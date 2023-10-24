@@ -2091,16 +2091,21 @@
 
   <!-- Jail North Door -->
   <door label="jail-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="jail-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2109,16 +2114,21 @@
 
   <!-- Blacktooth North Door -->
   <door label="blacktooth-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="blacktooth-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2127,16 +2137,21 @@
 
   <!-- Market North Door -->
   <door label="market-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="market-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2145,16 +2160,21 @@
 
   <!-- Moon North Door -->
   <door label="moon-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="moon-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2163,16 +2183,21 @@
 
   <!-- Byblos North Door -->
   <door label="byblos-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="byblos-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2181,16 +2206,21 @@
 
   <!-- Egyptus North Door -->
   <door label="egyptus-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="egyptus-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2199,16 +2229,21 @@
 
   <!-- Penitentiary North Door -->
   <door label="penitentiary-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="penitentiary-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2217,16 +2252,21 @@
 
   <!-- Safari North Door -->
   <door label="safari-door-north">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="safari-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2235,16 +2275,21 @@
 
   <!-- Jail South Door -->
   <door label="jail-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="jail-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2253,16 +2298,21 @@
 
   <!-- Blacktooth South Door -->
   <door label="blacktooth-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="blacktooth-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2271,16 +2321,21 @@
 
   <!-- Market South Door -->
   <door label="market-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="market-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2289,16 +2344,21 @@
 
   <!-- Moon South Door -->
   <door label="moon-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="moon-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2307,16 +2367,21 @@
 
   <!-- Byblos South Door -->
   <door label="byblos-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="byblos-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2325,16 +2390,21 @@
 
   <!-- Egyptus South Door -->
   <door label="egyptus-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="egyptus-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2343,16 +2413,21 @@
 
   <!-- Penitentiary South Door -->
   <door label="penitentiary-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="penitentiary-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2361,16 +2436,21 @@
 
   <!-- Safari South Door -->
   <door label="safari-door-south">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>32</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>9</widthX>
+      <widthY>32</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="safari-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2379,16 +2459,21 @@
 
   <!-- Jail East Door -->
   <door label="jail-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="jail-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2397,16 +2482,21 @@
 
   <!-- Blacktooth East Door -->
   <door label="blacktooth-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="blacktooth-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2415,16 +2505,21 @@
 
   <!-- Market East Door -->
   <door label="market-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="market-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2433,16 +2528,21 @@
 
   <!-- Moon East Door -->
   <door label="moon-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="moon-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2451,16 +2551,21 @@
 
   <!-- Byblos East Door -->
   <door label="byblos-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="byblos-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2469,16 +2574,21 @@
 
   <!-- Egyptus East Door -->
   <door label="egyptus-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="egyptus-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2487,16 +2597,21 @@
 
   <!-- Penitentiary East Door -->
   <door label="penitentiary-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="penitentiary-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2505,16 +2620,21 @@
 
   <!-- Safari East Door -->
   <door label="safari-door-east">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="safari-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2523,16 +2643,21 @@
 
   <!-- Jail West Door -->
   <door label="jail-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="jail-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2541,16 +2666,21 @@
 
   <!-- Blacktooth West Door -->
   <door label="blacktooth-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="blacktooth-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2559,16 +2689,21 @@
 
   <!-- Market West Door -->
   <door label="market-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="market-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2577,16 +2712,21 @@
 
   <!-- Moon West Door -->
   <door label="moon-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="moon-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2595,16 +2735,21 @@
 
   <!-- Byblos West Door -->
   <door label="byblos-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="byblos-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2613,16 +2758,21 @@
 
   <!-- Egyptus West Door -->
   <door label="egyptus-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="egyptus-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2631,16 +2781,21 @@
 
   <!-- Penitentiary West Door -->
   <door label="penitentiary-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="penitentiary-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2649,16 +2804,21 @@
 
   <!-- Safari West Door -->
   <door label="safari-door-west">
-    <widthX>9</widthX>
-    <widthX>9</widthX>
-    <widthX>32</widthX>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <widthY>9</widthY>
-    <height>48</height>
-    <height>48</height>
-    <height>51</height>
-    <orientations>1</orientations>
+    <leftJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </leftJamb>
+    <rightJamb>
+      <widthX>9</widthX>
+      <widthY>9</widthY>
+      <height>48</height>
+    </rightJamb>
+    <lintel>
+      <widthX>32</widthX>
+      <widthY>9</widthY>
+      <height>51</height>
+    </lintel>
     <picture file="safari-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>

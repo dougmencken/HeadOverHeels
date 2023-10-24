@@ -60,7 +60,7 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
         std::string justFamily = name.substr( name.find( "." ) + 1 );
         std::string justColor = name.substr( 0, name.find( "." ) );
 
-        // double height font
+        // stretch for the double height
         if ( doubleHeight )
         {
                 Picture* bigfont = new Picture( lettersOfFont->getWidth(), lettersOfFont->getHeight() << 1 ) ;

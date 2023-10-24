@@ -24,7 +24,7 @@ namespace gui
 {
 
 /**
- * Font which uses letters from picture file. Letters may have non-white color or~and double height
+ * The font with letters from the picture file. Letters may have a non-white color or~and the double height
  */
 
 class Font
@@ -33,9 +33,9 @@ class Font
 public:
 
         /**
-         * @param name Name of this font to mention it
-         * @param color Color of letters
-         * @param doubleHeight Double height of letters
+         * @param name the name of this font
+         * @param color the color of letters
+         * @param doubleHeight true for the double height stretching of letters
          */
         Font( const std::string & name, const std::string & color, bool doubleHeight = false ) ;
 
