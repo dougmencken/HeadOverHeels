@@ -172,7 +172,13 @@
 
   <text alias="draw-decor">
     <properties>
-      <string>рисовать фон</string>
+      <string>рисовать декорации</string>
+    </properties>
+  </text>
+
+  <text alias="draw-miniatures">
+    <properties>
+      <string>рисовать миниатюры</string>
     </properties>
   </text>
 
