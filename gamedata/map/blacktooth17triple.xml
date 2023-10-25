@@ -2,10 +2,6 @@
     <xTiles>14</xTiles>
     <yTiles>12</yTiles>
     <color>yellow</color>
-    <for-triple-room>
-        <camera-limit-x minimum="96" maximum="144"/>
-        <camera-limit-y minimum="80" maximum="128"/>
-    </for-triple-room>
     <floorKind>plain</floorKind>
     <nofloor x="0" y="0"/>
     <nofloor x="0" y="1"/>

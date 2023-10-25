@@ -129,22 +129,6 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         // with the knowledge about doors, calculate the coordinates of origin
         theRoom->calculateCoordinatesOfOrigin( hasNorthDoor, hasEastDoor, hasSouthDoor, hasWestDoor );
 
-        // for a “ triple ” room there’s more info
-        tinyxml2::XMLElement* tripleRoomInfo = root->FirstChildElement( "for-triple-room" );
-        if ( tripleRoomInfo != nilPointer )
-        {
-                // the limits for moving the camera
-                tinyxml2::XMLElement* limitX = tripleRoomInfo->FirstChildElement( "camera-limit-x" );
-                tinyxml2::XMLElement* limitY = tripleRoomInfo->FirstChildElement( "camera-limit-y" );
-
-                if ( limitX != nilPointer && limitY != nilPointer )
-                {
-                        theRoom->setTripleRoomCameraLimits (
-                                std::atoi( limitX->Attribute( "minimum" ) ), std::atoi( limitX->Attribute( "maximum" ) ),
-                                std::atoi( limitY->Attribute( "minimum" ) ), std::atoi( limitY->Attribute( "maximum" ) ) );
-                }
-        }
-
         // build walls without doors
 
         std::vector< std::pair< int, int > > wallsXY ;

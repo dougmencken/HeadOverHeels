@@ -213,23 +213,6 @@ bool Room::saveAsXML( const std::string & file )
         roomColor->SetText( getColor().c_str () );
         root->InsertEndChild( roomColor );
 
-        if ( whichRoom () == "triple" )
-        {
-                tinyxml2::XMLElement* tripleRoomInfo = roomXml.NewElement( "for-triple-room" ) ;
-
-                tinyxml2::XMLElement* limitX = roomXml.NewElement( "camera-limit-x" ) ;
-                limitX->SetAttribute( "minimum", tripleRoomCameraLimitsX.first );
-                limitX->SetAttribute( "maximum", tripleRoomCameraLimitsX.second );
-                tripleRoomInfo->InsertEndChild( limitX );
-
-                tinyxml2::XMLElement* limitY = roomXml.NewElement( "camera-limit-y" ) ;
-                limitY->SetAttribute( "minimum", tripleRoomCameraLimitsY.first );
-                limitY->SetAttribute( "maximum", tripleRoomCameraLimitsY.second );
-                tripleRoomInfo->InsertEndChild( limitY );
-
-                root->InsertEndChild( tripleRoomInfo );
-        }
-
         tinyxml2::XMLElement* floorKind = roomXml.NewElement( "floorKind" ) ;
         floorKind->SetText( getKindOfFloor().c_str () );
         root->InsertEndChild( floorKind );

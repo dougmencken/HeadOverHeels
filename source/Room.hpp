@@ -235,26 +235,8 @@ public:
         int getYCenterForItem ( const DescriptionOfItem * data ) ;
 
         /**
-         * (unused) the limits for moving the camera along X in a triple room
+         * the rooms larger than this number of tiles are not "single"
          */
-        ///std::pair < int, int > getTripleRoomCameraLimitsX () const {  return tripleRoomCameraLimitsX ;  }
-
-        /**
-         * (unused) the limits for moving the camera along Y in a triple room
-         */
-        ///std::pair < int, int > getTripleRoomCameraLimitsY () const {  return tripleRoomCameraLimitsY ;  }
-
-        /**
-         * Sets the limits for moving the camera in a triple room
-         */
-        void setTripleRoomCameraLimits ( int minX, int maxX, int minY, int maxY )
-        {
-                tripleRoomCameraLimitsX.first  = minX ;
-                tripleRoomCameraLimitsX.second = maxX ;
-                tripleRoomCameraLimitsY.first  = minY ;
-                tripleRoomCameraLimitsY.second = maxY ;
-        }
-
         static const unsigned int maxTilesOfSingleRoom = 10 ;
 
 protected:
@@ -343,10 +325,6 @@ private:
         Camera * camera ;
 
         PicturePtr whereToDraw ;
-
-        // (obsolete) the limits for moving the camera for a triple room
-        /*~~~*/ std::pair < int, int > tripleRoomCameraLimitsX ;
-        /*~~~*/ std::pair < int, int > tripleRoomCameraLimitsY ;
 
 } ;
 
