@@ -1,4 +1,4 @@
-<room scenery="blacktooth" tileSize="16">
+<room scenery="blacktooth">
     <xTiles>6</xTiles>
     <yTiles>9</yTiles>
     <color>white.reduced</color>

@@ -1,4 +1,4 @@
-<room scenery="market" tileSize="16">
+<room scenery="market">
     <xTiles>6</xTiles>
     <yTiles>8</yTiles>
     <color>yellow.reduced</color>

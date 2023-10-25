@@ -21,7 +21,7 @@ class ItemDescriptions ;
 
 
 /**
- * A door to the room. It is really three free items: two jambs and lintel
+ * A door to the room. It is really the three free items, the two jambs and the lintel
  */
 
 class Door : public Mediated
@@ -30,13 +30,13 @@ class Door : public Mediated
 public:
 
        /**
-        * @param label label of door
-        * @param cx cell of door on X
-        * @param cy cell of door on Y
-        * @param z position on Z or how far is item from ground
-        * @param way orientation of door
+        * @param label the label of door
+        * @param cx the door's cell on X
+        * @param cy the door's cell on Y
+        * @param z the position on Z, that's how far from the ground
+        * @param way where is the door, in the north of the room, in the south, in the west or in the east
         */
-        Door( const std::string & label, int cx, int cy, int z, const std::string & way ) ;
+        Door( const std::string & label, int cx, int cy, int z, const std::string & where ) ;
 
         virtual ~Door( ) ;
 
@@ -76,7 +76,7 @@ private:
 
         int leftLimit ;
 
-        std::string positionOfDoor ;
+        std::string whereIsDoor ;
 
         Picture * leftJambImage ;
 
@@ -94,7 +94,7 @@ public:
 
         bool isUnderDoor ( int x, int y, int z ) const ;
 
-        std::string getWhereIsDoor () const {  return positionOfDoor ;  }
+        std::string getWhereIsDoor () const {  return whereIsDoor ;  }
 
         FreeItemPtr getLeftJamb () ;
 

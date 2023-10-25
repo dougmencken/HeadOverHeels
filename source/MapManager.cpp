@@ -17,6 +17,8 @@
 
 #include <tinyxml2.h>
 
+#define GENERATE_ROOM_DESCRIPTIONS      0
+
 
 bool MapManager::buildEveryRoomAtOnce = false ;
 
@@ -196,8 +198,12 @@ void MapManager::readMap ( const std::string& fileName )
                         theRoom->setConnections( connections );
                         gameRooms[ roomFile ] = theRoom ;
 
-                        // write the room's file
-                        theRoom->saveAsXML( pathToRooms + theRoom->getNameOfRoomDescriptionFile() );
+                # if defined( GENERATE_ROOM_DESCRIPTIONS ) && GENERATE_ROOM_DESCRIPTIONS
+                        // write the description of room
+                        std::string saveTo = pathToRooms + theRoom->getNameOfRoomDescriptionFile ();
+                        std::cout << "saving the description of room as \"" << saveTo << "\"" << std::endl ;
+                        theRoom->saveAsXML( saveTo );
+                # endif
                 }
                 else
                 {
@@ -208,7 +214,7 @@ void MapManager::readMap ( const std::string& fileName )
         std::cout << "read map of rooms from " << fileName << std::endl ;
 }
 
-void MapManager::beginNewGame( const std::string& headRoom, const std::string& heelsRoom )
+void MapManager::beginNewGame( const std::string & headRoom, const std::string & heelsRoom )
 {
         std::cout << "MapManager::beginNewGame( \"" << headRoom << "\", \"" << heelsRoom << "\" )" << std::endl ;
 
@@ -560,18 +566,29 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         addRoomInPlay( newRoom );
 
-        // calculate entry position in new room
+        // calculate the entry location in new room
+
+        std::cout << "the exit coordinates from room \"" << fileOfPreviousRoom << "\" are"
+                        << " x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
 
         int entryX = exitX ;
         int entryY = exitY ;
         int entryZ = exitZ ;
 
-        std::cout << "exit coordinates from room \"" << fileOfPreviousRoom << "\" are x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
-        newRoom->calculateEntryCoordinates (
-                wayOfEntry, descriptionOfRoamer->getWidthX(), descriptionOfRoamer->getWidthY(),
-                northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ
+        bool okayToEnter = newRoom->calculateEntryCoordinates (
+                wayOfEntry,
+                descriptionOfRoamer->getWidthX(), descriptionOfRoamer->getWidthY(),
+                northBound, eastBound, southBound, westBound,
+                &entryX, &entryY, &entryZ
         ) ;
-        std::cout << "entry coordinates to room \"" << fileOfNextRoom << "\" are x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
+        if ( ! okayToEnter ) {
+                std::cout << "coordinates"
+                                << " x=" << entryX << " y=" << entryY << " z=" << entryZ
+                                << " are not okay to enter room \"" << fileOfNextRoom << "\"" << std::endl ;
+        } else {
+                std::cout << "the entry coordinates to room \"" << fileOfNextRoom << "\" are"
+                                << " x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
+        }
 
         // create character
 

@@ -1,6 +1,7 @@
-<room scenery="penitentiary" tileSize="16">
+<room scenery="penitentiary">
     <xTiles>10</xTiles>
     <yTiles>2</yTiles>
+    <color>white</color>
     <floorKind>mortal</floorKind>
     <walls>
         <wall on="x">

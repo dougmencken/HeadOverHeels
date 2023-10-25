@@ -17,12 +17,12 @@
 #endif
 
 
-Door::Door( const std::string & label, int cx, int cy, int z, const std::string & way )
+Door::Door( const std::string & label, int cx, int cy, int z, const std::string & where )
         : labelOfDoor( label )
         , cellX( cx )
         , cellY( cy )
         , z( z )
-        , positionOfDoor( way )
+        , whereIsDoor( where )
         , leftJambImage( nilPointer )
         , rightJambImage( nilPointer )
         , lintelImage( nilPointer )
@@ -56,8 +56,8 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
         leftJambImage = cutOutLeftJamb( *pictureOfDoor,
                                         leftJambData->getWidthX(), leftJambData->getWidthY(), leftJambData->getHeight(),
                                         lintelData->getWidthY(), lintelData->getHeight(),
-                                        way );
-        leftJambImage->setName( "left jamb of door for " + scenery + " at " + way );
+                                        where );
+        leftJambImage->setName( "left jamb of door in " + scenery + " at " + where );
 
         // cut out the right jamb
 
@@ -66,8 +66,8 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
         rightJambImage = cutOutRightJamb( *pictureOfDoor,
                                         rightJambData->getWidthX(), rightJambData->getWidthY(), rightJambData->getHeight(),
                                         lintelData->getWidthX(), lintelData->getHeight(),
-                                        way );
-        rightJambImage->setName( "right jamb of door for " + scenery + " at " + way );
+                                        where );
+        rightJambImage->setName( "right jamb of door in " + scenery + " at " + where );
 
         // cut out the lintel
 
@@ -75,8 +75,8 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
                                         lintelData->getWidthX(), lintelData->getWidthY(), lintelData->getHeight(),
                                         leftJambData->getWidthX(), leftJambData->getWidthY(),
                                         rightJambData->getWidthX(), rightJambData->getWidthY(),
-                                        way );
-        lintelImage->setName( "lintel of door for " + scenery + " at " + way );
+                                        where );
+        lintelImage->setName( "lintel of door in " + scenery + " at " + where );
 
 # if defined( SAVE_ITEM_FRAMES ) && SAVE_ITEM_FRAMES
 
@@ -233,7 +233,7 @@ FreeItemPtr Door::getLeftJamb()
         {
                 const DescriptionOfItem * leftJambData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~leftjamb" );
 
-                int tileSize = mediator->getRoom()->getSizeOfOneTile();
+                int tileSize = mediator->getRoom()->getSizeOfOneTile ();
 
                 if ( leftJambData != nilPointer && leftJambImage != nilPointer )
                 {
@@ -294,7 +294,7 @@ FreeItemPtr Door::getRightJamb()
         if ( rightJamb == nilPointer )
         {
                 int x( 0 ), y( 0 );
-                int tileSize = mediator->getRoom()->getSizeOfOneTile();
+                int tileSize = mediator->getRoom()->getSizeOfOneTile ();
 
                 const DescriptionOfItem * rightJambData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~rightjamb" );
 
@@ -355,7 +355,7 @@ FreeItemPtr Door::getLintel()
         if ( lintel == nilPointer )
         {
                 int x( 0 ), y( 0 );
-                int tileSize = mediator->getRoom()->getSizeOfOneTile();
+                int tileSize = mediator->getRoom()->getSizeOfOneTile ();
 
                 const DescriptionOfItem * lintelData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~lintel" );
 

@@ -43,21 +43,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         scenery = sceneryElement->FirstChild()->ToText()->Value() ;
         }
 
-        if ( scenery == "themoon" ) scenery = "moon" ;
-
-        unsigned int tileSize = 16 ;
-
-        if ( root->Attribute( "tileSize" ) != nilPointer )
-        {
-                tileSize = std::atoi( root->Attribute( "tileSize" ) );
-        }
-        else
-        {
-                tinyxml2::XMLElement* tileSizeElement = root->FirstChildElement( "tileSize" ) ;
-
-                if ( tileSizeElement != nilPointer && tileSizeElement->FirstChild() != nilPointer )
-                        tileSize = std::atoi( tileSizeElement->FirstChild()->ToText()->Value() );
-        }
+        ///if ( scenery == "themoon" ) scenery = "moon" ; // legacy
 
         tinyxml2::XMLElement* xTilesElement = root->FirstChildElement( "xTiles" ) ;
         tinyxml2::XMLElement* yTilesElement = root->FirstChildElement( "yTiles" ) ;
@@ -86,12 +72,11 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
         std::cout << " room \"" << roomName << "\"" << std::endl ;
 
-        // create room with initial parameters like scenery, dimensions, type of floor
+        // create room with initial parameters such as the scenery, the dimensions, the type of floor
         Room * theRoom = new Room (
                 roomName,
                 scenery,
                 xTiles, yTiles,
-                tileSize,
                 kindOfFloor
         );
 
@@ -746,8 +731,9 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 int itemZ = std::atoi( item->Attribute( "z" ) );
 
                 // in free coordinates
-                int fx = itemX * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemDescription->getWidthX() ) >> 1 );
-                int fy = ( itemY + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemDescription->getWidthY() ) >> 1 ) - 1;
+                unsigned int oneTileLong = room->getSizeOfOneTile ();
+                int fx = itemX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
+                int fy = ( itemY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
                 int fz = ( itemZ != Isomot::Top ) ? itemZ * Isomot::LayerHeight : Isomot::Top ;
 
                 // don’t create the item if it's a bonus that disappears once when taken

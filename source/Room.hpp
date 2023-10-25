@@ -44,19 +44,21 @@ class Room : public Drawable, public Mediated
 public:
 
        /**
-        * @param roomFile Name of file with data about this room
-        * @param scenery jail, blacktooth, market, moon, egyptus, penitentiary, safari, byblos
-        * @param xTiles How many tiles on X
-        * @param yTiles How many tiles on Y
-        * @param tileSize Length of side of single tile
-        * @param floorKind Kind of floor
+        * @param roomFile the name of file with data about this room
+        * @param scenery the one of jail, blacktooth, market, moon, egyptus, penitentiary, safari, byblos
+        * @param xTiles how many tiles on X
+        * @param yTiles how many tiles on Y
+        * @param floorKind the kind of floor
         */
-        Room( const std::string& roomFile, const std::string& scenery,
-                        unsigned int xTiles, unsigned int yTiles, unsigned int tileSize,
-                                const std::string& floorKind ) ;
+        Room( const std::string & roomFile, const std::string & scenery,
+                        unsigned int xTiles, unsigned int yTiles,
+                                const std::string & floorKind ) ;
 
         virtual ~Room( ) ;
 
+        /**
+         * may be "single", "double along X", "double along Y", "triple"
+         */
         std::string whichRoom () const ;
 
         bool isSingleRoom () const {  return getTilesX() <= maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom ;  }
@@ -106,9 +108,9 @@ public:
 
         void drawRoom () ;
 
-       /**
-        * Calculate boundaries of room from its size and its doors
-        */
+        /**
+         * Calculate boundaries of room from its size and its doors
+         */
         void calculateBounds () ;
 
         void calculateCoordinatesOfOrigin ( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor ) ;
@@ -127,19 +129,19 @@ public:
 
        /**
         * Calculate coordinates at which the character enters the room
-        * @param entry Way of entry
-        * @param widthX Size of character on X
-        * @param widthY Size of character on Y
-        * @param northBound North limit of room, it is X coordinate of north walls or north door
-        * @param eastBound East limit of room, it is Y coordinate of east walls or east door
-        * @param southBound South limit of room, it’s X coordinate of south walls or south door
-        * @param westBound West limit of room, it’s Y coordinate where are west walls or where’s west door
-        * @param x Resulting X coordinate to get
-        * @param y Resulting Y coordinate to get
-        * @param z Resulting Z coordinate to get
-        * @return true if coordinates are okay or false otherwise
+        * @param entry the way of entry
+        * @param widthX the size of character on X
+        * @param widthY the size of character on Y
+        * @param northBound the north limit of room, it is X coordinate of north walls or north door
+        * @param eastBound the east limit of room, it is Y coordinate of east walls or east door
+        * @param southBound the south limit of room, it’s X coordinate of south walls or south door
+        * @param westBound the west limit of room, it’s Y coordinate where are west walls or where’s west door
+        * @param x the resulting X coordinate
+        * @param y the resulting Y coordinate
+        * @param z the resulting Z coordinate
+        * @return true if coordinates are okay to enter the room or false otherwise
         */
-        bool calculateEntryCoordinates ( const Way& wayOfEntry,
+        bool calculateEntryCoordinates ( const Way & wayOfEntry,
                                                 int widthX, int widthY,
                                                 int northBound, int eastBound, int southBound, int westBound,
                                                 int * x, int * y, int * z ) ;
@@ -158,23 +160,23 @@ public:
 
         const std::string & getNameOfRoomDescriptionFile () const {  return nameOfFileWithDataAboutRoom ;  }
 
-       /**
-        * @return jail, blacktooth, market, moon, egyptus, penitentiary, safary o byblos
-        */
+        /**
+         * @return one of jail, blacktooth, market, moon, egyptus, penitentiary, safari, byblos
+         */
         const std::string & getScenery () const {  return this->scenery ;  }
 
         const std::string & getColor () const {  return this->color ;  }
 
         void setColor ( const std::string & roomColor ) {  this->color = roomColor ;  }
 
-       /**
-        * Screen coordinate X of room’s origin
-        */
+        /**
+         * the X coordinate of the room’s origin
+         */
         int getX0 () const {  return coordinatesOfOrigin.first ;  }
 
-       /**
-        * Screen coordinate Y of room’s origin
-        */
+        /**
+         * the Y coordinate of the room’s origin
+         */
         int getY0 () const {  return coordinatesOfOrigin.second ;  }
 
         unsigned int getWidthOfRoomImage () const ;
@@ -185,14 +187,17 @@ public:
 
         unsigned int getTilesY () const {  return howManyTiles.second ;  }
 
-       /**
-        * Returns length of side of single tile in isometric units
-        */
-        unsigned int getSizeOfOneTile () const {  return tileSize ;  }
+        /**
+         * The length of the single tile's side, in isometric units
+         */
+        static const unsigned int Single_Tile_Size = 16 ;
 
-       /**
-        * @return kind of floor which may be "plain", "mortal", or absent "none"
-        */
+        virtual // inherit as subclass for other sizes but 16
+        unsigned int getSizeOfOneTile () const {  return Single_Tile_Size ;  }
+
+        /**
+         * The kind of floor which may be "plain", "mortal", or "none" if absent
+         */
         const std::string & getKindOfFloor () const {  return kindOfFloor ;  }
 
         bool hasFloor () const {  return kindOfFloor != "absent" ;  }
@@ -291,11 +296,6 @@ private:
         std::pair < int /* x */, int /* y */ > coordinatesOfOrigin ;
 
         const std::pair < unsigned int /* tilesX */, unsigned int /* tilesY */ > howManyTiles ;
-
-       /**
-        * Length of tile’s side
-        */
-        const unsigned int tileSize ;
 
         std::string kindOfFloor ;
 

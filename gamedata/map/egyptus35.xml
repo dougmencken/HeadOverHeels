@@ -1,6 +1,7 @@
-<room scenery="egyptus" tileSize="16">
+<room scenery="egyptus">
     <xTiles>2</xTiles>
     <yTiles>9</yTiles>
+    <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">

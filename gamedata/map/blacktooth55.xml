@@ -1,4 +1,4 @@
-<room scenery="jail" tileSize="16">
+<room scenery="jail">
     <xTiles>9</xTiles>
     <yTiles>7</yTiles>
     <color>yellow.reduced</color>

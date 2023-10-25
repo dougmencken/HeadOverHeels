@@ -1,4 +1,4 @@
-<room scenery="safari" tileSize="16">
+<room scenery="safari">
     <xTiles>10</xTiles>
     <yTiles>12</yTiles>
     <color>white</color>

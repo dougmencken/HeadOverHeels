@@ -1,6 +1,7 @@
-<room scenery="byblos" tileSize="16">
+<room scenery="byblos">
     <xTiles>10</xTiles>
     <yTiles>6</yTiles>
+    <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">
@@ -44,11 +45,11 @@
             <picture>byblos-wall-y-1.png</picture>
         </wall>
         <wall on="y">
-            <position>4</position>
+            <position>5</position>
             <picture>byblos-wall-y-1.png</picture>
         </wall>
         <wall on="y">
-            <position>5</position>
+            <position>4</position>
             <picture>byblos-wall-y-1.png</picture>
         </wall>
     </walls>

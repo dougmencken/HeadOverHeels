@@ -287,10 +287,10 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int
         shadeFreeItemsBeneathItemAt( item, x, y, z );
 
         // range of columns met with item
-        int xStart = x / room->tileSize ;
-        int xEnd = ( x + item.getWidthX() - 1 ) / room->tileSize + 1 ;
-        int yStart = ( y - item.getWidthY() + 1 ) / room->tileSize ;
-        int yEnd = y / room->tileSize + 1 ;
+        int xStart = x / room->getSizeOfOneTile ();
+        int xEnd = ( x + item.getWidthX() - 1 ) / room->getSizeOfOneTile () + 1 ;
+        int yStart = ( y - item.getWidthY() + 1 ) / room->getSizeOfOneTile ();
+        int yEnd = y / room->getSizeOfOneTile () + 1 ;
 
         // for every column that item meets
         for ( int i = xStart; i < xEnd; i++ )
@@ -359,10 +359,10 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
 
-        int xCell = floorTile.getCellX();
-        int yCell = floorTile.getCellY();
-        int column = floorTile.getColumn();
-        int tileSize = room->getSizeOfOneTile();
+        int xCell = floorTile.getCellX ();
+        int yCell = floorTile.getCellY ();
+        int column = floorTile.getColumn ();
+        int tileSize = room->getSizeOfOneTile ();
 
         // shade with every grid item above
         for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
@@ -438,7 +438,7 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
 
-        int tileSize = room->getSizeOfOneTile();
+        int tileSize = room->getSizeOfOneTile ();
         int column = gridItem.getColumnOfGrid();
 
         // shade with grid items it may have above
@@ -525,7 +525,7 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
 
-        int tileSize = room->getSizeOfOneTile();
+        int tileSize = room->getSizeOfOneTile ();
 
         // range of columns met with item
         int xStart = freeItem.getX() / tileSize;
@@ -840,10 +840,10 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
         // for a free item
         else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" )
         {
-                int xStart = item->getX() / room->tileSize;
-                int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
-                int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->tileSize;
-                int yEnd = item->getY() / room->tileSize + 1;
+                int xStart = item->getX() / room->getSizeOfOneTile ();
+                int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->getSizeOfOneTile () + 1;
+                int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->getSizeOfOneTile ();
+                int yEnd = item->getY() / room->getSizeOfOneTile () + 1;
 
                 // in case when item collides with some wall
                 if ( xStart < 0 ) xStart = 0;

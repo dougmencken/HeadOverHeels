@@ -1,6 +1,7 @@
-<room scenery="moon" tileSize="16">
+<room scenery="moon">
     <xTiles>7</xTiles>
     <yTiles>6</yTiles>
+    <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">
@@ -36,12 +37,12 @@
             <picture>moon-wall-y-2.png</picture>
         </wall>
         <wall on="y">
-            <position>4</position>
-            <picture>moon-wall-y-2.png</picture>
-        </wall>
-        <wall on="y">
             <position>5</position>
             <picture>moon-wall-y-3.png</picture>
+        </wall>
+        <wall on="y">
+            <position>4</position>
+            <picture>moon-wall-y-2.png</picture>
         </wall>
     </walls>
     <items>

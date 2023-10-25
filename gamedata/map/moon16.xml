@@ -1,6 +1,7 @@
-<room scenery="moon" tileSize="16">
+<room scenery="moon">
     <xTiles>13</xTiles>
     <yTiles>7</yTiles>
+    <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">

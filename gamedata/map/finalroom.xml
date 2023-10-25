@@ -1,6 +1,7 @@
-<room tileSize="16">
+<room>
     <xTiles>12</xTiles>
     <yTiles>8</yTiles>
+    <color>white</color>
     <floorKind>plain</floorKind>
     <floor>
         <tile>
