@@ -193,9 +193,7 @@ std::string Room::whichRoom () const
 
 bool Room::saveAsXML( const std::string & file )
 {
-        std::cout << "writing the room as XML file \"" << file << "\"" << std::endl ;
-
-        tinyxml2::XMLDocument roomXml;
+        tinyxml2::XMLDocument roomXml ; // make new XML document
 
         tinyxml2::XMLElement * root = roomXml.NewElement( "room" );
         roomXml.InsertFirstChild( root );
