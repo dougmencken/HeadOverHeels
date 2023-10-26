@@ -34,6 +34,7 @@
         <file name="FreeItem.cpp" />
         <file name="AvatarItem.cpp" />
         <file name="DescriptionOfItem.cpp" />
+        <file name="DescriptionOfDoor.cpp" />
         <file name="ItemDescriptions.cpp" />
         <file name="Mediator.cpp" />
         <file name="ShadowCaster.cpp" />

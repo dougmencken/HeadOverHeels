@@ -42,19 +42,14 @@ public:
 
         virtual ~DescriptionOfItem () ;
 
-        static DescriptionOfItem * cloneAsLintelOfDoor ( const DescriptionOfItem & toClone ) ;
+protected:
 
-        static DescriptionOfItem * cloneAsLeftJambOfDoor ( const DescriptionOfItem & toClone ) ;
-
-        static DescriptionOfItem * cloneAsRightJambOfDoor ( const DescriptionOfItem & toClone ) ;
-
-private:
-
-        static DescriptionOfItem * clone ( const DescriptionOfItem & what ) ;
+        DescriptionOfItem * clone () ;
 
 public:
 
         const std::string & getLabel () const {  return label ;  }
+        void setLabel ( const std::string & newLabel ) {  this->label = newLabel ;  }
 
         unsigned int getWidthX () const {  return widthX ;  }
         unsigned int getWidthY () const {  return widthY ;  }
@@ -129,6 +124,7 @@ public:
         void setHowManyExtraFrames( unsigned short newExtraFrames ) {  this->extraFrames = newExtraFrames ;  }
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
+        void markAsPartOfDoor () {  this->partOfDoor = true ;  }
 
 private:
 

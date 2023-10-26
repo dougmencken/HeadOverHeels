@@ -2,2666 +2,2026 @@
 
 <items>
 
-  <!-- Brick number one -->
-  <item label="brick1">
+<!-- brick number one -->
+<item label="brick1">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>32</weight>
     <picture file="brick1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="brick1-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="vulcano">
+<item label="vulcano">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <mortal>yes</mortal>
     <picture file="vulcano.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="vulcano-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="spikes">
+<item label="spikes">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <mortal>yes</mortal>
     <picture file="spikes.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="spikes-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="toaster">
+<item label="toaster">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <mortal>yes</mortal>
     <picture file="toaster.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="toaster-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <item label="conveyor">
+<item label="conveyor">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>4</orientations>
     <speed>40</speed>
     <picture file="conveyor.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="conveyor-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
     <frames>4</frames>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="book">
+<item label="book">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <weight>20</weight>
     <speed>40</speed>
     <picture file="book.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="book-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <item label="stool">
+<item label="stool">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>4</orientations>
     <weight>20</weight>
     <speed>40</speed>
     <picture file="stool.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="stool-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <!-- Hush Puppy -->
-  <item label="puppy">
+<!-- hush puppy -->
+<item label="puppy">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <picture file="puppy.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="puppy-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <item label="sandwich">
+<item label="sandwich">
     <widthX>15</widthX>
     <widthY>15</widthY>
     <height>24</height>
-    <orientations>4</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="sandwich.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="sandwich-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="switch">
+<item label="switch">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="switch.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="switch-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <!-- Brick number two -->
-  <item label="brick2">
+<!-- brick number two -->
+<item label="brick2">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>32</weight>
     <picture file="brick2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
     <shadow file="brick2-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <!-- Bars orthogonal to the X (north-south) axis -->
-  <item label="bars-ns">
+<!-- bars perpendicular to the X (north-south) axis -->
+<item label="bars-ns">
     <widthX>8</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="bars-ns.png">
-      <frameWidth>42</frameWidth>
-      <frameHeight>44</frameHeight>
+        <width>42</width>
+        <height>44</height>
     </picture>
     <shadow file="bars-ns-shadows.png">
-      <shadowWidth>40</shadowWidth>
-      <shadowHeight>22</shadowHeight>
+        <width>40</width>
+        <height>22</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <!-- Bars orthogonal to the Y (east-west) axis -->
-  <item label="bars-ew">
+<!-- bars perpendicular to the Y (east-west) axis -->
+<item label="bars-ew">
     <widthX>16</widthX>
     <widthY>8</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="bars-ew.png">
-      <frameWidth>42</frameWidth>
-      <frameHeight>44</frameHeight>
+        <width>42</width>
+        <height>44</height>
     </picture>
     <shadow file="bars-ew-shadows.png">
-      <shadowWidth>40</shadowWidth>
-      <shadowHeight>22</shadowHeight>
+        <width>40</width>
+        <height>22</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="drum">
+<item label="drum">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="drum.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="drum-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="portable-brick">
+<item label="portable-brick">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="portable-brick.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="portable-brick-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="handbag">
+<item label="handbag">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <picture file="handbag.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="horn">
+<item label="horn">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>28</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <picture file="horn.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>52</frameHeight>
+        <width>48</width>
+        <height>52</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="donuts">
+<item label="donuts">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <weight>10</weight>
     <picture file="donuts.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="donuts-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <!-- Rabbit with bonus extra lives -->
-  <item label="extra-life">
+<!-- a rabbit with the bonus extra lives -->
+<item label="extra-life">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="rabbit-gold.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="rabbit-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <!-- Rabbit with bonus high jumps -->
-  <item label="high-jumps">
+<!-- a rabbit with the bonus high jumps -->
+<item label="high-jumps">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="rabbit-bronze.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="rabbit-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <!-- Rabbit with bonus quick steps -->
-  <item label="quick-steps">
+<!-- a rabbit with the bonus quick steps -->
+<item label="quick-steps">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="rabbit-bronze.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="rabbit-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <!-- Rabbit with temporary invulnerability bonus -->
-  <item label="shield">
+<!-- a rabbit with the temporary invulnerability bonus -->
+<item label="shield">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>2</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="rabbit-silver.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="rabbit-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>2</orientations>
+</item>
 
-  <item label="crown">
+<item label="crown">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="crown.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="crown-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="bomb">
+<item label="bomb">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
     <speed>20</speed>
+    <mortal>yes</mortal>
     <picture file="bomb.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="bomb-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <!-- Another portable brick aka Portable brick too -->
-  <item label="another-portable-brick">
+<!-- another portable brick aka portable brick too -->
+<item label="another-portable-brick">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <speed>40</speed>
     <picture file="portable-brick2.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="portable-brick2-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="ball">
+<item label="ball">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <speed>20</speed>
     <picture file="ball.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="ball-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="remote-control">
+<item label="remote-control">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <picture file="remote-control.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="remote-control-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
-
-  <!-- Brick cylinder -->
-  <item label="cylinder">
-    <widthX>12</widthX>
-    <widthY>12</widthY>
-    <height>24</height>
     <orientations>1</orientations>
+</item>
+
+<!-- brick cylinder -->
+<item label="cylinder">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
     <picture file="cylinder.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="imperial-guard-head">
+<item label="imperial-guard-head">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>4</orientations>
-    <mortal>yes</mortal>
     <speed>40</speed>
+    <mortal>yes</mortal>
     <picture file="imperial-guard-head.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="elephant-head">
+<item label="elephant-head">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>4</orientations>
     <mortal>yes</mortal>
     <picture file="elephant-head.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <!-- Monkey head (unused) -->
-  <item label="monkey-head">
+<!-- (unused) monkey head -->
+<item label="monkey-head">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>4</orientations>
     <mortal>yes</mortal>
     <picture file="monkey-head.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>50</frameHeight>
+        <width>48</width>
+        <height>50</height>
     </picture>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="elevator">
+<item label="elevator">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <betweenFrames>100</betweenFrames>
     <speed>20</speed>
     <picture file="elevator.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
-    <shadow file="elevator-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
-    </shadow>
-    <frames>4</frames>
-  </item>
-
-  <item label="helicopter-bug">
-    <widthX>12</widthX>
-    <widthY>12</widthY>
-    <height>24</height>
-    <orientations>1</orientations>
-    <mortal>yes</mortal>
-    <weight>10</weight>
     <betweenFrames>100</betweenFrames>
-    <speed>30</speed>
-    <picture file="helicopter-bug.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
-    </picture>
-    <shadow file="helicopter-bug-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+    <shadow file="elevator-shadows.png">
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>4</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="reincarnation-fish">
+<item label="helicopter-bug">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
+    <speed>30</speed>
+    <mortal>yes</mortal>
+    <picture file="helicopter-bug.png">
+        <width>48</width>
+        <height>48</height>
+    </picture>
+    <betweenFrames>100</betweenFrames>
+    <shadow file="helicopter-bug-shadows.png">
+        <width>48</width>
+        <height>25</height>
+    </shadow>
+    <frames>4</frames>
+    <orientations>1</orientations>
+</item>
+
+<item label="reincarnation-fish">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <weight>10</weight>
+    <picture file="fish.png">
+        <width>48</width>
+        <height>48</height>
+    </picture>
     <betweenFrames>200</betweenFrames>
-    <picture file="fish.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
-    </picture>
     <shadow file="fish-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="mortal-fish">
+<item label="mortal-fish">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
+    <mortal>yes</mortal>
     <picture file="fish.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="fish-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="siren">
+<item label="siren">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>40</betweenFrames>
     <speed>40</speed>
+    <mortal>yes</mortal>
     <picture file="siren.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
+    <betweenFrames>40</betweenFrames>
     <shadow file="siren-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="teleport">
+<item label="teleport">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <betweenFrames>150</betweenFrames>
     <picture file="teleport.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
+    <betweenFrames>150</betweenFrames>
     <shadow file="teleport-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <!-- Second Teleport -->
-  <item label="teleport-too">
+<!-- the second teleport -->
+<item label="teleport-too">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <betweenFrames>150</betweenFrames>
     <picture file="teleport.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
+    <betweenFrames>150</betweenFrames>
     <shadow file="teleport-shadows.png">
-      <shadowWidth>64</shadowWidth>
-      <shadowHeight>31</shadowHeight>
+        <width>64</width>
+        <height>31</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="turtle">
+<item label="turtle">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>4</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
+    <mortal>yes</mortal>
     <picture file="turtle.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
+    <betweenFrames>150</betweenFrames>
     <shadow file="turtle-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="trampoline">
+<item label="trampoline">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
-    <betweenFrames>80</betweenFrames>
     <speed>40</speed>
     <picture file="trampoline.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>48</width>
+        <height>56</height>
     </picture>
+    <betweenFrames>80</betweenFrames>
     <shadow file="trampoline-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="bubbles">
+<item label="bubbles">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <betweenFrames>130</betweenFrames>
     <speed>10</speed>
     <picture file="bubbles.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
+    <betweenFrames>130</betweenFrames>
     <shadow file="bubbles-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>6</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="double-bubbles">
+<item label="double-bubbles">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>48</height>
-    <orientations>1</orientations>
-    <betweenFrames>130</betweenFrames>
     <speed>10</speed>
     <picture file="double-bubbles.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
+    <betweenFrames>130</betweenFrames>
     <shadow file="bubbles-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>6</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="mortal-cap">
+<item label="mortal-cap">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
+    <weight>10</weight>
+    <speed>20</speed>
     <mortal>yes</mortal>
-    <weight>10</weight>
-    <speed>20</speed>
     <picture file="cap.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="cap-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="cap">
+<item label="cap">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <weight>10</weight>
     <speed>20</speed>
     <picture file="cap.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
     <shadow file="cap-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="bighead-robot">
+<item label="bighead-robot">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>48</height>
-    <orientations>4</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
+    <mortal>yes</mortal>
     <picture file="big-head-robot.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
+    <betweenFrames>150</betweenFrames>
     <shadow file="big-head-robot-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="elephant">
+<item label="elephant">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>48</height>
-    <orientations>4</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
+    <mortal>yes</mortal>
     <picture file="elephant.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
+    <betweenFrames>150</betweenFrames>
     <shadow file="elephant-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="monkey">
+<item label="monkey">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>48</height>
-    <orientations>4</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
+    <mortal>yes</mortal>
     <picture file="monkey.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
+    <betweenFrames>150</betweenFrames>
     <shadow file="monkey-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <item label="diver">
+<item label="diver">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>48</height>
-    <orientations>4</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
+    <mortal>yes</mortal>
     <picture file="diver.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
-    <shadow file="diver-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
-    </shadow>
-  </item>
-
-  <item label="bubble-robot">
-    <widthX>12</widthX>
-    <widthY>12</widthY>
-    <height>48</height>
-    <orientations>1</orientations>
-    <mortal>yes</mortal>
-    <weight>10</weight>
-    <betweenFrames>100</betweenFrames>
-    <speed>40</speed>
-    <picture file="bubble-robot.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
-    </picture>
-    <shadow file="bubble-robot-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
-    </shadow>
-    <frames>4</frames>
-  </item>
-
-  <item label="imperial-guard">
-    <widthX>12</widthX>
-    <widthY>12</widthY>
-    <height>48</height>
-    <orientations>4</orientations>
-    <mortal>yes</mortal>
-    <betweenFrames>100</betweenFrames>
-    <speed>40</speed>
-    <picture file="imperial-guard.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
-    </picture>
-    <shadow file="imperial-guard-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
-    </shadow>
-    <frames>4</frames>
-  </item>
-
-  <!-- Charlie the Dalek -->
-  <item label="charles-robot">
-    <widthX>12</widthX>
-    <widthY>12</widthY>
-    <height>48</height>
-    <orientations>4</orientations>
-    <weight>10</weight>
     <betweenFrames>150</betweenFrames>
+    <shadow file="diver-shadows.png">
+        <width>48</width>
+        <height>25</height>
+    </shadow>
+    <orientations>4</orientations>
+</item>
+
+<item label="bubble-robot">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <picture file="bubble-robot.png">
+        <width>48</width>
+        <height>80</height>
+    </picture>
+    <betweenFrames>100</betweenFrames>
+    <shadow file="bubble-robot-shadows.png">
+        <width>48</width>
+        <height>25</height>
+    </shadow>
+    <frames>4</frames>
+    <orientations>1</orientations>
+</item>
+
+<item label="imperial-guard">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <picture file="imperial-guard.png">
+        <width>48</width>
+        <height>80</height>
+    </picture>
+    <betweenFrames>100</betweenFrames>
+    <shadow file="imperial-guard-shadows.png">
+        <width>48</width>
+        <height>25</height>
+    </shadow>
+    <frames>4</frames>
+    <orientations>4</orientations>
+</item>
+
+<!-- Charlie the Dalek -->
+<item label="charles-robot">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <weight>10</weight>
     <speed>40</speed>
     <picture file="charles-robot.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
+    <betweenFrames>150</betweenFrames>
     <shadow file="charles-robot-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <!-- Head -->
-  <item label="head">
+<!-- Head -->
+<item label="head">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>23</height>
-    <orientations>4</orientations>
     <weight>20</weight>
-    <betweenFrames>90</betweenFrames>
     <speed>40</speed>
     <picture file="head.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
+    <betweenFrames>90</betweenFrames>
     <shadow file="head-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frame>0</frame>
     <frame>2</frame>
     <frame>1</frame>
     <frame>2</frame>
+    <orientations>4</orientations>
     <extraFrames>6</extraFrames>
-  </item>
+</item>
 
-  <!-- Heels -->
-  <item label="heels">
+<!-- Heels -->
+<item label="heels">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>4</orientations>
     <weight>10</weight>
-    <betweenFrames>90</betweenFrames>
     <speed>20</speed>
     <picture file="heels.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
+    <betweenFrames>90</betweenFrames>
     <shadow file="heels-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frame>0</frame>
     <frame>1</frame>
     <frame>0</frame>
     <frame>2</frame>
-  </item>
+    <orientations>4</orientations>
+</item>
 
-  <!-- Head over Heels -->
-  <item label="headoverheels">
+<!-- Head over Heels -->
+<item label="headoverheels">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>47</height>
-    <orientations>4</orientations>
     <weight>20</weight>
-    <betweenFrames>100</betweenFrames>
     <speed>20</speed>
     <picture file="headoverheels.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
+    <betweenFrames>100</betweenFrames>
     <shadow file="headoverheels-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>4</frames>
+    <orientations>4</orientations>
     <extraFrames>4</extraFrames>
-  </item>
+</item>
 
-  <item label="throne-guard">
+<item label="throne-guard">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>48</height>
-    <orientations>1</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>100</betweenFrames>
     <speed>20</speed>
+    <mortal>yes</mortal>
     <picture file="throne-guard.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>80</frameHeight>
+        <width>48</width>
+        <height>80</height>
     </picture>
+    <betweenFrames>100</betweenFrames>
     <shadow file="throne-guard-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>4</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="emperor">
+<item label="emperor">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
-    <orientations>1</orientations>
-    <mortal>yes</mortal>
     <weight>10</weight>
-    <betweenFrames>200</betweenFrames>
     <speed>20</speed>
+    <mortal>yes</mortal>
     <picture file="emperor.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+        <width>48</width>
+        <height>48</height>
     </picture>
+    <betweenFrames>200</betweenFrames>
     <shadow file="emperor-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
+        <width>48</width>
+        <height>25</height>
     </shadow>
     <frames>2</frames>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="invisible-wall-x">
+<item label="invisible-wall-x">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>240</height>
     <orientations>1</orientations>
-  </item>
+</item>
 
-  <item label="invisible-wall-y">
+<item label="invisible-wall-y">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>240</height>
     <orientations>1</orientations>
-  </item>
+</item>
 
-  <item label="jail-wall-x">
+<item label="jail-wall-x">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>101</height>
-    <orientations>1</orientations>
     <picture file="jail-wall-x.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>117</frameHeight>
+        <width>64</width>
+        <height>117</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="jail-wall-y">
+<item label="jail-wall-y">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>101</height>
-    <orientations>1</orientations>
     <picture file="jail-wall-y.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>117</frameHeight>
+        <width>64</width>
+        <height>117</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="jail-shaft-north">
+<item label="jail-shaft-north">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="jail-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="jail-capital-north">
+<item label="jail-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="jail-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="jail-shaft-east">
+<item label="jail-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="jail-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="jail-capital-east">
+<item label="jail-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="jail-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="jail-capital-south">
+<item label="jail-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="jail-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="jail-capital-west">
+<item label="jail-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="jail-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-wall-x-1">
+<item label="blacktooth-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-wall-x-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-wall-y-1">
+<item label="blacktooth-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-wall-y-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-wall-x-2">
+<item label="blacktooth-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-wall-x-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-wall-y-2">
+<item label="blacktooth-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-wall-y-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-wall-x-3">
+<item label="blacktooth-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-wall-x-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-wall-y-3">
+<item label="blacktooth-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-wall-y-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-column-shaft-north">
+<item label="blacktooth-column-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-column-capital-north">
+<item label="blacktooth-column-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-column-shaft-east">
+<item label="blacktooth-column-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-column-capital-east">
+<item label="blacktooth-column-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-column-capital-south">
+<item label="blacktooth-column-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="blacktooth-column-capital-west">
+<item label="blacktooth-column-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="blacktooth-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-wall-x-1">
+<item label="market-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="market-wall-x-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-wall-y-1">
+<item label="market-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="market-wall-y-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-wall-x-2">
+<item label="market-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="market-wall-x-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-wall-y-2">
+<item label="market-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="market-wall-y-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-wall-x-3">
+<item label="market-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="market-wall-x-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-wall-y-3">
+<item label="market-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="market-wall-y-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-column-shaft-north">
+<item label="market-column-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="market-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-column-capital-north">
+<item label="market-column-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="market-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-column-shaft-east">
+<item label="market-column-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="market-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-column-capital-east">
+<item label="market-column-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="market-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-column-capital-south">
+<item label="market-column-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="market-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="market-column-capital-west">
+<item label="market-column-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="market-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-x-1">
+<item label="moon-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-x-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-y-1">
+<item label="moon-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-y-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-x-2">
+<item label="moon-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-x-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-y-2">
+<item label="moon-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-y-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-x-3">
+<item label="moon-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-x-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-y-3">
+<item label="moon-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-y-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-x-4">
+<item label="moon-wall-x-4">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-x-4.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-wall-y-4">
+<item label="moon-wall-y-4">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="moon-wall-y-4.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-shaft-north">
+<item label="moon-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="moon-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-capital-north">
+<item label="moon-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="moon-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-shaft-east">
+<item label="moon-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="moon-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-capital-east">
+<item label="moon-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="moon-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-capital-south">
+<item label="moon-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="moon-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="moon-capital-west">
+<item label="moon-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="moon-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-wall-x-1">
+<item label="byblos-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="byblos-wall-x-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-wall-y-1">
+<item label="byblos-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="byblos-wall-y-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-wall-x-2">
+<item label="byblos-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="byblos-wall-x-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-wall-y-2">
+<item label="byblos-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="byblos-wall-y-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-shaft-north">
+<item label="byblos-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="byblos-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-capital-north">
+<item label="byblos-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="byblos-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-shaft-east">
+<item label="byblos-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="byblos-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-capital-east">
+<item label="byblos-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="byblos-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-capital-south">
+<item label="byblos-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="byblos-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="byblos-capital-west">
+<item label="byblos-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="byblos-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-wall-x-1">
+<item label="egyptus-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="egyptus-wall-x-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-wall-y-1">
+<item label="egyptus-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="egyptus-wall-y-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-wall-x-2">
+<item label="egyptus-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="egyptus-wall-x-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-wall-y-2">
+<item label="egyptus-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="egyptus-wall-y-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-shaft-north">
+<item label="egyptus-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="egyptus-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-capital-north">
+<item label="egyptus-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="egyptus-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-shaft-east">
+<item label="egyptus-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="egyptus-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-capital-east">
+<item label="egyptus-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="egyptus-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-capital-south">
+<item label="egyptus-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="egyptus-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="egyptus-capital-west">
+<item label="egyptus-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="egyptus-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-wall-x-1">
+<item label="penitentiary-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-wall-x-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-wall-y-1">
+<item label="penitentiary-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-wall-y-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-wall-x-2">
+<item label="penitentiary-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-wall-x-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-wall-y-2">
+<item label="penitentiary-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>99</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-wall-y-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>115</frameHeight>
+        <width>64</width>
+        <height>115</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-shaft-north">
+<item label="penitentiary-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-capital-north">
+<item label="penitentiary-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-shaft-east">
+<item label="penitentiary-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-capital-east">
+<item label="penitentiary-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-capital-south">
+<item label="penitentiary-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="penitentiary-capital-west">
+<item label="penitentiary-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="penitentiary-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-wall-x-1">
+<item label="safari-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="safari-wall-x-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-wall-y-1">
+<item label="safari-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="safari-wall-y-1.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-wall-x-2">
+<item label="safari-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="safari-wall-x-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-wall-y-2">
+<item label="safari-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="safari-wall-y-2.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-wall-x-3">
+<item label="safari-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="safari-wall-x-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-wall-y-3">
+<item label="safari-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
     <height>100</height>
-    <orientations>1</orientations>
     <picture file="safari-wall-y-3.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>116</frameHeight>
+        <width>64</width>
+        <height>116</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-shaft-north">
+<item label="safari-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="safari-column-shaft-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-capital-north">
+<item label="safari-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="safari-column-capital-north.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-shaft-east">
+<item label="safari-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="safari-column-shaft-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>39</frameHeight>
+        <width>64</width>
+        <height>39</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-capital-east">
+<item label="safari-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="safari-column-capital-east.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>49</frameHeight>
+        <width>64</width>
+        <height>49</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-capital-south">
+<item label="safari-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="safari-column-capital-south.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <item label="safari-capital-west">
+<item label="safari-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
-    <orientations>1</orientations>
     <picture file="safari-column-capital-west.png">
-      <frameWidth>64</frameWidth>
-      <frameHeight>56</frameHeight>
+        <width>64</width>
+        <height>56</height>
     </picture>
-  </item>
+    <orientations>1</orientations>
+</item>
 
-  <door label="jail-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="jail-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="jail-door-north"/>
 
-  <door label="blacktooth-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="blacktooth-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="blacktooth-door-north"/>
 
-  <door label="market-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="market-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="market-door-north"/>
 
-  <door label="moon-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="moon-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="moon-door-north"/>
 
-  <door label="byblos-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="byblos-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="byblos-door-north"/>
 
-  <door label="egyptus-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="egyptus-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="egyptus-door-north"/>
 
-  <door label="penitentiary-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="penitentiary-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="penitentiary-door-north"/>
 
-  <door label="safari-door-north">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="safari-door-north.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="safari-door-north"/>
 
-  <door label="jail-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="jail-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="jail-door-south"/>
 
-  <door label="blacktooth-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="blacktooth-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="blacktooth-door-south"/>
 
-  <door label="market-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="market-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="market-door-south"/>
 
-  <door label="moon-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="moon-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="moon-door-south"/>
 
-  <door label="byblos-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="byblos-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="byblos-door-south"/>
 
-  <door label="egyptus-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="egyptus-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="egyptus-door-south"/>
 
-  <door label="penitentiary-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="penitentiary-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="penitentiary-door-south"/>
 
-  <door label="safari-door-south">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>9</widthX>
-      <widthY>32</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="safari-door-south.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="safari-door-south"/>
 
-  <door label="jail-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="jail-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="jail-door-east"/>
 
-  <door label="blacktooth-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="blacktooth-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="blacktooth-door-east"/>
 
-  <door label="market-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="market-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="market-door-east"/>
 
-  <door label="moon-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="moon-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="moon-door-east"/>
 
-  <door label="byblos-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="byblos-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="byblos-door-east"/>
 
-  <door label="egyptus-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="egyptus-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="egyptus-door-east"/>
 
-  <door label="penitentiary-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="penitentiary-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="penitentiary-door-east"/>
 
-  <door label="safari-door-east">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="safari-door-east.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="safari-door-east"/>
 
-  <door label="jail-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="jail-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="jail-door-west"/>
 
-  <door label="blacktooth-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="blacktooth-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="blacktooth-door-west"/>
 
-  <door label="market-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="market-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="market-door-west"/>
 
-  <door label="moon-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="moon-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="moon-door-west"/>
 
-  <door label="byblos-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="byblos-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="byblos-door-west"/>
 
-  <door label="egyptus-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="egyptus-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="egyptus-door-west"/>
 
-  <door label="penitentiary-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="penitentiary-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="penitentiary-door-west"/>
 
-  <door label="safari-door-west">
-    <leftJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </leftJamb>
-    <rightJamb>
-      <widthX>9</widthX>
-      <widthY>9</widthY>
-      <height>48</height>
-    </rightJamb>
-    <lintel>
-      <widthX>32</widthX>
-      <widthY>9</widthY>
-      <height>51</height>
-    </lintel>
-    <picture file="safari-door-west.png">
-      <frameWidth>82</frameWidth>
-      <frameHeight>140</frameHeight>
-    </picture>
-  </door>
+<door label="safari-door-west"/>
 
 </items>

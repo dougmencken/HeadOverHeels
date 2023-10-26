@@ -98,6 +98,8 @@ headoverheels_SOURCES = main.cpp \
 			Isomot.hpp \
 			DescriptionOfItem.cpp \
 			DescriptionOfItem.hpp \
+			DescriptionOfDoor.cpp \
+			DescriptionOfDoor.hpp \
 			ItemDescriptions.cpp \
 			ItemDescriptions.hpp \
 			MapManager.cpp \
