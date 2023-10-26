@@ -16,7 +16,6 @@ bool GamePreferences::readPreferences( const std::string & fileName )
 {
         std::cout << "readPreferences( " << fileName << " )" << std::endl ;
 
-        // read list of sounds from XML file
         tinyxml2::XMLDocument preferences;
         tinyxml2::XMLError result = preferences.LoadFile( fileName.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
@@ -29,7 +28,7 @@ bool GamePreferences::readPreferences( const std::string & fileName )
 
         tinyxml2::XMLElement* root = preferences.FirstChildElement( "preferences" );
 
-        // chosen language
+        // the chosen language
 
         tinyxml2::XMLElement* language = root->FirstChildElement( "language" ) ;
         std::string languageString = "en_US";

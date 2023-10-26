@@ -19,7 +19,6 @@
     </shadow>
   </item>
 
-  <!-- Vulcano -->
   <item label="vulcano">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -36,7 +35,6 @@
     </shadow>
   </item>
 
-  <!-- Spikes -->
   <item label="spikes">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -53,7 +51,6 @@
     </shadow>
   </item>
 
-  <!-- Toaster -->
   <item label="toaster">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -70,7 +67,6 @@
     </shadow>
   </item>
 
-  <!-- Conveyor -->
   <item label="conveyor">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -88,7 +84,6 @@
     <frames>4</frames>
   </item>
 
-  <!-- Book -->
   <item label="book">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -106,7 +101,6 @@
     </shadow>
   </item>
 
-  <!-- Stool -->
   <item label="stool">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -124,7 +118,7 @@
     </shadow>
   </item>
 
-  <!-- Puppy -->
+  <!-- Hush Puppy -->
   <item label="puppy">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -140,7 +134,6 @@
     </shadow>
   </item>
 
-  <!-- Sandwich -->
   <item label="sandwich">
     <widthX>15</widthX>
     <widthY>15</widthY>
@@ -158,7 +151,6 @@
     </shadow>
   </item>
 
-  <!-- Switch -->
   <item label="switch">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -192,7 +184,7 @@
     </shadow>
   </item>
 
-  <!-- Bars orthogonal to north-south X axis -->
+  <!-- Bars orthogonal to the X (north-south) axis -->
   <item label="bars-ns">
     <widthX>8</widthX>
     <widthY>16</widthY>
@@ -208,7 +200,7 @@
     </shadow>
   </item>
 
-  <!-- Bars orthogonal to east-west Y axis -->
+  <!-- Bars orthogonal to the Y (east-west) axis -->
   <item label="bars-ew">
     <widthX>16</widthX>
     <widthY>8</widthY>
@@ -224,7 +216,6 @@
     </shadow>
   </item>
 
-  <!-- Drum -->
   <item label="drum">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -242,7 +233,6 @@
     </shadow>
   </item>
 
-  <!-- Portable brick -->
   <item label="portable-brick">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -260,7 +250,6 @@
     </shadow>
   </item>
 
-  <!-- Handbag -->
   <item label="handbag">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -273,7 +262,6 @@
     </picture>
   </item>
 
-  <!-- Horn -->
   <item label="horn">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -286,7 +274,6 @@
     </picture>
   </item>
 
-  <!-- Donuts -->
   <item label="donuts">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -303,7 +290,7 @@
     </shadow>
   </item>
 
-  <!-- Rabbit with extra lives -->
+  <!-- Rabbit with bonus extra lives -->
   <item label="extra-life">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -321,7 +308,7 @@
     </shadow>
   </item>
 
-  <!-- Rabbit with high jumps -->
+  <!-- Rabbit with bonus high jumps -->
   <item label="high-jumps">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -357,7 +344,7 @@
     </shadow>
   </item>
 
-  <!-- Rabbit with immunity -->
+  <!-- Rabbit with temporary invulnerability bonus -->
   <item label="shield">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -375,7 +362,6 @@
     </shadow>
   </item>
 
-  <!-- Crown -->
   <item label="crown">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -393,7 +379,6 @@
     </shadow>
   </item>
 
-  <!-- Bomb -->
   <item label="bomb">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -412,7 +397,7 @@
     </shadow>
   </item>
 
-  <!-- Another portable brick -->
+  <!-- Another portable brick aka Portable brick too -->
   <item label="another-portable-brick">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -430,7 +415,6 @@
     </shadow>
   </item>
 
-  <!-- Ball -->
   <item label="ball">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -448,7 +432,6 @@
     </shadow>
   </item>
 
-  <!-- Remote control -->
   <item label="remote-control">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -477,7 +460,6 @@
     </picture>
   </item>
 
-  <!-- Imperial guard head -->
   <item label="imperial-guard-head">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -491,7 +473,6 @@
     </picture>
   </item>
 
-  <!-- Elephant head -->
   <item label="elephant-head">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -517,7 +498,6 @@
     </picture>
   </item>
 
-  <!-- Elevator -->
   <item label="elevator">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -536,7 +516,6 @@
     <frames>4</frames>
   </item>
 
-  <!-- Helicopter bug -->
   <item label="helicopter-bug">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -557,7 +536,6 @@
     <frames>4</frames>
   </item>
 
-  <!-- Reincarnation Fish -->
   <item label="reincarnation-fish">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -576,7 +554,6 @@
     <frames>2</frames>
   </item>
 
-  <!-- Mortal Fish -->
   <item label="mortal-fish">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -594,7 +571,6 @@
     </shadow>
   </item>
 
-  <!-- Siren -->
   <item label="siren">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -615,7 +591,6 @@
     <frames>2</frames>
   </item>
 
-  <!-- Teleport -->
   <item label="teleport">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -651,7 +626,6 @@
     <frames>2</frames>
   </item>
 
-  <!-- Turtle -->
   <item label="turtle">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -672,7 +646,6 @@
     <frames>2</frames>
   </item>
 
-  <!-- Trampoline -->
   <item label="trampoline">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -692,7 +665,6 @@
     <frames>2</frames>
   </item>
 
-  <!-- Bubbles -->
   <item label="bubbles">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -711,7 +683,6 @@
     <frames>6</frames>
   </item>
 
-  <!-- Double Bubbles -->
   <item label="double-bubbles">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -730,7 +701,6 @@
     <frames>6</frames>
   </item>
 
-  <!-- Mortal cap -->
   <item label="mortal-cap">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -749,7 +719,6 @@
     </shadow>
   </item>
 
-  <!-- Cap -->
   <item label="cap">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -767,7 +736,6 @@
     </shadow>
   </item>
 
-  <!-- Big-head robot -->
   <item label="bighead-robot">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -787,7 +755,6 @@
     </shadow>
   </item>
 
-  <!-- Elephant -->
   <item label="elephant">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -807,7 +774,6 @@
     </shadow>
   </item>
 
-  <!-- Monkey -->
   <item label="monkey">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -827,7 +793,6 @@
     </shadow>
   </item>
 
-  <!-- Diver -->
   <item label="diver">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -847,7 +812,6 @@
     </shadow>
   </item>
 
-  <!-- Bubble robot -->
   <item label="bubble-robot">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -868,7 +832,6 @@
     <frames>4</frames>
   </item>
 
-  <!-- Imperial guard -->
   <item label="imperial-guard">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -888,7 +851,7 @@
     <frames>4</frames>
   </item>
 
-  <!-- Charles -->
+  <!-- Charlie the Dalek -->
   <item label="charles-robot">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -897,11 +860,11 @@
     <weight>10</weight>
     <betweenFrames>150</betweenFrames>
     <speed>40</speed>
-    <picture file="robot.png">
+    <picture file="charles-robot.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
     </picture>
-    <shadow file="robot-shadows.png">
+    <shadow file="charles-robot-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -975,7 +938,6 @@
     <extraFrames>4</extraFrames>
   </item>
 
-  <!-- Throne guard -->
   <item label="throne-guard">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -996,7 +958,6 @@
     <frames>4</frames>
   </item>
 
-  <!-- Emperor -->
   <item label="emperor">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -1017,7 +978,6 @@
     <frames>2</frames>
   </item>
 
-  <!-- Invisible Wall X -->
   <item label="invisible-wall-x">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1025,7 +985,6 @@
     <orientations>1</orientations>
   </item>
 
-  <!-- Invisible Wall Y -->
   <item label="invisible-wall-y">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1033,7 +992,6 @@
     <orientations>1</orientations>
   </item>
 
-  <!-- Jail Wall X -->
   <item label="jail-wall-x">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1045,7 +1003,6 @@
     </picture>
   </item>
 
-  <!-- Jail Wall Y -->
   <item label="jail-wall-y">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1057,7 +1014,6 @@
     </picture>
   </item>
 
-  <!-- Jail North Shaft -->
   <item label="jail-shaft-north">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1069,7 +1025,6 @@
     </picture>
   </item>
 
-  <!-- Jail North Capital -->
   <item label="jail-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1081,7 +1036,6 @@
     </picture>
   </item>
 
-  <!-- Jail East Shaft -->
   <item label="jail-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1093,7 +1047,6 @@
     </picture>
   </item>
 
-  <!-- Jail East Capital -->
   <item label="jail-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1105,7 +1058,6 @@
     </picture>
   </item>
 
-  <!-- Jail South Capital -->
   <item label="jail-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1117,7 +1069,6 @@
     </picture>
   </item>
 
-  <!-- Jail West Capital -->
   <item label="jail-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1129,7 +1080,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth Wall X variant 1 -->
   <item label="blacktooth-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1141,7 +1091,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth Wall Y variant 1 -->
   <item label="blacktooth-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1153,7 +1102,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth Wall X variant 2 -->
   <item label="blacktooth-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1165,7 +1113,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth Wall Y variant 2 -->
   <item label="blacktooth-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1177,7 +1124,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth Wall X variant 3 -->
   <item label="blacktooth-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1189,7 +1135,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth Wall Y variant 3 -->
   <item label="blacktooth-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1201,7 +1146,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth North Shaft -->
   <item label="blacktooth-column-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1213,7 +1157,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth North Capital -->
   <item label="blacktooth-column-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1225,7 +1168,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth East Shaft -->
   <item label="blacktooth-column-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1237,7 +1179,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth East Capital -->
   <item label="blacktooth-column-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1249,7 +1190,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth South Capital -->
   <item label="blacktooth-column-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1261,7 +1201,6 @@
     </picture>
   </item>
 
-  <!-- Blacktooth West Capital -->
   <item label="blacktooth-column-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1273,7 +1212,6 @@
     </picture>
   </item>
 
-  <!-- Market Wall X 1st version -->
   <item label="market-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1285,7 +1223,6 @@
     </picture>
   </item>
 
-  <!-- Market Wall Y 1st version -->
   <item label="market-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1297,7 +1234,6 @@
     </picture>
   </item>
 
-  <!-- Market Wall X 2nd version -->
   <item label="market-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1309,7 +1245,6 @@
     </picture>
   </item>
 
-  <!-- Market Wall Y 2nd version -->
   <item label="market-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1321,7 +1256,6 @@
     </picture>
   </item>
 
-  <!-- Market Wall X 3rd version -->
   <item label="market-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1333,7 +1267,6 @@
     </picture>
   </item>
 
-  <!-- Market Wall Y 3rd version -->
   <item label="market-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1345,7 +1278,6 @@
     </picture>
   </item>
 
-  <!-- Market North Shaft -->
   <item label="market-column-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1357,7 +1289,6 @@
     </picture>
   </item>
 
-  <!-- Market North Capital -->
   <item label="market-column-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1369,7 +1300,6 @@
     </picture>
   </item>
 
-  <!-- Market East Shaft -->
   <item label="market-column-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1381,7 +1311,6 @@
     </picture>
   </item>
 
-  <!-- Market East Capital -->
   <item label="market-column-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1393,7 +1322,6 @@
     </picture>
   </item>
 
-  <!-- Market South Capital -->
   <item label="market-column-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1405,7 +1333,6 @@
     </picture>
   </item>
 
-  <!-- Market West Capital -->
   <item label="market-column-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1417,7 +1344,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall X 1st variant -->
   <item label="moon-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1429,7 +1355,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall Y 1st variant -->
   <item label="moon-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1441,7 +1366,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall X 2nd variant -->
   <item label="moon-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1453,7 +1377,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall Y 2nd variant -->
   <item label="moon-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1465,7 +1388,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall X 3rd variant -->
   <item label="moon-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1477,7 +1399,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall Y 3rd variant -->
   <item label="moon-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1489,7 +1410,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall X 4th variant -->
   <item label="moon-wall-x-4">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1501,7 +1421,6 @@
     </picture>
   </item>
 
-  <!-- Moon Wall Y 4th variant -->
   <item label="moon-wall-y-4">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1513,7 +1432,6 @@
     </picture>
   </item>
 
-  <!-- Moon North Shaft -->
   <item label="moon-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1525,7 +1443,6 @@
     </picture>
   </item>
 
-  <!-- Moon Capital North -->
   <item label="moon-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1537,7 +1454,6 @@
     </picture>
   </item>
 
-  <!-- Moon East Shaft -->
   <item label="moon-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1549,7 +1465,6 @@
     </picture>
   </item>
 
-  <!-- Moon Capital East -->
   <item label="moon-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1561,7 +1476,6 @@
     </picture>
   </item>
 
-  <!-- Moon Capital South -->
   <item label="moon-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1573,7 +1487,6 @@
     </picture>
   </item>
 
-  <!-- Moon Capital West -->
   <item label="moon-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1585,7 +1498,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Wall X variant 1 -->
   <item label="byblos-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1597,7 +1509,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Wall Y variant 1 -->
   <item label="byblos-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1609,7 +1520,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Wall X variant 2 -->
   <item label="byblos-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1621,7 +1531,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Wall Y variant 2 -->
   <item label="byblos-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1633,7 +1542,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Shaft North -->
   <item label="byblos-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1645,7 +1553,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Capital North -->
   <item label="byblos-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1657,7 +1564,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Shaft East -->
   <item label="byblos-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1669,7 +1575,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Capital East -->
   <item label="byblos-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1681,7 +1586,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Capital South -->
   <item label="byblos-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1693,7 +1597,6 @@
     </picture>
   </item>
 
-  <!-- Byblos Capital West -->
   <item label="byblos-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1705,7 +1608,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Wall X 1st variant -->
   <item label="egyptus-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1717,7 +1619,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Wall Y 1st variant -->
   <item label="egyptus-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1729,7 +1630,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Wall X 2nd variant -->
   <item label="egyptus-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1741,7 +1641,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Wall Y 2nd variant -->
   <item label="egyptus-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1753,7 +1652,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Shaft North -->
   <item label="egyptus-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1765,7 +1663,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Capital North -->
   <item label="egyptus-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1777,7 +1674,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Shaft East -->
   <item label="egyptus-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1789,7 +1685,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Capital East -->
   <item label="egyptus-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1801,7 +1696,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Capital South -->
   <item label="egyptus-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1813,7 +1707,6 @@
     </picture>
   </item>
 
-  <!-- Egyptus Capital West -->
   <item label="egyptus-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1825,7 +1718,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Wall X variant 1 -->
   <item label="penitentiary-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1837,7 +1729,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Wall Y variant 1 -->
   <item label="penitentiary-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1849,7 +1740,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Wall X variant 2 -->
   <item label="penitentiary-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1861,7 +1751,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Wall Y variant 2 -->
   <item label="penitentiary-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1873,7 +1762,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Shaft North -->
   <item label="penitentiary-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1885,7 +1773,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Capital North -->
   <item label="penitentiary-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1897,7 +1784,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Shaft East -->
   <item label="penitentiary-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1909,7 +1795,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Capital East -->
   <item label="penitentiary-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1921,7 +1806,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Capital South -->
   <item label="penitentiary-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1933,7 +1817,6 @@
     </picture>
   </item>
 
-  <!-- Penitentiary Capital West -->
   <item label="penitentiary-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -1945,7 +1828,6 @@
     </picture>
   </item>
 
-  <!-- Safari Wall X 1st variant -->
   <item label="safari-wall-x-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1957,7 +1839,6 @@
     </picture>
   </item>
 
-  <!-- Safari Wall Y 1st variant -->
   <item label="safari-wall-y-1">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1969,7 +1850,6 @@
     </picture>
   </item>
 
-  <!-- Safari Wall X 2nd variant -->
   <item label="safari-wall-x-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1981,7 +1861,6 @@
     </picture>
   </item>
 
-  <!-- Safari Wall Y 2nd variant -->
   <item label="safari-wall-y-2">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -1993,7 +1872,6 @@
     </picture>
   </item>
 
-  <!-- Safari Wall X 3rd variant -->
   <item label="safari-wall-x-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -2005,7 +1883,6 @@
     </picture>
   </item>
 
-  <!-- Safari Wall Y 3rd variant -->
   <item label="safari-wall-y-3">
     <widthX>16</widthX>
     <widthY>0</widthY>
@@ -2017,7 +1894,6 @@
     </picture>
   </item>
 
-  <!-- Safari Shaft North -->
   <item label="safari-shaft-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -2029,7 +1905,6 @@
     </picture>
   </item>
 
-  <!-- Safari Capital North -->
   <item label="safari-capital-north">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -2041,7 +1916,6 @@
     </picture>
   </item>
 
-  <!-- Safari Shaft East -->
   <item label="safari-shaft-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -2053,7 +1927,6 @@
     </picture>
   </item>
 
-  <!-- Safari Capital East -->
   <item label="safari-capital-east">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -2065,7 +1938,6 @@
     </picture>
   </item>
 
-  <!-- Safari Capital South -->
   <item label="safari-capital-south">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -2077,7 +1949,6 @@
     </picture>
   </item>
 
-  <!-- Safari Capital West -->
   <item label="safari-capital-west">
     <widthX>16</widthX>
     <widthY>16</widthY>
@@ -2089,7 +1960,6 @@
     </picture>
   </item>
 
-  <!-- Jail North Door -->
   <door label="jail-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2112,7 +1982,6 @@
     </picture>
   </door>
 
-  <!-- Blacktooth North Door -->
   <door label="blacktooth-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2135,7 +2004,6 @@
     </picture>
   </door>
 
-  <!-- Market North Door -->
   <door label="market-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2158,7 +2026,6 @@
     </picture>
   </door>
 
-  <!-- Moon North Door -->
   <door label="moon-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2181,7 +2048,6 @@
     </picture>
   </door>
 
-  <!-- Byblos North Door -->
   <door label="byblos-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2204,7 +2070,6 @@
     </picture>
   </door>
 
-  <!-- Egyptus North Door -->
   <door label="egyptus-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2227,7 +2092,6 @@
     </picture>
   </door>
 
-  <!-- Penitentiary North Door -->
   <door label="penitentiary-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2250,7 +2114,6 @@
     </picture>
   </door>
 
-  <!-- Safari North Door -->
   <door label="safari-door-north">
     <leftJamb>
       <widthX>9</widthX>
@@ -2273,7 +2136,6 @@
     </picture>
   </door>
 
-  <!-- Jail South Door -->
   <door label="jail-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2296,7 +2158,6 @@
     </picture>
   </door>
 
-  <!-- Blacktooth South Door -->
   <door label="blacktooth-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2319,7 +2180,6 @@
     </picture>
   </door>
 
-  <!-- Market South Door -->
   <door label="market-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2342,7 +2202,6 @@
     </picture>
   </door>
 
-  <!-- Moon South Door -->
   <door label="moon-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2365,7 +2224,6 @@
     </picture>
   </door>
 
-  <!-- Byblos South Door -->
   <door label="byblos-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2388,7 +2246,6 @@
     </picture>
   </door>
 
-  <!-- Egyptus South Door -->
   <door label="egyptus-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2411,7 +2268,6 @@
     </picture>
   </door>
 
-  <!-- Penitentiary South Door -->
   <door label="penitentiary-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2434,7 +2290,6 @@
     </picture>
   </door>
 
-  <!-- Safari South Door -->
   <door label="safari-door-south">
     <leftJamb>
       <widthX>9</widthX>
@@ -2457,7 +2312,6 @@
     </picture>
   </door>
 
-  <!-- Jail East Door -->
   <door label="jail-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2480,7 +2334,6 @@
     </picture>
   </door>
 
-  <!-- Blacktooth East Door -->
   <door label="blacktooth-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2503,7 +2356,6 @@
     </picture>
   </door>
 
-  <!-- Market East Door -->
   <door label="market-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2526,7 +2378,6 @@
     </picture>
   </door>
 
-  <!-- Moon East Door -->
   <door label="moon-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2549,7 +2400,6 @@
     </picture>
   </door>
 
-  <!-- Byblos East Door -->
   <door label="byblos-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2572,7 +2422,6 @@
     </picture>
   </door>
 
-  <!-- Egyptus East Door -->
   <door label="egyptus-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2595,7 +2444,6 @@
     </picture>
   </door>
 
-  <!-- Penitentiary East Door -->
   <door label="penitentiary-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2618,7 +2466,6 @@
     </picture>
   </door>
 
-  <!-- Safari East Door -->
   <door label="safari-door-east">
     <leftJamb>
       <widthX>9</widthX>
@@ -2641,7 +2488,6 @@
     </picture>
   </door>
 
-  <!-- Jail West Door -->
   <door label="jail-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2664,7 +2510,6 @@
     </picture>
   </door>
 
-  <!-- Blacktooth West Door -->
   <door label="blacktooth-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2687,7 +2532,6 @@
     </picture>
   </door>
 
-  <!-- Market West Door -->
   <door label="market-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2710,7 +2554,6 @@
     </picture>
   </door>
 
-  <!-- Moon West Door -->
   <door label="moon-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2733,7 +2576,6 @@
     </picture>
   </door>
 
-  <!-- Byblos West Door -->
   <door label="byblos-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2756,7 +2598,6 @@
     </picture>
   </door>
 
-  <!-- Egyptus West Door -->
   <door label="egyptus-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2779,7 +2620,6 @@
     </picture>
   </door>
 
-  <!-- Penitentiary West Door -->
   <door label="penitentiary-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2802,7 +2642,6 @@
     </picture>
   </door>
 
-  <!-- Safari West Door -->
   <door label="safari-door-west">
     <leftJamb>
       <widthX>9</widthX>
@@ -2824,4 +2663,5 @@
       <frameHeight>140</frameHeight>
     </picture>
   </door>
+
 </items>

@@ -19,6 +19,9 @@ class GamePreferences
 
 public:
 
+        /**
+         * read the preferences from XML file
+         */
         static bool readPreferences ( const std::string & fileName ) ;
 
         static bool writePreferences ( const std::string & fileName ) ;

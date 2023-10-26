@@ -216,7 +216,7 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
                         description.setHeightOfShadow( std::atoi( shadowHeight->FirstChild()->ToText()->Value() ) );
         }
 
-        // the sequence of frames for an orientation is either simple 0,1,... or custom
+        // the sequence of frames for an orientation may be either simple 0,1,... or custom
         const tinyxml2::XMLElement* frames = element.FirstChildElement( "frames" ) ;
         if ( frames != nilPointer )
         {
@@ -225,27 +225,23 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
         }
         else
         {
+                // the custom sequence
                 std::vector< unsigned int > sequence ;
 
-                const tinyxml2::XMLElement* frame = element.FirstChildElement( "frame" ) ;
-                if ( frame != nilPointer )
+                for ( const tinyxml2::XMLElement* frame = element.FirstChildElement( "frame" ) ;
+                                frame != nilPointer ;
+                                frame = frame->NextSiblingElement( "frame" ) )
                 {
-                        // the custom sequence
-                        for ( const tinyxml2::XMLElement* frame = element.FirstChildElement( "frame" ) ;
-                                        frame != nilPointer ;
-                                        frame = frame->NextSiblingElement( "frame" ) )
-                        {
-                                sequence.push_back( std::atoi( frame->FirstChild()->ToText()->Value() ) );
-                        }
-                }
-                else
-                {
-                        if ( sequence.size () > 0 ) sequence.clear () ;
-                        sequence.push_back( 0 ) ;
+                        sequence.push_back( std::atoi( frame->FirstChild()->ToText()->Value() ) );
                 }
 
-                description.setSequenceOFrames( sequence ) ;
+                if ( sequence.size() > 0 )
+                        description.setSequenceOFrames( sequence ) ;
         }
+
+        // ... if neither
+        if ( description.howManyFramesPerOrientation () == 0 )
+                description.makeSequenceOFrames( 1 ) ; // then it's static
 
         // how many various orientations
         const tinyxml2::XMLElement* orientations = element.FirstChildElement( "orientations" ) ;
