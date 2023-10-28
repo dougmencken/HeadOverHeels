@@ -31,9 +31,9 @@ public:
 
 private:
 
-        std::string scenery = "none" ;
+        std::string scenery ;
 
-        std::string doorAt = "void" ;
+        std::string doorAt ;
 
         // the three parts of door are the lintel, the left jamb and the right jamb
         DescriptionOfItem * lintel ;

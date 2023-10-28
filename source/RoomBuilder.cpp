@@ -105,28 +105,41 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                tinyxml2::XMLElement* kindOfItem = item->FirstChildElement( "kind" );
-                if ( kindOfItem == nilPointer ) kindOfItem = item->FirstChildElement( "type" );
-                std::string kind = kindOfItem->FirstChild()->ToText()->Value() ;
+                std::string kindOfItem = "somewhat" ;
+                tinyxml2::XMLElement* kind = item->FirstChildElement( "kind" );
+                if ( kind != nilPointer )
+                        kindOfItem = kind->FirstChild()->ToText()->Value() ;
 
-                if ( kind == "door" )
+                if ( kindOfItem == "door" )
                 {
+                        std::string whereIsDoor = "nowhere" ;
                         tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
-                        if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
-                        std::string theWay = orientation->FirstChild()->ToText()->Value();
+                        if ( orientation != nilPointer )
+                                whereIsDoor = orientation->FirstChild()->ToText()->Value() ;
+                        else {
+                                tinyxml2::XMLElement* label = item->FirstChildElement( "label" );
+                                if ( label != nilPointer ) {
+                                        std::string doorLabel = label->FirstChild()->ToText()->Value();
 
-                        if ( theWay == "north" || theWay == "northeast" || theWay == "northwest" )
-                                hasNorthDoor = true;
-                        else if ( theWay == "east" || theWay == "eastnorth" || theWay == "eastsouth" )
-                                hasEastDoor = true;
-                        else if ( theWay == "south" || theWay == "southeast" || theWay == "southwest" )
-                                hasSouthDoor = true;
-                        else if ( theWay == "west" || theWay == "westnorth" || theWay == "westsouth" )
-                                hasWestDoor = true;
+                                        // the door's label is %scenery%-door-%at%
+                                        size_t doorInLabel = doorLabel.find( "door-" );
+                                        if ( doorInLabel != std::string::npos )
+                                                whereIsDoor = doorLabel.substr( doorInLabel + 5 );
+                                }
+                        }
+
+                        if ( whereIsDoor == "north" || whereIsDoor == "northeast" || whereIsDoor == "northwest" )
+                                hasNorthDoor = true ;
+                        else if ( whereIsDoor == "east" || whereIsDoor == "eastnorth" || whereIsDoor == "eastsouth" )
+                                hasEastDoor = true ;
+                        else if ( whereIsDoor == "south" || whereIsDoor == "southeast" || whereIsDoor == "southwest" )
+                                hasSouthDoor = true ;
+                        else if ( whereIsDoor == "west" || whereIsDoor == "westnorth" || whereIsDoor == "westsouth" )
+                                hasWestDoor = true ;
                 }
         }
 
-        // with the knowledge about doors, calculate the coordinates of origin
+        // knowing about the doors, calculate the coordinates of origin
         theRoom->calculateCoordinatesOfOrigin( hasNorthDoor, hasEastDoor, hasSouthDoor, hasWestDoor );
 
         // build walls without doors
@@ -167,11 +180,10 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 int itemZ = std::atoi( item->Attribute( "z" ) );
 
                 tinyxml2::XMLElement* kindOfItem = item->FirstChildElement( "kind" );
-                if ( kindOfItem == nilPointer ) kindOfItem = item->FirstChildElement( "type" );
+                assert( kindOfItem != nilPointer );
                 std::string kind = kindOfItem->FirstChild()->ToText()->Value() ;
 
-                // it’s a door
-                if ( kind == "door" )
+                if ( kind == "door" ) // is it a door
                 {
                         Door* door = buildDoor( item );
 
@@ -180,8 +192,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         else
                                 std::cout << "oops, can’t build a door with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
                 }
-                // it’s a grid item
-                else if ( kind == "griditem" )
+                else if ( kind == "griditem" ) // is it a grid item
                 {
                         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
                         int wallX = std::atoi( item->Attribute( "x" ) );
@@ -231,11 +242,11 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 wallsXY.push_back( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
                                 }
                                 else
-                                        std::cout << "oops, can’t build a grid item with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
+                                        std::cout << "oops, can’t build a grid item with coordinates "
+                                                        << itemX << ", " << itemY << ", " << itemZ << std::endl ;
                         }
                 }
-                // it is a free item
-                else if ( kind == "freeitem" )
+                else if ( kind == "freeitem" ) // is it a free item
                 {
                         FreeItemPtr freeItem = buildFreeItem( item, theRoom );
 
@@ -678,14 +689,14 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 int itemX = std::atoi( item->Attribute( "x" ) );
                 int itemY = std::atoi( item->Attribute( "y" ) );
                 int itemZ = std::atoi( item->Attribute( "z" ) );
+                itemZ = ( itemZ > Isomot::FloorZ ) ? itemZ * Isomot::LayerHeight : Isomot::FloorZ ;
 
+                std::string theWay = "nowhere" ;
                 tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
-                if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
-                std::string theWay = orientation->FirstChild()->ToText()->Value();
+                if ( orientation != nilPointer )
+                        theWay = orientation->FirstChild()->ToText()->Value();
 
-                GridItemPtr gridItem( new GridItem( itemDescription,
-                                                    itemX, itemY, itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ,
-                                                    theWay ) );
+                GridItemPtr gridItem( new GridItem( itemDescription, itemX, itemY, itemZ, theWay ) );
 
                 std::string behaviorOfItem = "still";
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
@@ -718,7 +729,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 unsigned int oneTileLong = room->getSizeOfOneTile ();
                 int fx = itemX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
                 int fy = ( itemY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
-                int fz = ( itemZ != Isomot::Top ) ? itemZ * Isomot::LayerHeight : Isomot::Top ;
+                int fz = ( itemZ != Isomot::FloorZ ) ? itemZ * Isomot::LayerHeight : Isomot::FloorZ ;
 
                 // don’t create the item if it's a bonus that disappears once when taken
                 if ( BonusManager::getInstance().isAbsent( BonusInRoom( itemDescription->getLabel(), room->getNameOfRoomDescriptionFile() ) ) )
@@ -726,9 +737,10 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                         return FreeItemPtr () ;
                 }
 
+                std::string theWay = "nowhere" ;
                 tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
-                if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
-                std::string theWay = orientation->FirstChild()->ToText()->Value();
+                if ( orientation != nilPointer )
+                        theWay = orientation->FirstChild()->ToText()->Value();
 
                 FreeItemPtr freeItem( new FreeItem( itemDescription, fx, fy, fz, theWay ) );
 
@@ -739,9 +751,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 std::string behaviorOfItem = "still";
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
                 if ( behavior != nilPointer )
-                {
                         behaviorOfItem = behavior->FirstChild()->ToText()->Value() ;
-                }
 
                 freeItem->setBehaviorOf( behaviorOfItem );
 
@@ -798,10 +808,19 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         int itemY = std::atoi( item->Attribute( "y" ) );
         int itemZ = std::atoi( item->Attribute( "z" ) );
 
-        tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
-        if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
+        // "z" can't be below the floor, that's less than Isomot::FloorZ = -1
+        itemZ = ( itemZ > Isomot::FloorZ ) ? itemZ * Isomot::LayerHeight : Isomot::FloorZ ;
 
-        return
-                new Door( label, itemX, itemY, ( itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ),
-                                 orientation->FirstChild()->ToText()->Value() );
+        std::string doorOrientation = "nowhere" ;
+        tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
+        if ( orientation != nilPointer )
+                doorOrientation = orientation->FirstChild()->ToText()->Value() ;
+        else {
+                // the door's label is %scenery%-door-%at%
+                size_t doorInLabel = label.find( "door-" );
+                if ( doorInLabel != std::string::npos )
+                        doorOrientation = label.substr( doorInLabel + 5 );
+        }
+
+        return new Door( label, itemX, itemY, itemZ, doorOrientation );
 }

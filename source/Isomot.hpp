@@ -59,17 +59,20 @@ public:
 
         void toggleCameraFollowsCharacter () {  cameraFollowsCharacter = ! cameraFollowsCharacter ;  }
 
-        static const int Top = -1 ;
+        /**
+         * The "z" position of the floor
+         */
+        static const int FloorZ = -1 ;
 
         /**
-         * Height in isometric units of layer
+         * The height in isometric units of a layer
          * Item in the grid at height n is n * LayerHeight units
          */
         static const int LayerHeight = 24 ;
 
         /**
-         * Maximum number of layers in room
-         * In isometric units maximum height of room is LayerHeight * MaxLayers
+         * The maximum number of layers in a room
+         * In isometric units, the maximum height of room is LayerHeight * MaxLayers
          */
         static const int MaxLayers = 10 ;
 

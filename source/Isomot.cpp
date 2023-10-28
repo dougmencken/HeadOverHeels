@@ -609,7 +609,7 @@ void Isomot::updateFinalRoom()
 
                 if ( arrived != nilPointer )
                 {
-                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Top, "south" ) );
+                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Isomot::FloorZ, "south" ) );
                         activeRoom->addFreeItem( character );
                 }
 
@@ -626,35 +626,35 @@ void Isomot::updateFinalRoom()
                 // la corona de Safari
                 if ( gameManager.isFreePlanet( "safari" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Top, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Isomot::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Egyptus
                 if ( gameManager.isFreePlanet( "egyptus" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Top, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Isomot::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Penitentiary
                 if ( gameManager.isFreePlanet( "penitentiary" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Top, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Isomot::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Byblos
                 if ( gameManager.isFreePlanet( "byblos" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Top, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Isomot::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Blacktooth
                 if ( gameManager.isFreePlanet( "blacktooth" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Top, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Isomot::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }

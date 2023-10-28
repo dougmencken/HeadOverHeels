@@ -30,10 +30,10 @@ void references::addreference( void * pointee, const std::string & type, void * 
                 else
                 {
                 # if defined( DEBUG_REFERENCES ) && DEBUG_REFERENCES
-                        std::cout << TERMINAL_COLOR_BOLD_BLUE << "pointer " << TERMINAL_COLOR_BOLD_RED << util::pointer2string( pointer ) <<
-                                        TERMINAL_COLOR_BOLD_BLUE << " to pointee " << TERMINAL_COLOR_BOLD_BLACK << util::pointer2string( pointee ) <<
-                                        TERMINAL_COLOR_BOLD_BLUE << " is already here" <<
-                                        TERMINAL_COLOR_OFF << std::endl ;
+                        std::cout << CONSOLE_COLOR_BOLD_BLUE << "pointer " << CONSOLE_COLOR_BOLD_RED << util::pointer2string( pointer ) <<
+                                        CONSOLE_COLOR_BOLD_BLUE << " to pointee " << CONSOLE_COLOR_BOLD_BLACK << util::pointer2string( pointee ) <<
+                                        CONSOLE_COLOR_BOLD_BLUE << " is already here" <<
+                                        CONSOLE_COLOR_OFF << std::endl ;
                 # endif
                 }
 
@@ -86,10 +86,10 @@ void references::compactreferences ()
                 if ( e->second.empty () )
                 {
                 # if defined( DEBUG_REFERENCES ) && ( DEBUG_REFERENCES > 1 )
-                        std::cout << TERMINAL_COLOR_BLUE << "there’s no more pointers to pointee " <<
-                                        TERMINAL_COLOR_BOLD_BLUE << util::demangle( types[ e->first ] ) << " * " <<
-                                        TERMINAL_COLOR_BOLD_GREEN << util::pointer2string( e->first ) <<
-                                        TERMINAL_COLOR_OFF << std::endl ;
+                        std::cout << CONSOLE_COLOR_BLUE << "there’s no more pointers to pointee " <<
+                                        CONSOLE_COLOR_BOLD_BLUE << util::demangle( types[ e->first ] ) << " * " <<
+                                        CONSOLE_COLOR_BOLD_GREEN << util::pointer2string( e->first ) <<
+                                        CONSOLE_COLOR_OFF << std::endl ;
                 # endif
 
                         types.erase( e->first );
@@ -106,10 +106,10 @@ void references::compactreferences ()
         }
 
 # if defined( DEBUG_REFERENCES ) && DEBUG_REFERENCES
-        std::cout << TERMINAL_COLOR_BLUE << "map of references had " <<
-                        TERMINAL_COLOR_BOLD_RED << sizebefore << TERMINAL_COLOR_BLUE << " entries before compacting, and has " <<
-                        TERMINAL_COLOR_BOLD_GREEN << entries.size() << TERMINAL_COLOR_BLUE << " entries after compacting"
-                        TERMINAL_COLOR_OFF << std::endl ;
+        std::cout << CONSOLE_COLOR_BLUE << "map of references had " <<
+                        CONSOLE_COLOR_BOLD_RED << sizebefore << CONSOLE_COLOR_BLUE << " entries before compacting, and has " <<
+                        CONSOLE_COLOR_BOLD_GREEN << entries.size() << CONSOLE_COLOR_BLUE << " entries after compacting"
+                        CONSOLE_COLOR_OFF << std::endl ;
 # endif
 
         unlockmutex ();
@@ -141,21 +141,21 @@ references::~references( )
         {
                 if ( ! e->second.empty () )
                 {
-                        std::cout << TERMINAL_COLOR_RED << "leaking " <<
-                                        TERMINAL_COLOR_BOLD_BLUE << util::demangle( types[ e->first ] ) << " * " <<
-                                        TERMINAL_COLOR_BOLD_RED << util::pointer2string( e->first ) << TERMINAL_COLOR_OFF ;
+                        std::cout << CONSOLE_COLOR_RED << "leaking " <<
+                                        CONSOLE_COLOR_BOLD_BLUE << util::demangle( types[ e->first ] ) << " * " <<
+                                        CONSOLE_COLOR_BOLD_RED << util::pointer2string( e->first ) << CONSOLE_COLOR_OFF ;
 
                         size_t refs = e->second.size () ;
                         const std::string times = ( refs == 1 ) ? "once" : util::number2string( refs ) + " times" ;
 
-                        std::cout << TERMINAL_COLOR_RED << " referenced " << TERMINAL_COLOR_BLUE << times << TERMINAL_COLOR_RED << " by" ;
+                        std::cout << CONSOLE_COLOR_RED << " referenced " << CONSOLE_COLOR_BLUE << times << CONSOLE_COLOR_RED << " by" ;
 
                         for ( size_t i = 0 ; i < refs ; ++ i )
                         {
-                                std::cout << " " << TERMINAL_COLOR_BOLD_BLACK << util::pointer2string( e->second[ i ] ) ;
+                                std::cout << " " << CONSOLE_COLOR_BOLD_BLACK << util::pointer2string( e->second[ i ] ) ;
                         }
 
-                        std::cout << TERMINAL_COLOR_OFF << std::endl ;
+                        std::cout << CONSOLE_COLOR_OFF << std::endl ;
 
                         ++ howMany ;
                 }
@@ -163,8 +163,8 @@ references::~references( )
 
         unlockmutex ();
 
-        std::cout << TERMINAL_COLOR_BOLD_RED << howMany << TERMINAL_COLOR_RED << " objects are leaking"
-                        TERMINAL_COLOR_OFF << std::endl ;
+        std::cout << CONSOLE_COLOR_BOLD_RED << howMany << CONSOLE_COLOR_RED << " objects are leaking"
+                        CONSOLE_COLOR_OFF << std::endl ;
 #endif
 
         pthread_mutex_destroy( &mutex );

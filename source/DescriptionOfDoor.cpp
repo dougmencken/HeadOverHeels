@@ -4,6 +4,8 @@
 
 DescriptionOfDoor::DescriptionOfDoor( const std::string & doorLabel )
         : DescriptionOfItem( doorLabel )
+        , scenery( "none" )
+        , doorAt( "void" )
 {
         setNameOfPicturesFile( doorLabel + ".png" );
         setWidthOfFrame( DescriptionOfDoor::WIDTH_OF_DOOR_IMAGE );

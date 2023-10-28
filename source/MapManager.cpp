@@ -594,7 +594,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         if ( wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
         {
-                entryZ = Isomot::Top ;
+                entryZ = Isomot::FloorZ ;
         }
 
         // no taken item in new room

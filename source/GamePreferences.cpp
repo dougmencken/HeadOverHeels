@@ -40,14 +40,14 @@ bool GamePreferences::readPreferences( const std::string & fileName )
 
         // chosen keys
 
-        tinyxml2::XMLElement* keyboard = root->FirstChildElement( "keyboard" ) ;
-        if ( keyboard != nilPointer )
+        tinyxml2::XMLElement* keys = root->FirstChildElement( "keys" ) ;
+        if ( keys != nilPointer )
         {
                 const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & chosenKeys = InputManager::getInstance().getUserKeys ();
                 for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = chosenKeys.begin () ; it != chosenKeys.end () ; ++ it )
                 {
                         std::string xmlAction = ( it->first == "take&jump" ) ? "takeandjump" : it->first ;
-                        tinyxml2::XMLElement* elementForKey = keyboard->FirstChildElement( xmlAction.c_str () ) ;
+                        tinyxml2::XMLElement* elementForKey = keys->FirstChildElement( xmlAction.c_str () ) ;
 
                         if ( elementForKey != nilPointer && elementForKey->FirstChild() != nilPointer )
                                 InputManager::getInstance().changeUserKey( it->first, elementForKey->FirstChild()->ToText()->Value() );
@@ -182,7 +182,7 @@ bool GamePreferences::writePreferences( const std::string & fileName )
 
         // keys
         {
-                tinyxml2::XMLNode * keyboard = preferences.NewElement( "keyboard" );
+                tinyxml2::XMLNode * keys = preferences.NewElement( "keys" );
 
                 const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & chosenKeys = InputManager::getInstance().getUserKeys ();
                 for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = chosenKeys.begin () ; it != chosenKeys.end () ; ++ it )
@@ -190,10 +190,10 @@ bool GamePreferences::writePreferences( const std::string & fileName )
                         std::string xmlAction = ( it->first == "take&jump" ) ? "takeandjump" : it->first ;
                         tinyxml2::XMLElement* elementForKey = preferences.NewElement( xmlAction.c_str () ) ;
                         elementForKey->SetText( InputManager::getInstance().getUserKeyFor( it->first ).c_str () );
-                        keyboard->InsertEndChild( elementForKey );
+                        keys->InsertEndChild( elementForKey );
                 }
 
-                root->InsertEndChild( keyboard );
+                root->InsertEndChild( keys );
         }
 
         // audio

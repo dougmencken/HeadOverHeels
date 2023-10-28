@@ -83,10 +83,10 @@ void FreeItem::freshProcessedImage ()
 #if defined( DEBUG_SHADOWS_AND_MASKS ) && DEBUG_SHADOWS_AND_MASKS
         if ( getUniqueName().find( "bars" ) != std::string::npos )
         {
-                std::cout << TERMINAL_COLOR_BLUE << "\"" << getProcessedImage().getName()
+                std::cout << CONSOLE_COLOR_BLUE << "\"" << getProcessedImage().getName()
                                 << "\" of " << whichKindOfItem() << " \"" << getUniqueName()
                                 << "\" just refreshed from shaded nonmasked image"
-                                << TERMINAL_COLOR_OFF << std::endl ;
+                                << CONSOLE_COLOR_OFF << std::endl ;
 
                 Color::multiplyWithColor( getProcessedImage(), Color::byName( "cyan" ) );
         }
@@ -101,10 +101,10 @@ void FreeItem::freshBothProcessedImages ()
 #if defined( DEBUG_SHADOWS_AND_MASKS ) && DEBUG_SHADOWS_AND_MASKS
         if ( getUniqueName().find( "bars" ) != std::string::npos )
         {
-                std::cout << TERMINAL_COLOR_RED << "\"" << getShadedNonmaskedImage().getName()
+                std::cout << CONSOLE_COLOR_RED << "\"" << getShadedNonmaskedImage().getName()
                                 << "\" of " << whichKindOfItem() << " \"" << getUniqueName()
                                 << "\" just refreshed from raw image"
-                                << TERMINAL_COLOR_OFF << std::endl ;
+                                << CONSOLE_COLOR_OFF << std::endl ;
 
                 Color::multiplyWithColor( getShadedNonmaskedImage(), Color::byName( "yellow" ) );
         }

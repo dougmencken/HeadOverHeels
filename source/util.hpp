@@ -41,17 +41,17 @@
     #define IF_DEBUG( line )
 #endif
 
-#define TERMINAL_COLOR_OFF              "\033[0m"
+#define CONSOLE_COLOR_OFF               "\033[0m"
 
-#define TERMINAL_COLOR_BLACK            "\033[0;30m"
-#define TERMINAL_COLOR_BLUE             "\033[0;34m"
-#define TERMINAL_COLOR_RED              "\033[0;31m"
-#define TERMINAL_COLOR_GREEN            "\033[0;32m"
+#define CONSOLE_COLOR_BLACK             "\033[0;30m"
+#define CONSOLE_COLOR_BLUE              "\033[0;34m"
+#define CONSOLE_COLOR_RED               "\033[0;31m"
+#define CONSOLE_COLOR_GREEN             "\033[0;32m"
 
-#define TERMINAL_COLOR_BOLD_BLACK       "\033[1;30m"
-#define TERMINAL_COLOR_BOLD_BLUE        "\033[1;34m"
-#define TERMINAL_COLOR_BOLD_RED         "\033[1;31m"
-#define TERMINAL_COLOR_BOLD_GREEN       "\033[1;32m"
+#define CONSOLE_COLOR_BOLD_BLACK        "\033[1;30m"
+#define CONSOLE_COLOR_BOLD_BLUE         "\033[1;34m"
+#define CONSOLE_COLOR_BOLD_RED          "\033[1;31m"
+#define CONSOLE_COLOR_BOLD_GREEN        "\033[1;32m"
 
 /**
  * Object-function to finalize elements of Standard Template Library container

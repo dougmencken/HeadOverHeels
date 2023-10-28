@@ -357,7 +357,7 @@ bool Room::saveAsXML( const std::string & file )
                                         item->SetAttribute( "x", theItem->getCellX() );
                                         item->SetAttribute( "y", theItem->getCellY() );
                                         int z = theItem->getZ();
-                                        z = ( z > Isomot::Top ) ? ( z / Isomot::LayerHeight ) : Isomot::Top ;
+                                        z = ( z > Isomot::FloorZ ) ? ( z / Isomot::LayerHeight ) : Isomot::FloorZ ;
                                         item->SetAttribute( "z", z );
 
                                         tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
@@ -455,7 +455,7 @@ bool Room::saveAsXML( const std::string & file )
                                 item->SetAttribute( "x", theDoor->getCellX() );
                                 item->SetAttribute( "y", theDoor->getCellY() );
                                 int z = theDoor->getZ();
-                                z = ( z > Isomot::Top ) ? ( z / Isomot::LayerHeight ) : Isomot::Top ;
+                                z = ( z > Isomot::FloorZ ) ? ( z / Isomot::LayerHeight ) : Isomot::FloorZ ;
                                 item->SetAttribute( "z", z );
 
                                 tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
@@ -676,7 +676,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         addGridItemToContainer( gridItem );
 
-        if ( gridItem->getZ() != Isomot::Top )
+        if ( gridItem->getZ() != Isomot::FloorZ )
         {
                 // when item goes lower than top, look for collisions
                 mediator->lookForCollisionsOf( gridItem->getUniqueName() );
@@ -720,7 +720,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 {
         if ( freeItem == nilPointer ) return;
 
-        if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Isomot::Top )
+        if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Isomot::FloorZ )
         {
                 std::cerr << "coordinates for " << freeItem->whichKindOfItem() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
@@ -759,7 +759,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         addFreeItemToContainer( freeItem );
 
         // for item which is placed at some height, look for collisions
-        if ( freeItem->getZ() > Isomot::Top )
+        if ( freeItem->getZ() > Isomot::FloorZ )
         {
                 mediator->lookForCollisionsOf( freeItem->getUniqueName() );
         }
@@ -838,7 +838,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                 }
         }
 
-        if ( character->getX() < 0 || character->getY() < 1 || character->getZ() < Isomot::Top )
+        if ( character->getX() < 0 || character->getY() < 1 || character->getZ() < Isomot::FloorZ )
         {
                 std::cerr << "coordinates for " << character->whichKindOfItem() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *character );
@@ -880,7 +880,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         addFreeItemToContainer( character );
 
         // for item which is placed at some height, look for collisions
-        if ( character->getZ() > Isomot::Top )
+        if ( character->getZ() > Isomot::FloorZ )
         {
                 mediator->lookForCollisionsOf( character->getUniqueName() );
                 while ( ! mediator->isStackOfCollisionsEmpty () )

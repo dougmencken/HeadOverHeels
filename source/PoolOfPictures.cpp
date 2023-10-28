@@ -36,7 +36,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
                 else
                 {
                 #if defined( DEBUG_POOL_OF_PICTURES ) && DEBUG_POOL_OF_PICTURES
-                        std::cout << TERMINAL_COLOR_RED << " picture " << TERMINAL_COLOR_BOLD_RED << key << TERMINAL_COLOR_RED << " is absent" << TERMINAL_COLOR_OFF << std::endl ;
+                        std::cout << CONSOLE_COLOR_RED << " picture " << CONSOLE_COLOR_BOLD_RED << key << CONSOLE_COLOR_RED << " is absent" << CONSOLE_COLOR_OFF << std::endl ;
                 #endif
                         pictures[ key ] = PicturePtr ();
                 }
@@ -62,7 +62,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
                 else
                 {
                 #if defined( DEBUG_POOL_OF_PICTURES ) && DEBUG_POOL_OF_PICTURES
-                        std::cout << TERMINAL_COLOR_BLUE << " picture " << TERMINAL_COLOR_BOLD_BLUE << key << TERMINAL_COLOR_BLUE << " is absent" << TERMINAL_COLOR_OFF << std::endl ;
+                        std::cout << CONSOLE_COLOR_BLUE << " picture " << CONSOLE_COLOR_BOLD_BLUE << key << CONSOLE_COLOR_BLUE << " is absent" << CONSOLE_COLOR_OFF << std::endl ;
                 #endif
                         makePicture( imageFile, imageWidth, imageHeight );
                 }
@@ -81,7 +81,7 @@ PicturePtr PoolOfPictures::makePicture( const std::string& imageFile, unsigned i
         pictures[ key ]->setName( "transparency chequerboard for absent " + key );
 
 #if defined( DEBUG_POOL_OF_PICTURES ) && DEBUG_POOL_OF_PICTURES
-        std::cout << TERMINAL_COLOR_GREEN << " made " << TERMINAL_COLOR_BOLD_GREEN << pictures[ key ]->getName() << TERMINAL_COLOR_OFF << std::endl ;
+        std::cout << CONSOLE_COLOR_GREEN << " made " << CONSOLE_COLOR_BOLD_GREEN << pictures[ key ]->getName() << CONSOLE_COLOR_OFF << std::endl ;
 #endif
 
         return pictures[ key ] ;
