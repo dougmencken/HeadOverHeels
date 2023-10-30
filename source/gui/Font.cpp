@@ -134,7 +134,7 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                                         while ( ( ( c & 0x80 ) != 0 ) && ( ( c & 0xC0 ) != 0xC0 )
                                                         && ( bytesInLetter < 4 ) && ( inBuf < length ) ) ;
 
-                                        letter[ bytesInLetter ] = 0;
+                                        letter[ bytesInLetter ] = 0 ; // end of string
 
                                         tableOfLetters[ inTable ] = std::string( letter );
                                         inTable++ ;
@@ -143,7 +143,7 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                 }
                 else
                 {
-                        std::cerr << "file \"" << file << "\" with table of letters is absent" << std::endl ;
+                        std::cerr << "file \"" << file << "\" with the table of letters is absent" << std::endl ;
                 }
         }
 

@@ -19,11 +19,11 @@ const Color * Color::theDarkBlue = new Color( 0, 0, 127, 0xff ) ;
 
 const Color * Color::theOrange = new Color( 255, 127, 0, 0xff ) ;
 
-const Color * Color::the50Gray = new Color( 127, 127, 127, 0xff ) ;
-const Color * Color::the75Gray = new Color( 191, 191, 191, 0xff ) ;
-const Color * Color::the25Gray = new Color( 63, 63, 63, 0xff ) ;
+const Color * Color::theGray50 = new Color( 127, 127, 127, 0xff ) ;
+const Color * Color::theGray75white = new Color( 191, 191, 191, 0xff ) ;
+const Color * Color::theGray25white = new Color( 63, 63, 63, 0xff ) ;
 
-const Color * Color::theReducedWhite = Color::the75Gray ;
+const Color * Color::theReducedWhite = Color::theGray75white ;
 
 const Color * Color::theReducedBlue = new Color( 0, 0, 191, 0xff ) ;
 const Color * Color::theReducedRed = new Color( 191, 0, 0, 0xff ) ;
@@ -48,7 +48,7 @@ Color::Color( )
 {
 }
 
-Color Color::operator * ( const Color & c ) const
+Color Color::multiply ( const Color & c ) const
 {
         return Color( red * ( c.red / 255.0 ), green * ( c.green / 255.0 ), blue * ( c.blue / 255.0 ), alpha ) ;
 }
@@ -78,9 +78,9 @@ const Color& Color::byName ( const std::string& color )
 
         if ( color == "orange" ) return *theOrange ;
 
-        if ( color == "gray50" || color == "50% gray" || color == "gray 50%" || color == "gray" || color == "light black" || color == "black.light" ) return *the50Gray ;
-        if ( color == "gray75" || color == "75% gray" || color == "gray 75%" || color == "reduced white" || color == "white.reduced" ) return *the75Gray ;
-        if ( color == "gray25" || color == "25% gray" || color == "gray 25%" ) return *the25Gray ;
+        if ( color == "gray" || color == "gray50" || color == "50% gray" || color == "gray 50%" || color == "light black" || color == "black.light" ) return *theGray50 ;
+        if ( color == "gray75" || color == "gray 75% white" || color == "reduced white" || color == "white.reduced" ) return *theGray75white ;
+        if ( color == "gray25" || color == "gray 25% white" ) return *theGray25white ;
 
         if ( color == "reduced black" || color == "black.reduced" ) return *theBlack ;
         if ( color == "light white" || color == "white.light" ) return *theWhite ;
@@ -92,15 +92,16 @@ const Color& Color::byName ( const std::string& color )
         if ( color == "reduced cyan" || color == "cyan.reduced" ) return *theReducedCyan ;
         if ( color == "reduced yellow" || color == "yellow.reduced" ) return *theReducedYellow ;
 
-        if ( color == "light blue" || color == "lightblue" || color == "blue.light" ) return *theLightBlue ;
-        if ( color == "light red" || color == "lightred" || color == "red.light" ) return *theLightRed ;
-        if ( color == "light magenta" || color == "lightmagenta" || color == "magenta.light" ) return *theLightMagenta ;
-        if ( color == "light green" ||  color == "lightgreen" || color == "green.light" ) return *theLightGreen ;
-        if ( color == "light cyan" || color == "lightcyan" || color == "cyan.light" ) return *theLightCyan ;
-        if ( color == "light yellow" || color == "lightyellow" || color == "yellow.light" ) return *theLightYellow ;
+        if ( color == "light blue" || color == "blue.light" ) return *theLightBlue ;
+        if ( color == "light red" || color == "red.light" ) return *theLightRed ;
+        if ( color == "light magenta" || color == "magenta.light" ) return *theLightMagenta ;
+        if ( color == "light green" || color == "green.light" ) return *theLightGreen ;
+        if ( color == "light cyan" || color == "cyan.light" ) return *theLightCyan ;
+        if ( color == "light yellow" || color == "yellow.light" ) return *theLightYellow ;
 
-        assert( color == "gray" );
-        return *the50Gray ;
+        std::cout << "unknown color \"" << color << "\" in Color::byName" << std::endl ;
+        assert( color == "unbeknown gray" );
+        return *theGray50 ;
 }
 
 /* public static */
@@ -148,8 +149,7 @@ void Color::multiplyWithColor( Picture& picture, unsigned char red, unsigned cha
                         unsigned char g = color.getGreen();
                         unsigned char b = color.getBlue();
 
-                        // don’t touch pixels with color of transparency
-                        if ( ! color.isKeyColor() )
+                        if ( ! color.isKeyColor() ) // don’t touch pixels with the color of transparency
                         {
                                 picture.putPixelAt( x, y, Color( r * ( red / 255.0 ), g * ( green / 255.0 ), b * ( blue / 255.0 ), color.getAlpha() ) );
                         }
@@ -173,11 +173,12 @@ void Color::pictureToGrayscale ( Picture& picture )
                         // convert every color but the “ key ” one
                         if ( ! color.isKeyColor() )
                         {
-                                /* imagine color as vector: c { r, g, b }
-                                   for each shade of gray r=g=b =w: b { w, w, w }
-                                   vector has length: c•c = rr + gg + bb and b•b = ww + ww + ww = 3ww
-                                   converted vector has the same length as original:
-                                        for the same lengths sqrt ( c•c ) = sqrt ( b•b )
+                                /* imagine the color as the linear geometric vector c { r, g, b }
+                                   this color turns into the shade of gray r=g=b =w with vector b { w, w, w }
+                                   the lengths of vectors are c•c = rr + gg + bb and b•b = ww + ww + ww = 3ww
+                                   the converted vector has the same length as the original
+                                   for the same lengths
+                                        sqrt ( c•c ) = sqrt ( b•b )
                                         sqrt( rr + gg + bb ) = sqrt( 3 ) * w
                                         w = sqrt( ( rr + gg + bb ) / 3 )
                                 */

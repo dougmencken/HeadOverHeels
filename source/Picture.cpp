@@ -89,7 +89,7 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
         unsigned int height = getHeight ();
 
         const Color& white = Color::whiteColor() ;
-        const Color& gray75 = Color::byName( "gray 75%" );
+        const Color& gray75white = Color::byName( "gray 75% white" );
 
         getAllegroPict().lock( true, true );
 
@@ -103,7 +103,7 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
                                 if ( ( ( y % sizeOfSquare ) == ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) != ( x % sizeOfSquareDoubled ) ) ||
                                         ( ( y % sizeOfSquare ) != ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) == ( x % sizeOfSquareDoubled ) ) )
                                 {
-                                        whichColor = gray75 ;
+                                        whichColor = gray75white ;
                                 }
 
                                 putPixelAt( x, y, whichColor );

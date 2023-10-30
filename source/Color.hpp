@@ -37,21 +37,19 @@ public:
 
         virtual ~Color( ) { }
 
-        virtual unsigned char getRed () const {  return red ;  }
-
+        virtual unsigned char   getRed () const {  return red ;  }
         virtual unsigned char getGreen () const {  return green ;  }
-
-        virtual unsigned char getBlue () const {  return blue ;  }
-
+        virtual unsigned char  getBlue () const {  return blue ;  }
         virtual unsigned char getAlpha () const {  return alpha ;  }
 
-        Color operator * ( const Color & c ) const ;
+        Color multiply ( const Color & c ) const ;
 
-        bool operator == ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue && c.alpha == alpha ;  }
+        bool equals ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue && c.alpha == alpha ;  }
 
-        bool operator != ( const Color & c ) const {  return c.red != red || c.green != green || c.blue != blue || c.alpha != alpha ;  }
+        bool operator == ( const Color & c ) const {  return   equals( c );  }
+        bool operator != ( const Color & c ) const {  return ! equals( c );  }
 
-        bool isKeyColor () const {  return toAllegroColor().isKeyColor() ;  }
+        bool isFullyTransparent () const {  return toAllegroColor().isKeyColor() ;  }
 
         virtual AllegroColor toAllegroColor () const {  return AllegroColor::makeColor( red, green, blue, alpha ) ;  }
 
@@ -104,9 +102,9 @@ private:
 
         static const Color * theOrange ;
 
-        static const Color * the50Gray ;        // 50% gray
-        static const Color * the75Gray ;        // 75% gray
-        static const Color * the25Gray ;        // 25% gray
+        static const Color * theGray50 ;             // 50% gray
+        static const Color * theGray75white ;        // gray 75% white 25% black
+        static const Color * theGray25white ;        // gray 25% white 75% black
 
         static const Color * theReducedWhite ;
 
