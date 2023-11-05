@@ -135,32 +135,21 @@ SavedGameInfo CreateListOfSavedGames::readSomeInfoFromTheSavedGame( const std::s
                 }
         }
 
-        unsigned short howManyPlanetsLiberated = 0;
+        unsigned short howManyPlanetsLiberated = 0 ;
 
-        tinyxml2::XMLElement* freeByblos = root->FirstChildElement( "freeByblos" ) ;
-        if ( freeByblos != nilPointer )
-                if ( std::string( freeByblos->FirstChild()->ToText()->Value() ) == "true" )
-                        howManyPlanetsLiberated ++;
+        std::vector< std::string > planets ;
+        planets.push_back( "Byblos" );
+        planets.push_back( "Egyptus" );
+        planets.push_back( "Penitentiary" );
+        planets.push_back( "Safari" );
+        planets.push_back( "Blacktooth" );
 
-        tinyxml2::XMLElement* freeEgyptus = root->FirstChildElement( "freeEgyptus" ) ;
-        if ( freeEgyptus != nilPointer )
-                if ( std::string( freeEgyptus->FirstChild()->ToText()->Value() ) == "true" )
-                        howManyPlanetsLiberated ++;
-
-        tinyxml2::XMLElement* freePenitentiary = root->FirstChildElement( "freePenitentiary" ) ;
-        if ( freePenitentiary != nilPointer )
-                if ( std::string( freePenitentiary->FirstChild()->ToText()->Value() ) == "true" )
-                        howManyPlanetsLiberated ++;
-
-        tinyxml2::XMLElement* freeSafari = root->FirstChildElement( "freeSafari" ) ;
-        if ( freeSafari != nilPointer )
-                if ( std::string( freeSafari->FirstChild()->ToText()->Value() ) == "true" )
-                        howManyPlanetsLiberated ++;
-
-        tinyxml2::XMLElement* freeBlacktooth = root->FirstChildElement( "freeBlacktooth" ) ;
-        if ( freeBlacktooth != nilPointer )
-                if ( std::string( freeBlacktooth->FirstChild()->ToText()->Value() ) == "true" )
-                        howManyPlanetsLiberated ++;
+        for ( unsigned int i = 0 ; i < planets.size () ; ++ i ) {
+                tinyxml2::XMLElement* planet = root->FirstChildElement( planets[ i ].c_str () ) ;
+                if ( planet != nilPointer )
+                        if ( std::string( planet->Attribute( "free" ) ) == "yes" )
+                                howManyPlanetsLiberated ++ ;
+        }
 
         return SavedGameInfo( fileName, howManyRoomsExplored, howManyPlanetsLiberated );
 }
