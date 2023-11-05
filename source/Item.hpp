@@ -77,7 +77,7 @@ public:
         /**
          * Used for the metamorphosis into bubbles, such as when the character teleports
          */
-        void metamorphInto ( const std::string& kindOfItem, const std::string& initiatedBy ) ;
+        void metamorphInto ( const std::string & kindOfItem, const std::string & initiatedBy ) ;
 
         void changeOrientation ( const std::string & way ) ;
 

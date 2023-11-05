@@ -120,14 +120,11 @@ bool CharacterHeadAndHeels::update ()
                         jump( characterItem );
                         break;
 
-                case activities::Activity::BeginWayOutTeletransport:
-                case activities::Activity::WayOutTeletransport:
-                        wayOutTeletransport( characterItem );
+                case activities::Activity::BeginTeletransportation:
+                        enterTeletransport( characterItem );
                         break;
-
-                case activities::Activity::BeginWayInTeletransport:
-                case activities::Activity::WayInTeletransport:
-                        wayInTeletransport( characterItem );
+                case activities::Activity::EndTeletransportation:
+                        exitTeletransport( characterItem );
                         break;
 
                 case activities::Activity::MeetMortalItem:
@@ -174,11 +171,10 @@ void CharacterHeadAndHeels::behave ()
         InputManager & input = InputManager::getInstance() ;
 
         // if it’s not a move by inertia or some other exotic activity
-        if ( activity != activities::Activity::AutoMoveNorth && activity != activities::Activity::AutoMoveSouth &&
-                activity != activities::Activity::AutoMoveEast && activity != activities::Activity::AutoMoveWest &&
-                activity != activities::Activity::BeginWayOutTeletransport && activity != activities::Activity::WayOutTeletransport &&
-                activity != activities::Activity::BeginWayInTeletransport && activity != activities::Activity::WayInTeletransport &&
-                activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
+        if ( activity != activities::Activity::AutoMoveNorth && activity != activities::Activity::AutoMoveSouth
+                        && activity != activities::Activity::AutoMoveEast && activity != activities::Activity::AutoMoveWest
+                        && activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
+                        && activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
         {
                 // when waiting or blinking
                 if ( activity == activities::Activity::Wait || activity == activities::Activity::Blink )
@@ -189,7 +185,7 @@ void CharacterHeadAndHeels::behave ()
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
+                                                activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
@@ -223,7 +219,7 @@ void CharacterHeadAndHeels::behave ()
                                 activity = activities::Activity::MoveWest;
                         }
                 }
-                // already moving
+                // when already moving
                 else if ( activity == activities::Activity::MoveNorth || activity == activities::Activity::MoveSouth ||
                         activity == activities::Activity::MoveEast || activity == activities::Activity::MoveWest )
                 {
@@ -233,7 +229,7 @@ void CharacterHeadAndHeels::behave ()
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
+                                                activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
@@ -272,7 +268,7 @@ void CharacterHeadAndHeels::behave ()
                                 activity = activities::Activity::Wait;
                         }
                 }
-                // character is being displaced
+                // the character is being displaced
                 else if ( activity == activities::Activity::DisplaceNorth || activity == activities::Activity::DisplaceSouth ||
                         activity == activities::Activity::DisplaceEast || activity == activities::Activity::DisplaceWest )
                 {

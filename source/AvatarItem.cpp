@@ -69,7 +69,7 @@ void AvatarItem::setWayOfExit ( const std::string& way )
         }
 }
 
-void AvatarItem::autoMoveOnEntry ( const std::string& wayOfEntry )
+void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
 {
         setWayOfEntry( wayOfEntry );
 
@@ -107,7 +107,7 @@ void AvatarItem::autoMoveOnEntry ( const std::string& wayOfEntry )
 
                 case Way::ByTeleport:
                 case Way::ByTeleportToo:
-                        getBehavior()->changeActivityOfItem( activities::Activity::BeginWayInTeletransport );
+                        getBehavior()->changeActivityOfItem( activities::Activity::EndTeletransportation );
                         break;
 
                 case Way::Above:
@@ -401,11 +401,10 @@ void AvatarItem::wait ()
         ActivityOfItem activity = getBehavior()->getActivityOfItem();
 
         // don’t wait while teleporting or loosing life
-        if ( activity != activities::Activity::BeginWayOutTeletransport && activity != activities::Activity::WayOutTeletransport &&
-                activity != activities::Activity::BeginWayInTeletransport && activity != activities::Activity::WayInTeletransport &&
-                activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
+        if ( activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
+                        && activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
         {
-                // set waiting frame by orientation of item
+                // set waiting frame by orientation
                 changeFrame( firstFrame () );
 
                 getBehavior()->changeActivityOfItem( activities::Activity::Wait );

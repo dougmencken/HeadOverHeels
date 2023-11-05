@@ -88,15 +88,11 @@ protected:
         */
         virtual void glide( AvatarItem & character ) ;
 
-       /**
-        * Character teleports from another room
-        */
-        virtual void wayInTeletransport( AvatarItem & character ) ;
-
-       /**
-        * Character teleports to another room
-        */
-        virtual void wayOutTeletransport( AvatarItem & character ) ;
+        /**
+         * Character teleports to another room
+         */
+        virtual void enterTeletransport( AvatarItem & character ) ;
+        virtual void exitTeletransport( AvatarItem & character ) ;
 
        /**
         * Character collides with a mortal item

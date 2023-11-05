@@ -307,64 +307,41 @@ void PlayerControlled::glide( ::AvatarItem & character )
         }
 }
 
-void PlayerControlled::wayInTeletransport( ::AvatarItem & character )
+void PlayerControlled::enterTeletransport( ::AvatarItem & character )
 {
-        switch ( activity )
-        {
-                case activities::Activity::BeginWayInTeletransport:
-                        // change to bubbles
-                        character.metamorphInto( kindOfBubbles, "begin way in teletransport" );
+	if ( activity != activities::Activity::BeginTeletransportation ) return ;
 
-                        // reverse animation of bubbles
-                        character.doBackwardsMotion();
+        // morph into bubbles
+        if ( character.getKind() != kindOfBubbles )
+                character.metamorphInto( kindOfBubbles, "begin teletransportation" );
 
-                        activity = activities::Activity::WayInTeletransport;
-                        break;
+        // animate item, change room when the animation finishes
+        character.animate() ;
+        if ( ! character.animationFinished () ) return ;
 
-                case activities::Activity::WayInTeletransport:
-                        // animate item, character appears in room when animation finishes
-                        character.animate() ;
-
-                        if ( character.animationFinished () )
-                        {
-                                // back to original appearance of character
-                                character.metamorphInto( character.getOriginalKind(), "way in teletransport" );
-
-                                activity = activities::Activity::Wait;
-                        }
-                        break;
-
-                default:
-                        ;
-        }
+        character.addToZ( -1 );
+        character.setWayOfExit( character.getMediator()->collisionWithSomeKindOf( "teleport" ) != nilPointer
+                                        ? "via teleport" : "via second teleport" );
 }
 
-void PlayerControlled::wayOutTeletransport( ::AvatarItem & character )
+void PlayerControlled::exitTeletransport( ::AvatarItem & character )
 {
-        switch ( activity )
-        {
-                case activities::Activity::BeginWayOutTeletransport:
-                        // change to bubbles
-                        character.metamorphInto( kindOfBubbles, "begin way out teletransport" );
+	if ( activity != activities::Activity::EndTeletransportation ) return ;
 
-                        activity = activities::Activity::WayOutTeletransport;
-                        break;
-
-                case activities::Activity::WayOutTeletransport:
-                        // animate item, change room when animation finishes
-                        character.animate() ;
-
-                        if ( character.animationFinished () )
-                        {
-                                character.addToZ( -1 );
-                                character.setWayOfExit( character.getMediator()->collisionWithSomeKindOf( "teleport" ) != nilPointer ?
-                                        "via teleport" : "via second teleport" );
-                        }
-                        break;
-
-                default:
-                        ;
+        // morph back from bubbles
+        if ( character.getKind() != kindOfBubbles ) {
+                character.metamorphInto( kindOfBubbles, "backwards motion" );
+                character.doBackwardsMotion(); // reverse the animation of bubbles
         }
+
+        // animate item, the character appears in the room when the animation finishes
+        character.animate() ;
+        if ( ! character.animationFinished () ) return ;
+
+        // back to the original appearance of character
+        character.metamorphInto( character.getOriginalKind(), "end teletransportation" );
+
+        activity = activities::Activity::Wait ;
 }
 
 void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )

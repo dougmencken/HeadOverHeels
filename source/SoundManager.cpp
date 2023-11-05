@@ -47,8 +47,8 @@ SoundManager::SoundManager( const std::string & audioInterface )
         activityStrings[ activities::Activity::DisplaceNortheast ] = activityStrings[ activities::Activity::DisplaceSoutheast ] = "push";
         activityStrings[ activities::Activity::DisplaceSouthwest ] = activityStrings[ activities::Activity::DisplaceNorthwest ] = "push";
         activityStrings[ activities::Activity::DisplaceUp ] = activityStrings[ activities::Activity::DisplaceDown ] = "push";
-        activityStrings[ activities::Activity::BeginWayOutTeletransport ] = activityStrings[ activities::Activity::WayOutTeletransport ] = "teleport-out";
-        activityStrings[ activities::Activity::BeginWayInTeletransport ] = activityStrings[ activities::Activity::WayInTeletransport ] = "teleport-in";
+        activityStrings[ activities::Activity::BeginTeletransportation ] = "teleport-out";
+        activityStrings[ activities::Activity::EndTeletransportation ] = "teleport-in";
         activityStrings[ activities::Activity::ForceDisplaceNorth ] = activityStrings[ activities::Activity::ForceDisplaceSouth ] = "force";
         activityStrings[ activities::Activity::ForceDisplaceEast ] = activityStrings[ activities::Activity::ForceDisplaceWest ] = "force";
         activityStrings[ activities::Activity::CancelDisplaceNorth ] = activityStrings[ activities::Activity::CancelDisplaceSouth ] = "move";

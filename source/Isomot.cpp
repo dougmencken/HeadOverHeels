@@ -465,7 +465,7 @@ void Isomot::handleMagicKeys ()
 
                         if ( otherCharacter != nilPointer && roomWithInactiveCharacter != activeRoom )
                         {
-                                std::cout << "both characters are in active room \"" << activeRoom->getNameOfRoomDescriptionFile() << "\" via pure magic" << std::endl ;
+                                std::cout << "the both characters are in active room \"" << activeRoom->getNameOfRoomDescriptionFile() << "\" via pure magic" << std::endl ;
 
                                 const std::string & nameOfAnotherCharacter = otherCharacter->getKind () ;
 
@@ -486,7 +486,7 @@ void Isomot::handleMagicKeys ()
                                 joinedCharacter->setBehaviorOf( behavior );
 
                                 activeRoom->addCharacterToRoom( joinedCharacter, true );
-                                joinedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::BeginWayInTeletransport );
+                                joinedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::EndTeletransportation );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
                                 mapManager.removeRoomInPlay( roomWithInactiveCharacter );
@@ -539,7 +539,7 @@ void Isomot::handleMagicKeys ()
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
                                 roomWithTeleportToFinalScene->addCharacterToRoom( teleportedCharacter, true );
-                                teleportedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::BeginWayInTeletransport );
+                                teleportedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::EndTeletransportation );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 

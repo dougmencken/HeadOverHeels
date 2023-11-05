@@ -66,10 +66,8 @@ public:
         static const unsigned int DisplaceNorthwest = 127 ;
         static const unsigned int DisplaceUp = 128 ;
         static const unsigned int DisplaceDown = 129 ;
-        static const unsigned int BeginWayOutTeletransport = 140 ;
-        static const unsigned int WayOutTeletransport = 141 ;
-        static const unsigned int BeginWayInTeletransport = 145 ;
-        static const unsigned int WayInTeletransport = 146 ;
+        static const unsigned int BeginTeletransportation = 133 ;
+        static const unsigned int EndTeletransportation = 144 ;
         static const unsigned int AutoMove = 150 ;
         static const unsigned int AutoMoveNorth = 151 ;
         static const unsigned int AutoMoveSouth = 152 ;
