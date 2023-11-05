@@ -29,8 +29,8 @@ PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & be
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
         , donutFromHooterIsHere( false )
-        , labelOfBubbles( "bubbles" )
-        , labelOfFiredDoughnut( "bubbles" )
+        , kindOfBubbles( "bubbles" )
+        , kindOfFiredDoughnut( "bubbles" )
         , speedTimer( new Timer () )
         , fallTimer( new Timer () )
         , glideTimer( new Timer () )
@@ -127,7 +127,7 @@ void PlayerControlled::autoMove( ::AvatarItem & character )
 
         if ( activity == activities::Activity::Wait )
         {       // stop playing the sound of auto-moving
-                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::AutoMove );
+                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::AutoMove );
         }
 }
 
@@ -184,7 +184,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
 
         if ( activity != activities::Activity::Fall )
         {
-                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Fall );
+                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Fall );
         }
 }
 
@@ -197,7 +197,7 @@ void PlayerControlled::jump( ::AvatarItem & character )
                         // look for an item below
                         character.canAdvanceTo( 0, 0, -1 );
 
-                        bool onASpringStool = ( character.getMediator()->collisionWithByBehavior( "behavior of spring leap" ) != nilPointer );
+                        bool onASpringStool = ( character.getMediator()->collisionWithBehavingAs( "behavior of spring leap" ) != nilPointer );
                         activity = ( onASpringStool || ( character.isHeels() && character.getHighJumps() > 0 )
                                         ? activities::Activity::HighJump // when on a trampoline or has a bonus high jumps
                                         : activities::Activity::RegularJump );
@@ -208,7 +208,7 @@ void PlayerControlled::jump( ::AvatarItem & character )
                                 {
                                         character.decrementBonusHighJumps () ;
                                 }
-                                SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::Rebound );
+                                SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::Rebound );
                         }
                 }
                         break;
@@ -242,7 +242,7 @@ void PlayerControlled::jump( ::AvatarItem & character )
         // when jump ends, stop sound of jumping
         if ( activity != activities::Activity::Jump && activity != activities::Activity::RegularJump && activity != activities::Activity::HighJump )
         {
-                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Jump );
+                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Jump );
         }
 
         // when character is active and is at maximum height of room it may go to room above
@@ -303,7 +303,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
         if ( activity != activities::Activity::Glide )
         {
                 // not gliding yet, so stop its sound
-                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Glide );
+                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Glide );
         }
 }
 
@@ -313,7 +313,7 @@ void PlayerControlled::wayInTeletransport( ::AvatarItem & character )
         {
                 case activities::Activity::BeginWayInTeletransport:
                         // change to bubbles
-                        character.metamorphInto( labelOfBubbles, "begin way in teletransport" );
+                        character.metamorphInto( kindOfBubbles, "begin way in teletransport" );
 
                         // reverse animation of bubbles
                         character.doBackwardsMotion();
@@ -328,7 +328,7 @@ void PlayerControlled::wayInTeletransport( ::AvatarItem & character )
                         if ( character.animationFinished () )
                         {
                                 // back to original appearance of character
-                                character.metamorphInto( character.getOriginalLabel(), "way in teletransport" );
+                                character.metamorphInto( character.getOriginalKind(), "way in teletransport" );
 
                                 activity = activities::Activity::Wait;
                         }
@@ -345,7 +345,7 @@ void PlayerControlled::wayOutTeletransport( ::AvatarItem & character )
         {
                 case activities::Activity::BeginWayOutTeletransport:
                         // change to bubbles
-                        character.metamorphInto( labelOfBubbles, "begin way out teletransport" );
+                        character.metamorphInto( kindOfBubbles, "begin way out teletransport" );
 
                         activity = activities::Activity::WayOutTeletransport;
                         break;
@@ -357,7 +357,7 @@ void PlayerControlled::wayOutTeletransport( ::AvatarItem & character )
                         if ( character.animationFinished () )
                         {
                                 character.addToZ( -1 );
-                                character.setWayOfExit( character.getMediator()->collisionWithByLabel( "teleport" ) != nilPointer ?
+                                character.setWayOfExit( character.getMediator()->collisionWithSomeKindOf( "teleport" ) != nilPointer ?
                                         "via teleport" : "via second teleport" );
                         }
                         break;
@@ -376,8 +376,8 @@ void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
                         // do you have immunity
                         if ( ! character.hasShield() )
                         {
-                                // change to bubbles retaining character’s label
-                                character.metamorphInto( labelOfBubbles, "collide with mortal item" );
+                                // change to bubbles
+                                character.metamorphInto( kindOfBubbles, "collide with mortal item" );
 
                                 this->isLosingLife = true ;
                                 activity = activities::Activity::Vanish;
@@ -416,10 +416,10 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
         {
                 this->donutFromHooterIsHere = true;
 
-                const DescriptionOfItem * hooterDoughnut = ItemDescriptions::descriptions().getDescriptionByLabel( labelOfFiredDoughnut );
+                const DescriptionOfItem * hooterDoughnut = ItemDescriptions::descriptions().getDescriptionByKind( kindOfFiredDoughnut );
                 if ( hooterDoughnut != nilPointer )
                 {
-                        SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::FireDoughnut );
+                        SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::FireDoughnut );
 
                         // create item at the same position as the character
                         int z = character.getZ() + character.getHeight() - hooterDoughnut->getHeight();
@@ -442,7 +442,7 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
 
                         character.useDoughnutHorn () ;
 
-                        SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::FireDoughnut );
+                        SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::FireDoughnut );
                 }
         }
 }
@@ -485,12 +485,12 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
 
                                 GameManager::getInstance().setImageOfItemInBag( takenItemImage );
 
-                                character.placeItemInBag( takenItem->getLabel(), takenItem->getBehavior()->getNameOfBehavior () );
+                                character.placeItemInBag( takenItem->getKind (), takenItem->getBehavior()->getNameOfBehavior () );
 
                                 takenItem->getBehavior()->changeActivityOfItem( activities::Activity::Vanish );
                                 activity = ( activity == activities::Activity::TakeAndJump ? activities::Activity::Jump : activities::Activity::ItemTaken );
 
-                                SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::TakeItem );
+                                SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::TakeItem );
 
                                 std::cout << "took item \"" << takenItem->getUniqueName() << "\"" << std::endl ;
                         }
@@ -507,7 +507,7 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
 {
         if ( character.getDescriptionOfTakenItem() != nilPointer )
         {
-                std::cout << "drop item \"" << character.getDescriptionOfTakenItem()->getLabel() << "\"" << std::endl ;
+                std::cout << "drop item \"" << character.getDescriptionOfTakenItem()->getKind () << "\"" << std::endl ;
 
                 // place a dropped item just below the character
                 if ( character.addToZ( Isomot::LayerHeight ) )
@@ -528,13 +528,13 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
                         // update activity
                         activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jump : activities::Activity::Wait );
 
-                        SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Fall );
-                        SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::DropItem );
+                        SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Fall );
+                        SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::DropItem );
                 }
                 else
                 {
                         // emit sound of o~ ou
-                        SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::Mistake );
+                        SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::Mistake );
                 }
         }
 

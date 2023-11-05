@@ -84,7 +84,7 @@ void FreeItem::freshProcessedImage ()
         if ( getUniqueName().find( "bars" ) != std::string::npos )
         {
                 std::cout << CONSOLE_COLOR_BLUE << "\"" << getProcessedImage().getName()
-                                << "\" of " << whichKindOfItem() << " \"" << getUniqueName()
+                                << "\" of " << whichItemClass() << " \"" << getUniqueName()
                                 << "\" just refreshed from shaded nonmasked image"
                                 << CONSOLE_COLOR_OFF << std::endl ;
 
@@ -102,7 +102,7 @@ void FreeItem::freshBothProcessedImages ()
         if ( getUniqueName().find( "bars" ) != std::string::npos )
         {
                 std::cout << CONSOLE_COLOR_RED << "\"" << getShadedNonmaskedImage().getName()
-                                << "\" of " << whichKindOfItem() << " \"" << getUniqueName()
+                                << "\" of " << whichItemClass() << " \"" << getUniqueName()
                                 << "\" just refreshed from raw image"
                                 << CONSOLE_COLOR_OFF << std::endl ;
 

@@ -10,7 +10,7 @@ DescriptionOfItem::~DescriptionOfItem( )
 /* protected */
 DescriptionOfItem * DescriptionOfItem::clone ()
 {
-        DescriptionOfItem * theClone = new DescriptionOfItem ( this->getLabel () );
+        DescriptionOfItem * theClone = new DescriptionOfItem ( this->getKind () );
 
         theClone->setWidthX( this->getWidthX () );
         theClone->setWidthY( this->getWidthY () );

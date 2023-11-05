@@ -26,8 +26,8 @@ class DescriptionOfItem
 
 public:
 
-        DescriptionOfItem( const std::string & itemLabel )
-                : label( itemLabel )
+        DescriptionOfItem( const std::string & kindOfItem )
+                : kind( kindOfItem )
                 , widthX( 0 ) , widthY( 0 ) , height( 0 )
                 , weight( 0.0 )
                 , speed( 0.0 )
@@ -48,8 +48,8 @@ protected:
 
 public:
 
-        const std::string & getLabel () const {  return label ;  }
-        void setLabel ( const std::string & newLabel ) {  this->label = newLabel ;  }
+        const std::string & getKind () const {  return kind ;  }
+        void setKind ( const std::string & newKind ) {  this->kind = newKind ;  }
 
         unsigned int getWidthX () const {  return widthX ;  }
         unsigned int getWidthY () const {  return widthY ;  }
@@ -128,7 +128,7 @@ public:
 
 private:
 
-        std::string label ;
+        std::string kind ;
 
         /**
          * The three spatial dimensions of the item, along the x, along the y, and height along the z

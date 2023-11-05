@@ -72,7 +72,7 @@ bool Driven::update ()
                                         {
                                                 ItemPtr item = mediator->findCollisionPop ();
 
-                                                if ( item->whichKindOfItem() == "avatar item" )
+                                                if ( item->whichItemClass() == "avatar item" )
                                                 {
                                                         characterFound = true ;
                                                         moving = true ;
@@ -119,7 +119,7 @@ bool Driven::update ()
                                                 activity = activities::Activity::Wait;
 
                                                 // emit sound of collision
-                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getKind(), activities::Activity::Collision );
                                         }
 
                                         speedTimer->reset();

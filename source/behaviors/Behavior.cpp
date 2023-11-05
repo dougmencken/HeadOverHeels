@@ -23,8 +23,8 @@ Behavior::Behavior( const ItemPtr & whichItem, const std::string & behavior )
 #if defined( DEBUG ) && DEBUG
         if ( behavior != "behavior of Head" && behavior != "behavior of Heels" && behavior != "behavior of Head over Heels" )
         {
-                std::cout << "creation of behavior \"" << behavior << "\" for " << whichItem->whichKindOfItem()
-                                << " \"" << whichItem->getUniqueName() << "\" ( \"" << whichItem->getLabel() << "\" )"
+                std::cout << "creation of behavior \"" << behavior << "\" for " << whichItem->whichItemClass()
+                                << " \"" << whichItem->getUniqueName() << "\" ( \"" << whichItem->getKind () << "\" )"
                                 << " at x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ()
                                 << " with orientation \"" << whichItem->getOrientation() << "\""
                                 << std::endl ;
@@ -47,7 +47,7 @@ void Behavior::propagateActivity( const Item& sender, const ActivityOfItem& acti
 
                 // is it free item or grid item
                 if ( item != nilPointer &&
-                        ( item->whichKindOfItem() == "grid item" || item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" ) )
+                        ( item->whichItemClass() == "grid item" || item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" ) )
                 {
                         // change activity for item with behavior
                         if ( item->getBehavior() != nilPointer )

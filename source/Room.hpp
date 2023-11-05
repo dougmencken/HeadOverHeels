@@ -261,8 +261,8 @@ private:
         std::vector < AvatarItemPtr > charactersWhoEnteredRoom ;
 
         /**
-         * Pairs label of item with next number for such item,
-         * it’s used to uniquely name each item in room to deal with collisions
+         * Pairs the kind of item with the next number for such items,
+         * it’s used to name the every item in a room uniquely
          */
         std::map < std::string , unsigned int > nextNumbers ;
 

@@ -17,8 +17,8 @@
 #endif
 
 
-Door::Door( const std::string & label, int cx, int cy, int z, const std::string & where )
-        : labelOfDoor( label )
+Door::Door( const std::string & kind, int cx, int cy, int z, const std::string & where )
+        : kindOfDoor( kind )
         , cellX( cx )
         , cellY( cy )
         , z( z )
@@ -30,7 +30,7 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
         , rightJamb( nilPointer )
         , lintel( nilPointer )
 {
-        const DescriptionOfItem * lintelData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~lintel" );
+        const DescriptionOfItem * lintelData = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~lintel" );
 
         // load the graphics of door
 
@@ -47,11 +47,11 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
                 return ;
         }
 
-        std::string scenery = labelOfDoor.substr( 0, labelOfDoor.find( "-" ) );
+        std::string scenery = kindOfDoor.substr( 0, kindOfDoor.find( "-" ) );
 
         // cut out the left jamb
 
-        const DescriptionOfItem* leftJambData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~leftjamb" );
+        const DescriptionOfItem* leftJambData = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~leftjamb" );
 
         leftJambImage = cutOutLeftJamb( *pictureOfDoor,
                                         leftJambData->getWidthX(), leftJambData->getWidthY(), leftJambData->getHeight(),
@@ -61,7 +61,7 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
 
         // cut out the right jamb
 
-        const DescriptionOfItem* rightJambData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~rightjamb" );
+        const DescriptionOfItem* rightJambData = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~rightjamb" );
 
         rightJambImage = cutOutRightJamb( *pictureOfDoor,
                                         rightJambData->getWidthX(), rightJambData->getWidthY(), rightJambData->getHeight(),
@@ -231,7 +231,7 @@ FreeItemPtr Door::getLeftJamb()
 {
         if ( leftJamb == nilPointer )
         {
-                const DescriptionOfItem * leftJambData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~leftjamb" );
+                const DescriptionOfItem * leftJambData = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~leftjamb" );
 
                 int tileSize = mediator->getRoom()->getSizeOfOneTile ();
 
@@ -282,7 +282,7 @@ FreeItemPtr Door::getLeftJamb()
                         allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getRawImageToChangeIt ().getAllegroPict() );
                         leftJamb->getRawImageToChangeIt().setName( leftJambImage->getName() );
                         leftJamb->freshBothProcessedImages ();
-                        leftJamb->setUniqueName( leftJamb->getLabel() + " " + util::makeRandomString( 8 ) );
+                        leftJamb->setUniqueName( leftJamb->getKind () + " " + util::makeRandomString( 8 ) );
                 }
         }
 
@@ -296,7 +296,7 @@ FreeItemPtr Door::getRightJamb()
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile ();
 
-                const DescriptionOfItem * rightJambData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~rightjamb" );
+                const DescriptionOfItem * rightJambData = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~rightjamb" );
 
                 if ( rightJambData != nilPointer && rightJambImage != nilPointer )
                 {
@@ -343,7 +343,7 @@ FreeItemPtr Door::getRightJamb()
                         allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getRawImageToChangeIt ().getAllegroPict() );
                         rightJamb->getRawImageToChangeIt().setName( rightJambImage->getName() );
                         rightJamb->freshBothProcessedImages ();
-                        rightJamb->setUniqueName( rightJamb->getLabel() + " " + util::makeRandomString( 8 ) );
+                        rightJamb->setUniqueName( rightJamb->getKind () + " " + util::makeRandomString( 8 ) );
                 }
         }
 
@@ -357,7 +357,7 @@ FreeItemPtr Door::getLintel()
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile ();
 
-                const DescriptionOfItem * lintelData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~lintel" );
+                const DescriptionOfItem * lintelData = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~lintel" );
 
                 if ( lintelData != nilPointer && lintelImage != nilPointer )
                 {
@@ -400,7 +400,7 @@ FreeItemPtr Door::getLintel()
                         allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getRawImageToChangeIt ().getAllegroPict() );
                         lintel->getRawImageToChangeIt().setName( lintelImage->getName() );
                         lintel->freshBothProcessedImages ();
-                        lintel->setUniqueName( lintel->getLabel() + " " + util::makeRandomString( 8 ) );
+                        lintel->setUniqueName( lintel->getKind () + " " + util::makeRandomString( 8 ) );
                 }
         }
 

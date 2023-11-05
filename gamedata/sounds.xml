@@ -3,26 +3,26 @@
 <sounds>
 
   <!-- interface -->
-  <item label="gui">
+  <item kind="gui">
     <event activity="mistake">
       <file>sound/o-ou.wav</file>
     </event>
   </item>
-  <item label="gui">
+  <item kind="gui">
     <event activity="push">
       <file>sound/quack.wav</file>
     </event>
   </item>
 
   <!-- door -->
-  <item label="door">
+  <item kind="door">
     <event activity="collision">
       <file>sound/doorway.wav</file>
     </event>
   </item>
 
   <!-- brick number one -->
-  <item label="brick1">
+  <item kind="brick1">
     <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
@@ -38,7 +38,7 @@
   <!-- toaster -->
 
   <!-- conveyor -->
-  <item label="conveyor">
+  <item kind="conveyor">
     <event activity="active">
       <file>sound/conveyor.wav</file>
     </event>
@@ -48,7 +48,7 @@
   </item>
 
   <!-- book -->
-  <item label="book">
+  <item kind="book">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -64,7 +64,7 @@
   </item>
 
   <!-- stool -->
-  <item label="stool">
+  <item kind="stool">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -77,14 +77,14 @@
   </item>
 
   <!-- puppy -->
-  <item label="puppy">
+  <item kind="puppy">
     <event activity="vanish">
       <file>sound/puppy-scratch.wav</file>
     </event>
   </item>
 
   <!-- sandwich -->
-  <item label="sandwich">
+  <item kind="sandwich">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -94,14 +94,14 @@
   </item>
 
   <!-- switch -->
-  <item label="switch">
+  <item kind="switch">
     <event activity="switch">
       <file>sound/switch.wav</file>
     </event>
   </item>
 
   <!-- brick number two -->
-  <item label="brick2">
+  <item kind="brick2">
     <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
@@ -111,21 +111,21 @@
   </item>
 
   <!-- bars north-south -->
-  <item label="bars-ns">
+  <item kind="bars-ns">
     <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
   </item>
 
   <!-- bars east-west -->
-  <item label="bars-ew">
+  <item kind="bars-ew">
     <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
   </item>
 
   <!-- drum -->
-  <item label="drum">
+  <item kind="drum">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -135,7 +135,7 @@
   </item>
 
   <!-- portable brick -->
-  <item label="portable-brick">
+  <item kind="portable-brick">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -145,35 +145,35 @@
   </item>
 
   <!-- donuts -->
-  <item label="donuts">
+  <item kind="donuts">
     <event activity="vanish">
       <file>sound/tools.wav</file>
     </event>
   </item>
 
   <!-- rabbit with bonus extra lives -->
-  <item label="extra-life">
+  <item kind="extra-life">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
   <!-- rabbit with bonus high jumps -->
-  <item label="high-jumps">
+  <item kind="high-jumps">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
   <!-- rabbit with bonus quick steps -->
-  <item label="quick-steps">
+  <item kind="quick-steps">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
   <!-- rabbit with bonus invulnerability -->
-  <item label="shield">
+  <item kind="shield">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
@@ -182,14 +182,14 @@
   <!-- crown -->
 
   <!-- bomb -->
-  <item label="bomb">
+  <item kind="bomb">
     <event activity="move">
       <file>sound/adjust.wav</file>
     </event>
   </item>
 
   <!-- another portable brick -->
-  <item label="another-portable-brick">
+  <item kind="another-portable-brick">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -199,7 +199,7 @@
   </item>
 
   <!-- ball -->
-  <item label="ball">
+  <item kind="ball">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -213,7 +213,7 @@
   <!-- brick cylinder -->
 
   <!-- horn -->
-  <item label="horn">
+  <item kind="horn">
     <event activity="vanish">
       <file>sound/tools.wav</file>
     </event>
@@ -224,21 +224,21 @@
   <!-- elephant head -->
 
   <!-- handbag -->
-  <item label="handbag">
+  <item kind="handbag">
     <event activity="vanish">
       <file>sound/tools.wav</file>
     </event>
   </item>
 
   <!-- elevator -->
-  <item label="elevator">
+  <item kind="elevator">
     <event activity="move">
       <file>sound/blades.wav</file>
     </event>
   </item>
 
   <!-- helicopter bug -->
-  <item label="helicopter-bug">
+  <item kind="helicopter-bug">
     <event activity="wait">
       <file>sound/blades.wav</file>
     </event>
@@ -248,14 +248,14 @@
   </item>
 
   <!-- reincarnation Fish -->
-  <item label="reincarnation-fish">
+  <item kind="reincarnation-fish">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
   <!-- siren -->
-  <item label="siren">
+  <item kind="siren">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -268,21 +268,21 @@
   </item>
 
   <!-- teleport -->
-  <item label="teleport">
+  <item kind="teleport">
     <event activity="active">
       <file>sound/teleport.wav</file>
     </event>
   </item>
 
   <!-- teleport too -->
-  <item label="teleport-too">
+  <item kind="teleport-too">
     <event activity="active">
       <file>sound/teleport.wav</file>
     </event>
   </item>
 
   <!-- turtle -->
-  <item label="turtle">
+  <item kind="turtle">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -295,7 +295,7 @@
   </item>
 
   <!-- trampoline -->
-  <item label="trampoline">
+  <item kind="trampoline">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -312,7 +312,7 @@
   <!-- double bubbles -->
 
   <!-- big head robot -->
-  <item label="bighead-robot">
+  <item kind="bighead-robot">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -325,7 +325,7 @@
   </item>
 
   <!-- elephant -->
-  <item label="elephant">
+  <item kind="elephant">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -338,7 +338,7 @@
   </item>
 
   <!-- monkey -->
-  <item label="monkey">
+  <item kind="monkey">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -351,7 +351,7 @@
   </item>
 
   <!-- diver -->
-  <item label="diver">
+  <item kind="diver">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -364,7 +364,7 @@
   </item>
 
   <!-- bubble robot -->
-  <item label="bubble-robot">
+  <item kind="bubble-robot">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -377,14 +377,14 @@
   </item>
 
   <!-- imperial guard -->
-  <item label="imperial-guard">
+  <item kind="imperial-guard">
     <event activity="wait">
       <file>sound/imperial-guard.wav</file>
     </event>
   </item>
 
   <!-- charles -->
-  <item label="charles-robot">
+  <item kind="charles-robot">
     <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
@@ -397,7 +397,7 @@
   </item>
 
   <!-- head -->
-  <item label="head">
+  <item kind="head">
     <event activity="move">
       <file>sound/head-walking.wav</file>
     </event>
@@ -425,7 +425,7 @@
   </item>
 
   <!-- heels -->
-  <item label="heels">
+  <item kind="heels">
     <event activity="move">
       <file>sound/heels-walking.wav</file>
     </event>
@@ -459,7 +459,7 @@
   </item>
 
   <!-- head over heels -->
-  <item label="headoverheels">
+  <item kind="headoverheels">
     <event activity="move">
       <file>sound/heels-walking.wav</file>
     </event>

@@ -56,8 +56,8 @@ void ItemDescriptions::readDescriptionsFromFile( const std::string & nameOfXMLFi
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                const std::string itemLabel = item->Attribute( "label" ) ; // the label of item
-                DescriptionOfItem * newDescription = new DescriptionOfItem ( itemLabel );
+                const std::string kindOfItem = item->Attribute( "kind" ) ; // the kind of item
+                DescriptionOfItem * newDescription = new DescriptionOfItem ( kindOfItem );
                 assert( newDescription != nilPointer );
 
                 // spatial dimensions
@@ -68,7 +68,7 @@ void ItemDescriptions::readDescriptionsFromFile( const std::string & nameOfXMLFi
                 readDescriptionFurther( *item, *newDescription );
 
                 // and at last
-                descriptionsOfItems[ itemLabel ] = newDescription ;
+                descriptionsOfItems[ kindOfItem ] = newDescription ;
         }
 
         // and now the descriptions of doors
@@ -78,8 +78,10 @@ void ItemDescriptions::readDescriptionsFromFile( const std::string & nameOfXMLFi
                         door != nilPointer ;
                         door = door->NextSiblingElement( "door" ) )
         {
-                const std::string doorLabel = door->Attribute( "label" ) ; // the label of door
-                DescriptionOfDoor * doorDescription = new DescriptionOfDoor ( doorLabel );
+                const std::string doorScenery = door->Attribute( "scenery" ) ;
+                const std::string doorAt = door->Attribute( "at" ) ;
+
+                DescriptionOfDoor * doorDescription = new DescriptionOfDoor ( doorScenery, doorAt );
                 assert( doorDescription != nilPointer );
 
                 // the three parts of door
@@ -92,9 +94,9 @@ void ItemDescriptions::readDescriptionsFromFile( const std::string & nameOfXMLFi
                 assert( rightJamb != nilPointer );
 
                 // and at last
-                descriptionsOfItems[  leftJamb->getLabel () ] = leftJamb ;
-                descriptionsOfItems[ rightJamb->getLabel () ] = rightJamb ;
-                descriptionsOfItems[    lintel->getLabel () ] = lintel ;
+                descriptionsOfItems[  leftJamb->getKind () ] = leftJamb ;
+                descriptionsOfItems[ rightJamb->getKind () ] = rightJamb ;
+                descriptionsOfItems[    lintel->getKind () ] = lintel ;
         }
 
         this->alreadyRead = true ;
@@ -149,8 +151,8 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
         }
         else
         {
-                const std::string & itemLabel = description.getLabel ();
-                if ( itemLabel == "invisible-wall-x" || itemLabel == "invisible-wall-y" )
+                const std::string & kindOfItem = description.getKind ();
+                if ( kindOfItem == "invisible-wall-x" || kindOfItem == "invisible-wall-y" )
                 {
                         description.setNameOfPicturesFile( "" );
                         description.setWidthOfFrame( 64 );
@@ -220,24 +222,25 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
                 description.setHowManyExtraFrames( std::atoi( extraFrames->FirstChild()->ToText()->Value() ) );
 }
 
-const DescriptionOfItem* ItemDescriptions::getDescriptionByLabel( const std::string & label ) /* const */
+const DescriptionOfItem* ItemDescriptions::getDescriptionByKind ( const std::string & kind ) /* const */
 {
+	// auto-read the items file if it hasn't been done before
         if ( ! this->alreadyRead )
-                readDescriptionsFromFile( The_File_Full_Of_Item_Descriptions ) ;
+                readDescriptionsFromFile( The_File_Full_Of_Item_Descriptions ) ; // yep, it makes the function non-const
 
-        if ( descriptionsOfItems.find( label ) == descriptionsOfItems.end () )
+        if ( descriptionsOfItems.find( kind ) == descriptionsOfItems.end () )
         {
-                std::cerr << "the description of item with label \"" << label << "\" is absent" << std::endl ;
+                std::cerr << "the description of item of kind \"" << kind << "\" is absent" << std::endl ;
                 return nilPointer ;
         }
 
 #ifdef __Cxx11__
 
-        return descriptionsOfItems.at( label );
+        return descriptionsOfItems.at( kind );
 
 #else
 
-        std::map< std::string, const DescriptionOfItem * >::const_iterator it = descriptionsOfItems.find( label );
+        std::map< std::string, const DescriptionOfItem * >::const_iterator it = descriptionsOfItems.find( kind );
         if ( it != descriptionsOfItems.end () ) return it->second ;
         return nilPointer ;
 

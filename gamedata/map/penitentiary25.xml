@@ -39,14 +39,14 @@
     </walls>
     <items>
         <item x="0" y="0" z="-1">
-            <label>penitentiary-door-west</label>
+            <kind>penitentiary-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="0" y="9" z="-1">
-            <label>penitentiary-door-west</label>
+            <kind>penitentiary-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

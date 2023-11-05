@@ -63,109 +63,109 @@
     </walls>
     <items>
         <item x="1" y="0" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="0" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="0" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="0" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="8" y="0" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="7" z="3">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="7" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="7" z="1">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="7" z="3">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="8" z="3">
-            <label>moon-capital-west</label>
+            <kind>moon-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="8" z="3">
-            <label>moon-capital-west</label>
+            <kind>moon-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="0" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>west</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="2" y="0" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>west</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="0" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>west</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="0" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>west</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="7" y="0" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>west</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="8" y="0" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>west</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="3" z="-1">
-            <label>moon-door-north</label>
+            <kind>moon-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="3" z="-1">
-            <label>moon-door-south</label>
+            <kind>moon-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="4" y="8" z="-1">
-            <label>moon-door-west</label>
+            <kind>moon-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

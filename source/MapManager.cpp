@@ -29,6 +29,8 @@ MapManager::~MapManager( )
 
 /* private */ void MapManager::clear ()
 {
+        forgetVisitedRooms () ;
+
         binRoomsInPlay() ;
 
         for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
@@ -56,13 +58,14 @@ void MapManager::readMap ( const std::string& fileName )
                 return;
         }
 
+# if defined( GENERATE_ROOM_DESCRIPTIONS ) && GENERATE_ROOM_DESCRIPTIONS
+
         std::string pathToRooms = ospaths::homePath () + "rooms" + ospaths::pathSeparator () ;
 
-        if ( MapManager::buildEveryRoomAtOnce )
-        {
-                if ( ! ospaths::folderExists( pathToRooms ) )
-                        mkdir( pathToRooms.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
-        }
+        if ( ! ospaths::folderExists( pathToRooms ) )
+                mkdir( pathToRooms.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+
+#endif
 
         tinyxml2::XMLElement* root = mapXml.FirstChildElement( "map" );
 
@@ -218,7 +221,7 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
 {
         std::cout << "MapManager::beginNewGame( \"" << headRoom << "\", \"" << heelsRoom << "\" )" << std::endl ;
 
-        forgetVisitedRooms () ;
+        clear () ;
 
         GameManager & gameManager = GameManager::getInstance () ;
 
@@ -238,7 +241,7 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
                 {
                         addRoomInPlay( firstRoom );
 
-                        const DescriptionOfItem* headData = ItemDescriptions::descriptions ().getDescriptionByLabel( "head" );
+                        const DescriptionOfItem* headData = ItemDescriptions::descriptions ().getDescriptionByKind( "head" );
 
                         int centerX = firstRoom->getXCenterForItem( headData );
                         int centerY = firstRoom->getYCenterForItem( headData );
@@ -278,7 +281,7 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
                         {
                                 addRoomInPlay( secondRoom );
 
-                                const DescriptionOfItem* heelsData = ItemDescriptions::descriptions ().getDescriptionByLabel( "heels" );
+                                const DescriptionOfItem* heelsData = ItemDescriptions::descriptions ().getDescriptionByKind( "heels" );
 
                                 int centerX = secondRoom->getXCenterForItem( heelsData );
                                 int centerY = secondRoom->getYCenterForItem( heelsData );
@@ -377,7 +380,7 @@ Room* MapManager::rebuildRoom( Room* room )
 
         if ( isRoomInPlay( room ) )
         {
-                std::string nameOfActiveCharacter = room->getMediator()->getLabelOfActiveCharacter();
+                std::string nameOfActiveCharacter = room->getMediator()->getNameOfActiveCharacter();
                 std::string nameOfActiveCharacterBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining();
 
                 std::string theWay( "nowhere" );
@@ -404,10 +407,10 @@ Room* MapManager::rebuildRoom( Room* room )
                                 std::cerr << "**nil** character among those who entered room \"" << fileOfRoom << "\""
                                                 << " @ MapManager::rebuildRoom" << std::endl ;
                         else
-                        if ( character->getLabel() == "headoverheels" || character->getLives() > 0 )
+                        if ( character->getKind() == "headoverheels" || character->getLives() > 0 )
                         {
                         //#ifdef DEBUG
-                                std::cout << "got character \"" << character->getLabel() << "\" who entered room \"" << fileOfRoom << "\""
+                                std::cout << "got character \"" << character->getKind() << "\" who entered room \"" << fileOfRoom << "\""
                                                 << " @ MapManager::rebuildRoom" << std::endl ;
                         //#endif
 
@@ -415,7 +418,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                 // and further the player swaps back to the room of splitting, and loses a life there
                                 // then don’t rebuild the room with both headoverheels together with the simple character
 
-                                if ( character->getLabel() == "headoverheels" && roomsInPlay.size() > 1 )
+                                if ( character->getKind() == "headoverheels" && roomsInPlay.size() > 1 )
                                 {
                                         std::cout << "some character migrated to another room, and only \"" << nameOfActiveCharacter << "\" is still here" << std::endl ;
 
@@ -446,7 +449,7 @@ Room* MapManager::rebuildRoom( Room* room )
 
                                 // create character
                                 aliveCharacter = RoomBuilder::createCharacterInRoom( newRoom,
-                                                                                     character->getLabel(),
+                                                                                     character->getKind(),
                                                                                      true,
                                                                                      character->getX(), character->getY(), character->getZ(),
                                                                                      theWay, entry );
@@ -530,8 +533,8 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         const AvatarItem & oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
 
-        std::string nameOfRoamer = oldItemOfRoamer.getOriginalLabel() ; // the original, because the current label may be "bubbles" when teleporting
-        const DescriptionOfItem * descriptionOfRoamer = ItemDescriptions::descriptions ().getDescriptionByLabel( nameOfRoamer ) ;
+        std::string nameOfRoamer = oldItemOfRoamer.getOriginalKind (); // the original, because the current kind may be "bubbles" when teleporting
+        const DescriptionOfItem * descriptionOfRoamer = ItemDescriptions::descriptions ().getDescriptionByKind( nameOfRoamer ) ;
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
                         << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit << "\""

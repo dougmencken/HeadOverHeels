@@ -78,19 +78,19 @@ void CreateListOfSavedGames::doAction ()
 
                         std::ostringstream ss;
                         ss << languageManager->findLanguageStringForAlias( "free-slot" )->getText();
-                        Label* labelOfFree = new Label( ss.str() );
+                        Label* freeLine = new Label( ss.str() );
                         if ( isLoadMenu() )
                         {
-                                labelOfFree->changeColor( "cyan" );
-                                labelOfFree->setAction( new PlaySound( activities::Activity::Mistake ) );
+                                freeLine->changeColor( "cyan" );
+                                freeLine->setAction( new PlaySound( activities::Activity::Mistake ) );
                         }
                         else
                         {
-                                labelOfFree->changeColor( "orange" );
-                                labelOfFree->setAction( new SaveGame( slot ) );
+                                freeLine->changeColor( "orange" );
+                                freeLine->setAction( new SaveGame( slot ) );
                         }
 
-                        menu->addOption( labelOfFree );
+                        menu->addOption( freeLine );
                 }
         }
 

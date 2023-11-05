@@ -49,7 +49,7 @@ bool Teleport::update ()
 
                                         // is it a free item with behavior
                                         if ( aboveItem != nilPointer &&
-                                                ( aboveItem->whichKindOfItem() == "free item" || aboveItem->whichKindOfItem() == "avatar item" ) &&
+                                                ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" ) &&
                                                         aboveItem->getBehavior() != nilPointer )
                                         {
                                                 // look for the items below
@@ -61,7 +61,7 @@ bool Teleport::update ()
                                                         {
                                                                 ItemPtr belowItem = mediator->findCollisionPop( );
 
-                                                                if ( aboveItem->whichKindOfItem() == "avatar item" && belowItem == this->item )
+                                                                if ( aboveItem->whichItemClass() == "avatar item" && belowItem == this->item )
                                                                 {
                                                                         characterIsAboveTeleport = true ;
                                                                         break;
@@ -81,8 +81,8 @@ bool Teleport::update ()
                         // animate activated teleport
                         if ( activated )
                         {
-                                item->animate();
-                                SoundManager::getInstance().play( item->getLabel(), activities::Activity::IsActive );
+                                item->animate ();
+                                SoundManager::getInstance().play( item->getKind (), activities::Activity::IsActive );
                         }
                         break;
 

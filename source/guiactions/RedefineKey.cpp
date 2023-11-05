@@ -23,8 +23,8 @@ RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& keyAction )
 
 void RedefineKey::doAction ()
 {
-        Label * activeLabel = menu->getActiveOption();
-        activeLabel->changeFontFamilyAndColor( "big", "yellow" );
+        Label * choice = menu->getActiveOption ();
+        choice->changeFontFamilyAndColor( "big", "yellow" );
         menu->redraw ();
 
         allegro::emptyKeyboardBuffer();
@@ -55,8 +55,8 @@ void RedefineKey::doAction ()
 
                                                 // update menu
                                                 std::string textOfThatKey = GuiManager::getInstance().getLanguageManager()->findLanguageStringForAlias( toLook )->getText();
-                                                std::list < Label * > everyLabel = menu->getEveryOption ();
-                                                for ( std::list< Label * >::iterator o = everyLabel.begin (); o != everyLabel.end (); ++o )
+                                                std::list < Label * > allOptions = menu->getEveryOption ();
+                                                for ( std::list< Label * >::iterator o = allOptions.begin (); o != allOptions.end (); ++o )
                                                 {
                                                         if ( ( *o )->getText() == textOfThatKey )
                                                         {
@@ -72,7 +72,7 @@ void RedefineKey::doAction ()
 
                                         std::cout << "key for \"" << this->whatKeyDoes << "\" was \"" << thatKey << "\" now is \"" << newKey << "\"" << std::endl ;
 
-                                        menu->setValueOf( activeLabel, newKey );
+                                        menu->setValueOf( choice, newKey );
 
                                         InputManager::getInstance().changeUserKey( this->whatKeyDoes, newKey );
                                 }
@@ -89,9 +89,9 @@ void RedefineKey::doAction ()
         }
 
         if ( InputManager::getInstance().getUserKeyFor( this->whatKeyDoes ) != "none" ) {
-                activeLabel->changeFontFamilyAndColor( "big", "white" );
+                choice->changeFontFamilyAndColor( "big", "white" );
         } else {
-                activeLabel->changeFontFamilyAndColor( "big", "cyan" );
+                choice->changeFontFamilyAndColor( "big", "cyan" );
         }
 
         menu->redraw ();

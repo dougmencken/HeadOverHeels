@@ -55,29 +55,29 @@
     </walls>
     <items>
         <item x="4" y="0" z="1">
-            <label>conveyor</label>
+            <kind>conveyor</kind>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="5" z="7">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
             <ascent>false</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="2" z="-1">
-            <label>blacktooth-door-south</label>
+            <kind>blacktooth-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

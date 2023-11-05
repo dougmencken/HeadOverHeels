@@ -39,49 +39,49 @@
     </walls>
     <items>
         <item x="3" y="1" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="1" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="1" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>east</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>east</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="1" z="1">
-            <label>imperial-guard-head</label>
+            <kind>imperial-guard-head</kind>
             <orientation>east</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="0" z="-1">
-            <label>moon-door-south</label>
+            <kind>moon-door-south</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="0" z="-1">
-            <label>moon-door-south</label>
+            <kind>moon-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

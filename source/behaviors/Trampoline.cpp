@@ -49,15 +49,15 @@ bool Trampoline::update ()
                         }
                         else
                         {
-                                // continue to bounce trampoline
+                                // the spring continues to bounce after unloading
                                 if ( rebounding && reboundTimer->getValue() < 0.600 )
                                 {
                                         freeItem.animate();
 
-                                        // play sound of bouncing
+                                        // play the sound of bouncing
                                         if ( reboundTimer->getValue() > 0.100 )
                                         {
-                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::IsActive );
+                                                SoundManager::getInstance().play( freeItem.getKind (), activities::Activity::IsActive );
                                         }
                                 }
                                 else
@@ -96,7 +96,7 @@ bool Trampoline::update ()
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
                                 // play sound of displacing
-                                SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                SoundManager::getInstance().play( freeItem.getKind (), activity );
 
                                 this->changeActivityOfItem( activity );
                                 activities::Displacing::getInstance().displace( this, &activity, true );
@@ -124,8 +124,8 @@ bool Trampoline::update ()
                                 this->changeActivityOfItem( activity );
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        // play sound of falling down
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        // play the sound of falling
+                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
                                         activity = activities::Activity::Wait;
                                 }
 

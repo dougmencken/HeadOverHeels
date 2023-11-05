@@ -55,9 +55,9 @@
     </walls>
     <items>
         <item x="6" y="2" z="-1">
-            <label>market-door-south</label>
+            <kind>market-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

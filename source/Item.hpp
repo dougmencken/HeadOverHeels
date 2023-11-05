@@ -44,7 +44,7 @@ public:
 
         virtual ~Item( ) ;
 
-        virtual std::string whichKindOfItem () const {  return "abstract item" ;  }
+        virtual std::string whichItemClass () const {  return "abstract item" ;  }
 
        /**
         * Used for sorting items in container, this variant is okay for grid items
@@ -77,7 +77,7 @@ public:
         /**
          * Used for the metamorphosis into bubbles, such as when the character teleports
          */
-        void metamorphInto ( const std::string& labelOfItem, const std::string& initiatedBy ) ;
+        void metamorphInto ( const std::string& kindOfItem, const std::string& initiatedBy ) ;
 
         void changeOrientation ( const std::string & way ) ;
 
@@ -150,13 +150,13 @@ public:
         void setUniqueName ( const std::string& name ) {  this->uniqueName = name ;  }
 
         /**
-         * Gives original label of item, label from item’s data may change via metamorphosis
+         * Gives the original kind of item, while the current kind may change via metamorphosis
          */
-        const std::string& getOriginalLabel () const {  return originalLabel ;  }
+        const std::string& getOriginalKind () const {  return originalKind ;  }
 
         const DescriptionOfItem * getDescriptionOfItem () const {  return descriptionOfItem ;  }
 
-        const std::string& getLabel () const ;
+        const std::string & getKind () const ;
 
         int getX () const {  return xYet ;  }
 
@@ -303,7 +303,10 @@ private:
 
         std::string uniqueName ;
 
-        std::string originalLabel ;
+        /**
+         * The original kind of item, the current kind may change via metamorphosis
+         */
+        std::string originalKind ;
 
         /**
          * Image of this item with shadows from other items, for free item it is also masked

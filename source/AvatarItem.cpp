@@ -419,14 +419,14 @@ bool AvatarItem::isActiveCharacter () const
 
 unsigned char AvatarItem::getLives() const
 {
-        const std::string & character = this->getOriginalLabel() ;
+        const std::string & character = this->getOriginalKind() ;
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
         return gameInfo.getLivesByName( character ) ;
 }
 
 void AvatarItem::addLives( unsigned char lives )
 {
-        const std::string & character = this->getOriginalLabel() ;
+        const std::string & character = this->getOriginalKind() ;
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
         gameInfo.addLivesByName( character, lives );
 }
@@ -435,20 +435,20 @@ void AvatarItem::loseLife ()
 {
         setWayOfExit( "rebuild room" );
 
-        const std::string & character = this->getOriginalLabel() ;
+        const std::string & character = this->getOriginalKind() ;
         GameManager & gameManager = GameManager::getInstance () ;
         GameInfo & gameInfo = gameManager.getGameInfo () ;
         unsigned char lives = gameInfo.getLivesByName( character ) ;
 
         if ( ! gameManager.areLivesInexhaustible () && lives > 0 )
-                gameInfo.loseLifeByName( getOriginalLabel () /* current label is "bubbles" */ );
+                gameInfo.loseLifeByName( getOriginalKind () /* the current kind is "bubbles" */ );
 
         gameManager.emptyHandbag () ;
 }
 
-void AvatarItem::takeMagicTool( const std::string & label )
+void AvatarItem::takeMagicTool( const std::string & tool )
 {
-        GameManager::getInstance().getGameInfo().setMagicToolByLabel( label );
+        GameManager::getInstance().getGameInfo().takeMagicTool( tool );
 }
 
 unsigned short AvatarItem::getDonuts () const
@@ -473,18 +473,18 @@ unsigned short AvatarItem::getQuickSteps () const
 
 void AvatarItem::activateBonusQuickSteps ()
 {
-        if ( this->getOriginalLabel() == "head" )
+        if ( this->getOriginalKind() == "head" )
         {
                 GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
 
                 unsigned short bonusHighSpeedSteps = 99 ;
-                gameInfo.addQuickStepsByName( this->getOriginalLabel(), bonusHighSpeedSteps );
+                gameInfo.addQuickStepsByName( this->getOriginalKind(), bonusHighSpeedSteps );
         }
 }
 
 void AvatarItem::decrementBonusQuickSteps ()
 {
-        GameManager::getInstance().getGameInfo().decrementQuickStepsByName( this->getOriginalLabel() );
+        GameManager::getInstance().getGameInfo().decrementQuickStepsByName( this->getOriginalKind() );
 }
 
 unsigned short AvatarItem::getHighJumps () const
@@ -494,15 +494,15 @@ unsigned short AvatarItem::getHighJumps () const
 
 void AvatarItem::addBonusHighJumps( unsigned char howMany )
 {
-        if ( getOriginalLabel() == "heels" )
+        if ( getOriginalKind() == "heels" )
         {
-                GameManager::getInstance().getGameInfo().addHighJumpsByName( this->getOriginalLabel(), howMany );
+                GameManager::getInstance().getGameInfo().addHighJumpsByName( this->getOriginalKind(), howMany );
         }
 }
 
 void AvatarItem::decrementBonusHighJumps ()
 {
-        GameManager::getInstance().getGameInfo().decrementHighJumpsByName( this->getOriginalLabel() );
+        GameManager::getInstance().getGameInfo().decrementHighJumpsByName( this->getOriginalKind() );
 }
 
 void AvatarItem::activateShield ()
@@ -511,7 +511,7 @@ void AvatarItem::activateShield ()
         shieldTimer->go () ;
 
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        const std::string & character = this->getOriginalLabel() ;
+        const std::string & character = this->getOriginalKind() ;
         gameInfo.setShieldPointsByName( character, 99 );
 }
 
@@ -525,7 +525,7 @@ void AvatarItem::activateShieldForSeconds ( double seconds )
         }
 
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        const std::string & character = this->getOriginalLabel() ;
+        const std::string & character = this->getOriginalKind() ;
         gameInfo.setShieldSecondsByName( character, seconds );
 }
 
@@ -540,7 +540,7 @@ void AvatarItem::decrementShieldOverTime ()
                 shieldTimer->stop () ;
         }
 
-        const std::string & character = this->getOriginalLabel() ;
+        const std::string & character = this->getOriginalKind() ;
         gameInfo.setShieldSecondsByName( character, shieldSecondsRemaining );
 }
 
@@ -570,9 +570,9 @@ void AvatarItem::liberatePlanet ()
         }
 }
 
-void AvatarItem::placeItemInBag ( const std::string & labelOfItem, const std::string & behavior )
+void AvatarItem::placeItemInBag ( const std::string & kindOfItem, const std::string & behavior )
 {
-        this->descriptionOfTakenItem = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfItem ) ;
+        this->descriptionOfTakenItem = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfItem ) ;
         this->behaviorOfTakenItem = behavior ;
 }
 
@@ -595,7 +595,7 @@ void AvatarItem::saveAt ( int x, int y, int z )
 bool AvatarItem::hasTool( const std::string & tool ) const
 {
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        const std::string & character = this->getOriginalLabel() ;
+        const std::string & character = this->getOriginalKind() ;
 
         if ( tool == "horn" && gameInfo.hasHorn() )
                 if (  character == "head" || character == "headoverheels" )
@@ -611,5 +611,5 @@ bool AvatarItem::hasTool( const std::string & tool ) const
 bool AvatarItem::hasShield () const
 {
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        return gameInfo.getShieldPointsByName( this->getOriginalLabel() ) > 0 ;
+        return gameInfo.getShieldPointsByName( this->getOriginalKind() ) > 0 ;
 }

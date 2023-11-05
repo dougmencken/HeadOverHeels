@@ -86,7 +86,7 @@ bool RemoteControl::update ()
                                         // emit sound of displacement if item is pushed but not displaced by item below it
                                         if ( this->sender == nilPointer || this->sender != this->item )
                                         {
-                                                SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                                SoundManager::getInstance().play( freeItem.getKind (), activity );
                                         }
 
                                         activities::Displacing::getInstance().displace( this, &activity, true );
@@ -151,7 +151,7 @@ bool RemoteControl::update ()
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play sound of falling down
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
                                         activity = activities::Activity::Wait;
                                 }
 

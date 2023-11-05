@@ -95,268 +95,268 @@
     </walls>
     <items>
         <item x="3" y="0" z="0">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="2">
-            <label>byblos-capital-east</label>
+            <kind>byblos-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="2">
-            <label>byblos-capital-east</label>
+            <kind>byblos-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="3" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="4" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="5" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="6" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="7" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="8" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="9" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="10" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="10" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="11" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="11" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="12" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="12" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="12" z="1">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="12" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="13" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="13" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="13" z="1">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="13" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="13" z="1">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="13" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="14" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="14" z="0">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="14" z="1">
-            <label>toaster</label>
+            <kind>toaster</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="14" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="16" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="13" z="1">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
             <ascent>true</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
-            <label>byblos-door-west</label>
+            <kind>byblos-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

@@ -55,86 +55,86 @@
     </walls>
     <items>
         <item x="5" y="1" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="1" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="1" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="2" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="2" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="2" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="3" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="3" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="3" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="4" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="4" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="4" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="4" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="6" z="0">
-            <label>siren</label>
+            <kind>siren</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in four secondary directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
-            <label>egyptus-door-east</label>
+            <kind>egyptus-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="8" y="3" z="-1">
-            <label>egyptus-door-south</label>
+            <kind>egyptus-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

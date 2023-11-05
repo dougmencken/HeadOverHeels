@@ -344,7 +344,7 @@ bool Room::saveAsXML( const std::string & file )
                                                 wall->InsertEndChild( wallPosition );
 
                                                 tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
-                                                wallPicture->SetText( ( theItem->getOriginalLabel() + ".png" ).c_str () );
+                                                wallPicture->SetText( ( theItem->getOriginalKind() + ".png" ).c_str () );
                                                 wall->InsertEndChild( wallPicture );
 
                                                 walls->InsertEndChild( wall );
@@ -360,9 +360,9 @@ bool Room::saveAsXML( const std::string & file )
                                         z = ( z > Isomot::FloorZ ) ? ( z / Isomot::LayerHeight ) : Isomot::FloorZ ;
                                         item->SetAttribute( "z", z );
 
-                                        tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
-                                        itemLabel->SetText( theItem->getLabel().c_str () );
-                                        item->InsertEndChild( itemLabel );
+                                        tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
+                                        kindOfItem->SetText( theItem->getKind().c_str () );
+                                        item->InsertEndChild( kindOfItem );
 
                                         tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
                                         std::string orientation = theItem->getOrientation();
@@ -377,9 +377,9 @@ bool Room::saveAsXML( const std::string & file )
                                                 item->InsertEndChild( itemBehavior );
                                         }
 
-                                        tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
-                                        kindOfItem->SetText( "griditem" );
-                                        item->InsertEndChild( kindOfItem );
+                                        tinyxml2::XMLElement* itemClass = roomXml.NewElement( "class" );
+                                        itemClass->SetText( "griditem" );
+                                        item->InsertEndChild( itemClass );
 
                                         items->InsertEndChild( item );
                                 }
@@ -391,7 +391,7 @@ bool Room::saveAsXML( const std::string & file )
                 for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
                 {
                         FreeItemPtr theItem = *fi ;
-                        if ( theItem != nilPointer && ! theItem->isPartOfDoor() && theItem->whichKindOfItem() != "avatar item" )
+                        if ( theItem != nilPointer && ! theItem->isPartOfDoor() && theItem->whichItemClass() != "avatar item" )
                         {
                                 tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
 
@@ -399,9 +399,9 @@ bool Room::saveAsXML( const std::string & file )
                                 item->SetAttribute( "y", theItem->getOriginalCellY() );
                                 item->SetAttribute( "z", theItem->getOriginalCellZ() );
 
-                                tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
-                                itemLabel->SetText( theItem->getLabel().c_str () );
-                                item->InsertEndChild( itemLabel );
+                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
+                                kindOfItem->SetText( theItem->getKind().c_str () );
+                                item->InsertEndChild( kindOfItem );
 
                                 tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
                                 std::string orientation = theItem->getOrientation();
@@ -435,9 +435,9 @@ bool Room::saveAsXML( const std::string & file )
                                         }
                                 }
 
-                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
-                                kindOfItem->SetText( "freeitem" );
-                                item->InsertEndChild( kindOfItem );
+                                tinyxml2::XMLElement* itemClass = roomXml.NewElement( "class" );
+                                itemClass->SetText( "freeitem" );
+                                item->InsertEndChild( itemClass );
 
                                 items->InsertEndChild( item );
                         }
@@ -458,17 +458,17 @@ bool Room::saveAsXML( const std::string & file )
                                 z = ( z > Isomot::FloorZ ) ? ( z / Isomot::LayerHeight ) : Isomot::FloorZ ;
                                 item->SetAttribute( "z", z );
 
-                                tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
-                                itemLabel->SetText( theDoor->getLabel().c_str () );
-                                item->InsertEndChild( itemLabel );
+                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
+                                kindOfItem->SetText( theDoor->getKind().c_str () );
+                                item->InsertEndChild( kindOfItem );
 
                                 tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
                                 itemOrientation->SetText( theDoor->getWhereIsDoor().c_str () );
                                 item->InsertEndChild( itemOrientation );
 
-                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
-                                kindOfItem->SetText( "door" );
-                                item->InsertEndChild( kindOfItem );
+                                tinyxml2::XMLElement* itemClass = roomXml.NewElement( "class" );
+                                itemClass->SetText( "door" );
+                                item->InsertEndChild( itemClass );
 
                                 items->InsertEndChild( item );
                         }
@@ -572,12 +572,12 @@ void Room::updateWallsWithDoors ()
                                 ( northeastDoor != nilPointer && segment->getPosition() == northeastDoor->getCellY() + 2 ) ||
                                 ( northwestDoor != nilPointer && segment->getPosition() == northwestDoor->getCellY() + 2 ) )
                         {
-                                std::string label = segment->getImage()->getName() ;
-                                label = label.substr( 0, label.find_last_of( "." ) );
+                                std::string imageName = segment->getImage()->getName() ;
+                                imageName = imageName.substr( 0, imageName.find_last_of( "." ) );
 
-                                const DescriptionOfItem* dataOfWall = ItemDescriptions::descriptions().getDescriptionByLabel( label );
+                                const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
 
-                                addGridItem( GridItemPtr( new GridItem( dataOfWall, 0, segment->getPosition(), 0, "nowhere" ) ) );
+                                addGridItem( GridItemPtr( new GridItem( descriptionOfWall, 0, segment->getPosition(), 0, "nowhere" ) ) );
 
                                 wallsToBin.push_back( segment );
                         }
@@ -606,12 +606,12 @@ void Room::updateWallsWithDoors ()
                                 ( eastnorthDoor != nilPointer && segment->getPosition() == eastnorthDoor->getCellX() + 2 ) ||
                                 ( eastsouthDoor != nilPointer && segment->getPosition() == eastsouthDoor->getCellX() + 2 ) )
                         {
-                                std::string label = segment->getImage()->getName() ;
-                                label = label.substr( 0, label.find_last_of( "." ) );
+                                std::string imageName = segment->getImage()->getName() ;
+                                imageName = imageName.substr( 0, imageName.find_last_of( "." ) );
 
-                                const DescriptionOfItem* dataOfWall = ItemDescriptions::descriptions().getDescriptionByLabel( label );
+                                const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
 
-                                addGridItem( GridItemPtr( new GridItem( dataOfWall, segment->getPosition(), 0, 0, "nowhere" ) ) );
+                                addGridItem( GridItemPtr( new GridItem( descriptionOfWall, segment->getPosition(), 0, 0, "nowhere" ) ) );
 
                                 wallsToBin.push_back( segment );
                         }
@@ -646,13 +646,13 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 ( gridItem->getCellX() >= static_cast< int >( this->getTilesX() ) ||
                         gridItem->getCellY() >= static_cast< int >( this->getTilesY() ) ) )
         {
-                std::cerr << "coordinates for " << gridItem->whichKindOfItem() << " are out of limits" << std::endl ;
+                std::cerr << "coordinates for " << gridItem->whichItemClass() << " are out of limits" << std::endl ;
                 return;
         }
 
         if ( gridItem->getHeight() < 1 )
         {
-                std::cerr << "can’t add " << gridItem->whichKindOfItem() << " which height is zero" << std::endl ;
+                std::cerr << "can’t add " << gridItem->whichItemClass() << " which height is zero" << std::endl ;
                 return;
         }
 
@@ -660,16 +660,16 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         mediator->clearStackOfCollisions ();
 
-        std::string labelOfItem = gridItem->getLabel() ;
-        unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
-        if ( uniqueNumberOfItem == 0 ) // is it new label
+        const std::string & kindOfItem = gridItem->getKind () ;
+        unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
+        if ( uniqueNumberOfItem == 0 ) // is it new kind
         {
                  uniqueNumberOfItem = 1;
         }
-        nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
+        nextNumbers[ kindOfItem ] = uniqueNumberOfItem + 1;
 
         std::ostringstream name;
-        name << labelOfItem << " " << util::toStringWithOrdinalSuffix( uniqueNumberOfItem ) <<
+        name << kindOfItem << " " << util::toStringWithOrdinalSuffix( uniqueNumberOfItem ) <<
                 " @" << gridItem->getX() << "," << gridItem->getY() << "," << gridItem->getZ() ;
 
         gridItem->setUniqueName( name.str() );
@@ -685,13 +685,13 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         {
                 // whem item goes to top, modify its position on Z
                 gridItem->setZ( mediator->findHighestZ( *gridItem ) );
-                std::cout << "for " << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" on top Z is " << gridItem->getZ() << std::endl ;
+                std::cout << "for " << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" on top Z is " << gridItem->getZ() << std::endl ;
         }
 
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
                 // can’t add item when there’s some collision
-                std::cerr << "there’s collision with " << gridItem->whichKindOfItem() << std::endl ;
+                std::cerr << "there’s collision with " << gridItem->whichItemClass() << std::endl ;
                 return ;
         }
 
@@ -706,7 +706,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         mediator->wantToMaskWithGridItem( *gridItem );
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+        std::cout << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 #endif
 }
 
@@ -722,14 +722,14 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 
         if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Isomot::FloorZ )
         {
-                std::cerr << "coordinates for " << freeItem->whichKindOfItem() << " are out of limits" << std::endl ;
+                std::cerr << "coordinates for " << freeItem->whichItemClass() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
                 return;
         }
 
         if ( freeItem->getHeight() < 1 || freeItem->getWidthX() < 1 || freeItem->getWidthY() < 1 )
         {
-                std::cerr << "can’t add " << freeItem->whichKindOfItem() << " which dimension is zero" << std::endl ;
+                std::cerr << "can’t add " << freeItem->whichItemClass() << " which dimension is zero" << std::endl ;
                 return;
         }
 
@@ -737,7 +737,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 || ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) + 1 < 0 )
                 || ( freeItem->getY() > static_cast< int >( this->getTilesY() * getSizeOfOneTile() ) - 1 ) )
         {
-                std::cerr << "coordinates for " << freeItem->whichKindOfItem() << " are out of room" << std::endl ;
+                std::cerr << "coordinates for " << freeItem->whichItemClass() << " are out of room" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
                 return;
         }
@@ -746,15 +746,15 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 
         mediator->clearStackOfCollisions ();
 
-        std::string labelOfItem = freeItem->getLabel() ;
-        unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
-        if ( uniqueNumberOfItem == 0 ) // is it new label
+        const std::string & kindOfItem = freeItem->getKind () ;
+        unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
+        if ( uniqueNumberOfItem == 0 ) // is it new kind
         {
                  uniqueNumberOfItem = 1;
         }
-        nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
+        nextNumbers[ kindOfItem ] = uniqueNumberOfItem + 1;
 
-        freeItem->setUniqueName( labelOfItem + " " + util::toStringWithOrdinalSuffix( uniqueNumberOfItem ) );
+        freeItem->setUniqueName( kindOfItem + " " + util::toStringWithOrdinalSuffix( uniqueNumberOfItem ) );
 
         addFreeItemToContainer( freeItem );
 
@@ -772,7 +772,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         // collision is found, so can’t add this item
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
-                std::cerr << "there’s collision with " << freeItem->whichKindOfItem() << std::endl ;
+                std::cerr << "there’s collision with " << freeItem->whichItemClass() << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
                 return;
         }
@@ -788,7 +788,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         mediator->wantToMaskWithFreeItem( *freeItem );
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+        std::cout << freeItem->whichItemClass() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 #endif
 }
 
@@ -809,25 +809,25 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                 {
                         AvatarItemPtr characterEntered = *epi ;
 
-                        if ( characterEntered->getOriginalLabel() == "headoverheels" && character->getOriginalLabel() != "headoverheels" )
+                        if ( characterEntered->getOriginalKind() == "headoverheels" && character->getOriginalKind() != "headoverheels" )
                         {
                                 // case when joined character enters room, splits in this room, and one of characters exits & re~enters
-                                std::cout << "character \"" << character->getOriginalLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
+                                std::cout << "character \"" << character->getOriginalKind() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
 
                                 // bin joined character
                                 charactersWhoEnteredRoom.erase( epi );
                                 /*  epi-- ;  */
 
                                 // add copy of another character as entered
-                                copyAnotherCharacterAsEntered( character->getOriginalLabel() );
+                                copyAnotherCharacterAsEntered( character->getOriginalKind() );
 
                                 break;
                         }
 
-                        if ( characterEntered->getOriginalLabel() == character->getOriginalLabel() )
+                        if ( characterEntered->getOriginalKind() == character->getOriginalKind() )
                         {
                                 // case when character returns back to this room, maybe via different way
-                                std::cout << "character \"" << character->getOriginalLabel() << "\" already entered this room some time ago" << std::endl ;
+                                std::cout << "character \"" << character->getOriginalKind() << "\" already entered this room some time ago" << std::endl ;
 
                                 // bin previous entry
                                 charactersWhoEnteredRoom.erase( epi );
@@ -840,14 +840,14 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
 
         if ( character->getX() < 0 || character->getY() < 1 || character->getZ() < Isomot::FloorZ )
         {
-                std::cerr << "coordinates for " << character->whichKindOfItem() << " are out of limits" << std::endl ;
+                std::cerr << "coordinates for " << character->whichItemClass() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
         }
 
         if ( character->getHeight() < 1 || character->getWidthX() < 1 || character->getWidthY() < 1 )
         {
-                std::cerr << "can’t add " << character->whichKindOfItem() << " which dimension is zero" << std::endl ;
+                std::cerr << "can’t add " << character->whichItemClass() << " which dimension is zero" << std::endl ;
                 return false;
         }
 
@@ -855,7 +855,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                 || ( character->getY() - static_cast< int >( character->getWidthY() ) + 1 < 0 )
                 || ( character->getY() > static_cast< int >( this->getTilesY() * getSizeOfOneTile() ) - 1 ) )
         {
-                std::cerr << "coordinates for " << character->whichKindOfItem() << " are out of room" << std::endl ;
+                std::cerr << "coordinates for " << character->whichItemClass() << " are out of room" << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
         }
@@ -864,18 +864,18 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
 
         mediator->clearStackOfCollisions ();
 
-        std::string labelOfItem = "character " + character->getOriginalLabel() ;
-        unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
-        if ( uniqueNumberOfItem > 0 ) // is there some character with the same label
+        std::string kindOfItem = "character " + character->getOriginalKind() ;
+        unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
+        if ( uniqueNumberOfItem > 0 ) // is there some character with the same name
         {
-                 std::cerr << "oops, can’t add the second character \"" << labelOfItem << "\" to this room" << std::endl ;
+                 std::cerr << "oops, can’t add the second character \"" << kindOfItem << "\" to this room" << std::endl ;
                  return false;
         }
-        nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
+        nextNumbers[ kindOfItem ] = uniqueNumberOfItem + 1;
 
-        character->setUniqueName( labelOfItem + " @ " + getNameOfRoomDescriptionFile() );
+        character->setUniqueName( kindOfItem + " @ " + getNameOfRoomDescriptionFile() );
 
-        std::cout << "adding character \"" << character->getOriginalLabel() << "\" to room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+        std::cout << "adding character \"" << character->getOriginalKind() << "\" to room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
         addFreeItemToContainer( character );
 
@@ -899,7 +899,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         // collision is found, so can’t add this item
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
-                std::cerr << "there’s collision with " << character->whichKindOfItem() << std::endl ;
+                std::cerr << "there’s collision with " << character->whichItemClass() << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
         }
@@ -928,7 +928,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                 copyOfCharacter->setBehaviorOf( character->getBehavior()->getNameOfBehavior() );
                 this->charactersWhoEnteredRoom.push_back( copyOfCharacter );
 
-                std::cout << "copy of character \"" << copyOfCharacter->getOriginalLabel() << "\""
+                std::cout << "copy of character \"" << copyOfCharacter->getOriginalKind() << "\""
                                 << " is created to rebuild this room" << std::endl ;
         }
 
@@ -937,7 +937,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
 
 void Room::dumpItemInsideThisRoom( const Item & item )
 {
-        std::cout << "   " << item.whichKindOfItem()
+        std::cout << "   " << item.whichItemClass()
                         << " at " << item.getX() << " " << item.getY() << " " << item.getZ()
                         << " with dimensions " << item.getWidthX() << " x " << item.getWidthY() << " x " << item.getHeight()
                         << std::endl
@@ -951,13 +951,13 @@ void Room::copyAnotherCharacterAsEntered( const std::string & name )
 {
         for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
-                if ( ( *pi )->getOriginalLabel() != name )
+                if ( ( *pi )->getOriginalKind() != name )
                 {
                         bool alreadyThere = false;
 
                         for ( std::vector< AvatarItemPtr >::const_iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                         {
-                                if ( ( *epi )->getOriginalLabel() == ( *pi )->getOriginalLabel() )
+                                if ( ( *epi )->getOriginalKind() == ( *pi )->getOriginalKind() )
                                 {
                                         alreadyThere = true;
                                         break;
@@ -1038,7 +1038,7 @@ void Room::removeGridItemByUniqueName( const std::string& uniqueName )
                                 gridItem = *g ;
                                 found = true ;
 
-                                std::cout << "removing " << ( *g )->whichKindOfItem() << " \"" << uniqueName <<
+                                std::cout << "removing " << ( *g )->whichItemClass() << " \"" << uniqueName <<
                                         "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                                 gridItems[ column ].erase( g );
@@ -1069,7 +1069,7 @@ void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
                         freeItem = *f ;
                         found = true ;
 
-                        std::cout << "removing " << ( *f )->whichKindOfItem() << " \"" << uniqueName <<
+                        std::cout << "removing " << ( *f )->whichItemClass() << " \"" << uniqueName <<
                                 "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                         freeItems.erase( f );
@@ -1091,7 +1091,7 @@ bool Room::removeCharacterFromRoom( const AvatarItem & character, bool character
         {
                 if ( character.getUniqueName() == ( *pi )->getUniqueName() )
                 {
-                        const std::string & characterName = character.getOriginalLabel() ;
+                        const std::string & characterName = character.getOriginalKind() ;
                         bool wasActive = character.isActiveCharacter() ;
 
                         removeFreeItemByUniqueName( character.getUniqueName() );
@@ -1112,7 +1112,7 @@ bool Room::removeCharacterFromRoom( const AvatarItem & character, bool character
                         {
                                 for ( std::vector< AvatarItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                                 {
-                                        if ( ( *epi )->getOriginalLabel() == characterName )
+                                        if ( ( *epi )->getOriginalKind() == characterName )
                                         {
                                                 std::cout << "and removing copy of character \"" << characterName << "\" created on entry to this room" << std::endl ;
 
@@ -1152,7 +1152,7 @@ unsigned int Room::removeBars ()
                         GridItemPtr gridItem = *gi ;
                         if ( gridItem == nilPointer ) continue ;
 
-                        if ( gridItem->getLabel().find( "bars" ) != std::string::npos )
+                        if ( gridItem->getKind().find( "bars" ) != std::string::npos )
                         {
                                 gridItemsToRemove.push_back( gridItem->getUniqueName() );
                                 howManyBars ++;
@@ -1172,7 +1172,7 @@ unsigned int Room::removeBars ()
                 FreeItemPtr freeItem = *fi ;
                 if ( freeItem == nilPointer ) continue ;
 
-                if ( freeItem->getLabel().find( "bars" ) != std::string::npos )
+                if ( freeItem->getKind().find( "bars" ) != std::string::npos )
                 {
                         freeItemsToRemove.push_back( freeItem->getUniqueName() );
                         howManyBars ++;
@@ -1453,7 +1453,7 @@ bool Room::activateCharacterByName( const std::string & character )
 {
         for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
-                if ( character == ( *pi )->getOriginalLabel() )
+                if ( character == ( *pi )->getOriginalKind() )
                 {
                         mediator->setActiveCharacter( *pi );
                         return true;
@@ -1493,7 +1493,7 @@ bool Room::continueWithAliveCharacter ()
                 std::vector< AvatarItemPtr >::iterator i = charactersYetInRoom.begin () ;
                 while ( i != charactersYetInRoom.end () )
                 {
-                        if ( *i != nilPointer && ( *i )->getLabel() == previouslyAliveCharacter->getLabel() ) break;
+                        if ( *i != nilPointer && ( *i )->getKind () == previouslyAliveCharacter->getKind () ) break;
                         ++ i ;
                 }
                 ++i ;

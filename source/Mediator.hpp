@@ -93,13 +93,13 @@ public:
         ItemPtr findItemByUniqueName ( const std::string & uniqueName ) ;
 
        /**
-        * Find item in room by its label
-        * @param label Label of item, when there are several elements with this label return the first one found
+        * Look for an item in the room by its kind
+        * When there are several items of this kind, the first found one is returned
         */
-        ItemPtr findItemByLabel ( const std::string & label ) ;
+        ItemPtr findItemOfKind ( const std::string & kind ) ;
 
        /**
-        * Find item in room by its behavior
+        * Look for an item in the room by its behavior
         */
         ItemPtr findItemByBehavior ( const std::string & behavior ) ;
 
@@ -131,16 +131,16 @@ public:
         ItemPtr findCollisionPop () {  return findItemByUniqueName( popCollision() ) ;  }
 
        /**
-        * Is there collision with item of a given label
-        * @return item with which collision happened or nil if there’s no collision
+        * Is there collision with item of a given kind
+        * @return item with which collision is happened or nil if there’s no collision
         */
-        ItemPtr collisionWithByLabel ( const std::string& label ) ;
+        ItemPtr collisionWithSomeKindOf ( const std::string & kind ) ;
 
        /**
         * Is there collision with item of a given behavior
-        * @return item with which collision happened or nil if there’s no collision
+        * @return item with which collision is happened or nil if there’s no collision
         */
-        ItemPtr collisionWithByBehavior ( const std::string& behavior ) ;
+        ItemPtr collisionWithBehavingAs ( const std::string & behavior ) ;
 
         ItemPtr collisionWithBadBoy () ;
 
@@ -207,7 +207,7 @@ private:
          */
         AvatarItemPtr activeCharacter ;
 
-        std::string labelOfActiveCharacter ;
+        std::string nameOfActiveCharacter ;
 
         /**
          * The character which was active just before joining them both
@@ -229,7 +229,7 @@ public:
 
         AvatarItemPtr & getActiveCharacter () {  return activeCharacter ;  }
 
-        const std::string & getLabelOfActiveCharacter () const {  return labelOfActiveCharacter ;  }
+        const std::string & getNameOfActiveCharacter () const {  return nameOfActiveCharacter ;  }
 
         void setActiveCharacter ( const AvatarItemPtr & character ) ;
 

@@ -113,7 +113,7 @@ private:
          */
         std::set < std::string > visitedRooms ;
 
-        // compose map from XML file
+        // compose map from the XML file
         void readMap ( const std::string & fileName ) ;
 
         void addRoomAsVisited( const std::string & roomFile ) {  visitedRooms.insert( roomFile ) ;  }

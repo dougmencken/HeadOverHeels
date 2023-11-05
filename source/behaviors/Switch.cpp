@@ -45,7 +45,7 @@ bool Switch::update ()
                                         ItemPtr trigger = triggerItems[ i ];
 
                                         if ( std::find( sideItems.begin (), sideItems.end (), trigger ) == sideItems.end () ||
-                                                ( trigger->whichKindOfItem() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == activities::Activity::Wait ) )
+                                                ( trigger->whichItemClass() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == activities::Activity::Wait ) )
                                         {
                                                 triggerItems.erase( std::remove( triggerItems.begin (), triggerItems.end (), trigger ), triggerItems.end () );
                                         }
@@ -74,7 +74,7 @@ bool Switch::update ()
 
                                         // is it free item
                                         if ( itemAbove != nilPointer &&
-                                                ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "avatar item" ) )
+                                                ( itemAbove->whichItemClass() == "free item" || itemAbove->whichItemClass() == "avatar item" ) )
                                         {
                                                 if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
@@ -92,16 +92,14 @@ bool Switch::update ()
                                                                 mediator->toggleSwitchInRoom();
 
                                                                 // play sound of switching
-                                                                SoundManager::getInstance().play( item->getLabel(), activities::Activity::SwitchIt );
+                                                                SoundManager::getInstance().play( item->getKind (), activities::Activity::SwitchIt );
                                                         }
                                                 }
                                         }
                                 }
-                        }
-                        else
-                        {
+                        } else
                                 isItemAbove = false;
-                        }
+
                         break;
 
                 case activities::Activity::DisplaceNorth:
@@ -120,7 +118,7 @@ bool Switch::update ()
                                 mediator->toggleSwitchInRoom();
 
                                 // play sound of switching
-                                SoundManager::getInstance().play( item->getLabel(), activities::Activity::SwitchIt );
+                                SoundManager::getInstance().play( item->getKind (), activities::Activity::SwitchIt );
                         }
 
                         activity = activities::Activity::Wait;

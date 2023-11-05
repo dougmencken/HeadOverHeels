@@ -183,17 +183,10 @@ Picture* Isomot::updateMe ()
                 {
                         // the active character lost one life
 
-                        if ( activeCharacter.getLives() != 0 || activeCharacter.getLabel() == "headoverheels" )
-                        {
+                        if ( activeCharacter.getLives () > 0 || activeCharacter.getKind () == "headoverheels" )
                                 activeRoom = mapManager.rebuildRoom();
-                        }
-                        else
-                        {
-                                if ( ! activeRoom->continueWithAliveCharacter () )
-                                {
-                                        activeRoom = mapManager.noLivesSwap ();
-                                }
-                        }
+                        else if ( ! activeRoom->continueWithAliveCharacter () )
+                                activeRoom = mapManager.noLivesSwap ();
                 }
                 else if ( activeCharacter.getWayOfExit() != "did not quit" )
                 {
@@ -357,7 +350,7 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "=" ) )
         {
-                gameManager.getGameInfo().addLivesByName( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
+                gameManager.getGameInfo().addLivesByName( activeRoom->getMediator()->getNameOfActiveCharacter(), 1 );
                 allegro::releaseKey( "=" );
         }
 
@@ -474,7 +467,7 @@ void Isomot::handleMagicKeys ()
                         {
                                 std::cout << "both characters are in active room \"" << activeRoom->getNameOfRoomDescriptionFile() << "\" via pure magic" << std::endl ;
 
-                                const std::string & nameOfAnotherCharacter = otherCharacter->getLabel() ;
+                                const std::string & nameOfAnotherCharacter = otherCharacter->getKind () ;
 
                                 int characterX = activeCharacter->getX() ;
                                 int characterY = activeCharacter->getY() ;
@@ -482,7 +475,7 @@ void Isomot::handleMagicKeys ()
                                 const std::string & orientation = otherCharacter->getOrientation() ;
 
                                 AvatarItemPtr joinedCharacter( new AvatarItem(
-                                        ItemDescriptions::descriptions().getDescriptionByLabel( nameOfAnotherCharacter ),
+                                        ItemDescriptions::descriptions().getDescriptionByKind( nameOfAnotherCharacter ),
                                         characterX, characterY, characterZ, orientation
                                 ) );
 
@@ -507,9 +500,9 @@ void Isomot::handleMagicKeys ()
         {
                 if ( gameManager.countFreePlanets() < 5 )
                 {
-                        if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == nilPointer )
+                        if ( activeRoom->getMediator()->findItemOfKind( "crown" ) == nilPointer )
                         {
-                                const DescriptionOfItem* chapeauDescription = ItemDescriptions::descriptions().getDescriptionByLabel( "crown" );
+                                const DescriptionOfItem* chapeauDescription = ItemDescriptions::descriptions().getDescriptionByKind( "crown" );
 
                                 int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauDescription->getWidthX() ) >> 1 ;
                                 int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauDescription->getWidthY() ) >> 1 ;
@@ -524,14 +517,14 @@ void Isomot::handleMagicKeys ()
                         AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
                         if ( activeCharacter != nilPointer )
                         {
-                                const std::string & nameOfCharacter = activeCharacter->getLabel() ;
+                                const std::string & nameOfCharacter = activeCharacter->getKind () ;
                                 const std::string & orientation = activeCharacter->getOrientation() ;
                                 int teleportedX = 0;
                                 int teleportedY = 95;
                                 int teleportedZ = 240;
 
                                 AvatarItemPtr teleportedCharacter( new AvatarItem(
-                                        ItemDescriptions::descriptions().getDescriptionByLabel( nameOfCharacter ),
+                                        ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacter ),
                                         teleportedX, teleportedY, teleportedZ,
                                         orientation
                                 ) ) ;
@@ -599,13 +592,13 @@ void Isomot::updateFinalRoom()
         {
                 mediator->endUpdate();
 
-                std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalLabel();
+                std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalKind();
 
                 activeRoom->removeCharacterFromRoom( * mediator->getActiveCharacter(), true );
 
                 std::cout << "character \"" << arrivedCharacter << "\" arrived to the final room" << std::endl ;
 
-                const DescriptionOfItem* arrived = ItemDescriptions::descriptions().getDescriptionByLabel( arrivedCharacter );
+                const DescriptionOfItem* arrived = ItemDescriptions::descriptions().getDescriptionByKind( arrivedCharacter );
 
                 if ( arrived != nilPointer )
                 {
@@ -619,7 +612,7 @@ void Isomot::updateFinalRoom()
 
                 unsigned int crowns = 0;
 
-                const DescriptionOfItem* descriptionOfChapeau = ItemDescriptions::descriptions().getDescriptionByLabel( "crown" );
+                const DescriptionOfItem* descriptionOfChapeau = ItemDescriptions::descriptions().getDescriptionByKind( "crown" );
 
                 GameManager & gameManager = GameManager::getInstance() ;
 
@@ -677,7 +670,7 @@ void Isomot::updateFinalRoom()
                 if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
                         FreeItemPtr finalBall( new FreeItem (
-                                ItemDescriptions::descriptions().getDescriptionByLabel( "ball" ),
+                                ItemDescriptions::descriptions().getDescriptionByKind( "ball" ),
                                 146, 93, LayerHeight, "none"
                         ) );
                         finalBall->setBehaviorOf( "behaivor of final ball" );

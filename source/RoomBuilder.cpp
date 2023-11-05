@@ -23,27 +23,14 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         tinyxml2::XMLError result = roomXml.LoadFile( roomFile.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::cerr << "can’t read room file " << roomFile.c_str () << std::endl ;
+                std::cerr << "can’t read the room file " << roomFile.c_str () << std::endl ;
                 return nilPointer;
         }
 
         tinyxml2::XMLElement* root = roomXml.FirstChildElement( "room" );
 
-        std::string scenery = "" ;
-
-        if ( root->Attribute( "scenery" ) != nilPointer )
-        {
-                scenery = root->Attribute( "scenery" ) ;
-        }
-        else
-        {
-                tinyxml2::XMLElement* sceneryElement = root->FirstChildElement( "scenery" ) ;
-
-                if ( sceneryElement != nilPointer && sceneryElement->FirstChild() != nilPointer )
-                        scenery = sceneryElement->FirstChild()->ToText()->Value() ;
-        }
-
-        ///if ( scenery == "themoon" ) scenery = "moon" ; // legacy
+        const char* sceneryOfRoom = root->Attribute( "scenery" );
+        std::string scenery( ( sceneryOfRoom != nilPointer ) ? sceneryOfRoom : "" );
 
         tinyxml2::XMLElement* xTilesElement = root->FirstChildElement( "xTiles" ) ;
         tinyxml2::XMLElement* yTilesElement = root->FirstChildElement( "yTiles" ) ;
@@ -72,7 +59,6 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
         std::cout << " room \"" << roomName << "\"" << std::endl ;
 
-        // create room with initial parameters such as the scenery, the dimensions, the type of floor
         Room * theRoom = new Room (
                 roomName,
                 scenery,
@@ -105,26 +91,26 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                std::string kindOfItem = "somewhat" ;
-                tinyxml2::XMLElement* kind = item->FirstChildElement( "kind" );
-                if ( kind != nilPointer )
-                        kindOfItem = kind->FirstChild()->ToText()->Value() ;
+                std::string whichClass = "" ;
+                tinyxml2::XMLElement* itemClass = item->FirstChildElement( "class" );
+                if ( itemClass != nilPointer )
+                        whichClass = itemClass->FirstChild()->ToText()->Value() ;
 
-                if ( kindOfItem == "door" )
+                if ( whichClass == "door" )
                 {
                         std::string whereIsDoor = "nowhere" ;
                         tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
                         if ( orientation != nilPointer )
                                 whereIsDoor = orientation->FirstChild()->ToText()->Value() ;
                         else {
-                                tinyxml2::XMLElement* label = item->FirstChildElement( "label" );
-                                if ( label != nilPointer ) {
-                                        std::string doorLabel = label->FirstChild()->ToText()->Value();
+                                tinyxml2::XMLElement* kind = item->FirstChildElement( "kind" );
+                                if ( kind != nilPointer ) {
+                                        std::string kindOfDoor = kind->FirstChild()->ToText()->Value();
 
-                                        // the door's label is %scenery%-door-%at%
-                                        size_t doorInLabel = doorLabel.find( "door-" );
-                                        if ( doorInLabel != std::string::npos )
-                                                whereIsDoor = doorLabel.substr( doorInLabel + 5 );
+                                        // the door's kind is %scenery%-door-%at%
+                                        size_t doorInKind = kindOfDoor.find( "door-" );
+                                        if ( doorInKind != std::string::npos )
+                                                whereIsDoor = kindOfDoor.substr( doorInKind + 5 );
                                 }
                         }
 
@@ -179,11 +165,11 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 int itemY = std::atoi( item->Attribute( "y" ) );
                 int itemZ = std::atoi( item->Attribute( "z" ) );
 
-                tinyxml2::XMLElement* kindOfItem = item->FirstChildElement( "kind" );
-                assert( kindOfItem != nilPointer );
-                std::string kind = kindOfItem->FirstChild()->ToText()->Value() ;
+                tinyxml2::XMLElement* itemClass = item->FirstChildElement( "class" );
+                assert( itemClass != nilPointer );
+                std::string whichClass = itemClass->FirstChild()->ToText()->Value() ;
 
-                if ( kind == "door" ) // is it a door
+                if ( whichClass == "door" ) // is it a door
                 {
                         Door* door = buildDoor( item );
 
@@ -192,22 +178,22 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         else
                                 std::cout << "oops, can’t build a door with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
                 }
-                else if ( kind == "griditem" ) // is it a grid item
+                else if ( whichClass == "griditem" ) // is it a grid item
                 {
-                        std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
+                        std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
                         int wallX = std::atoi( item->Attribute( "x" ) );
                         int wallY = std::atoi( item->Attribute( "y" ) );
 
-                        if ( ( label.find( "wall" ) != std::string::npos ) &&
-                                ( ( wallY == 0 && label.find( "-x" ) != std::string::npos ) || ( wallX == 0 && label.find( "-y" ) != std::string::npos ) ) )
+                        if ( ( kind.find( "wall" ) != std::string::npos ) &&
+                                ( ( wallY == 0 && kind.find( "-x" ) != std::string::npos ) || ( wallX == 0 && kind.find( "-y" ) != std::string::npos ) ) )
                         {
-                                bool onX = ( wallY == 0 && label.find( "-x" ) != std::string::npos );
+                                bool onX = ( wallY == 0 && kind.find( "-x" ) != std::string::npos );
                                 int index = ( onX ? wallX : wallY );
 
-                                std::cout << "converting grid item \"" << label << "\" to wall on " << ( onX ? "x:" : "y:" ) << index
+                                std::cout << "converting grid item \"" << kind << "\" to wall on " << ( onX ? "x:" : "y:" ) << index
                                                 << " of room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
-                                std::string fileWithPicture = label + ".png";
+                                std::string fileWithPicture = kind + ".png";
                                 std::string gfxSet = GameManager::getInstance().getChosenGraphicsSet() ;
 
                                 autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
@@ -246,7 +232,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                         << itemX << ", " << itemY << ", " << itemZ << std::endl ;
                         }
                 }
-                else if ( kind == "freeitem" ) // is it a free item
+                else if ( whichClass == "freeitem" ) // is it a free item
                 {
                         FreeItemPtr freeItem = buildFreeItem( item, theRoom );
 
@@ -329,7 +315,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
         if ( scenery != "" )
         {
-                // build floor automatically
+                // build the floor automatically
 
                 std::string sceneryPrefix = scenery + "-" ;
 
@@ -600,7 +586,7 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                 }
         }
 
-        const DescriptionOfItem* itemDescription = ItemDescriptions::descriptions().getDescriptionByLabel( nameOfCharacterToCreate );
+        const DescriptionOfItem* itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
 
         // if it is found and has some lives left, place it in room
         if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
@@ -681,8 +667,8 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 {
         ( void ) room ;
 
-        std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
-        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions ().getDescriptionByLabel( label );
+        std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
+        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions ().getDescriptionByKind( kind );
 
         if ( itemDescription != nilPointer )
         {
@@ -716,8 +702,8 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 /* static */
 FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 {
-        std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
-        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions ().getDescriptionByLabel( label );
+        std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
+        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions ().getDescriptionByKind( kind );
 
         if ( itemDescription != nilPointer )
         {
@@ -731,8 +717,8 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 int fy = ( itemY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
                 int fz = ( itemZ != Isomot::FloorZ ) ? itemZ * Isomot::LayerHeight : Isomot::FloorZ ;
 
-                // don’t create the item if it's a bonus that disappears once when taken
-                if ( BonusManager::getInstance().isAbsent( BonusInRoom( itemDescription->getLabel(), room->getNameOfRoomDescriptionFile() ) ) )
+                // don’t create an item if it's a bonus that disappears once when taken
+                if ( BonusManager::getInstance().isAbsent( BonusInRoom( itemDescription->getKind (), room->getNameOfRoomDescriptionFile() ) ) )
                 {
                         return FreeItemPtr () ;
                 }
@@ -802,7 +788,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 /* static */
 Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
 {
-        std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
+        std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
 
         int itemX = std::atoi( item->Attribute( "x" ) );
         int itemY = std::atoi( item->Attribute( "y" ) );
@@ -816,11 +802,11 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         if ( orientation != nilPointer )
                 doorOrientation = orientation->FirstChild()->ToText()->Value() ;
         else {
-                // the door's label is %scenery%-door-%at%
-                size_t doorInLabel = label.find( "door-" );
-                if ( doorInLabel != std::string::npos )
-                        doorOrientation = label.substr( doorInLabel + 5 );
+                // the door's kind is %scenery%-door-%at%
+                size_t doorInKind = kind.find( "door-" );
+                if ( doorInKind != std::string::npos )
+                        doorOrientation = kind.substr( doorInKind + 5 );
         }
 
-        return new Door( label, itemX, itemY, itemZ, doorOrientation );
+        return new Door( kind, itemX, itemY, itemZ, doorOrientation );
 }

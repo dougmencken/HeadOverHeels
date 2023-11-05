@@ -95,195 +95,195 @@
     </walls>
     <items>
         <item x="0" y="0" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="3" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="3" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="3" z="0">
-            <label>jail-capital-south</label>
+            <kind>jail-capital-south</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="4" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="4" z="0">
-            <label>jail-capital-south</label>
+            <kind>jail-capital-south</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="5" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="5" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="6" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="6" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="7" z="0">
-            <label>conveyor</label>
+            <kind>conveyor</kind>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="7" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="8" z="0">
-            <label>conveyor</label>
+            <kind>conveyor</kind>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="8" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="9" z="0">
-            <label>conveyor</label>
+            <kind>conveyor</kind>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="10" z="0">
-            <label>conveyor</label>
+            <kind>conveyor</kind>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="11" z="0">
-            <label>conveyor</label>
+            <kind>conveyor</kind>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="15" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="16" z="0">
-            <label>jail-capital-west</label>
+            <kind>jail-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="16" z="0">
-            <label>jail-capital-west</label>
+            <kind>jail-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="0" z="1">
-            <label>reincarnation-fish</label>
+            <kind>reincarnation-fish</kind>
             <orientation>none</orientation>
             <behavior>behavior of something special</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="0" z="0">
-            <label>trampoline</label>
+            <kind>trampoline</kind>
             <orientation>none</orientation>
             <behavior>behavior of spring leap</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="3" z="0">
-            <label>trampoline</label>
+            <kind>trampoline</kind>
             <orientation>none</orientation>
             <behavior>behavior of spring leap</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="9" z="0">
-            <label>trampoline</label>
+            <kind>trampoline</kind>
             <orientation>none</orientation>
             <behavior>behavior of spring leap</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="13" z="0">
-            <label>another-portable-brick</label>
+            <kind>another-portable-brick</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="14" z="0">
-            <label>another-portable-brick</label>
+            <kind>another-portable-brick</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="3" z="-1">
-            <label>jail-door-south</label>
+            <kind>jail-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="2" y="16" z="-1">
-            <label>jail-door-west</label>
+            <kind>jail-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

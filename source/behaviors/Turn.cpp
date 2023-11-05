@@ -50,7 +50,7 @@ bool Turn::update ()
                                         {
                                                 turn();
 
-                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getKind (), activities::Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -68,7 +68,7 @@ bool Turn::update ()
                 case activities::Activity::DisplaceSoutheast:
                 case activities::Activity::DisplaceSouthwest:
                 case activities::Activity::DisplaceNorthwest:
-                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                        SoundManager::getInstance().play( freeItem.getKind (), activity );
 
                         activities::Displacing::getInstance().displace( this, &activity, true );
 
@@ -92,7 +92,7 @@ bool Turn::update ()
                         {
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
                                         activity = activities::Activity::Wait;
                                 }
 

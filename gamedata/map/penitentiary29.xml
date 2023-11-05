@@ -39,111 +39,111 @@
     </walls>
     <items>
         <item x="0" y="1" z="0">
-            <label>penitentiary-shaft-north</label>
+            <kind>penitentiary-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="1" z="1">
-            <label>penitentiary-shaft-north</label>
+            <kind>penitentiary-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="1" z="2">
-            <label>penitentiary-capital-north</label>
+            <kind>penitentiary-capital-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="0">
-            <label>penitentiary-shaft-north</label>
+            <kind>penitentiary-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="1">
-            <label>penitentiary-shaft-north</label>
+            <kind>penitentiary-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="2">
-            <label>penitentiary-capital-north</label>
+            <kind>penitentiary-capital-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="2" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="1" z="1">
-            <label>mortal-cap</label>
+            <kind>mortal-cap</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="2" z="1">
-            <label>mortal-cap</label>
+            <kind>mortal-cap</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="1" z="-1">
-            <label>penitentiary-door-south</label>
+            <kind>penitentiary-door-south</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

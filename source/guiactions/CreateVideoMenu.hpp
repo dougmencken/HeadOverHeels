@@ -47,13 +47,13 @@ private:
 
         MenuWithValues * listOfOptions ;
 
-        Label * labelScreenSize ;
-        Label * labelFullscreen ;
-        Label * labelDrawShadows ;
-        Label * labelDrawSceneryDecor ;
-        Label * labelDrawRoomMiniatures ;
-        Label * labelCenterCameraOn ;
-        Label * labelChooseGraphics ;
+        Label * screenSize ;
+        Label * fullScreen ;
+        Label * drawShadows ;
+        Label * drawSceneryDecor ;
+        Label * drawRoomMiniatures ;
+        Label * centerCameraOn ;
+        Label * chooseGraphics ;
 
 };
 

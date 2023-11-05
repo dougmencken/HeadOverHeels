@@ -144,7 +144,7 @@ bool CharacterHeels::update()
         }
 
         // play sound for current activity
-        SoundManager::getInstance().play( characterItem.getOriginalLabel(), activity );
+        SoundManager::getInstance().play( characterItem.getOriginalKind(), activity );
 
         return false;
 }
@@ -196,7 +196,7 @@ void CharacterHeels::behave ()
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 // key to teleport is the same as for jump
                                 activity =
-                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
                         }
                 }
@@ -209,7 +209,7 @@ void CharacterHeels::behave ()
                                 // teleport when teletransport is below
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
                         }
                         else if ( input.takeTyped() )
@@ -240,7 +240,7 @@ void CharacterHeels::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( characterItem.getLabel(), activity );
+                                SoundManager::getInstance().stop( characterItem.getKind(), activity );
                                 activity = activities::Activity::Wait;
                         }
                 }

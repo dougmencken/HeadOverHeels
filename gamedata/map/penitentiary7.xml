@@ -55,91 +55,91 @@
     </walls>
     <items>
         <item x="3" y="0" z="0">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="2">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="3">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="4">
-            <label>penitentiary-capital-east</label>
+            <kind>penitentiary-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="2">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="3">
-            <label>penitentiary-shaft-east</label>
+            <kind>penitentiary-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="4">
-            <label>penitentiary-capital-east</label>
+            <kind>penitentiary-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="0">
-            <label>brick1</label>
+            <kind>brick1</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="1">
-            <label>brick1</label>
+            <kind>brick1</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="3">
-            <label>brick1</label>
+            <kind>brick1</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="1" z="0">
-            <label>bubble-robot</label>
+            <kind>bubble-robot</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="0">
-            <label>bubble-robot</label>
+            <kind>bubble-robot</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
-            <label>penitentiary-door-west</label>
+            <kind>penitentiary-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="8" y="3" z="-1">
-            <label>penitentiary-door-south</label>
+            <kind>penitentiary-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

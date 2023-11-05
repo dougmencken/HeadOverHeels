@@ -63,72 +63,72 @@
     </walls>
     <items>
         <item x="9" y="3" z="3">
-            <label>penitentiary-capital-south</label>
+            <kind>penitentiary-capital-south</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="8" y="4" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="8" y="4" z="1">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="8" y="4" z="3">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="9" y="4" z="3">
-            <label>penitentiary-capital-south</label>
+            <kind>penitentiary-capital-south</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="7" z="2">
-            <label>puppy</label>
+            <kind>puppy</kind>
             <orientation>west</orientation>
             <behavior>behavior of disappearance as soon as Head appears</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="7" z="1">
-            <label>puppy</label>
+            <kind>puppy</kind>
             <orientation>west</orientation>
             <behavior>behavior of disappearance as soon as Head appears</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="7" z="0">
-            <label>puppy</label>
+            <kind>puppy</kind>
             <orientation>west</orientation>
             <behavior>behavior of disappearance as soon as Head appears</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="8" z="3">
-            <label>penitentiary-capital-west</label>
+            <kind>penitentiary-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="8" z="3">
-            <label>penitentiary-capital-west</label>
+            <kind>penitentiary-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="-1">
-            <label>penitentiary-door-north</label>
+            <kind>penitentiary-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="3" z="-1">
-            <label>penitentiary-door-south</label>
+            <kind>penitentiary-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="4" y="8" z="-1">
-            <label>penitentiary-door-west</label>
+            <kind>penitentiary-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

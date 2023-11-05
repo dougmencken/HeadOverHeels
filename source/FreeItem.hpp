@@ -46,7 +46,7 @@ public:
 
         virtual ~FreeItem( ) { }
 
-        virtual std::string whichKindOfItem () const {  return "free item" ;  }
+        virtual std::string whichItemClass () const {  return "free item" ;  }
 
        /**
         * For sorting free items in container

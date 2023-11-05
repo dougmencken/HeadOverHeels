@@ -55,39 +55,39 @@
     </walls>
     <items>
         <item x="4" y="0" z="0">
-            <label>jail-shaft-east</label>
+            <kind>jail-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
-            <label>jail-capital-east</label>
+            <kind>jail-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="0">
-            <label>jail-shaft-east</label>
+            <kind>jail-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="1">
-            <label>jail-capital-east</label>
+            <kind>jail-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="-1">
-            <label>jail-door-west</label>
+            <kind>jail-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

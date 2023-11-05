@@ -55,25 +55,25 @@
     </walls>
     <items>
         <item x="4" y="2" z="0">
-            <label>mortal-fish</label>
+            <kind>mortal-fish</kind>
             <orientation>none</orientation>
             <behavior>behavior of something special</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="2" z="-1">
-            <label>egyptus-door-north</label>
+            <kind>egyptus-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="2" z="-1">
-            <label>egyptus-door-south</label>
+            <kind>egyptus-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="4" y="6" z="-1">
-            <label>egyptus-door-west</label>
+            <kind>egyptus-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

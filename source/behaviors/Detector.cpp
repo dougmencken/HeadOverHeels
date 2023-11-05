@@ -68,7 +68,7 @@ bool Detector::update ()
                                 // play sound on change of activity
                                 if ( activity != activities::Activity::Wait )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind(), activity );
                                 }
                                 break;
 

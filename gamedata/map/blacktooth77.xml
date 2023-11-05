@@ -47,148 +47,148 @@
     </walls>
     <items>
         <item x="4" y="0" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="0" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="0" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="0" z="3">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="0" z="4">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="0" z="5">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="0" z="0">
-            <label>another-portable-brick</label>
+            <kind>another-portable-brick</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="3">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="4">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="1" z="5">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="2" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="2" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="2" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="2" z="3">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="2" z="5">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="2" z="0">
-            <label>stool</label>
+            <kind>stool</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="1">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="3">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on touch</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="4">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="5">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="6">
-            <label>another-portable-brick</label>
+            <kind>another-portable-brick</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="1" z="-1">
-            <label>blacktooth-door-north</label>
+            <kind>blacktooth-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="1" z="-1">
-            <label>blacktooth-door-south</label>
+            <kind>blacktooth-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

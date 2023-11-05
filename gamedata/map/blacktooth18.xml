@@ -55,76 +55,76 @@
     </walls>
     <items>
         <item x="0" y="2" z="0">
-            <label>blacktooth-column-shaft-north</label>
+            <kind>blacktooth-column-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="1">
-            <label>blacktooth-column-shaft-north</label>
+            <kind>blacktooth-column-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="2">
-            <label>blacktooth-column-shaft-north</label>
+            <kind>blacktooth-column-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="3">
-            <label>blacktooth-column-capital-north</label>
+            <kind>blacktooth-column-capital-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="2" z="0">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="2" z="1">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="0">
-            <label>blacktooth-column-shaft-north</label>
+            <kind>blacktooth-column-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="1">
-            <label>blacktooth-column-shaft-north</label>
+            <kind>blacktooth-column-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="2">
-            <label>blacktooth-column-shaft-north</label>
+            <kind>blacktooth-column-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="3">
-            <label>blacktooth-column-capital-north</label>
+            <kind>blacktooth-column-capital-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="2" z="0">
-            <label>diver</label>
+            <kind>diver</kind>
             <orientation>west</orientation>
             <behavior>behavior of there and back</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="2" z="2">
-            <label>another-portable-brick</label>
+            <kind>another-portable-brick</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="2" z="-1">
-            <label>blacktooth-door-south</label>
+            <kind>blacktooth-door-south</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="2" z="-1">
-            <label>blacktooth-door-south</label>
+            <kind>blacktooth-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

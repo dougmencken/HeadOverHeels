@@ -63,28 +63,28 @@
     </walls>
     <items>
         <item x="4" y="0" z="0">
-            <label>penitentiary-capital-east</label>
+            <kind>penitentiary-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="0">
-            <label>penitentiary-capital-east</label>
+            <kind>penitentiary-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="5" z="0">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>6</top>
             <bottom>0</bottom>
             <ascent>true</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="0" z="-1">
-            <label>penitentiary-door-west</label>
+            <kind>penitentiary-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

@@ -44,7 +44,7 @@ bool Hunter::update ()
                         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                                         getNameOfBehavior() == "behavior of hunter in eight directions" )
                         {
-                                SoundManager::getInstance().play( this->item->getLabel(), activity );
+                                SoundManager::getInstance().play( this->item->getKind (), activity );
                                 activity = updateDirection( activity );
                         }
                         // otherwise check if the character is within the defined rectangle near the hunter
@@ -65,7 +65,7 @@ bool Hunter::update ()
                                 // eight-directional waiting hunter emits sound when it waits
                                 if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
                                 {
-                                        SoundManager::getInstance().play( this->item->getLabel(), activity );
+                                        SoundManager::getInstance().play( this->item->getKind (), activity );
                                 }
 
                                 // animate item, and when it waits too
@@ -105,7 +105,7 @@ bool Hunter::update ()
                                 this->item->animate();
 
                                 // play sound of movement
-                                SoundManager::getInstance().play( this->item->getLabel(), activity );
+                                SoundManager::getInstance().play( this->item->getKind (), activity );
                         }
                         break;
 
@@ -158,7 +158,7 @@ bool Hunter::update ()
                                 this->item->animate();
 
                                 // play sound of movement
-                                SoundManager::getInstance().play( this->item->getLabel(), activity );
+                                SoundManager::getInstance().play( this->item->getKind (), activity );
                         }
                         break;
 
@@ -337,7 +337,7 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                 }
 
                 // the guardian of throne flees from the player with four crowns
-                if ( item->getLabel() == "throne-guard" && GameManager::getInstance().countFreePlanets() >= 4 )
+                if ( item->getKind() == "throne-guard" && GameManager::getInstance().countFreePlanets() >= 4 )
                 {
                         changeActivityOfItem( activities::Activity::MoveSouthwest );
                 }
@@ -351,13 +351,13 @@ bool Hunter::createFullBody()
         FreeItem& thisItem = dynamic_cast< FreeItem& >( * this->item );
         bool created = false;
 
-        if ( thisItem.getLabel() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, - Isomot::LayerHeight ) )
+        if ( thisItem.getKind() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, - Isomot::LayerHeight ) )
         {
                 created = true;
 
                 // create the new item at the same location
                 FreeItemPtr newItem( new FreeItem (
-                        ItemDescriptions::descriptions().getDescriptionByLabel( "imperial-guard" ),
+                        ItemDescriptions::descriptions().getDescriptionByKind( "imperial-guard" ),
                         thisItem.getX(), thisItem.getY(), thisItem.getZ() - Isomot::LayerHeight,
                         thisItem.getOrientation() ) );
 

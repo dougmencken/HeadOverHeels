@@ -63,24 +63,24 @@
     </walls>
     <items>
         <item x="5" y="0" z="7">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
             <ascent>true</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="1" z="0">
-            <label>imperial-guard</label>
+            <kind>imperial-guard</kind>
             <orientation>none</orientation>
             <behavior>behavior of hunter in four directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="2" y="8" z="-1">
-            <label>blacktooth-door-west</label>
+            <kind>blacktooth-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

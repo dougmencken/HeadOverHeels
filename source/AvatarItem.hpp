@@ -34,13 +34,13 @@ public:
 
         virtual ~AvatarItem( ) { }
 
-        virtual std::string whichKindOfItem () const {  return "avatar item" ;  }
+        virtual std::string whichItemClass () const {  return "avatar item" ;  }
 
-        bool isHead () const {  return getOriginalLabel() == "head" ;  }
+        bool isHead () const {  return getOriginalKind() == "head" ;  }
 
-        bool isHeels () const {  return getOriginalLabel() == "heels" ;  }
+        bool isHeels () const {  return getOriginalKind() == "heels" ;  }
 
-        bool isHeadOverHeels () const {  return getOriginalLabel() == "headoverheels" ;  }
+        bool isHeadOverHeels () const {  return getOriginalKind() == "headoverheels" ;  }
 
         void autoMoveOnEntry ( const std::string & wayOfEntry ) ;
 
@@ -64,7 +64,7 @@ public:
         /**
          * the character takes a magic tool, one of "horn" or "handbag"
          */
-        void takeMagicTool( const std::string & label ) ;
+        void takeMagicTool( const std::string & tool ) ;
 
         unsigned short getDonuts () const ;
 
@@ -107,7 +107,7 @@ public:
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
-        void placeItemInBag ( const std::string & labelOfItem, const std::string & behavior ) ;
+        void placeItemInBag ( const std::string & kindOfItem, const std::string & behavior ) ;
 
         void emptyBag () ;
 

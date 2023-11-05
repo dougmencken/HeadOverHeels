@@ -47,35 +47,35 @@
     </walls>
     <items>
         <item x="3" y="0" z="0">
-            <label>elephant-head</label>
+            <kind>elephant-head</kind>
             <orientation>south</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="2" z="0">
-            <label>elephant-head</label>
+            <kind>elephant-head</kind>
             <orientation>south</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="4" z="0">
-            <label>elephant-head</label>
+            <kind>elephant-head</kind>
             <orientation>south</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="5" z="0">
-            <label>elephant</label>
+            <kind>elephant</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in four primary directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="2" z="-1">
-            <label>safari-door-north</label>
+            <kind>safari-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="7" y="2" z="-1">
-            <label>safari-door-south</label>
+            <kind>safari-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

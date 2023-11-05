@@ -55,40 +55,40 @@
     </walls>
     <items>
         <item x="3" y="2" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="4" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="5" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="7" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="4" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of waiting hunter in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="2" y="0" z="-1">
-            <label>market-door-east</label>
+            <kind>market-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="2" y="9" z="-1">
-            <label>market-door-west</label>
+            <kind>market-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

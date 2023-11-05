@@ -87,116 +87,116 @@
     </walls>
     <items>
         <item x="4" y="0" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="11" y="0" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="13" y="0" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="1" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="11" y="1" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="13" y="1" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="2" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="11" y="2" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="13" y="2" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="3" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="11" y="3" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="13" y="3" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="4" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="11" y="4" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="13" y="4" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="5" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="11" y="5" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="13" y="5" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="5" z="0">
-            <label>diver</label>
+            <kind>diver</kind>
             <orientation>south</orientation>
             <behavior>behavior of move then turn left and move</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="7" y="3" z="0">
-            <label>shield</label>
+            <kind>shield</kind>
             <orientation>west</orientation>
             <behavior>behavior of something special</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="2" z="-1">
-            <label>byblos-door-north</label>
+            <kind>byblos-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="17" y="2" z="-1">
-            <label>byblos-door-south</label>
+            <kind>byblos-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

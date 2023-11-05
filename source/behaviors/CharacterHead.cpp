@@ -147,7 +147,7 @@ bool CharacterHead::update ()
         }
 
         // play sound for current activity
-        SoundManager::getInstance().play( characterItem.getOriginalLabel(), activity );
+        SoundManager::getInstance().play( characterItem.getOriginalKind(), activity );
 
         return false;
 }
@@ -172,7 +172,7 @@ void CharacterHead::behave ()
                                 // jump or teleport
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
@@ -206,7 +206,7 @@ void CharacterHead::behave ()
                                 // look for teletransport below
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
@@ -232,7 +232,7 @@ void CharacterHead::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( characterItem.getLabel(), activity );
+                                SoundManager::getInstance().stop( characterItem.getKind(), activity );
                                 activity = activities::Activity::Wait;
                         }
                 }

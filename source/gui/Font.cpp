@@ -15,7 +15,7 @@ namespace gui
 
 /* static */ unsigned int Font::howManyLetters = 0 ;
 
-/* static */ std::string * Font::tableOfLetters = nilPointer ;
+/* static */ std::string * Font::listOfLetters = nilPointer ;
 
 
 Font::Font( const std::string& name, const std::string& color, bool doubleHeight ) :
@@ -28,7 +28,7 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                 autouniqueptr< allegro::Pict > fontFromFile( allegro::Pict::fromPNGFile( ospaths::pathToFile( nameOfFontFile ) ) );
                 if ( ! fontFromFile->isNotNil() )
                 {
-                        std::cerr << "oops, can’t get letters of fonts from file \"" << nameOfFontFile << "\"" << std::endl ;
+                        std::cerr << "oops, can’t get the image of letters from file \"" << nameOfFontFile << "\"" << std::endl ;
                         return ;
                 }
 
@@ -79,8 +79,8 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                 lettersOfFont->setName( lettersOfFont->getName() + ", yet colored " + justColor );
         }
 
-        // read table of letters once for all fonts
-        if ( tableOfLetters == nilPointer )
+        // read the list of letters once for all fonts
+        if ( Font::listOfLetters == nilPointer )
         {
                 howManyLetters = 0;
 
@@ -109,8 +109,8 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                                 }
                         }
 
-                        std::cout << "file \"" << file << "\" has table for " << howManyLetters << " letters" << std::endl ;
-                        tableOfLetters = new std::string[ howManyLetters ];
+                        std::cout << "file \"" << file << "\" lists " << howManyLetters << " letters" << std::endl ;
+                        listOfLetters = new std::string[ howManyLetters ];
 
                         unsigned int inTable = 0;
                         for ( unsigned int inBuf = 0 ; inBuf < length ; )
@@ -119,7 +119,7 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
 
                                 if ( c == 0 )
                                 {
-                                        tableOfLetters[ inTable++ ] = "";
+                                        listOfLetters[ inTable++ ] = "";
                                         inBuf ++;
                                 }
                                 else
@@ -136,26 +136,27 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
 
                                         letter[ bytesInLetter ] = 0 ; // end of string
 
-                                        tableOfLetters[ inTable ] = std::string( letter );
+                                        listOfLetters[ inTable ] = std::string( letter );
                                         inTable++ ;
                                 }
                         }
                 }
                 else
                 {
-                        std::cerr << "file \"" << file << "\" with the table of letters is absent" << std::endl ;
+                        std::cerr << "can't read file \"" << file << "\" with the list of letters drawn in the font" << std::endl ;
                 }
         }
 
         // decompose letters
-        const unsigned int lettersPerRow = 16;
-        const unsigned int rowsInFont = 21;
+        const unsigned int lettersPerLine = 16;
+        const unsigned int linesInFont = 21;
 
-        if ( rowsInFont * lettersPerRow != howManyLetters )
-                std::cout << "hmmm, table of letters has more or less letters than picture of font" << std::endl ;
+        if ( linesInFont * lettersPerLine != howManyLetters )
+                std::cout << "hmmm, the list of letters has more or less letters than the picture of font" << std::endl ;
 
-        this->charWidth = lettersOfFont->getWidth() / lettersPerRow;
-        this->charHeight = lettersOfFont->getHeight() / rowsInFont;
+        // the size of the font image is 272 x 609 pixels, or 16 x 21 letters 17 x 29 pixels each
+        this->charWidth = lettersOfFont->getWidth() / lettersPerLine ;
+        this->charHeight = lettersOfFont->getHeight() / linesInFont ;
 
         size_t positionInTable = 0;
 
@@ -164,9 +165,10 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                 for ( unsigned int x = 0; x < lettersOfFont->getWidth(); x += this->charWidth )
                 {
                         Picture* letter = new Picture( charWidth, charHeight );
-                        if ( tableOfLetters[ positionInTable ] != "" )
+                        if ( listOfLetters[ positionInTable ] != "" )
                                 allegro::bitBlit( lettersOfFont->getAllegroPict(), letter->getAllegroPict(), x, y, 0, 0, charWidth, charHeight );
-                        letter->setName( "image of letter \'" + tableOfLetters[ positionInTable++ ] + "\' for " + justFamily + " font colored " + justColor );
+
+                        letter->setName( "image of letter \'" + listOfLetters[ positionInTable ++ ] + "\' for " + justFamily + " font colored " + justColor );
                         letters.push_back( letter );
                 }
         }
@@ -184,7 +186,7 @@ Font::~Font( )
 
 Picture* Font::getPictureOfLetter( const std::string& letter )
 {
-        if ( tableOfLetters != nilPointer )
+        if ( listOfLetters != nilPointer )
         {
                 std::string letterInTable = letter ;
 
@@ -194,7 +196,7 @@ Picture* Font::getPictureOfLetter( const std::string& letter )
 
                 for ( unsigned int i = 0; i < howManyLetters; i++ )
                 {
-                        if ( letterInTable == tableOfLetters[ i ] )
+                        if ( letterInTable == listOfLetters[ i ] )
                                 return letters.at( i );
                 }
         }

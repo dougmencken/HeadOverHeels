@@ -39,44 +39,44 @@
     </walls>
     <items>
         <item x="4" y="0" z="1">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="1">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="1" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="1" z="1">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="1">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="0" z="-1">
-            <label>market-door-south</label>
+            <kind>market-door-south</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="0" z="-1">
-            <label>market-door-south</label>
+            <kind>market-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

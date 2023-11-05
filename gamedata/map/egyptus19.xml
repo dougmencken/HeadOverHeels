@@ -71,53 +71,53 @@
     </walls>
     <items>
         <item x="4" y="1" z="2">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="1" z="1">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="8" y="1" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="7" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="8" z="7">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="0">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
             <ascent>true</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="5" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="5" z="4">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="5" z="6">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
     </items>
 </room>

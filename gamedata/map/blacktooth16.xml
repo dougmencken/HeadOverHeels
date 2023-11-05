@@ -63,44 +63,44 @@
     </walls>
     <items>
         <item x="1" y="0" z="0">
-            <label>bubble-robot</label>
+            <kind>bubble-robot</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="8" y="0" z="0">
-            <label>bubble-robot</label>
+            <kind>bubble-robot</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="0">
-            <label>mortal-cap</label>
+            <kind>mortal-cap</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="4" z="0">
-            <label>mortal-cap</label>
+            <kind>mortal-cap</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="7" z="0">
-            <label>bubble-robot</label>
+            <kind>bubble-robot</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="3" z="-1">
-            <label>blacktooth-door-north</label>
+            <kind>blacktooth-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="4" y="8" z="-1">
-            <label>blacktooth-door-west</label>
+            <kind>blacktooth-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

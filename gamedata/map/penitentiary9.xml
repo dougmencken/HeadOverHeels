@@ -47,13 +47,13 @@
     </walls>
     <items>
         <item x="2" y="4" z="0">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
             <ascent>true</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
     </items>
 </room>

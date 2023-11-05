@@ -71,60 +71,60 @@
     </walls>
     <items>
         <item x="0" y="0" z="1">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="2">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="0" z="3">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="0" z="4">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="0" z="5">
-            <label>donuts</label>
+            <kind>donuts</kind>
             <orientation>none</orientation>
             <behavior>behavior of something special</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="2" z="0">
-            <label>bomb</label>
+            <kind>bomb</kind>
             <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="2" y="3" z="0">
-            <label>bomb</label>
+            <kind>bomb</kind>
             <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="3" z="0">
-            <label>siren</label>
+            <kind>siren</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in four secondary directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="5" z="0">
-            <label>bomb</label>
+            <kind>bomb</kind>
             <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="8" y="3" z="-1">
-            <label>safari-door-south</label>
+            <kind>safari-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

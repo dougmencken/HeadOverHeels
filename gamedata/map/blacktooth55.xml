@@ -55,23 +55,23 @@
     </walls>
     <items>
         <item x="4" y="6" z="0">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
             <ascent>false</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
-            <label>jail-door-east</label>
+            <kind>jail-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="8" y="3" z="-1">
-            <label>jail-door-south</label>
+            <kind>jail-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

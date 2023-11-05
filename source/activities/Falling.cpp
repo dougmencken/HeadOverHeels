@@ -32,7 +32,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
 {
         if ( behavior == nilPointer ) return false ;
 
-        if ( behavior->getItem()->whichKindOfItem() == "avatar item" &&
+        if ( behavior->getItem()->whichItemClass() == "avatar item" &&
                 GameManager::getInstance().charactersFly() &&
                 ! ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "PageDown" ) ) )
         {
@@ -54,7 +54,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
                         itemsBelow.push_back( mediator->popCollision() );
                 }
 
-                if ( sender.whichKindOfItem() == "free item" || sender.whichKindOfItem() == "avatar item" )
+                if ( sender.whichItemClass() == "free item" || sender.whichItemClass() == "avatar item" )
                 {
                         this->assignAnchor( sender.getUniqueName(), sender.getMediator(), itemsBelow );
                 }
@@ -70,11 +70,11 @@ bool Falling::fall( behaviors::Behavior * behavior )
                         if ( itemBelow != nilPointer )
                         {
                                 // is it grid item or free item
-                                if ( itemBelow->whichKindOfItem() == "grid item" ||
-                                        itemBelow->whichKindOfItem() == "free item" ||
-                                        itemBelow->whichKindOfItem() == "avatar item" )
+                                if ( itemBelow->whichItemClass() == "grid item" ||
+                                        itemBelow->whichItemClass() == "free item" ||
+                                        itemBelow->whichItemClass() == "avatar item" )
                                 {
-                                        if ( itemBelow->whichKindOfItem() == "avatar item" && sender.isMortal() )
+                                        if ( itemBelow->whichItemClass() == "avatar item" && sender.isMortal() )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
@@ -84,7 +84,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
                                                         }
                                                 }
                                         }
-                                        else if ( sender.whichKindOfItem() == "avatar item" && itemBelow->isMortal() )
+                                        else if ( sender.whichItemClass() == "avatar item" && itemBelow->isMortal() )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
@@ -119,7 +119,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
                                 }
                         }
                         // the character reaches floor
-                        else if ( sender.whichKindOfItem() == "avatar item" && name == "some tile of floor" )
+                        else if ( sender.whichItemClass() == "avatar item" && name == "some tile of floor" )
                         {
                                 AvatarItem & characterItem = dynamic_cast< AvatarItem & >( sender );
 
@@ -184,7 +184,7 @@ void Falling::assignAnchor( const std::string & uniqueNameOfItem, Mediator * med
                 else if ( itemBelow != nilPointer && ! anchor.empty() )
                 {
                         // if it is grid item and current anchor is not grid item then pick grid item as anchor
-                        if ( itemBelow->whichKindOfItem() == "grid item" && mediator->findItemByUniqueName( anchor )->whichKindOfItem() != "grid item" )
+                        if ( itemBelow->whichItemClass() == "grid item" && mediator->findItemByUniqueName( anchor )->whichItemClass() != "grid item" )
                         {
                                 anchor = itemBelow->getUniqueName() ;
                         }
@@ -222,9 +222,9 @@ void Falling::assignAnchor( const std::string & uniqueNameOfItem, Mediator * med
 
                 if ( anchor != nilPointer )
                 {
-                        std::cout << anchorItem->whichKindOfItem() << " \"" << anchorItem->getUniqueName() << "\" at" <<
+                        std::cout << anchorItem->whichItemClass() << " \"" << anchorItem->getUniqueName() << "\" at" <<
                                         " x=" << anchorItem->getX() << " y=" << anchorItem->getY() << " z=" << anchorItem->getZ() <<
-                                        " is set as anchor for " << freeItem.whichKindOfItem() << " \"" << freeItem.getUniqueName() <<
+                                        " is set as anchor for " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() <<
                                         "\" at" << " x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ()
                                   << std::endl ;
                 }

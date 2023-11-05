@@ -31,19 +31,19 @@
     </walls>
     <items>
         <item x="1" y="0" z="-1">
-            <label>blacktooth-door-west</label>
+            <kind>blacktooth-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="0" y="4" z="-1">
-            <label>blacktooth-door-north</label>
+            <kind>blacktooth-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="1" y="9" z="-1">
-            <label>blacktooth-door-west</label>
+            <kind>blacktooth-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

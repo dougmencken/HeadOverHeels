@@ -25,7 +25,7 @@ public:
         static const unsigned int  WIDTH_OF_DOOR_IMAGE = 82 ;
         static const unsigned int HEIGHT_OF_DOOR_IMAGE = 140 ;
 
-        DescriptionOfDoor( const std::string & doorLabel ) ;
+        DescriptionOfDoor( const std::string & scene, const std::string & where ) ;
 
         virtual ~DescriptionOfDoor () ;
 

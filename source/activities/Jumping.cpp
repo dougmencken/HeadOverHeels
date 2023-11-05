@@ -73,7 +73,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
                                 else
                                 {
                                         // non mortal free item
-                                        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" )
+                                        if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
                                         {
                                                 // raise items recursively
                                                 lift( characterItem, *item, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );

@@ -466,7 +466,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int leftTooAmbianceX = 33 + dx ;
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
-                std::string character = isomot.getMapManager().getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
+                std::string character = isomot.getMapManager().getActiveRoom()->getMediator()->getNameOfActiveCharacter();
                 allegro::drawSprite (
                         ( (  character == "head" || character == "headoverheels" ) ? ambiancePictures[ "head" ] : ambiancePictures[ "gray head" ] )->getAllegroPict(),
                         161 + dx, headHeelsAmbianceY );
@@ -721,7 +721,7 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room, int x, int
 
         saverAndLoader.ateFish (
                 room->getNameOfRoomDescriptionFile (),
-                character.getLabel (),
+                character.getKind (),
                 x, y, z,
                 character.getOrientation ()
         );

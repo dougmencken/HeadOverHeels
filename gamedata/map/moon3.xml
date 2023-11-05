@@ -63,146 +63,146 @@
     </walls>
     <items>
         <item x="3" y="0" z="0">
-            <label>moon-shaft-east</label>
+            <kind>moon-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
-            <label>moon-capital-east</label>
+            <kind>moon-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
-            <label>moon-shaft-east</label>
+            <kind>moon-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
-            <label>moon-capital-east</label>
+            <kind>moon-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="1" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="4" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="4" z="1">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="4" z="1">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="6" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="7" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="7" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="7" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="7" y="7" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="8" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="8" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="8" z="0">
-            <label>brick2</label>
+            <kind>brick2</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="9" z="0">
-            <label>moon-capital-west</label>
+            <kind>moon-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="9" z="0">
-            <label>moon-capital-west</label>
+            <kind>moon-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="1" z="1">
-            <label>charles-robot</label>
+            <kind>charles-robot</kind>
             <orientation>south</orientation>
             <behavior>behavior of remotely controlled one</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="1" z="0">
-            <label>trampoline</label>
+            <kind>trampoline</kind>
             <orientation>none</orientation>
             <behavior>behavior of spring leap</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="7" y="1" z="0">
-            <label>sandwich</label>
+            <kind>sandwich</kind>
             <orientation>west</orientation>
             <behavior>behavior of move then turn right and move</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="6" z="1">
-            <label>remote-control</label>
+            <kind>remote-control</kind>
             <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="7" z="1">
-            <label>remote-control</label>
+            <kind>remote-control</kind>
             <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="7" z="1">
-            <label>remote-control</label>
+            <kind>remote-control</kind>
             <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="8" z="1">
-            <label>remote-control</label>
+            <kind>remote-control</kind>
             <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
-            <label>moon-door-west</label>
+            <kind>moon-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="3" y="9" z="-1">
-            <label>moon-door-west</label>
+            <kind>moon-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

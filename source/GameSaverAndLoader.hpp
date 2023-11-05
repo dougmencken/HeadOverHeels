@@ -32,28 +32,28 @@ public:
 
         ~GameSaverAndLoader( ) { }
 
-       /**
-        * Set the data needed to record a game
-        * @param room Room where reincarnation fish is caught
-        * @param label Character who caught the fish
-        */
-        void ateFish ( const std::string & room, const std::string & label, int x, int y, int z, const std::string & orientation ) ;
+        /**
+         * Sets the data to save a game
+         * @param room Where the reincarnation fish is caught
+         * @param character Who caught the fish
+         */
+        void ateFish ( const std::string & room, const std::string & character, int x, int y, int z, const std::string & orientation ) ;
 
         bool loadGame ( const std::string & file ) ;
 
         bool saveGame ( const std::string & file ) ;
 
-        static const std::string Current_Save_Version () {  return "2.1" ;  }
+        static const std::string Current_Save_Version () {  return "2.2" ;  }
 
         static const std::vector< std::string > Parsable_Save_Versions ()
         {
-        #ifdef __Cxx11__
-                return { std::string( "2" ) };
-        #else
+        ///#ifdef __Cxx11__
+                ///return { std::string( "2.2" ) };
+        ///#else
                 std::vector< std::string > versions ;
-                versions.push_back( "2" );
+                ///versions.push_back( "2.2" );
                 return versions ;
-        #endif
+        ///#endif
         }
 
 private:
@@ -76,7 +76,7 @@ private:
 
         int zFish ;
 
-        std::string catchFishWay ;
+        std::string orientationOFish ;
 
 } ;
 

@@ -55,38 +55,38 @@
     </walls>
     <items>
         <item x="4" y="4" z="0">
-            <label>teleport</label>
+            <kind>teleport</kind>
             <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="4" z="0">
-            <label>teleport</label>
+            <kind>teleport</kind>
             <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="5" z="0">
-            <label>teleport</label>
+            <kind>teleport</kind>
             <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="5" z="0">
-            <label>teleport</label>
+            <kind>teleport</kind>
             <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="-1">
-            <label>blacktooth-door-east</label>
+            <kind>blacktooth-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="0" y="4" z="-1">
-            <label>blacktooth-door-north</label>
+            <kind>blacktooth-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

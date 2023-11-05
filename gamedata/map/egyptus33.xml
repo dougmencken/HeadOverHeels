@@ -39,9 +39,9 @@
     </walls>
     <items>
         <item x="3" y="0" z="-1">
-            <label>egyptus-door-east</label>
+            <kind>egyptus-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

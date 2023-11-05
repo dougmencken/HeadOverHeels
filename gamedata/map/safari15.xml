@@ -79,88 +79,88 @@
     </walls>
     <items>
         <item x="0" y="2" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="3" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="4" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="5" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="6" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="7" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="7" z="0">
-            <label>spikes</label>
+            <kind>spikes</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="10" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="12" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="14" z="0">
-            <label>vulcano</label>
+            <kind>vulcano</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="1" y="14" z="0">
-            <label>diver</label>
+            <kind>diver</kind>
             <orientation>south</orientation>
             <behavior>behavior of there and back</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="2" y="12" z="0">
-            <label>diver</label>
+            <kind>diver</kind>
             <orientation>south</orientation>
             <behavior>behavior of there and back</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="10" z="0">
-            <label>diver</label>
+            <kind>diver</kind>
             <orientation>south</orientation>
             <behavior>behavior of there and back</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="4" z="1">
-            <label>siren</label>
+            <kind>siren</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in four secondary directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="0" z="-1">
-            <label>safari-door-east</label>
+            <kind>safari-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="1" y="17" z="-1">
-            <label>safari-door-west</label>
+            <kind>safari-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

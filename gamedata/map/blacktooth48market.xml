@@ -39,14 +39,14 @@
     </walls>
     <items>
         <item x="0" y="3" z="-1">
-            <label>market-door-north</label>
+            <kind>market-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="1" y="8" z="-1">
-            <label>market-door-west</label>
+            <kind>market-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

@@ -44,15 +44,15 @@ public:
 
         virtual ~GridItem( ) ;
 
-        virtual std::string whichKindOfItem () const {  return "grid item" ;  }
+        virtual std::string whichItemClass () const {  return "grid item" ;  }
 
         bool isSegmentOfWallOnX () const
-                {  return getOriginalLabel().find( "wall-x" ) != std::string::npos &&
-                                getOriginalLabel().find( "invisible-wall" ) == std::string::npos ;  }
+                {  return getOriginalKind().find( "wall-x" ) != std::string::npos &&
+                                getOriginalKind().find( "invisible-wall" ) == std::string::npos ;  }
 
         bool isSegmentOfWallOnY () const
-                {  return getOriginalLabel().find( "wall-y" ) != std::string::npos &&
-                                getOriginalLabel().find( "invisible-wall" ) == std::string::npos ;  }
+                {  return getOriginalKind().find( "wall-y" ) != std::string::npos &&
+                                getOriginalKind().find( "invisible-wall" ) == std::string::npos ;  }
 
         virtual void calculateOffset () ;
 

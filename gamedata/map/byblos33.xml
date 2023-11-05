@@ -63,72 +63,72 @@
     </walls>
     <items>
         <item x="3" y="0" z="0">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="2">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="3">
-            <label>byblos-capital-east</label>
+            <kind>byblos-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="2">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="0" z="3">
-            <label>byblos-capital-east</label>
+            <kind>byblos-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="1" z="2">
-            <label>puppy</label>
+            <kind>puppy</kind>
             <orientation>west</orientation>
             <behavior>behavior of disappearance as soon as Head appears</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="1">
-            <label>puppy</label>
+            <kind>puppy</kind>
             <orientation>west</orientation>
             <behavior>behavior of disappearance as soon as Head appears</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="6" y="1" z="0">
-            <label>puppy</label>
+            <kind>puppy</kind>
             <orientation>west</orientation>
             <behavior>behavior of disappearance as soon as Head appears</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="-1">
-            <label>byblos-door-west</label>
+            <kind>byblos-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="8" y="4" z="-1">
-            <label>byblos-door-south</label>
+            <kind>byblos-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

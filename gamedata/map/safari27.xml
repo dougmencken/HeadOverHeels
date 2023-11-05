@@ -55,88 +55,88 @@
     </walls>
     <items>
         <item x="0" y="2" z="0">
-            <label>safari-shaft-north</label>
+            <kind>safari-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="1">
-            <label>safari-shaft-north</label>
+            <kind>safari-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="2">
-            <label>safari-shaft-north</label>
+            <kind>safari-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="2" z="3">
-            <label>safari-capital-north</label>
+            <kind>safari-capital-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="9" y="2" z="3">
-            <label>safari-capital-south</label>
+            <kind>safari-capital-south</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="0">
-            <label>safari-shaft-north</label>
+            <kind>safari-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="1">
-            <label>safari-shaft-north</label>
+            <kind>safari-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="2">
-            <label>safari-shaft-north</label>
+            <kind>safari-shaft-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="3" z="3">
-            <label>safari-capital-north</label>
+            <kind>safari-capital-north</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="9" y="3" z="3">
-            <label>safari-capital-south</label>
+            <kind>safari-capital-south</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="4" y="2" z="0">
-            <label>elephant</label>
+            <kind>elephant</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in four primary directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="2" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="4" y="3" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="3" z="0">
-            <label>trampoline</label>
+            <kind>trampoline</kind>
             <orientation>none</orientation>
             <behavior>behavior of spring leap</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="2" z="-1">
-            <label>safari-door-south</label>
+            <kind>safari-door-south</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="2" z="-1">
-            <label>safari-door-south</label>
+            <kind>safari-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

@@ -2,24 +2,15 @@
 #include "DescriptionOfDoor.hpp"
 
 
-DescriptionOfDoor::DescriptionOfDoor( const std::string & doorLabel )
-        : DescriptionOfItem( doorLabel )
-        , scenery( "none" )
-        , doorAt( "void" )
+DescriptionOfDoor::DescriptionOfDoor( const std::string & scene, const std::string & where )
+        : DescriptionOfItem( scene + "-door-" + where ) // door's item kind is %scenery%-door-%at%
+        , scenery( scene )
+        , doorAt( where )
 {
-        setNameOfPicturesFile( doorLabel + ".png" );
+        setNameOfPicturesFile( getKind() + ".png" );
         setWidthOfFrame( DescriptionOfDoor::WIDTH_OF_DOOR_IMAGE );
         setHeightOfFrame( DescriptionOfDoor::HEIGHT_OF_DOOR_IMAGE );
         setHowManyOrientations( 1 );
-
-        // the door's label is %scenery%-door-%at%
-        size_t doorInLabel = doorLabel.find( "door-" );
-        if ( doorInLabel != std::string::npos /* it is found */
-                        && doorInLabel > 0 /* and isn't at the very beginning */ )
-        {
-                this->scenery = doorLabel.substr( 0, doorInLabel - 1 );
-                this->doorAt = doorLabel.substr( doorInLabel + 5 );
-        }
 
         this->lintel = cloneAsLintelOfDoor() ;
         this->leftJamb = cloneAsLeftJambOfDoor() ;
@@ -36,7 +27,7 @@ DescriptionOfDoor::~DescriptionOfDoor ()
 DescriptionOfItem * DescriptionOfDoor::cloneAsLintelOfDoor ()
 {
         DescriptionOfItem * descriptionOfLintel = clone() ;
-        descriptionOfLintel->setLabel( getLabel () + "~lintel" );
+        descriptionOfLintel->setKind( getKind () + "~lintel" );
         descriptionOfLintel->markAsPartOfDoor ();
 
         const unsigned int lintelSmallerWidth = 9 ;
@@ -57,7 +48,7 @@ DescriptionOfItem * DescriptionOfDoor::cloneAsLintelOfDoor ()
 DescriptionOfItem * DescriptionOfDoor::cloneAsLeftJambOfDoor ()
 {
         DescriptionOfItem * descriptionOfLeftJamb = clone() ;
-        descriptionOfLeftJamb->setLabel( getLabel () + "~leftjamb" );
+        descriptionOfLeftJamb->setKind( getKind () + "~leftjamb" );
         descriptionOfLeftJamb->markAsPartOfDoor ();
 
         descriptionOfLeftJamb->setWidthX( 9 );
@@ -70,7 +61,7 @@ DescriptionOfItem * DescriptionOfDoor::cloneAsLeftJambOfDoor ()
 DescriptionOfItem * DescriptionOfDoor::cloneAsRightJambOfDoor ()
 {
         DescriptionOfItem * descriptionOfRightJamb = clone() ;
-        descriptionOfRightJamb->setLabel( getLabel () + "~rightjamb" );
+        descriptionOfRightJamb->setKind( getKind () + "~rightjamb" );
         descriptionOfRightJamb->markAsPartOfDoor ();
 
         descriptionOfRightJamb->setWidthX( 9 );

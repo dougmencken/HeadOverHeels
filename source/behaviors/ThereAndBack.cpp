@@ -52,8 +52,8 @@ bool ThereAndBack::update ()
                                         {
                                                 turnRound();
 
-                                                // play sound of colliding
-                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
+                                                // play the sound of colliding
+                                                SoundManager::getInstance().play( freeItem.getKind (), activities::Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -73,8 +73,8 @@ bool ThereAndBack::update ()
                 case activities::Activity::DisplaceNorthwest:
                         if ( ! this->isFlying )
                         {
-                                // emit sound of displacing
-                                SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                // emit the sound of displacing
+                                SoundManager::getInstance().play( freeItem.getKind (), activity );
 
                                 // displace this item by other one
                                 activities::Displacing::getInstance().displace( this, &activity, true );
@@ -105,8 +105,8 @@ bool ThereAndBack::update ()
                                 {
                                         if ( ! activities::Falling::getInstance().fall( this ) )
                                         {
-                                                // emit sound of falling down
-                                                SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                                // emit the sound of falling
+                                                SoundManager::getInstance().play( freeItem.getKind (), activity );
                                                 activity = activities::Activity::Wait;
                                         }
 

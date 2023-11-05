@@ -19,19 +19,19 @@ GameSaverAndLoader::GameSaverAndLoader( )
         , xFish( 0 )
         , yFish( 0 )
         , zFish( 0 )
-        , catchFishWay( "nowhere" )
+        , orientationOFish( "nowhere" )
 {
 
 }
 
-void GameSaverAndLoader::ateFish( const std::string& room, const std::string& name, int x, int y, int z, const std::string& orientation )
+void GameSaverAndLoader::ateFish( const std::string & room, const std::string & character, int x, int y, int z, const std::string & orientation )
 {
-        this->fishRoom = room;
-        this->nameOfCharacterWhoCaughtTheFish = name;
-        this->xFish = x;
-        this->yFish = y;
-        this->zFish = z;
-        catchFishWay = orientation ;
+        this->fishRoom = room ;
+        this->nameOfCharacterWhoCaughtTheFish = character ;
+        this->xFish = x ;
+        this->yFish = y ;
+        this->zFish = z ;
+        this->orientationOFish = orientation ;
 }
 
 bool GameSaverAndLoader::loadGame( const std::string & file )
@@ -66,7 +66,7 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
                 if ( isVersionParsable )
                         std::cout << " (not current but parsable)" << std::endl ;
                 else {
-                        std::cout << ", which is unknown" << std::endl ;
+                        std::cout << ", which can't be read by the current version of game" << std::endl ;
                         return false ;
                 }
         }
@@ -91,51 +91,51 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
 
         // liberated planets
 
-        tinyxml2::XMLElement* freeByblos = root->FirstChildElement( "freeByblos" ) ;
-        if ( freeByblos != nilPointer )
-                if ( std::string( freeByblos->FirstChild()->ToText()->Value() ) == "true" )
+        tinyxml2::XMLElement* byblos = root->FirstChildElement( "Byblos" ) ;
+        if ( byblos != nilPointer )
+                if ( std::string( byblos->Attribute( "free" ) ) == "yes" )
                         gameManager.liberatePlanet( "byblos", false );
 
-        tinyxml2::XMLElement* freeEgyptus = root->FirstChildElement( "freeEgyptus" ) ;
-        if ( freeEgyptus != nilPointer )
-                if ( std::string( freeEgyptus->FirstChild()->ToText()->Value() ) == "true" )
+        tinyxml2::XMLElement* egyptus = root->FirstChildElement( "Egyptus" ) ;
+        if ( egyptus != nilPointer )
+                if ( std::string( egyptus->Attribute( "free" ) ) == "yes" )
                         gameManager.liberatePlanet( "egyptus", false );
 
-        tinyxml2::XMLElement* freePenitentiary = root->FirstChildElement( "freePenitentiary" ) ;
-        if ( freePenitentiary != nilPointer )
-                if ( std::string( freePenitentiary->FirstChild()->ToText()->Value() ) == "true" )
+        tinyxml2::XMLElement* penitentiary = root->FirstChildElement( "Penitentiary" ) ;
+        if ( penitentiary != nilPointer )
+                if ( std::string( penitentiary->Attribute( "free" ) ) == "yes" )
                         gameManager.liberatePlanet( "penitentiary", false );
 
-        tinyxml2::XMLElement* freeSafari = root->FirstChildElement( "freeSafari" ) ;
-        if ( freeSafari != nilPointer )
-                if ( std::string( freeSafari->FirstChild()->ToText()->Value() ) == "true" )
+        tinyxml2::XMLElement* safari = root->FirstChildElement( "Safari" ) ;
+        if ( safari != nilPointer )
+                if ( std::string( safari->Attribute( "free" ) ) == "yes" )
                         gameManager.liberatePlanet( "safari", false );
 
-        tinyxml2::XMLElement* freeBlacktooth = root->FirstChildElement( "freeBlacktooth" ) ;
-        if ( freeBlacktooth != nilPointer )
-                if ( std::string( freeBlacktooth->FirstChild()->ToText()->Value() ) == "true" )
+        tinyxml2::XMLElement* blacktooth = root->FirstChildElement( "Blacktooth" ) ;
+        if ( blacktooth != nilPointer )
+                if ( std::string( blacktooth->Attribute( "free" ) ) == "yes" )
                         gameManager.liberatePlanet( "blacktooth", false );
 
-        // bonuses already taken
+        // already taken bonuses
 
         BonusManager::getInstance().clearAbsentBonuses () ; // forget any previous list
 
-        tinyxml2::XMLElement* bonuses = root->FirstChildElement( "bonuses" ) ;
+        tinyxml2::XMLElement* takenBonuses = root->FirstChildElement( "takenBonuses" ) ;
 
-        if ( bonuses != nilPointer )
+        if ( takenBonuses != nilPointer )
         {
-                for ( tinyxml2::XMLElement* bonus = bonuses->FirstChildElement( "bonus" ) ;
+                for ( tinyxml2::XMLElement* bonus = takenBonuses->FirstChildElement( "bonus" ) ;
                                 bonus != nilPointer ;
                                 bonus = bonus->NextSiblingElement( "bonus" ) )
                 {
-                        if ( bonus->Attribute( "room" ) != nilPointer && bonus->Attribute( "label" ) != nilPointer )
+                        if ( bonus->Attribute( "of" ) != nilPointer && bonus->Attribute( "in" ) != nilPointer )
                         {
-                                std::string room = bonus->Attribute( "room" );
-                                std::string label = bonus->Attribute( "label" );
+                                std::string kind = bonus->Attribute( "of" );
+                                std::string room = bonus->Attribute( "in" );
 
-                                BonusManager::getInstance().markAsAbsent( BonusInRoom( /* which bonus */ label, /* in which room */ room ) );
+                                BonusManager::getInstance().markAsAbsent( BonusInRoom( /* which bonus */ kind, /* in which room */ room ) );
 
-                                std::cout << "rebuilding room \"" << room << "\" without bonus \"" << label << "\"" << std::endl ;
+                                std::cout << "rebuilding room \"" << room << "\" without bonus \"" << kind << "\"" << std::endl ;
                                 gameManager.getIsomot().getMapManager().rebuildRoom( gameManager.getIsomot().getMapManager().findRoomByFile( room ) );
                         }
                 }
@@ -164,8 +164,6 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 character = character->NextSiblingElement( "character" ) )
                 {
                         const char * name = character->Attribute( "name" );
-                        if ( name == nilPointer ) // the games saved in version "2" had the "label" attribute
-                                name = character->Attribute( "label" );
 
                         bool isActiveCharacter = false ;
                         tinyxml2::XMLElement* active = character->FirstChildElement( "active" );
@@ -308,36 +306,36 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         bool isByblosFree = gameManager.isFreePlanet( "byblos" ) ;
         if ( isByblosFree ) {
-                tinyxml2::XMLElement* freeByblos = saveXml.NewElement( "freeByblos" ) ;
-                freeByblos->SetText( "true" ); // isByblosFree ? "true" : "false"
+                tinyxml2::XMLElement* freeByblos = saveXml.NewElement( "Byblos" ) ;
+                freeByblos->SetAttribute( "free", "yes" );
                 root->InsertEndChild( freeByblos );
         }
 
         bool isEgyptusFree = gameManager.isFreePlanet( "egyptus" ) ;
         if ( isEgyptusFree ) {
-                tinyxml2::XMLElement* freeEgyptus = saveXml.NewElement( "freeEgyptus" ) ;
-                freeEgyptus->SetText( "true" ); // isEgyptusFree ? "true" : "false"
+                tinyxml2::XMLElement* freeEgyptus = saveXml.NewElement( "Egyptus" ) ;
+                freeEgyptus->SetAttribute( "free", "yes" );
                 root->InsertEndChild( freeEgyptus );
         }
 
         bool isPenitentiaryFree = gameManager.isFreePlanet( "penitentiary" ) ;
         if ( isPenitentiaryFree ) {
-                tinyxml2::XMLElement* freePenitentiary = saveXml.NewElement( "freePenitentiary" ) ;
-                freePenitentiary->SetText( "true" ); // isPenitentiaryFree ? "true" : "false"
+                tinyxml2::XMLElement* freePenitentiary = saveXml.NewElement( "Penitentiary" ) ;
+                freePenitentiary->SetAttribute( "free", "yes" );
                 root->InsertEndChild( freePenitentiary );
         }
 
         bool isSafariFree = gameManager.isFreePlanet( "safari" ) ;
         if ( isSafariFree ) {
-                tinyxml2::XMLElement* freeSafari = saveXml.NewElement( "freeSafari" ) ;
-                freeSafari->SetText( "true" ); // isSafariFree ? "true" : "false"
+                tinyxml2::XMLElement* freeSafari = saveXml.NewElement( "Safari" ) ;
+                freeSafari->SetAttribute( "free", "yes" );
                 root->InsertEndChild( freeSafari );
         }
 
         bool isBlacktoothFree = gameManager.isFreePlanet( "blacktooth" ) ;
         if ( isBlacktoothFree ) {
-                tinyxml2::XMLElement* freeBlacktooth = saveXml.NewElement( "freeBlacktooth" ) ;
-                freeBlacktooth->SetText( "true" ); // isBlacktoothFree ? "true" : "false"
+                tinyxml2::XMLElement* freeBlacktooth = saveXml.NewElement( "Blacktooth" ) ;
+                freeBlacktooth->SetAttribute( "free", "yes" );
                 root->InsertEndChild( freeBlacktooth );
         }
 
@@ -347,17 +345,17 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         if ( takenBonuses.size () > 0 )
         {
-                tinyxml2::XMLElement* bonuses = saveXml.NewElement( "bonuses" ) ;
+                tinyxml2::XMLElement* takenBonusesXml = saveXml.NewElement( "takenBonuses" ) ;
 
                 for ( unsigned int b = 0 ; b < takenBonuses.size () ; ++ b )
                 {
                         tinyxml2::XMLElement* bonus = saveXml.NewElement( "bonus" );
-                        bonus->SetAttribute( "room", takenBonuses[ b ].getRoom ().c_str() );
-                        bonus->SetAttribute( "label", takenBonuses[ b ].getBonus ().c_str() );
-                        bonuses->InsertEndChild( bonus );
+                        bonus->SetAttribute( "of", takenBonuses[ b ].getBonus ().c_str() );
+                        bonus->SetAttribute( "in", takenBonuses[ b ].getRoom ().c_str() );
+                        takenBonusesXml->InsertEndChild( bonus );
                 }
 
-                root->InsertEndChild( bonuses );
+                root->InsertEndChild( takenBonusesXml );
         }
 
         // characters
@@ -404,7 +402,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 activeCharacter->InsertEndChild( lives );
 
                 tinyxml2::XMLElement* orientation = saveXml.NewElement( "orientation" );
-                orientation->SetText( catchFishWay.c_str () );
+                orientation->SetText( orientationOFish.c_str () );
                 activeCharacter->InsertEndChild( orientation );
 
                 tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
@@ -447,12 +445,12 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         if ( secondRoom != nilPointer )
         {
-                whoWaitsToPlay = secondRoom->getMediator()->getLabelOfActiveCharacter() ;
+                whoWaitsToPlay = secondRoom->getMediator()->getNameOfActiveCharacter() ;
         }
         else
         if ( activeRoom->getMediator()->getWaitingCharacter() != nilPointer )
         {
-                whoWaitsToPlay = activeRoom->getMediator()->getWaitingCharacter()->getLabel() ;
+                whoWaitsToPlay = activeRoom->getMediator()->getWaitingCharacter()->getKind () ;
         }
 
         AvatarItemPtr characterToo ;
@@ -465,7 +463,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
                 for ( std::vector< AvatarItemPtr >::const_iterator p = charactersOnEntry.begin (); p != charactersOnEntry.end (); ++ p )
                 {
-                        if ( ( *p )->getLabel() == whoWaitsToPlay )
+                        if ( ( *p )->getKind () == whoWaitsToPlay )
                         {
                                 characterToo = *p ;
                                 break;

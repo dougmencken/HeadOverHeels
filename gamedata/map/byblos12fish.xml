@@ -63,57 +63,57 @@
     </walls>
     <items>
         <item x="5" y="0" z="0">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="1">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="2">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="3">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="0" z="4">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="0" z="0">
-            <label>another-portable-brick</label>
+            <kind>another-portable-brick</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="5" y="0" z="5">
-            <label>reincarnation-fish</label>
+            <kind>reincarnation-fish</kind>
             <orientation>none</orientation>
             <behavior>behavior of something special</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="2" y="3" z="0">
-            <label>stool</label>
+            <kind>stool</kind>
             <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="3" z="-1">
-            <label>byblos-door-south</label>
+            <kind>byblos-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="2" y="8" z="-1">
-            <label>byblos-door-west</label>
+            <kind>byblos-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

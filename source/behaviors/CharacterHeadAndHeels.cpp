@@ -46,7 +46,7 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( const ItemPtr & item, const std::s
         blinkFrames[ "east" ] = 12;
         blinkFrames[ "west" ] = 19;
 
-        labelOfBubbles = "double-bubbles";
+        kindOfBubbles = "double-bubbles";
 
         // activate chronometers
         speedTimer->go();
@@ -163,7 +163,7 @@ bool CharacterHeadAndHeels::update ()
         }
 
         // play sound for current activity
-        SoundManager::getInstance().play( characterItem.getOriginalLabel(), activity );
+        SoundManager::getInstance().play( characterItem.getOriginalKind(), activity );
 
         return false;
 }
@@ -188,7 +188,7 @@ void CharacterHeadAndHeels::behave ()
                                 // is there teleport below
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
@@ -232,7 +232,7 @@ void CharacterHeadAndHeels::behave ()
                                 // jump or teleport
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginWayOutTeletransport : activities::Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
@@ -268,7 +268,7 @@ void CharacterHeadAndHeels::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( characterItem.getLabel(), activity );
+                                SoundManager::getInstance().stop( characterItem.getKind(), activity );
                                 activity = activities::Activity::Wait;
                         }
                 }

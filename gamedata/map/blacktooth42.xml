@@ -39,26 +39,26 @@
     </walls>
     <items>
         <item x="5" y="0" z="0">
-            <label>diver</label>
+            <kind>diver</kind>
             <orientation>west</orientation>
             <behavior>behavior of there and back</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="7" y="0" z="0">
-            <label>trampoline</label>
+            <kind>trampoline</kind>
             <orientation>none</orientation>
             <behavior>behavior of spring leap</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="0" z="-1">
-            <label>blacktooth-door-south</label>
+            <kind>blacktooth-door-south</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="0" z="-1">
-            <label>blacktooth-door-south</label>
+            <kind>blacktooth-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

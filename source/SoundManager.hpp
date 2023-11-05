@@ -41,24 +41,24 @@ public:
         /**
          * @param xmlFile the name of XML file with the info about the game’s sounds
          */
-        void readSounds ( const std::string& xmlFile ) ;
+        void readSounds ( const std::string & xmlFile ) ;
 
-        void addSound ( const std::string& label, const std::string& activity, const std::string& sampleFile ) ;
+        void addSound ( const std::string & item, const std::string & activity, const std::string & sampleFile ) ;
 
         bool isAudioInitialized () const {  return audioInitialized ;  }
 
         /**
-         * Play a sound
-         * @param label Item that gives out sound
-         * @param activity Activity of item
+         * Plays the sound
+         * @param item What gives out the sound
+         * @param activity The current activity of item
          * @param loop If true, the playing is repeated
          */
-        void play ( const std::string & label, const activities::ActivityOfItem & activity, bool loop = false ) ;
+        void play ( const std::string & item, const activities::ActivityOfItem & activity, bool loop = false ) ;
 
         /**
          * Stops playing a sound
          */
-        void stop ( const std::string & label, const activities::ActivityOfItem & activity ) ;
+        void stop ( const std::string & item, const activities::ActivityOfItem & activity ) ;
 
         /**
          * Stops playing of all sounds
@@ -69,11 +69,11 @@ public:
 
         void stopOgg () {  oggPlayer.stop() ;  }
 
-        allegro::Sample * getSampleFor ( const std::string& label, const std::string& event ) ;
+        allegro::Sample * getSampleFor ( const std::string & item, const std::string & event ) ;
 
-        allegro::Sample * getSampleFor ( const std::string& label, const ActivityOfItem& activity )
+        allegro::Sample * getSampleFor ( const std::string & item, const ActivityOfItem & activity )
         {
-                return getSampleFor( label, activityToString( activity ) ) ;
+                return getSampleFor( item, activityToString( activity ) ) ;
         }
 
         void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = ( volume <= 99 ) ? volume : 99 ;  }
@@ -96,9 +96,6 @@ private:
 
         bool audioInitialized ; // true after allegro::initAudio()
 
-        /**
-         * Subprocess for playing Ogg music
-         */
         allegro::ogg::OggPlayer oggPlayer ;
 
         /**
@@ -112,12 +109,12 @@ private:
         unsigned int musicVolume ;
 
         /**
-         * Map of item’s label to pairs of activity and name of file with sound
+         * Maps the kind of item to the map of activity to the name of the sound file 🤯
          */
-        std::map < std::string /* label */, std::map< std::string /* event */, std::string /* file */ > > sounds ;
+        std::map < std::string /* item */, std::map< std::string /* event */, std::string /* file */ > > sounds ;
 
         /**
-         * Maps name of file to sound sample
+         * Maps the name of file to the audio sample
          */
         std::map < std::string /* file */, allegro::Sample * > samples ;
 

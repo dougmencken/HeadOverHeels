@@ -57,7 +57,7 @@ bool Volatile::update ()
 
                                         // is it free item
                                         if ( topItem != nilPointer &&
-                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "avatar item" ) )
+                                                ( topItem->whichItemClass() == "free item" || topItem->whichItemClass() == "avatar item" ) )
                                         {
                                                 // look at whether above item is volatile or special
                                                 // because that item would disappear unless it is leaning on another one
@@ -116,8 +116,8 @@ bool Volatile::update ()
                         // if it's a puppy which disappears when Head or the composite character is in the room
                         else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                         {
-                                if ( mediator->findItemByLabel( "head" ) != nilPointer ||
-                                        mediator->findItemByLabel( "headoverheels" ) != nilPointer )
+                                if ( mediator->findItemOfKind( "head" ) != nilPointer ||
+                                        mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                 {
                                         activity = activities::Activity::Vanish;
                                         disappearanceTimer->reset();
@@ -148,8 +148,8 @@ bool Volatile::update ()
                                 }
                                 else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                                 {
-                                        if ( mediator->findItemByLabel( "head" ) != nilPointer ||
-                                                mediator->findItemByLabel( "headoverheels" ) != nilPointer )
+                                        if ( mediator->findItemOfKind( "head" ) != nilPointer ||
+                                                mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                         {
                                                 activity = activities::Activity::Vanish;
                                         }
@@ -173,7 +173,7 @@ bool Volatile::update ()
                                 ( getNameOfBehavior () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
                                 ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.5 ) )
                         {
-                                SoundManager::getInstance().play( item->getLabel(), activity );
+                                SoundManager::getInstance().play( item->getKind (), activity );
 
                                 // morph into bubbles
 

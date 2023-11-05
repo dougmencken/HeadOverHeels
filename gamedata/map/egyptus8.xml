@@ -63,115 +63,115 @@
     </walls>
     <items>
         <item x="1" y="2" z="0">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="2" z="1">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="2" z="2">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="2" z="3">
-            <label>ball</label>
+            <kind>ball</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="2" z="0">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="2" z="1">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="2" z="2">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="2" z="3">
-            <label>ball</label>
+            <kind>ball</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="3" z="0">
-            <label>siren</label>
+            <kind>siren</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in four secondary directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="6" z="0">
-            <label>siren</label>
+            <kind>siren</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in four secondary directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="7" z="0">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="7" z="1">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="7" z="2">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="7" z="3">
-            <label>ball</label>
+            <kind>ball</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="7" z="0">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="7" z="1">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="7" z="2">
-            <label>cylinder</label>
+            <kind>cylinder</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="7" z="3">
-            <label>ball</label>
+            <kind>ball</kind>
             <orientation>none</orientation>
             <behavior>behavior of impel</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
-            <label>egyptus-door-east</label>
+            <kind>egyptus-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="8" y="4" z="-1">
-            <label>egyptus-door-south</label>
+            <kind>egyptus-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="3" y="9" z="-1">
-            <label>egyptus-door-west</label>
+            <kind>egyptus-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

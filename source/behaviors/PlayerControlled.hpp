@@ -174,9 +174,9 @@ protected:
         */
         bool donutFromHooterIsHere ;
 
-        std::string labelOfBubbles ;
+        std::string kindOfBubbles ;
 
-        std::string labelOfFiredDoughnut ;
+        std::string kindOfFiredDoughnut ;
 
        /**
         * Timer for speed of movement

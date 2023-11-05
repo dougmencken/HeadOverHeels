@@ -51,7 +51,7 @@ bool Conveyor::update ()
 
                                                 // is it free item
                                                 if ( collision != nilPointer &&
-                                                        ( collision->whichKindOfItem() == "free item" || collision->whichKindOfItem() == "avatar item" ) )
+                                                        ( collision->whichItemClass() == "free item" || collision->whichItemClass() == "avatar item" ) )
                                                 {
                                                         FreeItem& itemAbove = dynamic_cast< FreeItem & >( *collision );
 
@@ -77,7 +77,7 @@ bool Conveyor::update ()
                                                                         }
 
                                                                         // play the sound of conveyor
-                                                                        SoundManager::getInstance().play( item->getLabel(), activities::Activity::IsActive );
+                                                                        SoundManager::getInstance().play( item->getKind (), activities::Activity::IsActive );
                                                                 }
                                                         }
                                                 }

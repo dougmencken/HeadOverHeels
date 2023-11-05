@@ -1,5 +1,6 @@
 
 #include "CreateVideoMenu.hpp"
+
 #include "CreateMenuOfGraphicsSets.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
@@ -22,11 +23,13 @@ static std::multimap< unsigned int, unsigned int > sizesOfScreen ;
 CreateVideoMenu::CreateVideoMenu( )
         : Action( )
         , listOfOptions ( nilPointer )
-        , labelScreenSize ( nilPointer )
-        , labelFullscreen ( nilPointer )
-        , labelDrawSceneryDecor ( nilPointer )
-        , labelDrawRoomMiniatures ( nilPointer )
-        , labelChooseGraphics ( nilPointer )
+        , screenSize ( nilPointer )
+        , fullScreen ( nilPointer )
+        , drawShadows ( nilPointer )
+        , drawSceneryDecor ( nilPointer )
+        , drawRoomMiniatures ( nilPointer )
+        , centerCameraOn ( nilPointer )
+        , chooseGraphics ( nilPointer )
 {
         if ( sizesOfScreen.size () == 0 )
         {
@@ -60,26 +63,26 @@ void CreateVideoMenu::doAction ()
                 LanguageText* textDrawRoomMiniatures = languageManager->findLanguageStringForAlias( "draw-miniatures" );
                 LanguageText* textCenterCameraOn = languageManager->findLanguageStringForAlias( "center-camera-on" );
 
-                this->labelScreenSize = new Label( textScreenSize->getText() );
-                this->labelFullscreen = new Label( textFullscreen->getText() );
-                this->labelDrawShadows = new Label( textDrawShadows->getText() );
-                this->labelDrawSceneryDecor = new Label( textDrawSceneryDecor->getText() );
-                this->labelDrawRoomMiniatures = new Label( textDrawRoomMiniatures->getText() );
-                this->labelCenterCameraOn = new Label( textCenterCameraOn->getText() );
+                this->screenSize = new Label( textScreenSize->getText() );
+                this->fullScreen = new Label( textFullscreen->getText() );
+                this->drawShadows = new Label( textDrawShadows->getText() );
+                this->drawSceneryDecor = new Label( textDrawSceneryDecor->getText() );
+                this->drawRoomMiniatures = new Label( textDrawRoomMiniatures->getText() );
+                this->centerCameraOn = new Label( textCenterCameraOn->getText() );
 
                 LanguageText* textChooseGraphics = languageManager->findLanguageStringForAlias( "graphic-set" );
-                this->labelChooseGraphics = new Label( textChooseGraphics->getText(), "", "yellow" );
-                labelChooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
+                this->chooseGraphics = new Label( textChooseGraphics->getText(), "", "yellow" );
+                this->chooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
                 this->listOfOptions = new MenuWithValues( ' ', 1 );
 
-                listOfOptions->addOption( labelScreenSize );
-                listOfOptions->addOption( labelFullscreen );
-                listOfOptions->addOption( labelDrawShadows );
-                listOfOptions->addOption( labelDrawSceneryDecor );
-                listOfOptions->addOption( labelDrawRoomMiniatures );
-                listOfOptions->addOption( labelCenterCameraOn );
-                listOfOptions->addOption( labelChooseGraphics );
+                listOfOptions->addOption( screenSize );
+                listOfOptions->addOption( fullScreen );
+                listOfOptions->addOption( drawShadows );
+                listOfOptions->addOption( drawSceneryDecor );
+                listOfOptions->addOption( drawRoomMiniatures );
+                listOfOptions->addOption( centerCameraOn );
+                listOfOptions->addOption( chooseGraphics );
 
                 updateLabels ();
 
@@ -124,27 +127,27 @@ void CreateVideoMenu::doAction ()
 
                                 if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                 {
-                                        if ( listOfOptions->getActiveOption () == labelFullscreen )
+                                        if ( listOfOptions->getActiveOption () == fullScreen )
                                         {
                                                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == labelDrawShadows )
+                                        else if ( listOfOptions->getActiveOption () == drawShadows )
                                         {
                                                 GameManager::getInstance().toggleCastShadows ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == labelDrawSceneryDecor )
+                                        else if ( listOfOptions->getActiveOption () == drawSceneryDecor )
                                         {
                                                 GameManager::getInstance().toggleSceneryDecor ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == labelDrawRoomMiniatures )
+                                        else if ( listOfOptions->getActiveOption () == drawRoomMiniatures )
                                         {
                                                 GameManager::getInstance().toggleRoomMiniatures ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == labelCenterCameraOn )
+                                        else if ( listOfOptions->getActiveOption () == centerCameraOn )
                                         {
                                                 GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
                                                 doneWithKey = true;
@@ -158,7 +161,7 @@ void CreateVideoMenu::doAction ()
 
                                 allegro::emptyKeyboardBuffer();
 
-                                // update labels of options now
+                                // update options now
                                 updateLabels();
                         }
 
@@ -176,20 +179,20 @@ void CreateVideoMenu::updateLabels ()
         std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
         std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
-        listOfOptions->setValueOf( labelDrawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
-        listOfOptions->setValueOf( labelDrawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
-        listOfOptions->setValueOf( labelDrawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
-        listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
+        listOfOptions->setValueOf( drawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
+        listOfOptions->setValueOf( drawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
+        listOfOptions->setValueOf( drawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
+        listOfOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
 
         std::string room = languageManager->findLanguageStringForAlias( "room" )-> getText ();
         std::string character = languageManager->findLanguageStringForAlias( "character" )-> getText ();
 
-        listOfOptions->setValueOf( labelCenterCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
+        listOfOptions->setValueOf( centerCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
 
-        // labelChooseGraphics has no value but action
+        // chooseGraphics has no value but action
 
-        labelScreenSize->changeColor( "cyan" );
-        listOfOptions->setValueOf( labelScreenSize, util::number2string( variables::getScreenWidth() )
+        screenSize->changeColor( "cyan" );
+        listOfOptions->setValueOf( screenSize, util::number2string( variables::getScreenWidth() )
                                                                 + " x "
                                                   + util::number2string( variables::getScreenHeight() ) );
         listOfOptions->redraw ();

@@ -22,8 +22,8 @@ PoolOfPictures * Item::poolOfPictures = new PoolOfPictures( ) ;
 Item::Item( const DescriptionOfItem* description, int z, const std::string& way )
       : Mediated(), Shady(),
         descriptionOfItem( description ),
-        uniqueName( description->getLabel() + "." + util::makeRandomString( 12 ) ),
-        originalLabel( description->getLabel() ),
+        uniqueName( description->getKind () + "." + util::makeRandomString( 12 ) ),
+        originalKind( description->getKind () ),
         processedImage( new Picture( description->getWidthOfFrame(), description->getHeightOfFrame() ) ),
         height( description->getHeight() ),
         orientation( way == "none" ? "nowhere" : way ),
@@ -51,7 +51,7 @@ Item::Item( const Item& item )
       : Mediated( item ), Shady( item.wantShadow ),
         descriptionOfItem( item.descriptionOfItem ),
         uniqueName( item.uniqueName + " copy" ),
-        originalLabel( item.originalLabel ),
+        originalKind( item.originalKind ),
         processedImage( new Picture( * item.processedImage ) ),
         height( item.height ),
         orientation( item.orientation ),
@@ -165,13 +165,13 @@ bool Item::atExtraFrame() const
         return currentFrame >= howManyMotions() - descriptionOfItem->howManyExtraFrames() ;
 }
 
-void Item::metamorphInto( const std::string & labelOfItem, const std::string & initiatedBy )
+void Item::metamorphInto( const std::string & kindOfItem, const std::string & initiatedBy )
 {
-        const DescriptionOfItem * description = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfItem );
+        const DescriptionOfItem * description = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfItem );
         if ( description == nilPointer ) return ;
 
-        std::cout << "metamorphosis of item \"" << getUniqueName()
-                        << "\" into \"" << description->getLabel()
+        std::cout << "metamorphosis of item \"" << getUniqueName ()
+                        << "\" into \"" << description->getKind ()
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
         this->descriptionOfItem = description;
@@ -319,9 +319,9 @@ void Item::doBackwardsMotion ()
         currentFrame = firstFrame() + descriptionOfItem->howManyFramesPerOrientation() - 1 ;
 }
 
-const std::string & Item::getLabel() const
+const std::string & Item::getKind () const
 {
-        return descriptionOfItem->getLabel () ;
+        return descriptionOfItem->getKind () ;
 }
 
 unsigned int Item::getWidthX() const
@@ -396,7 +396,7 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
                 {
                         Picture* rawFrame = new Picture( description.getWidthOfFrame(), description.getHeightOfFrame() );
                         allegro::bitBlit( picture->getAllegroPict(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
-                        rawFrame->setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
+                        rawFrame->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         rawFrame->saveAsPNG( ospaths::homePath() );
                 # endif
@@ -411,7 +411,7 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
                 for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
                         Picture animationFrame( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
-                        animationFrame.setName( description.getLabel() + " " +
+                        animationFrame.setName( description.getKind () + " " +
                                                         util::toStringWithOrdinalSuffix( o ) + " orientation " +
                                                         util::toStringWithOrdinalSuffix( f ) + " frame" );
 
@@ -425,7 +425,7 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
         for ( unsigned int e = 0 ; e < description.howManyExtraFrames() ; e ++ )
         {
                 Picture extraFrame( * rawFrames[ e + ( rawRow * description.howManyOrientations() ) ] );
-                extraFrame.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra frame" );
+                extraFrame.setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( e ) + " extra frame" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraFrame.saveAsPNG( ospaths::homePath() );
         # endif
@@ -456,7 +456,7 @@ void Item::createShadowFrames( Item* item, const DescriptionOfItem& description 
                 {
                         Picture* rawShadow = new Picture( description.getWidthOfShadow(), description.getHeightOfShadow() );
                         allegro::bitBlit( picture->getAllegroPict(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
-                        rawShadow->setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
+                        rawShadow->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         rawShadow->saveAsPNG( ospaths::homePath() );
                 # endif
@@ -471,7 +471,7 @@ void Item::createShadowFrames( Item* item, const DescriptionOfItem& description 
                 for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
                         Picture shadowFrame( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
-                        shadowFrame.setName( description.getLabel() + " " +
+                        shadowFrame.setName( description.getKind () + " " +
                                                 util::toStringWithOrdinalSuffix( o ) + " orientation " +
                                                 util::toStringWithOrdinalSuffix( f ) + " shadow" );
 
@@ -485,7 +485,7 @@ void Item::createShadowFrames( Item* item, const DescriptionOfItem& description 
         for ( unsigned int e = 0 ; e < description.howManyExtraFrames() ; e ++ )
         {
                 Picture extraShadow( * rawShadows[ e + ( rawRow * description.howManyOrientations() ) ] );
-                extraShadow.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra shadow" );
+                extraShadow.setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( e ) + " extra shadow" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraShadow.saveAsPNG( ospaths::homePath() );
         # endif

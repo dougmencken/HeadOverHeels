@@ -32,7 +32,7 @@ Mediator::Mediator( Room* room )
         pthread_mutex_init( &freeItemsMutex, nilPointer );
         pthread_mutex_init( &collisionsMutex, nilPointer );
 
-        // behaviors of items which may be freezed by doughnut or switch
+        // these can be frozen with a doughnut or switch
         badBoys.push_back( "behavior of detector" );
         badBoys.push_back( "behavior of hunter in four directions" );
         badBoys.push_back( "behavior of waiting hunter in four directions" );
@@ -148,7 +148,7 @@ void Mediator::update()
                 // then make it active to let it fall
                 if ( ( *p )->getWayOfExit() == "below" && ! ( *p )->isActiveCharacter() )
                 {
-                        std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
+                        std::cout << "inactive character \"" << ( *p )->getKind () << "\" falls down to another room, swap characters to make it active" << std::endl ;
                         activeCharacter->setWayOfExit( "did not quit" );
                         this->pickNextCharacter () ;
                 }
@@ -372,7 +372,7 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
                 if ( ! gridItem.hasShadow() ) continue ;
 
         # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
-                std::cout << "casting shadow from " << gridItem.whichKindOfItem() << " \"" << gridItem.getUniqueName() << "\"" <<
+                std::cout << "casting shadow from " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" <<
                         " at x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() <<
                         " on floor tile at" <<
                         " x=" << tileSize << "*" << xCell << "=" << xCell * tileSize <<
@@ -410,7 +410,7 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
                 if ( xCell >= xStart && xCell <= xEnd && yCell >= yStart && yCell <= yEnd )
                 {
                 # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
-                        std::cout << "casting shadow from " << freeItem.whichKindOfItem() << " \"" << freeItem.getUniqueName() << "\"" <<
+                        std::cout << "casting shadow from " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" <<
                                 " at x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() <<
                                 " on floor tile at" <<
                                 " x=" << tileSize << "*" << xCell << "=" << xCell * tileSize <<
@@ -456,8 +456,8 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                         std::ostringstream positionOfOn;
                         positionOfOn << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
 
-                        std::cout << "casting shadow from " << aboveItem.whichKindOfItem() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                        " on " << gridItem.whichKindOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                        std::cout << "casting shadow from " << aboveItem.whichItemClass() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                        " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                 # endif
 
                         ShadowCaster::castShadowOnItem (
@@ -499,8 +499,8 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                                 std::ostringstream positionOfOn;
                                 positionOfOn << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
 
-                                std::cout << "casting shadow from " << freeItem.whichKindOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                                " on " << gridItem.whichKindOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                std::cout << "casting shadow from " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                                " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
                                 ShadowCaster::castShadowOnItem (
@@ -554,8 +554,8 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
                                         std::ostringstream positionOfOn;
                                         positionOfOn << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
 
-                                        std::cout << "casting shadow from " << gridItem.whichKindOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                                        " on " << freeItem.whichKindOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                        std::cout << "casting shadow from " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                                        " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                                 # endif
 
                                         ShadowCaster::castShadowOnItem (
@@ -596,8 +596,8 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
                                 std::ostringstream positionOfOn;
                                 positionOfOn << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
 
-                                std::cout << "casting shadow from " << aboveItem.whichKindOfItem() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                        " on " << freeItem.whichKindOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                std::cout << "casting shadow from " << aboveItem.whichItemClass() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                        " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
                                 ShadowCaster::castShadowOnItem (
@@ -741,23 +741,23 @@ ItemPtr Mediator::findItemByUniqueName( const std::string & uniqueName )
         return ItemPtr() ;
 }
 
-ItemPtr Mediator::findItemByLabel( const std::string& label )
+ItemPtr Mediator::findItemOfKind( const std::string & kind )
 {
-        // look for free item
+        // look for a free item
         for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                if ( *f != nilPointer && ( *f )->getLabel() == label )
+                if ( *f != nilPointer && ( *f )->getKind () == kind )
                 {
                         return ItemPtr( *f ) ;
                 }
         }
 
-        // look for grid item
+        // look for a grid item
         for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
         {
                 for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
-                        if ( *g != nilPointer && ( *g )->getLabel() == label )
+                        if ( *g != nilPointer && ( *g )->getKind () == kind )
                         {
                                 return ItemPtr( *g ) ;
                         }
@@ -767,9 +767,9 @@ ItemPtr Mediator::findItemByLabel( const std::string& label )
         return ItemPtr() ;
 }
 
-ItemPtr Mediator::findItemByBehavior( const std::string& behavior )
+ItemPtr Mediator::findItemByBehavior( const std::string & behavior )
 {
-        // look for free item
+        // look for a free item
         for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
                 if ( *f != nilPointer && ( *f )->getBehavior() != nilPointer && ( *f )->getBehavior()->getNameOfBehavior () == behavior )
@@ -778,7 +778,7 @@ ItemPtr Mediator::findItemByBehavior( const std::string& behavior )
                 }
         }
 
-        // look for grid item
+        // look for a grid item
         for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
         {
                 for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
@@ -817,7 +817,7 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
         }
 
         // for a grid item
-        if ( item->whichKindOfItem() == "grid item" )
+        if ( item->whichItemClass() == "grid item" )
         {
                 int column = dynamic_cast< GridItem& >( *item ).getColumnOfGrid() ;
 
@@ -838,7 +838,7 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
                 }
         }
         // for a free item
-        else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" )
+        else if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
                 int xStart = item->getX() / room->getSizeOfOneTile ();
                 int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->getSizeOfOneTile () + 1;
@@ -900,7 +900,7 @@ int Mediator::findHighestZ( const Item& item )
                 }
         }
 
-        if ( item.whichKindOfItem() == "grid item" )
+        if ( item.whichItemClass() == "grid item" )
         {
                 int column = dynamic_cast< const GridItem& >( item ).getColumnOfGrid ();
 
@@ -916,7 +916,7 @@ int Mediator::findHighestZ( const Item& item )
                         }
                 }
         }
-        else if ( item.whichKindOfItem() == "free item" || item.whichKindOfItem() == "avatar item" )
+        else if ( item.whichItemClass() == "free item" || item.whichItemClass() == "avatar item" )
         {
                 const FreeItem& freeItem = dynamic_cast< const FreeItem& >( item );
 
@@ -981,32 +981,26 @@ std::string Mediator::popCollision()
         return name ;
 }
 
-ItemPtr Mediator::collisionWithByLabel( const std::string& label )
+ItemPtr Mediator::collisionWithSomeKindOf( const std::string & kind )
 {
-        for ( unsigned int i = 0; i < collisions.size(); i++ )
-        {
+        for ( unsigned int i = 0; i < collisions.size(); i ++ ) {
                 ItemPtr item = findItemByUniqueName( collisions[ i ] );
 
-                if ( item != nilPointer && item->getLabel() == label )
-                {
-                        return item;
-                }
+                if ( item != nilPointer && item->getKind () == kind )
+                        return item ;
         }
 
         return ItemPtr ();
 }
 
-ItemPtr Mediator::collisionWithByBehavior( const std::string& behavior )
+ItemPtr Mediator::collisionWithBehavingAs( const std::string & behavior )
 {
-        for ( unsigned int i = 0; i < collisions.size(); i++ )
-        {
+        for ( unsigned int i = 0; i < collisions.size(); i ++ ) {
                 ItemPtr item = findItemByUniqueName( collisions[ i ] );
 
                 if ( item != nilPointer && item->getBehavior() != nilPointer &&
-                        item->getBehavior()->getNameOfBehavior () == behavior )
-                {
-                        return item;
-                }
+                                item->getBehavior()->getNameOfBehavior () == behavior )
+                        return item ;
         }
 
         return ItemPtr ();
@@ -1028,18 +1022,18 @@ ItemPtr Mediator::collisionWithBadBoy()
         return ItemPtr ();
 }
 
-void Mediator::setActiveCharacter ( const AvatarItemPtr& character )
+void Mediator::setActiveCharacter ( const AvatarItemPtr & character )
 {
         if ( this->activeCharacter != character )
         {
                 this->activeCharacter = character ;
 
                 if ( character != nilPointer )
-                        this->labelOfActiveCharacter = character->getOriginalLabel ();
+                        this->nameOfActiveCharacter = character->getOriginalKind ();
                 else
-                        this->labelOfActiveCharacter.clear();
+                        this->nameOfActiveCharacter.clear();
 
-                std::cout << "character \"" << labelOfActiveCharacter << "\" is yet active in room \"" << room->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+                std::cout << "character \"" << nameOfActiveCharacter << "\" is yet active in room \"" << room->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
         }
 }
 
@@ -1052,31 +1046,31 @@ bool Mediator::pickNextCharacter ()
         std::vector< AvatarItemPtr >::iterator i = charactersInRoom.begin () ;
         while ( i != charactersInRoom.end () )
         {
-                if ( *i != nilPointer && ( *i )->getOriginalLabel() == activeCharacter->getOriginalLabel() ) break;
+                if ( *i != nilPointer && ( *i )->getOriginalKind() == activeCharacter->getOriginalKind() ) break;
                 ++ i ;
         }
         ++ i;
         setActiveCharacter( i != charactersInRoom.end () ? *i : *charactersInRoom.begin () );
 
         // see if characters may join here
-        if ( previousCharacter->getOriginalLabel() != activeCharacter->getOriginalLabel() )
+        if ( previousCharacter->getOriginalKind() != activeCharacter->getOriginalKind() )
         {
                 const int delta = room->getSizeOfOneTile() >> 1;
 
-                if ( ( previousCharacter->getOriginalLabel() == "head" && activeCharacter->getOriginalLabel() == "heels" ) ||
-                                ( previousCharacter->getOriginalLabel() == "heels" && activeCharacter->getOriginalLabel() == "head" ) )
+                if ( ( previousCharacter->getOriginalKind() == "head" && activeCharacter->getOriginalKind() == "heels" ) ||
+                                ( previousCharacter->getOriginalKind() == "heels" && activeCharacter->getOriginalKind() == "head" ) )
                 {
                         if ( ( previousCharacter->getX() + delta >= activeCharacter->getX() )
                                 && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= activeCharacter->getX() + activeCharacter->getWidthX() )
                                 && ( previousCharacter->getY() + delta >= activeCharacter->getY() )
                                 && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= activeCharacter->getY() + activeCharacter->getWidthY() )
-                                && ( ( previousCharacter->getOriginalLabel() == "head" && previousCharacter->getZ() - Isomot::LayerHeight == activeCharacter->getZ() ) ||
-                                        ( previousCharacter->getOriginalLabel() == "heels" && activeCharacter->getZ() - Isomot::LayerHeight == previousCharacter->getZ() ) ) )
+                                && ( ( previousCharacter->getOriginalKind() == "head" && previousCharacter->getZ() - Isomot::LayerHeight == activeCharacter->getZ() ) ||
+                                        ( previousCharacter->getOriginalKind() == "heels" && activeCharacter->getZ() - Isomot::LayerHeight == previousCharacter->getZ() ) ) )
                         {
                                 lockFreeItemsMutex ();
 
-                                AvatarItemPtr reference = previousCharacter->getOriginalLabel() == "heels" ? previousCharacter : activeCharacter;
-                                this->lastActiveCharacterBeforeJoining = previousCharacter->getOriginalLabel() == "heels" ? "heels" : "head";
+                                AvatarItemPtr reference = previousCharacter->getOriginalKind() == "heels" ? previousCharacter : activeCharacter;
+                                this->lastActiveCharacterBeforeJoining = previousCharacter->getOriginalKind() == "heels" ? "heels" : "head";
 
                                 int x = reference->getX();
                                 int y = reference->getY();
@@ -1098,22 +1092,23 @@ bool Mediator::pickNextCharacter ()
                                 // transfer item in handbag
                                 if ( descriptionOfItemInBag != nilPointer )
                                 {
-                                        std::cout << "transfer item \"" << descriptionOfItemInBag->getLabel() << "\" to character \"" << activeCharacter->getLabel() << "\"" << std::endl ;
-                                        activeCharacter->placeItemInBag( descriptionOfItemInBag->getLabel(), behaviorOfItemInBag );
+                                        std::cout << "transfer item \"" << descriptionOfItemInBag->getKind ()
+                                                        << "\" to the character \"" << activeCharacter->getKind () << "\"" << std::endl ;
+                                        activeCharacter->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                                 }
 
                                 unlockFreeItemsMutex ();
 
-                                std::cout << "join both characters into \"" << activeCharacter->getOriginalLabel() << "\""
+                                std::cout << "join both characters into \"" << activeCharacter->getOriginalKind () << "\""
                                                 << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
                                 return true;
                         }
                 }
         }
         // is it composite character
-        else if ( activeCharacter->getOriginalLabel() == "headoverheels" )
+        else if ( activeCharacter->getOriginalKind() == "headoverheels" )
         {
-                std::cout << "split \"" << activeCharacter->getOriginalLabel() << "\" in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
+                std::cout << "split \"" << activeCharacter->getOriginalKind() << "\" in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
 
                 int x = activeCharacter->getX();
                 int y = activeCharacter->getY();
@@ -1135,24 +1130,25 @@ bool Mediator::pickNextCharacter ()
 
                 if ( descriptionOfItemInBag != nilPointer )
                 {
-                        std::cout << "transfer item \"" << descriptionOfItemInBag->getLabel() << "\" to character \"" << characterHeels->getLabel() << "\"" << std::endl ;
-                        characterHeels->placeItemInBag( descriptionOfItemInBag->getLabel(), behaviorOfItemInBag );
+                        std::cout << "transfer item \"" << descriptionOfItemInBag->getKind ()
+                                        << "\" to the character \"" << characterHeels->getKind () << "\"" << std::endl ;
+                        characterHeels->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                 }
 
                 AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Isomot::LayerHeight, orientation );
 
                 setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? characterHeels : characterHead );
-                previousCharacter = ( activeCharacter->getOriginalLabel() == "head" ) ? characterHeels : characterHead;
+                previousCharacter = ( activeCharacter->getOriginalKind() == "head" ) ? characterHeels : characterHead;
 
                 unlockFreeItemsMutex ();
         }
 
-        if ( previousCharacter->getOriginalLabel() == activeCharacter->getOriginalLabel() )
+        if ( previousCharacter->getOriginalKind() == activeCharacter->getOriginalKind() )
         {
                 return false;
         }
 
-        std::cout << "swop character \"" << previousCharacter->getOriginalLabel() << "\" to character \"" << activeCharacter->getOriginalLabel() << "\""
+        std::cout << "swop character \"" << previousCharacter->getOriginalKind() << "\" to character \"" << activeCharacter->getOriginalKind() << "\""
                         << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
         return true;
 }

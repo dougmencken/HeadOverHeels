@@ -198,29 +198,29 @@ void Miniature::draw ()
         {
                 for ( std::vector< GridItemPtr >::const_iterator gi = gridItemsInRoom[ column ].begin (); gi != gridItemsInRoom[ column ].end (); ++ gi )
                 {
-                        const GridItem& item = *( *gi ) ;
+                        const GridItem & item = *( *gi ) ;
 
-                        std::string label = item.getLabel();
+                        std::string kind = item.getKind ();
                         int tileX = item.getCellX();
                         int tileY = item.getCellY();
 
-                        if ( label == "invisible-wall-x" )
+                        if ( kind == "invisible-wall-x" )
                         {
                                 int newPos = tileY - 1 ;
                                 if ( newPos < maxYsw ) maxYsw = newPos ;
                         }
-                        else if ( label.find( "wall-x" ) != std::string::npos )
+                        else if ( kind.find( "wall-x" ) != std::string::npos )
                         {
                                 int newPos = tileY + 1 ;
                                 if ( newPos > minYne ) minYne = newPos ;
                         }
 
-                        if ( label == "invisible-wall-y" )
+                        if ( kind == "invisible-wall-y" )
                         {
                                 int newPos = tileX - 1 ;
                                 if ( newPos < maxXsw ) maxXsw = newPos ;
                         }
-                        else if ( label.find( "wall-y" ) != std::string::npos )
+                        else if ( kind.find( "wall-y" ) != std::string::npos )
                         {
                                 int newPos = tileX + 1 ;
                                 if ( newPos > minXne ) minXne = newPos ;
@@ -356,26 +356,26 @@ void Miniature::draw ()
                 {
                         const GridItem& item = *( *gi ) ;
 
-                        std::string label = item.getLabel();
+                        std::string kind = item.getKind ();
                         int tileX = item.getCellX();
                         int tileY = item.getCellY();
 
                         // show teleports
 
-                        if ( label == "teleport" && ! roomToTeleport.empty() )
+                        if ( kind == "teleport" && ! roomToTeleport.empty() )
                         {
                                 fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "yellow" ) );
                         }
-                        else if ( label == "teleport-too" && ! roomToTeleportToo.empty() )
+                        else if ( kind == "teleport-too" && ! roomToTeleportToo.empty() )
                         {
                                 fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "magenta" ) );
                         }
 
                         // show triple room’s walls
 
-                        if ( label.find( "wall-x" ) != std::string::npos )
+                        if ( kind.find( "wall-x" ) != std::string::npos )
                         {
-                                if ( label.find( "invisible-wall" ) != std::string::npos )
+                                if ( kind.find( "invisible-wall" ) != std::string::npos )
                                         drawIsoTile( where,
                                                         originX, originY,
                                                         tileX, tileY,
@@ -388,9 +388,9 @@ void Miniature::draw ()
                                                         roomColor.multiply( Color::whiteColor() ),
                                                         false, false, true, false );
                         }
-                        if ( label.find( "wall-y" ) != std::string::npos )
+                        if ( kind.find( "wall-y" ) != std::string::npos )
                         {
-                                if ( label.find( "invisible-wall" ) != std::string::npos )
+                                if ( kind.find( "invisible-wall" ) != std::string::npos )
                                         drawIsoTile( where,
                                                         originX, originY,
                                                         tileX, tileY,
@@ -414,17 +414,17 @@ void Miniature::draw ()
 
         for ( std::vector< FreeItemPtr >::const_iterator fi = freeItemsInRoom.begin (); fi != freeItemsInRoom.end (); ++ fi )
         {
-                if ( *fi == nilPointer || ( *fi )->whichKindOfItem() == "avatar item" ) continue ;
+                if ( *fi == nilPointer || ( *fi )->whichItemClass() == "avatar item" ) continue ;
                 const FreeItem & item = *( *fi ) ;
 
                 const DescriptionOfItem * descriptionOfItem = item.getDescriptionOfItem () ;
                 if ( descriptionOfItem == nilPointer ) continue ;
 
-                std::string label = descriptionOfItem->getLabel();
+                std::string kind = descriptionOfItem->getKind ();
 
                 // show tools
 
-                if ( label == "handbag" || label == "horn" || label == "donuts" )
+                if ( kind == "handbag" || kind == "horn" || kind == "donuts" )
                 {
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
@@ -437,7 +437,7 @@ void Miniature::draw ()
 
                 // show rabbit bonuses
 
-                if ( label == "extra-life" || label == "high-jumps" || label == "quick-steps" || label == "shield" )
+                if ( kind == "extra-life" || kind == "high-jumps" || kind == "quick-steps" || kind == "shield" )
                 {
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
@@ -450,7 +450,7 @@ void Miniature::draw ()
 
                 // show fish
 
-                if ( label == "reincarnation-fish" || label == "mortal-fish" )
+                if ( kind == "reincarnation-fish" || kind == "mortal-fish" )
                 {
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
@@ -458,9 +458,9 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        if ( label == "reincarnation-fish" )
+                        if ( kind == "reincarnation-fish" )
                                 fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "green" ) );
-                        else if ( label == "mortal-fish" )
+                        else if ( kind == "mortal-fish" )
                                 fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "red" ) );
                 }
         }

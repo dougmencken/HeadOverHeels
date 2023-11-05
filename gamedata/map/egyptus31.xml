@@ -63,24 +63,24 @@
     </walls>
     <items>
         <item x="0" y="7" z="0">
-            <label>elevator</label>
+            <kind>elevator</kind>
             <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
             <ascent>true</ascent>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="3" y="7" z="0">
-            <label>bubble-robot</label>
+            <kind>bubble-robot</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="3" z="-1">
-            <label>egyptus-door-south</label>
+            <kind>egyptus-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

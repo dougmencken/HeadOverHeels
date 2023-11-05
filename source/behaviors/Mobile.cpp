@@ -56,7 +56,7 @@ bool Mobile::update ()
                                 // emit sound of displacement if item is pushed but not displaced by item below it
                                 if ( this->sender == nilPointer || this->sender != this->item )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
                                 }
 
                                 this->changeActivityOfItem( activity );
@@ -97,8 +97,8 @@ bool Mobile::update ()
                                 this->changeActivityOfItem( activity );
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        // play sound of falling
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        // play the sound of falling
+                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
                                         activity = activities::Activity::Wait;
                                 }
 

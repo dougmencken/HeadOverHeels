@@ -47,19 +47,19 @@
     </walls>
     <items>
         <item x="2" y="0" z="-1">
-            <label>blacktooth-door-east</label>
+            <kind>blacktooth-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="6" y="3" z="-1">
-            <label>blacktooth-door-south</label>
+            <kind>blacktooth-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="2" y="7" z="-1">
-            <label>blacktooth-door-west</label>
+            <kind>blacktooth-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

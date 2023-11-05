@@ -42,7 +42,7 @@ public:
         /**
          * @return the description of item or nil if there's no description for such an item
          */
-        const DescriptionOfItem * getDescriptionByLabel ( const std::string & label ) /* const */ ;
+        const DescriptionOfItem * getDescriptionByKind ( const std::string & kind ) /* const */ ;
 
         static ItemDescriptions & descriptions () {  return *theDescriptions ;  }
 

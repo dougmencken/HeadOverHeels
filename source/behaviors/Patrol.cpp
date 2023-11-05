@@ -64,11 +64,11 @@ bool Patrol::update ()
                                         {
                                                 changeOrientation();
 
-                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getKind (), activities::Activity::Collision );
                                         }
 
-                                        // play sound of moving
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        // play the sound of moving
+                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
 
                                         speedTimer->reset();
                                 }
@@ -85,8 +85,8 @@ bool Patrol::update ()
                 case activities::Activity::DisplaceSoutheast:
                 case activities::Activity::DisplaceSouthwest:
                 case activities::Activity::DisplaceNorthwest:
-                        // play sound of displacing
-                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                        // play the sound of displacing
+                        SoundManager::getInstance().play( freeItem.getKind (), activity );
 
                         // displace this item by some other one
                         activities::Displacing::getInstance().displace( this, &activity, true );
@@ -111,7 +111,7 @@ bool Patrol::update ()
                         {
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
                                         activity = activities::Activity::Wait;
                                 }
 

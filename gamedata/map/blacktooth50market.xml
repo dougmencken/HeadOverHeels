@@ -63,37 +63,37 @@
     </walls>
     <items>
         <item x="4" y="0" z="0">
-            <label>imperial-guard</label>
+            <kind>imperial-guard</kind>
             <orientation>none</orientation>
             <behavior>behavior of hunter in four directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="7" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="8" y="7" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="3" z="-1">
-            <label>market-door-north</label>
+            <kind>market-door-north</kind>
             <orientation>north</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="9" y="3" z="-1">
-            <label>market-door-south</label>
+            <kind>market-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="4" y="8" z="-1">
-            <label>market-door-west</label>
+            <kind>market-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

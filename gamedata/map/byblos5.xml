@@ -47,26 +47,26 @@
     </walls>
     <items>
         <item x="1" y="4" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="2" y="5" z="0">
-            <label>helicopter-bug</label>
+            <kind>helicopter-bug</kind>
             <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="1" y="0" z="-1">
-            <label>byblos-door-east</label>
+            <kind>byblos-door-east</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="1" y="9" z="-1">
-            <label>byblos-door-west</label>
+            <kind>byblos-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

@@ -94,7 +94,7 @@ void SoundManager::readSounds( const std::string& xmlFile )
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                std::string label = item->Attribute( "label" );
+                std::string kindOfItem = item->Attribute( "kind" );
 
                 for ( tinyxml2::XMLElement* event = item->FirstChildElement( "event" ) ;
                                 event != nilPointer ;
@@ -103,25 +103,23 @@ void SoundManager::readSounds( const std::string& xmlFile )
                         std::string activity = event->Attribute( "activity" );
                         std::string file = event->FirstChildElement( "file" )->FirstChild()->ToText()->Value();
 
-                        addSound( label, activity, file );
+                        addSound( kindOfItem, activity, file );
                 }
         }
 
         std::cout << "read list of sounds from " << xmlFile << std::endl ;
 }
 
-void SoundManager::addSound( const std::string& label, const std::string& activity, const std::string& sampleFile )
+void SoundManager::addSound( const std::string & item, const std::string& activity, const std::string& sampleFile )
 {
-        this->sounds[ label ][ activity ] = sampleFile ;
+        this->sounds[ item ][ activity ] = sampleFile ;
 
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
-        std::cout << "sound \"" << sampleFile << "\" for activity \"" << activity << "\" of \"" << label << "\"" << std::endl ;
+        std::cout << "sound \"" << sampleFile << "\" for activity \"" << activity << "\" of \"" << item << "\"" << std::endl ;
 #endif
 
-        if ( this->samples.find( sampleFile ) != this->samples.end () )
-        {
+        if ( this->samples.find( sampleFile ) != this->samples.end () ) // it's already here
                 return ;
-        }
 
         std::string pathToSample = ospaths::pathToFile( ospaths::sharePath(), sampleFile ) ;
         allegro::Sample* sample = allegro::Sample::loadFromFile( pathToSample );
@@ -139,9 +137,9 @@ void SoundManager::addSound( const std::string& label, const std::string& activi
         }
 }
 
-void SoundManager::play( const std::string& label, const ActivityOfItem& activity, bool loop )
+void SoundManager::play( const std::string & item, const ActivityOfItem & activity, bool loop )
 {
-        allegro::Sample* sample = getSampleFor( label, activity );
+        allegro::Sample* sample = getSampleFor( item, activity );
 
         if ( sample != nilPointer && sample->isNotNil() && sample->getVoice() < 0 )
         {
@@ -154,7 +152,7 @@ void SoundManager::play( const std::string& label, const ActivityOfItem& activit
 
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
                 std::cout << ( loop ? "looping" : "playing" ) << " sound for event \"" << activityToString( activity )
-                                << "\" of \"" << label << "\"" << std::endl ;
+                                << "\" of \"" << item << "\"" << std::endl ;
 #endif
         }
 
@@ -162,14 +160,14 @@ void SoundManager::play( const std::string& label, const ActivityOfItem& activit
                         if ( j->second != nilPointer ) j->second->neatenIfNotPlaying() ;
 }
 
-void SoundManager::stop( const std::string& label, const ActivityOfItem& activity )
+void SoundManager::stop( const std::string & item, const ActivityOfItem & activity )
 {
-        allegro::Sample* sample = getSampleFor( label, activity );
+        allegro::Sample* sample = getSampleFor( item, activity );
 
         if ( sample != nilPointer && sample->isNotNil() )
         {
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
-                std::cout << "stopping sound for event \"" << activityToString( activity ) << "\" of \"" << label << "\"" << std::endl ;
+                std::cout << "stopping sound for event \"" << activityToString( activity ) << "\" of \"" << item << "\"" << std::endl ;
 #endif
                 sample->stop();
         }
@@ -183,7 +181,7 @@ void SoundManager::stopEverySound ()
         }
 }
 
-void SoundManager::playOgg ( const std::string& oggFile, bool loop )
+void SoundManager::playOgg ( const std::string & oggFile, bool loop )
 {
         std::string fullName = ospaths::pathToFile( ospaths::sharePath(), oggFile );
 
@@ -208,10 +206,10 @@ void SoundManager::setVolumeOfMusic( unsigned int volume )
           allegro::setDigitalVolume( ( this->musicVolume * 255 ) / 99 );
 }
 
-allegro::Sample* SoundManager::getSampleFor( const std::string& label, const std::string& event )
+allegro::Sample* SoundManager::getSampleFor( const std::string & item, const std::string & event )
 {
         for ( std::map< std::string, std::map< std::string, std::string > >::const_iterator i = sounds.begin (); i != sounds.end (); ++ i )
-                if ( label == i->first )
+                if ( item == i->first )
                         for ( std::map< std::string, std::string >::const_iterator j = i->second.begin (); j != i->second.end (); ++ j )
                                 if ( event == j->first )
                                         if ( samples.find( j->second ) != samples.end () )
@@ -220,7 +218,7 @@ allegro::Sample* SoundManager::getSampleFor( const std::string& label, const std
         return allegro::Sample::nilSample() ;
 }
 
-std::string SoundManager::activityToString ( const ActivityOfItem& activity )
+std::string SoundManager::activityToString ( const ActivityOfItem & activity )
 {
         if ( activityStrings.find( activity ) != activityStrings.end () )
                 return activityStrings[ activity ];

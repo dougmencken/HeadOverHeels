@@ -130,16 +130,10 @@ void GameInfo::setShieldSecondsByName( const std::string & character, double sec
         setShieldPointsByName( character, GameInfo::convertShieldFromSecondsToPoints( seconds ) );
 }
 
-void GameInfo::setMagicToolByLabel ( const std::string & tool )
+void GameInfo::takeMagicTool ( const std::string & tool )
 {
-        if ( tool == "horn" )
-        {
-                this->horn = true ;
-        }
-        else if ( tool == "handbag" )
-        {
-                this->handbag = true ;
-        }
+        if ( tool == "horn" ) this->horn = true ;
+        if ( tool == "handbag" ) this->handbag = true ;
 }
 
 void GameInfo::consumeOneDoughnut ()

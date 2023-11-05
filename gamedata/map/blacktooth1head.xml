@@ -63,41 +63,41 @@
     </walls>
     <items>
         <item x="0" y="0" z="0">
-            <label>teleport</label>
+            <kind>teleport</kind>
             <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="0" y="7" z="0">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="7" z="2">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="7" z="4">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="7" z="6">
-            <label>bars-ns</label>
+            <kind>bars-ns</kind>
             <orientation>none</orientation>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="0" y="7" z="7">
-            <label>extra-life</label>
+            <kind>extra-life</kind>
             <orientation>west</orientation>
             <behavior>behavior of something special</behavior>
-            <kind>freeitem</kind>
+            <class>freeitem</class>
         </item>
         <item x="6" y="3" z="-1">
-            <label>jail-door-south</label>
+            <kind>jail-door-south</kind>
             <orientation>south</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

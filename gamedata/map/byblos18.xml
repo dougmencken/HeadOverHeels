@@ -55,90 +55,90 @@
     </walls>
     <items>
         <item x="2" y="0" z="0">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="0" z="1">
-            <label>byblos-capital-east</label>
+            <kind>byblos-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="0">
-            <label>byblos-shaft-east</label>
+            <kind>byblos-shaft-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
-            <label>byblos-capital-east</label>
+            <kind>byblos-capital-east</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="1" z="0">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="1" z="1">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="3" z="0">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="3" z="1">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="3" z="2">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="5" y="3" z="3">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="8" z="0">
-            <label>book</label>
+            <kind>book</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="9" z="1">
-            <label>byblos-capital-west</label>
+            <kind>byblos-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="3" y="9" z="1">
-            <label>byblos-capital-west</label>
+            <kind>byblos-capital-west</kind>
             <orientation>none</orientation>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="0" z="-1">
-            <label>byblos-door-west</label>
+            <kind>byblos-door-west</kind>
             <orientation>east</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
         <item x="2" y="9" z="-1">
-            <label>byblos-door-west</label>
+            <kind>byblos-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

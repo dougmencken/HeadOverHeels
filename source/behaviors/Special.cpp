@@ -40,8 +40,8 @@ bool Special::update ()
 
                                 // is that above item the character which may take this bonus
                                 if ( itemAbove != nilPointer
-                                        && itemAbove->whichKindOfItem() == "avatar item"
-                                                && mayTake( itemAbove->getOriginalLabel() ) )
+                                        && itemAbove->whichItemClass() == "avatar item"
+                                                && mayTake( itemAbove->getOriginalKind() ) )
                                 {
                                         activity = activities::Activity::Vanish ;
                                         this->sender = itemAbove ; // the character is yet the sender
@@ -69,7 +69,7 @@ bool Special::update ()
                 case activities::Activity::DisplaceNorthwest:
                 case activities::Activity::DisplaceUp:
                         // if the character touches the bonus item and may take this bonus
-                        if ( sender->whichKindOfItem() == "avatar item" && mayTake( sender->getOriginalLabel() ) )
+                        if ( sender->whichItemClass() == "avatar item" && mayTake( sender->getOriginalKind() ) )
                         {
                                 activity = activities::Activity::Vanish;
                         }
@@ -123,7 +123,7 @@ bool Special::update ()
                                         ItemPtr itemBelow = mediator->findCollisionPop( );
 
                                         // is that below item the character which may take this bonus
-                                        if ( itemBelow != nilPointer && itemBelow->whichKindOfItem() == "avatar item" && mayTake( itemBelow->getOriginalLabel() ) )
+                                        if ( itemBelow != nilPointer && itemBelow->whichItemClass() == "avatar item" && mayTake( itemBelow->getOriginalKind() ) )
                                         {
                                                 // get collisions of the avatar item with the items above it
                                                 itemBelow->canAdvanceTo( 0, 0, 1 );
@@ -150,18 +150,18 @@ bool Special::update ()
                                 isGone = true ;
 
                                 // play sound of taking
-                                SoundManager::getInstance().play( item->getLabel(), activity );
+                                SoundManager::getInstance().play( item->getKind (), activity );
 
                                 // a bonus item disappears from room once it's taken
                                 BonusManager::getInstance().markAsAbsent(
                                         BonusInRoom(
-                                                item->getLabel(),
+                                                item->getKind (),
                                                 item->getMediator()->getRoom()->getNameOfRoomDescriptionFile()
                                         ) );
 
                                 takeMagicItem( dynamic_cast< AvatarItem & >( *sender ) );
 
-                                if ( item->getOriginalLabel() != "crown" ) // no bubbles for crowns
+                                if ( item->getOriginalKind() != "crown" ) // no bubbles for crowns
                                 {
                                         item->setIgnoreCollisions( true );
 
@@ -183,7 +183,7 @@ bool Special::update ()
 
 bool Special::mayTake( const std::string& character )
 {
-        std::string magicItem = this->item->getOriginalLabel();
+        std::string magicItem = this->item->getOriginalKind();
 
         if ( magicItem == "extra-life" || magicItem == "shield" ||
                 magicItem == "reincarnation-fish" || magicItem == "crown" )
@@ -207,7 +207,7 @@ bool Special::mayTake( const std::string& character )
 
 void Special::takeMagicItem( AvatarItem & whoTakes )
 {
-        std::string magicItem = this->item->getOriginalLabel () ;
+        std::string magicItem = this->item->getOriginalKind () ;
 
         if ( magicItem == "donuts" )
         {

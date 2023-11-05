@@ -78,7 +78,7 @@ bool Doughnut::update ()
                                 }
 
                                 Mediator* mediator = freeItem.getMediator() ;
-                                bool collisionWithCharacter = ( mediator->collisionWithByLabel( this->character->getOriginalLabel() ) != nilPointer ) ;
+                                bool collisionWithCharacter = ( mediator->collisionWithSomeKindOf( this->character->getOriginalKind() ) != nilPointer ) ;
 
                                 // if no collisions or a collision with the character
                                 if ( mediator->isStackOfCollisionsEmpty() || collisionWithCharacter )

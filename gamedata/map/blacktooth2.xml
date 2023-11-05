@@ -63,15 +63,15 @@
     </walls>
     <items>
         <item x="0" y="0" z="0">
-            <label>teleport</label>
+            <kind>teleport</kind>
             <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
-            <kind>griditem</kind>
+            <class>griditem</class>
         </item>
         <item x="2" y="8" z="-1">
-            <label>blacktooth-door-west</label>
+            <kind>blacktooth-door-west</kind>
             <orientation>west</orientation>
-            <kind>door</kind>
+            <class>door</class>
         </item>
     </items>
 </room>

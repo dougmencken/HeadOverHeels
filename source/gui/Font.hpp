@@ -84,10 +84,10 @@ private:
         static unsigned int howManyLetters ;
 
         /**
-         * Table of translation between letter in picture file and UTF-8 code of this letter,
-         * which is read from file
+         * The letters drawn in the font
+         * for mapping between the image of letter from the font's picture file and the UTF-8 code of this letter
          */
-        static std::string * tableOfLetters ;
+        static std::string * listOfLetters ;
 
 };
 

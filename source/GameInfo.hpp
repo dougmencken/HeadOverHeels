@@ -96,7 +96,7 @@ public:
          * the magic tools
          */
 
-        void setMagicToolByLabel ( const std::string & label ) ;
+        void takeMagicTool ( const std::string & tool ) ;
 
         bool hasHorn () const {  return this->horn ;  }
 
