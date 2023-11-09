@@ -37,7 +37,12 @@ However, this project went (and still continues to go) almost unnoticed.
 Neither Jorge nor anyone else from the original team was ever participated in any further development and never wrote a single line about what's goin' on or was done here.
 https://osgameclones.com/ was perhaps the only lone site on which a link to this repo ever appeared.
 In the spring of 2019, I lost interest in this project and almost forgot about it.
-François Bissy's ( @kiwifb ) contribution in the fall of 2023 seems to have awakened my care to a some O_o degree
+François Bissy's ( @kiwifb ) contribution in the fall of 2023 seems to have awakened my care
+
+_(update)_
+so it happened, finalmente, that Jorge came to this project
+https://github.com/dougmencken/HeadOverHeels/commit/1f5cbbc4723150ccf5b74a1387330a126d0efeb9#commitcomment-131827424
+currently (November 9, 2023) we are sharing various stories via email
 
 ## The Future
 

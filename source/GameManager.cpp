@@ -597,7 +597,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 
                         allegro::textOut( "camera",
                                           ( where.getW() - 6 * widthOfChar ) >> 1, where.getH() - deltaYtext,
-                                          Color::byName( "75% gray" ).toAllegroColor() );
+                                          Color::byName( "gray 75% white" ).toAllegroColor() );
 
                         const int cameraDeltaX = activeRoom->getCamera()->getOffset().getX ();
                         const int cameraDeltaY = activeRoom->getCamera()->getOffset().getY ();
@@ -618,7 +618,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         allegro::textOut( xCamera, textX, textY,
                                           isomot.doesCameraFollowCharacter() ? Color::byName( "gray" ).toAllegroColor() : Color::whiteColor().toAllegroColor() );
                         allegro::textOut( "," , textX + widthOfChar * xCamera.length(), textY,
-                                          isomot.doesCameraFollowCharacter() ? Color::byName( "gray 25%" ).toAllegroColor() : Color::byName( "gray" ).toAllegroColor() );
+                                          isomot.doesCameraFollowCharacter() ? Color::byName( "gray 25% white" ).toAllegroColor() : Color::byName( "gray" ).toAllegroColor() );
                         allegro::textOut( yCamera, textX + widthOfChar * ( xCamera.length() + 1 ), textY,
                                           isomot.doesCameraFollowCharacter() ? Color::byName( "gray" ).toAllegroColor() : Color::whiteColor().toAllegroColor() );
                 }
@@ -651,7 +651,7 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
 
         if ( recordCaptures )
         {
-                allegro::fillRect( 19, 18, 80, 31, Color::byName( "75% gray" ).toAllegroColor() );
+                allegro::fillRect( 19, 18, 80, 31, Color::byName( "gray 75% white" ).toAllegroColor() );
                 allegro::fillCircle( 34, 24, 5, Color::byName( "red" ).toAllegroColor() );
                 allegro::textOut( "REC", 48, 21, Color::byName( "red" ).toAllegroColor() );
         }
