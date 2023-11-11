@@ -1,5 +1,6 @@
 
 #include "ospaths.hpp"
+
 #include "util.hpp"
 
 #include <algorithm>
@@ -115,10 +116,10 @@ void setPathToGame ( const char * pathToGame )
         fprintf( stdout, "FullPathToGame is \"%s\"\n", FullPathToGame.c_str () );
 }
 
-std::string HomePath( "" );
-
 std::string homePath ()
 {
+        static std::string HomePath( "" );
+
         if ( HomePath.empty () )
         {
         #if defined ( __WIN32 ) || defined ( __CYGWIN__ )
@@ -144,10 +145,10 @@ std::string homePath ()
         return HomePath;
 }
 
-std::string SharePath( "" );
-
 std::string sharePath ()
 {
+        static std::string SharePath( "" );
+
         if ( SharePath.empty () )
         {
                 SharePath = DataDirFromConfigure + ospaths::pathSeparator () + "headoverheels" + ospaths::pathSeparator () ;

@@ -4,8 +4,10 @@
 #include "sleep.hpp" // for milliSleep
 
 
+/* static */
 const FlickeringColor * FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color() ) ;
 
+/* static */
 const FlickeringColor * FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::byName( "gray75" ), Color() ) ;
 
 
