@@ -8,6 +8,9 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
+#ifndef screen_hpp_
+#define screen_hpp_
+
 namespace constants
 {
         static const unsigned int  Smallest_Screen_Width = 640 ;
@@ -41,3 +44,5 @@ namespace variables
 }
 
 bool allegroWindowSizeToScreenSize () ;
+
+#endif

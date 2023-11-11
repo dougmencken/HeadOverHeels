@@ -115,7 +115,7 @@ void setPathToGame ( const char * pathToGame )
         fprintf( stdout, "FullPathToGame is \"%s\"\n", FullPathToGame.c_str () );
 }
 
-std::string HomePath ;
+std::string HomePath( "" );
 
 std::string homePath ()
 {
@@ -144,7 +144,7 @@ std::string homePath ()
         return HomePath;
 }
 
-std::string SharePath ;
+std::string SharePath( "" );
 
 std::string sharePath ()
 {
