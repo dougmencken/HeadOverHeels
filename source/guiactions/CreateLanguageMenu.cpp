@@ -1,5 +1,6 @@
 
 #include "CreateLanguageMenu.hpp"
+
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "Font.hpp"
@@ -57,10 +58,13 @@ void CreateLanguageMenu::doAction ()
         over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
         screen.addWidget( over );
 
-        Head->moveTo( over->getX() - Head->getWidth() - over->getFont()->getCharWidth() + 4, space );
+        unsigned int widthOfSpace = over->getFont().getWidthOfLetter ( " " );
+        int spaceWithoutSpacing = widthOfSpace - over->getSpacing ();
+
+        Head->moveTo( over->getX() - Head->getWidth() - spaceWithoutSpacing, space );
         screen.addWidget( Head );
 
-        Heels->moveTo( over->getX() + over->getWidth() + over->getFont()->getCharWidth() - 4, space );
+        Heels->moveTo( over->getX() + over->getWidth() + spaceWithoutSpacing, space );
         screen.addWidget( Heels );
 
         const unsigned int headHeelsWidth = 48;

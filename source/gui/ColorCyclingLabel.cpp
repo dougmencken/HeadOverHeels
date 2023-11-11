@@ -8,7 +8,7 @@
 namespace gui
 {
 
-ColorCyclingLabel::ColorCyclingLabel( const std::string& text, const std::string& family, int spacing )
+ColorCyclingLabel::ColorCyclingLabel( const std::string & text, const std::string & family, int spacing )
         : Label( text, family, "white", spacing )
         , cycle( 0 )
         , colorCyclingTimer( new Timer () )
@@ -22,65 +22,63 @@ ColorCyclingLabel::~ColorCyclingLabel( )
 
 void ColorCyclingLabel::draw ()
 {
-        updateImageOfLabel( getText(), Label::getFontByFamilyAndColor( getFontFamily(), getColor() ) );
+        updateImageOfLabel( getText() );
 
         Label::draw ();
 }
 
-void ColorCyclingLabel::updateImageOfLabel( const std::string& text, Font * font )
+void ColorCyclingLabel::updateImageOfLabel( const std::string & text )
 {
-        if ( colorCyclingTimer->getValue() > 0.2 || imageOfLetters == nilPointer )
+        if ( colorCyclingTimer->getValue() < 0.2 && imageOfLetters != nilPointer ) return ;
+
+        delete imageOfLetters;
+
+        Font & font = Label::fontByFamilyAndColor( getFontFamily(), getColor() );
+        unsigned int howManyLetters = utf8StringLength( text );
+        imageOfLetters = new Picture( howManyLetters * ( font.getWidthOfLetter( "O" ) + getSpacing() ), font.getHeightOfLetter( "I" ) );
+
+        if ( ! text.empty() )
         {
-                delete imageOfLetters;
-                imageOfLetters = new Picture( getWidth(), getHeight() );
+                const size_t numberOfColors = 3;
+                const std::string cyclingColors[ numberOfColors ] = {  "cyan", "magenta", "green"  }; // original speccy sequence
 
-                if ( ! text.empty() )
+                Font & fontToUse = font ;
+
+                size_t letterInString = 0 ;
+
+                std::string::const_iterator iter = text.begin ();
+                while ( iter != text.end () )
                 {
-                        const size_t numberOfColors = 3;
-                        const std::string cyclingColors[ numberOfColors ] = {  "cyan", "magenta", "green"  }; // original speccy sequence
+                        // pick new font with color for this letter
+                        fontToUse = Label::fontByFamilyAndColor( font.getFamily(), cyclingColors[ cycle ] );
 
-                        Font* fontToUse = font ;
+                        // cycle in the sequence of colors
+                        ++ cycle ;
+                        if ( cycle >= numberOfColors ) cycle = 0 ;
 
-                        size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
+                        size_t from = std::distance( text.begin (), iter );
+                        size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
+                        std::string utf8letter = text.substr( from, howMany );
 
-                        std::string::const_iterator iter = text.begin ();
-                        while ( iter != text.end () )
-                        {
-                                // pick new font with color for this letter
-                                fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), cyclingColors[ cycle ] );
-                                if ( fontToUse == nilPointer )
-                                {
-                                        std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
-                                                        " for color \"" << cyclingColors[ cycle ] << "\"" << std::endl ;
-                                        fontToUse = font ;
-                                }
-
-                                // cycle in sequence of colors
-                                cycle++ ;
-                                if ( cycle >= numberOfColors ) cycle = 0;
-
-                                size_t from = std::distance( text.begin (), iter );
-                                size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
-                                std::string utf8letter = text.substr( from, howMany );
-
-                                // draw letter
+                        // draw letter
+                        Picture * letter = fontToUse.getPictureOfLetter( utf8letter ) ;
+                        if ( letter != nilPointer )
                                 allegro::bitBlit(
-                                        fontToUse->getPictureOfLetter( utf8letter )->getAllegroPict(),
+                                        letter->getAllegroPict(),
                                         imageOfLetters->getAllegroPict(),
                                         0,
                                         0,
-                                        charPos * ( fontToUse->getCharWidth() + getSpacing() ),
+                                        letterInString * ( letter->getWidth() + getSpacing() ),
                                         0,
-                                        fontToUse->getCharWidth(),
-                                        fontToUse->getCharHeight()
+                                        letter->getWidth(),
+                                        letter->getHeight()
                                 );
 
-                                charPos ++;
-                        }
+                        letterInString ++ ;
                 }
-
-                colorCyclingTimer->reset ();
         }
+
+        colorCyclingTimer->reset ();
 }
 
 }

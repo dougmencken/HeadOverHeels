@@ -12,7 +12,7 @@
 namespace gui
 {
 
-Label::Label( const std::string& text )
+Label::Label( const std::string & text )
 : Widget( ),
         imageOfLetters( nilPointer ),
         text( text ),
@@ -21,10 +21,10 @@ Label::Label( const std::string& text )
         spacing( 0 ),
         myAction( nilPointer )
 {
-        createImageOfLabel( text, Label::getFontByFamilyAndColor( fontFamily, color ) );
+        createImageOfLabel( text );
 }
 
-Label::Label( const std::string& text, const std::string& family, const std::string& color, int spacing )
+Label::Label( const std::string & text, const std::string & family, const std::string & color, int spacing )
 : Widget( ),
         imageOfLetters( nilPointer ),
         text( text ),
@@ -33,10 +33,10 @@ Label::Label( const std::string& text, const std::string& family, const std::str
         spacing( spacing ),
         myAction( nilPointer )
 {
-        if ( family.empty() ) this->fontFamily = "plain";
-        if ( color.empty() ) this->color = "white";
+        if ( family.empty() ) this->fontFamily = "plain" ;
+        if ( color.empty() ) this->color = "white" ;
 
-        createImageOfLabel( text, Label::getFontByFamilyAndColor( family, color ) );
+        createImageOfLabel( text );
 }
 
 Label::~Label( )
@@ -45,16 +45,16 @@ Label::~Label( )
 }
 
 /* static */
-Font* Label::getFontByFamilyAndColor( const std::string& family, const std::string& color )
+Font & Label::fontByFamilyAndColor( const std::string & family, const std::string & color )
 {
         Font* found = GuiManager::getInstance().getOrCreateFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
         assert( found != nilPointer );
-        return found;
+        return *found ;
 }
 
 void Label::update()
 {
-        createImageOfLabel( text, Label::getFontByFamilyAndColor( fontFamily, color ) );
+        createImageOfLabel( this->text );
 }
 
 void Label::changeFontFamily ( const std::string& family )
@@ -79,9 +79,7 @@ void Label::changeFontFamilyAndColor( const std::string& family, const std::stri
 void Label::draw ()
 {
         if ( imageOfLetters != nilPointer )
-        {
                 allegro::drawSprite( imageOfLetters->getAllegroPict(), getX(), getY() );
-        }
 }
 
 void Label::handleKey( const std::string& key )
@@ -92,61 +90,64 @@ void Label::handleKey( const std::string& key )
         }
 }
 
-void Label::createImageOfLabel( const std::string& text, Font * font )
+void Label::createImageOfLabel( const std::string & text )
 {
-        std::string nameOfImage = "image of label \"" + text + "\" using " + this->fontFamily + " font colored " + this->color ;
-        ///std::cout << "creating " << nameOfImage << std::endl ;
+        Font & font = Label::fontByFamilyAndColor( getFontFamily(), getColor() );
 
-        // re-create image of letters
+        // re-create the image of letters
         delete imageOfLetters ;
-        imageOfLetters = new Picture( getWidth(), getHeight() );
+
+        unsigned int howManyLetters = utf8StringLength( text );
+        imageOfLetters = new Picture( howManyLetters * ( font.getWidthOfLetter( "O" ) + getSpacing() ), font.getHeightOfLetter( "I" ) );
+
+        std::string nameOfImage = "image of label \"" + text + "\" using " + getFontFamily () + " font colored " + getColor () ;
         imageOfLetters->setName( nameOfImage );
 
         if ( ! text.empty() )
         {
-                const size_t numberOfColors = 3;
-                std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
+                static const size_t colors_in_multicolor = 3;
+                // the sequence of colors for a multicolor label
+                static std::string multiColors[ colors_in_multicolor ] = {  "cyan", "yellow", "orange"  }; // the amstrad cpc sequence
                 /* if ( GameManager::getInstance().isSimpleGraphicsSet() )
                         multiColors[ 2 ] = "white" ; // the original speccy sequence is “ cyan yellow white ” */
 
                 unsigned short cycle = 0; // position in that sequence for character to draw
-                Font* fontToUse = font ;
+                Font & fontToUse = font ;
 
-                size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
+                unsigned int letterInLine = 0 ;
 
                 std::string::const_iterator iter = text.begin ();
                 while ( iter != text.end () )
                 {
                         if ( this->color == "multicolor" )
                         {
-                                // pick new font with color for this letter
-                                fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ cycle ] );
-                                if ( fontToUse == nilPointer ) fontToUse = font ;
+                                // to color the letter, pick the new font
+                                fontToUse = Label::fontByFamilyAndColor( font.getFamily(), multiColors[ cycle ] );
 
-                                // cycle in sequence of colors
-                                cycle++;
-                                if ( cycle >= numberOfColors ) cycle = 0;
+                                // cycle in the sequence of colors
+                                ++ cycle ;
+                                if ( cycle >= colors_in_multicolor ) cycle = 0 ;
                         }
 
                         size_t from = std::distance( text.begin (), iter );
-                        size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
+                        size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // the string iterator increments here
                         std::string utf8letter = text.substr( from, howMany );
 
                         // draw letter
-                        Picture* pictureOfLetter = fontToUse->getPictureOfLetter( utf8letter ) ;
-                        if ( pictureOfLetter != nilPointer )
+                        Picture* letter = fontToUse.getPictureOfLetter( utf8letter ) ;
+                        if ( letter != nilPointer )
                                 allegro::bitBlit(
-                                    pictureOfLetter->getAllegroPict(),
+                                    letter->getAllegroPict(),
                                     imageOfLetters->getAllegroPict(),
                                     0,
                                     0,
-                                    charPos * ( fontToUse->getCharWidth() + getSpacing() ),
+                                    letterInLine * ( letter->getWidth() + getSpacing() ),
                                     0,
-                                    fontToUse->getCharWidth(),
-                                    fontToUse->getCharHeight()
+                                    letter->getWidth(),
+                                    letter->getHeight()
                                 ) ;
 
-                        charPos ++ ;
+                        letterInLine ++ ;
                 }
         }
 }

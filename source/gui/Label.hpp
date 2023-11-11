@@ -33,40 +33,66 @@ public:
         /**
          * @param text The text of this label
          */
-        Label( const std::string& text ) ;
+        Label( const std::string & text ) ;
 
         /**
          * @param text the text of this label
-         * @param family family of font to draw characters
-         * @param color color of text
-         * @param spacing space between letters
+         * @param family the family of font
+         * @param color the color of text
+         * @param spacing the space between letters
          */
-        Label( const std::string& text, const std::string& family, const std::string& color, int spacing = 0 ) ;
+        Label( const std::string & text, const std::string & family, const std::string & color, int spacing = 0 ) ;
 
         virtual ~Label( ) ;
 
         void update () ;
 
-        void changeFontFamily ( const std::string& family ) ;
+        void changeFontFamily ( const std::string & family ) ;
 
-        void changeColor ( const std::string& color ) ;
+        void changeColor ( const std::string & color ) ;
 
-        void changeFontFamilyAndColor ( const std::string& family, const std::string& color ) ;
+        void changeFontFamilyAndColor ( const std::string & family, const std::string & color ) ;
 
         virtual void draw () ;
 
         void handleKey ( const std::string& key ) ;
 
+        const std::string & getText () const {  return this->text ;  }
+
+        void setText( const std::string & newText ) {  this->text = newText ; update () ;  }
+
+        const std::string & getFontFamily () const {  return this->fontFamily ;  }
+
+        const std::string & getColor () const {  return this->color ;  }
+
+        const Font & getFont () const {  return Label::fontByFamilyAndColor( this->fontFamily, this->color ) ;  }
+
+        int getSpacing () const {  return this->spacing ;  }
+
+        void setSpacing ( int newSpacing ) {  this->spacing = newSpacing ; update ();  }
+
+        unsigned int getWidth () const
+        {
+                return ( imageOfLetters != nilPointer ) ? imageOfLetters->getWidth() : 0 ;
+        }
+
+        unsigned int getHeight () const
+        {
+                return ( imageOfLetters != nilPointer ) ? imageOfLetters->getHeight() : 0 ;
+        }
+
+        Action* getAction ( ) const {  return myAction ;  }
+
+        void setAction ( Action* action ) {  myAction = action ;  }
+
+        static Font & fontByFamilyAndColor ( const std::string & family, const std::string & color ) ;
+
 protected:
 
-        static Font * getFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
-
         /**
-         * Create image of label
-         * @param text string of characters in utf-8
-         * @param font font to draw these characters
+         * @param text the string of characters in utf-8
          */
-        virtual void createImageOfLabel ( const std::string& text, Font * font ) ;
+        virtual void createImageOfLabel ( const std::string & text ) ;
 
         Picture * imageOfLetters ;
 
@@ -81,34 +107,6 @@ private:
         int spacing ;
 
         Action * myAction ;
-
-public:
-
-        const std::string& getText () const {  return this->text ;  }
-
-        void setText( const std::string& newText ) {  this->text = newText ; update () ;  }
-
-        const std::string& getFontFamily () const {  return this->fontFamily ;  }
-
-        const std::string& getColor () const {  return this->color ;  }
-
-        Font * getFont () const {  return getFontByFamilyAndColor( fontFamily, color ) ;  }
-
-        int getSpacing () const {  return this->spacing ;  }
-
-        void setSpacing ( int newSpacing ) {  this->spacing = newSpacing ;  }
-
-        unsigned int getWidth () const
-        {
-                // symbols of game fonts are monospaced
-                return utf8StringLength( text ) * ( getFont()->getCharWidth() + spacing ) ;
-        }
-
-        unsigned int getHeight () const {  return getFont()->getCharHeight() ;  }
-
-        Action* getAction ( ) const {  return myAction ;  }
-
-        void setAction ( Action* action ) {  myAction = action ;  }
 
 } ;
 

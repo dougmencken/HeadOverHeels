@@ -155,14 +155,14 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                 std::cout << "hmmm, the list of letters has more or less letters than the picture of font" << std::endl ;
 
         // the size of the font image is 272 x 609 pixels, or 16 x 21 letters 17 x 29 pixels each
-        this->charWidth = lettersOfFont->getWidth() / lettersPerLine ;
-        this->charHeight = lettersOfFont->getHeight() / linesInFont ;
+        unsigned int charWidth = lettersOfFont->getWidth() / lettersPerLine ;
+        unsigned int charHeight = lettersOfFont->getHeight() / linesInFont ;
 
         size_t positionInTable = 0;
 
-        for ( unsigned int y = 0; y < lettersOfFont->getHeight(); y += this->charHeight )
+        for ( unsigned int y = 0; y < lettersOfFont->getHeight(); y += charHeight )
         {
-                for ( unsigned int x = 0; x < lettersOfFont->getWidth(); x += this->charWidth )
+                for ( unsigned int x = 0; x < lettersOfFont->getWidth(); x += charWidth )
                 {
                         Picture* letter = new Picture( charWidth, charHeight );
                         if ( listOfLetters[ positionInTable ] != "" )
@@ -184,7 +184,7 @@ Font::~Font( )
         }
 }
 
-Picture* Font::getPictureOfLetter( const std::string& letter )
+Picture* Font::getPictureOfLetter( const std::string & letter ) const
 {
         if ( listOfLetters != nilPointer )
         {

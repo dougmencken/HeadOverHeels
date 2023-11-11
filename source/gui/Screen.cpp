@@ -7,6 +7,7 @@
 #include "GameManager.hpp"
 #include "Action.hpp"
 #include "Label.hpp"
+	#include "ColorCyclingLabel.hpp"
 #include "TextField.hpp"
 #include "PictureWidget.hpp"
 #include "AnimatedPictureWidget.hpp"
@@ -348,10 +349,13 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
         addWidget( over );
 
-        Head->moveTo( over->getX() - Head->getWidth() - over->getFont()->getCharWidth() + 4, space );
+        unsigned int widthOfSpace = over->getFont().getWidthOfLetter( " " );
+        int spaceWithoutSpacing = widthOfSpace - over->getSpacing ();
+
+        Head->moveTo( over->getX() - Head->getWidth() - spaceWithoutSpacing, space );
         addWidget( Head );
 
-        Heels->moveTo( over->getX() + over->getWidth() + over->getFont()->getCharWidth() - 4, space );
+        Heels->moveTo( over->getX() + over->getWidth() + spaceWithoutSpacing, space );
         addWidget( Heels );
 
         TextField* JonRitman = new TextField( screenWidth >> 2, "center" ) ;
@@ -376,7 +380,7 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         if ( copyrightsToo )
         {
                 Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", "", "orange" );
-                Label* Douglas = new Label( "{ 2023 Douglas Mencken", "", "yellow" );
+                ColorCyclingLabel* Douglas = new ColorCyclingLabel( "{ 2023 Douglas Mencken", "" /*, "yellow"*/ );
 
                 const unsigned int screenHeight = variables::getScreenHeight();
                 const int leading = 28;

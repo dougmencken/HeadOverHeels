@@ -23,7 +23,7 @@ class ColorCyclingLabel : public Label
 
 public:
 
-        ColorCyclingLabel( const std::string& text, const std::string& family, int spacing = 0 ) ;
+        ColorCyclingLabel( const std::string & text, const std::string & family, int spacing = 0 ) ;
 
         virtual ~ColorCyclingLabel( ) ;
 
@@ -31,7 +31,7 @@ public:
 
 private:
 
-        virtual void updateImageOfLabel ( const std::string& text, Font * font ) ;
+        virtual void updateImageOfLabel ( const std::string & text ) ;
 
         unsigned short cycle ;
 

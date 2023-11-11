@@ -41,38 +41,28 @@ public:
 
         virtual ~Font( ) ;
 
-        Picture * getPictureOfLetter ( const std::string & letter ) ;
+        Picture * getPictureOfLetter ( const std::string & letter ) const ;
 
         std::string getName () const  {  return fontName ;  }
 
         /**
-         * Name of font is like color.family, use this to get just family
+         * The name of font is color.family, use this to get just the family
          */
         std::string getFamily () const {  return fontName.substr( fontName.find( "." ) + 1 ) ;  }
 
         std::string getColor () const {  return fontName.substr( 0, fontName.find( "." ) ) ;  }
 
-        unsigned int getCharWidth () const  {  return charWidth ;  }
+        unsigned int getWidthOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getWidth () ;  }
 
-        unsigned int getCharHeight () const  {  return charHeight ;  }
+        unsigned int getHeightOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getHeight () ;  }
 
 private:
 
-        Font( const Font& ) { }
+        Font( const Font & ) {} // no copying
 
         std::string fontName ;
 
         std::string fontColor ;
-
-        /**
-         * Width, in pixels, of each letter, game fonts are monospaced
-         */
-        unsigned int charWidth ;
-
-        /**
-         * Height, in pixels, of each letter
-         */
-        unsigned int charHeight ;
 
         /**
          * Images of letters

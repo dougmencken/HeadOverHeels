@@ -79,7 +79,7 @@ void MenuWithTwoColumns::draw ()
 
                 Picture* mark = ( activeOption == label ) ? Menu::beforeChosenOptionMini : Menu::beforeOption ;
 
-                // place option in first column
+                // place an option in the first column
                 if ( countOfRows <= rowsInFirstColumn )
                 {
                         if ( mark != nilPointer )
@@ -88,7 +88,7 @@ void MenuWithTwoColumns::draw ()
                         label->moveTo( getX () + dx, getY () + dy );
                         label->draw ();
                 }
-                // place option in second column
+                // place an option in the second column
                 else
                 {
                         // for first option in second column
@@ -108,10 +108,10 @@ void MenuWithTwoColumns::draw ()
                 }
 
                 // update vertical offset
-                dy += label->getFont()->getCharHeight() - 4;
+                dy += label->getHeight() - 4 ;
 
                 // adjust spacing between lines
-                dy -= label->getFont()->getCharHeight() >> 5;
+                dy -= label->getHeight() >> 5 ;
         }
 
         // back to initial position of menu
