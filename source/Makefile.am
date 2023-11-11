@@ -44,8 +44,6 @@ headoverheels_SOURCES = main.cpp \
 			pointers.hpp \
 			ospaths.cpp \
 			ospaths.hpp \
-			screen.cpp \
-			screen.hpp \
 			MayNotBePossible.hpp \
 			WrappersAllegro.cpp \
 			WrappersAllegro.hpp \

@@ -5,12 +5,11 @@
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "LanguageText.hpp"
+#include "GamePreferences.hpp"
 #include "Screen.hpp"
 #include "PictureWidget.hpp"
 #include "TextField.hpp"
 #include "CreateEndScreen.hpp"
-
-#include "screen.hpp"
 
 using gui::CreateCongratulationsScreen ;
 
@@ -54,7 +53,7 @@ void CreateCongratulationsScreen::doAction ()
 
         // Texto final
         langString = languageManager->findLanguageStringForAlias( "final-text" );
-        TextField* textField = new TextField( variables::getScreenWidth(), "center" );
+        TextField* textField = new TextField( GamePreferences::getScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 
         for ( size_t i = 0; i < langString->getLinesCount(); i++ )

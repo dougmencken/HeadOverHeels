@@ -12,8 +12,7 @@
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 #include "ContinueGame.hpp"
-
-#include "screen.hpp"
+#include "GamePreferences.hpp"
 
 using gui::CreatePlanetsScreen ;
 using gui::ContinueGame ;
@@ -53,8 +52,8 @@ void CreatePlanetsScreen::doAction ()
                 planets.freeWidgets() ;
         }
 
-        const unsigned int screenWidth = variables::getScreenWidth();
-        const unsigned int screenHeight = variables::getScreenHeight();
+        const unsigned int screenWidth = GamePreferences::getScreenWidth();
+        const unsigned int screenHeight = GamePreferences::getScreenHeight();
 
         // “ El Imperio Blacktooth ”
         std::string colorOfLabel = "yellow" ;

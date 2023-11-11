@@ -6,10 +6,31 @@
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 
-#include "screen.hpp"
+#include "WrappersAllegro.hpp"
 
 #include <tinyxml2.h>
 
+
+/* static */ unsigned int GamePreferences::screenWidth = GamePreferences::Default_Screen_Width ;
+/* static */ unsigned int GamePreferences::screenHeight = GamePreferences::Default_Screen_Height ;
+
+/* static */ bool GamePreferences::keepWidth = false ;
+/* static */ bool GamePreferences::keepHeight = false ;
+
+/* static */
+bool GamePreferences::allegroWindowSizeToScreenSize ()
+{
+        bool switched = allegro::switchToWindowedVideo( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) ;
+        if ( ! switched ) {
+                std::cout << "can’t change the size of game's window to "
+                                << GamePreferences::getScreenWidth() << " x " << GamePreferences::getScreenHeight() << std::endl ;
+        }
+
+        allegro::Pict::theScreen().clearToColor( AllegroColor::makeColor( 0, 0, 0, 0xff ) );
+        allegro::update ();
+
+        return switched ;
+}
 
 /* static */
 bool GamePreferences::readPreferences( const std::string & fileName )
@@ -89,19 +110,19 @@ bool GamePreferences::readPreferences( const std::string & fileName )
                 tinyxml2::XMLElement* width = video->FirstChildElement( "width" ) ;
                 if ( width != nilPointer )
                 {
-                        if ( variables::isWidthKept () )
-                                variables::keepThisWidth( false );
+                        if ( GamePreferences::isWidthKept () )
+                                GamePreferences::keepThisWidth( false );
                         else
-                                variables::setScreenWidth( std::atoi( width->FirstChild()->ToText()->Value() ) ) ;
+                                GamePreferences::setScreenWidth( std::atoi( width->FirstChild()->ToText()->Value() ) ) ;
                 }
 
                 tinyxml2::XMLElement* height = video->FirstChildElement( "height" ) ;
                 if ( height != nilPointer )
                 {
-                        if ( variables::isHeightKept () )
-                                variables::keepThisHeight( false );
+                        if ( GamePreferences::isHeightKept () )
+                                GamePreferences::keepThisHeight( false );
                         else
-                                variables::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
+                                GamePreferences::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
                 }
 
                 bool atFullScreen = false ;
@@ -220,11 +241,11 @@ bool GamePreferences::writePreferences( const std::string & fileName )
                 tinyxml2::XMLNode * video = preferences.NewElement( "video" );
 
                 tinyxml2::XMLElement * width = preferences.NewElement( "width" );
-                width->SetText( variables::getScreenWidth () );
+                width->SetText( GamePreferences::getScreenWidth () );
                 video->InsertEndChild( width );
 
                 tinyxml2::XMLElement * height = preferences.NewElement( "height" );
-                height->SetText( variables::getScreenHeight () );
+                height->SetText( GamePreferences::getScreenHeight () );
                 video->InsertEndChild( height );
 
                 tinyxml2::XMLElement * fullscreen = preferences.NewElement( "fullscreen" );

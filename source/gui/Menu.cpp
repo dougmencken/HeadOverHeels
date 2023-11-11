@@ -4,11 +4,11 @@
 #include "Gui.hpp"
 #include "GuiManager.hpp"
 #include "InputManager.hpp"
+#include "GamePreferences.hpp"
 #include "Label.hpp"
 #include "Font.hpp"
 
 #include "ospaths.hpp"
-#include "screen.hpp"
 
 #include <algorithm> // std::for_each
 #include <cassert>
@@ -67,7 +67,7 @@ Menu::~Menu( )
                 allegro::drawSprite( *optionPict, 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
-                beforeOption->setName( "picture to show before menu option" );
+                beforeOption->setName( "the picture to show before a menu option" );
         }
 
         if ( beforeChosenOptionMini == nilPointer )
@@ -97,7 +97,7 @@ Menu::~Menu( )
                 allegro::drawSprite( *chosenOptionMiniPict, 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
-                beforeChosenOptionMini->setName( "picture to show before chosen but not double height menu option" );
+                beforeChosenOptionMini->setName( "the picture to show before a chosen but not double height menu option" );
         }
 
         if ( beforeChosenOption == nilPointer )
@@ -108,7 +108,7 @@ Menu::~Menu( )
                                         0, 0, beforeChosenOptionMini->getWidth(), beforeChosenOptionMini->getHeight(),
                                         0, 0, beforeChosenOption->getWidth(), beforeChosenOption->getHeight() );
 
-                beforeChosenOption->setName( "picture to show before chosen menu option" );
+                beforeChosenOption->setName( "the picture to show before a chosen menu option" );
         }
 
         beforeChosenOptionMini->colorize( Color::byName( "orange" ) );
@@ -141,8 +141,8 @@ void Menu::draw ()
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( variables::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( variables::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( GamePreferences::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( GamePreferences::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
         int dy( 0 );

@@ -7,6 +7,7 @@
 #include "BonusManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
+#include "GamePreferences.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
@@ -14,8 +15,6 @@
 #include "AvatarItem.hpp"
 #include "ItemDescriptions.hpp"
 #include "Behavior.hpp"
-
-#include "screen.hpp"
 
 
 Isomot::Isomot( ) :
@@ -57,7 +56,7 @@ void Isomot::prepare ()
 
         // image where the isometric view is drawn
         if ( view == nilPointer )
-                view = new Picture( variables::getScreenWidth(), variables::getScreenHeight() );
+                view = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() );
         else
                 view->fillWithColor( Color::byName( "orange" ) );
 

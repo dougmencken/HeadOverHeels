@@ -1,6 +1,7 @@
 
 #include "CreateEndScreen.hpp"
 
+#include "GamePreferences.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
@@ -12,8 +13,6 @@
 #include "Label.hpp"
 #include "TextField.hpp"
 #include "CreateMainMenu.hpp"
-
-#include "screen.hpp"
 
 using gui::CreateEndScreen ;
 
@@ -45,8 +44,8 @@ void CreateEndScreen::doAction ()
         screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
         const unsigned int leading = 40 ;
-        const unsigned int screenWidth = variables::getScreenWidth();
-        const unsigned int screenHeight = variables::getScreenHeight();
+        const unsigned int screenWidth = GamePreferences::getScreenWidth();
+        const unsigned int screenHeight = GamePreferences::getScreenHeight();
         const unsigned int space = ( screenWidth / 20 ) - 10;
         const unsigned int labelsY = screenHeight - ( leading * 3 ) - ( space << 1 ) ;
         const unsigned int resultY = ( screenHeight >> 1 ) - ( screenHeight >> 4 ) - 20 ;

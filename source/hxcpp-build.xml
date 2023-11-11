@@ -18,7 +18,6 @@
         <file name="sleep.cpp" />
         <file name="pointers.cpp" />
         <file name="ospaths.cpp" />
-        <file name="screen.cpp" />
         <file name="WrappersAllegro.cpp" />
         <file name="Way.cpp" />
         <file name="Color.cpp" />

@@ -10,10 +10,10 @@
 #include "Camera.hpp"
 #include "SoundManager.hpp"
 #include "GameManager.hpp"
+#include "GamePreferences.hpp"
 #include "ItemDescriptions.hpp"
 
 #include "ospaths.hpp"
-#include "screen.hpp"
 
 #include <tinyxml2.h>
 
@@ -166,25 +166,25 @@ void MapManager::readMap ( const std::string& fileName )
                         const unsigned short interligne = 8 ;
 
                         const unsigned short offsetY = ( ( heightOfChar + interligne ) << 1 ) + 10 ;
-                        const unsigned short atY = variables::getScreenHeight() - offsetY ;
+                        const unsigned short atY = GamePreferences::getScreenHeight() - offsetY ;
 
                         std::string roomInRooms = "building " + util::toStringWithOrdinalSuffix( roomNth ) + " room out of " + util::number2string( howManyRooms ) ;
 
                         allegro::Pict::resetWhereToDraw() ;
 
-                        allegro::fillRect( 0, atY - 4, variables::getScreenWidth(), atY,
+                        allegro::fillRect( 0, atY - 4, GamePreferences::getScreenWidth(), atY,
                                            Color::blackColor().toAllegroColor() );
 
-                        autouniqueptr< allegro::Pict > stripe( allegro::Pict::newPict( variables::getScreenWidth(), heightOfChar + interligne ) );
+                        autouniqueptr< allegro::Pict > stripe( allegro::Pict::newPict( GamePreferences::getScreenWidth(), heightOfChar + interligne ) );
 
                         allegro::Pict::setWhereToDraw( *stripe ) ;
 
-                        unsigned int textX = ( variables::getScreenWidth() - roomInRooms.length() * widthOfChar ) >> 1 ;
+                        unsigned int textX = ( GamePreferences::getScreenWidth() - roomInRooms.length() * widthOfChar ) >> 1 ;
                         stripe->clearToColor( Color::byName( "blue" ).toAllegroColor() );
                         allegro::textOut( roomInRooms, textX, ( interligne >> 1 ) + 1, Color::byName( "yellow" ).toAllegroColor() );
                         allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY );
 
-                        textX = ( variables::getScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
+                        textX = ( GamePreferences::getScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
                         stripe->clearToColor( Color::byName( "blue" ).toAllegroColor() );
                         allegro::textOut( roomFile, textX, ( interligne >> 1 ) - 1, Color::byName( "green" ).toAllegroColor() );
                         allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY + ( heightOfChar + interligne ) );
@@ -192,7 +192,7 @@ void MapManager::readMap ( const std::string& fileName )
                         allegro::Pict::resetWhereToDraw() ;
 
                         allegro::fillRect( 0, atY + ( ( heightOfChar + interligne ) << 1 ),
-                                           variables::getScreenWidth(), atY + ( ( heightOfChar + interligne ) << 1 ) + 4,
+                                           GamePreferences::getScreenWidth(), atY + ( ( heightOfChar + interligne ) << 1 ) + 4,
                                            Color::blackColor().toAllegroColor() );
 
                         allegro::update();

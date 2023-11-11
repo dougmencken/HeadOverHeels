@@ -3,8 +3,8 @@
 
 #include "ospaths.hpp"
 #include "sleep.hpp"
-#include "screen.hpp"
 
+#include "GamePreferences.hpp"
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
 #include "SoundManager.hpp"
@@ -94,7 +94,7 @@ void ShowAuthors::doAction ()
         if ( screen.countWidgets() == 0 )
         {
                 if ( this->linesOfCredits != nilPointer ) delete this->linesOfCredits ;
-                this->linesOfCredits = new TextField( variables::getScreenWidth(), "center" );
+                this->linesOfCredits = new TextField( GamePreferences::getScreenWidth(), "center" );
 
                 this->initialY = screen.getImageOfScreen().getHeight() ;
                 this->linesOfCredits->moveTo( 0, initialY );

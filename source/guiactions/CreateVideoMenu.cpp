@@ -4,6 +4,7 @@
 #include "CreateMenuOfGraphicsSets.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
+#include "GamePreferences.hpp"
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 #include "Screen.hpp"
@@ -12,7 +13,6 @@
 #include "CreateMainMenu.hpp"
 
 #include "sleep.hpp"
-#include "screen.hpp"
 
 using gui::CreateVideoMenu ;
 using gui::CreateMenuOfGraphicsSets ;
@@ -192,8 +192,8 @@ void CreateVideoMenu::updateLabels ()
         // chooseGraphics has no value but action
 
         screenSize->changeColor( "cyan" );
-        listOfOptions->setValueOf( screenSize, util::number2string( variables::getScreenWidth() )
+        listOfOptions->setValueOf( screenSize, util::number2string( GamePreferences::getScreenWidth() )
                                                                 + " x "
-                                                  + util::number2string( variables::getScreenHeight() ) );
+                                                  + util::number2string( GamePreferences::getScreenHeight() ) );
         listOfOptions->redraw ();
 }

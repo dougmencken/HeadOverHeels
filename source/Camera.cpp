@@ -2,9 +2,7 @@
 #include "Camera.hpp"
 
 #include "Room.hpp"
-#include "GameManager.hpp"
-
-#include "screen.hpp"
+#include "GamePreferences.hpp"
 
 
 Camera::Camera( Room * room )
@@ -51,8 +49,11 @@ void Camera::instantCenterRoom ()
 void Camera::recenterRoom ()
 {
         if ( room != nilPointer ) {
-                roomCenterOffset.setX( ( static_cast< int >( room->getWidthOfRoomImage() ) - static_cast< int >( variables::getScreenWidth() ) ) >> 1 );
-                roomCenterOffset.setY( ( static_cast< int >( room->getHeightOfRoomImage() ) - static_cast< int >( variables::getScreenHeight() ) ) >> 1 );
+                roomCenterOffset.setX( ( static_cast< int >( room->getWidthOfRoomImage() )
+                                                - static_cast< int >( GamePreferences::getScreenWidth() ) ) >> 1 );
+                roomCenterOffset.setY( ( static_cast< int >( room->getHeightOfRoomImage() )
+                                                - static_cast< int >( GamePreferences::getScreenHeight() ) ) >> 1 );
+
                 roomCenterOffset.addToY( Camera::spaceForAmbiance );
         }
 
@@ -64,8 +65,8 @@ bool Camera::centerOnItem( const Item & item )
         CameraOffset newOffset ;
 
         // center on the room’s origin at first
-        newOffset.setX( room->getX0 () - ( static_cast< int >( variables::getScreenWidth() ) >> 1 ) );
-        newOffset.setY( room->getY0 () - ( static_cast< int >( variables::getScreenHeight() ) >> 1 ) );
+        newOffset.setX( room->getX0 () - ( static_cast< int >( GamePreferences::getScreenWidth() ) >> 1 ) );
+        newOffset.setY( room->getY0 () - ( static_cast< int >( GamePreferences::getScreenHeight() ) >> 1 ) );
         newOffset.addToY( Camera::spaceForAmbiance );
 
         // apply the item's offset

@@ -23,7 +23,6 @@
 #endif
 
 #include "ospaths.hpp"
-#include "screen.hpp"
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 #  include <allegro5/allegro.h>
@@ -62,7 +61,7 @@ void initAllegro ()
         allegro::init ();
 
         // switch to the chosen size of screen
-        allegroWindowSizeToScreenSize ();
+        GamePreferences::allegroWindowSizeToScreenSize ();
 
         // initialize the handler of keyboard events
         allegro::initKeyboardHandler ();
@@ -180,15 +179,15 @@ int main( int argc, char** argv )
                 if ( options.count( "width" ) > 0 )
                 {
                         int width = std::atoi( options[ "width" ].c_str () );
-                        variables::setScreenWidth( static_cast< unsigned int >( width ) );
-                        variables::keepThisWidth( true );
+                        GamePreferences::setScreenWidth( static_cast< unsigned int >( width ) );
+                        GamePreferences::keepThisWidth( true );
                 }
 
                 if ( options.count( "height" ) > 0 )
                 {
                         int height = std::atoi( options[ "height" ].c_str () );
-                        variables::setScreenHeight( static_cast< unsigned int >( height ) );
-                        variables::keepThisHeight( true );
+                        GamePreferences::setScreenHeight( static_cast< unsigned int >( height ) );
+                        GamePreferences::keepThisHeight( true );
                 }
 
                 if ( options.count( "head-room" ) > 0 )

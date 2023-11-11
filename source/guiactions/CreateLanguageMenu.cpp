@@ -9,9 +9,9 @@
 #include "Label.hpp"
 #include "SelectLanguage.hpp"
 #include "CreateMainMenu.hpp"
+#include "GamePreferences.hpp"
 
 #include "ospaths.hpp"
-#include "screen.hpp"
 
 #include <tinyxml2.h>
 
@@ -48,7 +48,7 @@ void CreateLanguageMenu::doAction ()
 
         screen.setEscapeAction( new gui::CreateMainMenu() );
 
-        const unsigned int screenWidth = variables::getScreenWidth();
+        const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
         Label* Head = new Label( "Head", "big", "yellow" );

@@ -7,6 +7,7 @@
 #include "Label.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Camera.hpp"
+#include "GamePreferences.hpp"
 #include "GuiManager.hpp"
 #include "MapManager.hpp"
 #include "InputManager.hpp"
@@ -19,7 +20,6 @@
 #include "util.hpp"
 #include "ospaths.hpp"
 #include "sleep.hpp"
-#include "screen.hpp"
 
 
 GameManager GameManager::instance ;
@@ -143,7 +143,7 @@ void GameManager::update ()
                                         else
                                         {
                                                 autouniqueptr< allegro::Pict > nothing ( allegro::Pict::newPict(
-                                                                variables::getScreenWidth(), variables::getScreenHeight()
+                                                                GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight()
                                                 ) );
                                                 nothing->clearToColor( Color::byName( "gray75" ).toAllegroColor() );
                                                 drawAmbianceOfGame( *nothing );
@@ -197,13 +197,13 @@ void GameManager::pause ()
         {
                 gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager() ;
                 gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
-                int deltaY = ( variables::getScreenHeight() >> 2 ) - 60 ;
+                int deltaY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -215,7 +215,7 @@ void GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -282,13 +282,13 @@ void GameManager::pause ()
 
                 gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
                 gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
-                int deltaY = ( variables::getScreenHeight() >> 2 );
+                int deltaY = ( GamePreferences::getScreenHeight() >> 2 );
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -300,7 +300,7 @@ void GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -441,8 +441,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
         // empty scenery means that it is the final room
         if ( scenery != "" )
         {
-                const unsigned int diffX =  variables::getScreenWidth() - /* 640 */ constants::Default_Screen_Width ;
-                const unsigned int diffY = variables::getScreenHeight() - /* 480 */ constants::Default_Screen_Height ;
+                const unsigned int diffX =  GamePreferences::getScreenWidth() - /* 640 */ GamePreferences::Default_Screen_Width ;
+                const unsigned int diffY = GamePreferences::getScreenHeight() - /* 480 */ GamePreferences::Default_Screen_Height ;
 
                 if ( diffX > 0 || diffY > 0 ) // when the screen is larger than 640 x 480
                         if ( ! isPresentGraphicsSet() && ! isSimpleGraphicsSet() )
@@ -569,7 +569,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 if ( freedomLabel == nilPointer )
                 {
                         freedomLabel = new gui::ColorCyclingLabel( "FREEDOM", "big" );
-                        freedomLabel->moveTo( variables::getScreenWidth() / 10, variables::getScreenHeight() - 100 );
+                        freedomLabel->moveTo( GamePreferences::getScreenWidth() / 10, GamePreferences::getScreenHeight() - 100 );
                 }
 
                 freedomLabel->draw ();
