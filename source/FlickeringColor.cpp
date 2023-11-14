@@ -4,12 +4,29 @@
 #include "sleep.hpp" // for milliSleep
 
 
-/* static */
-const FlickeringColor * FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color() ) ;
+/* static */ const FlickeringColor * FlickeringColor::whiteAndTransparent = nilPointer ;
+
+/* static */ const FlickeringColor * FlickeringColor::gray75AndTransparent = nilPointer ;
 
 /* static */
-const FlickeringColor * FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::byName( "gray75" ), Color() ) ;
+const FlickeringColor & FlickeringColor::flickerWhiteAndTransparent ()
+{
+        if ( FlickeringColor::whiteAndTransparent == nilPointer )
+                FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color() );
 
+        assert( FlickeringColor::whiteAndTransparent != nilPointer );
+        return * FlickeringColor::whiteAndTransparent ;
+}
+
+/* static */
+const FlickeringColor & FlickeringColor::flickerGray75AndTransparent ()
+{
+        if ( FlickeringColor::gray75AndTransparent == nilPointer )
+                FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::byName( "gray75" ), Color() ) ;
+
+        assert( FlickeringColor::gray75AndTransparent != nilPointer );
+        return * FlickeringColor::gray75AndTransparent ;
+}
 
 FlickeringColor::~FlickeringColor( )
 {

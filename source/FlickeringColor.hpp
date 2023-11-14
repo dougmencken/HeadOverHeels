@@ -71,9 +71,9 @@ public:
 
         virtual std::string toString () const ;
 
-        static const FlickeringColor & flickerWhiteAndTransparent () {  return *whiteAndTransparent ;  }
+        static const FlickeringColor & flickerWhiteAndTransparent () ;
 
-        static const FlickeringColor & flickerGray75AndTransparent () {  return *gray75AndTransparent ;  }
+        static const FlickeringColor & flickerGray75AndTransparent () ;
 
 protected:
 

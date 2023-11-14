@@ -21,7 +21,8 @@ echo
 pathToExternal="${buildFolder}"/external
 echo "path to external packages is" "${pathToExternal}"
 
-installPath="${buildFolder}"/_rootdir
+whereItGoes="_rootdir"
+installPath="${buildFolder}"/${whereItGoes}
 echo "install path is" "${installPath}"
 
 echo
