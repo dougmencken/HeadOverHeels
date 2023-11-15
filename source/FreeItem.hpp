@@ -48,12 +48,12 @@ public:
 
         virtual std::string whichItemClass () const {  return "free item" ;  }
 
-       /**
-        * For sorting free items in container
-        */
-        virtual bool operator< ( const FreeItem& item ) const
+        /**
+         * for sorting free items in a container
+         */
+        bool operator < ( const FreeItem & that ) const
         {
-                return isBehind( item ) ;
+                return isBehind( that ) ;
         }
 
         virtual void calculateOffset () ;

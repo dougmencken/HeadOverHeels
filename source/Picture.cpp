@@ -14,7 +14,7 @@ Picture::Picture( unsigned int width, unsigned int height )
         : picture( allegro::Pict::newPict( width, height ) )
         , name( "Picture." + util::makeRandomString( 12 ) )
 {
-        fillWithColor( Color() );
+        fillWithColor( Color::keyColor() );
 
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << std::endl ;

@@ -32,26 +32,35 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                         return ;
                 }
 
-                imageOfFont = new Picture( fontFromFile->getW(), fontFromFile->getH() );
+                autouniqueptr< Picture > blackLetters( new Picture( * fontFromFile ) );
 
-                autouniqueptr< Picture > blackLetters( new Picture( *fontFromFile ) );
-                blackLetters->colorize( Color::blackColor() );
+                // white to transparency
+                Color::replaceColor( * blackLetters, Color::whiteColor(), Color::keyColor() );
 
-                const unsigned int offsetOfTint = 1;
+                autouniqueptr< Picture > whiteLetters( new Picture( * blackLetters ) );
+
+                // black to white
+                Color::replaceColor( * whiteLetters, Color::blackColor(), Color::whiteColor() );
+
+                unsigned int width  = fontFromFile->getW ();
+                unsigned int height = fontFromFile->getH ();
+                Font::imageOfFont = new Picture( width, height );
+
+                const unsigned int offsetOfTint = 1 ;
                 allegro::bitBlit(
                         blackLetters->getAllegroPict(),
-                        imageOfFont->getAllegroPict(),
+                        Font::imageOfFont->getAllegroPict(),
                         0, 0,
                         offsetOfTint, offsetOfTint,
-                        imageOfFont->getWidth() - offsetOfTint, imageOfFont->getHeight() - offsetOfTint
+                        width - offsetOfTint, height - offsetOfTint
                 );
 
-                const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
-                allegro::Pict::setWhereToDraw( imageOfFont->getAllegroPict() );
-                allegro::drawSprite( *fontFromFile, 0, 0 );
+                const allegro::Pict & previousWhere = allegro::Pict::getWhereToDraw() ;
+                allegro::Pict::setWhereToDraw( Font::imageOfFont->getAllegroPict () );
+                allegro::drawSprite( whiteLetters->getAllegroPict (), 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
-                imageOfFont->setName( "image of font’s letters" );
+                Font::imageOfFont->setName( "image of the game’s font" );
         }
 
         Picture* lettersOfFont = new Picture( *imageOfFont );

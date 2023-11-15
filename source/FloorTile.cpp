@@ -215,7 +215,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 allegro::bitBlit( rightDepth->getAllegroPict(), rightDepthEast->getAllegroPict(),
                                   rightDepth->getWidth() - 2, 0, rightDepthEast->getWidth() - 2, quarterOfWidth >> 1, 2, rightDepthEast->getHeight() );
 
-                rightDepth->fillWithColor( Color() );
+                rightDepth->fillWithColor( Color::keyColor () );
                 allegro::bitBlit( rightDepthEast->getAllegroPict(), rightDepth->getAllegroPict(), 0, 0, 0, 0, quarterOfWidth, rightDepth->getHeight() );
         }
 
@@ -227,7 +227,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthNorth->getAllegroPict(),
                                   0, 0, 0, quarterOfWidth >> 1, 2, leftDepthNorth->getHeight() );
 
-                leftDepth->fillWithColor( Color() );
+                leftDepth->fillWithColor( Color::keyColor () );
                 allegro::bitBlit( leftDepthNorth->getAllegroPict(), leftDepth->getAllegroPict(), 0, 0, quarterOfWidth, 0, quarterOfWidth, leftDepth->getHeight() );
         }
 
@@ -239,7 +239,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthSouth->getAllegroPict(),
                                   leftDepth->getWidth() - 2, 0, leftDepthSouth->getWidth() - 2, 0, 2, leftDepthSouth->getHeight() );
 
-                leftDepth->fillWithColor( Color() );
+                leftDepth->fillWithColor( Color::keyColor () );
                 allegro::bitBlit( leftDepthSouth->getAllegroPict(), leftDepth->getAllegroPict(), 0, 0, 0, 0, quarterOfWidth, leftDepth->getHeight() );
         }
 
@@ -251,7 +251,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 allegro::bitBlit( rightDepth->getAllegroPict(), rightDepthWest->getAllegroPict(),
                                   0, 0, 0, 0, 2, rightDepthWest->getHeight() );
 
-                rightDepth->fillWithColor( Color() );
+                rightDepth->fillWithColor( Color::keyColor () );
                 allegro::bitBlit( rightDepthWest->getAllegroPict(), rightDepth->getAllegroPict(), 0, 0, quarterOfWidth, 0, quarterOfWidth, rightDepth->getHeight() );
         }
 

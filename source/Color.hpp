@@ -26,9 +26,6 @@ class Color
 
 public:
 
-        /* default constructor makes transparent color */
-        Color( ) ;
-
         Color( unsigned char r, unsigned char g, unsigned char b, unsigned char a ) : red( r ), green( g ), blue( b ), alpha( a ) { }
 
         Color( const AllegroColor& color ) : red( color.getRed() ), green( color.getGreen() ), blue( color.getBlue() ), alpha( color.getAlpha() ) { }
@@ -61,6 +58,8 @@ public:
 
         static const Color & whiteColor () {  return theWhite ;  }
 
+        static const Color & keyColor () {  return transparency ;  }
+
         static void replaceColor ( Picture & picture, const Color & from, const Color & to ) ;
 
         static void changeWhiteToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, whiteColor(), color ) ;  }
@@ -86,6 +85,8 @@ protected:
 private:
 
         static void multiplyWithColor ( Picture & picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+
+        static const Color transparency ;
 
         static const Color theWhite ;
 

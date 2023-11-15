@@ -46,6 +46,14 @@ public:
 
         virtual std::string whichItemClass () const {  return "grid item" ;  }
 
+        /**
+         * for sorting grid items in a container
+         */
+        bool operator < ( const GridItem & other ) const
+        {
+                return ( getZ() < other.getZ() + static_cast< int >( other.getHeight() ) );
+        }
+
         bool isSegmentOfWallOnX () const
                 {  return getOriginalKind().find( "wall-x" ) != std::string::npos &&
                                 getOriginalKind().find( "invisible-wall" ) == std::string::npos ;  }

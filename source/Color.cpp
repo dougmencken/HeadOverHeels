@@ -4,6 +4,9 @@
 #include <cmath> // for sqrt
 
 
+const Color Color::transparency ( AllegroColor::redOfKeyColor, AllegroColor::greenOfKeyColor, AllegroColor::blueOfKeyColor,
+                                        AllegroColor::alphaOfKeyColor ) ;
+
 const Color Color::theWhite ( 255, 255, 255, 0xff ) ;
 
 const Color Color::theBlack ( 0, 0, 0, 0xff );
@@ -39,14 +42,6 @@ const Color Color::theLightGreen ( 127, 255, 127, 0xff ) ;
 const Color Color::theLightCyan ( 127, 255, 255, 0xff ) ;
 const Color Color::theLightYellow ( 255, 255, 127, 0xff ) ;
 
-
-Color::Color( )
-        : red( AllegroColor::redOfKeyColor )
-        , green( AllegroColor::greenOfKeyColor )
-        , blue( AllegroColor::blueOfKeyColor )
-        , alpha( AllegroColor::alphaOfKeyColor )
-{
-}
 
 Color Color::multiply ( const Color & c ) const
 {

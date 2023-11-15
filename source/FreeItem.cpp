@@ -76,7 +76,7 @@ void FreeItem::draw ()
 
 void FreeItem::freshProcessedImage ()
 {
-        getProcessedImage().fillWithColor( Color() );
+        getProcessedImage().fillWithColor( Color::keyColor () );
         allegro::bitBlit( getShadedNonmaskedImage().getAllegroPict(), getProcessedImage().getAllegroPict() );
         getProcessedImage().setName( "processed " + getShadedNonmaskedImage().getName() );
 

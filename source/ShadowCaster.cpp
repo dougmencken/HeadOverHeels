@@ -60,8 +60,8 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
 
         if ( item.getWantShadow() )
         {
-                // for first or only one shading item begin with fresh image
-                shadyImage.fillWithColor( Color() );
+                // for the first or the only one shading item begin with the fresh image
+                shadyImage.fillWithColor( Color::keyColor () );
                 allegro::bitBlit( rawImage.getAllegroPict(), shadyImage.getAllegroPict() );
 
                 item.setWantShadow( false );

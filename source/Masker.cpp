@@ -44,9 +44,9 @@ void Masker::maskFreeItemBehindItem( FreeItem& itemToMask, const Item& upwardIte
         {
                 for ( maskedPixel = iniX, upwardPixel = deltaX ; maskedPixel < endX ; maskedPixel ++, upwardPixel ++ )
                 {
-                        if ( ! upwardImage.getPixelAt( upwardPixel, upwardRow ).isKeyColor() )
+                        if ( ! upwardImage.getPixelAt( upwardPixel, upwardRow ).isKeyColor () )
                         {
-                                maskedImage.putPixelAt( maskedPixel, maskedRow, Color() );
+                                maskedImage.putPixelAt( maskedPixel, maskedRow, Color::keyColor () );
                         }
                 }
         }

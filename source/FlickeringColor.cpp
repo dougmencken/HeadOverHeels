@@ -12,7 +12,7 @@
 const FlickeringColor & FlickeringColor::flickerWhiteAndTransparent ()
 {
         if ( FlickeringColor::whiteAndTransparent == nilPointer )
-                FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color() );
+                FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color::keyColor() );
 
         assert( FlickeringColor::whiteAndTransparent != nilPointer );
         return * FlickeringColor::whiteAndTransparent ;
@@ -22,7 +22,7 @@ const FlickeringColor & FlickeringColor::flickerWhiteAndTransparent ()
 const FlickeringColor & FlickeringColor::flickerGray75AndTransparent ()
 {
         if ( FlickeringColor::gray75AndTransparent == nilPointer )
-                FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::byName( "gray75" ), Color() ) ;
+                FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::byName( "gray75" ), Color::keyColor() ) ;
 
         assert( FlickeringColor::gray75AndTransparent != nilPointer );
         return * FlickeringColor::gray75AndTransparent ;

@@ -46,22 +46,14 @@ public:
 
         virtual std::string whichItemClass () const {  return "abstract item" ;  }
 
-       /**
-        * Used for sorting items in container, this variant is okay for grid items
-        */
-        virtual bool operator < ( const Item& item ) const
-        {
-                return ( getZ() < item.getZ() + static_cast< int >( item.getHeight() ) );
-        }
-
-        bool isBehind ( const Item& item ) const
+        bool isBehind ( const Item & item ) const
         {
                 return  ( getZ() < item.getZ() + static_cast< int >( item.getHeight() ) ) &&
                         ( getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
                         ( getY() - static_cast< int >( getWidthY() ) < item.getY() ) ;
         }
 
-        bool isBehindAt ( const Item& item, int x, int y, int z ) const
+        bool isBehindAt ( const Item & item, int x, int y, int z ) const
         {
                 return  ( getZ() < z + static_cast< int >( item.getHeight() ) ) &&
                         ( getX() < x + static_cast< int >( item.getWidthX() ) ) &&
