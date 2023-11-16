@@ -128,22 +128,24 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
 
                                 if ( c == 0 )
                                 {
-                                        listOfLetters[ inTable++ ] = "";
-                                        inBuf ++;
+                                        listOfLetters[ inTable++ ] = "" ;
+                                        inBuf ++ ;
                                 }
                                 else
                                 {
                                         char letter[ 5 ];
-                                        unsigned int bytesInLetter = 0;
+                                        unsigned int byteInLetter = 0 ;
 
                                         do {
-                                                letter[ bytesInLetter++ ] = c;
-                                                c = static_cast< unsigned char >( buffer[ ++inBuf ] );
+                                                letter[ byteInLetter ++ ] = c ;
+                                                ++ inBuf ;
+                                                if ( inBuf == length ) break ;
+                                                c = static_cast< unsigned char >( buffer[ inBuf ] );
                                         }
                                         while ( ( ( c & 0x80 ) != 0 ) && ( ( c & 0xC0 ) != 0xC0 )
-                                                        && ( bytesInLetter < 4 ) && ( inBuf < length ) ) ;
+                                                        && ( byteInLetter < 4 ) && ( inBuf < length ) ) ;
 
-                                        letter[ bytesInLetter ] = 0 ; // end of string
+                                        letter[ byteInLetter ] = 0 ; // end of string
 
                                         listOfLetters[ inTable ] = std::string( letter );
                                         inTable++ ;
