@@ -453,7 +453,7 @@
         <item x="0" y="9" z="1">
             <kind>quick-steps</kind>
             <orientation>west</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="10" y="0" z="-1">

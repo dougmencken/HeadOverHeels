@@ -9,17 +9,17 @@ InputManager* InputManager::instance = nilPointer ;
 
 InputManager::InputManager( )
 {
-        userKeys.push_back( std::pair< std::string, std::string >( "movenorth", "Left" ) );   // tecla para mover el jugador al norte, izquierda
-        userKeys.push_back( std::pair< std::string, std::string >( "movesouth", "Right" ) );  // tecla para mover el jugador al sur, derecha
-        userKeys.push_back( std::pair< std::string, std::string >( "moveeast", "Up" ) );      // tecla para mover el jugador al este, arriba
-        userKeys.push_back( std::pair< std::string, std::string >( "movewest", "Down" ) );    // tecla para mover el jugador al oeste, abajo
-        userKeys.push_back( std::pair< std::string, std::string >( "jump", "Space" ) );       // tecla para saltar
-        userKeys.push_back( std::pair< std::string, std::string >( "take", "c" ) );           // tecla para coger y dejar objetos
-        userKeys.push_back( std::pair< std::string, std::string >( "take&jump", "b" ) );      // tecla para coger/dejar un objeto y saltar
-        userKeys.push_back( std::pair< std::string, std::string >( "doughnut", "n" ) );       // tecla para disparar
-        userKeys.push_back( std::pair< std::string, std::string >( "swap", "x" ) );           // tecla para cambiar de jugador
-        userKeys.push_back( std::pair< std::string, std::string >( "pause", "m" ) );          // tecla para detener el juego
-        userKeys.push_back( std::pair< std::string, std::string >( "automap", "Tab" ) );      // tecla para show~hide automap
+        userKeys[ " 1 movenorth" ] = "Left" ;   // move left, izquierda, or isometric north, norte isométrico
+        userKeys[ " 2 movesouth" ] = "Right" ;  // move right, derecha, or isometric south, sur isométrico
+        userKeys[  " 3 moveeast" ] = "Up" ;     // move up, arriba, or isometric east, este isométrico
+        userKeys[  " 4 movewest" ] = "Down" ;   // move down, abajo, or isometric west, oeste isométrico
+        userKeys[      " 5 jump" ] = "Space" ;  // saltar
+        userKeys[      " 6 take" ] = "c" ;      // coger y dejar objetos
+        userKeys[ " 7 take&jump" ] = "b" ;      // coger/dejar un objeto y saltar
+        userKeys[  " 8 doughnut" ] = "n" ;      // release a doughnut
+        userKeys[      " 9 swap" ] = "x" ;      // to the next character
+        userKeys[     "10 pause" ] = "m" ;      // detener el juego
+        userKeys[   "11 automap" ] = "Tab" ;    // show~hide automap
 }
 
 InputManager& InputManager::getInstance()
@@ -30,75 +30,70 @@ InputManager& InputManager::getInstance()
         return *instance;
 }
 
-std::string InputManager::getUserKeyFor( const std::string& action ) const
+void InputManager::getAllActions( std::vector< std::string > & listOfActions ) const
 {
-        for ( std::vector< std::pair< std::string, std::string > >::const_iterator cit = userKeys.begin () ; cit != userKeys.end () ; ++ cit )
-        {
-                if ( cit->first == action )
-                        return cit->second ;
-        }
-
-        return "unknown" ;
+        for ( std::map< std::string, std::string >::const_iterator cit = userKeys.begin () ; cit != userKeys.end () ; ++ cit )
+                listOfActions.push_back( cit->first.substr( 3 ) );
 }
 
-std::string InputManager::getActionOfKeyByName( const std::string& keyName ) const
+std::string InputManager::getUserKeyFor( const std::string & action ) const
 {
-        for ( std::vector< std::pair< std::string, std::string > >::const_iterator cit = userKeys.begin () ; cit != userKeys.end () ; ++ cit )
+        for ( std::map< std::string, std::string >::const_iterator cit = userKeys.begin () ; cit != userKeys.end () ; ++ cit )
         {
-                if ( cit->second == keyName )
-                        return cit->first ;
+                if ( cit->first.substr( 3 ) == action )
+                        return cit->second ;
         }
 
         return "none" ;
 }
 
-void InputManager::changeUserKey( const std::string& action, const std::string& name )
+void InputManager::changeUserKey( const std::string & action, const std::string & key )
 {
-        for ( std::vector< std::pair< std::string, std::string > >::iterator it = userKeys.begin () ; it != userKeys.end () ; ++ it )
-        {
-                if ( it->first == action )
-                        it->second = name ;
-        }
+        for ( std::map< std::string, std::string >::const_iterator cit = userKeys.begin () ; cit != userKeys.end () ; ++ cit )
+                if ( cit->first.substr( 3 ) == action ) {
+                        userKeys[ cit->first ] = key ;
+                        break ;
+                }
 }
 
 bool InputManager::movenorthTyped() const
 {
         return allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "moveeast" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "moveeast" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
 }
 
 bool InputManager::movesouthTyped() const
 {
         return allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "moveeast" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "moveeast" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
 }
 
 bool InputManager::moveeastTyped() const
 {
         return allegro::isKeyPushed( getUserKeyFor( "moveeast" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
 }
 
 bool InputManager::movewestTyped() const
 {
         return allegro::isKeyPushed( getUserKeyFor( "movewest" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
-                && ! allegro::isKeyPushed( getUserKeyFor( "moveeast" ) ) ;
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
+                        && ! allegro::isKeyPushed( getUserKeyFor( "moveeast" ) ) ;
 }
 
 bool InputManager::anyMoveTyped() const
 {
-        return allegro::isKeyPushed( getUserKeyFor( "movenorth" ) ) ||
-                allegro::isKeyPushed( getUserKeyFor( "movesouth" ) ) ||
-                allegro::isKeyPushed( getUserKeyFor( "moveeast" ) ) ||
-                allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
+        return allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
+                        || allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
+                                || allegro::isKeyPushed( getUserKeyFor( "moveeast" ) )
+                                        || allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
 }
 
 bool InputManager::jumpTyped() const
@@ -136,9 +131,9 @@ bool InputManager::automapTyped() const
         return allegro::isKeyPushed( getUserKeyFor( "automap" ) );
 }
 
-void InputManager::releaseKeyFor( const std::string& keyAction ) const
+void InputManager::releaseKeyFor( const std::string & keyAction ) const
 {
-        const std::string& key = getUserKeyFor( keyAction ) ;
-        if ( key != "unknown" )
+        const std::string & key = getUserKeyFor( keyAction ) ;
+        if ( key != "none" )
                 allegro::releaseKey( key ) ;
 }

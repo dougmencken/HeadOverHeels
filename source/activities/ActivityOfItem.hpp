@@ -32,68 +32,67 @@ class Activity /* only constants here */
 {
 
 public:
+
         static const unsigned int Wait = 0 ;
-        static const unsigned int Push = 1 ;
-        static const unsigned int Move = 2 ;
-        static const unsigned int MoveNorth = 64 ;
-        static const unsigned int MoveSouth = 65 ;
-        static const unsigned int MoveEast = 66 ;
-        static const unsigned int MoveWest = 67 ;
-        static const unsigned int MoveNortheast = 68 ;
-        static const unsigned int MoveSoutheast = 69 ;
-        static const unsigned int MoveSouthwest = 70 ;
-        static const unsigned int MoveNorthwest = 71 ;
-        static const unsigned int MoveUp = 72 ;
-        static const unsigned int MoveDown = 73 ;
-        static const unsigned int Blink = 88 ;
+        static const unsigned int Blink = 8 ;
+
+        static const unsigned int MoveNorth = 24 ;
+        static const unsigned int MoveSouth = 25 ;
+        static const unsigned int MoveEast = 26 ;
+        static const unsigned int MoveWest = 27 ;
+        static const unsigned int MoveNortheast = 32 ;
+        static const unsigned int MoveSoutheast = 33 ;
+        static const unsigned int MoveSouthwest = 34 ;
+        static const unsigned int MoveNorthwest = 35 ;
+        static const unsigned int MoveDown = 60 ;
+        static const unsigned int MoveUp = 70 ;
+        static const unsigned int AutoMoveNorth = 81 ;
+        static const unsigned int AutoMoveSouth = 82 ;
+        static const unsigned int AutoMoveEast = 83 ;
+        static const unsigned int AutoMoveWest = 84 ;
+
         static const unsigned int Jump = 90 ;
-        static const unsigned int RegularJump = 91 ;
-        static const unsigned int HighJump = 92 ;
         static const unsigned int Fall = 95 ;
         static const unsigned int Glide = 98 ;
         static const unsigned int TakeItem = 100 ;
         static const unsigned int ItemTaken = 101 ;
         static const unsigned int DropItem = 102 ;
-        static const unsigned int TakeAndJump = 105 ;
-        static const unsigned int DropAndJump = 106 ;
-        static const unsigned int DisplaceNorth = 120 ;
-        static const unsigned int DisplaceSouth = 121 ;
-        static const unsigned int DisplaceEast = 122 ;
-        static const unsigned int DisplaceWest = 123 ;
-        static const unsigned int DisplaceNortheast = 124 ;
-        static const unsigned int DisplaceSoutheast = 125 ;
-        static const unsigned int DisplaceSouthwest = 126 ;
-        static const unsigned int DisplaceNorthwest = 127 ;
-        static const unsigned int DisplaceUp = 128 ;
-        static const unsigned int DisplaceDown = 129 ;
-        static const unsigned int BeginTeletransportation = 133 ;
-        static const unsigned int EndTeletransportation = 144 ;
-        static const unsigned int AutoMove = 150 ;
-        static const unsigned int AutoMoveNorth = 151 ;
-        static const unsigned int AutoMoveSouth = 152 ;
-        static const unsigned int AutoMoveEast = 153 ;
-        static const unsigned int AutoMoveWest = 154 ;
-        static const unsigned int ForceDisplace = 160 ;
-        static const unsigned int ForceDisplaceNorth = 161 ;
-        static const unsigned int ForceDisplaceSouth = 162 ;
-        static const unsigned int ForceDisplaceEast = 163 ;
-        static const unsigned int ForceDisplaceWest = 164 ;
-        static const unsigned int CancelDisplaceNorth = 171 ;
-        static const unsigned int CancelDisplaceSouth = 172 ;
-        static const unsigned int CancelDisplaceEast = 173 ;
-        static const unsigned int CancelDisplaceWest = 174 ;
-        static const unsigned int Freeze = 180 ;
-        static const unsigned int WakeUp = 181 ;
-        static const unsigned int StopAtTop = 182 ;
-        static const unsigned int StopAtBottom = 183 ;
-        static const unsigned int MeetMortalItem = 190 ;
-        static const unsigned int Vanish = 191 ;
-        static const unsigned int FireDoughnut = 192 ;
-        static const unsigned int Rebound = 200 ;
-        static const unsigned int SwitchIt = 210 ;
-        static const unsigned int Collision = 220 ;
-        static const unsigned int IsActive = 230 ;
-        static const unsigned int Mistake = 399 ;
+        static const unsigned int TakeAndJump = 115 ;
+        static const unsigned int DropAndJump = 116 ;
+
+        static const unsigned int DisplaceNorth = 124 ;
+        static const unsigned int DisplaceSouth = 125 ;
+        static const unsigned int DisplaceEast = 126 ;
+        static const unsigned int DisplaceWest = 127 ;
+        static const unsigned int DisplaceNortheast = 132 ;
+        static const unsigned int DisplaceSoutheast = 133 ;
+        static const unsigned int DisplaceSouthwest = 134 ;
+        static const unsigned int DisplaceNorthwest = 135 ;
+        static const unsigned int DisplaceUp = 160 ;
+        static const unsigned int DisplaceDown = 170 ;
+
+        static const unsigned int ForcePushNorth = 181 ;
+        static const unsigned int ForcePushSouth = 182 ;
+        static const unsigned int ForcePushEast = 183 ;
+        static const unsigned int ForcePushWest = 184 ;
+        static const unsigned int CancelPushingNorth = 191 ;
+        static const unsigned int CancelPushingSouth = 192 ;
+        static const unsigned int CancelPushingEast = 193 ;
+        static const unsigned int CancelPushingWest = 194 ;
+
+        static const unsigned int BeginTeletransportation = 222 ;
+        static const unsigned int EndTeletransportation = 223 ;
+
+        static const unsigned int Freeze = 281 ;
+        static const unsigned int WakeUp = 282 ;
+        static const unsigned int StopAtTop = 287 ;
+        static const unsigned int StopAtBottom = 288 ;
+        static const unsigned int MeetMortalItem = 290 ;
+        static const unsigned int Vanish = 299 ;
+        static const unsigned int Collision = 330 ;
+        static const unsigned int Function = 360 ;
+
+        static const unsigned int Mistake = 599 ;
 
 } ;
 

@@ -52,8 +52,8 @@ bool ThereAndBack::update ()
                                         {
                                                 turnRound();
 
-                                                // play the sound of colliding
-                                                SoundManager::getInstance().play( freeItem.getKind (), activities::Activity::Collision );
+                                                // play the sound of collision
+                                                SoundManager::getInstance().play( freeItem.getKind (), "collision" );
                                         }
 
                                         speedTimer->reset();
@@ -74,7 +74,7 @@ bool ThereAndBack::update ()
                         if ( ! this->isFlying )
                         {
                                 // emit the sound of displacing
-                                SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                SoundManager::getInstance().play( freeItem.getKind (), "push" );
 
                                 // displace this item by other one
                                 activities::Displacing::getInstance().displace( this, &activity, true );
@@ -106,7 +106,7 @@ bool ThereAndBack::update ()
                                         if ( ! activities::Falling::getInstance().fall( this ) )
                                         {
                                                 // emit the sound of falling
-                                                SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                                SoundManager::getInstance().play( freeItem.getKind (), "fall" );
                                                 activity = activities::Activity::Wait;
                                         }
 

@@ -53,10 +53,10 @@ bool Mobile::update ()
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                // emit sound of displacement if item is pushed but not displaced by item below it
+                                // emit the sound of displacing if item is pushed but not displaced by an item below it
                                 if ( this->sender == nilPointer || this->sender != this->item )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), "push" );
                                 }
 
                                 this->changeActivityOfItem( activity );
@@ -70,10 +70,10 @@ bool Mobile::update ()
                         freeItem.animate();
                         break;
 
-                case activities::Activity::ForceDisplaceNorth:
-                case activities::Activity::ForceDisplaceSouth:
-                case activities::Activity::ForceDisplaceEast:
-                case activities::Activity::ForceDisplaceWest:
+                case activities::Activity::ForcePushNorth:
+                case activities::Activity::ForcePushSouth:
+                case activities::Activity::ForcePushEast:
+                case activities::Activity::ForcePushWest:
                         // item is on conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
@@ -98,7 +98,7 @@ bool Mobile::update ()
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play the sound of falling
-                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), "fall" );
                                         activity = activities::Activity::Wait;
                                 }
 

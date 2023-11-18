@@ -61,23 +61,22 @@ bool Conveyor::update ()
                                                                 if ( ! itemAbove.getAnchor().empty() || this->item->getUniqueName() == itemAbove.getAnchor() )
                                                                 {
                                                                         ActivityOfItem activityOfItemAbove = itemAbove.getBehavior()->getActivityOfItem() ;
-                                                                        bool outOfGravity = ( activityOfItemAbove == activities::Activity::RegularJump
-                                                                                               || activityOfItemAbove == activities::Activity::HighJump
+                                                                        bool outOfGravity = ( activityOfItemAbove == activities::Activity::Jump
                                                                                                   || activityOfItemAbove == activities::Activity::Vanish ) ;
 
                                                                         if ( ! outOfGravity ) {
                                                                                 if ( item->getOrientation() == "south" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceSouth );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForcePushSouth );
                                                                                 else if ( item->getOrientation() == "west" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceWest );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForcePushWest );
                                                                                 else if ( item->getOrientation() == "north" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceNorth );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForcePushNorth );
                                                                                 else if ( item->getOrientation() == "east" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceEast );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForcePushEast );
                                                                         }
 
                                                                         // play the sound of conveyor
-                                                                        SoundManager::getInstance().play( item->getKind (), activities::Activity::IsActive );
+                                                                        SoundManager::getInstance().play( item->getKind (), "function" );
                                                                 }
                                                         }
                                                 }

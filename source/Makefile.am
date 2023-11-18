@@ -134,6 +134,8 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/Behavior.hpp \
 			behaviors/CreatorOfBehaviors.cpp \
 			behaviors/CreatorOfBehaviors.hpp \
+			behaviors/Bonus.cpp \
+			behaviors/Bonus.hpp \
 			behaviors/Conveyor.cpp \
 			behaviors/Conveyor.hpp \
 			behaviors/Detector.cpp \
@@ -166,8 +168,6 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/RemoteControl.hpp \
 			behaviors/Sink.cpp \
 			behaviors/Sink.hpp \
-			behaviors/Special.cpp \
-			behaviors/Special.hpp \
 			behaviors/Switch.cpp \
 			behaviors/Switch.hpp \
 			behaviors/Teleport.cpp \

@@ -1,5 +1,5 @@
 
-#include "Special.hpp"
+#include "Bonus.hpp"
 
 #include "FreeItem.hpp"
 #include "Displacing.hpp"
@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-Special::Special( const ItemPtr & item, const std::string & behavior )
+Bonus::Bonus( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
         , disappearanceTimer( new Timer() )
         , speedTimer( new Timer() )
@@ -24,7 +24,7 @@ Special::Special( const ItemPtr & item, const std::string & behavior )
         fallTimer->go();
 }
 
-bool Special::update ()
+bool Bonus::update ()
 {
         bool isGone = false ;
 
@@ -85,10 +85,10 @@ bool Special::update ()
                         }
                         break;
 
-                case activities::Activity::ForceDisplaceNorth:
-                case activities::Activity::ForceDisplaceSouth:
-                case activities::Activity::ForceDisplaceEast:
-                case activities::Activity::ForceDisplaceWest:
+                case activities::Activity::ForcePushNorth:
+                case activities::Activity::ForcePushSouth:
+                case activities::Activity::ForcePushEast:
+                case activities::Activity::ForcePushWest:
                         // the bonus item is on a conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
@@ -149,8 +149,8 @@ bool Special::update ()
                         {
                                 isGone = true ;
 
-                                // play sound of taking
-                                SoundManager::getInstance().play( item->getKind (), activity );
+                                // play the sound of taking
+                                SoundManager::getInstance().play( item->getKind (), "vanish" );
 
                                 // a bonus item disappears from room once it's taken
                                 BonusManager::getInstance().markAsAbsent(
@@ -181,7 +181,7 @@ bool Special::update ()
         return isGone;
 }
 
-bool Special::mayTake( const std::string& character )
+bool Bonus::mayTake( const std::string & character )
 {
         std::string magicItem = this->item->getOriginalKind();
 
@@ -205,7 +205,7 @@ bool Special::mayTake( const std::string& character )
                                                 magicItem == "donuts" ) ) ;
 }
 
-void Special::takeMagicItem( AvatarItem & whoTakes )
+void Bonus::takeMagicItem( AvatarItem & whoTakes )
 {
         std::string magicItem = this->item->getOriginalKind () ;
 

@@ -97,7 +97,7 @@
         <item x="5" y="1" z="5">
             <kind>reincarnation-fish</kind>
             <orientation>none</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="0" y="4" z="0">

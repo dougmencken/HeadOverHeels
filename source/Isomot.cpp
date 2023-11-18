@@ -507,7 +507,7 @@ void Isomot::handleMagicKeys ()
                                 int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauDescription->getWidthY() ) >> 1 ;
 
                                 FreeItemPtr chapeau( new FreeItem( chapeauDescription, x, y, 250, "none" ) );
-                                chapeau->setBehaviorOf( "behavior of something special" );
+                                chapeau->setBehaviorOf( "behavior of bonus" );
                                 activeRoom->addFreeItem( chapeau );
                         }
                 }

@@ -56,7 +56,7 @@ private:
 
         RoomBuilder( ) { }
 
-        static Wall * buildWall ( tinyxml2::XMLElement * wall, const std::string& gfxPrefix ) ;
+        static Wall * buildWall ( tinyxml2::XMLElement * wall ) ;
 
         static GridItemPtr buildGridItem ( tinyxml2::XMLElement * item, Room* room ) ;
 

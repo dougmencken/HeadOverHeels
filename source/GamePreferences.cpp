@@ -64,14 +64,16 @@ bool GamePreferences::readPreferences( const std::string & fileName )
         tinyxml2::XMLElement* keys = root->FirstChildElement( "keys" ) ;
         if ( keys != nilPointer )
         {
-                const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & chosenKeys = InputManager::getInstance().getUserKeys ();
-                for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = chosenKeys.begin () ; it != chosenKeys.end () ; ++ it )
+                std::vector< std::string > userActions ;
+                InputManager::getInstance().getAllActions( userActions );
+                for ( unsigned int i = 0 ; i < userActions.size () ; ++ i )
                 {
-                        std::string xmlAction = ( it->first == "take&jump" ) ? "takeandjump" : it->first ;
+                        const std::string & action = userActions[ i ];
+                        std::string xmlAction = ( action == "take&jump" ) ? "takeandjump" : action ;
                         tinyxml2::XMLElement* elementForKey = keys->FirstChildElement( xmlAction.c_str () ) ;
 
                         if ( elementForKey != nilPointer && elementForKey->FirstChild() != nilPointer )
-                                InputManager::getInstance().changeUserKey( it->first, elementForKey->FirstChild()->ToText()->Value() );
+                                InputManager::getInstance().changeUserKey( action, elementForKey->FirstChild()->ToText()->Value() );
                 }
         }
 
@@ -205,12 +207,14 @@ bool GamePreferences::writePreferences( const std::string & fileName )
         {
                 tinyxml2::XMLNode * keys = preferences.NewElement( "keys" );
 
-                const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & chosenKeys = InputManager::getInstance().getUserKeys ();
-                for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = chosenKeys.begin () ; it != chosenKeys.end () ; ++ it )
+                std::vector< std::string > userActions ;
+                InputManager::getInstance().getAllActions( userActions );
+                for ( unsigned int i = 0 ; i < userActions.size () ; ++ i )
                 {
-                        std::string xmlAction = ( it->first == "take&jump" ) ? "takeandjump" : it->first ;
+                        const std::string & action = userActions[ i ];
+                        std::string xmlAction = ( action == "take&jump" ) ? "takeandjump" : action ;
                         tinyxml2::XMLElement* elementForKey = preferences.NewElement( xmlAction.c_str () ) ;
-                        elementForKey->SetText( InputManager::getInstance().getUserKeyFor( it->first ).c_str () );
+                        elementForKey->SetText( InputManager::getInstance().getUserKeyFor( action ).c_str () );
                         keys->InsertEndChild( elementForKey );
                 }
 

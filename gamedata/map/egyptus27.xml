@@ -173,7 +173,7 @@
         <item x="6" y="6" z="0">
             <kind>shield</kind>
             <orientation>none</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="4" y="0" z="-1">

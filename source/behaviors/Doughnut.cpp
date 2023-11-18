@@ -97,7 +97,7 @@ bool Doughnut::update ()
                                         }
 
                                         // a doughnut disappears after a collison
-                                        dynamic_cast< PlayerControlled * >( this->character->getBehavior().get () )->setFireFromHooter( false );
+                                        dynamic_cast< PlayerControlled * >( this->character->getBehavior().get () )->resetDoughnutInRoom() ;
                                         vanish = true;
                                 }
 

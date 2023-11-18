@@ -28,7 +28,7 @@ bool Sink::update ()
         switch ( activity )
         {
                 case activities::Activity::Wait:
-                        // begin to fall when there’s an item on top
+                        // begin to fall when there’s an item above
                         if ( ! gridItem.canAdvanceTo( 0, 0, 1 ) )
                         {
                                 this->changeActivityOfItem( activities::Activity::Fall );
@@ -39,11 +39,10 @@ bool Sink::update ()
                         // is it time to lower one unit yet
                         if ( fallTimer->getValue() > gridItem.getWeight() )
                         {
-                                // when can’t fall any more or when there’s no item on top any longer
-                                if ( ! activities::Falling::getInstance().fall( this )
-                                        || gridItem.canAdvanceTo( 0, 0, 1 ) )
+                                // when can’t fall any more or when there’s no item above it
+                                if ( ! activities::Falling::getInstance().fall( this ) || gridItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Wait ;
                                 }
 
                                 fallTimer->reset();
@@ -54,7 +53,7 @@ bool Sink::update ()
                         activity = activities::Activity::Wait;
         }
 
-        SoundManager::getInstance().play( gridItem.getKind (), activity );
+        SoundManager::getInstance().play( gridItem.getKind (), SoundManager::activityToString( activity ) );
 
         return false;
 }

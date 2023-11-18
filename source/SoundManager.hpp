@@ -20,8 +20,6 @@
 
 #include "ActivityOfItem.hpp"
 
-using activities::ActivityOfItem ;
-
 
 class SoundManager
 {
@@ -39,11 +37,11 @@ public:
         static SoundManager & getInstance () ;
 
         /**
-         * @param xmlFile the name of XML file with the info about the game’s sounds
+         * @param xmlFile the name of XML file with the info about sounds
          */
         void readSounds ( const std::string & xmlFile ) ;
 
-        void addSound ( const std::string & item, const std::string & activity, const std::string & sampleFile ) ;
+        void addSound ( const std::string & item, const std::string & event, const std::string & sampleFile ) ;
 
         bool isAudioInitialized () const {  return audioInitialized ;  }
 
@@ -53,12 +51,12 @@ public:
          * @param activity The current activity of item
          * @param loop If true, the playing is repeated
          */
-        void play ( const std::string & item, const activities::ActivityOfItem & activity, bool loop = false ) ;
+        void play ( const std::string & item, const std::string & event, bool loop = false ) ;
 
         /**
          * Stops playing a sound
          */
-        void stop ( const std::string & item, const activities::ActivityOfItem & activity ) ;
+        void stop ( const std::string & item, const std::string & event ) ;
 
         /**
          * Stops playing of all sounds
@@ -71,10 +69,7 @@ public:
 
         allegro::Sample * getSampleFor ( const std::string & item, const std::string & event ) ;
 
-        allegro::Sample * getSampleFor ( const std::string & item, const ActivityOfItem & activity )
-        {
-                return getSampleFor( item, activityToString( activity ) ) ;
-        }
+        static std::string activityToString ( const activities::ActivityOfItem & activity ) ;
 
         void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = ( volume <= 99 ) ? volume : 99 ;  }
 
@@ -83,10 +78,6 @@ public:
         void setVolumeOfMusic ( unsigned int volume ) ;
 
         unsigned int getVolumeOfMusic () const {  return this->musicVolume ;  }
-
-protected:
-
-        std::string activityToString ( const ActivityOfItem& activity ) ;
 
 private:
 
@@ -117,8 +108,6 @@ private:
          * Maps the name of file to the audio sample
          */
         std::map < std::string /* file */, allegro::Sample * > samples ;
-
-        std::map < ActivityOfItem, std::string > activityStrings ;
 
 } ;
 

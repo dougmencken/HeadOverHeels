@@ -33,7 +33,7 @@ Hunter::~Hunter()
 bool Hunter::update ()
 {
         Mediator* mediator = this->item->getMediator();
-        AvatarItemPtr characterToHunt = mediator->getActiveCharacter();
+        AvatarItemPtr whoToHunt = mediator->getActiveCharacter();
 
         bool alive = true;
 
@@ -44,7 +44,7 @@ bool Hunter::update ()
                         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                                         getNameOfBehavior() == "behavior of hunter in eight directions" )
                         {
-                                SoundManager::getInstance().play( this->item->getKind (), activity );
+                                SoundManager::getInstance().play( this->item->getKind (), "wait" );
                                 activity = updateDirection( activity );
                         }
                         // otherwise check if the character is within the defined rectangle near the hunter
@@ -53,23 +53,23 @@ bool Hunter::update ()
                                 const unsigned int sizeOfRectangleInTiles = 3 ;
                                 const int coverage = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles ;
 
-                                if ( characterToHunt != nilPointer  &&
-                                        characterToHunt->getX() > this->item->getX() - coverage  &&
-                                        characterToHunt->getX() < this->item->getX() + static_cast< int >( this->item->getWidthX() ) + coverage  &&
-                                        characterToHunt->getY() > this->item->getY() - coverage  &&
-                                        characterToHunt->getY() < this->item->getY() + static_cast< int >( this->item->getWidthY() ) + coverage )
+                                if ( whoToHunt != nilPointer  &&
+                                        whoToHunt->getX() > this->item->getX() - coverage  &&
+                                        whoToHunt->getX() < this->item->getX() + static_cast< int >( this->item->getWidthX() ) + coverage  &&
+                                        whoToHunt->getY() > this->item->getY() - coverage  &&
+                                        whoToHunt->getY() < this->item->getY() + static_cast< int >( this->item->getWidthY() ) + coverage )
                                 {
                                         activity = updateDirection( activity );
                                 }
 
-                                // eight-directional waiting hunter emits sound when it waits
+                                // an eight-directional waiting hunter emits the sound when it waits
                                 if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
                                 {
-                                        SoundManager::getInstance().play( this->item->getKind (), activity );
+                                        SoundManager::getInstance().play( this->item->getKind (), "wait" );
                                 }
 
-                                // animate item, and when it waits too
-                                this->item->animate();
+                                // animate item while it waits
+                                this->item->animate ();
                         }
                 break;
 
@@ -104,8 +104,7 @@ bool Hunter::update ()
 
                                 this->item->animate();
 
-                                // play sound of movement
-                                SoundManager::getInstance().play( this->item->getKind (), activity );
+                                SoundManager::getInstance().play( this->item->getKind (), "move" );
                         }
                         break;
 
@@ -157,8 +156,7 @@ bool Hunter::update ()
 
                                 this->item->animate();
 
-                                // play sound of movement
-                                SoundManager::getInstance().play( this->item->getKind (), activity );
+                                SoundManager::getInstance().play( this->item->getKind (), "move" );
                         }
                         break;
 
@@ -219,12 +217,12 @@ ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
 
 ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
 {
-        AvatarItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
+        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter();
 
-        if ( characterToHunt != nilPointer ) // if there’s the active character in the room
+        if ( whoToHunt != nilPointer ) // if there’s the active character in the room
         {
-                int dx = this->item->getX() - characterToHunt->getX();
-                int dy = this->item->getY() - characterToHunt->getY();
+                int dx = this->item->getX() - whoToHunt->getX();
+                int dy = this->item->getY() - whoToHunt->getY();
 
                 if ( abs( dy ) > abs( dx ) )
                 {
@@ -269,12 +267,12 @@ ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
 
 ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
 {
-        AvatarItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
+        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter();
 
-        if ( characterToHunt != nilPointer ) // if there’s the active character in the room
+        if ( whoToHunt != nilPointer ) // if there’s the active character in the room
         {
-                int dx = this->item->getX() - characterToHunt->getX();
-                int dy = this->item->getY() - characterToHunt->getY();
+                int dx = this->item->getX() - whoToHunt->getX();
+                int dy = this->item->getY() - whoToHunt->getY();
 
                 // change the direction to reach the character as quick as possible
                 // look for the distances on X and Y between the hunter and the character

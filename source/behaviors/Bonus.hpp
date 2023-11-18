@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Special_hpp_
-#define Special_hpp_
+#ifndef Bonus_hpp_
+#define Bonus_hpp_
 
 #include "Behavior.hpp"
 #include "AvatarItem.hpp"
@@ -20,17 +20,17 @@ namespace behaviors
 {
 
 /**
- * Behavior of magic bonus item
+ * The behavior of a bonus bunny or crown
  */
 
-class Special : public Behavior
+class Bonus : public Behavior
 {
 
 public:
 
-        Special( const ItemPtr & item, const std::string& behavior ) ;
+        Bonus( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~Special () { }
+        virtual ~Bonus () { }
 
         virtual bool update () ;
 

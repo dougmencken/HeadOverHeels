@@ -64,11 +64,11 @@ bool Patrol::update ()
                                         {
                                                 changeOrientation();
 
-                                                SoundManager::getInstance().play( freeItem.getKind (), activities::Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getKind (), "collision" );
                                         }
 
                                         // play the sound of moving
-                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), "move" );
 
                                         speedTimer->reset();
                                 }
@@ -85,8 +85,7 @@ bool Patrol::update ()
                 case activities::Activity::DisplaceSoutheast:
                 case activities::Activity::DisplaceSouthwest:
                 case activities::Activity::DisplaceNorthwest:
-                        // play the sound of displacing
-                        SoundManager::getInstance().play( freeItem.getKind (), activity );
+                        SoundManager::getInstance().play( freeItem.getKind (), "push" );
 
                         // displace this item by some other one
                         activities::Displacing::getInstance().displace( this, &activity, true );
@@ -111,7 +110,7 @@ bool Patrol::update ()
                         {
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), "fall" );
                                         activity = activities::Activity::Wait;
                                 }
 

@@ -241,7 +241,7 @@ void GuiManager::toggleFullScreenVideo ()
         else
         {
                 SoundManager::getInstance().stopEverySound ();
-                SoundManager::getInstance().play( "gui", activities::Activity::Mistake, /* loop */ false );
+                SoundManager::getInstance().play( "menus", "mistake", /* loop */ false );
 
                 if ( this->atFullScreen )
                         allegro::switchToFullscreenVideo();

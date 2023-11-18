@@ -78,11 +78,10 @@ bool Teleport::update ()
                                 activated = false;
                         }
 
-                        // animate activated teleport
-                        if ( activated )
+                        if ( activated ) // animate activated teleport
                         {
                                 item->animate ();
-                                SoundManager::getInstance().play( item->getKind (), activities::Activity::IsActive );
+                                SoundManager::getInstance().play( item->getKind (), "function" );
                         }
                         break;
 

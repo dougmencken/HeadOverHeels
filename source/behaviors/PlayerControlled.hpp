@@ -128,17 +128,12 @@ protected:
 
         bool isLosingLife ;
 
-        unsigned int jumpPhase ;
+        int jumpPhase ;
 
-       /**
-        * Number of phases for normal jump
-        */
-        unsigned int jumpPhases ;
-
-       /**
-        * Number of phases for long jump
-        */
-        unsigned int highJumpPhases ;
+        /**
+         * true when on a trampoline or has a bonus high jump
+         */
+        bool highJump ;
 
        /**
         * Number of steps to take when character moves automatically
@@ -165,38 +160,38 @@ protected:
         */
         std::map < std::string, unsigned int > fallFrames ;
 
-       /**
-        * Is there a fire from hooter in room
-        */
-        bool donutFromHooterIsHere ;
+        /**
+         * is there a doughnut from the hooter in the room?
+         */
+        bool donutFromHooterInRoom ;
 
         std::string kindOfBubbles ;
 
         std::string kindOfFiredDoughnut ;
 
-       /**
-        * Timer for speed of movement
-        */
+        /**
+         * Timer for the speed of movement
+         */
         autouniqueptr < Timer > speedTimer ;
 
-       /**
-        * Timer for speed of falling
-        */
+        /**
+         * Timer for the speed of falling
+         */
         autouniqueptr < Timer > fallTimer ;
 
-       /**
-        * Timer for speed of gliding
-        */
+        /**
+         * Timer for the speed of gliding
+         */
         autouniqueptr < Timer > glideTimer ;
 
-       /**
-        * Timer for blinking
-        */
+        /**
+         * Timer for blinking
+         */
         autouniqueptr < Timer > timerForBlinking ;
 
 public:
 
-        void setFireFromHooter ( bool isHere ) {  this->donutFromHooterIsHere = isHere ;  }
+        void resetDoughnutInRoom () {  this->donutFromHooterInRoom = false ;  }
 
 } ;
 

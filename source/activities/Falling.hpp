@@ -37,7 +37,7 @@ public:
         virtual ~Falling( ) {}
 
        /**
-        * @return true if item may fall or false when there’s collision
+        * @return true if the item may fall or false when there’s a collision
         */
         virtual bool fall ( behaviors::Behavior * behavior ) ;
 

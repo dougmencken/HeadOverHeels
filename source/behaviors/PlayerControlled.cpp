@@ -21,14 +21,13 @@ using behaviors::PlayerControlled ;
 PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
         , isLosingLife( false )
-        , jumpPhase( 0 )
-        , jumpPhases( 0 )
-        , highJumpPhases( 0 )
+        , jumpPhase( -1 )
+        , highJump( false )
         , automaticSteps( 16 /* pasos automáticos */ )
         , automaticStepsThruDoor( automaticSteps )
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
-        , donutFromHooterIsHere( false )
+        , donutFromHooterInRoom( false )
         , kindOfBubbles( "bubbles" )
         , kindOfFiredDoughnut( "bubbles" )
         , speedTimer( new Timer () )
@@ -126,8 +125,8 @@ void PlayerControlled::autoMove( ::AvatarItem & character )
         }
 
         if ( activity == activities::Activity::Wait )
-        {       // stop playing the sound of auto-moving
-                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::AutoMove );
+        {       // stop playing the sound of moving
+                SoundManager::getInstance().stop( character.getOriginalKind(), "move" );
         }
 }
 
@@ -176,7 +175,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
                 }
                 else if ( activity != activities::Activity::MeetMortalItem || character.hasShield() )
                 {
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Wait ;
                 }
 
                 fallTimer->reset();
@@ -184,68 +183,56 @@ void PlayerControlled::fall( ::AvatarItem & character )
 
         if ( activity != activities::Activity::Fall )
         {
-                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Fall );
+                SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
         }
 }
 
 void PlayerControlled::jump( ::AvatarItem & character )
 {
-        switch ( activity )
+        if ( activity == activities::Activity::Jump )
         {
-                case activities::Activity::Jump:
+                if ( jumpPhase < 0 )
                 {
+                        this->highJump = false ;
+
                         // look for an item below
                         character.canAdvanceTo( 0, 0, -1 );
 
                         bool onASpringStool = ( character.getMediator()->collisionWithBehavingAs( "behavior of spring leap" ) != nilPointer );
-                        activity = ( onASpringStool || ( character.isHeels() && character.getHighJumps() > 0 )
-                                        ? activities::Activity::HighJump // when on a trampoline or has a bonus high jumps
-                                        : activities::Activity::RegularJump );
+                        this->highJump = onASpringStool || ( character.isHeels() && character.getHighJumps() > 0 ) ;
 
-                        if ( activity == activities::Activity::HighJump )
-                        {
+                        if ( this->highJump ) {
                                 if ( character.isHeels () )
-                                {
                                         character.decrementBonusHighJumps () ;
-                                }
-                                SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::Rebound );
-                        }
-                }
-                        break;
 
-                case activities::Activity::RegularJump:
-                case activities::Activity::HighJump:
+                                SoundManager::getInstance().play( character.getOriginalKind(), "rebound" );
+                        }
+
+                        jumpPhase = 0 ;
+                }
+
+                // is it time to jump
+                if ( speedTimer->getValue() > character.getSpeed() )
                 {
-                        // is it time to jump
-                        if ( speedTimer->getValue() > character.getSpeed() )
-                        {
-                                if ( activity == activities::Activity::RegularJump )
-                                        activities::Jumping::getInstance().jump( this, &activity, jumpPhase, jumpVector );
-                                else if ( activity == activities::Activity::HighJump )
-                                        activities::Jumping::getInstance().jump( this, &activity, jumpPhase, highJumpVector );
+                        activities::Jumping::getInstance().jump( this, &activity, jumpPhase, this->highJump ? highJumpVector : jumpVector );
 
-                                // to the next phase of jump
-                                ++ jumpPhase ;
-                                if ( activity == activities::Activity::Fall ) jumpPhase = 0;
+                        // to the next phase of jump
+                        ++ jumpPhase ;
 
-                                speedTimer->reset();
+                        if ( activity == activities::Activity::Fall ) jumpPhase = -1 ; // end of jump
 
-                                character.animate();
-                        }
+                        speedTimer->reset();
+
+                        character.animate();
                 }
-                        break;
-
-                default:
-                        ;
         }
 
-        // when jump ends, stop sound of jumping
-        if ( activity != activities::Activity::Jump && activity != activities::Activity::RegularJump && activity != activities::Activity::HighJump )
-        {
-                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Jump );
+        if ( activity != activities::Activity::Jump )
+        {       // not jumping, then stop the sound
+                SoundManager::getInstance().stop( character.getOriginalKind(), "jump" );
         }
 
-        // when character is active and is at maximum height of room it may go to room above
+        // when the active character is at the maximum height of room, it moves to the room above
         if ( character.isActiveCharacter() && character.getZ() >= Isomot::MaxLayers * Isomot::LayerHeight )
         {
                 character.setWayOfExit( "above" );
@@ -301,9 +288,8 @@ void PlayerControlled::glide( ::AvatarItem & character )
         }
 
         if ( activity != activities::Activity::Glide )
-        {
-                // not gliding yet, so stop its sound
-                SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Glide );
+        {       // not gliding yet, so stop the sound
+                SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
         }
 }
 
@@ -391,12 +377,12 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
 {
         if ( character.hasTool( "horn" ) && character.getDonuts() > 0 )
         {
-                this->donutFromHooterIsHere = true;
+                this->donutFromHooterInRoom = true ;
 
                 const DescriptionOfItem * hooterDoughnut = ItemDescriptions::descriptions().getDescriptionByKind( kindOfFiredDoughnut );
                 if ( hooterDoughnut != nilPointer )
                 {
-                        SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::FireDoughnut );
+                        SoundManager::getInstance().stop( character.getOriginalKind(), "donut" );
 
                         // create item at the same position as the character
                         int z = character.getZ() + character.getHeight() - hooterDoughnut->getHeight();
@@ -419,7 +405,7 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
 
                         character.useDoughnutHorn () ;
 
-                        SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::FireDoughnut );
+                        SoundManager::getInstance().play( character.getOriginalKind(), "donut" );
                 }
         }
 }
@@ -467,7 +453,7 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                                 takenItem->getBehavior()->changeActivityOfItem( activities::Activity::Vanish );
                                 activity = ( activity == activities::Activity::TakeAndJump ? activities::Activity::Jump : activities::Activity::ItemTaken );
 
-                                SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::TakeItem );
+                                SoundManager::getInstance().play( character.getOriginalKind(), "take" );
 
                                 std::cout << "took item \"" << takenItem->getUniqueName() << "\"" << std::endl ;
                         }
@@ -505,13 +491,13 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
                         // update activity
                         activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jump : activities::Activity::Wait );
 
-                        SoundManager::getInstance().stop( character.getOriginalKind(), activities::Activity::Fall );
-                        SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::DropItem );
+                        SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
+                        SoundManager::getInstance().play( character.getOriginalKind(), "drop" );
                 }
                 else
                 {
-                        // emit sound of o~ ou
-                        SoundManager::getInstance().play( character.getOriginalKind(), activities::Activity::Mistake );
+                        // emit the sound of o~ ou
+                        SoundManager::getInstance().play( character.getOriginalKind(), "mistake" );
                 }
         }
 

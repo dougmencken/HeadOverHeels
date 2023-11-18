@@ -302,7 +302,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
 
         if ( oldX != getX() || oldY != getY() )
         {
-                SoundManager::getInstance().play ( "door", activities::Activity::Collision, /* loop */ false );
+                SoundManager::getInstance().play ( "door", "collision", /* loop */ false );
                 return true ;
         }
 

@@ -13,7 +13,7 @@
 #include "RemoteControl.hpp"
 #include "Sink.hpp"
 #include "Doughnut.hpp"
-#include "Special.hpp"
+#include "Bonus.hpp"
 #include "Switch.hpp"
 #include "Teleport.hpp"
 #include "Trampoline.hpp"
@@ -98,9 +98,9 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( const ItemPt
         {
                 behaviorToReturn = new Doughnut( item, behavior );
         }
-        else if ( behavior == "behavior of something special" )
+        else if ( behavior == "behavior of bonus" )
         {
-                behaviorToReturn = new Special( item, behavior );
+                behaviorToReturn = new Bonus( item, behavior );
         }
         else if ( behavior == "behavior of switch" )
         {

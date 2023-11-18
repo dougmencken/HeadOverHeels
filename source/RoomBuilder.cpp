@@ -139,7 +139,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 wall != nilPointer ;
                                 wall = wall->NextSiblingElement( "wall" ) )
                 {
-                        Wall* wallSegment = buildWall( wall, GameManager::getInstance().getChosenGraphicsSet() );
+                        Wall* wallSegment = buildWall( wall );
 
                         if ( wallSegment != nilPointer )
                         {
@@ -625,7 +625,7 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
 }
 
 /* static */
-Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const std::string& gfxPrefix )
+Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall )
 {
         std::string xy;
         if ( wall->Attribute( "on" ) != nilPointer )
@@ -646,7 +646,7 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const std::string& gfx
         std::string pictureString = picture->FirstChild()->ToText()->Value();
 
         autouniqueptr< allegro::Pict > image( allegro::Pict::fromPNGFile (
-                ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, pictureString )
+                ospaths::pathToFile( ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), pictureString )
         ) );
 
         if ( image->isNotNil() )
@@ -657,7 +657,7 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const std::string& gfx
                 return new Wall( xy == "x" ? true : false, std::atoi( position->FirstChild()->ToText()->Value() ), imageOfWall );
         }
         else
-                std::cerr << "picture \"" << pictureString << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
+                std::cerr << "there’s no picture \"" << pictureString << "\"" << std::endl ;
 
         return nilPointer;
 }

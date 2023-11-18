@@ -22,7 +22,7 @@ class PlaySound : public Action
 
 public:
 
-        explicit PlaySound( const ActivityOfItem& what ) : Action( ), whichSound( what ) { }
+        explicit PlaySound( const std::string & what ) : Action( ), soundOf( what ) { }
 
         virtual ~PlaySound( ) { }
 
@@ -32,13 +32,13 @@ protected:
 
         virtual void doAction ()
         {
-                SoundManager::getInstance().stopEverySound (); //stop ( "gui", whichSound );
-                SoundManager::getInstance().play ( "gui", whichSound, /* loop */ false );
+                SoundManager::getInstance().stopEverySound (); //stop ( "menus", soundOf );
+                SoundManager::getInstance().play ( "menus", soundOf, /* loop */ false );
         }
 
 private:
 
-        ActivityOfItem whichSound ;
+        std::string soundOf ;
 
 };
 

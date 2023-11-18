@@ -130,7 +130,7 @@
         <item x="0" y="5" z="0">
             <kind>crown</kind>
             <orientation>none</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="1" y="5" z="1">

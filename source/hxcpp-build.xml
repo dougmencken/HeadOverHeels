@@ -58,6 +58,7 @@
         <file name="activities/Falling.cpp" />
         <file name="activities/Jumping.cpp" />
         <file name="activities/Moving.cpp" />
+        <file name="behaviors/Bonus.cpp" />
         <file name="behaviors/Conveyor.cpp" />
         <file name="behaviors/Detector.cpp" />
         <file name="behaviors/Doughnut.cpp" />
@@ -74,7 +75,6 @@
         <file name="behaviors/CharacterHeels.cpp" />
         <file name="behaviors/RemoteControl.cpp" />
         <file name="behaviors/Sink.cpp" />
-        <file name="behaviors/Special.cpp" />
         <file name="behaviors/Switch.cpp" />
         <file name="behaviors/Teleport.cpp" />
         <file name="behaviors/Trampoline.cpp" />

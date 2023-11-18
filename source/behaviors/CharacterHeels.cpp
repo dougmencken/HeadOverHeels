@@ -13,13 +13,11 @@
 namespace behaviors
 {
 
-CharacterHeels::CharacterHeels( const ItemPtr & item, const std::string & behavior ) :
-        PlayerControlled( item, behavior )
+CharacterHeels::CharacterHeels( const ItemPtr & item, const std::string & behavior )
+        : PlayerControlled( item, behavior )
 {
-        jumpPhases = 20;
-        highJumpPhases = 21;
-
-        // salto normal
+        // salto
+        const unsigned int jumpPhases = 20 ;
         for ( unsigned int i = 0; i < jumpPhases; i++ )
         {
                 std::pair< int /* xy */, int /* z */ > jumpPhase( i == 9 || i == 19 ? 2 : 1 , ( i < jumpPhases / 2 ) ? 3 : -3 );
@@ -27,13 +25,14 @@ CharacterHeels::CharacterHeels( const ItemPtr & item, const std::string & behavi
         }
 
         // salto largo
+        const unsigned int highJumpPhases = 21 ;
         for ( unsigned int i = 0; i < highJumpPhases; i++ )
         {
                 std::pair< int /* xy */, int /* z */ > jumpPhase( 2 , ( i < 17 ) ? 3 : -3 );
                 highJumpVector.push_back( jumpPhase );
         }
 
-        // fotogramas de caída
+        // fotogramas de caída (falling)
         fallFrames[ "north" ] = 8;
         fallFrames[ "south" ] = 0;
         fallFrames[ "east" ] = 12;
@@ -85,17 +84,17 @@ bool CharacterHeels::update()
                 case activities::Activity::DisplaceSoutheast:
                 case activities::Activity::DisplaceSouthwest:
                 case activities::Activity::DisplaceNorthwest:
-                case activities::Activity::ForceDisplaceNorth:
-                case activities::Activity::ForceDisplaceSouth:
-                case activities::Activity::ForceDisplaceEast:
-                case activities::Activity::ForceDisplaceWest:
+                case activities::Activity::ForcePushNorth:
+                case activities::Activity::ForcePushSouth:
+                case activities::Activity::ForcePushEast:
+                case activities::Activity::ForcePushWest:
                         displace( characterItem );
                         break;
 
-                case activities::Activity::CancelDisplaceNorth:
-                case activities::Activity::CancelDisplaceSouth:
-                case activities::Activity::CancelDisplaceEast:
-                case activities::Activity::CancelDisplaceWest:
+                case activities::Activity::CancelPushingNorth:
+                case activities::Activity::CancelPushingSouth:
+                case activities::Activity::CancelPushingEast:
+                case activities::Activity::CancelPushingWest:
                         cancelDisplace( characterItem );
                         break;
 
@@ -103,9 +102,7 @@ bool CharacterHeels::update()
                         fall( characterItem );
                         break;
 
-                case activities::Activity::Jump:
-                case activities::Activity::RegularJump:
-                case activities::Activity::HighJump:
+                case activities::Activity::Jump :
                         jump( characterItem );
                         break;
 
@@ -140,8 +137,8 @@ bool CharacterHeels::update()
                         ;
         }
 
-        // play sound for current activity
-        SoundManager::getInstance().play( characterItem.getOriginalKind(), activity );
+        // play sound for the current activity
+        SoundManager::getInstance().play( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
 
         return false;
 }
@@ -236,8 +233,8 @@ void CharacterHeels::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( characterItem.getKind(), activity );
-                                activity = activities::Activity::Wait;
+                                SoundManager::getInstance().stop( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
+                                activity = activities::Activity::Wait ;
                         }
                 }
                 // if you are being displaced
@@ -276,8 +273,8 @@ void CharacterHeels::behave ()
                         }
                 }
                 // if you are being forcibly displaced
-                else if ( activity == activities::Activity::ForceDisplaceNorth || activity == activities::Activity::ForceDisplaceSouth ||
-                        activity == activities::Activity::ForceDisplaceEast || activity == activities::Activity::ForceDisplaceWest )
+                else if ( activity == activities::Activity::ForcePushNorth || activity == activities::Activity::ForcePushSouth ||
+                        activity == activities::Activity::ForcePushEast || activity == activities::Activity::ForcePushWest )
                 {
                         if ( input.jumpTyped() )
                         {
@@ -287,24 +284,24 @@ void CharacterHeels::behave ()
                         // cancel displace when moving in direction opposite to displacement
                         else if ( input.movenorthTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceSouth ? activities::Activity::CancelDisplaceSouth : activities::Activity::MoveNorth );
+                                activity = ( activity == activities::Activity::ForcePushSouth ? activities::Activity::CancelPushingSouth : activities::Activity::MoveNorth );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceNorth ? activities::Activity::CancelDisplaceNorth : activities::Activity::MoveSouth );
+                                activity = ( activity == activities::Activity::ForcePushNorth ? activities::Activity::CancelPushingNorth : activities::Activity::MoveSouth );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceWest ? activities::Activity::CancelDisplaceWest : activities::Activity::MoveEast );
+                                activity = ( activity == activities::Activity::ForcePushWest ? activities::Activity::CancelPushingWest : activities::Activity::MoveEast );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceEast ? activities::Activity::CancelDisplaceEast : activities::Activity::MoveWest );
+                                activity = ( activity == activities::Activity::ForcePushEast ? activities::Activity::CancelPushingEast : activities::Activity::MoveWest );
                         }
                 }
-                else if ( activity == activities::Activity::Jump || activity == activities::Activity::RegularJump || activity == activities::Activity::HighJump )
+                else if ( activity == activities::Activity::Jump )
                 {
-
+                        // nothing here
                 }
                 else if ( activity == activities::Activity::Fall )
                 {

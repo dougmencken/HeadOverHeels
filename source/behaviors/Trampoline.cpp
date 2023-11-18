@@ -1,5 +1,6 @@
 
 #include "Trampoline.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
@@ -13,8 +14,8 @@
 namespace behaviors
 {
 
-Trampoline::Trampoline( const ItemPtr & item, const std::string & behavior ) :
-        Behavior( item, behavior )
+Trampoline::Trampoline( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
         , folded( false )
         , rebounding( false )
         , plainFrame( 0 )
@@ -57,7 +58,7 @@ bool Trampoline::update ()
                                         // play the sound of bouncing
                                         if ( reboundTimer->getValue() > 0.100 )
                                         {
-                                                SoundManager::getInstance().play( freeItem.getKind (), activities::Activity::IsActive );
+                                                SoundManager::getInstance().play( freeItem.getKind (), "function" );
                                         }
                                 }
                                 else
@@ -95,8 +96,8 @@ bool Trampoline::update ()
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                // play sound of displacing
-                                SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                // play the sound of displacing
+                                SoundManager::getInstance().play( freeItem.getKind (), "push" );
 
                                 this->changeActivityOfItem( activity );
                                 activities::Displacing::getInstance().displace( this, &activity, true );
@@ -125,7 +126,7 @@ bool Trampoline::update ()
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play the sound of falling
-                                        SoundManager::getInstance().play( freeItem.getKind (), activity );
+                                        SoundManager::getInstance().play( freeItem.getKind (), "fall" );
                                         activity = activities::Activity::Wait;
                                 }
 

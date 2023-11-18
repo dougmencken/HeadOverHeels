@@ -42,35 +42,47 @@ void RedefineKey::doAction ()
                         }
                         else
                         {
-                                std::string thatKey = InputManager::getInstance().getUserKeyFor( this->whatKeyDoes );
-                                if ( thatKey != newKey && /* print screen is used to toggle recording of game */ newKey != "PrintScreen" )
+                                const std::string & thatKey = InputManager::getInstance().getUserKeyFor( this->whatKeyDoes );
+                                if ( thatKey != newKey && /* any key but */ newKey != "PrintScreen" )
                                 {
                                         // if this new key was already in use, change that previous one to "none"
-                                        std::string previousAction = InputManager::getInstance().getActionOfKeyByName( newKey );
-                                        std::string toLook = ( previousAction == "take&jump" ? "takeandjump" : previousAction );
+                                        std::vector< std::string > userActions ;
+                                        InputManager::getInstance().getAllActions( userActions );
+                                        std::string previousAction( "" );
+                                        for ( unsigned int i = 0 ; i < userActions.size () ; ++ i )
+                                        {
+                                                const std::string & action = userActions[ i ];
+                                                const std::string & key = InputManager::getInstance().getUserKeyFor( action );
+                                                if ( key == newKey ) {
+                                                        previousAction = action ;
+                                                        break ;
+                                                }
+                                        }
 
-                                        if ( previousAction != "unknown" )
+                                        if ( previousAction.length () > 0 )
                                         {
                                                 InputManager::getInstance().changeUserKey( previousAction, "none" );
 
                                                 // update menu
+                                                std::string toLook = ( previousAction == "take&jump" ) ? "takeandjump" : previousAction ;
                                                 std::string textOfThatKey = GuiManager::getInstance().getLanguageManager()->findLanguageStringForAlias( toLook )->getText();
+
                                                 std::list < Label * > allOptions = menu->getEveryOption ();
-                                                for ( std::list< Label * >::iterator o = allOptions.begin (); o != allOptions.end (); ++o )
+                                                for ( std::list< Label * >::iterator o = allOptions.begin (); o != allOptions.end (); ++ o )
                                                 {
                                                         if ( ( *o )->getText() == textOfThatKey )
                                                         {
                                                                 menu->setValueOf( *o, "none" );
                                                                 ( *o )->changeColor( "cyan" );
 
-                                                                std::cout << "key \"" << previousAction << "\" is now NONE" << std::endl ;
+                                                                std::cout << "NO key for \"" << previousAction << "\" yet" << std::endl ;
                                                                 break;
                                                         }
                                                 }
                                                 menu->redraw ();
                                         }
 
-                                        std::cout << "key for \"" << this->whatKeyDoes << "\" was \"" << thatKey << "\" now is \"" << newKey << "\"" << std::endl ;
+                                        std::cout << "the key for \"" << this->whatKeyDoes << "\" was \"" << thatKey << "\" now is \"" << newKey << "\"" << std::endl ;
 
                                         menu->setValueOf( choice, newKey );
 

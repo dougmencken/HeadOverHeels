@@ -140,19 +140,19 @@ bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool
                 }
                         break;
 
-                case activities::Activity::CancelDisplaceNorth:
+                case activities::Activity::CancelPushingNorth:
                         item->changeOrientation( "south" );
                         break;
 
-                case activities::Activity::CancelDisplaceSouth:
+                case activities::Activity::CancelPushingSouth:
                         item->changeOrientation( "north" );
                         break;
 
-                case activities::Activity::CancelDisplaceEast:
+                case activities::Activity::CancelPushingEast:
                         item->changeOrientation( "west" );
                         break;
 
-                case activities::Activity::CancelDisplaceWest:
+                case activities::Activity::CancelPushingWest:
                         item->changeOrientation( "east" );
                         break;
 

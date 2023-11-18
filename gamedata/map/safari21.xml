@@ -94,7 +94,7 @@
         <item x="7" y="0" z="5">
             <kind>donuts</kind>
             <orientation>none</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="5" y="2" z="0">

@@ -82,7 +82,7 @@ void CreateListOfSavedGames::doAction ()
                         if ( isLoadMenu() )
                         {
                                 freeLine->changeColor( "cyan" );
-                                freeLine->setAction( new PlaySound( activities::Activity::Mistake ) );
+                                freeLine->setAction( new PlaySound( "mistake" ) );
                         }
                         else
                         {

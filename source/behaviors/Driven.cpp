@@ -118,8 +118,7 @@ bool Driven::update ()
                                                 moving = false;
                                                 activity = activities::Activity::Wait;
 
-                                                // emit sound of collision
-                                                SoundManager::getInstance().play( freeItem.getKind(), activities::Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getKind(), "collision" );
                                         }
 
                                         speedTimer->reset();

@@ -19,8 +19,8 @@ namespace behaviors
 {
 
 /**
- * Moves item in one direction. When it collides with something,
- * it rotates 180° and continues to move in opposite way
+ * Move an item in one direction. When it hits something, rotate 180°
+ * and continue to move in the opposite way
  */
 
 class ThereAndBack : public Behavior

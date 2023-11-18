@@ -46,7 +46,7 @@ bool Elevator::update ()
 
                                 speedTimer->reset();
 
-                                // elevator reached its top
+                                // elevator reached the top
                                 if ( freeItem.getZ() > top * Isomot::LayerHeight )
                                 {
                                         activity = activities::Activity::StopAtTop;
@@ -104,7 +104,7 @@ bool Elevator::update ()
                         break;
         }
 
-        SoundManager::getInstance().play( freeItem.getKind (), activity );
+        SoundManager::getInstance().play( freeItem.getKind (), SoundManager::activityToString( activity ) );
 
         return false;
 }

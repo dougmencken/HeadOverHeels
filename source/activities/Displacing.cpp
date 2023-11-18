@@ -35,28 +35,28 @@ bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activi
 
         switch ( *activity )
         {
-                case activities::Activity::ForceDisplaceNorth:
+                case activities::Activity::ForcePushNorth:
                         activityToPropagate = activities::Activity::DisplaceNorth;
                         // fallthru
                 case activities::Activity::DisplaceNorth:
                         itemDisplaced = item->addToX( -1 );
                         break;
 
-                case activities::Activity::ForceDisplaceSouth:
+                case activities::Activity::ForcePushSouth:
                         activityToPropagate = activities::Activity::DisplaceSouth;
                         // fallthru
                 case activities::Activity::DisplaceSouth:
                         itemDisplaced = item->addToX( 1 );
                         break;
 
-                case activities::Activity::ForceDisplaceEast:
+                case activities::Activity::ForcePushEast:
                         activityToPropagate = activities::Activity::DisplaceEast;
                         // fallthru
                 case activities::Activity::DisplaceEast:
                         itemDisplaced = item->addToY( -1 );
                         break;
 
-                case activities::Activity::ForceDisplaceWest:
+                case activities::Activity::ForcePushWest:
                         activityToPropagate = activities::Activity::DisplaceWest;
                         // fallthru
                 case activities::Activity::DisplaceWest:

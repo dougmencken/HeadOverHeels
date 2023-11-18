@@ -75,7 +75,7 @@
         <item x="1" y="7" z="5">
             <kind>donuts</kind>
             <orientation>none</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="0" y="3" z="-1">

@@ -22,45 +22,6 @@ SoundManager::SoundManager( const std::string & audioInterface )
         , musicVolume( 75 )
 {
         audioInitialized = allegro::initAudio( audioInterface ) ;
-
-        activityStrings[ activities::Activity::Wait ] = "wait";
-        activityStrings[ activities::Activity::Push ] = "push";
-        activityStrings[ activities::Activity::Move ] = "move";
-        activityStrings[ activities::Activity::MoveNorth ] = activityStrings[ activities::Activity::MoveSouth ] = "move";
-        activityStrings[ activities::Activity::MoveEast ] = activityStrings[ activities::Activity::MoveWest ] = "move";
-        activityStrings[ activities::Activity::MoveNortheast ] = activityStrings[ activities::Activity::MoveSoutheast ] = "move";
-        activityStrings[ activities::Activity::MoveSouthwest ] = activityStrings[ activities::Activity::MoveNorthwest ] = "move";
-        activityStrings[ activities::Activity::MoveUp ] = activityStrings[ activities::Activity::MoveDown ] = "move";
-        activityStrings[ activities::Activity::AutoMove ] = "move";
-        activityStrings[ activities::Activity::AutoMoveNorth ] = activityStrings[ activities::Activity::AutoMoveSouth ] = "move";
-        activityStrings[ activities::Activity::AutoMoveEast ] = activityStrings[ activities::Activity::AutoMoveWest ] = "move";
-        activityStrings[ activities::Activity::Blink ] = "blink";
-        activityStrings[ activities::Activity::Jump ] = "jump";
-        activityStrings[ activities::Activity::RegularJump ] = activityStrings[ activities::Activity::HighJump ] = "jump";
-        activityStrings[ activities::Activity::Fall ] = "fall";
-        activityStrings[ activities::Activity::Glide ] = "fall";
-        activityStrings[ activities::Activity::TakeItem ] = activityStrings[ activities::Activity::TakeAndJump ] = "take";
-        activityStrings[ activities::Activity::ItemTaken ] = "taken";
-        activityStrings[ activities::Activity::DropItem ] = activityStrings[ activities::Activity::DropAndJump ] = "drop";
-        activityStrings[ activities::Activity::DisplaceNorth ] = activityStrings[ activities::Activity::DisplaceSouth ] = "push";
-        activityStrings[ activities::Activity::DisplaceEast ] = activityStrings[ activities::Activity::DisplaceWest ] = "push";
-        activityStrings[ activities::Activity::DisplaceNortheast ] = activityStrings[ activities::Activity::DisplaceSoutheast ] = "push";
-        activityStrings[ activities::Activity::DisplaceSouthwest ] = activityStrings[ activities::Activity::DisplaceNorthwest ] = "push";
-        activityStrings[ activities::Activity::DisplaceUp ] = activityStrings[ activities::Activity::DisplaceDown ] = "push";
-        activityStrings[ activities::Activity::BeginTeletransportation ] = "teleport-out";
-        activityStrings[ activities::Activity::EndTeletransportation ] = "teleport-in";
-        activityStrings[ activities::Activity::ForceDisplaceNorth ] = activityStrings[ activities::Activity::ForceDisplaceSouth ] = "force";
-        activityStrings[ activities::Activity::ForceDisplaceEast ] = activityStrings[ activities::Activity::ForceDisplaceWest ] = "force";
-        activityStrings[ activities::Activity::CancelDisplaceNorth ] = activityStrings[ activities::Activity::CancelDisplaceSouth ] = "move";
-        activityStrings[ activities::Activity::CancelDisplaceEast ] = activityStrings[ activities::Activity::CancelDisplaceWest ] = "move";
-        activityStrings[ activities::Activity::MeetMortalItem ] = "death";
-        activityStrings[ activities::Activity::Vanish ] = "vanish";
-        activityStrings[ activities::Activity::FireDoughnut ] = "donut";
-        activityStrings[ activities::Activity::Rebound ] = "rebound";
-        activityStrings[ activities::Activity::SwitchIt ] = "switch";
-        activityStrings[ activities::Activity::Collision ] = "collision";
-        activityStrings[ activities::Activity::IsActive ] = "active";
-        activityStrings[ activities::Activity::Mistake ] = "mistake";
 }
 
 SoundManager::~SoundManager( )
@@ -79,49 +40,49 @@ SoundManager& SoundManager::getInstance()
 
 void SoundManager::readSounds( const std::string& xmlFile )
 {
-        // read list of sounds from XML file
+        // read the list of sounds from an XML file
         tinyxml2::XMLDocument sounds;
         tinyxml2::XMLError result = sounds.LoadFile( ( ospaths::sharePath() + xmlFile ).c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::cerr << "can’t read list of sounds from \"" << xmlFile << "\"" << std::endl ;
+                std::cerr << "can’t read the list of sounds from \"" << xmlFile << "\"" << std::endl ;
                 return;
         }
 
         tinyxml2::XMLElement* root = sounds.FirstChildElement( "sounds" );
 
-        for ( tinyxml2::XMLElement* item = root->FirstChildElement( "item" ) ;
-                        item != nilPointer ;
-                        item = item->NextSiblingElement( "item" ) )
+        for ( tinyxml2::XMLElement* forItem = root->FirstChildElement( "for" ) ;
+                        forItem != nilPointer ;
+                        forItem = forItem->NextSiblingElement( "for" ) )
         {
-                std::string kindOfItem = item->Attribute( "kind" );
+                std::string kindOfItem = forItem->Attribute( "item" );
 
-                for ( tinyxml2::XMLElement* event = item->FirstChildElement( "event" ) ;
-                                event != nilPointer ;
-                                event = event->NextSiblingElement( "event" ) )
+                for ( tinyxml2::XMLElement* sound = forItem->FirstChildElement( "sound" ) ;
+                                sound != nilPointer ;
+                                sound = sound->NextSiblingElement( "sound" ) )
                 {
-                        std::string activity = event->Attribute( "activity" );
-                        std::string file = event->FirstChildElement( "file" )->FirstChild()->ToText()->Value();
+                        std::string event = sound->Attribute( "on" );
+                        std::string sample = sound->Attribute( "play" );
 
-                        addSound( kindOfItem, activity, file );
+                        addSound( kindOfItem, event, sample );
                 }
         }
 
         std::cout << "read list of sounds from " << xmlFile << std::endl ;
 }
 
-void SoundManager::addSound( const std::string & item, const std::string& activity, const std::string& sampleFile )
+void SoundManager::addSound( const std::string & item, const std::string & event, const std::string & sampleFile )
 {
-        this->sounds[ item ][ activity ] = sampleFile ;
+        this->sounds[ item ][ event ] = sampleFile ;
 
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
-        std::cout << "sound \"" << sampleFile << "\" for activity \"" << activity << "\" of \"" << item << "\"" << std::endl ;
+        std::cout << "sound \"" << sampleFile << "\" on \"" << event << "\" for \"" << item << "\"" << std::endl ;
 #endif
 
         if ( this->samples.find( sampleFile ) != this->samples.end () ) // it's already here
                 return ;
 
-        std::string pathToSample = ospaths::pathToFile( ospaths::sharePath(), sampleFile ) ;
+        std::string pathToSample = ospaths::pathToFile( ospaths::sharePath() + "sound", sampleFile ) ;
         allegro::Sample* sample = allegro::Sample::loadFromFile( pathToSample );
 
         if ( sample != nilPointer && sample->isNotNil() )
@@ -137,9 +98,9 @@ void SoundManager::addSound( const std::string & item, const std::string& activi
         }
 }
 
-void SoundManager::play( const std::string & item, const ActivityOfItem & activity, bool loop )
+void SoundManager::play( const std::string & item, const std::string & event, bool loop )
 {
-        allegro::Sample* sample = getSampleFor( item, activity );
+        allegro::Sample* sample = getSampleFor( item, event );
 
         if ( sample != nilPointer && sample->isNotNil() && sample->getVoice() < 0 )
         {
@@ -151,8 +112,8 @@ void SoundManager::play( const std::string & item, const ActivityOfItem & activi
                         sample->loop();
 
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
-                std::cout << ( loop ? "looping" : "playing" ) << " sound for event \"" << activityToString( activity )
-                                << "\" of \"" << item << "\"" << std::endl ;
+                std::cout << ( loop ? "looping" : "playing" ) << " sound on \"" << event
+                                << "\" for \"" << item << "\"" << std::endl ;
 #endif
         }
 
@@ -160,14 +121,14 @@ void SoundManager::play( const std::string & item, const ActivityOfItem & activi
                         if ( j->second != nilPointer ) j->second->neatenIfNotPlaying() ;
 }
 
-void SoundManager::stop( const std::string & item, const ActivityOfItem & activity )
+void SoundManager::stop( const std::string & item, const std::string & event )
 {
-        allegro::Sample* sample = getSampleFor( item, activity );
+        allegro::Sample* sample = getSampleFor( item, event );
 
         if ( sample != nilPointer && sample->isNotNil() )
         {
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
-                std::cout << "stopping sound for event \"" << activityToString( activity ) << "\" of \"" << item << "\"" << std::endl ;
+                std::cout << "stopping sound on \"" << event << "\" for \"" << item << "\"" << std::endl ;
 #endif
                 sample->stop();
         }
@@ -218,10 +179,62 @@ allegro::Sample* SoundManager::getSampleFor( const std::string & item, const std
         return allegro::Sample::nilSample() ;
 }
 
-std::string SoundManager::activityToString ( const ActivityOfItem & activity )
+/* static */
+std::string SoundManager::activityToString ( const activities::ActivityOfItem & activity )
 {
-        if ( activityStrings.find( activity ) != activityStrings.end () )
-                return activityStrings[ activity ];
+        switch ( activity )
+        {
+                case activities::Activity::Wait : return "wait" ;
 
-        return "other";
+                case activities::Activity::Blink : return "blink" ;
+
+                case activities::Activity::MoveNorth :
+                case activities::Activity::MoveSouth :
+                case activities::Activity::MoveEast :
+                case activities::Activity::MoveWest :
+                case activities::Activity::MoveNortheast :
+                case activities::Activity::MoveSoutheast :
+                case activities::Activity::MoveSouthwest :
+                case activities::Activity::MoveNorthwest :
+                case activities::Activity::MoveUp :
+                case activities::Activity::MoveDown :
+                case activities::Activity::AutoMoveNorth :
+                case activities::Activity::AutoMoveSouth :
+                case activities::Activity::AutoMoveEast :
+                case activities::Activity::AutoMoveWest :
+                        return "move" ;
+
+                case activities::Activity::Jump : return "jump" ;
+
+                case activities::Activity::Fall : return "fall" ;
+                case activities::Activity::Glide : return "fall" ;
+
+                case activities::Activity::TakeItem : case activities::Activity::TakeAndJump : return "take" ;
+                case activities::Activity::ItemTaken : return "taken" ;
+                case activities::Activity::DropItem : case activities::Activity::DropAndJump : return "drop" ;
+
+                case activities::Activity::DisplaceNorth : case activities::Activity::DisplaceSouth :
+                case activities::Activity::DisplaceEast : case activities::Activity::DisplaceWest :
+                case activities::Activity::DisplaceNortheast : case activities::Activity::DisplaceSoutheast :
+                case activities::Activity::DisplaceSouthwest : case activities::Activity::DisplaceNorthwest :
+                case activities::Activity::DisplaceUp : case activities::Activity::DisplaceDown :
+                        return "push" ;
+
+                case activities::Activity::ForcePushNorth : case activities::Activity::ForcePushSouth :
+                case activities::Activity::ForcePushEast : case activities::Activity::ForcePushWest : return "forcepush" ;
+
+                case activities::Activity::CancelPushingNorth : case activities::Activity::CancelPushingSouth :
+                case activities::Activity::CancelPushingEast : case activities::Activity::CancelPushingWest : return "move" ;
+
+                case activities::Activity::BeginTeletransportation : return "teleport-out" ;
+                case activities::Activity::EndTeletransportation : return "teleport-in" ;
+
+                case activities::Activity::MeetMortalItem : return "death" ;
+                case activities::Activity::Vanish : return "vanish" ;
+                case activities::Activity::Collision : return "collision" ;
+                case activities::Activity::Function : return "function" ;
+                case activities::Activity::Mistake : return "mistake" ;
+        }
+
+        return "other" ;
 }

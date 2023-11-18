@@ -120,7 +120,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
         // end jump when it’s the last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
         {
-                *activity = activities::Activity::Fall;
+                *activity = activities::Activity::Fall ;
         }
 
         return itemMoved ;
@@ -133,7 +133,7 @@ void Jumping::lift( FreeItem& sender, Item& item, int z )
         {
                 // when item is volatile
                 if ( item.getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
-                                item.getBehavior()->getNameOfBehavior () == "behavior of something special" )
+                                item.getBehavior()->getNameOfBehavior () == "behavior of bonus" )
                 {
                         item.getBehavior()->changeActivityOfItem( activities::Activity::DisplaceUp, ItemPtr( &sender ) );
                 }

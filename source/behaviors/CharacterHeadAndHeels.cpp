@@ -17,10 +17,8 @@ namespace behaviors
 CharacterHeadAndHeels::CharacterHeadAndHeels( const ItemPtr & item, const std::string & behavior )
         : PlayerControlled( item, behavior )
 {
-        jumpPhases = 28;
-        highJumpPhases = 28;
-
-        // salto normal
+        // salto
+        const unsigned int jumpPhases = 28 ;
         for ( unsigned int i = 0; i < jumpPhases; i++ )
         {
                 std::pair< int /* xy */, int /* z */ > jumpPhase( 1, ( i < 4 ? 4 : ( i < 8 ? 3 : 2 ) ) );
@@ -28,19 +26,20 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( const ItemPtr & item, const std::s
         }
 
         // salto largo
+        const unsigned int highJumpPhases = 28 ;
         for ( unsigned int i = 0; i < highJumpPhases; i++ )
         {
                 std::pair< int /* xy */, int /* z */ > jumpPhase( 1, 3 );
                 highJumpVector.push_back( jumpPhase );
         }
 
-        // fotogramas de caída
+        // fotogramas de caída (falling)
         fallFrames[ "north" ] = 8;
         fallFrames[ "south" ] = 16;
         fallFrames[ "east" ] = 12;
         fallFrames[ "west" ] = 17;
 
-        // fotogramas de parpadeo
+        // fotogramas de parpadeo (blinking)
         blinkFrames[ "north" ] = 8;
         blinkFrames[ "south" ] = 18;
         blinkFrames[ "east" ] = 12;
@@ -96,17 +95,17 @@ bool CharacterHeadAndHeels::update ()
                 case activities::Activity::DisplaceSoutheast:
                 case activities::Activity::DisplaceSouthwest:
                 case activities::Activity::DisplaceNorthwest:
-                case activities::Activity::ForceDisplaceNorth:
-                case activities::Activity::ForceDisplaceSouth:
-                case activities::Activity::ForceDisplaceEast:
-                case activities::Activity::ForceDisplaceWest:
+                case activities::Activity::ForcePushNorth:
+                case activities::Activity::ForcePushSouth:
+                case activities::Activity::ForcePushEast:
+                case activities::Activity::ForcePushWest:
                         displace( characterItem );
                         break;
 
-                case activities::Activity::CancelDisplaceNorth:
-                case activities::Activity::CancelDisplaceSouth:
-                case activities::Activity::CancelDisplaceEast:
-                case activities::Activity::CancelDisplaceWest:
+                case activities::Activity::CancelPushingNorth:
+                case activities::Activity::CancelPushingSouth:
+                case activities::Activity::CancelPushingEast:
+                case activities::Activity::CancelPushingWest:
                         cancelDisplace( characterItem );
                         break;
 
@@ -114,9 +113,7 @@ bool CharacterHeadAndHeels::update ()
                         fall( characterItem );
                         break;
 
-                case activities::Activity::Jump:
-                case activities::Activity::RegularJump:
-                case activities::Activity::HighJump:
+                case activities::Activity::Jump :
                         jump( characterItem );
                         break;
 
@@ -159,8 +156,8 @@ bool CharacterHeadAndHeels::update ()
                         ;
         }
 
-        // play sound for current activity
-        SoundManager::getInstance().play( characterItem.getOriginalKind(), activity );
+        // play sound for the current activity
+        SoundManager::getInstance().play( characterItem.getOriginalKind(), SoundManager::activityToString ( activity ) );
 
         return false;
 }
@@ -187,7 +184,7 @@ void CharacterHeadAndHeels::behave ()
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
                         }
-                        else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        else if ( input.doughnutTyped() && ! donutFromHooterInRoom )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -231,7 +228,7 @@ void CharacterHeadAndHeels::behave ()
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
                         }
-                        else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        else if ( input.doughnutTyped() && ! donutFromHooterInRoom )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -264,8 +261,8 @@ void CharacterHeadAndHeels::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( characterItem.getKind(), activity );
-                                activity = activities::Activity::Wait;
+                                SoundManager::getInstance().stop( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
+                                activity = activities::Activity::Wait ;
                         }
                 }
                 // the character is being displaced
@@ -274,9 +271,9 @@ void CharacterHeadAndHeels::behave ()
                 {
                         if ( input.jumpTyped() )
                         {
-                                activity = activities::Activity::Jump;
+                                activity = activities::Activity::Jump ;
                         }
-                        else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        else if ( input.doughnutTyped() && ! donutFromHooterInRoom )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -309,34 +306,34 @@ void CharacterHeadAndHeels::behave ()
                         }
                 }
                 // character is being displaced forcibly
-                else if ( activity == activities::Activity::ForceDisplaceNorth || activity == activities::Activity::ForceDisplaceSouth ||
-                        activity == activities::Activity::ForceDisplaceEast || activity == activities::Activity::ForceDisplaceWest )
+                else if ( activity == activities::Activity::ForcePushNorth || activity == activities::Activity::ForcePushSouth ||
+                        activity == activities::Activity::ForcePushEast || activity == activities::Activity::ForcePushWest )
                 {
                         if ( input.jumpTyped() )
                         {
-                                activity = activities::Activity::Jump;
+                                activity = activities::Activity::Jump ;
                         }
                         // cancel displace when moving in direction opposite to displacement
                         else if ( input.movenorthTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceSouth ? activities::Activity::CancelDisplaceSouth : activities::Activity::MoveNorth );
+                                activity = ( activity == activities::Activity::ForcePushSouth ? activities::Activity::CancelPushingSouth : activities::Activity::MoveNorth );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceNorth ? activities::Activity::CancelDisplaceNorth : activities::Activity::MoveSouth );
+                                activity = ( activity == activities::Activity::ForcePushNorth ? activities::Activity::CancelPushingNorth : activities::Activity::MoveSouth );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceWest ? activities::Activity::CancelDisplaceWest : activities::Activity::MoveEast );
+                                activity = ( activity == activities::Activity::ForcePushWest ? activities::Activity::CancelPushingWest : activities::Activity::MoveEast );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForceDisplaceEast ? activities::Activity::CancelDisplaceEast : activities::Activity::MoveWest );
+                                activity = ( activity == activities::Activity::ForcePushEast ? activities::Activity::CancelPushingEast : activities::Activity::MoveWest );
                         }
                 }
-                else if ( activity == activities::Activity::Jump || activity == activities::Activity::RegularJump || activity == activities::Activity::HighJump )
+                else if ( activity == activities::Activity::Jump )
                 {
-                        if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        if ( input.doughnutTyped() && ! donutFromHooterInRoom )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -360,7 +357,7 @@ void CharacterHeadAndHeels::behave ()
                 }
                 else if ( activity == activities::Activity::Fall )
                 {
-                        if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        if ( input.doughnutTyped() && ! donutFromHooterInRoom )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -383,7 +380,7 @@ void CharacterHeadAndHeels::behave ()
                 // to enter gap between grid items
                 if ( activity == activities::Activity::Glide )
                 {
-                        if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        if ( input.doughnutTyped() && ! donutFromHooterInRoom )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );

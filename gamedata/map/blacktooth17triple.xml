@@ -250,7 +250,7 @@
         <item x="9" y="2" z="0">
             <kind>shield</kind>
             <orientation>west</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="9" y="11" z="0">

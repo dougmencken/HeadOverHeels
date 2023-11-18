@@ -82,7 +82,7 @@
         <item x="7" y="0" z="0">
             <kind>high-jumps</kind>
             <orientation>none</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="0" y="3" z="0">

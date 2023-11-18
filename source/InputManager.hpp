@@ -12,6 +12,7 @@
 #define InputManager_hpp_
 
 #include <string>
+#include <map>
 #include <vector>
 
 #include "WrappersAllegro.hpp"
@@ -24,22 +25,24 @@ private:
 
         InputManager( ) ;
 
+        static InputManager * instance ;
+
+        std::map < /* action */ std::string, /* key */ std::string > userKeys ;
+
 public:
 
         ~InputManager( ) { }
 
         static InputManager & getInstance () ;
 
-        const std::vector < std::pair < std::string, std::string > > & getUserKeys () const {  return userKeys ;  }
+        void getAllActions ( std::vector< std::string > & listOfActions ) const ;
 
         /**
-         * Returns the user-defined key's name for the given action
+         * Returns the user-defined key for the given action, or "none"
          */
         std::string getUserKeyFor ( const std::string & action ) const ;
 
-        std::string getActionOfKeyByName ( const std::string & keyName ) const ;
-
-        void changeUserKey ( const std::string & action, const std::string & name ) ;
+        void changeUserKey ( const std::string & action, const std::string & key ) ;
 
        /**
         * Move character to the north
@@ -76,7 +79,7 @@ public:
         bool takeAndJumpTyped () const ;
 
        /**
-        * Release doughnut
+        * Release a doughnut
         */
         bool doughnutTyped () const ;
 
@@ -96,12 +99,6 @@ public:
         bool automapTyped () const ;
 
         void releaseKeyFor ( const std::string& keyAction ) const ;
-
-private:
-
-        static InputManager * instance ;
-
-        std::vector < std::pair < /* action */ std::string, /* name */ std::string > > userKeys ;
 
 } ;
 

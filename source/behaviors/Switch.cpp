@@ -78,11 +78,10 @@ bool Switch::update ()
                                         {
                                                 if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
-                                                                // yep, the switch doesn’t toggle when the character jumps
-                                                                itemAbove->getBehavior()->getActivityOfItem() != activities::Activity::RegularJump &&
-                                                                itemAbove->getBehavior()->getActivityOfItem() != activities::Activity::HighJump )
+                                                                // the switch doesn’t toggle when the character jumps
+                                                                itemAbove->getBehavior()->getActivityOfItem() != activities::Activity::Jump )
                                                 {
-                                                        // when there’s no more than one item below initiator of switch
+                                                        // toggle the switch when there’s only one item below the character
                                                         if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )
                                                         {
                                                                 isItemAbove = true;
@@ -91,8 +90,8 @@ bool Switch::update ()
 
                                                                 mediator->toggleSwitchInRoom();
 
-                                                                // play sound of switching
-                                                                SoundManager::getInstance().play( item->getKind (), activities::Activity::SwitchIt );
+                                                                // play the sound of switching
+                                                                SoundManager::getInstance().play( item->getKind (), "switch" );
                                                         }
                                                 }
                                         }
@@ -117,8 +116,8 @@ bool Switch::update ()
 
                                 mediator->toggleSwitchInRoom();
 
-                                // play sound of switching
-                                SoundManager::getInstance().play( item->getKind (), activities::Activity::SwitchIt );
+                                // play the sound of switching
+                                SoundManager::getInstance().play( item->getKind (), "switch" );
                         }
 
                         activity = activities::Activity::Wait;

@@ -94,7 +94,7 @@
         <item x="8" y="8" z="0">
             <kind>extra-life</kind>
             <orientation>west</orientation>
-            <behavior>behavior of something special</behavior>
+            <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="4" y="0" z="-1">

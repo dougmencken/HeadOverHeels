@@ -1,5 +1,6 @@
 
 #include "CreateAudioMenu.hpp"
+
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "LanguageManager.hpp"
@@ -146,7 +147,7 @@ void CreateAudioMenu::doAction ()
                                                         listOfOptions->setValueOf( labelEffects, ss.str() );
                                                         SoundManager::getInstance().setVolumeOfEffects( value );
                                                         SoundManager::getInstance().stopEverySound ();
-                                                        SoundManager::getInstance().play ( "gui", activities::Activity::Push, /* loop */ false );
+                                                        SoundManager::getInstance().play ( "menus", "effect", /* loop */ false );
                                                 }
                                         }
                                 }

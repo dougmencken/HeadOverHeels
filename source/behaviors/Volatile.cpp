@@ -65,7 +65,7 @@ bool Volatile::update ()
                                                         topItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
                                                         topItem->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
                                                         topItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
-                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of something special" )
+                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
                                                 {
                                                         gone = true;
                                                         topItems.push( topItem );
@@ -96,7 +96,7 @@ bool Volatile::update ()
                                                                         ( bottomItem->getBehavior() != nilPointer
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into"
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
-                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of something special" ) ||
+                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" ) ||
                                                                         ( bottomItem->getBehavior() != nilPointer
                                                                                 && bottomItem->getBehavior()->getActivityOfItem() == activities::Activity::Vanish ) )
                                                                 {
@@ -173,7 +173,7 @@ bool Volatile::update ()
                                 ( getNameOfBehavior () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
                                 ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.5 ) )
                         {
-                                SoundManager::getInstance().play( item->getKind (), activity );
+                                SoundManager::getInstance().play( item->getKind (), "vanish" );
 
                                 // morph into bubbles
 
