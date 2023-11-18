@@ -184,7 +184,7 @@ void CharacterHeadAndHeels::behave ()
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
                         }
-                        else if ( input.doughnutTyped() && ! donutFromHooterInRoom )
+                        else if ( input.doughnutTyped() )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -228,7 +228,7 @@ void CharacterHeadAndHeels::behave ()
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
                         }
-                        else if ( input.doughnutTyped() && ! donutFromHooterInRoom )
+                        else if ( input.doughnutTyped() )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -273,7 +273,7 @@ void CharacterHeadAndHeels::behave ()
                         {
                                 activity = activities::Activity::Jump ;
                         }
-                        else if ( input.doughnutTyped() && ! donutFromHooterInRoom )
+                        else if ( input.doughnutTyped() )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -333,7 +333,7 @@ void CharacterHeadAndHeels::behave ()
                 }
                 else if ( activity == activities::Activity::Jump )
                 {
-                        if ( input.doughnutTyped() && ! donutFromHooterInRoom )
+                        if ( input.doughnutTyped() )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -357,7 +357,7 @@ void CharacterHeadAndHeels::behave ()
                 }
                 else if ( activity == activities::Activity::Fall )
                 {
-                        if ( input.doughnutTyped() && ! donutFromHooterInRoom )
+                        if ( input.doughnutTyped() )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
@@ -380,7 +380,7 @@ void CharacterHeadAndHeels::behave ()
                 // to enter gap between grid items
                 if ( activity == activities::Activity::Glide )
                 {
-                        if ( input.doughnutTyped() && ! donutFromHooterInRoom )
+                        if ( input.doughnutTyped() )
                         {
                                 useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );

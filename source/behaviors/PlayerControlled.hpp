@@ -160,11 +160,6 @@ protected:
         */
         std::map < std::string, unsigned int > fallFrames ;
 
-        /**
-         * is there a doughnut from the hooter in the room?
-         */
-        bool donutFromHooterInRoom ;
-
         std::string kindOfBubbles ;
 
         std::string kindOfFiredDoughnut ;
@@ -191,7 +186,14 @@ protected:
 
 public:
 
-        void resetDoughnutInRoom () {  this->donutFromHooterInRoom = false ;  }
+        void unsetDoughnutInRoom () {  this->donutFromHooterInRoom = false ;  }
+
+private:
+
+        /**
+         * is there a doughnut from the hooter in the room?
+         */
+        bool donutFromHooterInRoom ;
 
 } ;
 

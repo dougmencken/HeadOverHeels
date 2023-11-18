@@ -27,13 +27,13 @@ PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & be
         , automaticStepsThruDoor( automaticSteps )
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
-        , donutFromHooterInRoom( false )
         , kindOfBubbles( "bubbles" )
         , kindOfFiredDoughnut( "bubbles" )
         , speedTimer( new Timer () )
         , fallTimer( new Timer () )
         , glideTimer( new Timer () )
         , timerForBlinking( new Timer () )
+        , donutFromHooterInRoom( false )
 {
 
 }
@@ -375,7 +375,7 @@ void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
 
 void PlayerControlled::useHooter( ::AvatarItem & character )
 {
-        if ( character.hasTool( "horn" ) && character.getDonuts() > 0 )
+        if ( character.hasTool( "horn" ) && character.getDonuts() > 0 && ! this->donutFromHooterInRoom )
         {
                 this->donutFromHooterInRoom = true ;
 
