@@ -194,10 +194,10 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                                 else
                                                                 {
                                                                         ActivityOfItem currentActivity = freeItemAbove.getBehavior()->getActivityOfItem();
-                                                                        if ( currentActivity != activities::Activity::DisplaceNorth &&
-                                                                                currentActivity != activities::Activity::DisplaceSouth &&
-                                                                                currentActivity != activities::Activity::DisplaceEast &&
-                                                                                currentActivity != activities::Activity::DisplaceWest )
+                                                                        if ( currentActivity != activities::Activity::PushedNorth &&
+                                                                                currentActivity != activities::Activity::PushedSouth &&
+                                                                                currentActivity != activities::Activity::PushedEast &&
+                                                                                currentActivity != activities::Activity::PushedWest )
                                                                         {
                                                                                 freeItemAbove.getBehavior()->changeActivityOfItem( activity, ItemPtr( &freeItemAbove ) );
                                                                         }

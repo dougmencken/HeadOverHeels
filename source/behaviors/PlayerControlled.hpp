@@ -61,57 +61,56 @@ protected:
         */
         virtual void autoMove( AvatarItem & character ) ;
 
-       /**
-        * Move the character at the speed of an item that pushes it in one of eight directions
-        */
+        /**
+         * Move the character at the speed of an item that pushes it
+         */
         virtual void displace( AvatarItem & character ) ;
 
         /**
-         * Cancels the existing displace by moving in the opposite direction, leaving the item
-         * stopped at the current point. Used when the character is dragged by a conveyor
+         * Move in the opposite direction of pushing, leaving the character at the current place.
+         * It happens when the moving character is dragged by a conveyor
          */
-        virtual void cancelDisplace( AvatarItem & character ) ;
+        virtual void cancelDragging( AvatarItem & character ) ;
 
-       /**
-        * Character falls down at speed from item’s data
-        */
+        /**
+         * The character is falling down
+         */
         virtual void fall( AvatarItem & character ) ;
 
-       /**
-        * Character jumps, details of jumping are in subclasses
-        */
+        /**
+         * The character jumps
+         */
         virtual void jump( AvatarItem & character ) ;
 
-       /**
-        * Character in air, falling or has jumped, glides at speed from item’s data
-        * in direction of north or south or west or east
-        */
+        /**
+         * The character glides in the air when falling or jumping
+         */
         virtual void glide( AvatarItem & character ) ;
 
         /**
-         * Character teleports to another room
+         * The character teleports to another room
          */
         virtual void enterTeletransport( AvatarItem & character ) ;
         virtual void exitTeletransport( AvatarItem & character ) ;
 
-       /**
-        * Character collides with a mortal item
-        */
+        /**
+         * The character collides with a mortal item
+         */
         virtual void collideWithMortalItem( AvatarItem & character ) ;
 
-       /**
-        * Character releases something that freezes moving items
-        */
+        /**
+         * The character releases something that can freeze another item
+         */
         virtual void useHooter( AvatarItem & character ) ;
 
-       /**
-        * Take item underneath character
-        */
+        /**
+         * Take an item below the character
+         */
         virtual void takeItem( AvatarItem & character ) ;
 
-       /**
-        * Drop item just below character
-        */
+        /**
+         * Drop a taken item just under the character
+         */
         virtual void dropItem( AvatarItem & character ) ;
 
 protected:

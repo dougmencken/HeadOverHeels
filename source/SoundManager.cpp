@@ -213,23 +213,23 @@ std::string SoundManager::activityToString ( const activities::ActivityOfItem & 
                 case activities::Activity::ItemTaken : return "taken" ;
                 case activities::Activity::DropItem : case activities::Activity::DropAndJump : return "drop" ;
 
-                case activities::Activity::DisplaceNorth : case activities::Activity::DisplaceSouth :
-                case activities::Activity::DisplaceEast : case activities::Activity::DisplaceWest :
-                case activities::Activity::DisplaceNortheast : case activities::Activity::DisplaceSoutheast :
-                case activities::Activity::DisplaceSouthwest : case activities::Activity::DisplaceNorthwest :
-                case activities::Activity::DisplaceUp : case activities::Activity::DisplaceDown :
+                case activities::Activity::PushedNorth : case activities::Activity::PushedSouth :
+                case activities::Activity::PushedEast : case activities::Activity::PushedWest :
+                case activities::Activity::PushedNortheast : case activities::Activity::PushedSoutheast :
+                case activities::Activity::PushedSouthwest : case activities::Activity::PushedNorthwest :
+                case activities::Activity::PushedUp : /* case activities::Activity::PushedDown : */
                         return "push" ;
 
-                case activities::Activity::ForcePushNorth : case activities::Activity::ForcePushSouth :
-                case activities::Activity::ForcePushEast : case activities::Activity::ForcePushWest : return "forcepush" ;
+                case activities::Activity::DraggedNorth : case activities::Activity::DraggedSouth :
+                case activities::Activity::DraggedEast : case activities::Activity::DraggedWest : return "dragged" ;
 
-                case activities::Activity::CancelPushingNorth : case activities::Activity::CancelPushingSouth :
-                case activities::Activity::CancelPushingEast : case activities::Activity::CancelPushingWest : return "move" ;
+                case activities::Activity::CancelDragNorth : case activities::Activity::CancelDragSouth :
+                case activities::Activity::CancelDragEast : case activities::Activity::CancelDragWest : return "move" ;
 
                 case activities::Activity::BeginTeletransportation : return "teleport-out" ;
                 case activities::Activity::EndTeletransportation : return "teleport-in" ;
 
-                case activities::Activity::MeetMortalItem : return "death" ;
+                case activities::Activity::MeetMortalItem : return "lose-life" ;
                 case activities::Activity::Vanish : return "vanish" ;
                 case activities::Activity::Collision : return "collision" ;
                 case activities::Activity::Function : return "function" ;

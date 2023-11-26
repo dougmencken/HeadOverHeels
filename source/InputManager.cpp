@@ -124,6 +124,7 @@ bool InputManager::swapTyped() const
 bool InputManager::pauseTyped() const
 {
         return allegro::isKeyPushed( getUserKeyFor( "pause" ) );
+        ///return ( allegro::nextKey() == getUserKeyFor( "pause" ) );
 }
 
 bool InputManager::automapTyped() const

@@ -77,14 +77,14 @@ bool Patrol::update ()
                         }
                         break;
 
-                case activities::Activity::DisplaceNorth:
-                case activities::Activity::DisplaceSouth:
-                case activities::Activity::DisplaceEast:
-                case activities::Activity::DisplaceWest:
-                case activities::Activity::DisplaceNortheast:
-                case activities::Activity::DisplaceSoutheast:
-                case activities::Activity::DisplaceSouthwest:
-                case activities::Activity::DisplaceNorthwest:
+                case activities::Activity::PushedNorth:
+                case activities::Activity::PushedSouth:
+                case activities::Activity::PushedEast:
+                case activities::Activity::PushedWest:
+                case activities::Activity::PushedNortheast:
+                case activities::Activity::PushedSoutheast:
+                case activities::Activity::PushedSouthwest:
+                case activities::Activity::PushedNorthwest:
                         SoundManager::getInstance().play( freeItem.getKind (), "push" );
 
                         // displace this item by some other one

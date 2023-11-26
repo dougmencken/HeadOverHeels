@@ -71,14 +71,14 @@ bool RemoteControl::update ()
                         }
                         break;
 
-                case activities::Activity::DisplaceNorth:
-                case activities::Activity::DisplaceSouth:
-                case activities::Activity::DisplaceEast:
-                case activities::Activity::DisplaceWest:
-                case activities::Activity::DisplaceNortheast:
-                case activities::Activity::DisplaceNorthwest:
-                case activities::Activity::DisplaceSoutheast:
-                case activities::Activity::DisplaceSouthwest:
+                case activities::Activity::PushedNorth:
+                case activities::Activity::PushedSouth:
+                case activities::Activity::PushedEast:
+                case activities::Activity::PushedWest:
+                case activities::Activity::PushedNortheast:
+                case activities::Activity::PushedNorthwest:
+                case activities::Activity::PushedSoutheast:
+                case activities::Activity::PushedSouthwest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
@@ -103,8 +103,8 @@ bool RemoteControl::update ()
                         }
 
                         // controller changes movement of controlled item
-                        if ( activity == activities::Activity::DisplaceNorth || activity == activities::Activity::DisplaceSouth ||
-                                activity == activities::Activity::DisplaceEast || activity == activities::Activity::DisplaceWest )
+                        if ( activity == activities::Activity::PushedNorth || activity == activities::Activity::PushedSouth ||
+                                activity == activities::Activity::PushedEast || activity == activities::Activity::PushedWest )
                         {
                                 if ( getNameOfBehavior() == "behavior of remote control" )
                                 {
@@ -112,19 +112,19 @@ bool RemoteControl::update ()
 
                                         switch ( activity )
                                         {
-                                                case activities::Activity::DisplaceNorth:
+                                                case activities::Activity::PushedNorth:
                                                         motionActivity = activities::Activity::MoveNorth;
                                                         break;
 
-                                                case activities::Activity::DisplaceSouth:
+                                                case activities::Activity::PushedSouth:
                                                         motionActivity = activities::Activity::MoveSouth;
                                                         break;
 
-                                                case activities::Activity::DisplaceEast:
+                                                case activities::Activity::PushedEast:
                                                         motionActivity = activities::Activity::MoveEast;
                                                         break;
 
-                                                case activities::Activity::DisplaceWest:
+                                                case activities::Activity::PushedWest:
                                                         motionActivity = activities::Activity::MoveWest;
                                                         break;
 

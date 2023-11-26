@@ -63,8 +63,8 @@ bool CharacterHead::update ()
                 characterItem.decrementShieldOverTime () ;
         }
 
-        // change height for climbing bars easily
-        characterItem.setHeight( activity == activities::Activity::Fall || activity == activities::Activity::Glide ? 23 : 24 );
+        // change the height to climb bars easier
+        characterItem.changeHeightTo( activity == activities::Activity::Fall || activity == activities::Activity::Glide ? 23 : 24 );
 
         switch ( activity )
         {
@@ -86,26 +86,26 @@ bool CharacterHead::update ()
                         move( characterItem );
                         break;
 
-                case activities::Activity::DisplaceNorth:
-                case activities::Activity::DisplaceSouth:
-                case activities::Activity::DisplaceEast:
-                case activities::Activity::DisplaceWest:
-                case activities::Activity::DisplaceNortheast:
-                case activities::Activity::DisplaceSoutheast:
-                case activities::Activity::DisplaceSouthwest:
-                case activities::Activity::DisplaceNorthwest:
-                case activities::Activity::ForcePushNorth:
-                case activities::Activity::ForcePushSouth:
-                case activities::Activity::ForcePushEast:
-                case activities::Activity::ForcePushWest:
+                case activities::Activity::PushedNorth:
+                case activities::Activity::PushedSouth:
+                case activities::Activity::PushedEast:
+                case activities::Activity::PushedWest:
+                case activities::Activity::PushedNortheast:
+                case activities::Activity::PushedSoutheast:
+                case activities::Activity::PushedSouthwest:
+                case activities::Activity::PushedNorthwest:
+                case activities::Activity::DraggedNorth:
+                case activities::Activity::DraggedSouth:
+                case activities::Activity::DraggedEast:
+                case activities::Activity::DraggedWest:
                         displace( characterItem );
                         break;
 
-                case activities::Activity::CancelPushingNorth:
-                case activities::Activity::CancelPushingSouth:
-                case activities::Activity::CancelPushingEast:
-                case activities::Activity::CancelPushingWest:
-                        cancelDisplace( characterItem );
+                case activities::Activity::CancelDragNorth:
+                case activities::Activity::CancelDragSouth:
+                case activities::Activity::CancelDragEast:
+                case activities::Activity::CancelDragWest:
+                        cancelDragging( characterItem );
                         break;
 
                 case activities::Activity::Fall:
@@ -230,8 +230,8 @@ void CharacterHead::behave ()
                         }
                 }
                 // if you are being displaced
-                else if ( activity == activities::Activity::DisplaceNorth || activity == activities::Activity::DisplaceSouth ||
-                        activity == activities::Activity::DisplaceEast || activity == activities::Activity::DisplaceWest )
+                else if ( activity == activities::Activity::PushedNorth || activity == activities::Activity::PushedSouth ||
+                        activity == activities::Activity::PushedEast || activity == activities::Activity::PushedWest )
                 {
                         if ( input.jumpTyped() )
                         {
@@ -260,8 +260,8 @@ void CharacterHead::behave ()
                         }
                 }
                 // if you are being forcibly displaced
-                else if ( activity == activities::Activity::ForcePushNorth || activity == activities::Activity::ForcePushSouth ||
-                        activity == activities::Activity::ForcePushEast || activity == activities::Activity::ForcePushWest )
+                else if ( activity == activities::Activity::DraggedNorth || activity == activities::Activity::DraggedSouth ||
+                        activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
                 {
                         if ( input.jumpTyped() )
                         {
@@ -271,19 +271,19 @@ void CharacterHead::behave ()
                         // cancel displace when moving in direction opposite to displacement
                         else if ( input.movenorthTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForcePushSouth ? activities::Activity::CancelPushingSouth : activities::Activity::MoveNorth );
+                                activity = ( activity == activities::Activity::DraggedSouth ? activities::Activity::CancelDragSouth : activities::Activity::MoveNorth );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForcePushNorth ? activities::Activity::CancelPushingNorth : activities::Activity::MoveSouth );
+                                activity = ( activity == activities::Activity::DraggedNorth ? activities::Activity::CancelDragNorth : activities::Activity::MoveSouth );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForcePushWest ? activities::Activity::CancelPushingWest : activities::Activity::MoveEast );
+                                activity = ( activity == activities::Activity::DraggedWest ? activities::Activity::CancelDragWest : activities::Activity::MoveEast );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = ( activity == activities::Activity::ForcePushEast ? activities::Activity::CancelPushingEast : activities::Activity::MoveWest );
+                                activity = ( activity == activities::Activity::DraggedEast ? activities::Activity::CancelDragEast : activities::Activity::MoveWest );
                         }
                 }
                 else if ( activity == activities::Activity::Jump )

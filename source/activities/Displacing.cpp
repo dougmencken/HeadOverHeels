@@ -26,7 +26,7 @@ Displacing& Displacing::getInstance()
 
 bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
-        bool itemDisplaced = false;
+        bool displaced = false ;
 
         ItemPtr item = behavior->getItem ();
         if ( item == nilPointer ) return false ;
@@ -35,52 +35,52 @@ bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activi
 
         switch ( *activity )
         {
-                case activities::Activity::ForcePushNorth:
-                        activityToPropagate = activities::Activity::DisplaceNorth;
+                case activities::Activity::DraggedNorth:
+                        activityToPropagate = activities::Activity::PushedNorth;
                         // fallthru
-                case activities::Activity::DisplaceNorth:
-                        itemDisplaced = item->addToX( -1 );
+                case activities::Activity::PushedNorth:
+                        displaced = item->addToX( -1 );
                         break;
 
-                case activities::Activity::ForcePushSouth:
-                        activityToPropagate = activities::Activity::DisplaceSouth;
+                case activities::Activity::DraggedSouth:
+                        activityToPropagate = activities::Activity::PushedSouth;
                         // fallthru
-                case activities::Activity::DisplaceSouth:
-                        itemDisplaced = item->addToX( 1 );
+                case activities::Activity::PushedSouth:
+                        displaced = item->addToX( 1 );
                         break;
 
-                case activities::Activity::ForcePushEast:
-                        activityToPropagate = activities::Activity::DisplaceEast;
+                case activities::Activity::DraggedEast:
+                        activityToPropagate = activities::Activity::PushedEast;
                         // fallthru
-                case activities::Activity::DisplaceEast:
-                        itemDisplaced = item->addToY( -1 );
+                case activities::Activity::PushedEast:
+                        displaced = item->addToY( -1 );
                         break;
 
-                case activities::Activity::ForcePushWest:
-                        activityToPropagate = activities::Activity::DisplaceWest;
+                case activities::Activity::DraggedWest:
+                        activityToPropagate = activities::Activity::PushedWest;
                         // fallthru
-                case activities::Activity::DisplaceWest:
-                        itemDisplaced = item->addToY( 1 );
+                case activities::Activity::PushedWest:
+                        displaced = item->addToY( 1 );
                         break;
 
-                case activities::Activity::DisplaceNortheast:
-                        itemDisplaced = item->addToPosition( -1, -1, 0 );
+                case activities::Activity::PushedNortheast:
+                        displaced = item->addToPosition( -1, -1, 0 );
                         break;
 
-                case activities::Activity::DisplaceNorthwest:
-                        itemDisplaced = item->addToPosition( -1, 1, 0 );
+                case activities::Activity::PushedNorthwest:
+                        displaced = item->addToPosition( -1, 1, 0 );
                         break;
 
-                case activities::Activity::DisplaceSoutheast:
-                        itemDisplaced = item->addToPosition( 1, -1, 0 );
+                case activities::Activity::PushedSoutheast:
+                        displaced = item->addToPosition( 1, -1, 0 );
                         break;
 
-                case activities::Activity::DisplaceSouthwest:
-                        itemDisplaced = item->addToPosition( 1, 1, 0 );
+                case activities::Activity::PushedSouthwest:
+                        displaced = item->addToPosition( 1, 1, 0 );
                         break;
 
-                case activities::Activity::DisplaceUp:
-                        itemDisplaced = item->addToZ( 1 );
+                case activities::Activity::PushedUp:
+                        displaced = item->addToZ( 1 );
                         break;
 
                 default:
@@ -89,15 +89,14 @@ bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activi
 
         if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
-                // when there’s collision
-                if ( ! itemDisplaced )
+                // when there’s a collision
+                if ( ! displaced )
                 {
                         // move involved items
                         this->propagateActivityToAdjacentItems( *item, activityToPropagate );
                 }
-                else
-                {
-                        // look if items on top of this item needs to move too
+                else {
+                        // maybe there’s something on top
                         this->propagateActivityToItemsAbove( *item, *activity );
                 }
         }
@@ -108,12 +107,12 @@ bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activi
                 // look if it falls yet
                 if ( Falling::getInstance().fall( behavior ) )
                 {
-                        *activity = activities::Activity::Fall;
-                        itemDisplaced = true;
+                        *activity = activities::Activity::Fall ;
+                        displaced = true ;
                 }
         }
 
-        return itemDisplaced ;
+        return displaced ;
 }
 
 }

@@ -60,25 +60,25 @@ public:
         static const unsigned int TakeAndJump = 115 ;
         static const unsigned int DropAndJump = 116 ;
 
-        static const unsigned int DisplaceNorth = 124 ;
-        static const unsigned int DisplaceSouth = 125 ;
-        static const unsigned int DisplaceEast = 126 ;
-        static const unsigned int DisplaceWest = 127 ;
-        static const unsigned int DisplaceNortheast = 132 ;
-        static const unsigned int DisplaceSoutheast = 133 ;
-        static const unsigned int DisplaceSouthwest = 134 ;
-        static const unsigned int DisplaceNorthwest = 135 ;
-        static const unsigned int DisplaceUp = 160 ;
-        static const unsigned int DisplaceDown = 170 ;
+        static const unsigned int PushedNorth = 124 ;
+        static const unsigned int PushedSouth = 125 ;
+        static const unsigned int PushedEast = 126 ;
+        static const unsigned int PushedWest = 127 ;
+        static const unsigned int PushedNortheast = 132 ;
+        static const unsigned int PushedSoutheast = 133 ;
+        static const unsigned int PushedSouthwest = 134 ;
+        static const unsigned int PushedNorthwest = 135 ;
+        static const unsigned int PushedUp = 150 ;
+        /* static const unsigned int PushedDown = 160 ; */
 
-        static const unsigned int ForcePushNorth = 181 ;
-        static const unsigned int ForcePushSouth = 182 ;
-        static const unsigned int ForcePushEast = 183 ;
-        static const unsigned int ForcePushWest = 184 ;
-        static const unsigned int CancelPushingNorth = 191 ;
-        static const unsigned int CancelPushingSouth = 192 ;
-        static const unsigned int CancelPushingEast = 193 ;
-        static const unsigned int CancelPushingWest = 194 ;
+        static const unsigned int DraggedNorth = 181 ;
+        static const unsigned int DraggedSouth = 182 ;
+        static const unsigned int DraggedEast = 183 ;
+        static const unsigned int DraggedWest = 184 ;
+        static const unsigned int CancelDragNorth = 191 ;
+        static const unsigned int CancelDragSouth = 192 ;
+        static const unsigned int CancelDragEast = 193 ;
+        static const unsigned int CancelDragWest = 194 ;
 
         static const unsigned int BeginTeletransportation = 222 ;
         static const unsigned int EndTeletransportation = 223 ;

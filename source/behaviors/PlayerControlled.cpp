@@ -132,7 +132,7 @@ void PlayerControlled::autoMove( ::AvatarItem & character )
 
 void PlayerControlled::displace( ::AvatarItem & character )
 {
-        // this item is moved by another one
+        // the character is moved by another item
         // when the displacement couldn’t be performed due to a collision then the activity propagates to the collided items
         if ( speedTimer->getValue() > character.getSpeed() )
         {
@@ -144,7 +144,7 @@ void PlayerControlled::displace( ::AvatarItem & character )
         }
 }
 
-void PlayerControlled::cancelDisplace( ::AvatarItem & character )
+void PlayerControlled::cancelDragging( ::AvatarItem & character )
 {
         if ( ! character.isFrozen() )
         {
@@ -247,7 +247,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
                 if ( ! activities::Falling::getInstance().fall( this ) &&
                         ( activity != activities::Activity::MeetMortalItem || character.hasShield() ) )
                 {
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Wait ;
                 }
 
                 glideTimer->reset();
@@ -334,20 +334,20 @@ void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
 {
         switch ( activity )
         {
-                // character just met mortal guy
+                // the character just met something mortal
                 case activities::Activity::MeetMortalItem:
                         // do you have immunity
                         if ( ! character.hasShield() )
                         {
                                 // change to bubbles
-                                character.metamorphInto( kindOfBubbles, "collide with mortal item" );
+                                character.metamorphInto( kindOfBubbles, "hit something mortal" );
 
                                 this->isLosingLife = true ;
-                                activity = activities::Activity::Vanish;
+                                activity = activities::Activity::Vanish ;
                         }
                         else
                         {
-                                activity = activities::Activity::Wait;
+                                activity = activities::Activity::Wait ;
                         }
                         break;
 
@@ -379,15 +379,15 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
         {
                 this->donutFromHooterInRoom = true ;
 
-                const DescriptionOfItem * hooterDoughnut = ItemDescriptions::descriptions().getDescriptionByKind( kindOfFiredDoughnut );
-                if ( hooterDoughnut != nilPointer )
+                const DescriptionOfItem * whatIsDonut = ItemDescriptions::descriptions().getDescriptionByKind( kindOfFiredDoughnut );
+                if ( whatIsDonut != nilPointer )
                 {
                         SoundManager::getInstance().stop( character.getOriginalKind(), "donut" );
 
                         // create item at the same position as the character
-                        int z = character.getZ() + character.getHeight() - hooterDoughnut->getHeight();
+                        int z = character.getZ() + character.getHeight() - whatIsDonut->getHeight() ;
                         FreeItemPtr donut( new FreeItem (
-                                hooterDoughnut,
+                                whatIsDonut,
                                 character.getX(), character.getY(),
                                 z < 0 ? 0 : z,
                                 character.getOrientation () ) );
@@ -397,7 +397,7 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
                         Doughnut * behaviorOfDonut = dynamic_cast< Doughnut * >( donut->getBehavior().get () );
                         behaviorOfDonut->setCharacter( AvatarItemPtr( &character ) );
 
-                        // initially the doughnut shares the same position with the character, therefore ignore collisions
+                        // initially the doughnut shares the same position as the character, therefore ignore collisions
                         // COMMENT THIS AND THE GAME CRASHES WHAHA ///////////
                         donut->setIgnoreCollisions( true );
 
@@ -420,23 +420,23 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                 // look for an item below the character
                 if ( ! character.canAdvanceTo( 0, 0, -1 ) )
                 {
-                        int coordinates = 0;
+                        int whereIsItemToPick = 0 ;
 
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
                                 ItemPtr bottomItem = mediator->findCollisionPop( );
 
-                                // choose free pushable item less than or equal to 3/4 of size of one tile
+                                // pick a free pushable item less than or equal to 3/4 of the size of one tile
                                 if ( bottomItem != nilPointer && bottomItem->getBehavior() != nilPointer
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 bottomItem->getBehavior()->getNameOfBehavior() == "behavior of spring leap" )
                                         && bottomItem->getWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
                                         && bottomItem->getWidthY() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
                                 {
-                                        if ( bottomItem->getX() + bottomItem->getY() > coordinates )
+                                        if ( bottomItem->getX() + bottomItem->getY() > whereIsItemToPick )
                                         {
-                                                coordinates = bottomItem->getX() + bottomItem->getY();
-                                                takenItem = bottomItem;
+                                                whereIsItemToPick = bottomItem->getX () + bottomItem->getY ();
+                                                takenItem = bottomItem ;
                                         }
                                 }
                         }
@@ -451,7 +451,8 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                                 character.placeItemInBag( takenItem->getKind (), takenItem->getBehavior()->getNameOfBehavior () );
 
                                 takenItem->getBehavior()->changeActivityOfItem( activities::Activity::Vanish );
-                                activity = ( activity == activities::Activity::TakeAndJump ? activities::Activity::Jump : activities::Activity::ItemTaken );
+                                activity = ( activity == activities::Activity::TakeAndJump )
+                                                ? activities::Activity::Jump : activities::Activity::ItemTaken ;
 
                                 SoundManager::getInstance().play( character.getOriginalKind(), "take" );
 

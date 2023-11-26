@@ -173,7 +173,7 @@ public:
          */
         unsigned int getHeight () const {  return height ;  }
 
-        void setHeight ( int newHeight ) {  height = newHeight ;  }
+        void changeHeightTo ( int newHeight ) {  height = newHeight ;  }
 
         bool isMortal () const ;
 

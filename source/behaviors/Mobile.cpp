@@ -42,14 +42,14 @@ bool Mobile::update ()
                         }
                         break;
 
-                case activities::Activity::DisplaceNorth:
-                case activities::Activity::DisplaceSouth:
-                case activities::Activity::DisplaceEast:
-                case activities::Activity::DisplaceWest:
-                case activities::Activity::DisplaceNortheast:
-                case activities::Activity::DisplaceSoutheast:
-                case activities::Activity::DisplaceSouthwest:
-                case activities::Activity::DisplaceNorthwest:
+                case activities::Activity::PushedNorth:
+                case activities::Activity::PushedSouth:
+                case activities::Activity::PushedEast:
+                case activities::Activity::PushedWest:
+                case activities::Activity::PushedNortheast:
+                case activities::Activity::PushedSoutheast:
+                case activities::Activity::PushedSouthwest:
+                case activities::Activity::PushedNorthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
@@ -70,10 +70,10 @@ bool Mobile::update ()
                         freeItem.animate();
                         break;
 
-                case activities::Activity::ForcePushNorth:
-                case activities::Activity::ForcePushSouth:
-                case activities::Activity::ForcePushEast:
-                case activities::Activity::ForcePushWest:
+                case activities::Activity::DraggedNorth:
+                case activities::Activity::DraggedSouth:
+                case activities::Activity::DraggedEast:
+                case activities::Activity::DraggedWest:
                         // item is on conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {

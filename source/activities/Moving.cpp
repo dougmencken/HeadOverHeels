@@ -25,11 +25,11 @@ Moving& Moving::getInstance()
 }
 
 
-bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
+bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool itFalls )
 {
-        bool moved = false;
+        bool moved = false ;
 
-        ActivityOfItem displaceActivity = activities::Activity::Wait;
+        ActivityOfItem toItemsNearby = activities::Activity::Wait ;
 
         ItemPtr item = behavior->getItem();
         if ( item == nilPointer ) return false ;
@@ -41,66 +41,69 @@ bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool
                 case activities::Activity::AutoMoveNorth:
                         item->changeOrientation( "north" );
                         moved = item->addToX( -1 );
-                        displaceActivity = activities::Activity::DisplaceNorth ;
+                        toItemsNearby = activities::Activity::PushedNorth ;
                         break;
 
                 case activities::Activity::MoveSouth:
                 case activities::Activity::AutoMoveSouth:
                         item->changeOrientation( "south" );
                         moved = item->addToX( 1 );
-                        displaceActivity = activities::Activity::DisplaceSouth ;
+                        toItemsNearby = activities::Activity::PushedSouth ;
                         break;
 
                 case activities::Activity::MoveEast:
                 case activities::Activity::AutoMoveEast:
                         item->changeOrientation( "east" );
                         moved = item->addToY( -1 );
-                        displaceActivity = activities::Activity::DisplaceEast ;
+                        toItemsNearby = activities::Activity::PushedEast ;
                         break;
 
                 case activities::Activity::MoveWest:
                 case activities::Activity::AutoMoveWest:
                         item->changeOrientation( "west" );
                         moved = item->addToY( 1 );
-                        displaceActivity = activities::Activity::DisplaceWest ;
+                        toItemsNearby = activities::Activity::PushedWest ;
                         break;
 
                 case activities::Activity::MoveNortheast:
                         moved = item->addToPosition( -1, -1, 0 );
-                        displaceActivity = activities::Activity::DisplaceNortheast ;
+                        toItemsNearby = activities::Activity::PushedNortheast ;
                         break;
 
                 case activities::Activity::MoveNorthwest:
                         moved = item->addToPosition( -1, 1, 0 );
-                        displaceActivity = activities::Activity::DisplaceNorthwest ;
+                        toItemsNearby = activities::Activity::PushedNorthwest ;
                         break;
 
                 case activities::Activity::MoveSoutheast:
                         moved = item->addToPosition( 1, -1, 0 );
-                        displaceActivity = activities::Activity::DisplaceSoutheast ;
+                        toItemsNearby = activities::Activity::PushedSoutheast ;
                         break;
 
                 case activities::Activity::MoveSouthwest:
                         moved = item->addToPosition( 1, 1, 0 );
-                        displaceActivity = activities::Activity::DisplaceSouthwest ;
+                        toItemsNearby = activities::Activity::PushedSouthwest ;
                         break;
 
                 case activities::Activity::MoveUp:
                         moved = item->addToZ( 1 );
 
-                        // if can’t move up, raise free items above
+                        // if can’t move up, raise the items above
                         if ( ! moved )
                         {
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        ItemPtr topItem = mediator->findCollisionPop( );
-                                        if ( topItem != nilPointer &&
-                                                ( topItem->whichItemClass() == "free item" || topItem->whichItemClass() == "avatar item" ) )
+                                        ItemPtr aboveItem = mediator->findCollisionPop ();
+
+                                        // when there’s something above
+                                        if ( aboveItem != nilPointer
+                                                // that moves freely
+                                                && ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" )
+                                                // and isn’t bigger
+                                                && ( item->getWidthX() + item->getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
                                         {
-                                                if ( item->getWidthX() + item->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
-                                                {
-                                                        ascent( dynamic_cast< FreeItem& >( *topItem ), 1 );
-                                                }
+                                                        // then raise it
+                                                        ascent( dynamic_cast< FreeItem & >( *aboveItem ), 1 );
                                         }
                                 }
 
@@ -111,48 +114,48 @@ bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool
 
                 case activities::Activity::MoveDown:
                 {
-                        // is there any items above
-                        bool loading = ! item->canAdvanceTo( 0, 0, 2 );
+                        // is there anything above
+                        bool loaded = ! item->canAdvanceTo( 0, 0, /* 2 */ 1 );
 
-                        // copy stack of collisions
-                        std::stack< std::string > topItems;
+                        // collect the stack of such items
+                        std::stack< std::string > itemsAbove ;
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                topItems.push( mediator->popCollision() );
+                                itemsAbove.push( mediator->popCollision() );
                         }
 
                         moved = item->addToZ( -1 );
 
-                        // fall together with items above
-                        if ( moved && loading )
+                        // fall together with the items above
+                        if ( moved && loaded )
                         {
-                                while ( ! topItems.empty() )
+                                while ( ! itemsAbove.empty() )
                                 {
-                                        ItemPtr topItem = mediator->findItemByUniqueName( topItems.top() );
-                                        topItems.pop();
+                                        ItemPtr onTop = mediator->findItemByUniqueName( itemsAbove.top() );
+                                        itemsAbove.pop();
 
-                                        if ( topItem->whichItemClass() == "free item" || topItem->whichItemClass() == "avatar item" )
-                                        {
-                                                descend( dynamic_cast< FreeItem& >( *topItem ), 2 );
+                                        if ( onTop->whichItemClass() == "free item" || onTop->whichItemClass() == "avatar item" )
+                                        {       // lower it, to not fall when on elevator and it goes down
+                                                descend( dynamic_cast< FreeItem & >( *onTop ), /* 2 */ 1 );
                                         }
                                 }
                         }
                 }
                         break;
 
-                case activities::Activity::CancelPushingNorth:
+                case activities::Activity::CancelDragNorth:
                         item->changeOrientation( "south" );
                         break;
 
-                case activities::Activity::CancelPushingSouth:
+                case activities::Activity::CancelDragSouth:
                         item->changeOrientation( "north" );
                         break;
 
-                case activities::Activity::CancelPushingEast:
+                case activities::Activity::CancelDragEast:
                         item->changeOrientation( "west" );
                         break;
 
-                case activities::Activity::CancelPushingWest:
+                case activities::Activity::CancelDragWest:
                         item->changeOrientation( "east" );
                         break;
 
@@ -160,20 +163,19 @@ bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool
                         ;
         }
 
+        // if the item can move freely
         if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
-                // move collided items when there’s horizontal collision
-                if ( ! moved ||
-                        ( *activity != activities::Activity::MoveUp && *activity != activities::Activity::MoveDown ) )
+                if ( /* not moving up or down, to not change the activity of items on elevator */
+                        ( *activity != activities::Activity::MoveUp && *activity != activities::Activity::MoveDown )
+                                || /* there’s a collision */ ! moved )
                 {
-                        // see if is it necessary to move items above
-                        // exception is for vertical movement to keep activity of items above elevator unchanged
-                        this->propagateActivityToAdjacentItems( *item, displaceActivity );
+                        // move adjacent items
+                        this->propagateActivityToAdjacentItems( *item, toItemsNearby );
                 }
         }
 
-        // item may fall
-        if ( canFall && *activity != activities::Activity::Wait )
+        if ( itFalls /* doesn’t fly */ && *activity != activities::Activity::Wait )
         {
                 if ( Falling::getInstance().fall( behavior ) )
                 {
@@ -189,11 +191,8 @@ void Moving::ascent( FreeItem & freeItem, int z )
 {
         if ( freeItem.getBehavior() != nilPointer )
         {
-                // don’t ascent elevator
-                if ( freeItem.getBehavior()->getNameOfBehavior () != "behavior of elevator" )
+                if ( freeItem.getBehavior()->getNameOfBehavior () != "behavior of elevator" ) // don’t ascent an elevator
                 {
-                        // when there’s something above this item
-                        // then raise every not bigger free item above
                         if ( ! freeItem.addToZ( z ) )
                         {
                                 Mediator* mediator = freeItem.getMediator();
@@ -208,9 +207,8 @@ void Moving::ascent( FreeItem & freeItem, int z )
                                                 {
                                                         AvatarItem & character = dynamic_cast< AvatarItem & >( freeItem );
 
-                                                        if ( character.isActiveCharacter() )
-                                                        {
-                                                                // active character reached maximum height of room
+                                                        if ( character.isActiveCharacter() ) {
+                                                                // the active character reached the maximum height of room
                                                                 character.setWayOfExit( "above" );
                                                         }
 
@@ -218,16 +216,17 @@ void Moving::ascent( FreeItem & freeItem, int z )
                                                 }
                                         }
 
-                                        ItemPtr topItem = mediator->findItemByUniqueName( collision );
+                                        ItemPtr aboveItem = mediator->findItemByUniqueName( collision );
 
-                                        if ( topItem != nilPointer &&
-                                                ( topItem->whichItemClass() == "free item" || topItem->whichItemClass() == "avatar item" ) )
+                                        // when there’s something above
+                                        if ( aboveItem != nilPointer
+                                                // that moves freely
+                                                && ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" )
+                                                // and isn’t bigger
+                                                && ( freeItem.getWidthX() + freeItem.getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
                                         {
-                                                if ( freeItem.getWidthX() + freeItem.getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
-                                                {
-                                                        // raise recursively
-                                                        ascent( dynamic_cast< FreeItem& >( *topItem ), z );
-                                                }
+                                                // then raise it, recursively
+                                                ascent( dynamic_cast< FreeItem & >( *aboveItem ), z );
                                         }
                                 }
 
@@ -242,22 +241,22 @@ void Moving::descend( FreeItem & freeItem, int z )
 {
         if ( freeItem.getBehavior() != nilPointer )
         {
-                // are there items on top
-                bool loading = ! freeItem.canAdvanceTo( 0, 0, z );
+                // is there anything above
+                bool loaded = ! freeItem.canAdvanceTo( 0, 0, z );
 
-                // if item may descend itself then lower every item above it
-                if ( freeItem.addToZ( -1 ) && loading )
+                // if the item may descend itself then lower every item above it
+                if ( freeItem.addToZ( -1 ) && loaded )
                 {
                         Mediator* mediator = freeItem.getMediator();
 
-                        // make copy of stack of collisions
-                        std::stack< std::string > topItems;
+                        // collect the stack of items above
+                        std::stack< std::string > itemsAbove ;
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                topItems.push( mediator->popCollision() );
+                                itemsAbove.push( mediator->popCollision() );
                         }
 
-                        // descend by one at a time, otherwise there may be collision which hinders descend
+                        // descend by the one at a time, otherwise there may be a collision which hinders descending
                         for ( int i = 0; i < ( z - 1 ); i++ )
                         {
                                 freeItem.addToZ( -1 );
@@ -266,14 +265,14 @@ void Moving::descend( FreeItem & freeItem, int z )
                         // for each item above
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                ItemPtr topItem = mediator->findItemByUniqueName( topItems.top() );
-                                topItems.pop();
+                                ItemPtr aboveItem = mediator->findItemByUniqueName( itemsAbove.top () );
+                                itemsAbove.pop ();
 
-                                if ( topItem != nilPointer &&
-                                        ( topItem->whichItemClass() == "free item" || topItem->whichItemClass() == "avatar item" ) )
+                                if ( aboveItem != nilPointer &&
+                                        ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" ) )
                                 {
-                                        // lower recursively
-                                        descend( dynamic_cast< FreeItem& >( *topItem ), z );
+                                        // lower it, recursively
+                                        descend( dynamic_cast< FreeItem & >( *aboveItem ), z );
                                 }
                         }
                 }

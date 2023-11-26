@@ -91,22 +91,22 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
         if ( orientation == "north" )
         {
                 itemMoved = characterItem.addToX( - deltaXY );
-                displaceActivity = activities::Activity::DisplaceNorth ;
+                displaceActivity = activities::Activity::PushedNorth ;
         }
         else if ( orientation == "south" )
         {
                 itemMoved = characterItem.addToX( deltaXY );
-                displaceActivity = activities::Activity::DisplaceSouth ;
+                displaceActivity = activities::Activity::PushedSouth ;
         }
         else if ( orientation == "east" )
         {
                 itemMoved = characterItem.addToY( - deltaXY );
-                displaceActivity = activities::Activity::DisplaceEast ;
+                displaceActivity = activities::Activity::PushedEast ;
         }
         else if ( orientation == "west" )
         {
                 itemMoved = characterItem.addToY( deltaXY );
-                displaceActivity = activities::Activity::DisplaceWest ;
+                displaceActivity = activities::Activity::PushedWest ;
         }
 
         // displace adjacent items when there’s horizontal collision
@@ -135,7 +135,7 @@ void Jumping::lift( FreeItem& sender, Item& item, int z )
                 if ( item.getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 item.getBehavior()->getNameOfBehavior () == "behavior of bonus" )
                 {
-                        item.getBehavior()->changeActivityOfItem( activities::Activity::DisplaceUp, ItemPtr( &sender ) );
+                        item.getBehavior()->changeActivityOfItem( activities::Activity::PushedUp, ItemPtr( &sender ) );
                 }
                 // raise item when it’s not elevator
                 else if ( item.getBehavior()->getNameOfBehavior () != "behavior of elevator" )

@@ -32,26 +32,26 @@ public:
         static Moving & getInstance () ;
 
        /**
-        * Item moves
-        * @param behavior behavior of item
-        * @param activity to get way of movement
-        * @param canFall whether item may fall, false if it flies
-        * @return true for move or change of activity, false for collision
+        * Move the item
+        * @param behavior the behavior of item
+        * @param activity the current activity
+        * @param itFalls whether the item falls, false for a flying one
+        * @return true for a move or activity change, false for a collision
         */
-        virtual bool move ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
+        virtual bool move ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool itFalls ) ;
 
 protected:
 
         /**
-         * Recursively lift items stacked on this item
-         * @param freeItem Currently first item
+         * Recursively lift the items stacked on that item
+         * @param freeItem That item
          * @param z Units to ascend
          */
         void ascent ( FreeItem & freeItem, int z ) ;
 
         /**
-         * Recursively lower items stacked on this item
-         * @param freeItem Currently first item
+         * Recursively lower the items stacked on that item
+         * @param freeItem That item
          * @param z Units to descend
          */
         void descend ( FreeItem & freeItem, int z ) ;

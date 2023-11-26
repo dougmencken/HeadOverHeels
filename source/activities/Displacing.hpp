@@ -32,9 +32,9 @@ public:
 
        /**
         * Item is being displaced
-        * @param behavior behavior of item
+        * @param behavior the behavior of item
         * @param activity subactivity to get way of movement
-        * @param canFall whether item may fall, false if it flies
+        * @param canFall whether an item falls, false if it flies
         * @return true for displace or change of activity, false for collision
         */
         virtual bool displace ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
