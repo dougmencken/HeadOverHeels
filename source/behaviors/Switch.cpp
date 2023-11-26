@@ -29,37 +29,37 @@ Switch::~Switch( )
 bool Switch::update ()
 {
         Mediator * mediator = item->getMediator();
-        std::vector< ItemPtr > sideItems;
+        std::vector< ItemPtr > itemsNearby ;
 
         switch ( activity )
         {
                 case activities::Activity::Wait:
-                        // look if there’re items on sides
-                        if ( checkSideItems( sideItems ) )
+                        // look if there’re items near the switch
+                        if ( lookForItemsNearby( itemsNearby ) )
                         {
-                                // when some item that made switch is no longer near,
-                                // or that item is near but it’s a character which yet waits,
-                                // then remove such item from list of triggers so that it may re~switch
-                                for ( size_t i = 0; i < triggerItems.size(); i++ )
+                                // when some item that made the switch is no longer near,
+                                // or that item is near but it’s a character that is waiting,
+                                // then remove such an item from the list of triggers so that it may re~switch
+                                for ( size_t i = 0 ; i < triggers.size() ; i ++ )
                                 {
-                                        ItemPtr trigger = triggerItems[ i ];
+                                        ItemPtr trigger = triggers[ i ];
 
-                                        if ( std::find( sideItems.begin (), sideItems.end (), trigger ) == sideItems.end () ||
+                                        if ( std::find( itemsNearby.begin (), itemsNearby.end (), trigger ) == itemsNearby.end () ||
                                                 ( trigger->whichItemClass() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == activities::Activity::Wait ) )
                                         {
-                                                triggerItems.erase( std::remove( triggerItems.begin (), triggerItems.end (), trigger ), triggerItems.end () );
+                                                triggers.erase( std::remove( triggers.begin (), triggers.end (), trigger ), triggers.end () );
                                         }
                                 }
                         }
                         else
                         {
-                                triggerItems.clear();
+                                triggers.clear ();
                         }
 
                         // look for items above
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
-                                // copy stack of collisions
+                                // copy the stack of collisions
                                 std::stack< std::string > aboveItems;
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
@@ -72,7 +72,7 @@ bool Switch::update ()
                                         ItemPtr itemAbove = mediator->findItemByUniqueName( aboveItems.top() );
                                         aboveItems.pop();
 
-                                        // is it free item
+                                        // is it a free item
                                         if ( itemAbove != nilPointer &&
                                                 ( itemAbove->whichItemClass() == "free item" || itemAbove->whichItemClass() == "avatar item" ) )
                                         {
@@ -109,12 +109,12 @@ bool Switch::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
-                        if ( std::find( triggerItems.begin (), triggerItems.end (), sender ) == triggerItems.end () )
+                        if ( std::find( triggers.begin (), triggers.end (), affectedBy ) == /* not there */ triggers.end () )
                         {
-                                triggerItems.push_back( sender );
-                                item->animate();
+                                triggers.push_back( affectedBy );
+                                item->animate ();
 
-                                mediator->toggleSwitchInRoom();
+                                mediator->toggleSwitchInRoom() ;
 
                                 // play the sound of switching
                                 SoundManager::getInstance().play( item->getKind (), "switch" );
@@ -130,47 +130,47 @@ bool Switch::update ()
         return false;
 }
 
-bool Switch::checkSideItems( std::vector< ItemPtr >& sideItems )
+bool Switch::lookForItemsNearby( std::vector< ItemPtr > & itemsNearby )
 {
         Mediator* mediator = item->getMediator();
 
-        // is there item at north
+        // is there an item at north
         if ( ! item->canAdvanceTo( -1, 0, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
-                        sideItems.push_back( mediator->findCollisionPop() );
+                        itemsNearby.push_back( mediator->findCollisionPop() );
                 }
         }
 
-        // is there item at south
+        // is there an item at south
         if ( ! item->canAdvanceTo( 1, 0, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
-                        sideItems.push_back( mediator->findCollisionPop() );
+                        itemsNearby.push_back( mediator->findCollisionPop() );
                 }
         }
 
-        // is there item at east
+        // is there an item at east
         if ( ! item->canAdvanceTo( 0, -1, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
-                        sideItems.push_back( mediator->findCollisionPop() );
+                        itemsNearby.push_back( mediator->findCollisionPop() );
                 }
         }
 
-        // is there item at west
+        // is there an item at west
         if ( ! item->canAdvanceTo( 0, 1, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
-                        sideItems.push_back( mediator->findCollisionPop() );
+                        itemsNearby.push_back( mediator->findCollisionPop() );
                 }
         }
 
-        return ! sideItems.empty();
+        return ! itemsNearby.empty() ;
 }
 
 }

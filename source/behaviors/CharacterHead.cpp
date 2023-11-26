@@ -149,7 +149,7 @@ bool CharacterHead::update ()
 void CharacterHead::behave ()
 {
         AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
-        InputManager& input = InputManager::getInstance();
+        const InputManager & input = InputManager::getInstance ();
 
         // if it’s not a move by inertia or some other exotic activity
         if ( activity != activities::Activity::AutoMoveNorth && activity != activities::Activity::AutoMoveSouth
@@ -259,31 +259,31 @@ void CharacterHead::behave ()
                                 activity = activities::Activity::MoveWest;
                         }
                 }
-                // if you are being forcibly displaced
+                // if the character is dragged by a conveyor
                 else if ( activity == activities::Activity::DraggedNorth || activity == activities::Activity::DraggedSouth ||
                         activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
                 {
                         if ( input.jumpTyped() )
                         {
-                                activity = activities::Activity::Jump;
+                                activity = activities::Activity::Jump ;
                         }
-                        // user moves while displacing
-                        // cancel displace when moving in direction opposite to displacement
+                        // the character moves while being dragged
+                        // moving in the opposite way cancels dragging
                         else if ( input.movenorthTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedSouth ? activities::Activity::CancelDragSouth : activities::Activity::MoveNorth );
+                                activity = ( activity == activities::Activity::DraggedSouth ) ? activities::Activity::CancelDragSouth : activities::Activity::MoveNorth ;
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedNorth ? activities::Activity::CancelDragNorth : activities::Activity::MoveSouth );
+                                activity = ( activity == activities::Activity::DraggedNorth ) ? activities::Activity::CancelDragNorth : activities::Activity::MoveSouth ;
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedWest ? activities::Activity::CancelDragWest : activities::Activity::MoveEast );
+                                activity = ( activity == activities::Activity::DraggedWest ) ? activities::Activity::CancelDragWest : activities::Activity::MoveEast ;
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedEast ? activities::Activity::CancelDragEast : activities::Activity::MoveWest );
+                                activity = ( activity == activities::Activity::DraggedEast ) ? activities::Activity::CancelDragEast : activities::Activity::MoveWest ;
                         }
                 }
                 else if ( activity == activities::Activity::Jump )

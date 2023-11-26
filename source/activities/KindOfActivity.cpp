@@ -48,7 +48,6 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                                                         itemMeetsSender->getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                 }
                                                         }
-                                                        /* else std::cout << "the inviolability granted when item \"" << sender.getKind() << "\" met the character" << std::endl ; */
                                                 }
                                         }
                                         // if the sender is the character and the colliding one is mortal, then the character loses one life
@@ -65,7 +64,6 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                                                 sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                 itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
                                                         }
-                                                        /* else std::cout << "the inviolability granted when the character met item \"" << itemMeetsSender->getKind() << "\"" << std::endl ; */
                                                 }
                                         }
                                         // if not, propagate activity to that item
@@ -163,44 +161,40 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                         // is it free item
                         if ( itemAbove->whichItemClass() == "free item" || itemAbove->whichItemClass() == "avatar item" )
                         {
-                                FreeItem& freeItemAbove = dynamic_cast< FreeItem& >( *itemAbove );
+                                FreeItem & freeItemAbove = dynamic_cast< FreeItem& >( *itemAbove );
+                                if ( freeItemAbove.getBehavior() == nilPointer ) continue ; // nothing for an item without behavior
 
-                                // is it item with behavior
-                                if ( freeItemAbove.getBehavior() != nilPointer )
+                                // look for collisions of that free item with items below it
+                                if ( ! freeItemAbove.canAdvanceTo( 0, 0, -1 ) )
                                 {
-                                        // look for collisions of that free item with items below it
-                                        if ( ! freeItemAbove.canAdvanceTo( 0, 0, -1 ) )
+                                        // propagate activity when there’s no more than one item below or when sender is anchor of that item
+                                        if ( mediator->depthOfStackOfCollisions() <= 1 || sender.getUniqueName() == freeItemAbove.getAnchor() )
                                         {
-                                                // propagate activity when there’s no more than one item below or when sender is anchor of that item
-                                                if ( mediator->depthOfStackOfCollisions() <= 1 || sender.getUniqueName() == freeItemAbove.getAnchor() )
+                                                if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
-                                                        if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                        // if it’s avatar item above sender and sender is mortal, then the character loses its life
+                                                        if ( freeItemAbove.whichItemClass() == "avatar item" && sender.isMortal() &&
+                                                                ! dynamic_cast< const AvatarItem & >( freeItemAbove ).hasShield() )
                                                         {
-                                                                // if it’s avatar item above sender and sender is mortal, then the character loses its life
-                                                                if ( freeItemAbove.whichItemClass() == "avatar item" && sender.isMortal() &&
-                                                                        ! dynamic_cast< const AvatarItem & >( freeItemAbove ).hasShield() )
+                                                                if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem )
                                                                 {
-                                                                        if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem )
+                                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                                         {
-                                                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                                                                {
-                                                                                        std::cout << "character is above mortal item \"" << sender.getKind() << "\"" << std::endl ;
-                                                                                        freeItemAbove.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                                                }
-                                                                                /* else std::cout << "the inviolability granted when the character is above \"" << sender.getKind() << "\"" << std::endl ; */
+                                                                                std::cout << "character is above mortal item \"" << sender.getKind() << "\"" << std::endl ;
+                                                                                freeItemAbove.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                         }
                                                                 }
-                                                                // if not, propagate activity to that item above
-                                                                else
+                                                        }
+                                                        // if not, propagate activity to that item above
+                                                        else
+                                                        {
+                                                                ActivityOfItem currentActivity = freeItemAbove.getBehavior()->getActivityOfItem();
+                                                                if ( currentActivity != activities::Activity::PushedNorth &&
+                                                                        currentActivity != activities::Activity::PushedSouth &&
+                                                                        currentActivity != activities::Activity::PushedEast &&
+                                                                        currentActivity != activities::Activity::PushedWest )
                                                                 {
-                                                                        ActivityOfItem currentActivity = freeItemAbove.getBehavior()->getActivityOfItem();
-                                                                        if ( currentActivity != activities::Activity::PushedNorth &&
-                                                                                currentActivity != activities::Activity::PushedSouth &&
-                                                                                currentActivity != activities::Activity::PushedEast &&
-                                                                                currentActivity != activities::Activity::PushedWest )
-                                                                        {
-                                                                                freeItemAbove.getBehavior()->changeActivityOfItem( activity, ItemPtr( &freeItemAbove ) );
-                                                                        }
+                                                                        freeItemAbove.getBehavior()->changeActivityOfItem( activity, ItemPtr( &freeItemAbove ) );
                                                                 }
                                                         }
                                                 }

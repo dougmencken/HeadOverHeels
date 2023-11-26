@@ -20,7 +20,7 @@ namespace behaviors
 {
 
 /**
- * The behavior of a bonus bunny or crown
+ * The behavior of a bonus bunny, horn, pack of donuts, handbag, crown or reincarnation fish
  */
 
 class Bonus : public Behavior
@@ -37,11 +37,11 @@ public:
 protected:
 
         /**
-         * Checks if magic item can be taken, it depends on item and on character who takes it
+         * whether the character can take this item or not
          */
         bool mayTake ( const std::string & character ) ;
 
-        void takeMagicItem ( AvatarItem & whoTakes ) ;
+        void takeIt ( AvatarItem & whoTakes ) ;
 
 private:
 

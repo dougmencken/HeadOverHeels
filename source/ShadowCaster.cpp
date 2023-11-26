@@ -321,7 +321,7 @@ void ShadowCaster::castShadowOnFloor( FloorTile& tile, int x, int y, const Pictu
 
         if ( tile.getWantShadow() )
         {
-                // for first or only one shading item begin with fresh image of tile
+                // for the first or the only one shading item begin with the fresh image of tile
                 ////tile.freshShadyImage ();
                 tile.setWantShadow( false );
         }

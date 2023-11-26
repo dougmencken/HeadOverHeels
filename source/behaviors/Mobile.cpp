@@ -53,9 +53,9 @@ bool Mobile::update ()
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                // emit the sound of displacing if item is pushed but not displaced by an item below it
-                                if ( this->sender == nilPointer || this->sender != this->item )
-                                {
+                                // if the item isn't displaced by another item below it
+                                if ( this->affectedBy == nilPointer || this->affectedBy != this->item )
+                                {       // emit the sound of pushing
                                         SoundManager::getInstance().play( freeItem.getKind (), "push" );
                                 }
 

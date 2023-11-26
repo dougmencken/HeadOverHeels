@@ -33,20 +33,20 @@ public:
 private:
 
        /**
-        * Check if there are items near switch
-        * @param Where to store items
+        * See if there are items near the switch
+        * @param Where to put items
         * @return true if any item was found or false otherwise
         */
-        bool checkSideItems ( std::vector< ItemPtr > & sideItems ) ;
+        bool lookForItemsNearby ( std::vector< ItemPtr > & itemsNearby ) ;
 
 private:
 
         bool isItemAbove ;
 
-       /**
-        * Items that triggered this switch
-        */
-        std::vector< ItemPtr > triggerItems ;
+        /**
+         * Items that triggered this switch
+         */
+        std::vector< ItemPtr > triggers ;
 
 };
 

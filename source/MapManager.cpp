@@ -511,7 +511,7 @@ Room* MapManager::changeRoom()
 
 Room* MapManager::changeRoom( const std::string& wayOfExit )
 {
-        Room* previousRoom = this->activeRoom;
+        Room* previousRoom = this->activeRoom ;
 
         std::string fileOfPreviousRoom = previousRoom->getNameOfRoomDescriptionFile() ;
         const RoomConnections* previousRoomLinks = previousRoom->getConnections();
@@ -544,12 +544,11 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         const int exitY = oldItemOfRoamer.getY ();
         const int exitZ = oldItemOfRoamer.getZ ();
 
-        // get limits of room
-        int northBound = previousRoom->getLimitAt( "north" );
-        int eastBound = previousRoom->getLimitAt( "east" );
-        int southBound = previousRoom->getLimitAt( "south" );
-        int westBound = previousRoom->getLimitAt( "west" );
-        // plus there’s a possibility to exit and to enter the room via the floor, the roof or the teletransport
+        // get the limits of the previous room
+        int previousNorthBound = previousRoom->getLimitAt( "north" );
+        int previousEastBound = previousRoom->getLimitAt( "east" );
+        int previousSouthBound = previousRoom->getLimitAt( "south" );
+        int previousWestBound = previousRoom->getLimitAt( "west" );
 
         const std::string exitOrientation = oldItemOfRoamer.getOrientation() ;
 
@@ -569,11 +568,12 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         addRoomInPlay( newRoom );
 
-        // calculate the entry location in new room
+        // calculate the entry location in the new room
 
         std::cout << "the exit coordinates from room \"" << fileOfPreviousRoom << "\" are"
                         << " x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
 
+        // initially the coordinates of exit from the previous room
         int entryX = exitX ;
         int entryY = exitY ;
         int entryZ = exitZ ;
@@ -581,7 +581,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         bool okayToEnter = newRoom->calculateEntryCoordinates (
                 wayOfEntry,
                 descriptionOfRoamer->getWidthX(), descriptionOfRoamer->getWidthY(),
-                northBound, eastBound, southBound, westBound,
+                previousNorthBound, previousEastBound, previousSouthBound, previousWestBound,
                 &entryX, &entryY, &entryZ
         ) ;
         if ( ! okayToEnter ) {

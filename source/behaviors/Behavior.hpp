@@ -43,8 +43,8 @@ public:
          */
         virtual bool update () = 0 ;
 
-        virtual void changeActivityOfItem ( const ActivityOfItem & activity, const ItemPtr & sender = ItemPtr () )
-                {  this->activity = activity ;  this->sender = sender ;  }
+        virtual void changeActivityOfItem ( const ActivityOfItem & newActivity, const ItemPtr & dueTo = ItemPtr () )
+                {  this->activity = newActivity ;  this->affectedBy = dueTo ;  }
 
         std::string getNameOfBehavior () const {  return nameOfBehavior ;  }
 
@@ -62,19 +62,19 @@ protected:
         std::string nameOfBehavior ;
 
         /**
-         * Item with this behavior
+         * The item that behaves
          */
         ItemPtr item ;
 
         /**
-         * Current variant of activity
+         * The current activity
          */
         ActivityOfItem activity ;
 
         /**
-         * Another item which changes activity of item with this behavior
+         * Another item that changed the activity of this one
          */
-        ItemPtr sender ;
+        ItemPtr affectedBy ;
 
 } ;
 

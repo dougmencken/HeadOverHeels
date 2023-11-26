@@ -223,7 +223,7 @@ void Item::changeFrame( size_t newFrame )
 
 bool Item::canAdvanceTo( int x, int y, int z )
 {
-        // coordinates before change
+        // the coordinates before
         int originalX = xYet ;
         int originalY = yYet ;
         int originalZ = zYet ;
@@ -232,7 +232,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
 
         bool collisionFound = false;
 
-        // new coordinates
+        // the new coordinates
         xYet += x ;
         yYet += y ;
         zYet += z ;
@@ -268,7 +268,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
                 collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
         }
 
-        // restore original coordinates
+        // restore the original coordinates
         xYet = originalX ;
         yYet = originalY ;
         zYet = originalZ ;

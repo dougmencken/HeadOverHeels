@@ -1,5 +1,6 @@
 
 #include "FreeItem.hpp"
+
 #include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
@@ -248,7 +249,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
 
         switch ( Way( way ).getIntegerOfWay() )
         {
-                // for rooms with north or south door
+                // for rooms with the north or south door
                 case Way::North:
                 case Way::Northeast:
                 case Way::Northwest:
@@ -272,7 +273,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
 
                         break;
 
-                // for rooms with the east or the west door
+                // for rooms with the east or west door
                 case Way::East:
                 case Way::Eastnorth:
                 case Way::Eastsouth:

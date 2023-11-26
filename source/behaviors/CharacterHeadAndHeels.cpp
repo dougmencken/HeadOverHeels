@@ -165,7 +165,7 @@ bool CharacterHeadAndHeels::update ()
 void CharacterHeadAndHeels::behave ()
 {
         AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
-        InputManager & input = InputManager::getInstance() ;
+        const InputManager & input = InputManager::getInstance() ;
 
         // if it’s not a move by inertia or some other exotic activity
         if ( activity != activities::Activity::AutoMoveNorth && activity != activities::Activity::AutoMoveSouth
@@ -305,7 +305,7 @@ void CharacterHeadAndHeels::behave ()
                                 activity = activities::Activity::MoveWest;
                         }
                 }
-                // character is being displaced forcibly
+                // the character is dragged by a conveyor
                 else if ( activity == activities::Activity::DraggedNorth || activity == activities::Activity::DraggedSouth ||
                         activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
                 {
@@ -313,7 +313,8 @@ void CharacterHeadAndHeels::behave ()
                         {
                                 activity = activities::Activity::Jump ;
                         }
-                        // cancel displace when moving in direction opposite to displacement
+                        // the character moves while being dragged
+                        // moving in the opposite way cancels dragging
                         else if ( input.movenorthTyped() )
                         {
                                 activity = ( activity == activities::Activity::DraggedSouth ? activities::Activity::CancelDragSouth : activities::Activity::MoveNorth );

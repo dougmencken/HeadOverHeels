@@ -44,39 +44,38 @@ bool Falling::fall( behaviors::Behavior * behavior )
         // when there’s something below
         if ( ! mayFall )
         {
-                Item& sender = *( behavior->getItem() );
-                Mediator* mediator = sender.getMediator();
+                Item & whatFalls = *( behavior->getItem() );
+                Mediator* mediator = whatFalls.getMediator() ;
 
-                // copy stack of collisions into vector
-                std::vector< std::string > itemsBelow;
+                // collect the collisions
+                std::vector< std::string > itemsBelow ;
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
                         itemsBelow.push_back( mediator->popCollision() );
                 }
 
-                if ( sender.whichItemClass() == "free item" || sender.whichItemClass() == "avatar item" )
+                if ( whatFalls.whichItemClass() == "free item" || whatFalls.whichItemClass() == "avatar item" )
                 {
-                        this->assignAnchor( sender.getUniqueName(), sender.getMediator(), itemsBelow );
+                        this->assignAnchor( whatFalls.getUniqueName(), whatFalls.getMediator(), itemsBelow );
                 }
 
-                // as long as there’re items collided with the sender
                 while ( ! itemsBelow.empty() )
                 {
-                        std::string name = itemsBelow.back();
+                        std::string nameOfItemBelow = itemsBelow.back();
                         itemsBelow.pop_back();
 
-                        ItemPtr itemBelow = mediator->findItemByUniqueName( name );
+                        ItemPtr itemBelow = mediator->findItemByUniqueName( nameOfItemBelow );
 
                         if ( itemBelow != nilPointer )
                         {
-                                // is it grid item or free item
-                                if ( itemBelow->whichItemClass() == "grid item" ||
-                                        itemBelow->whichItemClass() == "free item" ||
-                                        itemBelow->whichItemClass() == "avatar item" )
+                                // is it a grid item or a free item
+                                if ( itemBelow->whichItemClass() == "grid item"
+                                        || itemBelow->whichItemClass() == "free item"
+                                                || itemBelow->whichItemClass() == "avatar item" )
                                 {
-                                        if ( itemBelow->whichItemClass() == "avatar item" && sender.isMortal() )
+                                        if ( itemBelow->whichItemClass() == "avatar item" && whatFalls.isMortal() )
                                         {
-                                                if ( sender.canAdvanceTo( 0, 0, -1 ) )
+                                                if ( whatFalls.canAdvanceTo( 0, 0, -1 ) )
                                                 {
                                                         if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
@@ -84,13 +83,13 @@ bool Falling::fall( behaviors::Behavior * behavior )
                                                         }
                                                 }
                                         }
-                                        else if ( sender.whichItemClass() == "avatar item" && itemBelow->isMortal() )
+                                        else if ( whatFalls.whichItemClass() == "avatar item" && itemBelow->isMortal() )
                                         {
-                                                if ( sender.canAdvanceTo( 0, 0, -1 ) )
+                                                if ( whatFalls.canAdvanceTo( 0, 0, -1 ) )
                                                 {
                                                         if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
+                                                                whatFalls.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                         }
                                                 }
                                                 else
@@ -99,19 +98,18 @@ bool Falling::fall( behaviors::Behavior * behavior )
 
                                                         // look if some item underneath the character is not mortal
                                                         while ( ! mediator->isStackOfCollisionsEmpty() )
-                                                        {
                                                                 if ( ! mediator->findCollisionPop()->isMortal() )
                                                                 {
-                                                                        onlyMortal = false;
+                                                                        onlyMortal = false ;
+                                                                        break ;
                                                                 }
-                                                        }
 
                                                         // if every one is mortal then the character loses its life
                                                         if ( onlyMortal )
                                                         {
                                                                 if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                                 {
-                                                                        sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
+                                                                        whatFalls.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                 }
                                                         }
                                                 }
@@ -119,9 +117,9 @@ bool Falling::fall( behaviors::Behavior * behavior )
                                 }
                         }
                         // the character reaches floor
-                        else if ( sender.whichItemClass() == "avatar item" && name == "some tile of floor" )
+                        else if ( whatFalls.whichItemClass() == "avatar item" && nameOfItemBelow == "some tile of floor" )
                         {
-                                AvatarItem & characterItem = dynamic_cast< AvatarItem & >( sender );
+                                AvatarItem & characterItem = dynamic_cast< AvatarItem & >( whatFalls );
 
                                 if ( ! mediator->getRoom()->hasFloor() )
                                 {

@@ -662,7 +662,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         const std::string & kindOfItem = gridItem->getKind () ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
-        if ( uniqueNumberOfItem == 0 ) // is it new kind
+        if ( uniqueNumberOfItem == 0 ) // is it the new kind
         {
                  uniqueNumberOfItem = 1;
         }

@@ -164,7 +164,7 @@ Picture* Isomot::updateMe ()
                 // swap key changes character and possibly room
                 if ( InputManager::getInstance().swapTyped() )
                 {
-                        activeCharacter.wait(); // stop the character currently active
+                        activeCharacter.wait(); // stop the active character
 
                         if ( activeCharacter.getBehavior()->getActivityOfItem() == activities::Activity::Wait )
                         {
@@ -189,7 +189,7 @@ Picture* Isomot::updateMe ()
                 }
                 else if ( activeCharacter.getWayOfExit() != "did not quit" )
                 {
-                        // there’s change of room
+                        // the room is changing
 
                         Room* newRoom = mapManager.changeRoom();
 
@@ -208,7 +208,7 @@ Picture* Isomot::updateMe ()
                         activeRoom->getCamera()->instantCenterRoom () ;
         }
 
-        // draw active room
+        // draw the active room
 
         activeRoom->drawRoom();
 
@@ -232,7 +232,7 @@ Picture* Isomot::updateMe ()
 
         if ( GameManager::getInstance().drawRoomMiniatures () )
         {
-                // show information about room and draw the miniature of room
+                // show information about the current room and draw the miniature
 
                 std::ostringstream roomTiles;
                 roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();

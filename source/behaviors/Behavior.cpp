@@ -18,7 +18,7 @@ Behavior::Behavior( const ItemPtr & whichItem, const std::string & behavior )
         : nameOfBehavior( behavior )
         , item( whichItem )
         , activity( activities::Activity::Wait )
-        , sender( nilPointer )
+        , affectedBy( nilPointer )
 {
 #if defined( DEBUG ) && DEBUG
         if ( behavior != "behavior of Head" && behavior != "behavior of Heels" && behavior != "behavior of Head over Heels" )

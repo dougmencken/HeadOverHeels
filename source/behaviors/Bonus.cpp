@@ -44,7 +44,7 @@ bool Bonus::update ()
                                                 && mayTake( itemAbove->getOriginalKind() ) )
                                 {
                                         activity = activities::Activity::Vanish ;
-                                        this->sender = itemAbove ; // the character is yet the sender
+                                        affectedBy = itemAbove ; // vanishing is caused by the character
 
                                         disappearanceTimer->reset();
                                 }
@@ -69,11 +69,11 @@ bool Bonus::update ()
                 case activities::Activity::PushedNorthwest:
                 case activities::Activity::PushedUp:
                         // if the character touches the bonus item and may take this bonus
-                        if ( sender->whichItemClass() == "avatar item" && mayTake( sender->getOriginalKind() ) )
+                        if ( affectedBy->whichItemClass() == "avatar item" && mayTake( affectedBy->getOriginalKind() ) )
                         {
-                                activity = activities::Activity::Vanish;
+                                activity = activities::Activity::Vanish ;
                         }
-                        // otherwise it's some other item which moves the bonus
+                        // otherwise it's some other item which pushes the bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 activities::Displacing::getInstance().displace( this, &activity, true );
@@ -135,7 +135,7 @@ bool Bonus::update ()
                                                 if ( takeIt )
                                                 {
                                                         activity = activities::Activity::Vanish ;
-                                                        this->sender = itemBelow; // the character is yet the sender
+                                                        affectedBy = itemBelow ; // vanishing is caused by the character
 
                                                         disappearanceTimer->reset();
                                                 }
@@ -152,14 +152,14 @@ bool Bonus::update ()
                                 // play the sound of taking
                                 SoundManager::getInstance().play( item->getKind (), "vanish" );
 
-                                // a bonus item disappears from room once it's taken
+                                // a bonus item disappears from the room once it's taken
                                 BonusManager::getInstance().markAsAbsent(
                                         BonusInRoom(
                                                 item->getKind (),
                                                 item->getMediator()->getRoom()->getNameOfRoomDescriptionFile()
                                         ) );
 
-                                takeMagicItem( dynamic_cast< AvatarItem & >( *sender ) );
+                                takeIt( dynamic_cast< AvatarItem & >( * affectedBy ) );
 
                                 if ( item->getOriginalKind() != "crown" ) // no bubbles for crowns
                                 {
@@ -205,40 +205,40 @@ bool Bonus::mayTake( const std::string & character )
                                                 magicItem == "donuts" ) ) ;
 }
 
-void Bonus::takeMagicItem( AvatarItem & whoTakes )
+void Bonus::takeIt( AvatarItem & whoTakes )
 {
-        std::string magicItem = this->item->getOriginalKind () ;
+        std::string whichItem = this->item->getOriginalKind () ;
 
-        if ( magicItem == "donuts" )
+        if ( whichItem == "donuts" )
         {
                 const unsigned short DonutsPerBox = 6 ;
                 whoTakes.addDonuts( DonutsPerBox );
         }
-        else if ( magicItem == "extra-life" )
+        else if ( whichItem == "extra-life" )
         {
                 whoTakes.addLives( 2 );
         }
-        else if ( magicItem == "quick-steps" )
+        else if ( whichItem == "quick-steps" )
         {
                 whoTakes.activateBonusQuickSteps () ;
         }
-        else if ( magicItem == "high-jumps" )
+        else if ( whichItem == "high-jumps" )
         {
                 whoTakes.addBonusHighJumps( 10 );
         }
-        else if ( magicItem == "shield" )
+        else if ( whichItem == "shield" )
         {
                 whoTakes.activateShield () ;
         }
-        else if ( magicItem == "crown" )
+        else if ( whichItem == "crown" )
         {
                 whoTakes.liberatePlanet () ;
         }
-        else if ( magicItem == "horn" || magicItem == "handbag" )
+        else if ( whichItem == "horn" || whichItem == "handbag" )
         {
-                whoTakes.takeMagicTool( magicItem );
+                whoTakes.takeMagicTool( whichItem );
         }
-        else if ( magicItem == "reincarnation-fish" )
+        else if ( whichItem == "reincarnation-fish" )
         {
                 whoTakes.saveAt( this->item->getX (), this->item->getY (), this->item->getZ () );
         }

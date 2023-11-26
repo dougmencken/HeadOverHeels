@@ -46,7 +46,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
         // let’s move up
         if ( ! characterItem.addToZ( deltaZ ) )
         {
-                // if can’t, raise pile of items above
+                // if can’t, raise the pile of items above
                 if ( deltaZ > 0 )
                 {
                         while ( ! mediator->isStackOfCollisionsEmpty() )
@@ -128,17 +128,17 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
 
 void Jumping::lift( FreeItem& sender, Item& item, int z )
 {
-        // only for item with behavior
-        if ( item.getBehavior() != nilPointer )
+        const autouniqueptr< Behavior > & behavior = item.getBehavior() ;
+        if ( behavior != nilPointer )
         {
                 // when item is volatile
-                if ( item.getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
-                                item.getBehavior()->getNameOfBehavior () == "behavior of bonus" )
+                if ( behavior->getNameOfBehavior () == "behavior of disappearance on touch" ||
+                                behavior->getNameOfBehavior () == "behavior of bonus" )
                 {
-                        item.getBehavior()->changeActivityOfItem( activities::Activity::PushedUp, ItemPtr( &sender ) );
+                        behavior->changeActivityOfItem( activities::Activity::PushedUp, ItemPtr( &sender ) );
                 }
-                // raise item when it’s not elevator
-                else if ( item.getBehavior()->getNameOfBehavior () != "behavior of elevator" )
+                // raise if the item isn’t an elevator
+                else if ( behavior->getNameOfBehavior () != "behavior of elevator" )
                 {
                         // is there’s something above
                         if ( ! item.addToZ( z ) )
