@@ -44,11 +44,11 @@ bool Detector::update ()
                                 {
                                         if ( activeCharacter->getY() <= freeItem.getY() )
                                         {
-                                                changeActivityOfItem( activities::Activity::MoveEast );
+                                                setActivityOfItem( activities::Activity::MoveEast );
                                         }
                                         else if ( activeCharacter->getY() >= freeItem.getY() )
                                         {
-                                                changeActivityOfItem( activities::Activity::MoveWest );
+                                                setActivityOfItem( activities::Activity::MoveWest );
                                         }
                                 }
                                 // the character meets the detector on the Y way
@@ -56,12 +56,12 @@ bool Detector::update ()
                                 {
                                         if ( activeCharacter->getX() <= freeItem.getX() )
                                         {
-                                                changeActivityOfItem( activities::Activity::MoveNorth );
+                                                setActivityOfItem( activities::Activity::MoveNorth );
                                         }
                                         else
                                         if ( activeCharacter->getX() >= freeItem.getX() )
                                         {
-                                                changeActivityOfItem( activities::Activity::MoveSouth );
+                                                setActivityOfItem( activities::Activity::MoveSouth );
                                         }
                                 }
 

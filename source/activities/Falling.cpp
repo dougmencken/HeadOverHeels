@@ -77,20 +77,14 @@ bool Falling::fall( behaviors::Behavior * behavior )
                                         {
                                                 if ( whatFalls.canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                                        {
-                                                                itemBelow->getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                        }
+                                                        itemBelow->getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                                 }
                                         }
                                         else if ( whatFalls.whichItemClass() == "avatar item" && itemBelow->isMortal() )
                                         {
                                                 if ( whatFalls.canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                                        {
-                                                                whatFalls.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                        }
+                                                        whatFalls.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                                 }
                                                 else
                                                 {
@@ -106,12 +100,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
 
                                                         // if every one is mortal then the character loses its life
                                                         if ( onlyMortal )
-                                                        {
-                                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                                                {
-                                                                        whatFalls.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                                }
-                                                        }
+                                                                whatFalls.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                                 }
                                         }
                                 }
@@ -128,10 +117,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
                                 else
                                 if ( mediator->getRoom()->getKindOfFloor() == "mortal" )
                                 {
-                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                        {
-                                                characterItem.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                        }
+                                        characterItem.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                 }
                         }
                 }

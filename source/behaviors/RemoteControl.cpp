@@ -83,7 +83,7 @@ bool RemoteControl::update ()
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
-                                        // if the item isn't displaced by another item below it
+                                        // if the item isn't dragged
                                         if ( this->affectedBy == nilPointer || this->affectedBy != this->item )
                                         {       // emit the sound of pushing
                                                 SoundManager::getInstance().play( freeItem.getKind (), "push" );
@@ -132,7 +132,7 @@ bool RemoteControl::update ()
                                                         ;
                                         }
 
-                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior().get () )->changeActivityOfItem( motionActivity );
+                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior().get () )->setActivityOfItem( motionActivity );
                                         activity = activities::Activity::Wait;
                                 }
                         }

@@ -43,7 +43,13 @@ public:
          */
         virtual bool update () = 0 ;
 
-        virtual void changeActivityOfItem ( const ActivityOfItem & newActivity, const ItemPtr & dueTo = ItemPtr () )
+        virtual void setActivityOfItem ( const ActivityOfItem & newActivity )
+        {
+                this->activity = newActivity ;
+                if ( this->affectedBy != nilPointer ) this->affectedBy = ItemPtr () ;
+        }
+
+        virtual void changeActivityOfItemDueTo ( const ActivityOfItem & newActivity, const ItemPtr & dueTo )
                 {  this->activity = newActivity ;  this->affectedBy = dueTo ;  }
 
         std::string getNameOfBehavior () const {  return nameOfBehavior ;  }

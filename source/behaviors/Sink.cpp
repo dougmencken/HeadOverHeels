@@ -31,7 +31,7 @@ bool Sink::update ()
                         // begin to fall when there’s an item above
                         if ( ! gridItem.canAdvanceTo( 0, 0, 1 ) )
                         {
-                                this->changeActivityOfItem( activities::Activity::Fall );
+                                this->setActivityOfItem( activities::Activity::Fall );
                         }
                         break;
 

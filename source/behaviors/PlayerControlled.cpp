@@ -44,6 +44,29 @@ PlayerControlled::~PlayerControlled()
         highJumpVector.clear();
 }
 
+bool PlayerControlled::isInvulnerableToLethalItems () const
+{
+        return ( dynamic_cast< const ::AvatarItem & >( * this->item ) ).hasShield ()
+                        || GameManager::getInstance().isImmuneToCollisionsWithMortalItems () ;
+}
+
+void PlayerControlled::setActivityOfItem ( const ActivityOfItem & newActivity )
+{
+        if ( this->affectedBy != nilPointer ) this->affectedBy = ItemPtr () ;
+
+        if ( newActivity == activities::Activity::MeetMortalItem && isInvulnerableToLethalItems () ) return ;
+
+        this->activity = newActivity ;
+}
+
+void PlayerControlled::changeActivityOfItemDueTo ( const ActivityOfItem & newActivity, const ItemPtr & dueTo )
+{
+        if ( newActivity == activities::Activity::MeetMortalItem && isInvulnerableToLethalItems () ) return ;
+
+        this->activity = newActivity ;
+        this->affectedBy = dueTo ;
+}
+
 void PlayerControlled::wait( ::AvatarItem & character )
 {
         character.wait();
@@ -450,7 +473,7 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
 
                                 character.placeItemInBag( takenItem->getKind (), takenItem->getBehavior()->getNameOfBehavior () );
 
-                                takenItem->getBehavior()->changeActivityOfItem( activities::Activity::Vanish );
+                                takenItem->getBehavior()->setActivityOfItem( activities::Activity::Vanish );
                                 activity = ( activity == activities::Activity::TakeAndJump )
                                                 ? activities::Activity::Jump : activities::Activity::ItemTaken ;
 

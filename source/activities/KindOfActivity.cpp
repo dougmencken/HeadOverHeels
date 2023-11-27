@@ -31,61 +31,48 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                 // is it item with behavior
                                 if ( itemMeetsSender->getBehavior() != nilPointer )
                                 {
-                                        // if it’s avatar item and the sender is mortal, then the character loses one life
-                                        if ( itemMeetsSender->whichItemClass() == "avatar item" && sender.isMortal() &&
-                                                        ! dynamic_cast< const AvatarItem & >( *itemMeetsSender ).hasShield() )
+                                        // if it’s the character and the sender is mortal, then the character loses one life
+                                        if ( itemMeetsSender->whichItemClass() == "avatar item" && sender.isMortal() )
                                         {
-                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem &&
-                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem
+                                                        && itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        // is the contact direct
+                                                        if ( mediator->depthOfStackOfCollisions() <= 1 )
                                                         {
-                                                                std::cout << "mortal item \"" << sender.getKind() << "\" just met the character" << std::endl ;
-
-                                                                // is it direct contact
-                                                                if ( mediator->depthOfStackOfCollisions() <= 1 )
-                                                                {
-                                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                                }
+                                                                itemMeetsSender->getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                                         }
                                                 }
                                         }
                                         // if the sender is the character and the colliding one is mortal, then the character loses one life
-                                        else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() &&
-                                                        ! dynamic_cast< const AvatarItem & >( sender ).hasShield() )
+                                        else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
                                         {
-                                                if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem &&
-                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem
+                                                        && sender.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                                        {
-                                                                std::cout << "the character just met mortal item \"" << itemMeetsSender->getKind() << "\"" << std::endl ;
-
-                                                                sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                                itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
-                                                        }
+                                                        sender.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
+                                                }
+                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                {
+                                                        itemMeetsSender->getBehavior()->changeActivityOfItemDueTo( activity, ItemPtr( &sender ) );
                                                 }
                                         }
-                                        // if not, propagate activity to that item
+                                        // if not, just propagate activity to that item
                                         else
                                         {
                                                 if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
+                                                        itemMeetsSender->getBehavior()->changeActivityOfItemDueTo( activity, ItemPtr( &sender ) );
                                                 }
                                         }
                                 }
-                                // otherwise it is item without behavior, which may be mortal too
-                                else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() &&
-                                                ! dynamic_cast< const AvatarItem & >( sender ).hasShield() )
+                                // otherwise it is an item without behavior, which may be mortal too
+                                else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
                                 {
-                                        if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem &&
-                                                        sender.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                        if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem
+                                                && sender.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                         {
-                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                                {
-                                                        sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                }
+                                                sender.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                         }
                                 }
                         }
@@ -164,26 +151,18 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                 FreeItem & freeItemAbove = dynamic_cast< FreeItem& >( *itemAbove );
                                 if ( freeItemAbove.getBehavior() == nilPointer ) continue ; // nothing for an item without behavior
 
-                                // look for collisions of that free item with items below it
+                                // look for collisions of that free item with the items below it
                                 if ( ! freeItemAbove.canAdvanceTo( 0, 0, -1 ) )
                                 {
-                                        // propagate activity when there’s no more than one item below or when sender is anchor of that item
+                                        // propagate activity when there’s no more than one item below or when the sender is anchor of that item
                                         if ( mediator->depthOfStackOfCollisions() <= 1 || sender.getUniqueName() == freeItemAbove.getAnchor() )
                                         {
                                                 if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
-                                                        // if it’s avatar item above sender and sender is mortal, then the character loses its life
-                                                        if ( freeItemAbove.whichItemClass() == "avatar item" && sender.isMortal() &&
-                                                                ! dynamic_cast< const AvatarItem & >( freeItemAbove ).hasShield() )
+                                                        // if it’s the character above the mortal sender, then the character loses its life
+                                                        if ( freeItemAbove.whichItemClass() == "avatar item" && sender.isMortal() )
                                                         {
-                                                                if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem )
-                                                                {
-                                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                                                        {
-                                                                                std::cout << "character is above mortal item \"" << sender.getKind() << "\"" << std::endl ;
-                                                                                freeItemAbove.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                                                        }
-                                                                }
+                                                                freeItemAbove.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                                         }
                                                         // if not, propagate activity to that item above
                                                         else
@@ -194,7 +173,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                                         currentActivity != activities::Activity::PushedEast &&
                                                                         currentActivity != activities::Activity::PushedWest )
                                                                 {
-                                                                        freeItemAbove.getBehavior()->changeActivityOfItem( activity, ItemPtr( &freeItemAbove ) );
+                                                                        freeItemAbove.getBehavior()->changeActivityOfItemDueTo( activity, ItemPtr( &freeItemAbove ) );
                                                                 }
                                                         }
                                                 }

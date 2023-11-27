@@ -66,13 +66,13 @@ bool Conveyor::update ()
 
                                                                         if ( ! outOfGravity ) {
                                                                                 if ( item->getOrientation() == "south" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::DraggedSouth );
+                                                                                        itemAbove.getBehavior()->setActivityOfItem( activities::Activity::DraggedSouth );
                                                                                 else if ( item->getOrientation() == "west" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::DraggedWest );
+                                                                                        itemAbove.getBehavior()->setActivityOfItem( activities::Activity::DraggedWest );
                                                                                 else if ( item->getOrientation() == "north" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::DraggedNorth );
+                                                                                        itemAbove.getBehavior()->setActivityOfItem( activities::Activity::DraggedNorth );
                                                                                 else if ( item->getOrientation() == "east" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::DraggedEast );
+                                                                                        itemAbove.getBehavior()->setActivityOfItem( activities::Activity::DraggedEast );
                                                                         }
 
                                                                         // play the sound of conveyor

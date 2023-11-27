@@ -365,6 +365,13 @@ void Isomot::handleMagicKeys ()
                 allegro::releaseKey( "c" );
         }
 
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "y" ) )
+        {
+                AvatarItemPtr & activeCharacter = activeRoom->getMediator()->getActiveCharacter() ;
+                if ( activeCharacter != nilPointer ) activeCharacter->activateShield ();
+                allegro::releaseKey( "y" );
+        }
+
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "b" ) )
         {
                 gameManager.toggleSceneryDecor ();
@@ -485,7 +492,7 @@ void Isomot::handleMagicKeys ()
                                 joinedCharacter->setBehaviorOf( behavior );
 
                                 activeRoom->addCharacterToRoom( joinedCharacter, true );
-                                joinedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::EndTeletransportation );
+                                joinedCharacter->getBehavior()->setActivityOfItem( activities::Activity::EndTeletransportation );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
                                 mapManager.removeRoomInPlay( roomWithInactiveCharacter );
@@ -538,7 +545,7 @@ void Isomot::handleMagicKeys ()
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
                                 roomWithTeleportToFinalScene->addCharacterToRoom( teleportedCharacter, true );
-                                teleportedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::EndTeletransportation );
+                                teleportedCharacter->getBehavior()->setActivityOfItem( activities::Activity::EndTeletransportation );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 

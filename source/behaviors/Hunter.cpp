@@ -228,36 +228,36 @@ ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
                 {
                         if ( dx > 0 )
                         {
-                                changeActivityOfItem( activities::Activity::MoveNorth );
+                                setActivityOfItem( activities::Activity::MoveNorth );
                         }
                         else if ( dx < 0 )
                         {
-                                changeActivityOfItem( activities::Activity::MoveSouth );
+                                setActivityOfItem( activities::Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        changeActivityOfItem( activities::Activity::MoveEast );
+                                        setActivityOfItem( activities::Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        changeActivityOfItem( activities::Activity::MoveWest );
+                                        setActivityOfItem( activities::Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
                 {
                         if ( dy > 0 )
                         {
-                                changeActivityOfItem( activities::Activity::MoveEast );
+                                setActivityOfItem( activities::Activity::MoveEast );
                         }
                         else if ( dy < 0 )
                         {
-                                changeActivityOfItem( activities::Activity::MoveWest );
+                                setActivityOfItem( activities::Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        changeActivityOfItem( activities::Activity::MoveNorth );
+                                        setActivityOfItem( activities::Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        changeActivityOfItem( activities::Activity::MoveSouth );
+                                        setActivityOfItem( activities::Activity::MoveSouth );
                         }
                 }
         }
@@ -282,27 +282,27 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                         if ( dx > 1 )
                         {
                                 if ( dy > 1 )
-                                        changeActivityOfItem( activities::Activity::MoveNortheast );
+                                        setActivityOfItem( activities::Activity::MoveNortheast );
                                 else if ( dy < -1 )
-                                        changeActivityOfItem( activities::Activity::MoveNorthwest );
+                                        setActivityOfItem( activities::Activity::MoveNorthwest );
                                 else
-                                        changeActivityOfItem( activities::Activity::MoveNorth );
+                                        setActivityOfItem( activities::Activity::MoveNorth );
                         }
                         else if ( dx < -1 )
                         {
                                 if ( dy > 1 )
-                                        changeActivityOfItem( activities::Activity::MoveSoutheast );
+                                        setActivityOfItem( activities::Activity::MoveSoutheast );
                                 else if ( dy < -1 )
-                                        changeActivityOfItem( activities::Activity::MoveSouthwest );
+                                        setActivityOfItem( activities::Activity::MoveSouthwest );
                                 else
-                                        changeActivityOfItem( activities::Activity::MoveSouth );
+                                        setActivityOfItem( activities::Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        changeActivityOfItem( activities::Activity::MoveEast );
+                                        setActivityOfItem( activities::Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        changeActivityOfItem( activities::Activity::MoveWest );
+                                        setActivityOfItem( activities::Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
@@ -310,34 +310,34 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                         if ( dy > 1 )
                         {
                                 if ( dx > 1 )
-                                        changeActivityOfItem( activities::Activity::MoveNortheast );
+                                        setActivityOfItem( activities::Activity::MoveNortheast );
                                 else if ( dx < -1 )
-                                        changeActivityOfItem( activities::Activity::MoveSoutheast );
+                                        setActivityOfItem( activities::Activity::MoveSoutheast );
                                 else
-                                        changeActivityOfItem( activities::Activity::MoveEast );
+                                        setActivityOfItem( activities::Activity::MoveEast );
                         }
                         else if ( dy < -1 )
                         {
                                 if ( dx > 1 )
-                                        changeActivityOfItem( activities::Activity::MoveNorthwest );
+                                        setActivityOfItem( activities::Activity::MoveNorthwest );
                                 else if ( dx < -1 )
-                                        changeActivityOfItem( activities::Activity::MoveSouthwest );
+                                        setActivityOfItem( activities::Activity::MoveSouthwest );
                                 else
-                                        changeActivityOfItem( activities::Activity::MoveWest );
+                                        setActivityOfItem( activities::Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        changeActivityOfItem( activities::Activity::MoveNorth );
+                                        setActivityOfItem( activities::Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        changeActivityOfItem( activities::Activity::MoveSouth );
+                                        setActivityOfItem( activities::Activity::MoveSouth );
                         }
                 }
 
                 // the guardian of throne flees from the player with four crowns
                 if ( item->getKind() == "throne-guard" && GameManager::getInstance().countFreePlanets() >= 4 )
                 {
-                        changeActivityOfItem( activities::Activity::MoveSouthwest );
+                        setActivityOfItem( activities::Activity::MoveSouthwest );
                 }
         }
 

@@ -84,34 +84,34 @@ void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
                 case Way::North:
                 case Way::Northeast:
                 case Way::Northwest:
-                        getBehavior()->changeActivityOfItem( activities::Activity::AutoMoveSouth );
+                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveSouth );
                         break;
 
                 case Way::South:
                 case Way::Southeast:
                 case Way::Southwest:
-                        getBehavior()->changeActivityOfItem( activities::Activity::AutoMoveNorth );
+                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveNorth );
                         break;
 
                 case Way::East:
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        getBehavior()->changeActivityOfItem( activities::Activity::AutoMoveWest );
+                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveWest );
                         break;
 
                 case Way::West:
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        getBehavior()->changeActivityOfItem( activities::Activity::AutoMoveEast );
+                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveEast );
                         break;
 
                 case Way::ByTeleport:
                 case Way::ByTeleportToo:
-                        getBehavior()->changeActivityOfItem( activities::Activity::EndTeletransportation );
+                        getBehavior()->setActivityOfItem( activities::Activity::EndTeletransportation );
                         break;
 
                 case Way::Above:
-                        getBehavior()->changeActivityOfItem( activities::Activity::Fall );
+                        getBehavior()->setActivityOfItem( activities::Activity::Fall );
                         break;
 
                 default:
@@ -407,7 +407,7 @@ void AvatarItem::wait ()
                 // set waiting frame by orientation
                 changeFrame( firstFrame () );
 
-                getBehavior()->changeActivityOfItem( activities::Activity::Wait );
+                getBehavior()->setActivityOfItem( activities::Activity::Wait );
         }
 }
 

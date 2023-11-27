@@ -99,7 +99,7 @@ bool Trampoline::update ()
                                 // play the sound of displacing
                                 SoundManager::getInstance().play( freeItem.getKind (), "push" );
 
-                                this->changeActivityOfItem( activity );
+                                this->setActivityOfItem( activity );
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 if ( activity != activities::Activity::Fall )
@@ -122,7 +122,7 @@ bool Trampoline::update ()
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
                                 // item falls
-                                this->changeActivityOfItem( activity );
+                                this->setActivityOfItem( activity );
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play the sound of falling

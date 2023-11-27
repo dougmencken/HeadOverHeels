@@ -23,7 +23,7 @@ bool FinalBall::update ()
         switch ( activity )
         {
                 case activities::Activity::Wait:
-                        this->changeActivityOfItem( activities::Activity::MoveNorth );
+                        this->setActivityOfItem( activities::Activity::MoveNorth );
                         break;
 
                 case activities::Activity::MoveNorth:

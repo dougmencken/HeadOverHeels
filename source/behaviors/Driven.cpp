@@ -44,19 +44,19 @@ bool Driven::update ()
                                 switch ( Way( freeItem.getOrientation() ).getIntegerOfWay() )
                                 {
                                         case Way::North:
-                                                changeActivityOfItem( activities::Activity::MoveNorth );
+                                                setActivityOfItem( activities::Activity::MoveNorth );
                                                 break;
 
                                         case Way::South:
-                                                changeActivityOfItem( activities::Activity::MoveSouth );
+                                                setActivityOfItem( activities::Activity::MoveSouth );
                                                 break;
 
                                         case Way::East:
-                                                changeActivityOfItem( activities::Activity::MoveEast );
+                                                setActivityOfItem( activities::Activity::MoveEast );
                                                 break;
 
                                         case Way::West:
-                                                changeActivityOfItem( activities::Activity::MoveWest );
+                                                setActivityOfItem( activities::Activity::MoveWest );
                                                 break;
 
                                         default:
@@ -80,19 +80,19 @@ bool Driven::update ()
                                                         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
                                                         {
                                                                 case Way::North:
-                                                                        changeActivityOfItem( activities::Activity::MoveNorth );
+                                                                        setActivityOfItem( activities::Activity::MoveNorth );
                                                                         break;
 
                                                                 case Way::South:
-                                                                        changeActivityOfItem( activities::Activity::MoveSouth );
+                                                                        setActivityOfItem( activities::Activity::MoveSouth );
                                                                         break;
 
                                                                 case Way::East:
-                                                                        changeActivityOfItem( activities::Activity::MoveEast );
+                                                                        setActivityOfItem( activities::Activity::MoveEast );
                                                                         break;
 
                                                                 case Way::West:
-                                                                        changeActivityOfItem( activities::Activity::MoveWest );
+                                                                        setActivityOfItem( activities::Activity::MoveWest );
                                                                         break;
 
                                                                 default:

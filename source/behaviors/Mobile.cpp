@@ -53,13 +53,13 @@ bool Mobile::update ()
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                // if the item isn't displaced by another item below it
+                                // if the item isn't dragged
                                 if ( this->affectedBy == nilPointer || this->affectedBy != this->item )
                                 {       // emit the sound of pushing
                                         SoundManager::getInstance().play( freeItem.getKind (), "push" );
                                 }
 
-                                this->changeActivityOfItem( activity );
+                                this->setActivityOfItem( activity );
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 activity = activities::Activity::Wait;
@@ -94,7 +94,7 @@ bool Mobile::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                this->changeActivityOfItem( activity );
+                                this->setActivityOfItem( activity );
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play the sound of falling

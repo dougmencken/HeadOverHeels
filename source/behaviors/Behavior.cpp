@@ -52,7 +52,7 @@ void Behavior::propagateActivity( const Item& sender, const ActivityOfItem& acti
                         // change activity for item with behavior
                         if ( item->getBehavior() != nilPointer )
                         {
-                                item->getBehavior()->changeActivityOfItem( activity );
+                                item->getBehavior()->setActivityOfItem( activity );
                         }
                 }
         }

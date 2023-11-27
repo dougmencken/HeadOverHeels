@@ -62,13 +62,10 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
                                 ItemPtr item = mediator->findItemByUniqueName( collision );
                                 if ( item == nilPointer ) continue ;
 
-                                // mortal thing is above
-                                if ( item->isMortal() && ! characterItem.hasShield() )
+                                // a mortal thing is above
+                                if ( item->isMortal() )
                                 {
-                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-                                        {
-                                                characterItem.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
-                                        }
+                                        characterItem.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                 }
                                 else
                                 {
@@ -135,12 +132,12 @@ void Jumping::lift( FreeItem& sender, Item& item, int z )
                 if ( behavior->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 behavior->getNameOfBehavior () == "behavior of bonus" )
                 {
-                        behavior->changeActivityOfItem( activities::Activity::PushedUp, ItemPtr( &sender ) );
+                        behavior->changeActivityOfItemDueTo( activities::Activity::PushedUp, ItemPtr( &sender ) );
                 }
                 // raise if the item isn’t an elevator
                 else if ( behavior->getNameOfBehavior () != "behavior of elevator" )
                 {
-                        // is there’s something above
+                        // is there something above
                         if ( ! item.addToZ( z ) )
                         {
                                 Mediator* mediator = item.getMediator();
