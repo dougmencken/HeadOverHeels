@@ -56,12 +56,12 @@ public:
 
         virtual ~Room( ) ;
 
-        /**
-         * may be "single", "double along X", "double along Y", "triple"
-         */
-        std::string whichRoom () const ;
-
         bool isSingleRoom () const {  return getTilesX() <= maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom ;  }
+
+        bool isTripleRoom () const {  return getTilesX() > maxTilesOfSingleRoom && getTilesY() > maxTilesOfSingleRoom ;  }
+
+        bool isDoubleRoomAlongX () const {  return getTilesX() > maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom ;  }
+        bool isDoubleRoomAlongY () const {  return getTilesX() <= maxTilesOfSingleRoom && getTilesY() > maxTilesOfSingleRoom ;  }
 
         bool saveAsXML ( const std::string& file ) ;
 
@@ -127,23 +127,24 @@ public:
 
         bool continueWithAliveCharacter () ;
 
-       /**
-        * Calculate coordinates at which the character enters the room
-        * @param entry the way of entry
-        * @param widthX the size of character on X
-        * @param widthY the size of character on Y
-        * @param northBound the north limit of room, it is X coordinate of north walls or north door
-        * @param eastBound the east limit of room, it is Y coordinate of east walls or east door
-        * @param southBound the south limit of room, it’s X coordinate of south walls or south door
-        * @param westBound the west limit of room, it’s Y coordinate where are west walls or where’s west door
-        * @param x the resulting X coordinate
-        * @param y the resulting Y coordinate
-        * @param z the resulting Z coordinate
-        * @return true if coordinates are okay to enter the room or false otherwise
-        */
+        /**
+         * Calculate coordinates at which the character enters the room
+         *
+         * @param the way of entry
+         * @param widthX the size of the character on X
+         * @param widthY the size of the character on Y
+         * @param previousNorthBound the limit of the previous room in the north, it is the X coordinate of the north walls or door
+         * @param previousEastBound the limit of the previous room in the east, it is the Y coordinate of the east walls or door
+         * @param previousSouthBound the limit of the previous room in the south, it’s the X coordinate of the south walls or door
+         * @param previousWestBound the limit of the previous room in the west, it’s the Y coordinate of the west walls or door
+         * @param x the X coordinate of entrance, initially the X of exit from the previous room
+         * @param y the Y coordinate of entrance, initially the Y of exit from the previous room
+         * @param z the Z coordinate of entrance, initially the Z of exit from the previous room
+         * @return true if coordinates are okay to enter the room or false otherwise
+         */
         bool calculateEntryCoordinates ( const Way & wayOfEntry,
                                                 int widthX, int widthY,
-                                                int northBound, int eastBound, int southBound, int westBound,
+                                                int previousNorthBound, int previousEastBound, int previousSouthBound, int previousWestBound,
                                                 int * x, int * y, int * z ) ;
 
         const RoomConnections * getConnections () const {  return connections ;  }
@@ -202,7 +203,7 @@ public:
 
         bool hasFloor () const {  return kindOfFloor != "absent" ;  }
 
-        unsigned short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
+        short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
         const std::vector < std::pair < int, int > > & getTilesWithoutFloor () const {  return tilesWithoutFloor ;  }
 
@@ -218,7 +219,7 @@ public:
                 return it != doors.end() ? it->second : nilPointer ;
         }
 
-        bool hasDoorAt ( const std::string & way ) const {  return ( getDoorAt( way ) != nilPointer ) ;  }
+        bool hasDoorAt ( const std::string & way ) const {  return getDoorAt( way ) != nilPointer ;  }
 
         const std::map < std::string, Door * > & getDoors () const {  return doors ;  }
 
@@ -272,24 +273,24 @@ private:
 
         std::string color ;
 
-       /**
-        * Where the origin of room is
-        */
+        /**
+         * Where the origin of the room is
+         */
         std::pair < int /* x */, int /* y */ > coordinatesOfOrigin ;
 
         const std::pair < unsigned int /* tilesX */, unsigned int /* tilesY */ > howManyTiles ;
 
         std::string kindOfFloor ;
 
-       /**
-        * Sequence of when to draw a column of grid items
-        */
+        /**
+         * The sequence of drawing columns of grid items
+         */
         unsigned int * drawSequence ;
 
-       /**
-        * Degree of shadows’ opacity
-        * from 0 for pure black shadows, thru 128 for 50% opacity of shadows, up to 256 for no shadows
-        */
+        /**
+         * The opacity of shadows
+         * from 0 for pure black shadows, thru 128 for 50% opacity, up to 256 for no shadows
+         */
         unsigned short shadingOpacity ;
 
         std::vector < std::pair < int, int > > tilesWithoutFloor ;
@@ -300,27 +301,27 @@ private:
 
         std::vector < Wall * > wallY ;
 
-       /**
-        * Set of grid items that form structure of room. Each column is sorted
-        * thus next item’s Z is greater than preceding item’s Z
-        */
+        /**
+         * The set of grid items that make up the structure of the room. Each column is sorted
+         * in such a way that the next item’s Z is greater than the preceding item’s Z
+         */
         std::vector < std::vector < GridItemPtr > > gridItems ;
 
-       /**
-        * Free items in room
-        */
+        /**
+         * Free items in room
+         */
         std::vector < FreeItemPtr > freeItems ;
 
-       /**
-        * Las puertas
-        * The doors
-        */
+        /**
+         * Las puertas
+         * The doors
+         */
         std::map < std::string, Door * > doors ;
 
-       /**
-        * Isometric coordinates that limit this room
-        */
-        std::map < std::string, unsigned short > bounds ;
+        /**
+         * Isometric coordinates that limit this room
+         */
+        std::map < std::string, short > bounds ;
 
         Camera * camera ;
 

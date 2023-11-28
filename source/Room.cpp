@@ -44,18 +44,18 @@ Room::Room( const std::string & roomFile, const std::string & scenery,
         this->mediator = new Mediator( this );
 
         ///bounds.clear ();
-        bounds[ "north" ] = 64000;
-        bounds[ "south" ] = 64000;
-        bounds[ "east" ] = 64000;
-        bounds[ "west" ] = 64000;
-        bounds[ "northeast" ] = 64000;
-        bounds[ "southeast" ] = 64000;
-        bounds[ "southwest" ] = 64000;
-        bounds[ "northwest" ] = 64000;
-        bounds[ "eastnorth" ] = 64000;
-        bounds[ "eastsouth" ] = 64000;
-        bounds[ "westnorth" ] = 64000;
-        bounds[ "westsouth" ] = 64000;
+        bounds[ "north" ] = -1 ;
+        bounds[ "south" ] = -1 ;
+        bounds[ "east" ] = -1 ;
+        bounds[ "west" ] = -1 ;
+        bounds[ "northeast" ] = -2 ;
+        bounds[ "southeast" ] = -2 ;
+        bounds[ "southwest" ] = -2 ;
+        bounds[ "northwest" ] = -2 ;
+        bounds[ "eastnorth" ] = -2 ;
+        bounds[ "eastsouth" ] = -2 ;
+        bounds[ "westnorth" ] = -2 ;
+        bounds[ "westsouth" ] = -2 ;
 
         ///doors.clear ();
         doors[ "north" ] = nilPointer;
@@ -171,24 +171,6 @@ Room::~Room()
 
         charactersYetInRoom.clear() ;
         charactersWhoEnteredRoom.clear() ;
-}
-
-std::string Room::whichRoom () const
-{
-        if ( isSingleRoom () ) return "single" ;
-
-        // is it the double room along Y
-        if ( getTilesX() <= maxTilesOfSingleRoom && getTilesY() > maxTilesOfSingleRoom )
-        {
-                return "double along Y" ;
-        }
-        // is it the double room along X
-        else if ( getTilesX() > maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom )
-        {
-                return "double along X" ;
-        }
-
-        return "triple" ;
 }
 
 bool Room::saveAsXML( const std::string & file )
@@ -748,7 +730,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 
         const std::string & kindOfItem = freeItem->getKind () ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
-        if ( uniqueNumberOfItem == 0 ) // is it new kind
+        if ( uniqueNumberOfItem == 0 ) // is it the new kind
         {
                  uniqueNumberOfItem = 1;
         }
@@ -912,9 +894,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         character->setOffset( offset );
 
         if ( mediator->getActiveCharacter() == nilPointer )
-        {
                 mediator->setActiveCharacter( character );
-        }
 
         mediator->wantShadowFromFreeItem( *character );
         mediator->wantToMaskWithFreeItem( *character );
@@ -1423,15 +1403,17 @@ void Room::calculateBounds()
         bounds[ "south" ] = oneTileLong * getTilesX() - ( hasDoorAt( "south" ) || hasDoorAt( "southeast" ) || hasDoorAt( "southwest" )  ? oneTileLong : 0 );
         bounds[ "west" ] = oneTileLong * getTilesY() - ( hasDoorAt( "west" ) || hasDoorAt( "westnorth" ) || hasDoorAt( "westsouth" )  ? oneTileLong : 0 );
 
-        // door limits of triple room
-        bounds[ "northeast" ] = hasDoorAt( "northeast" ) ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
-        bounds[ "northwest" ] = hasDoorAt( "northwest" ) ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
-        bounds[ "southeast" ] = hasDoorAt( "southeast" ) ? doors[ "southeast" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
-        bounds[ "southwest" ] = hasDoorAt( "southwest" ) ? doors[ "southwest" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
-        bounds[ "eastnorth" ] = hasDoorAt( "eastnorth" ) ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
-        bounds[ "eastsouth" ] = hasDoorAt( "eastsouth" ) ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
-        bounds[ "westnorth" ] = hasDoorAt( "westnorth" ) ? doors[ "westnorth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
-        bounds[ "westsouth" ] = hasDoorAt( "westsouth" ) ? doors[ "westsouth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
+        if ( this->isTripleRoom () ) {
+                // limits for a triple room
+                bounds[ "northeast" ] = hasDoorAt( "northeast" ) ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
+                bounds[ "northwest" ] = hasDoorAt( "northwest" ) ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
+                bounds[ "southeast" ] = hasDoorAt( "southeast" ) ? doors[ "southeast" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
+                bounds[ "southwest" ] = hasDoorAt( "southwest" ) ? doors[ "southwest" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
+                bounds[ "eastnorth" ] = hasDoorAt( "eastnorth" ) ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
+                bounds[ "eastsouth" ] = hasDoorAt( "eastsouth" ) ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
+                bounds[ "westnorth" ] = hasDoorAt( "westnorth" ) ? doors[ "westnorth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
+                bounds[ "westsouth" ] = hasDoorAt( "westsouth" ) ? doors[ "westsouth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
+        }
 }
 
 void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor )
@@ -1516,29 +1498,29 @@ bool Room::continueWithAliveCharacter ()
 
 bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
                                         int widthX, int widthY,
-                                        int northBound, int eastBound, int southBound, int westBound,
+                                        int previousNorthBound, int previousEastBound, int previousSouthBound, int previousWestBound,
                                         int* x, int* y, int* z )
 {
+        std::string way = wayOfEntry.toString () ;
+
+        // when moving from a single room to a double room or vice versa
         int differenceOnX = 0 ;
         int differenceOnY = 0 ;
 
-        if ( wayOfEntry.toString() == "above" || wayOfEntry.toString() == "below" ||
-                        wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
+        if ( way == "above" || way == "below" || way == "via teleport" || way == "via second teleport" )
         {
                 const int limitOfSingleRoom = maxTilesOfSingleRoom * getSizeOfOneTile ();
 
-                // calculate the difference on X axis when moving from a single room to a double room or vice versa
-                if ( ( bounds[ "south" ] - bounds[ "north" ] > limitOfSingleRoom && southBound - northBound <= limitOfSingleRoom ) ||
-                        ( bounds[ "south" ] - bounds[ "north" ] <= limitOfSingleRoom && southBound - northBound > limitOfSingleRoom ) )
+                if ( ( bounds[ "south" ] - bounds[ "north" ] > limitOfSingleRoom && previousSouthBound - previousNorthBound <= limitOfSingleRoom ) ||
+                        ( bounds[ "south" ] - bounds[ "north" ] <= limitOfSingleRoom && previousSouthBound - previousNorthBound > limitOfSingleRoom ) )
                 {
-                        differenceOnX = ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1;
+                        differenceOnX = ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1;
                 }
 
-                // calculate the difference on Y axis when moving from a single room to a double room or vice versa
-                if ( ( bounds[ "west" ] - bounds[ "east" ] > limitOfSingleRoom && westBound - eastBound <= limitOfSingleRoom ) ||
-                        ( bounds[ "west" ] - bounds[ "east" ] <= limitOfSingleRoom && westBound - eastBound > limitOfSingleRoom ) )
+                if ( ( bounds[ "west" ] - bounds[ "east" ] > limitOfSingleRoom && previousWestBound - previousEastBound <= limitOfSingleRoom ) ||
+                        ( bounds[ "west" ] - bounds[ "east" ] <= limitOfSingleRoom && previousWestBound - previousEastBound > limitOfSingleRoom ) )
                 {
-                        differenceOnY = ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1;
+                        differenceOnY = ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1;
                 }
         }
 
@@ -1549,102 +1531,102 @@ bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
         switch ( wayOfEntry.getIntegerOfWay () )
         {
                 case Way::North:
-                        *x = bounds[ "north" ] - oneTileSize + 1;
-                        *y = doors[ "north" ]->getLeftJamb()->getY() - doors[ "north" ]->getLeftJamb()->getWidthY();
-                        *z = doors[ "north" ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] - oneTileSize + 1;
+                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::South:
-                        *x = bounds[ "south" ] + oneTileSize - widthX;
-                        *y = doors[ "south" ]->getLeftJamb()->getY() - doors[ "south" ]->getLeftJamb()->getWidthY();
-                        *z = doors[ "south" ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] + oneTileSize - widthX;
+                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::East:
-                        *x = doors[ "east" ]->getLeftJamb()->getX() + doors[ "east" ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ "east" ] - oneTileSize + widthY;
-                        *z = doors[ "east" ]->getLeftJamb()->getZ();
+                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
+                        *y = bounds[ way ] - oneTileSize + widthY;
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::West:
-                        *x = doors[ "west" ]->getLeftJamb()->getX() + doors[ "west" ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ "west" ] + oneTileSize - 1;
-                        *z = doors[ "west" ]->getLeftJamb()->getZ();
+                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
+                        *y = bounds[ way ] + oneTileSize - 1;
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Northeast:
-                        *x = bounds[ "northeast" ];
-                        *y = doors[ "northeast" ]->getLeftJamb()->getY() - doors[ "northeast" ]->getLeftJamb()->getWidthY();
-                        *z = doors[ "northeast" ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ];
+                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Northwest:
-                        *x = bounds[ "northwest" ];
-                        *y = doors[ "northwest" ]->getLeftJamb()->getY() - doors[ "northwest" ]->getLeftJamb()->getWidthY();
-                        *z = doors[ "northwest" ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ];
+                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Southeast:
-                        *x = bounds[ "southeast" ] - widthX;
-                        *y = doors[ "southeast" ]->getLeftJamb()->getY() - doors[ "southeast" ]->getLeftJamb()->getWidthY();
-                        *z = doors[ "southeast" ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] - widthX;
+                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Southwest:
-                        *x = bounds[ "southwest" ] - widthX;
-                        *y = doors[ "southwest" ]->getLeftJamb()->getY() - doors[ "southwest" ]->getLeftJamb()->getWidthY();
-                        *z = doors[ "southwest" ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] - widthX;
+                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Eastnorth:
-                        *x = doors[ "eastnorth" ]->getLeftJamb()->getX() + doors[ "eastnorth" ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ "eastnorth" ] + widthY;
-                        *z = doors[ "eastnorth" ]->getLeftJamb()->getZ();
+                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
+                        *y = bounds[ way ] + widthY;
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Eastsouth:
-                        *x = doors[ "eastsouth" ]->getLeftJamb()->getX() + doors[ "eastsouth" ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ "eastsouth" ] + widthY;
-                        *z = doors[ "eastsouth" ]->getLeftJamb()->getZ();
+                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
+                        *y = bounds[ way ] + widthY;
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Westnorth:
-                        *x = doors[ "westnorth" ]->getLeftJamb()->getX() + doors[ "westnorth" ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ "westnorth" ] - widthY;
-                        *z = doors[ "westnorth" ]->getLeftJamb()->getZ();
+                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
+                        *y = bounds[ way ] - widthY;
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Westsouth:
-                        *x = doors[ "westsouth" ]->getLeftJamb()->getX() + doors[ "westsouth" ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ "westsouth" ] - widthY;
-                        *z = doors[ "westsouth" ]->getLeftJamb()->getZ();
+                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
+                        *y = bounds[ way ] - widthY;
+                        *z = doors[ way ]->getLeftJamb()->getZ();
                         okay = true ;
                         break;
 
                 case Way::Above:
-                        *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
+                        *x += bounds[ "north" ] - previousNorthBound + ( ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differenceOnX : differenceOnX );
-                        *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );
+                        *y += bounds[ "east" ] - previousEastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1 );
                         *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ] ) >> 1 ) ? -differenceOnY : differenceOnY );
                         *z = Isomot::MaxLayers * Isomot::LayerHeight ;
                         okay = true ;
                         break;
 
                 case Way::Below:
-                        *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
+                        *x += bounds[ "north" ] - previousNorthBound + ( ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differenceOnX : differenceOnX );
-                        *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound) >> 1 );
+                        *y += bounds[ "east" ] - previousEastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1 );
                         *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ]) >> 1 ) ? -differenceOnY : differenceOnY );
                         *z = Isomot::LayerHeight ;
                         okay = true ;
@@ -1652,9 +1634,9 @@ bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
 
                 case Way::ByTeleport:
                 case Way::ByTeleportToo:
-                        *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
+                        *x += bounds[ "north" ] - previousNorthBound + ( ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differenceOnX : differenceOnX );
-                        *y += differenceOnY + bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );
+                        *y += differenceOnY + bounds[ "east" ] - previousEastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1 );
                         *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ] ) >> 1 ) ? -differenceOnY : differenceOnY );
                         okay = true ;
                         break;
