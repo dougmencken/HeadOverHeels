@@ -1067,7 +1067,7 @@ void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
 
 bool Room::removeCharacterFromRoom( const AvatarItem & character, bool characterExitsRoom )
 {
-        for ( std::vector< AvatarItemPtr >::iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
+        for ( std::vector< AvatarItemPtr >::iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++ pi )
         {
                 if ( character.getUniqueName() == ( *pi )->getUniqueName() )
                 {
@@ -1078,9 +1078,9 @@ bool Room::removeCharacterFromRoom( const AvatarItem & character, bool character
 
                         nextNumbers[ "character " + characterName ] -- ;
 
-                        if ( wasActive )
-                        {
-                                // activate other character, or set it to nil when there’s no other character in room
+                        if ( wasActive ) {
+                                // activate the waiting character
+                                // it is nil when there’s no other character in this room
                                 mediator->setActiveCharacter( mediator->getWaitingCharacter() );
                         }
 
@@ -1116,9 +1116,9 @@ bool Room::isAnyCharacterStillInRoom () const
         return ! charactersYetInRoom.empty () ;
 }
 
-unsigned int Room::removeBars ()
+unsigned int Room::removeItemsOfKind ( const std::string & kind )
 {
-        unsigned int howManyBars = 0;
+        unsigned int howManyItemsWereRemoved = 0 ;
 
         mediator->lockGridItemsMutex();
         mediator->lockFreeItemsMutex();
@@ -1132,17 +1132,15 @@ unsigned int Room::removeBars ()
                         GridItemPtr gridItem = *gi ;
                         if ( gridItem == nilPointer ) continue ;
 
-                        if ( gridItem->getKind().find( "bars" ) != std::string::npos )
-                        {
+                        if ( gridItem->getKind() == kind )
                                 gridItemsToRemove.push_back( gridItem->getUniqueName() );
-                                howManyBars ++;
-                        }
                 }
         }
 
         for ( std::vector< std::string >::const_iterator gi = gridItemsToRemove.begin (); gi != gridItemsToRemove.end (); ++ gi )
         {
                 removeGridItemByUniqueName( *gi );
+                howManyItemsWereRemoved ++ ;
         }
 
         std::vector< std::string > freeItemsToRemove ;
@@ -1152,22 +1150,20 @@ unsigned int Room::removeBars ()
                 FreeItemPtr freeItem = *fi ;
                 if ( freeItem == nilPointer ) continue ;
 
-                if ( freeItem->getKind().find( "bars" ) != std::string::npos )
-                {
+                if ( freeItem->getKind() == kind )
                         freeItemsToRemove.push_back( freeItem->getUniqueName() );
-                        howManyBars ++;
-                }
         }
 
         for ( std::vector< std::string >::const_iterator fi = freeItemsToRemove.begin (); fi != freeItemsToRemove.end (); ++ fi )
         {
                 removeFreeItemByUniqueName( *fi );
+                howManyItemsWereRemoved ++ ;
         }
 
         mediator->unlockFreeItemsMutex();
         mediator->unlockGridItemsMutex();
 
-        return howManyBars;
+        return howManyItemsWereRemoved ;
 }
 
 void Room::dontDisappearOnJump ()
@@ -1431,18 +1427,19 @@ void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bo
 #endif
 }
 
-bool Room::activateCharacterByName( const std::string & character )
+bool Room::activateCharacterByName( const std::string & name )
 {
-        for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
+        for ( unsigned int i = 0 ; i < charactersYetInRoom.size () ; ++ i )
         {
-                if ( character == ( *pi )->getOriginalKind() )
+                AvatarItemPtr character = charactersYetInRoom[ i ];
+                if ( name == character->getOriginalKind () )
                 {
-                        mediator->setActiveCharacter( *pi );
-                        return true;
+                        mediator->setActiveCharacter( character );
+                        return true ;
                 }
         }
 
-        return false;
+        return false ;
 }
 
 void Room::activate()
@@ -1468,32 +1465,32 @@ bool Room::swapCharactersInRoom ()
 bool Room::continueWithAliveCharacter ()
 {
         AvatarItemPtr previouslyAliveCharacter = mediator->getActiveCharacter() ;
+        assert( previouslyAliveCharacter != nilPointer );
 
-        if ( previouslyAliveCharacter->getLives() == 0 )
+        if ( previouslyAliveCharacter->getLives() > 0 ) return true ;
+
+        // that character has no more lives, look for the other one in this room
+        AvatarItemPtr nextCharacter ( nilPointer );
+        for ( unsigned int i = 0 ; i < charactersYetInRoom.size () ; ++ i )
         {
-                // look for the next character
-                std::vector< AvatarItemPtr >::iterator i = charactersYetInRoom.begin () ;
-                while ( i != charactersYetInRoom.end () )
-                {
-                        if ( *i != nilPointer && ( *i )->getKind () == previouslyAliveCharacter->getKind () ) break;
-                        ++ i ;
+                AvatarItemPtr character = charactersYetInRoom[ i ];
+                if ( character != nilPointer && character->getKind() != previouslyAliveCharacter->getKind() ) {
+                        nextCharacter = character ;
+                        break ;
                 }
-                ++i ;
-                mediator->setActiveCharacter( i != this->charactersYetInRoom.end () ? ( *i ) : *this->charactersYetInRoom.begin () );
-
-                // is there other alive characters in room
-                if ( previouslyAliveCharacter != mediator->getActiveCharacter() )
-                {
-                        removeCharacterFromRoom( *previouslyAliveCharacter, true );
-
-                        this->activate();
-                        return true;
-                }
-
-                return false;
         }
 
-        return true;
+        if ( nextCharacter != nilPointer && nextCharacter->getLives() > 0 )
+        {
+                mediator->setActiveCharacter( nextCharacter );
+
+                removeCharacterFromRoom( *previouslyAliveCharacter, /* leaving room */ true );
+
+                ///this->activate();
+                return true ;
+        }
+
+        return false ;
 }
 
 bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
@@ -1503,6 +1500,17 @@ bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
 {
         std::string way = wayOfEntry.toString () ;
 
+        int northToSouth = bounds[ "south" ] - bounds[ "north" ] ;           //  N + N2S = S     *------>(N)----->(S)
+        int previousSouth2North = previousNorthBound - previousSouthBound ;  //  N' = S' + S2N'  *-->(N')<-------------(S')
+        int previousNorth2South = - previousSouth2North ;                    //  N2S' = - S2N'   *-->(N')------------->(S')
+
+        int eastToWest = bounds[ "west" ] - bounds[ "east" ] ;
+        int previousWest2East = previousEastBound - previousWestBound ;
+        int previousEast2West = - previousWest2East ;
+
+        int dX = ( northToSouth + previousSouth2North ) >> 1 ;
+        int dY = ( eastToWest + previousWest2East ) >> 1 ;
+
         // when moving from a single room to a double room or vice versa
         int differenceOnX = 0 ;
         int differenceOnY = 0 ;
@@ -1511,18 +1519,24 @@ bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
         {
                 const int limitOfSingleRoom = maxTilesOfSingleRoom * getSizeOfOneTile ();
 
-                if ( ( bounds[ "south" ] - bounds[ "north" ] > limitOfSingleRoom && previousSouthBound - previousNorthBound <= limitOfSingleRoom ) ||
-                        ( bounds[ "south" ] - bounds[ "north" ] <= limitOfSingleRoom && previousSouthBound - previousNorthBound > limitOfSingleRoom ) )
+                if ( ( northToSouth > limitOfSingleRoom && previousNorth2South <= limitOfSingleRoom )
+                        || ( northToSouth <= limitOfSingleRoom && previousNorth2South > limitOfSingleRoom ) )
                 {
-                        differenceOnX = ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1;
+                        differenceOnX = dX ;
                 }
 
-                if ( ( bounds[ "west" ] - bounds[ "east" ] > limitOfSingleRoom && previousWestBound - previousEastBound <= limitOfSingleRoom ) ||
-                        ( bounds[ "west" ] - bounds[ "east" ] <= limitOfSingleRoom && previousWestBound - previousEastBound > limitOfSingleRoom ) )
+                if ( ( eastToWest > limitOfSingleRoom && previousEast2West <= limitOfSingleRoom )
+                        || ( eastToWest <= limitOfSingleRoom && previousEast2West > limitOfSingleRoom ) )
                 {
-                        differenceOnY = ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1;
+                        differenceOnY = dY ;
                 }
         }
+
+        const FreeItemPtr & leftJamb = hasDoorAt( way ) ? doors[ way ]->getLeftJamb() : FreeItemPtr () ;
+
+        if ( leftJamb != nilPointer ) *z = leftJamb->getZ ();
+        else if ( way == "above" ) *z = Isomot::MaxLayers * Isomot::LayerHeight ;
+        else if ( way == "below" ) *z = Isomot::LayerHeight ;
 
         bool okay = false ;
         unsigned int oneTileSize = getSizeOfOneTile ();
@@ -1531,113 +1545,99 @@ bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
         switch ( wayOfEntry.getIntegerOfWay () )
         {
                 case Way::North:
-                        *x = bounds[ way ] - oneTileSize + 1;
-                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] - oneTileSize + 1 ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
                         okay = true ;
                         break;
 
                 case Way::South:
-                        *x = bounds[ way ] + oneTileSize - widthX;
-                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] + oneTileSize - widthX ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
                         okay = true ;
                         break;
 
                 case Way::East:
-                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ way ] - oneTileSize + widthY;
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *y = bounds[ way ] - oneTileSize + widthY ;
                         okay = true ;
                         break;
 
                 case Way::West:
-                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ way ] + oneTileSize - 1;
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *y = bounds[ way ] + oneTileSize - 1 ;
                         okay = true ;
                         break;
 
                 case Way::Northeast:
                         *x = bounds[ way ];
-                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
                         okay = true ;
                         break;
 
                 case Way::Northwest:
                         *x = bounds[ way ];
-                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
                         okay = true ;
                         break;
 
                 case Way::Southeast:
-                        *x = bounds[ way ] - widthX;
-                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] - widthX ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
                         okay = true ;
                         break;
 
                 case Way::Southwest:
-                        *x = bounds[ way ] - widthX;
-                        *y = doors[ way ]->getLeftJamb()->getY() - doors[ way ]->getLeftJamb()->getWidthY();
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = bounds[ way ] - widthX ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
                         okay = true ;
                         break;
 
                 case Way::Eastnorth:
-                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ way ] + widthY;
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *y = bounds[ way ] + widthY ;
                         okay = true ;
                         break;
 
                 case Way::Eastsouth:
-                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ way ] + widthY;
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *y = bounds[ way ] + widthY ;
                         okay = true ;
                         break;
 
                 case Way::Westnorth:
-                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ way ] - widthY;
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *y = bounds[ way ] - widthY ;
                         okay = true ;
                         break;
 
                 case Way::Westsouth:
-                        *x = doors[ way ]->getLeftJamb()->getX() + doors[ way ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ way ] - widthY;
-                        *z = doors[ way ]->getLeftJamb()->getZ();
+                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *y = bounds[ way ] - widthY ;
                         okay = true ;
                         break;
 
                 case Way::Above:
-                        *x += bounds[ "north" ] - previousNorthBound + ( ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1 );
-                        *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differenceOnX : differenceOnX );
-                        *y += bounds[ "east" ] - previousEastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1 );
-                        *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ] ) >> 1 ) ? -differenceOnY : differenceOnY );
-                        *z = Isomot::MaxLayers * Isomot::LayerHeight ;
+                        *x += bounds[ "north" ] - previousNorthBound + dX ;
+                        *x += ( *x < ( northToSouth >> 1 ) ) ? - differenceOnX : differenceOnX ;
+                        *y += bounds[ "east" ] - previousEastBound + dY ;
+                        *y += ( *y < ( eastToWest >> 1 ) ) ? - differenceOnY : differenceOnY ;
                         okay = true ;
                         break;
 
                 case Way::Below:
-                        *x += bounds[ "north" ] - previousNorthBound + ( ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1 );
-                        *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differenceOnX : differenceOnX );
-                        *y += bounds[ "east" ] - previousEastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1 );
-                        *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ]) >> 1 ) ? -differenceOnY : differenceOnY );
-                        *z = Isomot::LayerHeight ;
+                        *x += bounds[ "north" ] - previousNorthBound + dX ;
+                        *x += ( *x < ( northToSouth >> 1 ) ) ? - differenceOnX : differenceOnX ;
+                        *y += bounds[ "east" ] - previousEastBound + dY ;
+                        *y += ( *y < ( eastToWest >> 1 ) ) ? - differenceOnY : differenceOnY ;
                         okay = true ;
                         break;
 
                 case Way::ByTeleport:
                 case Way::ByTeleportToo:
-                        *x += bounds[ "north" ] - previousNorthBound + ( ( bounds[ "south" ] - bounds[ "north" ] - previousSouthBound + previousNorthBound ) >> 1 );
-                        *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differenceOnX : differenceOnX );
-                        *y += differenceOnY + bounds[ "east" ] - previousEastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - previousWestBound + previousEastBound ) >> 1 );
-                        *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ] ) >> 1 ) ? -differenceOnY : differenceOnY );
+                        *x += bounds[ "north" ] - previousNorthBound + dX ;
+                        *x += ( *x < ( northToSouth >> 1 ) ) ? - differenceOnX : differenceOnX ;
+                        *y += differenceOnY + bounds[ "east" ] - previousEastBound + dY ;
+                        *y += ( *y < ( eastToWest >> 1 ) ) ? - differenceOnY : differenceOnY ;
                         okay = true ;
                         break;
 

@@ -94,10 +94,10 @@ public:
         bool removeCharacterFromRoom ( const AvatarItem & character, bool characterExitsRoom ) ;
 
         /**
-         * Removes any bar in this room
-         * @return how many bars are gone
+         * Removes all items of the desired kind in this room
+         * @return how many items were removed
          */
-        unsigned int removeBars () ;
+        unsigned int removeItemsOfKind ( const std::string & kind ) ;
 
         /**
          * After that, no item in this room would disappear on jump
@@ -115,7 +115,10 @@ public:
 
         void calculateCoordinatesOfOrigin ( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor ) ;
 
-        bool activateCharacterByName ( const std::string & character ) ;
+        /**
+         * @return true if the character with this name is found in the room and activated
+         */
+        bool activateCharacterByName ( const std::string & name ) ;
 
         void activate () ;
 

@@ -467,15 +467,15 @@ Room* MapManager::rebuildRoom( Room* room )
                 {
                         addRoomInPlay( newRoom );
 
-                        bool isActiveCharacterHere = newRoom->activateCharacterByName( nameOfActiveCharacter );
+                        bool characterIsHere = newRoom->activateCharacterByName( nameOfActiveCharacter );
 
-                        if ( ! isActiveCharacterHere )
+                        if ( ! characterIsHere )
                         {
-                                // the case when the composite character merged in this room
-                                // loses a life and splits back into the two simple characters
-                                isActiveCharacterHere = newRoom->activateCharacterByName( nameOfActiveCharacterBeforeJoining );
+                                // the case when the composite character was merged in this room
+                                // and then loses a life and splits back into the two simple characters
+                                characterIsHere = newRoom->activateCharacterByName( nameOfActiveCharacterBeforeJoining );
 
-                                if ( ! isActiveCharacterHere ) // unlucky to happen
+                                if ( ! characterIsHere ) // unlucky to happen
                                 {
                                         if ( newRoom->isAnyCharacterStillInRoom() )
                                         {

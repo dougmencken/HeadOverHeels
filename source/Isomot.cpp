@@ -367,7 +367,7 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "y" ) )
         {
-                AvatarItemPtr & activeCharacter = activeRoom->getMediator()->getActiveCharacter() ;
+                const AvatarItemPtr & activeCharacter = activeRoom->getMediator()->getActiveCharacter() ;
                 if ( activeCharacter != nilPointer ) activeCharacter->activateShield ();
                 allegro::releaseKey( "y" );
         }
@@ -434,10 +434,13 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "-" ) )
         {
-                unsigned int howManyBars = activeRoom->removeBars ();
+                unsigned int howManyBars = activeRoom->removeItemsOfKind( "bars-ns" );
+                howManyBars += activeRoom->removeItemsOfKind( "bars-ew" );
+                unsigned int howManyBricks = activeRoom->removeItemsOfKind( "brick2" );
+                howManyBricks += activeRoom->removeItemsOfKind( "brick1" );
 
-                if ( howManyBars > 0 )
-                        std::cout << howManyBars << " bars are gone" << std::endl ;
+                if ( howManyBars > 0 ) std::cout << howManyBars << " bars are gone" << std::endl ;
+                if ( howManyBricks > 0 ) std::cout << howManyBricks << " bricks are gone" << std::endl ;
 
                 allegro::releaseKey( "-" );
         }

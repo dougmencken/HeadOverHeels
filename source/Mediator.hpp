@@ -205,9 +205,7 @@ private:
         /**
          * The character yet controlled by the player
          */
-        AvatarItemPtr activeCharacter ;
-
-        std::string nameOfActiveCharacter ;
+        AvatarItemPtr currentlyActiveCharacter ;
 
         /**
          * The character which was active just before joining them both
@@ -221,15 +219,20 @@ private:
 
 public:
 
-        bool isThreadRunning () {  return threadRunning ;  }
+        bool isThreadRunning () const {  return threadRunning ;  }
 
-        const std::string & getLastActiveCharacterBeforeJoining () {  return lastActiveCharacterBeforeJoining ;  }
+        const std::string & getLastActiveCharacterBeforeJoining () const {  return lastActiveCharacterBeforeJoining ;  }
 
         Room * getRoom () const {  return room ;  }
 
-        AvatarItemPtr & getActiveCharacter () {  return activeCharacter ;  }
+        const AvatarItemPtr & getActiveCharacter () const {  return this->currentlyActiveCharacter ;  }
 
-        const std::string & getNameOfActiveCharacter () const {  return nameOfActiveCharacter ;  }
+        std::string getNameOfActiveCharacter () const
+        {
+                return ( this->currentlyActiveCharacter != nilPointer )
+                                ? this->currentlyActiveCharacter->getOriginalKind ()
+                                : "" ;
+        }
 
         void setActiveCharacter ( const AvatarItemPtr & character ) ;
 

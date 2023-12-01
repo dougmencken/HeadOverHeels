@@ -26,7 +26,7 @@ Mediator::Mediator( Room* room )
         , needGridItemsSorting( false )
         , needFreeItemsSorting( false )
         , switchInRoomIsOn( false )
-        , activeCharacter( nilPointer )
+        , currentlyActiveCharacter( nilPointer )
 {
         pthread_mutex_init( &gridItemsMutex, nilPointer );
         pthread_mutex_init( &freeItemsMutex, nilPointer );
@@ -106,9 +106,9 @@ void Mediator::update()
 
         unlockGridItemsMutex ();
 
-        if ( activeCharacter != nilPointer )
+        if ( this->currentlyActiveCharacter != nilPointer )
         {
-                activeCharacter->behave ();
+                this->currentlyActiveCharacter->behave ();
         }
 
         lockFreeItemsMutex ();
@@ -141,15 +141,17 @@ void Mediator::update()
                 }
         }
 
-        std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
-        for ( std::vector< AvatarItemPtr >::iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++ p )
+        std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom () ;
+        for ( unsigned int i = 0 ; i < charactersInRoom.size () ; ++ i )
         {
-                // when inactive character falls down to room below this one
+                AvatarItemPtr character = charactersInRoom[ i ];
+
+                // when the inactive character falls down to the room below
                 // then make it active to let it fall
-                if ( ( *p )->getWayOfExit() == "below" && ! ( *p )->isActiveCharacter() )
+                if ( character->getWayOfExit() == "below" && ! character->isActiveCharacter() )
                 {
-                        std::cout << "inactive character \"" << ( *p )->getKind () << "\" falls down to another room, swap characters to make it active" << std::endl ;
-                        activeCharacter->setWayOfExit( "did not quit" );
+                        std::cout << "inactive character \"" << character->getKind () << "\" falls down to another room, swap characters to make it active" << std::endl ;
+                        this->currentlyActiveCharacter->setWayOfExit( "did not quit" );
                         this->pickNextCharacter () ;
                 }
         }
@@ -1016,105 +1018,105 @@ ItemPtr Mediator::collisionWithBadBoy()
 
 void Mediator::setActiveCharacter ( const AvatarItemPtr & character )
 {
-        if ( this->activeCharacter != character )
+        if ( this->currentlyActiveCharacter != character )
         {
-                this->activeCharacter = character ;
+                this->currentlyActiveCharacter = character ;
 
-                if ( character != nilPointer )
-                        this->nameOfActiveCharacter = character->getOriginalKind ();
-                else
-                        this->nameOfActiveCharacter.clear();
-
-                std::cout << "character \"" << nameOfActiveCharacter << "\" is yet active in room \"" << room->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+                std::cout << "character \"" << getNameOfActiveCharacter() << "\" is yet active in room \"" << room->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
         }
 }
 
 bool Mediator::pickNextCharacter ()
 {
-        AvatarItemPtr previousCharacter = activeCharacter;
+        AvatarItemPtr previousCharacter( getActiveCharacter() );
 
-        // search for next character
+        // look for the next character
         std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
-        std::vector< AvatarItemPtr >::iterator i = charactersInRoom.begin () ;
-        while ( i != charactersInRoom.end () )
+        AvatarItemPtr nextCharacter ( nilPointer );
+        for ( unsigned int i = 0 ; i < charactersInRoom.size () ; ++ i )
         {
-                if ( *i != nilPointer && ( *i )->getOriginalKind() == activeCharacter->getOriginalKind() ) break;
-                ++ i ;
+                AvatarItemPtr character = charactersInRoom[ i ];
+                if ( character != nilPointer && character->getOriginalKind() != previousCharacter->getOriginalKind() ) {
+                        nextCharacter = character ;
+                        break ;
+                }
         }
-        ++ i;
-        setActiveCharacter( i != charactersInRoom.end () ? *i : *charactersInRoom.begin () );
+        if ( nextCharacter != nilPointer ) setActiveCharacter( nextCharacter );
 
-        // see if characters may join here
-        if ( previousCharacter->getOriginalKind() != activeCharacter->getOriginalKind() )
+        const AvatarItemPtr & currentCharacter = getActiveCharacter() ;
+
+        if ( previousCharacter->getOriginalKind() != currentCharacter->getOriginalKind() )
         {
-                const int delta = room->getSizeOfOneTile() >> 1;
+                // see if the characters may join here
 
-                if ( ( previousCharacter->getOriginalKind() == "head" && activeCharacter->getOriginalKind() == "heels" ) ||
-                                ( previousCharacter->getOriginalKind() == "heels" && activeCharacter->getOriginalKind() == "head" ) )
+                const int delta = room->getSizeOfOneTile() >> 1 ;
+
+                if ( ( previousCharacter->getOriginalKind() == "head" && currentCharacter->getOriginalKind() == "heels" ) ||
+                                ( previousCharacter->getOriginalKind() == "heels" && currentCharacter->getOriginalKind() == "head" ) )
                 {
-                        if ( ( previousCharacter->getX() + delta >= activeCharacter->getX() )
-                                && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= activeCharacter->getX() + activeCharacter->getWidthX() )
-                                && ( previousCharacter->getY() + delta >= activeCharacter->getY() )
-                                && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= activeCharacter->getY() + activeCharacter->getWidthY() )
-                                && ( ( previousCharacter->getOriginalKind() == "head" && previousCharacter->getZ() - Isomot::LayerHeight == activeCharacter->getZ() ) ||
-                                        ( previousCharacter->getOriginalKind() == "heels" && activeCharacter->getZ() - Isomot::LayerHeight == previousCharacter->getZ() ) ) )
+                        if ( ( previousCharacter->getX() + delta >= currentCharacter->getX() )
+                                && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= currentCharacter->getX() + currentCharacter->getWidthX() )
+                                && ( previousCharacter->getY() + delta >= currentCharacter->getY() )
+                                && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= currentCharacter->getY() + currentCharacter->getWidthY() )
+                                && ( ( previousCharacter->getOriginalKind() == "head" && previousCharacter->getZ() - Isomot::LayerHeight == currentCharacter->getZ() )
+                                        || ( previousCharacter->getOriginalKind() == "heels" && currentCharacter->getZ() - Isomot::LayerHeight == previousCharacter->getZ() ) ) )
                         {
                                 lockFreeItemsMutex ();
 
-                                AvatarItemPtr reference = previousCharacter->getOriginalKind() == "heels" ? previousCharacter : activeCharacter;
-                                this->lastActiveCharacterBeforeJoining = previousCharacter->getOriginalKind() == "heels" ? "heels" : "head";
+                                AvatarItemPtr reference = previousCharacter->getOriginalKind() == "heels" ? previousCharacter : currentCharacter ;
+                                this->lastActiveCharacterBeforeJoining = previousCharacter->getOriginalKind() == "heels" ? "heels" : "head" ;
 
                                 int x = reference->getX();
                                 int y = reference->getY();
                                 int z = reference->getZ();
                                 std::string orientation = reference->getOrientation() ;
 
-                                // item that Heels may have in handbag
+                                // an item that Heels may have in the handbag
                                 AvatarItemPtr heels = reference;
                                 const DescriptionOfItem* descriptionOfItemInBag = heels->getDescriptionOfTakenItem ();
                                 std::string behaviorOfItemInBag = heels->getBehaviorOfTakenItem( );
 
-                                // remove simple characters
+                                // remove the simple characters
                                 this->room->removeCharacterFromRoom( *previousCharacter, false );
-                                this->room->removeCharacterFromRoom( *activeCharacter, false );
+                                this->room->removeCharacterFromRoom( *currentCharacter, false );
 
-                                // create composite character
+                                // create the composite character
                                 setActiveCharacter( RoomBuilder::createCharacterInRoom( this->room, "headoverheels", false, x, y, z, orientation ) );
 
-                                // transfer item in handbag
+                                // transfer an item in the handbag
                                 if ( descriptionOfItemInBag != nilPointer )
                                 {
-                                        std::cout << "transfer item \"" << descriptionOfItemInBag->getKind ()
-                                                        << "\" to the character \"" << activeCharacter->getKind () << "\"" << std::endl ;
-                                        activeCharacter->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
+                                        std::cout << "item \"" << descriptionOfItemInBag->getKind ()
+                                                        << "\" goes into the bag of \"" << getActiveCharacter()->getKind () << "\"" << std::endl ;
+                                        getActiveCharacter()->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                                 }
 
                                 unlockFreeItemsMutex ();
 
-                                std::cout << "join both characters into \"" << activeCharacter->getOriginalKind () << "\""
+                                std::cout << "join both characters into \"" << getActiveCharacter()->getOriginalKind () << "\""
                                                 << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
                                 return true;
                         }
                 }
         }
         // is it composite character
-        else if ( activeCharacter->getOriginalKind() == "headoverheels" )
+        else if ( currentCharacter->getOriginalKind() == "headoverheels" )
         {
-                std::cout << "split \"" << activeCharacter->getOriginalKind() << "\" in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
+                std::cout << "split \"" << currentCharacter->getOriginalKind() << "\" in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
 
-                int x = activeCharacter->getX();
-                int y = activeCharacter->getY();
-                int z = activeCharacter->getZ();
-                std::string orientation = activeCharacter->getOrientation() ;
+                int x = currentCharacter->getX ();
+                int y = currentCharacter->getY ();
+                int z = currentCharacter->getZ ();
+                std::string orientation = currentCharacter->getOrientation ();
 
                 lockFreeItemsMutex ();
 
                 // get the description of item in the handbag
-                const DescriptionOfItem* descriptionOfItemInBag = activeCharacter->getDescriptionOfTakenItem ();
-                std::string behaviorOfItemInBag = activeCharacter->getBehaviorOfTakenItem( );
+                const DescriptionOfItem* descriptionOfItemInBag = currentCharacter->getDescriptionOfTakenItem ();
+                std::string behaviorOfItemInBag = currentCharacter->getBehaviorOfTakenItem( );
 
                 // remove the composite character
-                this->room->removeCharacterFromRoom( *activeCharacter, false );
+                this->room->removeCharacterFromRoom( *currentCharacter, false );
 
                 // create the simple characters
 
@@ -1130,19 +1132,16 @@ bool Mediator::pickNextCharacter ()
                 AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Isomot::LayerHeight, orientation );
 
                 setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? characterHeels : characterHead );
-                previousCharacter = ( activeCharacter->getOriginalKind() == "head" ) ? characterHeels : characterHead;
 
                 unlockFreeItemsMutex ();
         }
 
-        if ( previousCharacter->getOriginalKind() == activeCharacter->getOriginalKind() )
-        {
-                return false;
-        }
+        if ( previousCharacter->getOriginalKind() == getActiveCharacter()->getOriginalKind() )
+                return false ;
 
-        std::cout << "swop character \"" << previousCharacter->getOriginalKind() << "\" to character \"" << activeCharacter->getOriginalKind() << "\""
+        std::cout << "swop character \"" << previousCharacter->getOriginalKind() << "\" to character \"" << getActiveCharacter()->getOriginalKind() << "\""
                         << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
-        return true;
+        return true ;
 }
 
 void Mediator::toggleSwitchInRoom ()
@@ -1200,9 +1199,9 @@ AvatarItemPtr Mediator::getWaitingCharacter() const
 {
         std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
 
-        for ( std::vector< AvatarItemPtr >::iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++p )
+        for ( std::vector< AvatarItemPtr >::iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++ p )
         {
-                if ( ( *p )->getUniqueName() != activeCharacter->getUniqueName() )
+                if ( ( *p )->getUniqueName() != getActiveCharacter()->getUniqueName() )
                 {
                         return *p ;
                 }
