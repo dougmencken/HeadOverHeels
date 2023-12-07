@@ -23,9 +23,9 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
 
         const Picture& rawImage = item.getRawImage() ;
 
-        int height = item.getHeight_Signed () ;
-        int width = std::max( item.getWidthX_Signed (), item.getWidthY_Signed () );
-        int deltaW = isFreeItem ? item.getWidthX_Signed() - item.getWidthY_Signed() : 0 /* the widths of a grid item are always equal */ ;
+        int height = item.getHeight () ;
+        int width = std::max( item.getWidthX (), item.getWidthY () );
+        int deltaW = isFreeItem ? item.getWidthX() - item.getWidthY() : 0 /* the widths of a grid item are always equal */ ;
 
         int iniX = x - item.getImageOffsetX();          // initial X
         int endX = iniX + shadow.getWidth();            // final X

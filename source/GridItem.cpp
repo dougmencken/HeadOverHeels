@@ -13,8 +13,8 @@ GridItem::GridItem( const DescriptionOfItem* description, int cx, int cy, int z,
         , imageOffset( std::pair< int, int >( 0, 0 ) )
 {
         // the free coordinates of this grid item
-        setX( cx * getWidthX_Signed() );
-        setY( ( cy + 1 ) * getWidthY_Signed() - 1 );
+        setX( cx * getWidthX() );
+        setY( ( cy + 1 ) * getWidthY() - 1 );
 
         // look for collisions
         setIgnoreCollisions( false );

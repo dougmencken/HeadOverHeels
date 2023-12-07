@@ -100,7 +100,7 @@ bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool
                                                 // that moves freely
                                                 && ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" )
                                                 // and isn’t bigger
-                                                && ( item->getWidthX_Signed() + item->getWidthY_Signed() >= aboveItem->getWidthX_Signed() + aboveItem->getWidthY_Signed() ) )
+                                                && ( item->getWidthX() + item->getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
                                         {
                                                         // then raise it
                                                         ascent( dynamic_cast< FreeItem & >( *aboveItem ), 1 );
@@ -223,7 +223,7 @@ void Moving::ascent( FreeItem & freeItem, int z )
                                                 // that moves freely
                                                 && ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" )
                                                 // and isn’t bigger
-                                                && ( freeItem.getWidthX_Signed() + freeItem.getWidthY_Signed() >= aboveItem->getWidthX_Signed() + aboveItem->getWidthY_Signed() ) )
+                                                && ( freeItem.getWidthX() + freeItem.getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
                                         {
                                                 // then raise it, recursively
                                                 ascent( dynamic_cast< FreeItem & >( *aboveItem ), z );

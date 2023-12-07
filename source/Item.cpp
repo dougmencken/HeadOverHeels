@@ -240,7 +240,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( this->getX() + this->getWidthX_Signed() > mediator->getRoom()->getLimitAt( "south" ) )
+        else if ( this->getX() + this->getWidthX() > mediator->getRoom()->getLimitAt( "south" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
@@ -248,7 +248,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at west" );
         }
-        else if ( this->getY() - this->getWidthY_Signed() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
+        else if ( this->getY() - this->getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
         }
@@ -276,12 +276,12 @@ bool Item::canAdvanceTo( int x, int y, int z )
 
 bool Item::intersectsWith( const Item& item ) const
 {
-        return  ( this->getX() < item.getX() + item.getWidthX_Signed() ) &&
-                        ( item.getX() < this->getX() + this->getWidthX_Signed() ) &&
-                ( this->getY() > item.getY() - item.getWidthY_Signed() ) &&
-                        ( item.getY() > this->getY() - this->getWidthY_Signed() ) &&
-                ( this->getZ() < item.getZ() + item.getHeight_Signed() ) &&
-                        ( item.getZ() < this->getZ() + this->getHeight_Signed() ) ;
+        return  ( this->getX() < item.getX() + item.getWidthX() ) &&
+                        ( item.getX() < this->getX() + this->getWidthX() ) &&
+                ( this->getY() > item.getY() - item.getWidthY() ) &&
+                        ( item.getY() > this->getY() - this->getWidthY() ) &&
+                ( this->getZ() < item.getZ() + item.getHeight() ) &&
+                        ( item.getZ() < this->getZ() + this->getHeight() ) ;
 }
 
 bool Item::doGraphicsOverlap( const Item & item ) const

@@ -51,7 +51,7 @@ public:
          */
         bool operator < ( const GridItem & other ) const
         {
-                return ( getZ() < other.getZ() + other.getHeight_Signed() );
+                return ( getZ() < other.getZ() + other.getHeight() );
         }
 
         bool isSegmentOfWallOnX () const

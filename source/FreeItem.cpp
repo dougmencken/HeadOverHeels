@@ -46,12 +46,12 @@ FreeItem::FreeItem( const FreeItem & freeItem )
 
 int FreeItem::getImageOffsetX () const
 {
-        return ( ( getX() - getY() ) << 1 ) + getWidthX_Signed() + getWidthY_Signed() - ( getRawImage().getWidth() >> 1 ) - 1 ;
+        return ( ( getX() - getY() ) << 1 ) + getWidthX() + getWidthY() - ( getRawImage().getWidth() >> 1 ) - 1 ;
 }
 
 int FreeItem::getImageOffsetY () const
 {
-        return getX() + getY() + getWidthX_Signed() - getRawImage().getHeight() - getZ() ;
+        return getX() + getY() + getWidthX() - getRawImage().getHeight() - getZ() ;
 }
 
 void FreeItem::draw ()
@@ -183,7 +183,7 @@ bool FreeItem::addToPosition( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( getX() + getWidthX_Signed() > mediator->getRoom()->getLimitAt( "south" ) )
+        else if ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( "south" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
@@ -191,7 +191,7 @@ bool FreeItem::addToPosition( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at west" );
         }
-        else if ( getY() - getWidthY_Signed() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
+        else if ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
         }
@@ -265,7 +265,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& at, const std::string& wh
                         }
                         // move the character left when it hits the right jamb
                         else if ( door->getRightJamb()->getUniqueName() == what
-                                        && this->getY() - getWidthY_Signed() >= door->getRightJamb()->getY() - door->getRightJamb()->getWidthY_Signed() )
+                                        && this->getY() - getWidthY() >= door->getRightJamb()->getY() - door->getRightJamb()->getWidthY() )
                         {
                                 setY( getY() + 1 ) ;
                                 setX( previousX );
@@ -288,7 +288,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& at, const std::string& wh
                         }
                         // move the character left when it collides with the right jamb
                         else if ( door->getRightJamb()->getUniqueName() == what
-                                        && this->getX() - getWidthX_Signed() <= door->getRightJamb()->getX() + door->getRightJamb()->getWidthX_Signed() )
+                                        && this->getX() - getWidthX() <= door->getRightJamb()->getX() + door->getRightJamb()->getWidthX() )
                         {
                                 setX( getX() - 1 ) ;
                                 setY( previousY );

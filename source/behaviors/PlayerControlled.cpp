@@ -408,7 +408,7 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
                         SoundManager::getInstance().stop( character.getOriginalKind(), "donut" );
 
                         // create item at the same position as the character
-                        int z = character.getZ() + character.getHeight_Signed() - whatIsDonut->getHeight() ;
+                        int z = character.getZ() + character.getHeight() - whatIsDonut->getHeight() ;
                         FreeItemPtr donut( new FreeItem (
                                 whatIsDonut,
                                 character.getX(), character.getY(),

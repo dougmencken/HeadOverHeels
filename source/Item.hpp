@@ -48,16 +48,16 @@ public:
 
         bool isBehind ( const Item & item ) const
         {
-                return  ( getZ() < item.getZ() + item.getHeight_Signed() ) &&
-                        ( getX() < item.getX() + item.getWidthX_Signed() ) &&
-                        ( getY() - getWidthY_Signed() < item.getY() ) ;
+                return  ( getZ() < item.getZ() + item.getHeight() ) &&
+                        ( getX() < item.getX() + item.getWidthX() ) &&
+                        ( getY() - getWidthY() < item.getY() ) ;
         }
 
         bool isBehindAt ( const Item & item, int x, int y, int z ) const
         {
-                return  ( getZ() < z + item.getHeight_Signed() ) &&
-                        ( getX() < x + item.getWidthX_Signed() ) &&
-                        ( getY() - getWidthY_Signed() < y ) ;
+                return  ( getZ() < z + item.getHeight() ) &&
+                        ( getX() < x + item.getWidthX() ) &&
+                        ( getY() - getWidthY() < y ) ;
         }
 
         virtual bool updateItem () ;
@@ -164,19 +164,19 @@ public:
          * The width of this item on X in isometric units
          */
         unsigned int getUnsignedWidthX () const ;
-        int getWidthX_Signed () const {  return static_cast< int >( getUnsignedWidthX () );  }
+        int getWidthX () const {  return static_cast< int >( getUnsignedWidthX () );  }
 
         /**
          * The width of this item on Y in isometric units
          */
         unsigned int getUnsignedWidthY () const ;
-        int getWidthY_Signed () const {  return static_cast< int >( getUnsignedWidthY () );  }
+        int getWidthY () const {  return static_cast< int >( getUnsignedWidthY () );  }
 
         /**
          * The height, or width on Z, of this item in isometric units
          */
         unsigned int getUnsignedHeight () const {  return height ;  }
-        int getHeight_Signed () const {  return static_cast< int >( getUnsignedHeight () );  }
+        int getHeight () const {  return static_cast< int >( getUnsignedHeight () );  }
 
         void changeHeightTo ( int newHeight ) {  height = newHeight ;  }
 
