@@ -22,9 +22,8 @@ FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, c
         , partOfDoor ( false )
         , shadedNonmaskedImage ( )
 {
-        xYet = x ;
-        yYet = y ;
-        if ( yYet < 0 ) yYet = 0 ;
+        setX( x );
+        setY( y >= 0 ? y : 0 );
 
         freshBothProcessedImages ();
 
@@ -32,7 +31,7 @@ FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, c
         setIgnoreCollisions( false );
 }
 
-FreeItem::FreeItem( const FreeItem& freeItem )
+FreeItem::FreeItem( const FreeItem & freeItem )
         : Item( freeItem ), Drawable()
         , originalCellX( freeItem.originalCellX )
         , originalCellY( freeItem.originalCellY )
@@ -45,11 +44,14 @@ FreeItem::FreeItem( const FreeItem& freeItem )
 {
 }
 
-void FreeItem::calculateOffset ()
+int FreeItem::getImageOffsetX () const
 {
-        int offsetX = ( ( getX() - getY() ) << 1 ) + static_cast< int >( getWidthX() + getWidthY() ) - ( getRawImage().getWidth() >> 1 ) - 1 ;
-        int offsetY = getX() + getY() + static_cast< int >( getWidthX() ) - getRawImage().getHeight() - getZ() ;
-        setOffset( std::pair< int, int >( offsetX, offsetY ) );
+        return ( ( getX() - getY() ) << 1 ) + getWidthX_Signed() + getWidthY_Signed() - ( getRawImage().getWidth() >> 1 ) - 1 ;
+}
+
+int FreeItem::getImageOffsetY () const
+{
+        return getX() + getY() + getWidthX_Signed() - getRawImage().getHeight() - getZ() ;
 }
 
 void FreeItem::draw ()
@@ -60,16 +62,16 @@ void FreeItem::draw ()
         {
                 allegro::drawSprite(
                         getProcessedImage().getAllegroPict(),
-                        mediator->getRoom()->getX0 () + getOffsetX (),
-                        mediator->getRoom()->getY0 () + getOffsetY ()
+                        mediator->getRoom()->getX0 () + getImageOffsetX (),
+                        mediator->getRoom()->getY0 () + getImageOffsetY ()
                 ) ;
         }
         else
         {
                 allegro::drawSpriteWithTransparency(
                         getProcessedImage().getAllegroPict(),
-                        mediator->getRoom()->getX0 () + getOffsetX (),
-                        mediator->getRoom()->getY0 () + getOffsetY (),
+                        mediator->getRoom()->getX0 () + getImageOffsetX (),
+                        mediator->getRoom()->getY0 () + getImageOffsetY (),
                         static_cast < unsigned char > ( 255 - 2.55 * this->transparency )
                 ) ;
         }
@@ -116,16 +118,15 @@ void FreeItem::freshBothProcessedImages ()
 
 void FreeItem::updateImage ()
 {
-        std::pair< int, int > offsetBefore = getOffset() ;
-
-        calculateOffset ();
+        const int imageOffsetXBefore = getImageOffsetX ();
+        const int imageOffsetYBefore = getImageOffsetY ();
 
         freshBothProcessedImages ();
         setWantShadow( true );
         setWantMaskTrue();
 
-        // remask items in room
-        mediator->wantToMaskWithFreeItemAt( *this, offsetBefore );
+        // remask
+        mediator->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
         mediator->wantToMaskWithFreeItem( *this );
 }
 
@@ -166,22 +167,23 @@ bool FreeItem::addToPosition( int x, int y, int z )
 
         bool collisionFound = false;
 
-        int xBefore = xYet ;
-        int yBefore = yYet ;
-        int zBefore = zYet ;
+        const int xBefore = getX ();
+        const int yBefore = getY ();
+        const int zBefore = getZ ();
 
-        std::pair< int, int > offsetBefore = getOffset() ;
+        const int imageOffsetXBefore = getImageOffsetX ();
+        const int imageOffsetYBefore = getImageOffsetY ();
 
-        xYet += x ;
-        yYet += y ;
-        zYet += z ;
+        setX( xBefore + x );
+        setY( yBefore + y );
+        setZ( zBefore + z );
 
         // look for collision with real wall, one which limits the room
         if ( getX() < mediator->getRoom()->getLimitAt( "north" ) )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( getX() + static_cast< int >( getWidthX() ) > mediator->getRoom()->getLimitAt( "south" ) )
+        else if ( getX() + getWidthX_Signed() > mediator->getRoom()->getLimitAt( "south" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
@@ -189,7 +191,7 @@ bool FreeItem::addToPosition( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at west" );
         }
-        else if ( getY() - static_cast< int >( getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" ) )
+        else if ( getY() - getWidthY_Signed() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
         }
@@ -205,17 +207,15 @@ bool FreeItem::addToPosition( int x, int y, int z )
         {
                 // look for collision with other items in room
                 collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
-                if ( ! collisionFound )  // is it okay to move
+                if ( ! collisionFound ) // is it okay to move
                 {
                         // reshade and remask
                         freshBothProcessedImages();
                         setWantShadow( true );
                         setWantMaskTrue();
 
-                        calculateOffset ();
-
-                        // mark to mask free items whose images overlap with its image
-                        mediator->wantToMaskWithFreeItemAt( *this, offsetBefore );
+                        // mark to remask
+                        mediator->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
                         mediator->wantToMaskWithFreeItem( *this );
 
                         // reshade items
@@ -229,25 +229,26 @@ bool FreeItem::addToPosition( int x, int y, int z )
         // restore previous values when there’s a collision
         if ( collisionFound )
         {
-                xYet = xBefore ;
-                yYet = yBefore ;
-                zYet = zBefore ;
-
-                setOffset( offsetBefore );
+                setX( xBefore );
+                setY( yBefore );
+                setZ( zBefore );
         }
 
         return ! collisionFound;
 }
 
-bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& name, const int previousX, const int previousY )
+bool FreeItem::isCollidingWithDoor( const std::string& at, const std::string& what, const int previousX, const int previousY )
 {
-        Door* door = mediator->getRoom()->getDoorAt( way );
+        Door* door = mediator->getRoom()->getDoorAt( at );
         if ( door == nilPointer ) return false ;
 
-        int oldX = getX();
-        int oldY = getY();
+        // proceed only when colliding with a door's jamb
+        if ( door->getLeftJamb()->getUniqueName() != what && door->getRightJamb()->getUniqueName() != what ) return false ;
 
-        switch ( Way( way ).getIntegerOfWay() )
+        const int xBefore = getX();
+        const int yBefore = getY();
+
+        switch ( Way( at ).getIntegerOfWay() )
         {
                 // for rooms with the north or south door
                 case Way::North:
@@ -257,18 +258,17 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
                 case Way::Southeast:
                 case Way::Southwest:
                         // move the character right when it collides with the left jamb
-                        if ( door->getLeftJamb()->getUniqueName() == name && this->getY() <= door->getLeftJamb()->getY() )
+                        if ( door->getLeftJamb()->getUniqueName() == what && this->getY() <= door->getLeftJamb()->getY() )
                         {
-                                yYet -- ;
-                                xYet = previousX ;
+                                setY( getY() - 1 ) ;
+                                setX( previousX );
                         }
                         // move the character left when it hits the right jamb
-                        else if ( door->getRightJamb()->getUniqueName() == name &&
-                                        this->getY() - static_cast< int >( getWidthY() )
-                                                >= door->getRightJamb()->getY() - static_cast< int >( door->getRightJamb()->getWidthY() ) )
+                        else if ( door->getRightJamb()->getUniqueName() == what
+                                        && this->getY() - getWidthY_Signed() >= door->getRightJamb()->getY() - door->getRightJamb()->getWidthY_Signed() )
                         {
-                                yYet ++ ;
-                                xYet = previousX ;
+                                setY( getY() + 1 ) ;
+                                setX( previousX );
                         }
 
                         break;
@@ -281,18 +281,17 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
                 case Way::Westnorth:
                 case Way::Westsouth:
                         // move the character right when it hits the left jamb
-                        if ( door->getLeftJamb()->getUniqueName() == name && this->getX() >= door->getLeftJamb()->getX() )
+                        if ( door->getLeftJamb()->getUniqueName() == what && this->getX() >= door->getLeftJamb()->getX() )
                         {
-                                xYet ++ ;
-                                yYet = previousY ;
+                                setX( getX() + 1 ) ;
+                                setY( previousY );
                         }
                         // move the character left when it collides with the right jamb
-                        else if ( door->getRightJamb()->getUniqueName() == name &&
-                                        this->getX() - static_cast< int >( getWidthX() )
-                                                <= door->getRightJamb()->getX() + static_cast< int >( door->getRightJamb()->getWidthX() ) )
+                        else if ( door->getRightJamb()->getUniqueName() == what
+                                        && this->getX() - getWidthX_Signed() <= door->getRightJamb()->getX() + door->getRightJamb()->getWidthX_Signed() )
                         {
-                                xYet -- ;
-                                yYet = previousY ;
+                                setX( getX() - 1 ) ;
+                                setY( previousY );
                         }
 
                         break;
@@ -301,7 +300,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
                         ;
         }
 
-        if ( oldX != getX() || oldY != getY() )
+        if ( getX () != xBefore || yBefore != getY () )
         {
                 SoundManager::getInstance().play ( "door", "collision", /* loop */ false );
                 return true ;

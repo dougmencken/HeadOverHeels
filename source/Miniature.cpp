@@ -477,18 +477,18 @@ void Miniature::draw ()
 
                 unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
-                // range of tiles where character is
+                // the range of tiles where the character is
                 int xBegin = character.getX() / roomTileSize;
-                int xEnd = ( character.getX() + character.getWidthX() - 1 ) / roomTileSize;
-                int yBegin = ( character.getY() - character.getWidthY() + 1 ) / roomTileSize;
+                int xEnd = ( character.getX() + character.getWidthX_Signed() - 1 ) / roomTileSize;
+                int yBegin = ( character.getY() - character.getWidthY_Signed() + 1 ) / roomTileSize;
                 int yEnd = character.getY() / roomTileSize;
 
                 /* for ( int x = xBegin ; x <= xEnd ; ++ x )
                         for ( int y = yBegin ; y <= yEnd ; ++ y )
                                 drawIsoTile( where, originX, originY, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
 
-                int deltaWx = ( roomTileSize - character.getWidthX() ) >> 1 ;
-                int deltaWy = ( roomTileSize - character.getWidthY() ) >> 1 ;
+                int deltaWx = ( roomTileSize - character.getWidthX_Signed() ) >> 1 ;
+                int deltaWy = ( roomTileSize - character.getWidthY_Signed() ) >> 1 ;
 
                 int tileX = ( character.getX() > deltaWx ) ? ( character.getX() - deltaWx ) / roomTileSize : 0 ;
                 int tileY = ( ( character.getY() + deltaWy + 1 ) / roomTileSize ) - 1 ;

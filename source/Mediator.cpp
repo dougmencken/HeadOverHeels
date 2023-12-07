@@ -201,12 +201,12 @@ void* Mediator::updateThread( void* mediatorAsVoid )
         pthread_exit( nilPointer );
 }
 
-void Mediator::wantToMaskWithFreeItem( const FreeItem& item )
+void Mediator::wantToMaskWithFreeItem( const FreeItem & item )
 {
-        wantToMaskWithFreeItemAt( item, item.getOffset () );
+        wantToMaskWithFreeItemImageAt( item, item.getImageOffsetX (), item.getImageOffsetY () );
 }
 
-void Mediator::wantToMaskWithFreeItemAt( const FreeItem& item, std::pair< int, int > offset )
+void Mediator::wantToMaskWithFreeItemImageAt( const FreeItem & item, int x, int y )
 {
         for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
@@ -215,7 +215,7 @@ void Mediator::wantToMaskWithFreeItemAt( const FreeItem& item, std::pair< int, i
                 if ( thatFreeItem.getUniqueName() != item.getUniqueName() &&
                         thatFreeItem.getUniqueName() + " copy" != item.getUniqueName() )
                 {
-                        if ( item.doGraphicsOverlapAt( thatFreeItem, offset ) )
+                        if ( item.doGraphicsOverlapAt( thatFreeItem, x, y ) )
                         {
                                 thatFreeItem.setWantMaskTrue();
                         }
@@ -223,18 +223,20 @@ void Mediator::wantToMaskWithFreeItemAt( const FreeItem& item, std::pair< int, i
         }
 }
 
-void Mediator::wantToMaskWithGridItem( const GridItem& gridItem )
+void Mediator::wantToMaskWithGridItem( const GridItem & gridItem )
 {
-        wantToMaskWithGridItemAt( gridItem, gridItem.getX (), gridItem.getY (), gridItem.getZ (), gridItem.getOffset () );
+        wantToMaskWithGridItemAt( gridItem,
+                                        gridItem.getX (), gridItem.getY (), gridItem.getZ (),
+                                                std::pair< int, int >( gridItem.getImageOffsetX (), gridItem.getImageOffsetY () ) );
 }
 
-void Mediator::wantToMaskWithGridItemAt( const GridItem& gridItem, int x, int y, int z, std::pair< int, int > offset )
+void Mediator::wantToMaskWithGridItemAt( const GridItem & gridItem, int x, int y, int z, std::pair< int, int > offset )
 {
         for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
                 FreeItem& freeItem = *( *f );
 
-                if ( gridItem.doGraphicsOverlapAt( freeItem, offset ) )
+                if ( gridItem.doGraphicsOverlapAt( freeItem, offset.first, offset.second ) )
                 {
                         // mask when free item is behind grid item
                         if ( freeItem.isBehindAt( gridItem, x, y, z ) )
@@ -290,8 +292,8 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int
 
         // the range of cells where this item is
         int xStart = x / room->getSizeOfOneTile ();
-        int xEnd = ( x + item.getWidthX() - 1 ) / room->getSizeOfOneTile () + 1 ;
-        int yStart = ( y - item.getWidthY() + 1 ) / room->getSizeOfOneTile ();
+        int xEnd = ( x + item.getWidthX_Signed() - 1 ) / room->getSizeOfOneTile () + 1 ;
+        int yStart = ( y - item.getWidthY_Signed() + 1 ) / room->getSizeOfOneTile ();
         int yEnd = y / room->getSizeOfOneTile () + 1 ;
 
         for ( int i = xStart; i < xEnd; ++ i ) {
@@ -334,10 +336,10 @@ void Mediator::shadeFreeItemsBeneathItemAt( const Item& item, int x, int y, int 
                         int itemY = y ;
                         int freeX = freeItem.getX();
                         int freeY = freeItem.getY();
-                        int freeXend = freeX + static_cast< int >( freeItem.getWidthX() );
-                        int freeYend = freeY - static_cast< int >( freeItem.getWidthY() );
-                        int itemXend = itemX + static_cast< int >( item.getWidthX() );
-                        int itemYend = itemY - static_cast< int >( item.getWidthY() );
+                        int freeXend = freeX + freeItem.getWidthX_Signed() ;
+                        int freeYend = freeY - freeItem.getWidthY_Signed() ;
+                        int itemXend = itemX + item.getWidthX_Signed() ;
+                        int itemYend = itemY - item.getWidthY_Signed() ;
 
                         if ( ( freeXend > itemX ) && ( freeX < itemXend )
                                 && ( freeY > itemYend ) && ( freeYend < itemY )
@@ -403,8 +405,8 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
                 if ( ! freeItem.hasShadow() ) continue ;
 
                 int xStart = freeItem.getX() / tileSize;
-                int xEnd = ( freeItem.getX() + freeItem.getWidthX() - 1 ) / tileSize;
-                int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / tileSize;
+                int xEnd = ( freeItem.getX() + freeItem.getWidthX_Signed() - 1 ) / tileSize;
+                int yStart = ( freeItem.getY() - freeItem.getWidthY_Signed() + 1 ) / tileSize;
                 int yEnd = freeItem.getY() / tileSize;
 
                 // shade with free item above
@@ -422,10 +424,10 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
                         ShadowCaster::castShadowOnFloor (
                                 floorTile,
                                 /* x */ ( ( freeItem.getX() - freeItem.getY() ) << 1 ) + room->getX0()
-                                                + static_cast< int >( freeItem.getWidthX() + freeItem.getWidthY() )
+                                                + freeItem.getWidthX_Signed() + freeItem.getWidthY_Signed()
                                                 - ( static_cast< int >( freeItem.getImageOfShadow().getWidth() ) >> 1 ) - 1,
                                 /* y */ freeItem.getX() + freeItem.getY() + room->getY0()
-                                                + ( ( static_cast< int >( freeItem.getWidthX() ) - static_cast< int >( freeItem.getWidthY() ) + 1 ) >> 1 )
+                                                + ( ( freeItem.getWidthX_Signed() - freeItem.getWidthY_Signed() + 1 ) >> 1 )
                                                 - ( static_cast< int >( freeItem.getImageOfShadow().getHeight() ) >> 1 ),
                                 /* shadow */ freeItem.getImageOfShadow(),
                                 /* shading */ room->getOpacityOfShadows(),
@@ -461,14 +463,19 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                                         " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                 # endif
 
+                        int  widthOfItemImage = gridItem.getRawImage().getWidth() ;
+                        int heightOfItemImage = gridItem.getRawImage().getHeight() ;
+
+                        int  widthOfAboveShadow = aboveItem.getImageOfShadow().getWidth() ;
+                        int heightOfAboveShadow = aboveItem.getImageOfShadow().getHeight() ;
+
                         ShadowCaster::castShadowOnItem (
                                 gridItem,
-                                /* x */ gridItem.getOffsetX()
-                                                + ( ( static_cast< int >( gridItem.getRawImage().getWidth() )
-                                                        - static_cast< int >( aboveItem.getImageOfShadow().getWidth() ) ) >> 1 ),
-                                /* y */ gridItem.getOffsetY()
-                                                + gridItem.getRawImage().getHeight() - tileSize - gridItem.getHeight()
-                                                - ( static_cast< int >( aboveItem.getImageOfShadow().getHeight() ) >> 1 ),
+                                /* x */ gridItem.getImageOffsetX()
+                                                + ( ( widthOfItemImage - widthOfAboveShadow ) >> 1 ),
+                                /* y */ gridItem.getImageOffsetY()
+                                                + heightOfItemImage - tileSize - gridItem.getHeight_Signed()
+                                                - ( heightOfAboveShadow >> 1 ),
                                 /* shadow */ aboveItem.getImageOfShadow(),
                                 /* shading */ room->getOpacityOfShadows()
                                 /* transparency = 0 */
@@ -476,7 +483,7 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                 }
         }
 
-        // scroll thru list of free items to shade grid item
+        // scroll thru the list of free items to shade the grid item
         for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin(); f != room->freeItems.end(); ++ f )
         {
                 const FreeItem& freeItem = *( *f );
@@ -487,8 +494,8 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                 {
                         // range of tiles where item is
                         int xStart = freeItem.getX() / tileSize;
-                        int xEnd = ( freeItem.getX() + freeItem.getWidthX() - 1 ) / tileSize;
-                        int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / tileSize;
+                        int xEnd = ( freeItem.getX() + freeItem.getWidthX_Signed() - 1 ) / tileSize;
+                        int yStart = ( freeItem.getY() - freeItem.getWidthY_Signed() + 1 ) / tileSize;
                         int yEnd = freeItem.getY() / tileSize;
 
                         // shade with free item above
@@ -504,15 +511,18 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                                                 " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
+                                int  widthOfAboveShadow = freeItem.getImageOfShadow().getWidth() ;
+                                int heightOfAboveShadow = freeItem.getImageOfShadow().getHeight() ;
+
                                 ShadowCaster::castShadowOnItem (
                                         gridItem,
                                         /* x */ ( ( freeItem.getX() - freeItem.getY() ) << 1 )
-                                                        + static_cast< int >( freeItem.getWidthX() + freeItem.getWidthY() )
-                                                        - ( static_cast< int >( freeItem.getImageOfShadow().getWidth() ) >> 1 ) - 1,
+                                                        + freeItem.getWidthX_Signed() + freeItem.getWidthY_Signed()
+                                                        - ( widthOfAboveShadow >> 1 ) - 1,
                                         /* y */ freeItem.getX() + freeItem.getY()
-                                                        + ( ( static_cast< int >( freeItem.getWidthX() ) - static_cast< int >( freeItem.getWidthY() ) + 1 ) >> 1 )
-                                                        - ( static_cast< int >( freeItem.getImageOfShadow().getHeight() ) >> 1 )
-                                                        - gridItem.getZ() - gridItem.getHeight(),
+                                                        + ( ( freeItem.getWidthX_Signed() - freeItem.getWidthY_Signed() + 1 ) >> 1 )
+                                                        - ( heightOfAboveShadow >> 1 )
+                                                        - gridItem.getZ() - gridItem.getHeight_Signed(),
                                         /* shadow */ freeItem.getImageOfShadow(),
                                         /* shading */ room->getOpacityOfShadows(),
                                         /* transparency */ freeItem.getTransparency()
@@ -530,8 +540,8 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
 
         // the range of cells where this item is
         int xStart = freeItem.getX() / tileSize;
-        int xEnd = ( freeItem.getX() + freeItem.getWidthX() - 1 ) / tileSize;
-        int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / tileSize;
+        int xEnd = ( freeItem.getX() + freeItem.getWidthX_Signed() - 1 ) / tileSize;
+        int yStart = ( freeItem.getY() - freeItem.getWidthY_Signed() + 1 ) / tileSize;
         int yEnd = freeItem.getY() / tileSize;
 
         // cast shadow from the grid items above
@@ -558,13 +568,16 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
                                                         " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                                 # endif
 
+                                        int  widthOfAboveShadow = gridItem.getImageOfShadow().getWidth() ;
+                                        int heightOfAboveShadow = gridItem.getImageOfShadow().getHeight() ;
+
                                         ShadowCaster::castShadowOnItem (
                                                 freeItem,
                                                 /* x */ ( tileSize << 1 ) * ( xCell - yCell )
-                                                                - ( static_cast< int >( gridItem.getImageOfShadow().getWidth() ) >> 1 ) + 1,
+                                                                - ( widthOfAboveShadow >> 1 ) + 1,
                                                 /* y */ tileSize * ( xCell + yCell + 1 )
-                                                                - freeItem.getZ() - freeItem.getHeight()
-                                                                - ( static_cast< int >( gridItem.getImageOfShadow().getHeight() ) >> 1 ) - 1,
+                                                                - freeItem.getZ() - freeItem.getHeight_Signed()
+                                                                - ( heightOfAboveShadow >> 1 ) - 1,
                                                 /* shadow */ gridItem.getImageOfShadow(),
                                                 /* shading */ room->getOpacityOfShadows()
                                                 /* transparency = 0 */
@@ -583,12 +596,12 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
 
                 if ( aboveItem.getUniqueName() != freeItem.getUniqueName() )
                 {
-                        // shadow with free item above
-                        if ( freeItem.getZ() < aboveItem.getZ() &&
-                                freeItem.getX() < aboveItem.getX() + static_cast< int >( aboveItem.getWidthX() ) &&
-                                        aboveItem.getX() < freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) &&
-                                freeItem.getY() > aboveItem.getY() - static_cast< int >( aboveItem.getWidthY() ) &&
-                                        aboveItem.getY() > freeItem.getY() - static_cast< int >( freeItem.getWidthY() ) )
+                        // shadow from a free item above
+                        if ( freeItem.getZ() < aboveItem.getZ()
+                                && freeItem.getX() < aboveItem.getX() + aboveItem.getWidthX_Signed()
+                                        && aboveItem.getX() < freeItem.getX() + freeItem.getWidthX_Signed()
+                                && freeItem.getY() > aboveItem.getY() - aboveItem.getWidthY_Signed()
+                                        && aboveItem.getY() > freeItem.getY() - freeItem.getWidthY_Signed() )
                         {
                         # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
                                 std::ostringstream positionOfFrom;
@@ -600,14 +613,17 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
                                         " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
+                                int  widthOfAboveShadow = aboveItem.getImageOfShadow().getWidth() ;
+                                int heightOfAboveShadow = aboveItem.getImageOfShadow().getHeight() ;
+
                                 ShadowCaster::castShadowOnItem (
                                         freeItem,
                                         /* x */ ( ( aboveItem.getX() - aboveItem.getY() ) << 1 )
-                                                        + static_cast< int >( aboveItem.getWidthX() + aboveItem.getWidthY() )
-                                                        - ( static_cast< int >( aboveItem.getImageOfShadow().getWidth() ) >> 1 ) - 1,
-                                        /* y */ aboveItem.getX() + aboveItem.getY() - freeItem.getZ() - freeItem.getHeight()
-                                                        + ( ( static_cast< int >( aboveItem.getWidthX() ) - static_cast< int >( aboveItem.getWidthY() )
-                                                                - static_cast< int >( aboveItem.getImageOfShadow().getHeight() ) ) >> 1 ),
+                                                        + aboveItem.getWidthX_Signed() + aboveItem.getWidthY_Signed()
+                                                                - ( widthOfAboveShadow >> 1 ) - 1,
+                                        /* y */ aboveItem.getX() + aboveItem.getY() - freeItem.getZ() - freeItem.getHeight_Signed()
+                                                        + ( ( aboveItem.getWidthX_Signed() - aboveItem.getWidthY_Signed()
+                                                                - heightOfAboveShadow ) >> 1 ),
                                         /* shadow */ aboveItem.getImageOfShadow(),
                                         /* shading */ room->getOpacityOfShadows(),
                                         /* transparency */ freeItem.getTransparency()
@@ -667,9 +683,9 @@ void Mediator::maskFreeItem( FreeItem& freeItem )
         if ( ! freeItem.getWantMask().isFalse() )
         {
                 int xStart = freeItem.getX() / room->getSizeOfOneTile() ;
-                int xEnd = ( ( freeItem.getX() + freeItem.getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1 ;
-                int yStart = ( freeItem.getY() / room->getSizeOfOneTile() ) + 1 ;
-                int yEnd = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / room ->getSizeOfOneTile() ;
+                int xEnd = 1 + ( freeItem.getX() + freeItem.getWidthX_Signed() - 1 ) / room->getSizeOfOneTile() ;
+                int yStart = 1 + freeItem.getY() / room->getSizeOfOneTile ();
+                int yEnd = ( freeItem.getY() - freeItem.getWidthY_Signed() + 1 ) / room->getSizeOfOneTile() ;
 
                 do {
                         unsigned int i = 0;
@@ -688,9 +704,9 @@ void Mediator::maskFreeItem( FreeItem& freeItem )
                                                 int gridItemX = static_cast< int >( ( xStart + i ) * room->getSizeOfOneTile() ) ;
                                                 int gridItemYMinusWidthY = static_cast< int >( ( yStart + i ) * room->getSizeOfOneTile() ) - 1 ;
 
-                                                if ( gridItemX >= ( freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) ) ||
+                                                if ( gridItemX >= ( freeItem.getX() + freeItem.getWidthX_Signed() ) ||
                                                         ( gridItemYMinusWidthY >= freeItem.getY() ) ||
-                                                        ( gridItem.getZ() >= freeItem.getZ() + static_cast< int >( freeItem.getHeight() ) ) )
+                                                        ( gridItem.getZ() >= freeItem.getZ() + freeItem.getHeight_Signed() ) )
                                                 // grid item is not behind free item
                                                 {
                                                 # if  defined( DEBUG_MASKS )  &&  DEBUG_MASKS
@@ -841,8 +857,8 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
         else if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
                 int xStart = item->getX() / room->getSizeOfOneTile ();
-                int xEnd = 1 + ( item->getX() + item->getWidthX() - 1 ) / room->getSizeOfOneTile ();
-                int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->getSizeOfOneTile ();
+                int xEnd = 1 + ( item->getX() + item->getWidthX_Signed() - 1 ) / room->getSizeOfOneTile ();
+                int yStart = ( item->getY() - item->getWidthY_Signed() + 1 ) / room->getSizeOfOneTile ();
                 int yEnd = 1 + item->getY() / room->getSizeOfOneTile () ;
 
                 // when an item collides with a wall
@@ -861,8 +877,8 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
                                 {
                                         const GridItem& gridItem = *( *g ) ;
 
-                                        if ( ( item->getZ() < gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) ) &&
-                                                ( gridItem.getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
+                                        if ( ( item->getZ() < gridItem.getZ() + gridItem.getHeight_Signed() ) &&
+                                                ( gridItem.getZ() < item->getZ() + item->getHeight_Signed() ) )
                                         {
                                                 collisions.push_back( gridItem.getUniqueName() );
                                                 collisionFound = true;
@@ -888,13 +904,13 @@ int Mediator::findHighestZ( const Item& item )
                 if ( freeItem.getUniqueName() != item.getUniqueName() && freeItem.isNotIgnoringCollisions () )
                 {
                         // look for intersection on X and Y with higher Z
-                        if ( ( freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) > item.getX() ) &&
-                                        ( freeItem.getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
-                                ( freeItem.getY() > item.getY() - static_cast< int >( item.getWidthX() ) ) &&
-                                        ( freeItem.getY() - static_cast< int >( freeItem.getWidthY() ) < item.getY() ) &&
-                                ( freeItem.getZ() + static_cast< int >( freeItem.getHeight() ) > item.getZ() ) )
+                        if ( freeItem.getX() + freeItem.getWidthX_Signed() > item.getX()
+                                        && freeItem.getX() < item.getX() + item.getWidthX_Signed()
+                                && freeItem.getY() > item.getY() - item.getWidthX_Signed()
+                                        && freeItem.getY() - freeItem.getWidthY_Signed() < item.getY()
+                                && freeItem.getZ() + freeItem.getHeight_Signed() > item.getZ() )
                         {
-                                z = freeItem.getZ() + static_cast< int >( freeItem.getHeight() );
+                                z = freeItem.getZ() + freeItem.getHeight_Signed() ;
                         }
                 }
         }
@@ -908,7 +924,7 @@ int Mediator::findHighestZ( const Item& item )
                                 g != room->gridItems[ column ].end (); ++ g )
                 {
                         const GridItem & gridItem = *( *g ) ;
-                        int zPlusHeight = gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) ;
+                        int zPlusHeight = gridItem.getZ() + gridItem.getHeight_Signed() ;
 
                         if ( zPlusHeight > z ) z = zPlusHeight ;
                 }
@@ -919,8 +935,8 @@ int Mediator::findHighestZ( const Item& item )
 
                 // get cells where the item is
                 int xStart = freeItem.getX() / room->getSizeOfOneTile();
-                int xEnd = 1 + ( freeItem.getX() + freeItem.getWidthX() - 1 ) / room->getSizeOfOneTile() ;
-                int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / room->getSizeOfOneTile() ;
+                int xEnd = 1 + ( freeItem.getX() + freeItem.getWidthX_Signed() - 1 ) / room->getSizeOfOneTile() ;
+                int yStart = ( freeItem.getY() - freeItem.getWidthY_Signed() + 1 ) / room->getSizeOfOneTile() ;
                 int yEnd = 1 + freeItem.getY() / room->getSizeOfOneTile() ;
 
                 // look for items within these cells
@@ -932,7 +948,7 @@ int Mediator::findHighestZ( const Item& item )
                                                 g != room->gridItems[ column ].end (); ++ g )
                                 {
                                         const GridItem & gridItem = *( *g ) ;
-                                        int zPlusHeight = gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) ;
+                                        int zPlusHeight = gridItem.getZ() + gridItem.getHeight_Signed() ;
 
                                         if ( zPlusHeight > z ) z = zPlusHeight ;
                                 }
@@ -1055,9 +1071,9 @@ bool Mediator::pickNextCharacter ()
                                 ( previousCharacter->getOriginalKind() == "heels" && currentCharacter->getOriginalKind() == "head" ) )
                 {
                         if ( ( previousCharacter->getX() + delta >= currentCharacter->getX() )
-                                && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= currentCharacter->getX() + currentCharacter->getWidthX() )
+                                && ( previousCharacter->getX() + previousCharacter->getWidthX_Signed() - delta <= currentCharacter->getX() + currentCharacter->getWidthX_Signed() )
                                 && ( previousCharacter->getY() + delta >= currentCharacter->getY() )
-                                && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= currentCharacter->getY() + currentCharacter->getWidthY() )
+                                && ( previousCharacter->getY() + previousCharacter->getWidthY_Signed() - delta <= currentCharacter->getY() + currentCharacter->getWidthY_Signed() )
                                 && ( ( previousCharacter->getOriginalKind() == "head" && previousCharacter->getZ() - Isomot::LayerHeight == currentCharacter->getZ() )
                                         || ( previousCharacter->getOriginalKind() == "heels" && currentCharacter->getZ() - Isomot::LayerHeight == previousCharacter->getZ() ) ) )
                         {

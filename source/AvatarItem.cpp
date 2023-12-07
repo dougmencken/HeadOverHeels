@@ -135,15 +135,16 @@ bool AvatarItem::addToPosition( int x, int y, int z )
 
         mediator->clearStackOfCollisions( );
 
-        int xBefore = xYet ;
-        int yBefore = yYet ;
-        int zBefore = zYet ;
+        const int xBefore = getX() ;
+        const int yBefore = getY() ;
+        const int zBefore = getZ() ;
 
-        std::pair< int, int > offsetBefore = getOffset() ;
+        const int imageOffsetXBefore = getImageOffsetX ();
+        const int imageOffsetYBefore = getImageOffsetY ();
 
-        xYet += x ;
-        yYet += y ;
-        zYet += z ;
+        setX( xBefore + x );
+        setY( yBefore + y );
+        setZ( zBefore + z );
 
         // look for collision with door
 
@@ -157,66 +158,62 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                 {
                         std::string what = mediator->popCollision();
 
-                        // case of move to north wall
-                        if ( x < 0 )
+                        if ( x < 0 ) // moving north
                         {
-                                // check for hit of north door’s jamb
+                                // see if the character hits a north door’s jamb
                                 doorCollision = isCollidingWithDoor( "north", what, xBefore, yBefore );
                                 if ( ! doorCollision )
                                 {
-                                        // check for hit of northeast door’s jamb
+                                        // then maybe the character hits a north-east door’s jamb
                                         doorCollision = isCollidingWithDoor( "northeast", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
-                                                // then it’s hit of northwest door’s jamb
+                                                // or a north-west door’s jamb
                                                 doorCollision = isCollidingWithDoor( "northwest", what, xBefore, yBefore );
                                         }
                                 }
                         }
-                        // case of move to south wall
-                        else if ( x > 0 )
+                        else if ( x > 0 ) // moving south
                         {
-                                // check for hit of south door’s jamb
+                                // see if the character hits a south door’s jamb
                                 doorCollision = isCollidingWithDoor( "south", what, xBefore, yBefore );
                                 if ( ! doorCollision )
                                 {
-                                        // check for hit of southeast door’s jamb
+                                        // then maybe the character hits a south-east door’s jamb
                                         doorCollision = isCollidingWithDoor( "southeast", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
-                                                // then it’s hit of southwest door’s jamb
+                                                // or a south-west door’s jamb
                                                 doorCollision = isCollidingWithDoor( "southwest", what, xBefore, yBefore );
                                         }
                                 }
                         }
-                        // case of move to east wall
-                        else if ( y < 0 )
+                        else if ( y < 0 ) // moving east
                         {
+                                // see if the character hits an east door’s jamb
                                 doorCollision = isCollidingWithDoor( "east", what, xBefore, yBefore );
-                                // check for hit of east door’s jamb
                                 if ( ! doorCollision )
                                 {
-                                        // check for hit of east-north door’s jamb
+                                        // maybe the character hits an east-north door’s jamb
                                         doorCollision = isCollidingWithDoor( "eastnorth", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
-                                                // so it’s hit of east-south door’s jamb
+                                                // or an east-south door’s jamb
                                                 doorCollision = isCollidingWithDoor( "eastsouth", what, xBefore, yBefore );
                                         }
                                 }
                         }
-                        // case of move to west wall
-                        else if ( y > 0 )
+                        else if ( y > 0 ) // moving west
                         {
+                                // see if the character hits a west door’s jamb
                                 doorCollision = isCollidingWithDoor( "west", what, xBefore, yBefore );
-                                // check for hit of west door’s jamb
                                 if ( ! doorCollision )
                                 {
-                                        // check for hit of west-north door’s jamb
+                                        // maybe the character hits a west-north door’s jamb
                                         doorCollision = isCollidingWithDoor( "westnorth", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
-                                                // so it’s hit of west-south door’s jamb
+                                                // or a west-south door’s jamb
                                                 doorCollision = isCollidingWithDoor( "westsouth", what, xBefore, yBefore );
                                         }
                                 }
@@ -224,7 +221,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                 }
         }
 
-        // look for collision with real wall, one which limits the room
+        // look for a collision with a wall that limits the room
         if ( this->getX() < mediator->getRoom()->getLimitAt( "north" )
                         && isNotUnderDoorAt( "north" ) && isNotUnderDoorAt( "northeast" ) && isNotUnderDoorAt( "northwest" ) )
         {
@@ -291,11 +288,8 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                                 setWantShadow( true );
                                 setWantMaskTrue();
 
-                                // update offset to point of room’s origin
-                                calculateOffset ();
-
-                                // mark to mask free items whose images overlap with character’s image
-                                mediator->wantToMaskWithFreeItemAt( *this, offsetBefore );
+                                // mark to mask the free items whose images overlap with the character’s image
+                                mediator->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
                                 mediator->wantToMaskWithFreeItem( *this );
 
                                 // reshade items
@@ -311,11 +305,9 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         if ( collisionFound && ! doorCollision )
         {
                 // restore previous values
-                xYet = xBefore ;
-                yYet = yBefore ;
-                zYet = zBefore ;
-
-                setOffset( offsetBefore );
+                setX( xBefore );
+                setY( yBefore );
+                setZ( zBefore );
         }
 
         return ! collisionFound ;

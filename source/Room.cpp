@@ -632,7 +632,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 return;
         }
 
-        if ( gridItem->getHeight() < 1 )
+        if ( gridItem->getUnsignedHeight() == 0 )
         {
                 std::cerr << "can’t add " << gridItem->whichItemClass() << " which height is zero" << std::endl ;
                 return;
@@ -677,12 +677,8 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 return ;
         }
 
-        // calculate the offset of the item’s image from the origin of room
-        std::pair< int, int > offset (
-                ( ( getSizeOfOneTile () * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage().getWidth() >> 1 ) + 1,
-                getSizeOfOneTile () * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getRawImage().getHeight() - gridItem->getZ() - 1
-        ) ;
-        gridItem->setOffset( offset );
+        // update the offset of the item’s image from the room’s origin
+        gridItem->updateImageOffset() ;
 
         mediator->wantShadowFromGridItem( *gridItem );
         mediator->wantToMaskWithGridItem( *gridItem );
@@ -709,15 +705,15 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 return;
         }
 
-        if ( freeItem->getHeight() < 1 || freeItem->getWidthX() < 1 || freeItem->getWidthY() < 1 )
+        if ( freeItem->getUnsignedHeight() == 0 || freeItem->getUnsignedWidthX() == 0 || freeItem->getUnsignedWidthY() == 0 )
         {
                 std::cerr << "can’t add " << freeItem->whichItemClass() << " which dimension is zero" << std::endl ;
                 return;
         }
 
-        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > static_cast< int >( this->getTilesX() * getSizeOfOneTile() ) )
-                || ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) + 1 < 0 )
-                || ( freeItem->getY() > static_cast< int >( this->getTilesY() * getSizeOfOneTile() ) - 1 ) )
+        if ( ( freeItem->getX() + freeItem->getWidthX_Signed() > static_cast< int >( this->getTilesX() * getSizeOfOneTile() ) )
+                || ( freeItem->getY() - freeItem->getWidthY_Signed() + 1 < 0 )
+                        || ( freeItem->getY() > static_cast< int >( this->getTilesY() * getSizeOfOneTile() ) - 1 ) )
         {
                 std::cerr << "coordinates for " << freeItem->whichItemClass() << " are out of room" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
@@ -759,13 +755,6 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 return;
         }
 
-        // calculate the offset of the item’s image from the origin of room
-        std::pair< int, int > offset (
-                ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage().getWidth() >> 1 ) - 1,
-                freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getRawImage().getHeight() - freeItem->getZ()
-        ) ;
-        freeItem->setOffset( offset );
-
         mediator->wantShadowFromFreeItem( *freeItem );
         mediator->wantToMaskWithFreeItem( *freeItem );
 
@@ -787,9 +776,9 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
 
         if ( characterEntersRoom )
         {
-                for ( std::vector< AvatarItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
+                for ( std::vector< AvatarItemPtr >::iterator it = charactersWhoEnteredRoom.begin (); it != charactersWhoEnteredRoom.end (); ++ it )
                 {
-                        AvatarItemPtr characterEntered = *epi ;
+                        AvatarItemPtr characterEntered = *it ;
 
                         if ( characterEntered->getOriginalKind() == "headoverheels" && character->getOriginalKind() != "headoverheels" )
                         {
@@ -797,10 +786,10 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                                 std::cout << "character \"" << character->getOriginalKind() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
 
                                 // bin joined character
-                                charactersWhoEnteredRoom.erase( epi );
-                                /*  epi-- ;  */
+                                charactersWhoEnteredRoom.erase( it );
+                                /*  -- it ;  */
 
-                                // add copy of another character as entered
+                                // add copy the other character as entered
                                 copyAnotherCharacterAsEntered( character->getOriginalKind() );
 
                                 break;
@@ -812,8 +801,8 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                                 std::cout << "character \"" << character->getOriginalKind() << "\" already entered this room some time ago" << std::endl ;
 
                                 // bin previous entry
-                                charactersWhoEnteredRoom.erase( epi );
-                                /*  epi-- ;  */
+                                charactersWhoEnteredRoom.erase( it );
+                                /*  -- it ;  */
 
                                 break;
                         }
@@ -827,15 +816,15 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                 return false;
         }
 
-        if ( character->getHeight() < 1 || character->getWidthX() < 1 || character->getWidthY() < 1 )
+        if ( character->getUnsignedHeight() == 0 || character->getUnsignedWidthX() == 0 || character->getUnsignedWidthY() == 0 )
         {
                 std::cerr << "can’t add " << character->whichItemClass() << " which dimension is zero" << std::endl ;
                 return false;
         }
 
-        if ( ( character->getX() + static_cast< int >( character->getWidthX() ) > static_cast< int >( this->getTilesX() * getSizeOfOneTile() ) )
-                || ( character->getY() - static_cast< int >( character->getWidthY() ) + 1 < 0 )
-                || ( character->getY() > static_cast< int >( this->getTilesY() * getSizeOfOneTile() ) - 1 ) )
+        if ( ( character->getX() + character->getWidthX_Signed() > static_cast< int >( this->getTilesX() * getSizeOfOneTile() ) )
+                || ( character->getY() - character->getWidthY_Signed() + 1 < 0 )
+                        || ( character->getY() > static_cast< int >( this->getTilesY() * getSizeOfOneTile() ) - 1 ) )
         {
                 std::cerr << "coordinates for " << character->whichItemClass() << " are out of room" << std::endl ;
                 dumpItemInsideThisRoom( *character );
@@ -886,13 +875,6 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                 return false;
         }
 
-        // the offset of the character’s image from the room's origin
-        std::pair< int, int > offset (
-                ( ( character->getX() - character->getY() ) << 1 ) + character->getWidthX() + character->getWidthY() - ( character->getRawImage().getWidth() >> 1 ) - 1,
-                character->getX() + character->getY() + character->getWidthX() - character->getRawImage().getHeight() - character->getZ()
-        ) ;
-        character->setOffset( offset );
-
         if ( mediator->getActiveCharacter() == nilPointer )
                 mediator->setActiveCharacter( character );
 
@@ -919,7 +901,7 @@ void Room::dumpItemInsideThisRoom( const Item & item )
 {
         std::cout << "   " << item.whichItemClass()
                         << " at " << item.getX() << " " << item.getY() << " " << item.getZ()
-                        << " with dimensions " << item.getWidthX() << " x " << item.getWidthY() << " x " << item.getHeight()
+                        << " with dimensions " << item.getWidthX_Signed() << " x " << item.getWidthY_Signed() << " x " << item.getHeight_Signed()
                         << std::endl
                         << "   inside room \"" << this->nameOfFileWithDataAboutRoom << "\""
                         << " of " << getTilesX () << " x " << getTilesY () << " tiles"
@@ -935,9 +917,9 @@ void Room::copyAnotherCharacterAsEntered( const std::string & name )
                 {
                         bool alreadyThere = false;
 
-                        for ( std::vector< AvatarItemPtr >::const_iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
+                        for ( std::vector< AvatarItemPtr >::const_iterator it = charactersWhoEnteredRoom.begin (); it != charactersWhoEnteredRoom.end (); ++ it )
                         {
-                                if ( ( *epi )->getOriginalKind() == ( *pi )->getOriginalKind() )
+                                if ( ( *it )->getOriginalKind() == ( *pi )->getOriginalKind() )
                                 {
                                         alreadyThere = true;
                                         break;
@@ -1090,14 +1072,14 @@ bool Room::removeCharacterFromRoom( const AvatarItem & character, bool character
                         // when a character leaves room, bin its copy on entry
                         if ( characterExitsRoom )
                         {
-                                for ( std::vector< AvatarItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
+                                for ( std::vector< AvatarItemPtr >::iterator it = charactersWhoEnteredRoom.begin (); it != charactersWhoEnteredRoom.end (); ++ it )
                                 {
-                                        if ( ( *epi )->getOriginalKind() == characterName )
+                                        if ( ( *it )->getOriginalKind() == characterName )
                                         {
                                                 std::cout << "and removing copy of character \"" << characterName << "\" created on entry to this room" << std::endl ;
 
-                                                charactersWhoEnteredRoom.erase( epi );
-                                                /// epi-- ; // not needed because of "break"
+                                                charactersWhoEnteredRoom.erase( it );
+                                                /// -- it ; // not needed because of "break"
 
                                                 break;
                                         }
@@ -1401,12 +1383,12 @@ void Room::calculateBounds()
 
         if ( this->isTripleRoom () ) {
                 // limits for a triple room
-                bounds[ "northeast" ] = hasDoorAt( "northeast" ) ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
-                bounds[ "northwest" ] = hasDoorAt( "northwest" ) ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
+                bounds[ "northeast" ] = hasDoorAt( "northeast" ) ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX_Signed() - oneTileLong : bounds[ "north" ];
+                bounds[ "northwest" ] = hasDoorAt( "northwest" ) ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX_Signed() - oneTileLong : bounds[ "north" ];
                 bounds[ "southeast" ] = hasDoorAt( "southeast" ) ? doors[ "southeast" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
                 bounds[ "southwest" ] = hasDoorAt( "southwest" ) ? doors[ "southwest" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
-                bounds[ "eastnorth" ] = hasDoorAt( "eastnorth" ) ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
-                bounds[ "eastsouth" ] = hasDoorAt( "eastsouth" ) ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
+                bounds[ "eastnorth" ] = hasDoorAt( "eastnorth" ) ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY_Signed() - oneTileLong : bounds[ "east" ];
+                bounds[ "eastsouth" ] = hasDoorAt( "eastsouth" ) ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY_Signed() - oneTileLong : bounds[ "east" ];
                 bounds[ "westnorth" ] = hasDoorAt( "westnorth" ) ? doors[ "westnorth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
                 bounds[ "westsouth" ] = hasDoorAt( "westsouth" ) ? doors[ "westsouth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
         }
@@ -1546,72 +1528,72 @@ bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
         {
                 case Way::North:
                         *x = bounds[ way ] - oneTileSize + 1 ;
-                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY_Signed() ;
                         okay = true ;
                         break;
 
                 case Way::South:
                         *x = bounds[ way ] + oneTileSize - widthX ;
-                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY_Signed() ;
                         okay = true ;
                         break;
 
                 case Way::East:
-                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *x = leftJamb->getX() + leftJamb->getWidthX_Signed() ;
                         *y = bounds[ way ] - oneTileSize + widthY ;
                         okay = true ;
                         break;
 
                 case Way::West:
-                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *x = leftJamb->getX() + leftJamb->getWidthX_Signed() ;
                         *y = bounds[ way ] + oneTileSize - 1 ;
                         okay = true ;
                         break;
 
                 case Way::Northeast:
                         *x = bounds[ way ];
-                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY_Signed() ;
                         okay = true ;
                         break;
 
                 case Way::Northwest:
                         *x = bounds[ way ];
-                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY_Signed() ;
                         okay = true ;
                         break;
 
                 case Way::Southeast:
                         *x = bounds[ way ] - widthX ;
-                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY_Signed() ;
                         okay = true ;
                         break;
 
                 case Way::Southwest:
                         *x = bounds[ way ] - widthX ;
-                        *y = leftJamb->getY() - leftJamb->getWidthY() ;
+                        *y = leftJamb->getY() - leftJamb->getWidthY_Signed() ;
                         okay = true ;
                         break;
 
                 case Way::Eastnorth:
-                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *x = leftJamb->getX() + leftJamb->getWidthX_Signed() ;
                         *y = bounds[ way ] + widthY ;
                         okay = true ;
                         break;
 
                 case Way::Eastsouth:
-                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *x = leftJamb->getX() + leftJamb->getWidthX_Signed() ;
                         *y = bounds[ way ] + widthY ;
                         okay = true ;
                         break;
 
                 case Way::Westnorth:
-                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *x = leftJamb->getX() + leftJamb->getWidthX_Signed() ;
                         *y = bounds[ way ] - widthY ;
                         okay = true ;
                         break;
 
                 case Way::Westsouth:
-                        *x = leftJamb->getX() + leftJamb->getWidthX() ;
+                        *x = leftJamb->getX() + leftJamb->getWidthX_Signed() ;
                         *y = bounds[ way ] - widthY ;
                         okay = true ;
                         break;

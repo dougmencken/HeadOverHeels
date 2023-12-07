@@ -25,18 +25,17 @@ Item::Item( const DescriptionOfItem* description, int z, const std::string& way 
         uniqueName( description->getKind () + "." + util::makeRandomString( 12 ) ),
         originalKind( description->getKind () ),
         processedImage( new Picture( description->getWidthOfFrame(), description->getHeightOfFrame() ) ),
+        xYet( 0 ),
+        yYet( 0 ),
+        zYet( z ),
         height( description->getHeight() ),
         orientation( way == "none" ? "nowhere" : way ),
         currentFrame( firstFrame () ),
         backwardsMotion( false ),
-        offset( std::pair< int, int >( 0, 0 ) ),
         ignoreCollisions( true ),
         motionTimer( new Timer () ),
         behavior( nilPointer ),
-        anchor( ),
-        xYet( 0 ),
-        yYet( 0 ),
-        zYet( z )
+        anchor( )
 {
         readGraphicsOfItem ();
 
@@ -53,18 +52,17 @@ Item::Item( const Item& item )
         uniqueName( item.uniqueName + " copy" ),
         originalKind( item.originalKind ),
         processedImage( new Picture( * item.processedImage ) ),
+        xYet( item.xYet ),
+        yYet( item.yYet ),
+        zYet( item.zYet ),
         height( item.height ),
         orientation( item.orientation ),
         currentFrame( item.currentFrame ),
         backwardsMotion( item.backwardsMotion ),
-        offset( item.offset ),
         ignoreCollisions( item.ignoreCollisions ),
         motionTimer( new Timer () ),
         behavior( nilPointer ),
-        anchor( item.anchor ),
-        xYet( item.xYet ),
-        yYet( item.yYet ),
-        zYet( item.zYet )
+        anchor( item.anchor )
 {
         for ( std::vector< PicturePtr >::const_iterator it = item.motion.begin (); it != item.motion.end (); ++ it )
         {
@@ -242,7 +240,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( this->getX() + static_cast< int >( this->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" ) )
+        else if ( this->getX() + this->getWidthX_Signed() > mediator->getRoom()->getLimitAt( "south" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
@@ -250,7 +248,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at west" );
         }
-        else if ( this->getY() - static_cast< int >( this->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" ) )
+        else if ( this->getY() - this->getWidthY_Signed() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
         }
@@ -278,28 +276,28 @@ bool Item::canAdvanceTo( int x, int y, int z )
 
 bool Item::intersectsWith( const Item& item ) const
 {
-        return  ( this->getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
-                        ( item.getX() < this->getX() + static_cast< int >( this->getWidthX() ) ) &&
-                ( this->getY() > item.getY() - static_cast< int >( item.getWidthY() ) ) &&
-                        ( item.getY() > this->getY() - static_cast< int >( this->getWidthY() ) ) &&
-                ( this->getZ() < item.getZ() + static_cast< int >( item.getHeight() ) ) &&
-                        ( item.getZ() < this->getZ() + static_cast< int >( this->getHeight() ) ) ;
+        return  ( this->getX() < item.getX() + item.getWidthX_Signed() ) &&
+                        ( item.getX() < this->getX() + this->getWidthX_Signed() ) &&
+                ( this->getY() > item.getY() - item.getWidthY_Signed() ) &&
+                        ( item.getY() > this->getY() - this->getWidthY_Signed() ) &&
+                ( this->getZ() < item.getZ() + item.getHeight_Signed() ) &&
+                        ( item.getZ() < this->getZ() + this->getHeight_Signed() ) ;
 }
 
-bool Item::doGraphicsOverlap( const Item& item ) const
+bool Item::doGraphicsOverlap( const Item & item ) const
 {
-        return  ( this->getOffsetX() < item.getOffsetX() + static_cast< int >( item.getRawImage().getWidth() ) ) &&
-                        ( item.getOffsetX() < this->getOffsetX() + static_cast< int >( this->getRawImage().getWidth() ) ) &&
-                ( this->getOffsetY() < item.getOffsetY() + static_cast< int >( item.getRawImage().getHeight() ) ) &&
-                        ( item.getOffsetY() < this->getOffsetY() + static_cast< int >( this->getRawImage().getHeight() ) ) ;
+        return doGraphicsOverlapAt( item, item.getImageOffsetX(), item.getImageOffsetY() );
 }
 
-bool Item::doGraphicsOverlapAt( const Item& item, std::pair< int, int > offset ) const
+bool Item::doGraphicsOverlapAt( const Item & item, int x, int y ) const
 {
-        return  ( this->getOffsetX() < offset.first + static_cast< int >( item.getRawImage().getWidth() ) ) &&
-                        ( offset.first < this->getOffsetX() + static_cast< int >( this->getRawImage().getWidth() ) ) &&
-                ( this->getOffsetY() < offset.second + static_cast< int >( item.getRawImage().getHeight() ) ) &&
-                        ( offset.second < this->getOffsetY() + static_cast< int >( this->getRawImage().getHeight() ) ) ;
+        int thisImageWidth = this->getRawImage().getWidth() ;
+        int thisImageHeight = this->getRawImage().getHeight() ;
+        int thatImageWidth = item.getRawImage().getWidth() ;
+        int thatImageHeight = item.getRawImage().getHeight() ;
+
+        return  ( this->getImageOffsetX() < x + thatImageWidth ) && ( x < this->getImageOffsetX() + thisImageWidth )
+                        && ( this->getImageOffsetY() < y + thatImageHeight ) && ( y < this->getImageOffsetY() + thisImageHeight ) ;
 }
 
 void Item::setBehaviorOf( const std::string & nameOfBehavior )
@@ -324,12 +322,12 @@ const std::string & Item::getKind () const
         return descriptionOfItem->getKind () ;
 }
 
-unsigned int Item::getWidthX() const
+unsigned int Item::getUnsignedWidthX () const
 {
         return descriptionOfItem->getWidthX() ;
 }
 
-unsigned int Item::getWidthY() const
+unsigned int Item::getUnsignedWidthY () const
 {
         return descriptionOfItem->getWidthY() ;
 }

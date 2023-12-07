@@ -69,15 +69,15 @@ bool Camera::centerOnItem( const Item & item )
         newOffset.setY( room->getY0 () - ( static_cast< int >( GamePreferences::getScreenHeight() ) >> 1 ) );
         newOffset.addToY( Camera::spaceForAmbiance );
 
-        // apply the item's offset
-        newOffset.addToX( item.getOffsetX () );
-        newOffset.addToY( item.getOffsetY () );
+        // apply offset of the item's image
+        newOffset.addToX( item.getImageOffsetX () );
+        newOffset.addToY( item.getImageOffsetY () );
 
         // center the item itself
-        int widthOfItem = ( item.getWidthX() + item.getWidthY() ) << 1 ;
-        int heightOfItem = item.getWidthX() + item.getWidthY() + item.getHeight() ;
-        newOffset.addToX( widthOfItem >> 1 );
-        newOffset.addToY( - ( heightOfItem >> 1 ) );
+        int widthOfImage = ( item.getWidthX_Signed() + item.getWidthY_Signed() ) << 1 ;
+        int heightOfImage = item.getWidthY_Signed() + item.getHeight_Signed() + item.getWidthX_Signed() ;
+        newOffset.addToX( widthOfImage >> 1 );
+        newOffset.addToY( - ( heightOfImage >> 1 ) );
 
         return softShiftTo( newOffset ) ;
 }

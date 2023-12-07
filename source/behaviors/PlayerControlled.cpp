@@ -408,7 +408,7 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
                         SoundManager::getInstance().stop( character.getOriginalKind(), "donut" );
 
                         // create item at the same position as the character
-                        int z = character.getZ() + character.getHeight() - whatIsDonut->getHeight() ;
+                        int z = character.getZ() + character.getHeight_Signed() - whatIsDonut->getHeight() ;
                         FreeItemPtr donut( new FreeItem (
                                 whatIsDonut,
                                 character.getX(), character.getY(),
@@ -453,8 +453,8 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                                 if ( bottomItem != nilPointer && bottomItem->getBehavior() != nilPointer
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 bottomItem->getBehavior()->getNameOfBehavior() == "behavior of spring leap" )
-                                        && bottomItem->getWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
-                                        && bottomItem->getWidthY() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
+                                        && bottomItem->getUnsignedWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
+                                        && bottomItem->getUnsignedWidthY() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
                                 {
                                         if ( bottomItem->getX() + bottomItem->getY() > whereIsItemToPick )
                                         {

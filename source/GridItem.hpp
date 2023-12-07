@@ -51,7 +51,7 @@ public:
          */
         bool operator < ( const GridItem & other ) const
         {
-                return ( getZ() < other.getZ() + static_cast< int >( other.getHeight() ) );
+                return ( getZ() < other.getZ() + other.getHeight_Signed() );
         }
 
         bool isSegmentOfWallOnX () const
@@ -62,7 +62,8 @@ public:
                 {  return getOriginalKind().find( "wall-y" ) != std::string::npos &&
                                 getOriginalKind().find( "invisible-wall" ) == std::string::npos ;  }
 
-        virtual void calculateOffset () ;
+        virtual int getImageOffsetX () const {  return imageOffset.first ;  }
+        virtual int getImageOffsetY () const {  return imageOffset.second ;  }
 
         /**
          * Draw this grid item
@@ -72,23 +73,30 @@ public:
         virtual bool addToPosition ( int x, int y, int z ) ;
 
         /**
-         * Position on X of the cell in room where this item is
+         * The X of the cell in the room where this item is
          */
         int getCellX () const {  return cell.first ;  }
 
         /**
-         * Position on Y of the cell in room where this item is
+         * The Y of the cell in the room where this item is
          */
         int getCellY () const {  return cell.second ;  }
 
         unsigned int getColumnOfGrid () const ;
 
-protected:
+        void updateImageOffset () ;
+
+private:
 
         /**
-         * Position ( X, Y ) of the cell in room where this item is
+         * Position ( X, Y ) of the cell in the room where this item is
          */
         std::pair < int, int > cell ;
+
+        /**
+         * The offset on ( X, Y ) of processed image from the room’s origin
+         */
+        std::pair < int, int > imageOffset ;
 
         virtual void updateImage () ;
 

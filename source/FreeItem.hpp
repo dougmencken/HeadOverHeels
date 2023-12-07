@@ -42,7 +42,7 @@ public:
         */
         FreeItem( const DescriptionOfItem * description, int x, int y, int z, const std::string& way ) ;
 
-        FreeItem( const FreeItem& freeItem ) ;
+        FreeItem( const FreeItem & freeItem ) ;
 
         virtual ~FreeItem( ) { }
 
@@ -55,8 +55,6 @@ public:
         {
                 return isBehind( that ) ;
         }
-
-        virtual void calculateOffset () ;
 
         int getOriginalCellX () const {  return originalCellX ;  }
 
@@ -77,6 +75,12 @@ public:
         virtual void freshProcessedImage () ;
 
         void freshBothProcessedImages () ;
+
+        /**
+         * The distance of the processed image from the room’s origin
+         */
+        virtual int getImageOffsetX () const ;
+        virtual int getImageOffsetY () const ;
 
         /**
          * Request to shade item
@@ -124,11 +128,13 @@ protected:
         virtual void updateShadow () ;
 
         /**
-         * Check if item hits a door, when yes then move it
-         * @param way door mentioned by its position in room
-         * @param name unique name of item from stack of collisions
+         * See if this item hits a door's jamb, if yes it moves
+         * @param at the door mentioned by its location in room
+         * @param what the name of bumped item
+         * @param previousX the 3D X coordinate before hitting the door
+         * @param previousY the 3D Y coordinate before hitting the door
          */
-        bool isCollidingWithDoor ( const std::string& way, const std::string& name, const int previousX, const int previousY ) ;
+        bool isCollidingWithDoor ( const std::string& at, const std::string& what, const int previousX, const int previousY ) ;
 
         /**
          * See if item is not under that door or that door doesn’t exist

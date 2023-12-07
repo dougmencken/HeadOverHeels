@@ -48,19 +48,17 @@ public:
 
         bool isBehind ( const Item & item ) const
         {
-                return  ( getZ() < item.getZ() + static_cast< int >( item.getHeight() ) ) &&
-                        ( getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
-                        ( getY() - static_cast< int >( getWidthY() ) < item.getY() ) ;
+                return  ( getZ() < item.getZ() + item.getHeight_Signed() ) &&
+                        ( getX() < item.getX() + item.getWidthX_Signed() ) &&
+                        ( getY() - getWidthY_Signed() < item.getY() ) ;
         }
 
         bool isBehindAt ( const Item & item, int x, int y, int z ) const
         {
-                return  ( getZ() < z + static_cast< int >( item.getHeight() ) ) &&
-                        ( getX() < x + static_cast< int >( item.getWidthX() ) ) &&
-                        ( getY() - static_cast< int >( getWidthY() ) < y ) ;
+                return  ( getZ() < z + item.getHeight_Signed() ) &&
+                        ( getX() < x + item.getWidthX_Signed() ) &&
+                        ( getY() - getWidthY_Signed() < y ) ;
         }
-
-        virtual void calculateOffset () = 0 ;
 
         virtual bool updateItem () ;
 
@@ -119,7 +117,7 @@ public:
 
         bool doGraphicsOverlap ( const Item & item ) const ;
 
-        bool doGraphicsOverlapAt ( const Item & item, std::pair < int, int > offset ) const ;
+        bool doGraphicsOverlapAt ( const Item & item, int x, int y ) const ;
 
         void setBehaviorOf ( const std::string & nameOfBehavior ) ;
 
@@ -156,22 +154,29 @@ public:
 
         int getZ () const {  return zYet ;  }
 
-        void setZ ( const int newZ ) {  zYet = newZ ;  }
+        void setX ( int newX ) {  this->xYet = newX ;  }
+
+        void setY ( int newY ) {  this->yYet = newY ;  }
+
+        void setZ ( int newZ ) {  this->zYet = newZ ;  }
 
         /**
-         * Width of item on X in isometric units
+         * The width of this item on X in isometric units
          */
-        unsigned int getWidthX () const ;
+        unsigned int getUnsignedWidthX () const ;
+        int getWidthX_Signed () const {  return static_cast< int >( getUnsignedWidthX () );  }
 
         /**
-         * Width of item on Y in isometric units
+         * The width of this item on Y in isometric units
          */
-        unsigned int getWidthY () const ;
+        unsigned int getUnsignedWidthY () const ;
+        int getWidthY_Signed () const {  return static_cast< int >( getUnsignedWidthY () );  }
 
         /**
-         * Height, or width on Z, of item in isometric units
+         * The height, or width on Z, of this item in isometric units
          */
-        unsigned int getHeight () const {  return height ;  }
+        unsigned int getUnsignedHeight () const {  return height ;  }
+        int getHeight_Signed () const {  return static_cast< int >( getUnsignedHeight () );  }
 
         void changeHeightTo ( int newHeight ) {  height = newHeight ;  }
 
@@ -244,21 +249,10 @@ public:
         }
 
         /**
-         * Distance of processed image from room’s origin ( 0, 0, 0 )
+         * The distance of the processed image from the room’s origin
          */
-        std::pair < int, int > getOffset () const {  return offset ;  }
-
-        void setOffset ( const std::pair < int, int >& offset ) {  this->offset = offset ;  }
-
-        /**
-         * Distance of processed image from room’s origin ( 0, 0, 0 ) on X
-         */
-        int getOffsetX () const {  return offset.first ;  }
-
-        /**
-         * Distance of processed image from room’s origin ( 0, 0, 0 ) on Y
-         */
-        int getOffsetY () const {  return offset.second ;  }
+        virtual int getImageOffsetX () const = 0 ;
+        virtual int getImageOffsetY () const = 0 ;
 
         /**
          * Reference item below which would move this item
@@ -305,6 +299,21 @@ private:
          */
         PicturePtr processedImage ;
 
+        /**
+         * The spatial position on X in isometric units
+         */
+        int xYet ;
+
+        /**
+         * The spatial position on Y in isometric units
+         */
+        int yYet ;
+
+        /**
+         * The spatial position on Z in isometric units
+         */
+        int zYet ;
+
         unsigned int height ;
 
         std::string orientation ;
@@ -318,11 +327,6 @@ private:
          * True to reverse sequence of animation
          */
         bool backwardsMotion ;
-
-        /**
-         * Offset on ( X, Y ) from room’s point of origin
-         */
-        std::pair < int, int > offset ;
 
         /**
          * Whether to ignore that this item collides with something
@@ -355,21 +359,6 @@ private:
         std::string anchor ;
 
 protected:
-
-        /**
-         * Spacial position X in isometric units
-         */
-        int xYet ;
-
-        /**
-         * Spacial position Y in isometric units
-         */
-        int yYet ;
-
-        /**
-         * Spacial position Z in isometric units
-         */
-        int zYet ;
 
         virtual void updateImage () ;
 

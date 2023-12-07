@@ -23,21 +23,13 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
 
         const Picture& rawImage = item.getRawImage() ;
 
-        int height = static_cast< int >( item.getHeight() );
-        int width = static_cast< int >( item.getWidthX() );
-        int deltaW = 0 ;  // widths of grid item are always equal
+        int height = item.getHeight_Signed () ;
+        int width = std::max( item.getWidthX_Signed (), item.getWidthY_Signed () );
+        int deltaW = isFreeItem ? item.getWidthX_Signed() - item.getWidthY_Signed() : 0 /* the widths of a grid item are always equal */ ;
 
-        if ( isFreeItem )
-        {
-                if ( item.getWidthY() > item.getWidthX() )
-                        width = static_cast< int >( item.getWidthY() );
-
-                deltaW = static_cast< int >( item.getWidthX() ) - static_cast< int >( item.getWidthY() );
-        }
-
-        int iniX = x - item.getOffsetX();               // initial X
+        int iniX = x - item.getImageOffsetX();          // initial X
         int endX = iniX + shadow.getWidth();            // final X
-        int iniY = y - item.getOffsetY();               // initial Y
+        int iniY = y - item.getImageOffsetY();          // initial Y
         int endY = iniY + shadow.getHeight();           // final Y
         if ( iniX < 0 ) iniX = 0;
         if ( iniY < 0 ) iniY = 0;
@@ -76,8 +68,8 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
         int shadowRow = 0 ;     // row of pixels in shadow shading this item
         int shadowPixel = 0 ;   // pixel in row of shadow shading this item
 
-        int deltaX = iniX + item.getOffsetX() - x ;
-        int deltaY = iniY + item.getOffsetY() - y ;
+        int deltaX = iniX + item.getImageOffsetX() - x ;
+        int deltaY = iniY + item.getImageOffsetY() - y ;
 
         const int iniltpx = ( rawImage.getWidth() >> 1 ) - ( width << 1 ) + deltaW ;
         const int inirtpx = ( rawImage.getWidth() >> 1 ) + ( width << 1 ) + deltaW - 2 ;
@@ -135,7 +127,7 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                         if ( iniX < ltpx1 )
                         {
                                 iniX = ltpx1 ;
-                                deltaX = iniX + item.getOffsetX() - x ;
+                                deltaX = iniX + item.getImageOffsetX() - x ;
                         }
 
                         if ( endX > rtpx1 + 2 )
@@ -222,7 +214,7 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                         if ( iniX < ltpx1 )
                         {
                                 iniX = ltpx1;
-                                deltaX = iniX + item.getOffsetX() - x ;
+                                deltaX = iniX + item.getImageOffsetX() - x ;
                         }
 
                         if ( endX > rtpx1 + 2 )

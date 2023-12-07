@@ -63,7 +63,7 @@ public:
         */
         void endUpdate () ;
 
-        void wantToMaskWithFreeItemAt ( const FreeItem & item, std::pair < int, int > offset ) ;
+        void wantToMaskWithFreeItemImageAt ( const FreeItem & item, int x, int y ) ;
 
         void wantToMaskWithFreeItem ( const FreeItem & item ) ;
 

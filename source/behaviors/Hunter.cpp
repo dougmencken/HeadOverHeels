@@ -55,9 +55,9 @@ bool Hunter::update ()
 
                                 if ( whoToHunt != nilPointer  &&
                                         whoToHunt->getX() > this->item->getX() - coverage  &&
-                                        whoToHunt->getX() < this->item->getX() + static_cast< int >( this->item->getWidthX() ) + coverage  &&
+                                        whoToHunt->getX() < this->item->getX() + this->item->getWidthX_Signed() + coverage  &&
                                         whoToHunt->getY() > this->item->getY() - coverage  &&
-                                        whoToHunt->getY() < this->item->getY() + static_cast< int >( this->item->getWidthY() ) + coverage )
+                                        whoToHunt->getY() < this->item->getY() + this->item->getWidthY_Signed() + coverage )
                                 {
                                         activity = updateDirection( activity );
                                 }

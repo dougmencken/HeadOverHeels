@@ -10,10 +10,10 @@ void Masker::maskFreeItemBehindItem( FreeItem& itemToMask, const Item& upwardIte
 {
         const Picture& upwardImage = upwardItem.getRawImage() ;
 
-        int iniX = upwardItem.getOffsetX() - itemToMask.getOffsetX();   // initial X
-        int endX = iniX + upwardImage.getWidth();                       // final X
-        int iniY = upwardItem.getOffsetY() - itemToMask.getOffsetY();   // initial Y
-        int endY = iniY + upwardImage.getHeight();                      // final Y
+        int iniX = upwardItem.getImageOffsetX() - itemToMask.getImageOffsetX(); // initial X
+        int endX = iniX + upwardImage.getWidth();                               // final X
+        int iniY = upwardItem.getImageOffsetY() - itemToMask.getImageOffsetY(); // initial Y
+        int endY = iniY + upwardImage.getHeight();                              // final Y
 
         Picture& maskedImage = itemToMask.getProcessedImage();
 
@@ -29,8 +29,8 @@ void Masker::maskFreeItemBehindItem( FreeItem& itemToMask, const Item& upwardIte
                 itemToMask.setWantMaskIndeterminate ();
         }
 
-        const int deltaX = iniX + itemToMask.getOffsetX() - upwardItem.getOffsetX() ;
-        const int deltaY = iniY + itemToMask.getOffsetY() - upwardItem.getOffsetY() ;
+        const int deltaX = iniX + itemToMask.getImageOffsetX() - upwardItem.getImageOffsetX() ;
+        const int deltaY = iniY + itemToMask.getImageOffsetY() - upwardItem.getImageOffsetY() ;
 
         int maskedRow = 0 ;     // row of pixels in maskedImage
         int maskedPixel = 0 ;   // pixel in row of maskedImage
