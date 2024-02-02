@@ -9,6 +9,8 @@ fi
 
 echo
 
+installPath=/usr
+
 pathToExternal="${buildFolder}"/external
 echo "path to external packages is" "${pathToExternal}"
 
@@ -19,7 +21,7 @@ echo
 
 allegro4version="4.4.3.1"
 allegro4name=allegro-"$allegro4version"
-allegro4installpath=/usr
+allegro4installpath="${installPath}"
 
 if [ -x "$( command -v cmake )" ]; then
 
