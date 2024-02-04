@@ -379,7 +379,7 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         if ( copyrightsToo )
         {
                 Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", "", "orange" );
-                Label* Douglas = new Label( "{ 2023 Douglas Mencken", "", "yellow" );
+                Label* Douglas = new Label( "{ 2024 Douglas Mencken", "", "yellow" );
 
                 const unsigned int screenHeight = GamePreferences::getScreenHeight();
                 const int leading = 28;

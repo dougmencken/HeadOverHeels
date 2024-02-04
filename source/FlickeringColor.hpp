@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2023 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2024 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game by Jon Ritman and Bernie Drummond
 //
