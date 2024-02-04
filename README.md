@@ -1,12 +1,11 @@
 # Head over Heels
 
-The free and open source remake of the game by Jon Ritman and Bernie Drummond
+The free and open source remake of the Jon Ritman and Bernie Drummond’s game
 
 ## The Story
 
-This repository originated from version 1.0.1 by *Jorge Rodríguez Santos* aka *helmantika*
-which was published on http://www.headoverheels2.com/drupal/en/
-yet is extinct.
+This repository originated with version 1.0.1 by *Jorge Rodríguez Santos* aka *helmantika*
+which I found on http://www.headoverheels2.com/
 
 *Jorge Rodríguez Santos* wrote :
 
