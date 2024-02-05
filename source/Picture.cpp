@@ -114,9 +114,14 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
         getAllegroPict().unlock();
 }
 
-void Picture::colorize( const Color& color )
+void Picture::colorizeWhite( const Color& color )
 {
         Color::changeWhiteToColor( *this, color );
+}
+
+void Picture::colorizeBlack( const Color& color )
+{
+        Color::changeBlackToColor( *this, color );
 }
 
 void Picture::toGrayscale()

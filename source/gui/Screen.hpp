@@ -11,7 +11,6 @@
 #ifndef Screen_hpp_
 #define Screen_hpp_
 
-#include <list>
 #include <vector>
 
 #include "pointers.hpp"
@@ -56,6 +55,9 @@ public:
 
         void addWidget ( Widget* widget ) ;
 
+        /**
+         * @return true if it is found and removed
+         */
         bool removeWidget ( Widget* widget ) ;
 
         size_t countWidgets () {  return widgets.size () ;  }
@@ -115,9 +117,9 @@ private:
         PicturePtr imageOfScreen ;
 
         /**
-         * Elements of interface to draw on screen
+         * What to draw on this screen
          */
-        std::list < Widget * > widgets ;
+        std::vector < Widget * > widgets ;
 
         bool drawSpectrumColors ;
 

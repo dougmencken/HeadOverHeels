@@ -17,19 +17,18 @@
 namespace gui
 {
 
-/* static */ Picture * Menu::beforeOption = nilPointer ;
+/* static */ Picture * Menu::pictureBeforeOption = nilPointer ;
 
-/* static */ Picture * Menu::beforeChosenOption = nilPointer ;
+/* static */ Picture * Menu::pictureBeforeChosenOption = nilPointer ;
 
-/* static */ Picture * Menu::beforeChosenOptionMini = nilPointer ;
+/* static */ Picture * Menu::pictureBeforeChosenOptionSingle = nilPointer ;
 
 
 Menu::Menu( )
         : Widget( )
-        , whereToDraw( )
         , activeOption( nilPointer )
 {
-        makePicturesForOptions ();
+        makePicturesBeforeOptions() ;
 }
 
 Menu::~Menu( )
@@ -38,104 +37,132 @@ Menu::~Menu( )
         options.clear();
 }
 
-/* static */ void Menu::makePicturesForOptions ()
+/* private */ /* static */
+void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offsetForTintY )
 {
-        if ( beforeOption == nilPointer )
+        if ( pictureBeforeOption == nilPointer )
         {
                 autouniqueptr< allegro::Pict > optionPict( allegro::Pict::fromPNGFile (
                         ospaths::pathToFile( ospaths::sharePath(), "menu-option.png" )
                 ) );
                 assert( optionPict->isNotNil() );
 
-                beforeOption = new Picture( optionPict->getW(), optionPict->getH() );
+                autouniqueptr< Picture > beforeOptionBlack( new Picture( * optionPict ) );
 
-                autouniqueptr< Picture > blackOption( new Picture( *optionPict ) );
-                blackOption->colorize( Color::blackColor() );
+                // white to transparency
+                Color::replaceColor( * beforeOptionBlack, Color::whiteColor(), Color::keyColor() );
+                // black to white
+                autouniqueptr< Picture > beforeOptionWhite( new Picture( * beforeOptionBlack ) );
+                Color::replaceColor( * beforeOptionWhite, Color::blackColor(), Color::whiteColor() );
 
-                const unsigned int offsetOfTintX = 1;
-                const unsigned int offsetOfTintY = 1;
+                pictureBeforeOption = new Picture( optionPict->getW(), optionPict->getH() );
+
                 allegro::bitBlit(
-                        blackOption->getAllegroPict(),
-                        beforeOption->getAllegroPict(),
+                        beforeOptionBlack->getAllegroPict(),
+                        pictureBeforeOption->getAllegroPict(),
                         0, 0,
-                        offsetOfTintX, offsetOfTintY,
-                        beforeOption->getWidth() - offsetOfTintX, beforeOption->getHeight() - offsetOfTintY
+                        offsetForTintX, offsetForTintY,
+                        pictureBeforeOption->getWidth() - offsetForTintX, pictureBeforeOption->getHeight() - offsetForTintY
                 );
 
                 const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
-                allegro::Pict::setWhereToDraw( beforeOption->getAllegroPict() );
-                allegro::drawSprite( *optionPict, 0, 0 );
+                allegro::Pict::setWhereToDraw( pictureBeforeOption->getAllegroPict() );
+                allegro::drawSprite( beforeOptionWhite->getAllegroPict(), 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
-                beforeOption->setName( "the picture to show before a menu option" );
+                pictureBeforeOption->setName( "the picture to show before a menu option" );
         }
 
-        if ( beforeChosenOptionMini == nilPointer )
+        if ( pictureBeforeChosenOptionSingle == nilPointer )
         {
-                autouniqueptr< allegro::Pict > chosenOptionMiniPict( allegro::Pict::fromPNGFile (
+                autouniqueptr< allegro::Pict > chosenOptionSinglePict( allegro::Pict::fromPNGFile (
                         ospaths::pathToFile( ospaths::sharePath(), "chosen-menu-option.png" )
                 ) );
-                assert( chosenOptionMiniPict->isNotNil() );
+                assert( chosenOptionSinglePict->isNotNil() );
 
-                beforeChosenOptionMini = new Picture( chosenOptionMiniPict->getW(), chosenOptionMiniPict->getH() );
+                autouniqueptr< Picture > beforeChosenOptionBlack( new Picture( * chosenOptionSinglePict ) );
 
-                autouniqueptr< Picture > blackChosenOptionMini( new Picture( *chosenOptionMiniPict ) );
-                blackChosenOptionMini->colorize( Color::blackColor() );
+                // white to transparency
+                Color::replaceColor( * beforeChosenOptionBlack, Color::whiteColor(), Color::keyColor() );
+                // black to white
+                autouniqueptr< Picture > beforeChosenOptionWhite( new Picture( * beforeChosenOptionBlack ) );
+                Color::replaceColor( * beforeChosenOptionWhite, Color::blackColor(), Color::whiteColor() );
 
-                const unsigned int offsetOfTintX = 1;
-                const unsigned int offsetOfTintY = 0;
+                pictureBeforeChosenOptionSingle = new Picture( chosenOptionSinglePict->getW(), chosenOptionSinglePict->getH() );
+
+                const int chosenOptionTintOffsetY = 0 ;
                 allegro::bitBlit(
-                        blackChosenOptionMini->getAllegroPict(),
-                        beforeChosenOptionMini->getAllegroPict(),
+                        beforeChosenOptionBlack->getAllegroPict(),
+                        pictureBeforeChosenOptionSingle->getAllegroPict(),
                         0, 0,
-                        offsetOfTintX, offsetOfTintY,
-                        beforeChosenOptionMini->getWidth() - offsetOfTintX, beforeChosenOptionMini->getHeight() - offsetOfTintY
+                        offsetForTintX, chosenOptionTintOffsetY,
+                        pictureBeforeChosenOptionSingle->getWidth() - offsetForTintX,
+                                pictureBeforeChosenOptionSingle->getHeight() - chosenOptionTintOffsetY
                 );
 
                 const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
-                allegro::Pict::setWhereToDraw( beforeChosenOptionMini->getAllegroPict() );
-                allegro::drawSprite( *chosenOptionMiniPict, 0, 0 );
+                allegro::Pict::setWhereToDraw( pictureBeforeChosenOptionSingle->getAllegroPict() );
+                allegro::drawSprite( beforeChosenOptionWhite->getAllegroPict(), 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
-                beforeChosenOptionMini->setName( "the picture to show before a chosen but not double height menu option" );
+                pictureBeforeChosenOptionSingle->setName( "the picture to show before a chosen but not double height menu option" );
         }
 
-        if ( beforeChosenOption == nilPointer )
+        if ( pictureBeforeChosenOption == nilPointer )
         {
-                beforeChosenOption = new Picture( beforeChosenOptionMini->getWidth(), beforeChosenOptionMini->getHeight() << 1 );
+                pictureBeforeChosenOption = new Picture( pictureBeforeChosenOptionSingle->getWidth(),
+                                                                        pictureBeforeChosenOptionSingle->getHeight() << 1 );
 
-                allegro::stretchBlit( beforeChosenOptionMini->getAllegroPict(), beforeChosenOption->getAllegroPict(),
-                                        0, 0, beforeChosenOptionMini->getWidth(), beforeChosenOptionMini->getHeight(),
-                                        0, 0, beforeChosenOption->getWidth(), beforeChosenOption->getHeight() );
+                allegro::stretchBlit( pictureBeforeChosenOptionSingle->getAllegroPict(), pictureBeforeChosenOption->getAllegroPict(),
+                                        0, 0, pictureBeforeChosenOptionSingle->getWidth(), pictureBeforeChosenOptionSingle->getHeight(),
+                                        0, 0, pictureBeforeChosenOption->getWidth(), pictureBeforeChosenOption->getHeight() );
 
-                beforeChosenOption->setName( "the picture to show before a chosen menu option" );
+                pictureBeforeChosenOption->setName( "the picture to show before a chosen menu option" );
         }
 
-        beforeChosenOptionMini->colorize( Color::byName( "orange" ) );
+        pictureBeforeChosenOptionSingle->colorizeWhite( Color::byName( "orange" ) );
+}
+
+/* static */
+const Picture & Menu::getPictureBeforeOption ()
+{
+        assert( Menu::pictureBeforeOption != nilPointer );
+        return *Menu::pictureBeforeOption ;
+}
+
+/* static */
+const Picture & Menu::getPictureBeforeChosenOption ()
+{
+        assert( Menu::pictureBeforeChosenOption != nilPointer );
+        return *Menu::pictureBeforeChosenOption ;
+}
+
+/* static */
+const Picture & Menu::getPictureBeforeChosenOptionSingle ()
+{
+        assert( Menu::pictureBeforeChosenOptionSingle != nilPointer );
+        return *Menu::pictureBeforeChosenOptionSingle ;
 }
 
 void Menu::draw ()
 {
-        if ( activeOption == nilPointer )
-        {
-                resetActiveOption ();
-        }
+        if ( activeOption == nilPointer ) resetActiveOption ();
 
         // adjust font of every option
         // font for chosen option is double-height
-        for ( std::list< Label* >::iterator i = options.begin (); i != options.end (); ++i )
+        for ( std::vector< Label* >::const_iterator it = options.begin (); it != options.end (); ++ it )
         {
-                Label* label = *i;
+                Label* option = *it ;
 
-                if ( label == this->activeOption )
+                if ( option == getActiveOption() )
                 {
-                        if ( label->getFontFamily() != "big" )
-                                label->changeFontFamily( "big" );
+                        if ( option->getFontFamily() != "big" )
+                                option->changeFontFamily( "big" );
                 }
                 else
                 {
-                        if ( label->getFontFamily() != "plain" )
-                                label->changeFontFamily( "plain" );
+                        if ( option->getFontFamily() != "plain" )
+                                option->changeFontFamily( "plain" );
                 }
         }
 
@@ -144,27 +171,26 @@ void Menu::draw ()
         setX( previousX + ( ( GamePreferences::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( GamePreferences::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
+        int dx( Menu::getPictureBeforeOption().getWidth () );
         int dy( 0 );
 
         // for each label
         // para cada etiqueta
-        for ( std::list< Label* >::iterator i = options.begin (); i != options.end (); ++i )
+        for ( std::vector< Label* >::const_iterator il = options.begin (); il != options.end (); ++ il )
         {
-                Label* label = *i;
+                Label* option = *il ;
 
-                Picture * mark = ( this->activeOption == label ) ? Menu::beforeChosenOption : Menu::beforeOption ;
-                if ( mark != nilPointer )
-                        allegro::drawSprite( mark->getAllegroPict(), getX (), getY () + dy );
+                const Picture & mark = ( getActiveOption() == option ) ? Menu::getPictureBeforeChosenOption() : Menu::getPictureBeforeOption() ;
+                allegro::drawSprite( mark.getAllegroPict(), getX (), getY () + dy );
 
-                label->moveTo( getX () + dx, getY () + dy );
-                label->draw ();
+                option->moveTo( getX () + dx, getY () + dy );
+                option->draw ();
 
                 // update vertical offset
-                dy += label->getHeight() - ( label == this->activeOption ? 8 : 4 );
+                dy += option->getHeight() - ( option == getActiveOption() ? 8 : 4 );
 
                 // adjust spacing between lines
-                dy -= label->getHeight() >> 5;
+                dy -= option->getHeight() >> 5 ;
         }
 
         // back to initial position of menu
@@ -174,11 +200,10 @@ void Menu::draw ()
 
 void Menu::redraw ()
 {
-        if ( whereToDraw != nilPointer ) drawOn( whereToDraw->getAllegroPict() );
         GuiManager::getInstance().redraw();
 }
 
-void Menu::handleKey( const std::string& key )
+void Menu::handleKey( const std::string & key )
 {
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
         {
@@ -186,12 +211,12 @@ void Menu::handleKey( const std::string& key )
                 return;
         }
 
-        if ( this->activeOption != nilPointer )
+        if ( getActiveOption() != nilPointer )
         {
                 if ( key == "Up" || key == "q" )
-                        this->previousOption();
+                        this->previousOption() ;
                 else if ( key == "Down" || key == "a" )
-                        this->nextOption();
+                        this->nextOption() ;
                 else
                         activeOption->handleKey( key );
         }
@@ -203,26 +228,24 @@ void Menu::addOption( Label* label )
                 options.push_back( label );
 }
 
-void Menu::setActiveOption ( Label* option )
+void Menu::setActiveOption ( const std::string & textOfOption )
 {
-        for ( std::list< Label * >::iterator i = options.begin () ; i != options.end () ; ++i )
+        for ( std::vector< Label * >::const_iterator it = options.begin () ; it != options.end () ; ++ it )
         {
-                if ( ( *i ) == option )
+                if ( ( *it )->getText() == textOfOption )
                 {
-                        activeOption = option ;
-                        return;
+                        this->activeOption = *it ;
+                        return ;
                 }
         }
 
-        if ( option != nilPointer )
-        {
-                std::cerr << "option \"" << option->getText() << "\" isn’t from this menu" << std::endl ;
-        }
+        std::cerr << "option \"" << textOfOption << "\" isn’t from this menu" << std::endl ;
 }
 
 void Menu::resetActiveOption ()
 {
-        setActiveOption( * options.begin () );
+        if ( options.size () > 0 )
+                setActiveOption( ( * options.begin() )->getText() );
 }
 
 void Menu::setVerticalOffset ( int offset )
@@ -234,9 +257,9 @@ unsigned int Menu::getWidthOfMenu () const
 {
         unsigned int widthOfMenu = 0;
 
-        for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
+        for ( std::vector< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
         {
-                unsigned int theWidth = ( *i )->getWidth() + ( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 ) ;
+                unsigned int theWidth = ( *i )->getWidth() + Menu::getPictureBeforeOption().getWidth() ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }
 
@@ -247,7 +270,7 @@ unsigned int Menu::getHeightOfMenu () const
 {
         unsigned int heightOfMenu = 0;
 
-        for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
+        for ( std::vector< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
         {
                 heightOfMenu += ( *i )->getHeight() - 4;
                 heightOfMenu -= ( *i )->getHeight() >> 5;
@@ -258,11 +281,11 @@ unsigned int Menu::getHeightOfMenu () const
 
 void Menu::previousOption ()
 {
-        std::list < Label * >::iterator it = options.begin ();
+        std::vector < Label * >::const_iterator it = options.begin ();
         for ( ; it != options.end (); ++ it )
         {
-                if ( (*it)->getY () == this->activeOption->getY ()
-                        && (*it)->getX () == this->activeOption->getX () ) break ;
+                if ( ( *it )->getY () == this->activeOption->getY ()
+                        && ( *it )->getX () == this->activeOption->getX () ) break ;
         }
         assert ( it != options.end () );
 
@@ -271,11 +294,11 @@ void Menu::previousOption ()
 
 void Menu::nextOption ()
 {
-        std::list < Label * >::iterator it = options.begin ();
+        std::vector < Label * >::const_iterator it = options.begin ();
         for ( ; it != options.end (); ++ it )
         {
-                if ( (*it)->getY () == this->activeOption->getY ()
-                        && (*it)->getX () == this->activeOption->getX () ) break ;
+                if ( ( *it )->getY () == this->activeOption->getY ()
+                        && ( *it )->getX () == this->activeOption->getX () ) break ;
         }
         assert ( it != options.end () );
 

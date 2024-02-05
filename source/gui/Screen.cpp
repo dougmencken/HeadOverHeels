@@ -197,16 +197,11 @@ void Screen::refresh () const
         }
 
         if ( drawSpectrumColors /* || GameManager::getInstance().isSimpleGraphicsSet() */ )
-        {
                 Screen::draw2x8colors( *this ) ;
-        }
 
         // draw each component
-
-        for ( std::list< Widget * >::const_iterator it = widgets.begin () ; it != widgets.end () ; ++it )
-        {
-                ( *it )->draw ();
-        }
+        for ( std::vector< Widget * >::const_iterator wi = widgets.begin () ; wi != widgets.end () ; ++ wi )
+                ( *wi )->draw ();
 
         allegro::Pict::setWhereToDraw( previousWhere );
 }
@@ -277,24 +272,22 @@ void Screen::addWidget( Widget* widget )
 
         this->widgets.push_back( widget );
         widget->setOnScreen( true );
-
-        if ( widget->isMenu() ) dynamic_cast< gui::Menu* >( widget )->setWhereToDraw( imageOfScreen );
 }
 
 bool Screen::removeWidget( Widget* widget )
 {
-        for ( std::list< Widget* >::const_iterator it = widgets.begin (); it != widgets.end (); ++ it )
+        for ( std::vector< Widget* >::const_iterator it = widgets.begin (); it != widgets.end (); )
         {
-                if ( ( *it ) == widget )
-                {
-                        widgets.remove( widget );
-                        delete widget;
+                if ( ( *it ) == widget ) {
+                        /* it = */ widgets.erase( it );
+                        delete widget ;
 
-                        return true;
-                }
+                        return true ;
+                } else
+                        ++ it ;
         }
 
-        return false;
+        return false ;
 }
 
 void Screen::freeWidgets ()
@@ -307,9 +300,9 @@ void Screen::freeWidgets ()
 
         while ( ! this->widgets.empty () )
         {
-                Widget* w = *( widgets.begin () );
-                widgets.remove( w );
-                delete w;
+                Widget* w = this->widgets.back ();
+                widgets.pop_back() ;
+                delete w ;
         }
 
         pictureOfHead = nilPointer;

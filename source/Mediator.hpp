@@ -12,7 +12,6 @@
 #define Mediator_hpp_
 
 #include <string>
-#include <list>
 #include <vector>
 #include <deque>
 

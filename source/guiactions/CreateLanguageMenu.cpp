@@ -80,14 +80,16 @@ void CreateLanguageMenu::doAction ()
 
         for ( std::map< std::string, std::string >::const_iterator it = languages.begin () ; it != languages.end () ; ++ it )
         {
-                Label* tongue = new Label( ( *it ).second );
-                tongue->setAction( new SelectLanguage( ( *it ).first ) );
-
-                menu->addOption( tongue );
-
-                if ( ( language.empty() && it == languages.begin() ) || language == ( *it ).first )
                 {
-                        menu->setActiveOption( tongue );
+                        Label* tongue = new Label( ( *it ).second );
+                        tongue->setAction( new SelectLanguage( ( *it ).first ) );
+
+                        menu->addOption( tongue );
+                }
+
+                if ( language == ( *it ).first || ( language.empty() && it == languages.begin() ) )
+                {
+                        menu->setActiveOption( ( *it ).second );
                 }
         }
 

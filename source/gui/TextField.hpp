@@ -12,7 +12,7 @@
 #define TextField_hpp_
 
 #include <string>
-#include <list>
+#include <vector>
 
 #include <WrappersAllegro.hpp>
 
@@ -34,11 +34,11 @@ class TextField : public Widget
 
 public:
 
-       /**
-        * @param width of field
-        * @param align horizontal alignment: left, center, or right
-        */
-        TextField( unsigned int width, const std::string& align ) ;
+        /**
+         * @param width of field
+         * @param align horizontal alignment: left, center, or right
+         */
+        TextField( unsigned int width, const std::string & align ) ;
 
         virtual ~TextField( ) ;
 
@@ -46,36 +46,36 @@ public:
 
         void handleKey ( const std::string& /* key */ ) { /* do nothing */ }
 
-       /**
-        * Añade una nueva línea al campo de texto
-        */
+        /**
+         * Añade una nueva línea al campo de texto
+         */
         void addLine ( const std::string& text, const std::string& font, const std::string& color ) ;
 
-       /**
-        * Change position of text field
-        */
+        /**
+         * Changes position of the text field
+         */
         void moveTo ( int x, int y ) ;
 
-        unsigned int getHeightOfField() {  return heightOfField ;  }
+        unsigned int getWidthOfField () const {  return this->width ;  }
 
-        unsigned int getWidthOfField() {  return width ;  }
+        unsigned int getHeightOfField () const {  return this->height ;  }
 
-        std::string getAlignment () {  return alignment ;  }
+        const std::string & getAlignment () const {  return this->alignment ;  }
 
-        void setAlignment( const std::string& newAlignment ) ;
+        void setAlignment( const std::string & newAlignment ) ;
 
 private:
 
         unsigned int width ;
 
+        unsigned int height ;
+
         std::string alignment ;
 
-        unsigned int heightOfField ;
-
-       /**
-        * El campo de texto se compone de etiquetas
-        */
-        std::list < Label * > lines ;
+        /**
+         * The text field is made up of labels
+         */
+        std::vector < Label * > lines ;
 
 };
 

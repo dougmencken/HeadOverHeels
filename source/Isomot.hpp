@@ -14,7 +14,6 @@
 #include "Timer.hpp"
 #include "Picture.hpp"
 
-#include <list>
 #include <string>
 
 #include <tinyxml2.h>
@@ -82,7 +81,7 @@ private:
 
         void handleMagicKeys () ;
 
-        void playTuneForScenery ( const std::string& scenery ) ;
+        void playTuneForScenery ( const std::string & scenery ) ;
 
         void offRecording () ;
 

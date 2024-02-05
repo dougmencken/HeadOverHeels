@@ -4,6 +4,8 @@
 #include "util.hpp"
 #include "ospaths.hpp"
 
+#include <iostream>
+
 #include <tinyxml2.h>
 
 #ifdef DEBUG

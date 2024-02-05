@@ -11,9 +11,8 @@
 #ifndef Menu_hpp_
 #define Menu_hpp_
 
-#include <list>
 #include <string>
-#include <iostream>
+#include <vector>
 
 #include <WrappersAllegro.hpp>
 
@@ -42,17 +41,11 @@ public:
 
         virtual ~Menu( );
 
-        virtual bool isMenu () {  return true ;  }
-
         virtual void draw () ;
 
         void redraw () ;
 
-        PicturePtr getWhereToDraw () const {  return whereToDraw ;  }
-
-        void setWhereToDraw ( const PicturePtr& where ) {  whereToDraw = where ;  }
-
-        void handleKey ( const std::string& key ) ;
+        virtual void handleKey ( const std::string & key ) ;
 
         /**
          * Add option to menu
@@ -61,14 +54,14 @@ public:
 
         Label * getActiveOption () const {  return this->activeOption ;  }
 
-        void setActiveOption ( Label * option ) ;
+        void setActiveOption ( const std::string & textOfOption ) ;
 
         /**
          * Make the first option active
          */
         void resetActiveOption () ;
 
-        std::list < Label * > getEveryOption () {  return this->options ;  }
+        const std::vector < Label * > & getEveryOption () const {  return this->options ;  }
 
         void setVerticalOffset ( int offset ) ;
 
@@ -88,34 +81,42 @@ protected:
          */
         virtual void nextOption () ;
 
-        PicturePtr whereToDraw ;
+private:
 
         /**
          * Options that make up the menu
          */
-        std::list < Label * > options ;
+        std::vector < Label * > options ;
 
         /**
          * The chosen option
          */
         Label * activeOption ;
 
-        /**
-         * Image before each option of menu
-         */
-        static Picture * beforeOption ;
+private:
 
         /**
-         * Image for the chosen option which is double height
+         * The picture to show before a menu option
          */
-        static Picture * beforeChosenOption ;
+        static Picture * pictureBeforeOption ;
 
         /**
-         * Image for the chosen option which is single height
+         * The picture to show before a chosen menu option
          */
-        static Picture * beforeChosenOptionMini ;
+        static Picture * pictureBeforeChosenOption ;
 
-        static void makePicturesForOptions () ;
+        /**
+         * The picture to show before a chosen but not double height menu option
+         */
+        static Picture * pictureBeforeChosenOptionSingle ;
+
+        static void makePicturesBeforeOptions ( const int offsetForTintX = 1, const int offsetForTintY = 1 ) ;
+
+protected:
+
+        static const Picture & getPictureBeforeOption () ;
+        static const Picture & getPictureBeforeChosenOption () ;
+        static const Picture & getPictureBeforeChosenOptionSingle () ;
 
 };
 

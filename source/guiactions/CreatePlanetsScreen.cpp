@@ -70,12 +70,11 @@ void CreatePlanetsScreen::doAction ()
 
         if ( ! GameManager::getInstance().isSimpleGraphicsSet () )
         {
-                chapeauTriste->toGrayscale();
+                chapeauTriste->toGrayscale ();
         }
-        else
-        {
-                chapeauTriste->colorize( Color::byName( "gray" ) );
-                chapeau->colorize( Color::byName( "yellow" ) );
+        else {
+                chapeauTriste->colorizeWhite( Color::byName( "gray" ) );
+                chapeau->colorizeWhite( Color::byName( "yellow" ) );
         }
 
         const int halfOfChapeauWidth = chapeau->getWidth() >> 1;

@@ -81,10 +81,10 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                 lettersOfFont->setName( "picture of stretched double height letters to make " + name + " font" );
         }
 
-        // colorize letters
+        // colorize letters by changing white to the font color
         if ( color != "white" )
         {
-                lettersOfFont->colorize( Color::byName( color ) );
+                lettersOfFont->colorizeWhite( Color::byName( color ) );
                 lettersOfFont->setName( lettersOfFont->getName() + ", yet colored " + justColor );
         }
 

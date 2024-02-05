@@ -18,10 +18,6 @@ class Drawable
 
 public:
 
-        Drawable( ) { }
-
-        virtual ~Drawable( ) { }
-
         virtual void draw () = 0 ;
 
 protected:

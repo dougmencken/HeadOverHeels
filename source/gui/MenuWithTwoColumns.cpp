@@ -26,46 +26,42 @@ MenuWithTwoColumns::~MenuWithTwoColumns( )
 
 void MenuWithTwoColumns::draw ()
 {
-        if ( activeOption == nilPointer )
+        if ( getActiveOption() == nilPointer ) resetActiveOption ();
+
+        const std::vector< Label* > & options = getEveryOption ();
+
+        unsigned int lastInTheFirstColumn = lastRowInTheFirstColumn() ;
+
+        const unsigned int prepictureWidth = Menu::getPictureBeforeOption().getWidth ();
+
+        // calculate position of the second column
+        unsigned int widthOfTheFirstColumn = 0 ;
+        for ( unsigned int row = 0 ; row < options.size (); ++ row )
         {
-                resetActiveOption ();
-        }
-
-        // rows in first column, after this number options go to second column
-        unsigned int rowsInFirstColumn = options.size () >> 1;
-
-        unsigned int widthOfOption = ( Menu::beforeOption != nilPointer ) ? Menu::beforeOption->getWidth() : 0 ;
-
-        // calculate position of second column
-        unsigned int widthOfFirstColumn = 0;
-        unsigned int countOfRows = 0;
-        for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i, countOfRows++ )
-        {
-                if ( countOfRows <= rowsInFirstColumn )
+                if ( row <= lastInTheFirstColumn )
                 {
-                        unsigned int theWidth = ( *i )->getWidth() + widthOfOption;
-                        if ( theWidth > widthOfFirstColumn ) widthOfFirstColumn = theWidth ;
+                        unsigned int theWidth = options[ row ]->getWidth() + prepictureWidth ;
+                        if ( theWidth > widthOfTheFirstColumn ) widthOfTheFirstColumn = theWidth ;
                 }
         }
-        unsigned int secondColumnX = widthOfFirstColumn + this->spaceBetweenColumns;
+        unsigned int secondColumnX = widthOfTheFirstColumn + this->spaceBetweenColumns ;
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
         setX( previousX + ( ( GamePreferences::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( GamePreferences::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( widthOfOption );
+        int dx( prepictureWidth );
         int dy( 0 );
 
         // for each label
         // para cada etiqueta
-        countOfRows = 0;
-        for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i, countOfRows++ )
+        for ( unsigned int row = 0 ; row < options.size (); ++ row )
         {
-                Label* label = *i;
+                Label* label = options[ row ] ;
 
-                // pick a font & color of text
-                if ( label == this->activeOption )
+                // pick the font & color of text
+                if ( label == getActiveOption() )
                 {
                         if ( label->getColor() != "orange" )
                                 label->changeFontFamilyAndColor( "plain", "orange" );
@@ -76,37 +72,24 @@ void MenuWithTwoColumns::draw ()
                                 label->changeFontFamilyAndColor( "plain", "white" );
                 }
 
-                Picture* mark = ( activeOption == label ) ? Menu::beforeChosenOptionMini : Menu::beforeOption ;
+                // reset vertical position for the second column’s first option
+                if ( row == 1 + lastInTheFirstColumn ) dy = 0 ;
 
-                // place an option in the first column
-                if ( countOfRows <= rowsInFirstColumn )
-                {
-                        if ( mark != nilPointer )
-                                allegro::drawSprite( mark->getAllegroPict(), getX (), getY () + dy );
+                int columnX = ( row > lastInTheFirstColumn ) ? secondColumnX : 0 ;
 
-                        label->moveTo( getX () + dx, getY () + dy );
-                        label->draw ();
-                }
-                // place an option in the second column
-                else
-                {
-                        // for first option in second column
-                        if ( countOfRows == rowsInFirstColumn + 1 )
-                        {
-                                dy = 0;
-                        }
-
-                        // dibuja la viñeta
+                {       // dibuja la viñeta
                         // para cada etiqueta
-                        // ( poems, no less )
-                        if ( mark != nilPointer )
-                                allegro::drawSprite( mark->getAllegroPict(), getX () + secondColumnX, getY () + dy );
+                        const Picture & vignette = ( getActiveOption() == label )
+                                                        ? Menu::getPictureBeforeChosenOptionSingle()
+                                                        : Menu::getPictureBeforeOption() ;
 
-                        label->moveTo( getX () + dx + secondColumnX, getY () + dy );
-                        label->draw ();
+                        allegro::drawSprite( vignette.getAllegroPict(), getX() + columnX, getY() + dy );
                 }
 
-                // update vertical offset
+                label->moveTo( getX() + dx + columnX, getY() + dy );
+                label->draw ();
+
+                // apply the vertical offset
                 dy += label->getHeight() - 4 ;
 
                 // adjust spacing between lines
@@ -120,47 +103,113 @@ void MenuWithTwoColumns::draw ()
 
 unsigned int MenuWithTwoColumns::getWidthOfMenu () const
 {
-        unsigned int widthOfFirstColumn = 0;
-        unsigned int widthOfSecondColumn = 0;
-        unsigned int countOfRows = 0;
+        unsigned int widthOfTheFirstColumn = 0 ;
+        unsigned int widthOfTheSecondColumn = 0 ;
 
-        unsigned int rowsInFirstColumn = options.size () >> 1;
-
-        for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i, countOfRows++ )
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( unsigned int row = 0 ; row < options.size (); ++ row )
         {
-                unsigned int theWidth = ( *i )->getWidth() + ( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
+                unsigned int theWidth = options[ row ]->getWidth() + Menu::getPictureBeforeOption().getWidth() ;
 
-                if ( countOfRows <= rowsInFirstColumn )
+                if ( row <= lastRowInTheFirstColumn () )
                 {
-                        if ( theWidth > widthOfFirstColumn )
-                                widthOfFirstColumn = theWidth ;
+                        if ( theWidth > widthOfTheFirstColumn )
+                                widthOfTheFirstColumn = theWidth ;
                 }
                 else
                 {
-                        if ( theWidth > widthOfSecondColumn )
-                                widthOfSecondColumn = theWidth ;
+                        if ( theWidth > widthOfTheSecondColumn )
+                                widthOfTheSecondColumn = theWidth ;
                 }
         }
 
-        return widthOfFirstColumn + this->spaceBetweenColumns + widthOfSecondColumn;
+        return widthOfTheFirstColumn + this->spaceBetweenColumns + widthOfTheSecondColumn ;
 }
 
 unsigned int MenuWithTwoColumns::getHeightOfMenu () const
 {
-        unsigned int heightOfMenu = 0;
-        unsigned int countOfRows = 0;
-        unsigned int rowsInFirstColumn = options.size () >> 1;
+        unsigned int heightOfMenu = 0 ;
 
-        for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i, countOfRows++ )
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( unsigned int row = 0 ; row < options.size (); ++ row )
         {
-                if ( countOfRows <= rowsInFirstColumn )
+                if ( row <= lastRowInTheFirstColumn () )
                 {
-                        heightOfMenu += ( *i )->getHeight() - 4;
-                        heightOfMenu -= ( *i )->getHeight() >> 5;
+                        unsigned int heightOfOption = options[ row ]->getHeight() ;
+                        heightOfMenu += heightOfOption - 4 ;
+                        heightOfMenu -= heightOfOption >> 5 ;
                 }
         }
 
-        return heightOfMenu;
+        return heightOfMenu ;
+}
+
+void MenuWithTwoColumns::handleKey ( const std::string & key )
+{
+        Menu::handleKey( key );
+
+        if ( getActiveOption() != nilPointer )
+        {
+                const std::string & activeOptionText = getActiveOption()->getText() ;
+
+                if ( ( key == "Right" || key == "p" )
+                                && ( isInTheFirstColumn( activeOptionText) ) )
+                {
+                        const std::vector< Label* > & options = getEveryOption ();
+                        unsigned int lastRow = lastRowInTheFirstColumn() ;
+                        for ( unsigned int row = 0 ; row <= lastRow ; ++ row )
+                        {
+                                if ( options[ row ]->getText() == activeOptionText ) {
+                                        unsigned int rowInTheSecondColumn = row + lastRow + 1 ;
+                                        if ( rowInTheSecondColumn < options.size () )
+                                                setActiveOption( options[ rowInTheSecondColumn ]->getText() );
+                                        break ;
+                                }
+                        }
+                }
+                else if ( ( key == "Left" || key == "o" )
+                                && ( isInTheSecondColumn( activeOptionText ) ) )
+                {
+                        const std::vector< Label* > & options = getEveryOption ();
+                        unsigned int firstRow = lastRowInTheFirstColumn() + 1 ;
+                        for ( unsigned int row = firstRow ; row < options.size () ; ++ row )
+                        {
+                                if ( options[ row ]->getText() == activeOptionText ) {
+                                        int rowInTheFirstColumn = row - firstRow ;
+                                        if ( rowInTheFirstColumn >= 0 )
+                                                setActiveOption( options[ rowInTheFirstColumn ]->getText() );
+                                        break ;
+                                }
+                        }
+                }
+        }
+}
+
+unsigned int MenuWithTwoColumns::lastRowInTheFirstColumn () const
+{
+        return getEveryOption().size () >> 1 ;
+}
+
+bool MenuWithTwoColumns::isInTheFirstColumn( const std::string & option ) const
+{
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( unsigned int row = 0 ; row <= lastRowInTheFirstColumn() ; ++ row )
+        {
+                if ( options[ row ]->getText() == option ) return true ;
+        }
+
+        return false ;
+}
+
+bool MenuWithTwoColumns::isInTheSecondColumn( const std::string & option ) const
+{
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( unsigned int row = 1 + lastRowInTheFirstColumn() ; row < options.size () ; ++ row )
+        {
+                if ( options[ row ]->getText() == option ) return true ;
+        }
+
+        return false ;
 }
 
 }

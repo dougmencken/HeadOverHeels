@@ -61,7 +61,7 @@ GuiManager::GuiManager( ) :
 
         allegro::setTitleOfAllegroWindow ( nameOfWindow );
 
-        // initialize sound manager
+        // initialize the sound manager
         SoundManager::getInstance().readSounds( "sounds.xml" );
 }
 
@@ -268,13 +268,9 @@ Font* GuiManager::getOrCreateFontByFamilyAndColor ( const std::string& family, c
         std::string familyToLook = ( ! family.empty() ) ? family : "plain";
         std::string colorToLook = ( ! color.empty() ) ? color : "white";
 
-        for (  std::list< Font * >::const_iterator i = fonts.begin (); i != fonts.end (); ++i )
-        {
-                if ( ( *i )->getName() == colorToLook + "." + familyToLook )
-                {
-                        return ( *i ) ;
-                }
-        }
+        for (  std::vector< Font * >::const_iterator fi = fonts.begin (); fi != fonts.end (); ++ fi )
+                if ( ( *fi )->getName() == colorToLook + "." + familyToLook )
+                        return ( *fi ) ;
 
         IF_DEBUG( std::cout << "making font with family \"" << familyToLook << "\" and color \"" << colorToLook << "\"" << std::endl )
 

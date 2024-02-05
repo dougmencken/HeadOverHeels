@@ -12,7 +12,6 @@
 #define GuiManager_hpp_
 
 #include <string>
-#include <list>
 #include <map>
 
 #include "Gui.hpp"
@@ -168,13 +167,13 @@ private:
         WhyPaused whyTheGameIsPaused ;
 
        /**
-        * Draw graphics at full screen when true or in window when false
+        * Draw graphics at the full screen when true or in a window when false
         */
         bool atFullScreen ;
 
-        std::list < Font * > fonts ;
+        std::vector < Font * > fonts ;
 
-        void assignLanguage ( const std::string& language ) ;
+        void assignLanguage ( const std::string & language ) ;
 
 };
 

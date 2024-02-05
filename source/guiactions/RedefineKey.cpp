@@ -67,13 +67,14 @@ void RedefineKey::doAction ()
                                                 std::string toLook = ( previousAction == "take&jump" ) ? "takeandjump" : previousAction ;
                                                 std::string textOfThatKey = GuiManager::getInstance().getLanguageManager()->findLanguageStringForAlias( toLook )->getText();
 
-                                                std::list < Label * > allOptions = menu->getEveryOption ();
-                                                for ( std::list< Label * >::iterator o = allOptions.begin (); o != allOptions.end (); ++ o )
+                                                const std::vector < Label * > & allOptions = menu->getEveryOption ();
+                                                for ( unsigned int o = 0 ; o < allOptions.size() ; ++ o )
                                                 {
-                                                        if ( ( *o )->getText() == textOfThatKey )
+                                                        Label* option = allOptions[ o ];
+                                                        if ( option->getText() == textOfThatKey )
                                                         {
-                                                                menu->setValueOf( *o, "none" );
-                                                                ( *o )->changeColor( "cyan" );
+                                                                menu->setValueOf( option, "none" );
+                                                                option->changeColor( "cyan" );
 
                                                                 std::cout << "NO key for \"" << previousAction << "\" yet" << std::endl ;
                                                                 break;

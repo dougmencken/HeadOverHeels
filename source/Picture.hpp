@@ -59,7 +59,8 @@ public:
 
         void fillWithTransparencyChequerboard ( const unsigned int sizeOfSquare = 8 ) ;
 
-        void colorize ( const Color & color ) ;
+        void colorizeWhite ( const Color & color ) ;
+        void colorizeBlack ( const Color & color ) ;
 
         void toGrayscale () ;
 

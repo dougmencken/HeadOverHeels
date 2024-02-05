@@ -1,5 +1,6 @@
 
 #include "TextField.hpp"
+
 #include "Font.hpp"
 #include "Label.hpp"
 
@@ -9,11 +10,11 @@ using gui::TextField;
 using gui::Label;
 
 
-TextField::TextField( unsigned int width, const std::string& align )
+TextField::TextField( unsigned int width, const std::string & align )
         : Widget( )
         , width( width )
+        , height( 0 )
         , alignment( align )
-        , heightOfField( 0 )
 {
 
 }
@@ -26,7 +27,7 @@ TextField::~TextField()
 
 void TextField::draw ()
 {
-        for ( std::list< Label* >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
+        for ( std::vector< Label* >::const_iterator i = this->lines.begin (); i != this->lines.end (); ++ i )
         {
                 Label* label = *i ;
 
@@ -50,15 +51,15 @@ void TextField::addLine( const std::string& text, const std::string& font, const
         else if ( alignment == "right" )
                 posX = deltaW;
 
-        label->moveTo( posX + this->getX (), this->getY () + heightOfField );
-        this->heightOfField += label->getHeight();
+        label->moveTo( posX + this->getX (), this->getY () + this->height );
+        this->height += label->getHeight();
 
         lines.push_back( label );
 }
 
 void TextField::setAlignment( const std::string& newAlignment )
 {
-        for ( std::list< Label * >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
+        for ( std::vector< Label * >::const_iterator i = this->lines.begin (); i != this->lines.end (); ++ i )
         {
                 Label* label = ( *i );
 
@@ -77,7 +78,7 @@ void TextField::setAlignment( const std::string& newAlignment )
 
 void TextField::moveTo( int x, int y )
 {
-        for ( std::list< Label * >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
+        for ( std::vector< Label * >::const_iterator i = this->lines.begin (); i != this->lines.end (); ++ i )
         {
                 Label* label = ( *i );
                 label->moveTo( label->getX() + x - this->getX(), label->getY() + y - this->getY() );

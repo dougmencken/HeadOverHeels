@@ -25,18 +25,17 @@ MenuWithValues::~MenuWithValues( )
 
 void MenuWithValues::draw ()
 {
-        if ( activeOption == nilPointer )
-        {
-                resetActiveOption ();
-        }
+        if ( getActiveOption() == nilPointer ) resetActiveOption ();
 
+        const std::vector< Label* > & options = getEveryOption ();
+
+        // get the longest option
         unsigned int maxLetters = 0;
         unsigned int maxPixels = 0;
 
-        // get longest option
-        for ( std::list< Label* >::iterator i = options.begin (); i != options.end (); ++i )
+        for ( std::vector< Label* >::const_iterator it = options.begin (); it != options.end (); ++ it )
         {
-                Label* option = *i;
+                Label* option = *it ;
                 if ( option->getWidth() > maxPixels )
                 {
                         maxPixels = option->getWidth();
@@ -44,11 +43,12 @@ void MenuWithValues::draw ()
                 }
         }
 
-        for ( std::list< Label* >::iterator i = options.begin (); i != options.end (); ++i )
+        // the active, that is currently chosen, option is drawn stretched to double height
+        for ( unsigned int o = 0 ; o < options.size (); ++ o )
         {
-                Label* option = *i;
+                Label* option = options[ o ] ;
 
-                if ( option == this->activeOption )
+                if ( option == getActiveOption() )
                 {
                         if ( option->getFontFamily() != "big" )
                                 option->changeFontFamily( "big" );
@@ -60,32 +60,34 @@ void MenuWithValues::draw ()
                 }
         }
 
-        std::list< Label * > optionsWithValues;
-        Label* activeOptionWithValue = nilPointer;
+        std::vector< Label * > optionsWithValues ;
+        Label* activeOptionWithValue = nilPointer ;
 
-        for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i )
+        for ( unsigned int o = 0 ; o < options.size (); ++ o )
         {
-                Label* option = *i;
+                Label* option = options[ o ] ;
+                const std::string & textOfOption = option->getText() ;
 
-                std::string textOfOption = option->getText() ;
+                std::string filler ;
                 unsigned int lengthOfText = utf8StringLength( textOfOption );
                 for ( unsigned int off = lengthOfText; off < maxLetters + minSpacesBeforeValue; off++ )
                 {
-                        textOfOption = textOfOption + symbolToFill;
+                        filler += symbolToFill ;
                 }
 
-                Label* optionWithValue = new Label( textOfOption + getValueOf( option ), option->getFontFamily(), option->getColor(), option->getSpacing() );
+                Label* optionWithValue = new Label( textOfOption + filler + getValueOf( textOfOption ),
+                                                        option->getFontFamily(), option->getColor(), option->getSpacing() );
                 optionsWithValues.push_back( optionWithValue );
 
-                if ( option == this->activeOption )
-                        activeOptionWithValue = optionWithValue;
+                if ( option == getActiveOption() )
+                        activeOptionWithValue = optionWithValue ;
         }
 
-        // condense options of menu so they fit on screen
+        // condense menu options so they fit on the screen
         // hey but how about alignment, need to condense every option to the same as for the most condensed one
-        /* for ( std::list< Label* >::iterator o = optionsWithValues.begin (); o != optionsWithValues.end (); ++o )
+        /* for ( std::vector< Label* >::const_iterator o = optionsWithValues.begin (); o != optionsWithValues.end (); ++ o )
         {
-                Label* option = *o;
+                Label* option = *o ;
                 while ( option->getWidth() > ( GamePreferences::getScreenWidth() - 100 ) )
                         option->setSpacing( option->getSpacing() - 1 );
         } */
@@ -95,18 +97,17 @@ void MenuWithValues::draw ()
         setX( previousX + ( ( GamePreferences::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( GamePreferences::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
+        int dx( Menu::getPictureBeforeOption().getWidth () );
         int dy( 0 );
 
         // for each label
         // para cada etiqueta
-        for ( std::list< Label* >::iterator i = optionsWithValues.begin (); i != optionsWithValues.end (); ++i )
+        for ( unsigned int i = 0 ; i < optionsWithValues.size() ; ++ i )
         {
-                Label* label = *i;
+                Label* label = optionsWithValues[ i ];
 
-                Picture * mark = ( activeOptionWithValue == label ) ? Menu::beforeChosenOption : Menu::beforeOption ;
-                if ( mark != nilPointer )
-                        allegro::drawSprite( mark->getAllegroPict(), getX (), getY () + dy );
+                const Picture & mark = ( activeOptionWithValue == label ) ? Menu::getPictureBeforeChosenOption() : Menu::getPictureBeforeOption() ;
+                allegro::drawSprite( mark.getAllegroPict(), getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
                 label->draw ();
@@ -126,36 +127,33 @@ void MenuWithValues::draw ()
         optionsWithValues.clear();
 }
 
-std::string MenuWithValues::getValueOf( Label* option ) const
+std::string MenuWithValues::getValueOf( const std::string & textOfOption ) const
 {
-        size_t numberOf = 0;
-        for ( std::list< Label* >::const_iterator o = options.begin (); o != options.end (); ++o, numberOf++ )
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( unsigned int row = 0 ; row < options.size (); ++ row )
         {
-                if ( ( *o ) == option )
+                if ( options[ row ]->getText() == textOfOption )
                 {
-                        if ( numberOf >= listOfValues.size() )
-                                return "(o)";
+                        assert( row < listOfValues.size() );
 
-                        return listOfValues[ numberOf ] ;
+                        return listOfValues[ row ] ;
                 }
         }
 
         return "";
 }
 
-void MenuWithValues::setValueOf( Label* option, const std::string& value )
+void MenuWithValues::setValueOf( const Label * const option, const std::string & value )
 {
-        while ( listOfValues.size() < options.size() )
-        {
+        while ( listOfValues.size() < getEveryOption().size() ) // equalize sizes
                 listOfValues.push_back( "" );
-        }
 
-        size_t numberOf = 0;
-        for ( std::list< Label* >::const_iterator o = options.begin (); o != options.end (); ++o, numberOf++ )
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( unsigned int o = 0 ; o < options.size () ; ++ o )
         {
-                if ( ( *o ) == option )
+                if ( options[ o ] == option )
                 {
-                        listOfValues[ numberOf ] = value ;
+                        listOfValues[ o ] = value ;
                         break;
                 }
         }
@@ -163,36 +161,45 @@ void MenuWithValues::setValueOf( Label* option, const std::string& value )
 
 unsigned int MenuWithValues::getWidthOfMenu () const
 {
-        unsigned int widthOfMenu = 0;
+        const std::vector< Label* > & options = getEveryOption ();
 
-        unsigned int maxLetters = 0;
-        for ( std::list< Label* >::const_iterator it = options.begin (); it != options.end (); ++it )
+        // at first get length of the longest option
+        unsigned int maxLetters = 0 ;
+        for ( std::vector< Label* >::const_iterator o = options.begin (); o != options.end (); ++ o )
         {
-                unsigned int length = utf8StringLength( ( *it )->getText() );
+                unsigned int length = utf8StringLength( ( *o )->getText() );
                 if ( length > maxLetters ) maxLetters = length;
         }
 
-        for ( std::list< Label * >::const_iterator o = options.begin () ; o != options.end () ; ++o )
-        {
-                std::string textOfOption = ( *o )->getText();
-                for ( unsigned int i = utf8StringLength( textOfOption ); i < maxLetters + minSpacesBeforeValue; i++ )
-                        textOfOption = textOfOption + symbolToFill;
+        unsigned int widthOfMenu = 0 ;
 
-                Label optionWithValue( textOfOption + getValueOf( *o ), ( *o )->getFontFamily(), ( *o )->getColor(), ( *o )->getSpacing() );
-                unsigned int theWidth = optionWithValue.getWidth() + ( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 ) ;
+        for ( unsigned int o = 0 ; o < options.size () ; ++ o )
+        {
+                Label* option = options[ o ];
+                const std::string & textOfOption = option->getText();
+                std::string filler ;
+                for ( unsigned int i = utf8StringLength( textOfOption ); i < maxLetters + minSpacesBeforeValue ; i++ )
+                        filler += symbolToFill ;
+
+                Label optionWithValue( textOfOption + filler + getValueOf( textOfOption ),
+                                                option->getFontFamily(), option->getColor(), option->getSpacing() );
+
+                unsigned int theWidth = optionWithValue.getWidth() + Menu::getPictureBeforeOption().getWidth() ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }
 
-        return widthOfMenu;
+        return widthOfMenu ;
 }
 
 void MenuWithValues::previousOption ()
 {
-        for ( std::list< Label* >::const_iterator o = options.begin (); o != options.end (); ++o )
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( std::vector< Label* >::const_iterator o = options.begin (); o != options.end (); ++ o )
         {  // compare by text of option here
-                if ( ( *o )->getText() == activeOption->getText() )
+                if ( ( *o )->getText() == getActiveOption()->getText() )
                 {
-                        activeOption = ( o == options.begin() ? *( --options.end() ) : *( --o ) );
+                        Label* previousOption = ( o == options.begin() ? *( --options.end() ) : *( -- o ) );
+                        setActiveOption( previousOption->getText() );
                         break;
                 }
         }
@@ -200,12 +207,14 @@ void MenuWithValues::previousOption ()
 
 void MenuWithValues::nextOption ()
 {
-        for ( std::list< Label* >::const_iterator o = options.begin (); o != options.end (); ++o )
+        const std::vector< Label* > & options = getEveryOption ();
+        for ( std::vector< Label* >::const_iterator o = options.begin (); o != options.end (); ++ o )
         {  // compare by text of option here
-                if ( ( *o )->getText() == activeOption->getText() )
+                if ( ( *o )->getText() == getActiveOption()->getText() )
                 {
-                        ++o ;
-                        activeOption = ( o == options.end() ? *options.begin() : *o );
+                        ++ o ;
+                        Label* nextOption = ( o == options.end() ? *options.begin() : *o );
+                        setActiveOption( nextOption->getText() );
                         break;
                 }
         }

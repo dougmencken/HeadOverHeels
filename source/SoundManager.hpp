@@ -12,9 +12,7 @@
 #define SoundManager_hpp_
 
 #include <string>
-#include <list>
 #include <map>
-#include <iostream>
 
 #include "WrappersAllegro.hpp"
 

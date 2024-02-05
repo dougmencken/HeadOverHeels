@@ -27,7 +27,7 @@ class MenuWithTwoColumns : public Menu
 public:
 
         /**
-         * @param space Space between columns
+         * @param space The space between columns
          */
         MenuWithTwoColumns( unsigned int space );
 
@@ -38,6 +38,16 @@ public:
         virtual unsigned int getWidthOfMenu () const ;
 
         virtual unsigned int getHeightOfMenu () const ;
+
+        virtual void handleKey ( const std::string & key ) ;
+
+        /**
+         * The index of last row in the first column, after this number the subsequent options go to the second column
+         */
+        unsigned int lastRowInTheFirstColumn () const ;
+
+        bool isInTheFirstColumn( const std::string & option ) const ;
+        bool isInTheSecondColumn( const std::string & option ) const ;
 
 private:
 

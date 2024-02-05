@@ -45,7 +45,7 @@ void CreateMenuOfGraphicsSets::doAction ()
 
                 screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-                for ( std::map < std::string, std::string >::iterator i = setsOfGraphics.begin (); i != setsOfGraphics.end (); ++ i )
+                for ( std::map < std::string, std::string >::const_iterator i = setsOfGraphics.begin (); i != setsOfGraphics.end (); ++ i )
                 {
                         std::string nameOfSet = i->second;
                         std::string nameOfSetSpaced ( nameOfSet );
@@ -71,13 +71,11 @@ void CreateMenuOfGraphicsSets::doAction ()
                 screen.setKeyHandler( menuOfGraphicsSets );
         }
 
-        std::list< Label* > labels = menuOfGraphicsSets->getEveryOption ();
-        for ( std::list< Label * >::iterator il = labels.begin (); il != labels.end (); ++il )
+        const std::vector< Label* > & sets = menuOfGraphicsSets->getEveryOption ();
+        for ( unsigned int i = 0 ; i < sets.size (); ++ i )
         {
-                if ( ( *il )->getColor() == "yellow" )
-                {
-                        menuOfGraphicsSets->setActiveOption( *il );
-                }
+                if ( sets[ i ]->getColor() == "yellow" )
+                        menuOfGraphicsSets->setActiveOption( sets[ i ]->getText () );
         }
 
         gui::GuiManager::getInstance().changeScreen( screen, true );
@@ -106,15 +104,15 @@ void CreateMenuOfGraphicsSets::doAction ()
                                         std::string chosenSet = menuOfGraphicsSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
 
                                         if ( chosenSet != GameManager::getInstance().getChosenGraphicsSet() )
-                                        { // new set is not the same as previous one
+                                        { // the new set is not the same as the previous one
                                                 GameManager::getInstance().setChosenGraphicsSet( chosenSet.c_str () ) ;
 
                                                 gui::GuiManager::getInstance().refreshScreens ();
 
-                                                std::list< Label * > everySet = menuOfGraphicsSets->getEveryOption ();
-                                                for ( std::list< Label* >::iterator is = everySet.begin (); is != everySet.end (); ++is )
+                                                const std::vector< Label * > & everySet = menuOfGraphicsSets->getEveryOption ();
+                                                for ( unsigned int i = 0 ; i < everySet.size (); ++ i )
                                                 {
-                                                        ( * is )->changeColor( "cyan" );
+                                                        everySet[ i ]->changeColor( "cyan" );
                                                 }
                                                 menuOfGraphicsSets->getActiveOption()->changeColor( "yellow" );
                                         }

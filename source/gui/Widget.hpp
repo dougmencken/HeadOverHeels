@@ -37,8 +37,6 @@ public:
 
         virtual ~Widget( ) { }
 
-        virtual bool isMenu () {  return false ;  }
-
         /**
          * Subclasses may respond to this event or notify other component
          */

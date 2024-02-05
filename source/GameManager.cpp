@@ -374,8 +374,8 @@ void GameManager::refreshAmbianceImages ()
         }
         else
         {
-                ambiancePictures[ "gray head" ]->colorize( Color::byName( "reduced magenta" ) );
-                ambiancePictures[ "gray heels" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray head" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray heels" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
         }
 
         ambiancePictures[ "handbag" ] = refreshPicture( "gui-handbag.png" );
@@ -394,13 +394,13 @@ void GameManager::refreshAmbianceImages ()
         }
         else
         {
-                ambiancePictures[ "gray handbag" ]->colorize( Color::byName( "reduced magenta" ) );
-                ambiancePictures[ "gray horn" ]->colorize( Color::byName( "reduced magenta" ) );
-                ambiancePictures[ "gray donuts" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray handbag" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray horn" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray donuts" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
 
-                ambiancePictures[ "handbag" ]->colorize( Color::byName( "yellow" ) );
-                ambiancePictures[ "horn" ]->colorize( Color::byName( "yellow" ) );
-                ambiancePictures[ "donuts" ]->colorize( Color::byName( "yellow" ) );
+                ambiancePictures[ "handbag" ]->colorizeWhite( Color::byName( "yellow" ) );
+                ambiancePictures[ "horn" ]->colorizeWhite( Color::byName( "yellow" ) );
+                ambiancePictures[ "donuts" ]->colorizeWhite( Color::byName( "yellow" ) );
         }
 
         ambiancePictures[ "grandes saltos" ] = refreshPicture( "high-jumps.png" );
@@ -419,14 +419,14 @@ void GameManager::refreshAmbianceImages ()
         }
         else
         {
-                ambiancePictures[ "gray grandes saltos" ]->colorize( Color::byName( "reduced magenta" ) );
-                ambiancePictures[ "grandes saltos" ]->colorize( Color::byName( "yellow" ) );
+                ambiancePictures[ "gray grandes saltos" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "grandes saltos" ]->colorizeWhite( Color::byName( "yellow" ) );
 
-                ambiancePictures[ "gray gran velocidad" ]->colorize( Color::byName( "reduced magenta" ) );
-                ambiancePictures[ "gran velocidad" ]->colorize( Color::byName( "yellow" ) );
+                ambiancePictures[ "gray gran velocidad" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gran velocidad" ]->colorizeWhite( Color::byName( "yellow" ) );
 
-                ambiancePictures[ "gray escudo" ]->colorize( Color::byName( "reduced magenta" ) );
-                ambiancePictures[ "escudo" ]->colorize( Color::byName( "yellow" ) );
+                ambiancePictures[ "gray escudo" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "escudo" ]->colorizeWhite( Color::byName( "yellow" ) );
         }
 }
 

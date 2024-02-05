@@ -11,10 +11,8 @@
 #ifndef Room_hpp_
 #define Room_hpp_
 
-#include <iostream>
 #include <string>
 #include <vector>
-#include <list>
 #include <map>
 
 #include "Way.hpp"

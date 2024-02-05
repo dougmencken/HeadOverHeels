@@ -12,7 +12,6 @@
 #define RoomBuilder_hpp_
 
 #include <string>
-#include <iostream>
 
 #include <tinyxml2.h>
 
