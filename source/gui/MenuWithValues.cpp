@@ -1,8 +1,9 @@
 
 #include "MenuWithValues.hpp"
-#include "Label.hpp"
 
 #include "GamePreferences.hpp"
+#include "Label.hpp"
+#include "UnicodeUtilities.hpp"
 
 #include <algorithm> // std::for_each
 

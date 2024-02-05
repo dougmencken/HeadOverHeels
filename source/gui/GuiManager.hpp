@@ -14,7 +14,6 @@
 #include <string>
 #include <map>
 
-#include "Gui.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
 

@@ -2,6 +2,8 @@
 #include "ColorCyclingLabel.hpp"
 #include "Color.hpp"
 
+#include "UnicodeUtilities.hpp"
+
 #include <iostream>
 
 

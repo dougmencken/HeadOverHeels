@@ -45,6 +45,7 @@ headoverheels_SOURCES = main.cpp \
 			ospaths.cpp \
 			ospaths.hpp \
 			MayNotBePossible.hpp \
+			UnicodeUtilities.hpp \
 			WrappersAllegro.cpp \
 			WrappersAllegro.hpp \
 			Way.cpp \
@@ -182,7 +183,6 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/Volatile.hpp \
 			gui/Font.cpp \
 			gui/Font.hpp \
-			gui/Gui.hpp \
 			gui/GuiManager.cpp \
 			gui/GuiManager.hpp \
 			gui/PictureWidget.cpp \

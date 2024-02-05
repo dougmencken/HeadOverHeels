@@ -15,7 +15,6 @@
 
 #include <WrappersAllegro.hpp>
 
-#include "Gui.hpp"
 #include "Widget.hpp"
 #include "Font.hpp"
 

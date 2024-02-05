@@ -1,7 +1,6 @@
 
 #include "Screen.hpp"
 
-#include "Gui.hpp"
 #include "Menu.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"

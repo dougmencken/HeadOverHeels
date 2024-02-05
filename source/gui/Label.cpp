@@ -1,9 +1,11 @@
 
 #include "Label.hpp"
+
 #include "Color.hpp"
 #include "Action.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
+#include "UnicodeUtilities.hpp"
 
 #include <iostream>
 #include <cassert>

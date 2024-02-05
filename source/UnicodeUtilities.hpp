@@ -8,17 +8,13 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Gui_hpp_
-#define Gui_hpp_
+#ifndef UnicodeUtilities_hpp_
+#define UnicodeUtilities_hpp_
 
 #include <string>
 
-
-namespace gui
-{
-
 /*
- * moves the iterator to next unicode character in the string, returns number of bytes skipped
+ * moves the iterator to the next unicode character in the string, returns the number of bytes skipped
  * from code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
  */
 template < typename _Iterator1, typename _Iterator2 >
@@ -37,10 +33,10 @@ inline size_t incUtf8StringIterator( _Iterator1 & it, const _Iterator2 & last )
 }
 
 /*
- * gives the real length of UTF-8 encoded std::string
+ * gives the real length of a UTF-8 encoded std::string
  * from code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
  */
-inline size_t utf8StringLength( const std::string& str )
+inline size_t utf8StringLength( const std::string & str )
 {
         size_t len = 0;
         std::string::const_iterator it = str.begin ();
@@ -48,8 +44,6 @@ inline size_t utf8StringLength( const std::string& str )
                 len ++;
 
         return len ;
-}
-
 }
 
 #endif

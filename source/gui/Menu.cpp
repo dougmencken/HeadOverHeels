@@ -1,7 +1,6 @@
 
 #include "Menu.hpp"
 
-#include "Gui.hpp"
 #include "GuiManager.hpp"
 #include "InputManager.hpp"
 #include "GamePreferences.hpp"
