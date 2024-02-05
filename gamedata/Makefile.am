@@ -5,8 +5,7 @@ gamedata_DATA = items.xml \
 		font.png \
 		menu-option.png \
 		chosen-menu-option.png \
-		loading-screen.png \
-		shadow-template.png
+		loading-screen.png
 
 SUBDIRS = map music savegame sound text \
 		gfx gfx.2009 gfx.riderx gfx.2003 gfx.simple
