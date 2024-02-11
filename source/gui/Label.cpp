@@ -18,8 +18,8 @@ Label::Label( const std::string & text )
 : Widget( )
         , imageOfLetters( nilPointer )
         , text( text )
-        , fontName( "plain" )
         , color( "white" )
+        , height2x( false )
         , multicolored( false )
         , spacing( 0 )
         , myAction( nilPointer )
@@ -27,17 +27,16 @@ Label::Label( const std::string & text )
         createImageOfLabel( text );
 }
 
-Label::Label( const std::string & text, const Font & font, bool multicolor, int spacing )
+Label::Label( const std::string & text, const Font & font, bool multicolor )
 : Widget( )
         , imageOfLetters( nilPointer )
         , text( text )
-        , fontName( font.getName() )
-        , color( font.getColor() )
+        , color( font.getColor () )
+        , height2x( font.isDoubleHeight () )
         , multicolored( multicolor )
-        , spacing( spacing )
+        , spacing( 0 )
         , myAction( nilPointer )
 {
-        if ( this->fontName.empty() ) this->fontName = "plain" ;
         if ( this->color.empty() ) this->color = "white" ;
 
         createImageOfLabel( text );
@@ -50,14 +49,7 @@ Label::~Label( )
 
 void Label::update()
 {
-        createImageOfLabel( this->text );
-}
-
-void Label::changeFont( const std::string & nameOFont, const std::string & whichColor )
-{
-        this->fontName = nameOFont ;
-        this->color = whichColor ;
-        update ();
+        createImageOfLabel( getText() );
 }
 
 void Label::draw ()
@@ -84,7 +76,8 @@ void Label::createImageOfLabel( const std::string & text )
         unsigned int howManyLetters = utf8StringLength( text );
         imageOfLetters = new Picture( howManyLetters * ( font.getWidthOfLetter( "O" ) + getSpacing() ), font.getHeightOfLetter( "I" ) );
 
-        std::string nameOfImage = "image of label \"" + text + "\" using " + this->fontName + " font colored " + this->color ;
+        std::string kindOFont = font.isDoubleHeight() ? "double-height font" : "font" ;
+        std::string nameOfImage = "image of label \"" + text + "\" using the game’s " + kindOFont + " colored " + this->color ;
         imageOfLetters->setName( nameOfImage );
 
         if ( ! text.empty() )
@@ -117,7 +110,7 @@ void Label::createImageOfLabel( const std::string & text )
                         std::string utf8letter = text.substr( from, howMany );
 
                         // draw letter
-                        Picture* letter = Font::fontByNameAndColor( font.getName(), fontColor ).getPictureOfLetter( utf8letter ) ;
+                        Picture* letter = Font::fontByColorAndSize( fontColor, font.isDoubleHeight() ).getPictureOfLetter( utf8letter ) ;
                         if ( letter != nilPointer )
                                 allegro::bitBlit(
                                     letter->getAllegroPict(),

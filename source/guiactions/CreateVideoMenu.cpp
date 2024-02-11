@@ -71,7 +71,7 @@ void CreateVideoMenu::doAction ()
                 this->centerCameraOn = new Label( textCenterCameraOn->getText() );
 
                 LanguageText* textChooseGraphics = languageManager->findLanguageStringForAlias( "graphic-set" );
-                this->chooseGraphics = new Label( textChooseGraphics->getText(), Font::fontByNameAndColor( "", "yellow" ) );
+                this->chooseGraphics = new Label( textChooseGraphics->getText(), Font::fontWithColor( "yellow" ) );
                 this->chooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
                 this->listOfOptions = new MenuWithValues( ' ', 1 );

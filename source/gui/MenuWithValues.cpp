@@ -49,16 +49,9 @@ void MenuWithValues::draw ()
         {
                 Label* option = options[ o ] ;
 
-                if ( option == getActiveOption() )
-                {
-                        if ( option->getFont().getName() != "big" )
-                                option->changeFont( "big", option->getFont().getColor() );
-                }
-                else
-                {
-                        if ( option->getFont().getName() != "plain" )
-                                option->changeFont( "plain", option->getFont().getColor() );
-                }
+                if ( ( option == getActiveOption() && ! option->getFont().isDoubleHeight() )
+                                || ( getActiveOption() != option && option->getFont().isDoubleHeight() ) )
+                        option->toggleDoubleHeight() ;
         }
 
         std::vector< Label * > optionsWithValues ;

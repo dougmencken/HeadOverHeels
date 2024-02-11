@@ -333,9 +333,9 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
-        Label* Head = new Label( "Head", Font::fontByNameAndColor( "big", "yellow" ) );
-        Label* over = new Label( "over", Font::fontByNameAndColor( "", "" ), /* multicolor */ true );
-        Label* Heels = new Label( "Heels", Font::fontByNameAndColor( "big", "yellow" ) );
+        Label* Head = new Label( "Head", Font::fontWith2xHeightAndColor( "yellow" ) );
+        Label* over = new Label( "over", Font::fontWithColor( "" ), /* multicolor */ true );
+        Label* Heels = new Label( "Heels", Font::fontWith2xHeightAndColor( "yellow" ) );
 
         over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
         addWidget( over );
@@ -350,14 +350,14 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         addWidget( Heels );
 
         TextField* JonRitman = new TextField( screenWidth >> 2, "center" ) ;
-        JonRitman->appendText( "Jon", "", "multicolor" );
-        JonRitman->appendText( "Ritman", "", "multicolor" );
+        JonRitman->appendText( "Jon", false, "multicolor" );
+        JonRitman->appendText( "Ritman", false, "multicolor" );
         JonRitman->moveTo( Head->getX() - JonRitman->getWidthOfField() - space, space );
         addWidget( JonRitman );
 
         TextField* BernieDrummond = new TextField( screenWidth >> 2, "center" ) ;
-        BernieDrummond->appendText( "Bernie", "", "multicolor" );
-        BernieDrummond->appendText( "Drummond", "", "multicolor" );
+        BernieDrummond->appendText( "Bernie", false, "multicolor" );
+        BernieDrummond->appendText( "Drummond", false, "multicolor" );
         BernieDrummond->moveTo( Heels->getX() + Heels->getWidth() + space, space );
         addWidget( BernieDrummond );
 
@@ -370,8 +370,8 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 
         if ( copyrightsToo )
         {
-                Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", Font::fontByNameAndColor( "", "orange" ) );
-                Label* Douglas = new Label( "{ 2024 Douglas Mencken", Font::fontByNameAndColor( "", "yellow" ) );
+                Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", Font::fontWithColor( "orange" ) );
+                Label* Douglas = new Label( "{ 2024 Douglas Mencken", Font::fontWithColor( "yellow" ) );
 
                 const unsigned int screenHeight = GamePreferences::getScreenHeight();
                 const int leading = 28;

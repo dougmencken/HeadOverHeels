@@ -10,8 +10,8 @@
 namespace gui
 {
 
-ColorCyclingLabel::ColorCyclingLabel( const std::string & text, bool doubleHeight, int spacing )
-        : Label( text, Font::fontByNameAndColor( doubleHeight ? "big" : "", "white" ), spacing )
+ColorCyclingLabel::ColorCyclingLabel( const std::string & text, bool doubleHeight )
+        : Label( text, Font::fontByColorAndSize( "white", doubleHeight ) )
         , cycle( 0 )
         , colorCyclingTimer( new Timer () )
 {
@@ -64,7 +64,7 @@ void ColorCyclingLabel::updateImageOfLabel ()
                         std::string utf8letter = text.substr( from, howMany );
 
                         // draw letter
-                        Picture * letter = Font::fontByNameAndColor( font.getName(), fontColor ).getPictureOfLetter( utf8letter ) ;
+                        Picture * letter = Font::fontByColorAndSize( fontColor, font.isDoubleHeight() ).getPictureOfLetter( utf8letter ) ;
                         if ( letter != nilPointer )
                                 allegro::bitBlit(
                                         letter->getAllegroPict(),

@@ -46,7 +46,7 @@ public:
 
         void handleKey ( const std::string& /* key */ ) { /* do nothing */ }
 
-        void appendText ( const std::string & text, const std::string & font, const std::string & color ) ;
+        void appendText ( const std::string & text, bool height2x, const std::string & color ) ;
 
         void moveTo ( int x, int y ) ;
 

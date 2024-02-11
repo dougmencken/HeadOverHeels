@@ -59,7 +59,7 @@ void CreatePlanetsScreen::doAction ()
         std::string colorOfLabel = "yellow" ;
         if ( GameManager::getInstance().isSimpleGraphicsSet () ) colorOfLabel = "red" ;
         Label* empire = new Label( languageManager->findLanguageStringForAlias( "blacktooth-empire" )->getText(),
-                                        Font::fontByNameAndColor( "big", colorOfLabel ) );
+                                        Font::fontWith2xHeightAndColor( colorOfLabel ) );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
         empire->setAction( new ContinueGame( gameInProgress ) );
 

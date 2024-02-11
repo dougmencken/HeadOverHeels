@@ -59,16 +59,16 @@ void MenuWithTwoColumns::draw ()
         {
                 Label* label = options[ row ] ;
 
-                // pick the font & color of text
+                // pick the color of text
                 if ( label == getActiveOption() )
                 {
                         if ( label->getFont().getColor() != "orange" )
-                                label->changeFont( "plain", "orange" );
+                                label->changeColor( "orange" );
                 }
                 else
                 {
                         if ( label->getFont().getColor() != "white" )
-                                label->changeFont( "plain", "white" );
+                                label->changeColor( "white" );
                 }
 
                 // reset vertical position for the second column’s first option

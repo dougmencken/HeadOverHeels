@@ -59,7 +59,7 @@ void CreateCongratulationsScreen::doAction ()
         for ( size_t i = 0; i < langString->howManyLinesOfText(); i ++ )
         {
                 const LanguageLine & line = langString->getNthLine( i );
-                textField->appendText( line.getText(), line.getFontName(), line.getColor() );
+                textField->appendText( line.getText(), line.isBigHeight(), line.getColor() );
         }
 
         screen.addWidget( textField );

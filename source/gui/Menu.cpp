@@ -147,22 +147,14 @@ void Menu::draw ()
 {
         if ( activeOption == nilPointer ) resetActiveOption ();
 
-        // adjust font of every option
-        // font for chosen option is double-height
-        for ( std::vector< Label* >::const_iterator it = options.begin (); it != options.end (); ++ it )
+        // the chosen option’s font is double-height stretched
+        for ( unsigned int o = 0 ; o < this->options.size (); ++ o )
         {
-                Label* option = *it ;
+                Label* option = this->options[ o ] ;
 
-                if ( option == getActiveOption() )
-                {
-                        if ( option->getFont().getName() != "big" )
-                                option->changeFont( "big", option->getFont().getColor() );
-                }
-                else
-                {
-                        if ( option->getFont().getName() != "plain" )
-                                option->changeFont( "plain", option->getFont().getColor() );
-                }
+                if ( ( option == getActiveOption() && ! option->getFont().isDoubleHeight() )
+                                || ( getActiveOption() != option && option->getFont().isDoubleHeight() ) )
+                        option->toggleDoubleHeight() ;
         }
 
         // update position of the whole menu to draw it centered

@@ -45,7 +45,7 @@ public:
          * @param multicolor true for coloring letters in the cycle
          * @param spacing the space between letters
          */
-        Label( const std::string & text, const Font & font, bool multicolor = false, int spacing = 0 ) ;
+        Label( const std::string & text, const Font & font, bool multicolor = false ) ;
 
         virtual ~Label( ) ;
 
@@ -57,19 +57,17 @@ public:
 
         const std::string & getText () const {  return this->text ;  }
 
-        void setText( const std::string & newText ) {  this->text = newText ; update () ;  }
+        void setText( const std::string & newText ) {  this->text = newText ; update() ;  }
 
-        const Font & getFont () const {  return Font::fontByNameAndColor( this->fontName, this->color ) ;  }
+        const Font & getFont () const {  return Font::fontByColorAndSize( this->color, this->height2x ) ;  }
 
-        void changeFont( const std::string & nameOFont, const std::string & whichColor );
+        void changeColor ( const std::string & whichColor ) {  this->color = whichColor ; update() ;  }
 
-        void changeFont( const Font & font ) {  changeFont( font.getName (), font.getColor () );  }
-
-        void changeColor ( const std::string & fontColor ) {  changeFont( this->fontName, fontColor );  }
+        void toggleDoubleHeight () {  this->height2x = ! this->height2x ; update() ;  }
 
         int getSpacing () const {  return this->spacing ;  }
 
-        void setSpacing ( int newSpacing ) {  this->spacing = newSpacing ; update ();  }
+        void setSpacing ( int newSpacing ) {  this->spacing = newSpacing ; update() ;  }
 
         unsigned int getWidth () const
         {
@@ -98,9 +96,9 @@ private:
 
         std::string text ;
 
-        std::string fontName ;
-
         std::string color ;
+
+        bool height2x ;
 
         bool multicolored ;
 

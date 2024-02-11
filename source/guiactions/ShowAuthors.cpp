@@ -104,7 +104,7 @@ void ShowAuthors::doAction ()
 
                 for ( size_t n = 0; n < howManyLines; ++ n ) {
                         const LanguageLine & line = this->creditsText->getNthLine( n );
-                        linesOfCredits->appendText( line.getText(), line.getFontName(), line.getColor() );
+                        linesOfCredits->appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
                 screen.addWidget( this->linesOfCredits );

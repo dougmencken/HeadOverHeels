@@ -33,7 +33,7 @@ public:
 
         const std::string & getText() const {  return this->text ;  }
 
-        const std::string & getFontName() const {  return this->fontName ;  }
+        bool isBigHeight() const {  return ( this->fontName == "big" );  }
 
         const std::string & getColor() const {  return this->color ;  }
 

@@ -24,7 +24,7 @@ namespace gui
 {
 
 /**
- * The font with letters from the picture file. Letters may have a non-white color or~and the double height
+ * The font with letters from the picture file. The letters have colour and can be double height
  */
 
 class Font
@@ -33,13 +33,14 @@ class Font
 private:
 
         /**
-         * @param name the name of this font
          * @param color the color of letters
-         * @param doubleHeight true for the double height stretching of letters
+         * @param doubleHeightStretching true for the double height stretching of letters
          */
-        Font( const std::string & name, const std::string & color, bool doubleHeight = false ) ;
+        Font( const std::string & color, bool doubleHeightStretching = false ) ;
 
         Font( const Font & ) {} // no copying
+
+        static bool readListOfLetters () ;
 
 public:
 
@@ -47,21 +48,24 @@ public:
 
         Picture * getPictureOfLetter ( const std::string & letter ) const ;
 
-        std::string getName () const  {  return fontName ;  }
+        const std::string & getColor () const {  return this->fontColor ;  }
 
-        std::string getColor () const {  return fontColor ;  }
+        bool isDoubleHeight () const {  return this->doubleHeight ;  }
 
         unsigned int getWidthOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getWidth () ;  }
 
         unsigned int getHeightOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getHeight () ;  }
 
-        static const Font & fontByNameAndColor ( const std::string & name, const std::string & color ) ;
+        static const Font & fontWithColor ( const std::string & color ) {  return fontByColorAndSize( color, false );  }
+        static const Font & fontWith2xHeightAndColor ( const std::string & color ) {  return fontByColorAndSize( color, true );  }
+
+        static const Font & fontByColorAndSize ( const std::string & color, bool height2x ) ;
 
 private:
 
-        std::string fontName ;
-
         std::string fontColor ;
+
+        bool doubleHeight ;
 
         /**
          * Images of letters
