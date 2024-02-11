@@ -30,7 +30,7 @@ namespace gui
 class Font
 {
 
-public:
+private:
 
         /**
          * @param name the name of this font
@@ -39,26 +39,25 @@ public:
          */
         Font( const std::string & name, const std::string & color, bool doubleHeight = false ) ;
 
+        Font( const Font & ) {} // no copying
+
+public:
+
         virtual ~Font( ) ;
 
         Picture * getPictureOfLetter ( const std::string & letter ) const ;
 
         std::string getName () const  {  return fontName ;  }
 
-        /**
-         * The name of font is color.family, use this to get just the family
-         */
-        std::string getFamily () const {  return fontName.substr( fontName.find( "." ) + 1 ) ;  }
-
-        std::string getColor () const {  return fontName.substr( 0, fontName.find( "." ) ) ;  }
+        std::string getColor () const {  return fontColor ;  }
 
         unsigned int getWidthOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getWidth () ;  }
 
         unsigned int getHeightOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getHeight () ;  }
 
-private:
+        static const Font & fontByNameAndColor ( const std::string & name, const std::string & color ) ;
 
-        Font( const Font & ) {} // no copying
+private:
 
         std::string fontName ;
 
@@ -78,6 +77,8 @@ private:
          * for mapping between the image of letter from the font's picture file and the UTF-8 code of this letter
          */
         static std::string * listOfLetters ;
+
+        static std::vector < Font * > fonts ;
 
 };
 

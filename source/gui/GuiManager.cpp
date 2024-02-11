@@ -69,10 +69,7 @@ GuiManager::~GuiManager( )
 {
         freeScreens () ;
 
-        std::for_each( this->fonts.begin (), this->fonts.end (), DeleteIt() );
-        this->fonts.clear();
-
-        delete this->languageManager;
+        delete this->languageManager ;
 }
 
 GuiManager& GuiManager::getInstance ()
@@ -261,23 +258,6 @@ void GuiManager::assignLanguage( const std::string& language )
         fprintf( stdout, "language \"%s\"\n", language.c_str () );
         std::string pathToText = ospaths::sharePath () + "text" + ospaths::pathSeparator () ;
         this->languageManager = new LanguageManager( pathToText + language + ".xml", pathToText + "en_US.xml" );
-}
-
-Font* GuiManager::getOrCreateFontByFamilyAndColor ( const std::string& family, const std::string& color )
-{
-        std::string familyToLook = ( ! family.empty() ) ? family : "plain";
-        std::string colorToLook = ( ! color.empty() ) ? color : "white";
-
-        for (  std::vector< Font * >::const_iterator fi = fonts.begin (); fi != fonts.end (); ++ fi )
-                if ( ( *fi )->getName() == colorToLook + "." + familyToLook )
-                        return ( *fi ) ;
-
-        IF_DEBUG( std::cout << "making font with family \"" << familyToLook << "\" and color \"" << colorToLook << "\"" << std::endl )
-
-        Font* newFont = new Font( colorToLook + "." + familyToLook, colorToLook, family == "big" );
-        addFont( newFont );
-
-        return newFont ;
 }
 
 }

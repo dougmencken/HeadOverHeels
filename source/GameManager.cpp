@@ -199,10 +199,10 @@ void GameManager::pause ()
                 gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
                 int deltaY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
 
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
+                        const gui::LanguageLine & line = text->getNthLine( i );
+                        gui::Label label( line.getText(), gui::Font::fontByNameAndColor( line.getFontName(), line.getColor() ) );
                         label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
@@ -211,10 +211,10 @@ void GameManager::pause ()
                 text = language->findLanguageStringForAlias( "confirm-resume" );
                 deltaY += 20;
 
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
+                        const gui::LanguageLine & line = text->getNthLine( i );
+                        gui::Label label( line.getText(), gui::Font::fontByNameAndColor( line.getFontName(), line.getColor() ) );
                         label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
@@ -284,10 +284,10 @@ void GameManager::pause ()
                 gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
                 int deltaY = ( GamePreferences::getScreenHeight() >> 2 );
 
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
+                        const gui::LanguageLine & line = text->getNthLine( i );
+                        gui::Label label( line.getText(), gui::Font::fontByNameAndColor( line.getFontName(), line.getColor() ) );
                         label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
@@ -296,10 +296,10 @@ void GameManager::pause ()
                 text = language->findLanguageStringForAlias( "confirm-resume" );
                 deltaY += 20;
 
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
+                        const gui::LanguageLine & line = text->getNthLine( i );
+                        gui::Label label( line.getText(), gui::Font::fontByNameAndColor( line.getFontName(), line.getColor() ) );
                         label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
@@ -487,13 +487,15 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 
                 // vidas de Head
                 unsigned char livesForHead = this->theInfo.getHeadLives () ;
-                gui::Label headLivesLabel( util::number2string( livesForHead ), "big", "white", -2 );
+                gui::Label headLivesLabel( util::number2string( livesForHead ),
+                                                gui::Font::fontByNameAndColor( "big", "white" ), -2 );
                 headLivesLabel.moveTo( ( livesForHead > 9 ? 214 : 221 ) + dx, headHeelsAmbianceY - 1 );
                 headLivesLabel.draw ();
 
                 // vidas de Heels
                 unsigned char livesForHeels = this->theInfo.getHeelsLives () ;
-                gui::Label heelsLivesLabel( util::number2string( livesForHeels ), "big", "white", -2 );
+                gui::Label heelsLivesLabel( util::number2string( livesForHeels ),
+                                                gui::Font::fontByNameAndColor( "big", "white" ), -2 );
                 heelsLivesLabel.moveTo( ( livesForHeels > 9 ? 398 : 405 ) + dx, headHeelsAmbianceY - 1 );
                 heelsLivesLabel.draw ();
 
@@ -504,7 +506,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         leftTooAmbianceX, charStuffAmbianceY );
                 if ( doughnuts > 0 )
                 {
-                        gui::Label donutsLabel( util::number2string( doughnuts ), "", colorOfLabels, -2 );
+                        gui::Label donutsLabel( util::number2string( doughnuts ),
+                                                gui::Font::fontByNameAndColor( "", colorOfLabels ), -2 );
                         donutsLabel.moveTo( ( doughnuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
                         donutsLabel.draw ();
                 }
@@ -516,7 +519,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         rightAmbianceX, bonusAmbianceY );
                 if ( highJumps > 0 )
                 {
-                        gui::Label highJumpsLabel( util::number2string( highJumps ), "", colorOfLabels, -2 );
+                        gui::Label highJumpsLabel( util::number2string( highJumps ),
+                                                        gui::Font::fontByNameAndColor( "", colorOfLabels ), -2 );
                         highJumpsLabel.moveTo( ( highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
                         highJumpsLabel.draw ();
                 }
@@ -528,7 +532,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         leftAmbianceX, bonusAmbianceY );
                 if ( quickSteps > 0 )
                 {
-                        gui::Label bigSpeedLabel( util::number2string( quickSteps ), "", colorOfLabels, -2 );
+                        gui::Label bigSpeedLabel( util::number2string( quickSteps ),
+                                                        gui::Font::fontByNameAndColor( "", colorOfLabels ), -2 );
                         bigSpeedLabel.moveTo( ( quickSteps > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
                         bigSpeedLabel.draw ();
                 }
@@ -540,7 +545,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         leftAmbianceX, immunityAmbianceY );
                 if ( headShieldInteger > 0 )
                 {
-                        gui::Label headShieldLabel( util::number2string( headShieldInteger ), "", colorOfLabels, -2 );
+                        gui::Label headShieldLabel( util::number2string( headShieldInteger ),
+                                                        gui::Font::fontByNameAndColor( "", colorOfLabels ), -2 );
                         headShieldLabel.moveTo( ( headShieldInteger > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
                         headShieldLabel.draw ();
                 }
@@ -552,7 +558,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         rightAmbianceX, immunityAmbianceY );
                 if ( heelsShieldInteger > 0 )
                 {
-                        gui::Label heelsShieldLabel( util::number2string( heelsShieldInteger ), "", colorOfLabels, -2 );
+                        gui::Label heelsShieldLabel( util::number2string( heelsShieldInteger ),
+                                                        gui::Font::fontByNameAndColor( "", colorOfLabels ), -2 );
                         heelsShieldLabel.moveTo( ( heelsShieldInteger > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
                         heelsShieldLabel.draw ();
                 }
@@ -568,7 +575,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 // draw color~cycling FREEDOM on the final scene
                 if ( freedomLabel == nilPointer )
                 {
-                        freedomLabel = new gui::ColorCyclingLabel( "FREEDOM", "big" );
+                        freedomLabel = new gui::ColorCyclingLabel( "FREEDOM", /* double height font */ true );
                         freedomLabel->moveTo( GamePreferences::getScreenWidth() / 10, GamePreferences::getScreenHeight() - 100 );
                 }
 

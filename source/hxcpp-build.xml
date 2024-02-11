@@ -89,7 +89,6 @@
         <file name="gui/AnimatedPictureWidget.cpp" />
         <file name="gui/Label.cpp" />
         <file name="gui/ColorCyclingLabel.cpp" />
-        <file name="gui/LanguageText.cpp" />
         <file name="gui/LanguageManager.cpp" />
         <file name="gui/Menu.cpp" />
         <file name="gui/MenuWithValues.cpp" />

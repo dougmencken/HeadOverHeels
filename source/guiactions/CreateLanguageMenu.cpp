@@ -51,9 +51,9 @@ void CreateLanguageMenu::doAction ()
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
-        Label* Head = new Label( "Head", "big", "yellow" );
-        Label* over = new Label( "over", "plain", "multicolor" );
-        Label* Heels = new Label( "Heels", "big", "yellow" );
+        Label* Head = new Label( "Head", Font::fontByNameAndColor( "big", "yellow" ) );
+        Label* over = new Label( "over", Font::fontByNameAndColor( "", "" ), /* multicolor */ true );
+        Label* Heels = new Label( "Heels", Font::fontByNameAndColor( "big", "yellow" ) );
 
         over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
         screen.addWidget( over );

@@ -107,15 +107,15 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
                                 #if defined( DEBUG_XML ) && DEBUG_XML
                                         std::cout << "         <string>" << string->FirstChild()->ToText()->Value() << "</string>" << std::endl ;
                                 #endif
-                                        langText->addLine( string->FirstChild()->ToText()->Value(),
-                                                           font != nilPointer ? font : "", color != nilPointer ? color : "" );
+                                        langText->addLine( LanguageLine( string->FirstChild()->ToText()->Value(),
+                                                                           font != nilPointer ? font : "", color != nilPointer ? color : "" ) );
                                 }
                                 else
                                 {
                                 #if defined( DEBUG_XML ) && DEBUG_XML
                                         std::cout << "         <string></string>" << std::endl ;
                                 #endif
-                                        langText->addLine( "" );
+                                        langText->addEmptyLine() ;
                                 }
                         }
                         #if defined( DEBUG_XML ) && DEBUG_XML

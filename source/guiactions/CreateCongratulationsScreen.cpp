@@ -51,15 +51,15 @@ void CreateCongratulationsScreen::doAction ()
         screen.addWidget( new PictureWidget( 400, 50, PicturePtr( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
         screen.addPictureOfHeelsAt( 400, 100 );
 
-        // Texto final
+        // texto final
         langString = languageManager->findLanguageStringForAlias( "final-text" );
         TextField* textField = new TextField( GamePreferences::getScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 
-        for ( size_t i = 0; i < langString->getLinesCount(); i++ )
+        for ( size_t i = 0; i < langString->howManyLinesOfText(); i ++ )
         {
-                LanguageLine* line = langString->getLine( i );
-                textField->addLine( line->text, line->font, line->color );
+                const LanguageLine & line = langString->getNthLine( i );
+                textField->appendText( line.getText(), line.getFontName(), line.getColor() );
         }
 
         screen.addWidget( textField );

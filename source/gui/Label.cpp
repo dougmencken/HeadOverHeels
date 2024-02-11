@@ -15,28 +15,30 @@ namespace gui
 {
 
 Label::Label( const std::string & text )
-: Widget( ),
-        imageOfLetters( nilPointer ),
-        text( text ),
-        fontFamily( "plain" ),
-        color( "white" ),
-        spacing( 0 ),
-        myAction( nilPointer )
+: Widget( )
+        , imageOfLetters( nilPointer )
+        , text( text )
+        , fontName( "plain" )
+        , color( "white" )
+        , multicolored( false )
+        , spacing( 0 )
+        , myAction( nilPointer )
 {
         createImageOfLabel( text );
 }
 
-Label::Label( const std::string & text, const std::string & family, const std::string & color, int spacing )
-: Widget( ),
-        imageOfLetters( nilPointer ),
-        text( text ),
-        fontFamily( family ),
-        color( color ),
-        spacing( spacing ),
-        myAction( nilPointer )
+Label::Label( const std::string & text, const Font & font, bool multicolor, int spacing )
+: Widget( )
+        , imageOfLetters( nilPointer )
+        , text( text )
+        , fontName( font.getName() )
+        , color( font.getColor() )
+        , multicolored( multicolor )
+        , spacing( spacing )
+        , myAction( nilPointer )
 {
-        if ( family.empty() ) this->fontFamily = "plain" ;
-        if ( color.empty() ) this->color = "white" ;
+        if ( this->fontName.empty() ) this->fontName = "plain" ;
+        if ( this->color.empty() ) this->color = "white" ;
 
         createImageOfLabel( text );
 }
@@ -46,35 +48,15 @@ Label::~Label( )
         delete imageOfLetters ;
 }
 
-/* static */
-Font & Label::fontByFamilyAndColor( const std::string & family, const std::string & color )
-{
-        Font* found = GuiManager::getInstance().getOrCreateFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
-        assert( found != nilPointer );
-        return *found ;
-}
-
 void Label::update()
 {
         createImageOfLabel( this->text );
 }
 
-void Label::changeFontFamily ( const std::string& family )
+void Label::changeFont( const std::string & nameOFont, const std::string & whichColor )
 {
-        this->fontFamily = family;
-        update ();
-}
-
-void Label::changeColor ( const std::string& color )
-{
-        this->color = color;
-        update ();
-}
-
-void Label::changeFontFamilyAndColor( const std::string& family, const std::string& color )
-{
-        this->fontFamily = family;
-        this->color = color;
+        this->fontName = nameOFont ;
+        this->color = whichColor ;
         update ();
 }
 
@@ -94,7 +76,7 @@ void Label::handleKey( const std::string& key )
 
 void Label::createImageOfLabel( const std::string & text )
 {
-        Font & font = Label::fontByFamilyAndColor( getFontFamily(), getColor() );
+        const Font & font = getFont() ;
 
         // re-create the image of letters
         delete imageOfLetters ;
@@ -102,7 +84,7 @@ void Label::createImageOfLabel( const std::string & text )
         unsigned int howManyLetters = utf8StringLength( text );
         imageOfLetters = new Picture( howManyLetters * ( font.getWidthOfLetter( "O" ) + getSpacing() ), font.getHeightOfLetter( "I" ) );
 
-        std::string nameOfImage = "image of label \"" + text + "\" using " + getFontFamily () + " font colored " + getColor () ;
+        std::string nameOfImage = "image of label \"" + text + "\" using " + this->fontName + " font colored " + this->color ;
         imageOfLetters->setName( nameOfImage );
 
         if ( ! text.empty() )
@@ -110,21 +92,20 @@ void Label::createImageOfLabel( const std::string & text )
                 static const size_t colors_in_multicolor = 3;
                 // the sequence of colors for a multicolor label
                 static std::string multiColors[ colors_in_multicolor ] = {  "cyan", "yellow", "orange"  }; // the amstrad cpc sequence
-                /* if ( GameManager::getInstance().isSimpleGraphicsSet() )
-                        multiColors[ 2 ] = "white" ; // the original speccy sequence is “ cyan yellow white ” */
+                if ( GameManager::getInstance().isSimpleGraphicsSet() )
+                        multiColors[ 2 ] = "white" ; // the original speccy sequence is “ cyan yellow white ”
 
-                unsigned short cycle = 0; // position in that sequence for character to draw
-                Font & fontToUse = font ;
+                unsigned short cycle = 0 ; // current position in that sequence
+                std::string fontColor = font.getColor() ;
 
                 unsigned int letterInLine = 0 ;
 
                 std::string::const_iterator iter = text.begin ();
                 while ( iter != text.end () )
                 {
-                        if ( this->color == "multicolor" )
+                        if ( this->multicolored )
                         {
-                                // to color the letter, pick the new font
-                                fontToUse = Label::fontByFamilyAndColor( font.getFamily(), multiColors[ cycle ] );
+                                fontColor = multiColors[ cycle ] ;
 
                                 // cycle in the sequence of colors
                                 ++ cycle ;
@@ -136,7 +117,7 @@ void Label::createImageOfLabel( const std::string & text )
                         std::string utf8letter = text.substr( from, howMany );
 
                         // draw letter
-                        Picture* letter = fontToUse.getPictureOfLetter( utf8letter ) ;
+                        Picture* letter = Font::fontByNameAndColor( font.getName(), fontColor ).getPictureOfLetter( utf8letter ) ;
                         if ( letter != nilPointer )
                                 allegro::bitBlit(
                                     letter->getAllegroPict(),

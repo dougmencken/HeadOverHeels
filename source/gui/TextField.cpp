@@ -39,9 +39,10 @@ void TextField::draw ()
         }
 }
 
-void TextField::addLine( const std::string& text, const std::string& font, const std::string& color )
+void TextField::appendText( const std::string & text, const std::string & font, const std::string & color )
 {
-        Label* label = new Label( text, font, color );
+        bool multicolor = ( color == "multicolor" ) ;
+        Label* label = new Label( text, Font::fontByNameAndColor( font, multicolor ? "" : color ), multicolor );
 
         const int deltaW = static_cast< int >( this->width ) - static_cast< int >( label->getWidth() );
         int posX = 0;

@@ -193,7 +193,6 @@ headoverheels_SOURCES = main.cpp \
 			gui/Label.hpp \
 			gui/ColorCyclingLabel.cpp \
 			gui/ColorCyclingLabel.hpp \
-			gui/LanguageText.cpp \
 			gui/LanguageText.hpp \
 			gui/LanguageManager.cpp \
 			gui/LanguageManager.hpp \

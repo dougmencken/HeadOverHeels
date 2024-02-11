@@ -14,7 +14,6 @@
 #include <string>
 #include <map>
 
-#include "Font.hpp"
 #include "Screen.hpp"
 
 
@@ -114,10 +113,6 @@ public:
         */
         void toggleFullScreenVideo () ;
 
-        void addFont ( Font * font ) {  fonts.push_back( font ) ;  }
-
-        Font * getOrCreateFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
-
        /**
         * @return A string of characters in the LLL_CC format
         *         where LLL is a language code according to ISO 639
@@ -144,9 +139,9 @@ public:
 
 private:
 
-       /**
-        * Unique object of this class for the whole game
-        */
+        /**
+         * Unique object of this class for the whole game
+         */
         static GuiManager * instance ;
 
         // the screen to draw by the user interface
@@ -165,12 +160,10 @@ private:
         // a reason why the game is paused
         WhyPaused whyTheGameIsPaused ;
 
-       /**
-        * Draw graphics at the full screen when true or in a window when false
-        */
+        /**
+         * Draw graphics at the full screen when true or in a window when false
+         */
         bool atFullScreen ;
-
-        std::vector < Font * > fonts ;
 
         void assignLanguage ( const std::string & language ) ;
 

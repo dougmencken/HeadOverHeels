@@ -62,13 +62,13 @@ void MenuWithTwoColumns::draw ()
                 // pick the font & color of text
                 if ( label == getActiveOption() )
                 {
-                        if ( label->getColor() != "orange" )
-                                label->changeFontFamilyAndColor( "plain", "orange" );
+                        if ( label->getFont().getColor() != "orange" )
+                                label->changeFont( "plain", "orange" );
                 }
                 else
                 {
-                        if ( label->getColor() != "white" )
-                                label->changeFontFamilyAndColor( "plain", "white" );
+                        if ( label->getFont().getColor() != "white" )
+                                label->changeFont( "plain", "white" );
                 }
 
                 // reset vertical position for the second column’s first option

@@ -24,7 +24,7 @@ RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& keyAction )
 void RedefineKey::doAction ()
 {
         Label * choice = menu->getActiveOption ();
-        choice->changeFontFamilyAndColor( "big", "yellow" );
+        choice->changeFont( "big", "yellow" );
         menu->redraw ();
 
         allegro::emptyKeyboardBuffer();
@@ -102,9 +102,9 @@ void RedefineKey::doAction ()
         }
 
         if ( InputManager::getInstance().getUserKeyFor( this->whatKeyDoes ) != "none" ) {
-                choice->changeFontFamilyAndColor( "big", "white" );
+                choice->changeFont( "big", "white" );
         } else {
-                choice->changeFontFamilyAndColor( "big", "cyan" );
+                choice->changeFont( "big", "cyan" );
         }
 
         menu->redraw ();

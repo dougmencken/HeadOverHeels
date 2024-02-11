@@ -74,7 +74,7 @@ void CreateMenuOfGraphicsSets::doAction ()
         const std::vector< Label* > & sets = menuOfGraphicsSets->getEveryOption ();
         for ( unsigned int i = 0 ; i < sets.size (); ++ i )
         {
-                if ( sets[ i ]->getColor() == "yellow" )
+                if ( sets[ i ]->getFont().getColor() == "yellow" )
                         menuOfGraphicsSets->setActiveOption( sets[ i ]->getText () );
         }
 

@@ -155,13 +155,13 @@ void Menu::draw ()
 
                 if ( option == getActiveOption() )
                 {
-                        if ( option->getFontFamily() != "big" )
-                                option->changeFontFamily( "big" );
+                        if ( option->getFont().getName() != "big" )
+                                option->changeFont( "big", option->getFont().getColor() );
                 }
                 else
                 {
-                        if ( option->getFontFamily() != "plain" )
-                                option->changeFontFamily( "plain" );
+                        if ( option->getFont().getName() != "plain" )
+                                option->changeFont( "plain", option->getFont().getColor() );
                 }
         }
 

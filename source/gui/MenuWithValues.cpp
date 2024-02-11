@@ -51,13 +51,13 @@ void MenuWithValues::draw ()
 
                 if ( option == getActiveOption() )
                 {
-                        if ( option->getFontFamily() != "big" )
-                                option->changeFontFamily( "big" );
+                        if ( option->getFont().getName() != "big" )
+                                option->changeFont( "big", option->getFont().getColor() );
                 }
                 else
                 {
-                        if ( option->getFontFamily() != "plain" )
-                                option->changeFontFamily( "plain" );
+                        if ( option->getFont().getName() != "plain" )
+                                option->changeFont( "plain", option->getFont().getColor() );
                 }
         }
 
@@ -76,8 +76,7 @@ void MenuWithValues::draw ()
                         filler += symbolToFill ;
                 }
 
-                Label* optionWithValue = new Label( textOfOption + filler + getValueOf( textOfOption ),
-                                                        option->getFontFamily(), option->getColor(), option->getSpacing() );
+                Label* optionWithValue = new Label( textOfOption + filler + getValueOf( textOfOption ), option->getFont(), option->getSpacing() );
                 optionsWithValues.push_back( optionWithValue );
 
                 if ( option == getActiveOption() )
@@ -182,8 +181,7 @@ unsigned int MenuWithValues::getWidthOfMenu () const
                 for ( unsigned int i = utf8StringLength( textOfOption ); i < maxLetters + minSpacesBeforeValue ; i++ )
                         filler += symbolToFill ;
 
-                Label optionWithValue( textOfOption + filler + getValueOf( textOfOption ),
-                                                option->getFontFamily(), option->getColor(), option->getSpacing() );
+                Label optionWithValue( textOfOption + filler + getValueOf( textOfOption ), option->getFont(), option->getSpacing() );
 
                 unsigned int theWidth = optionWithValue.getWidth() + Menu::getPictureBeforeOption().getWidth() ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;

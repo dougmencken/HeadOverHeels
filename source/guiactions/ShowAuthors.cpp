@@ -48,7 +48,7 @@ void ShowAuthors::readCreditsText( const std::string & fileName )
                 std::cerr << "can't read XML file \"" << fileName << "\"" << std::endl ;
 
                 this->creditsText = new LanguageText( "credits" ) ;
-                this->creditsText->addLine( "and where is my credits.xml ?", "big", "white" );
+                this->creditsText->addLine( LanguageLine( "and where is my credits.xml ?", "big", "white" ) );
                 return ;
         }
 
@@ -74,12 +74,12 @@ void ShowAuthors::readCreditsText( const std::string & fileName )
                         {
                                 if ( string->FirstChild() != nilPointer )
                                 {
-                                        this->creditsText->addLine( string->FirstChild()->ToText()->Value(),
-                                                                        font != nilPointer ? font : "",
-                                                                        color != nilPointer ? color : "" );
+                                        this->creditsText->addLine( LanguageLine ( string->FirstChild()->ToText()->Value(),
+                                                                                        font != nilPointer ? font : "",
+                                                                                        color != nilPointer ? color : "" ) );
                                 } else
                                 {
-                                        this->creditsText->addLine( "" );
+                                        this->creditsText->addEmptyLine() ;
                                 }
                         }
                 }
@@ -99,13 +99,12 @@ void ShowAuthors::doAction ()
                 this->initialY = screen.getImageOfScreen().getHeight() ;
                 this->linesOfCredits->moveTo( 0, initialY );
 
-                size_t howManyLines = this->creditsText->getLinesCount() ;
+                size_t howManyLines = this->creditsText->howManyLinesOfText () ;
                 std::cout << "credits-text has " << howManyLines << " lines" << std::endl ;
 
-                for ( size_t i = 0; i < howManyLines; i++ )
-                {
-                        LanguageLine* line = this->creditsText->getLine( i );
-                        linesOfCredits->addLine( line->text, line->font, line->color );
+                for ( size_t n = 0; n < howManyLines; ++ n ) {
+                        const LanguageLine & line = this->creditsText->getNthLine( n );
+                        linesOfCredits->appendText( line.getText(), line.getFontName(), line.getColor() );
                 }
 
                 screen.addWidget( this->linesOfCredits );

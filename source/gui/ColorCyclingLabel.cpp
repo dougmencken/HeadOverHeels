@@ -1,7 +1,7 @@
 
 #include "ColorCyclingLabel.hpp"
-#include "Color.hpp"
 
+#include "Color.hpp"
 #include "UnicodeUtilities.hpp"
 
 #include <iostream>
@@ -10,8 +10,8 @@
 namespace gui
 {
 
-ColorCyclingLabel::ColorCyclingLabel( const std::string & text, const std::string & family, int spacing )
-        : Label( text, family, "white", spacing )
+ColorCyclingLabel::ColorCyclingLabel( const std::string & text, bool doubleHeight, int spacing )
+        : Label( text, Font::fontByNameAndColor( doubleHeight ? "big" : "", "white" ), spacing )
         , cycle( 0 )
         , colorCyclingTimer( new Timer () )
 {
@@ -24,19 +24,21 @@ ColorCyclingLabel::~ColorCyclingLabel( )
 
 void ColorCyclingLabel::draw ()
 {
-        updateImageOfLabel( getText() );
+        updateImageOfLabel() ;
 
         Label::draw ();
 }
 
-void ColorCyclingLabel::updateImageOfLabel( const std::string & text )
+void ColorCyclingLabel::updateImageOfLabel ()
 {
         if ( colorCyclingTimer->getValue() < 0.2 && imageOfLetters != nilPointer ) return ;
 
-        delete imageOfLetters;
+        delete imageOfLetters ;
 
-        Font & font = Label::fontByFamilyAndColor( getFontFamily(), getColor() );
+        const std::string & text = getText() ;
         unsigned int howManyLetters = utf8StringLength( text );
+        const Font & font = getFont() ;
+
         imageOfLetters = new Picture( howManyLetters * ( font.getWidthOfLetter( "O" ) + getSpacing() ), font.getHeightOfLetter( "I" ) );
 
         if ( ! text.empty() )
@@ -44,15 +46,14 @@ void ColorCyclingLabel::updateImageOfLabel( const std::string & text )
                 const size_t numberOfColors = 3;
                 const std::string cyclingColors[ numberOfColors ] = {  "cyan", "magenta", "green"  }; // original speccy sequence
 
-                Font & fontToUse = font ;
+                std::string fontColor = font.getColor() ;
 
                 size_t letterInString = 0 ;
 
                 std::string::const_iterator iter = text.begin ();
                 while ( iter != text.end () )
                 {
-                        // pick new font with color for this letter
-                        fontToUse = Label::fontByFamilyAndColor( font.getFamily(), cyclingColors[ cycle ] );
+                        fontColor = cyclingColors[ cycle ] ;
 
                         // cycle in the sequence of colors
                         ++ cycle ;
@@ -63,7 +64,7 @@ void ColorCyclingLabel::updateImageOfLabel( const std::string & text )
                         std::string utf8letter = text.substr( from, howMany );
 
                         // draw letter
-                        Picture * letter = fontToUse.getPictureOfLetter( utf8letter ) ;
+                        Picture * letter = Font::fontByNameAndColor( font.getName(), fontColor ).getPictureOfLetter( utf8letter ) ;
                         if ( letter != nilPointer )
                                 allegro::bitBlit(
                                         letter->getAllegroPict(),

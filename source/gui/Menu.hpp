@@ -26,7 +26,7 @@ namespace gui
 class Label ;
 
 /**
- * The user interface menu
+ * The menu presents the user with a list of options to choose from
  *
  * options are chosen by the Up Arrow or Q / Down Arrow or A keys
  * and are selected by using the Enter or Space key

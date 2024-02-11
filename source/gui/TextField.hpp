@@ -46,14 +46,8 @@ public:
 
         void handleKey ( const std::string& /* key */ ) { /* do nothing */ }
 
-        /**
-         * Añade una nueva línea al campo de texto
-         */
-        void addLine ( const std::string& text, const std::string& font, const std::string& color ) ;
+        void appendText ( const std::string & text, const std::string & font, const std::string & color ) ;
 
-        /**
-         * Changes position of the text field
-         */
         void moveTo ( int x, int y ) ;
 
         unsigned int getWidthOfField () const {  return this->width ;  }

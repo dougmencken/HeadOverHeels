@@ -54,28 +54,29 @@ void CreateEndScreen::doAction ()
 
         // the score reached by the player
         unsigned int score = this->visitedRooms * 160 + this->liberatedPlanets * 10000 ;
-        Label* scoreLabel = new Label( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + util::number2string( score ), "", "yellow" );
+        Label* scoreLabel = new Label ( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + util::number2string( score ),
+                                        Font::fontByNameAndColor( "", "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         screen.addWidget( scoreLabel );
 
         // the number of the rooms visited
         std::string exploredRooms = languageManager->findLanguageStringForAlias( "explored-rooms" )->getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
-        Label* rooms = new Label( exploredRooms, "", "cyan" );
+        Label* rooms = new Label( exploredRooms, Font::fontByNameAndColor( "", "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         screen.addWidget( rooms );
 
         // the number of the planets liberated
         std::string liberatedPlanets = languageManager->findLanguageStringForAlias( "liberated-planets" )->getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
-        Label* planets = new Label( liberatedPlanets, "", "white" );
+        Label* planets = new Label( liberatedPlanets, Font::fontByNameAndColor( "", "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
         screen.addWidget( planets );
 
         if ( score == 0 )
         {
                 TextField* result = new TextField( screenWidth, "center" );
-                result->addLine( "fix the game please", "big", "orange" );
+                result->appendText( "fix the game please", "big", "orange" );
                 result->moveTo( 0, resultY );
                 screen.addWidget( result );
         }
@@ -90,7 +91,7 @@ void CreateEndScreen::doAction ()
                         if ( score > bounds[ i ] )
                         {
                                 TextField* result = new TextField( screenWidth, "center" );
-                                result->addLine( languageManager->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
+                                result->appendText( languageManager->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
                                 result->moveTo( 0, resultY );
                                 screen.addWidget( result );
 

@@ -24,6 +24,11 @@ namespace gui
 
 class Action ;
 
+
+/**
+ * The line of text
+ */
+
 class Label : public Widget
 {
 
@@ -36,21 +41,15 @@ public:
 
         /**
          * @param text the text of this label
-         * @param family the family of font
-         * @param color the color of text
+         * @param font the font to draw this label
+         * @param multicolor true for coloring letters in the cycle
          * @param spacing the space between letters
          */
-        Label( const std::string & text, const std::string & family, const std::string & color, int spacing = 0 ) ;
+        Label( const std::string & text, const Font & font, bool multicolor = false, int spacing = 0 ) ;
 
         virtual ~Label( ) ;
 
         void update () ;
-
-        void changeFontFamily ( const std::string & family ) ;
-
-        void changeColor ( const std::string & color ) ;
-
-        void changeFontFamilyAndColor ( const std::string & family, const std::string & color ) ;
 
         virtual void draw () ;
 
@@ -60,11 +59,13 @@ public:
 
         void setText( const std::string & newText ) {  this->text = newText ; update () ;  }
 
-        const std::string & getFontFamily () const {  return this->fontFamily ;  }
+        const Font & getFont () const {  return Font::fontByNameAndColor( this->fontName, this->color ) ;  }
 
-        const std::string & getColor () const {  return this->color ;  }
+        void changeFont( const std::string & nameOFont, const std::string & whichColor );
 
-        const Font & getFont () const {  return Label::fontByFamilyAndColor( this->fontFamily, this->color ) ;  }
+        void changeFont( const Font & font ) {  changeFont( font.getName (), font.getColor () );  }
+
+        void changeColor ( const std::string & fontColor ) {  changeFont( this->fontName, fontColor );  }
 
         int getSpacing () const {  return this->spacing ;  }
 
@@ -84,8 +85,6 @@ public:
 
         void setAction ( Action* action ) {  myAction = action ;  }
 
-        static Font & fontByFamilyAndColor ( const std::string & family, const std::string & color ) ;
-
 protected:
 
         /**
@@ -99,9 +98,11 @@ private:
 
         std::string text ;
 
-        std::string fontFamily ;
+        std::string fontName ;
 
         std::string color ;
+
+        bool multicolored ;
 
         int spacing ;
 

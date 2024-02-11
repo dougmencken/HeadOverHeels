@@ -17,8 +17,10 @@ namespace gui
 
 /* static */ std::string * Font::listOfLetters = nilPointer ;
 
+/* static */ std::vector < Font * > Font::fonts ;
 
-Font::Font( const std::string& name, const std::string& color, bool doubleHeight ) :
+
+Font::Font( const std::string & name, const std::string & color, bool doubleHeight ) :
         fontName( name ),
         fontColor( color )
 {
@@ -63,29 +65,27 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                 Font::imageOfFont->setName( "image of the game’s font" );
         }
 
-        Picture* lettersOfFont = new Picture( *imageOfFont );
-        lettersOfFont->setName( "picture of letters to make " + name + " font" );
+        Picture* lettersOfFont = new Picture( * Font::imageOfFont );
+        std::string pictureOfWhat = "letters" ;
 
-        std::string justFamily = name.substr( name.find( "." ) + 1 );
-        std::string justColor = name.substr( 0, name.find( "." ) );
-
-        // stretch for the double height
         if ( doubleHeight )
-        {
+        {       // stretch for the double height
                 Picture* bigfont = new Picture( lettersOfFont->getWidth(), lettersOfFont->getHeight() << 1 ) ;
                 allegro::stretchBlit( lettersOfFont->getAllegroPict(), bigfont->getAllegroPict(),
                                         0, 0, lettersOfFont->getWidth(), lettersOfFont->getHeight(),
                                         0, 0, bigfont->getWidth(), bigfont->getHeight() );
                 delete lettersOfFont ;
                 lettersOfFont = bigfont ;
-                lettersOfFont->setName( "picture of stretched double height letters to make " + name + " font" );
+                pictureOfWhat = "stretched double height letters" ;
         }
 
+        lettersOfFont->setName( "picture of " + pictureOfWhat + " to make the game’s \"" + name + "\" font" );
+
         // colorize letters by changing white to the font color
-        if ( color != "white" )
+        if ( getColor() != "white" )
         {
-                lettersOfFont->colorizeWhite( Color::byName( color ) );
-                lettersOfFont->setName( lettersOfFont->getName() + ", yet colored " + justColor );
+                lettersOfFont->colorizeWhite( Color::byName( getColor() ) );
+                lettersOfFont->setName( lettersOfFont->getName() + ", yet colored " + getColor() );
         }
 
         // read the list of letters once for all fonts
@@ -179,7 +179,8 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
                         if ( listOfLetters[ positionInTable ] != "" )
                                 allegro::bitBlit( lettersOfFont->getAllegroPict(), letter->getAllegroPict(), x, y, 0, 0, charWidth, charHeight );
 
-                        letter->setName( "image of letter \'" + listOfLetters[ positionInTable ++ ] + "\' for " + justFamily + " font colored " + justColor );
+                        letter->setName( "image of letter \'" + listOfLetters[ positionInTable ++ ]
+                                                + "\' for \"" + getName() + "\" font colored " + getColor() );
                         letters.push_back( letter );
                 }
         }
@@ -217,6 +218,27 @@ Picture* Font::getPictureOfLetter( const std::string & letter ) const
                 return letters.at( '?' - 32 );
 
         return nilPointer ;
+}
+
+/* static */
+const Font & Font::fontByNameAndColor ( const std::string & name, const std::string & color )
+{
+        std::string fontName = ( ! name.empty() ) ? name : "plain" ;
+        std::string fontColor = ( ! color.empty() ) ? color : "white" ;
+
+        for (  std::vector< Font * >::const_iterator ifont = Font::fonts.begin (); ifont != Font::fonts.end (); ++ ifont ) {
+                Font * font = ( *ifont ) ;
+                if ( font->getName() == fontName && font->getColor() == fontColor )
+                        return *font ;
+        }
+
+        IF_DEBUG( std::cout << "making new font \"" << fontName << "\" colored \"" << fontColor << "\"" << std::endl )
+
+        bool doubleHeight = ( name == "big" );
+        Font* newFont = new Font( fontName, fontColor, doubleHeight );
+        Font::fonts.push_back( newFont ) ;
+
+        return *newFont ;
 }
 
 }

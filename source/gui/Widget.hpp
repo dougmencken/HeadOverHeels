@@ -38,7 +38,7 @@ public:
         virtual ~Widget( ) { }
 
         /**
-         * Subclasses may respond to this event or notify other component
+         * Subclasses may handle this event or pass it to some other widget
          */
         virtual void handleKey ( const std::string& key ) = 0 ;
 

@@ -18,23 +18,41 @@
 namespace gui
 {
 
-struct LanguageLine
+class LanguageLine
 {
+
+private:
 
         std::string text ;
 
-        std::string font ;
+        std::string fontName ;
 
         std::string color ;
+
+public:
+
+        const std::string & getText() const {  return this->text ;  }
+
+        const std::string & getFontName() const {  return this->fontName ;  }
+
+        const std::string & getColor() const {  return this->color ;  }
+
+        LanguageLine( const std::string & theText )
+                : text( theText )
+                , fontName( "" )
+                , color( "" )
+        {}
+
+        LanguageLine( const std::string & theText, const std::string & whichFont, const std::string & whichColor )
+                : text( theText )
+                , fontName( whichFont )
+                , color( whichColor )
+        {}
 
 };
 
 class LanguageText
 {
-
-public:
-
-        LanguageText( const std::string& alias ) ;
 
 private:
 
@@ -44,29 +62,29 @@ private:
 
 public:
 
-        void addLine ( const std::string& text ) ;
+        LanguageText( const std::string & theAlias )
+                : alias( theAlias )
+        {}
 
-        void addLine ( const std::string& text, const std::string& font, const std::string& color ) ;
+        void addLine ( const LanguageLine & line )
+        {
+                this->lines.push_back( line );
+        }
 
-        std::string getAlias () const {  return this->alias ;  }
+        void addEmptyLine ()
+        {
+                this->lines.push_back( LanguageLine( "" ) );
+        }
 
-        std::string getFirstLineText () const {  return this->lines[ 0 ].text ;  }
+        const std::string & getAlias () const {  return this->alias ;  }
 
-        std::string getFirstLineFont () const {  return this->lines[ 0 ].font ;  }
+        const LanguageLine & getFirstLine () const {  return this->lines[ 0 ] ;  }
 
-        std::string getFirstLineColor () const {  return this->lines[ 0 ].color ;  }
+        const LanguageLine & getNthLine ( size_t number ) const {  return this->lines[ number ] ;  }
 
-        std::string getText () const {  return this->getFirstLineText() ;  }
+        const std::string & getText () const {  return this->getFirstLine().getText() ;  }
 
-        std::string getFont () const {  return this->getFirstLineFont() ;  }
-
-        std::string getColor () const {  return this->getFirstLineColor() ;  }
-
-        LanguageLine* getFirstLine () {  return &( this->lines[ 0 ] ) ;  }
-
-        LanguageLine* getLine ( size_t number ) {  return &( this->lines[ number ] ) ;  }
-
-        size_t getLinesCount () {  return this->lines.size() ;  }
+        unsigned int howManyLinesOfText () {  return this->lines.size() ;  }
 
 };
 
