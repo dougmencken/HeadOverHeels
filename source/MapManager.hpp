@@ -101,7 +101,7 @@ private:
 
         std::vector < Room * > roomsInPlay ;
 
-        std::map< std::string, RoomConnections* > linksBetweenRooms ;
+        std::map< std::string, ConnectedRooms* > linksBetweenRooms ;
 
         /**
          * Every room on the map

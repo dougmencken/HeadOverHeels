@@ -232,7 +232,7 @@ void Bonus::takeIt( AvatarItem & whoTakes )
         }
         else if ( whichItem == "crown" )
         {
-                whoTakes.liberatePlanet () ;
+                whoTakes.liberateCurrentPlanet () ;
         }
         else if ( whichItem == "horn" || whichItem == "handbag" )
         {

@@ -82,3 +82,38 @@ std::string Way::toString () const
 
         return "unknown way" ;
 }
+
+/* static */
+std::string Way::exitToEntry ( const std::string & wayOfExit )
+{
+        switch ( Way( wayOfExit ).getIntegerOfWay () )
+        {
+                case Northeast :
+                case Northwest :
+                case North :            return "south" ;
+
+                case Southeast :
+                case Southwest :
+                case South :            return "north" ;
+
+                case Eastnorth :
+                case Eastsouth :
+                case East :             return "west" ;
+
+                case Westnorth :
+                case Westsouth :
+                case West :             return "east" ;
+
+                case Above :            return "below" ;
+
+                case Below :            return "above" ;
+
+                ///case ByTeleport :       return "via teleport" ;
+
+                ///case ByTeleportToo :    return "via second teleport" ;
+        }
+
+        // here it is either "via teleport" / "via second teleport" or maybe some other way
+        // just return that way of exit as the way of entry
+        return wayOfExit ;
+}

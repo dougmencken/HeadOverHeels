@@ -436,7 +436,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
         allegro::Pict::setWhereToDraw( where );
 
         // the scenery of this room
-        std::string scenery = isomot.getMapManager().getActiveRoom()->getScenery();
+        const std::string & scenery = isomot.getMapManager().getActiveRoom()->getScenery() ;
 
         // empty scenery means that it is the final room
         if ( scenery != "" )
@@ -466,7 +466,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int leftTooAmbianceX = 33 + dx ;
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
-                std::string character = isomot.getMapManager().getActiveRoom()->getMediator()->getNameOfActiveCharacter();
+                const std::string & character = isomot.getMapManager().getActiveRoom()->getMediator()->getNameOfActiveCharacter();
                 allegro::drawSprite (
                         ( (  character == "head" || character == "headoverheels" ) ? ambiancePictures[ "head" ] : ambiancePictures[ "gray head" ] )->getAllegroPict(),
                         161 + dx, headHeelsAmbianceY );
@@ -482,8 +482,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         ( this->theInfo.hasHandbag () ? ambiancePictures[ "handbag" ] : ambiancePictures[ "gray handbag" ] )->getAllegroPict(),
                         rightTooAmbianceX, headHeelsAmbianceY );
 
-                std::string colorOfLabels = "white";
-                /* if ( isSimpleGraphicsSet () ) colorOfLabels = "magenta"; */
+                std::string colorOfLabels = "white" ;
+                /* if ( isSimpleGraphicsSet () ) colorOfLabels = "magenta" ; */
 
                 // vidas de Head
                 unsigned char livesForHead = this->theInfo.getHeadLives () ;
@@ -684,12 +684,12 @@ void GameManager::resetPlanets ()
         }
 }
 
-void GameManager::liberatePlanet ( const std::string& planet, bool now )
+void GameManager::liberatePlanet ( const std::string & planet, bool previously )
 {
         if ( planet == "blacktooth" || planet == "safari" || planet == "egyptus" || planet == "penitentiary" || planet == "byblos" )
         {
                 this->planets[ planet ] = true;
-                if ( now ) keyMoments.crownTaken() ;
+                if ( ! previously ) keyMoments.crownTaken() ;
         }
 }
 

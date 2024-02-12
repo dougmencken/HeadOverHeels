@@ -16,8 +16,8 @@
         <eastsouth></eastsouth>
         <westnorth></westnorth>
         <westsouth></westsouth>
-        <floor></floor>
-        <roof></roof>
+        <below></below>
+        <above></above>
         <teleport></teleport>
     </room>
     -->
@@ -34,12 +34,12 @@
 
     <room file="blacktooth3.xml">
         <east>blacktooth2.xml</east>
-        <floor>blacktooth4.xml</floor>
+        <below>blacktooth4.xml</below>
     </room>
 
     <room file="blacktooth4.xml">
         <west>blacktooth5.xml</west>
-        <roof>blacktooth3.xml</roof>
+        <above>blacktooth3.xml</above>
     </room>
 
     <room file="blacktooth5.xml">
@@ -133,7 +133,7 @@
 
     <room file="blacktooth22.xml">
         <west>blacktooth21fish.xml</west>
-        <floor>blacktooth44market.xml</floor>
+        <below>blacktooth44market.xml</below>
     </room>
 
     <room file="blacktooth23heels.xml">
@@ -148,12 +148,12 @@
 
     <room file="blacktooth25.xml">
         <south>blacktooth24.xml</south>
-        <roof>blacktooth26.xml</roof>
+        <above>blacktooth26.xml</above>
     </room>
 
     <room file="blacktooth26.xml">
         <east>blacktooth27fish.xml</east>
-        <floor>blacktooth25.xml</floor>
+        <below>blacktooth25.xml</below>
     </room>
 
     <room file="blacktooth27fish.xml">
@@ -168,12 +168,12 @@
 
     <room file="blacktooth29.xml">
         <west>blacktooth27fish.xml</west>
-        <roof>blacktooth30.xml</roof>
+        <above>blacktooth30.xml</above>
     </room>
 
     <room file="blacktooth30.xml">
         <south>blacktooth31.xml</south>
-        <floor>blacktooth29.xml</floor>
+        <below>blacktooth29.xml</below>
     </room>
 
     <room file="blacktooth31.xml">
@@ -188,12 +188,12 @@
 
     <room file="blacktooth33.xml">
         <west>blacktooth32.xml</west>
-        <roof>blacktooth34.xml</roof>
+        <above>blacktooth34.xml</above>
     </room>
 
     <room file="blacktooth34.xml">
         <east>blacktooth35.xml</east>
-        <floor>blacktooth33.xml</floor>
+        <below>blacktooth33.xml</below>
     </room>
 
     <room file="blacktooth35.xml">
@@ -213,13 +213,13 @@
 
     <room file="blacktooth38.xml">
         <west>blacktooth37.xml</west>
-        <floor>blacktooth39.xml</floor>
+        <below>blacktooth39.xml</below>
     </room>
 
     <room file="blacktooth39.xml">
         <north>blacktooth41.xml</north>
         <east>blacktooth40fish.xml</east>
-        <roof>blacktooth38.xml</roof>
+        <above>blacktooth38.xml</above>
     </room>
 
     <room file="blacktooth40fish.xml">
@@ -238,12 +238,12 @@
 
     <room file="blacktooth43.xml">
         <south>blacktooth42.xml</south>
-        <floor>blacktooth46market.xml</floor>
+        <below>blacktooth46market.xml</below>
     </room>
 
     <room file="blacktooth44market.xml">
         <south>blacktooth45market.xml</south>
-        <roof>blacktooth22.xml</roof>
+        <above>blacktooth22.xml</above>
     </room>
 
     <room file="blacktooth45market.xml">
@@ -254,7 +254,7 @@
     <room file="blacktooth46market.xml">
         <east>blacktooth47market.xml</east>
         <west>blacktooth45market.xml</west>
-        <roof>blacktooth43.xml</roof>
+        <above>blacktooth43.xml</above>
     </room>
 
     <room file="blacktooth47market.xml">
@@ -295,13 +295,13 @@
 
     <room file="blacktooth54.xml">
         <west>blacktooth53market.xml</west>
-        <floor>blacktooth55.xml</floor>
+        <below>blacktooth55.xml</below>
     </room>
 
     <room file="blacktooth55.xml">
         <south>blacktooth56.xml</south>
         <east>blacktooth61.xml</east>
-        <roof>blacktooth54.xml</roof>
+        <above>blacktooth54.xml</above>
     </room>
 
     <room file="blacktooth56.xml">
@@ -602,24 +602,24 @@
 
     <room file="egyptus13.xml">
         <west>egyptus12.xml</west>
-        <roof>egyptus14.xml</roof>
+        <above>egyptus14.xml</above>
         <teleport>egyptus9fish.xml</teleport>
     </room>
 
     <room file="egyptus14.xml">
         <east>egyptus18.xml</east>
-        <floor>egyptus13.xml</floor>
-        <roof>egyptus19.xml</roof>
+        <below>egyptus13.xml</below>
+        <above>egyptus19.xml</above>
     </room>
 
     <room file="egyptus15.xml">
         <west>egyptus10.xml</west>
-        <roof>egyptus16.xml</roof>
+        <above>egyptus16.xml</above>
     </room>
 
     <room file="egyptus16.xml">
         <east>egyptus17.xml</east>
-        <floor>egyptus15.xml</floor>
+        <below>egyptus15.xml</below>
     </room>
 
     <room file="egyptus17.xml">
@@ -633,13 +633,13 @@
     </room>
 
     <room file="egyptus19.xml">
-        <floor>egyptus14.xml</floor>
-        <roof>egyptus20.xml</roof>
+        <below>egyptus14.xml</below>
+        <above>egyptus20.xml</above>
     </room>
 
     <room file="egyptus20.xml">
         <north>egyptus21.xml</north>
-        <floor>egyptus19.xml</floor>
+        <below>egyptus19.xml</below>
     </room>
 
     <room file="egyptus21.xml">
@@ -686,27 +686,27 @@
 
     <room file="egyptus29.xml">
         <north>egyptus28.xml</north>
-        <floor>egyptus30.xml</floor>
+        <below>egyptus30.xml</below>
     </room>
 
     <room file="egyptus30.xml">
-        <floor>egyptus31.xml</floor>
-        <roof>egyptus29.xml</roof>
+        <below>egyptus31.xml</below>
+        <above>egyptus29.xml</above>
     </room>
 
     <room file="egyptus31.xml">
         <south>egyptus32.xml</south>
-        <roof>egyptus30.xml</roof>
+        <above>egyptus30.xml</above>
     </room>
 
     <room file="egyptus32.xml">
         <north>egyptus31.xml</north>
-        <floor>egyptus33.xml</floor>
+        <below>egyptus33.xml</below>
     </room>
 
     <room file="egyptus33.xml">
         <east>egyptus34fish.xml</east>
-        <roof>egyptus32.xml</roof>
+        <above>egyptus32.xml</above>
     </room>
 
     <room file="egyptus34fish.xml">
@@ -716,17 +716,17 @@
 
     <room file="egyptus35.xml">
         <west>egyptus34fish.xml</west>
-        <roof>egyptus36.xml</roof>
+        <above>egyptus36.xml</above>
     </room>
 
     <room file="egyptus36.xml">
-        <floor>egyptus35.xml</floor>
-        <roof>egyptus37.xml</roof>
+        <below>egyptus35.xml</below>
+        <above>egyptus37.xml</above>
     </room>
 
     <room file="egyptus37.xml">
         <north>egyptus38.xml</north>
-        <floor>egyptus36.xml</floor>
+        <below>egyptus36.xml</below>
     </room>
 
     <room file="egyptus38.xml">
@@ -757,17 +757,17 @@
 
     <room file="penitentiary4.xml">
         <south>penitentiary3.xml</south>
-        <roof>penitentiary5.xml</roof>
+        <above>penitentiary5.xml</above>
     </room>
 
     <room file="penitentiary5.xml">
-        <floor>penitentiary4.xml</floor>
-        <roof>penitentiary6.xml</roof>
+        <below>penitentiary4.xml</below>
+        <above>penitentiary6.xml</above>
     </room>
 
     <room file="penitentiary6.xml">
         <north>penitentiary7.xml</north>
-        <floor>penitentiary5.xml</floor>
+        <below>penitentiary5.xml</below>
     </room>
 
     <room file="penitentiary7.xml">
@@ -777,17 +777,17 @@
 
     <room file="penitentiary8.xml">
         <west>penitentiary7.xml</west>
-        <roof>penitentiary9.xml</roof>
+        <above>penitentiary9.xml</above>
     </room>
 
     <room file="penitentiary9.xml">
-        <floor>penitentiary8.xml</floor>
-        <roof>penitentiary10.xml</roof>
+        <below>penitentiary8.xml</below>
+        <above>penitentiary10.xml</above>
     </room>
 
     <room file="penitentiary10.xml">
         <east>penitentiary11.xml</east>
-        <floor>penitentiary9.xml</floor>
+        <below>penitentiary9.xml</below>
     </room>
 
     <room file="penitentiary11.xml">
@@ -803,27 +803,27 @@
 
     <room file="penitentiary13.xml">
         <west>penitentiary2.xml</west>
-        <roof>penitentiary14.xml</roof>
+        <above>penitentiary14.xml</above>
     </room>
 
     <room file="penitentiary14.xml">
-        <floor>penitentiary13.xml</floor>
-        <roof>penitentiary15.xml</roof>
+        <below>penitentiary13.xml</below>
+        <above>penitentiary15.xml</above>
     </room>
 
     <room file="penitentiary15.xml">
-        <floor>penitentiary14.xml</floor>
-        <roof>penitentiary16.xml</roof>
+        <below>penitentiary14.xml</below>
+        <above>penitentiary16.xml</above>
     </room>
 
     <room file="penitentiary16.xml">
-        <floor>penitentiary15.xml</floor>
-        <roof>penitentiary17.xml</roof>
+        <below>penitentiary15.xml</below>
+        <above>penitentiary17.xml</above>
     </room>
 
     <room file="penitentiary17.xml">
         <east>penitentiary18fish.xml</east>
-        <floor>penitentiary16.xml</floor>
+        <below>penitentiary16.xml</below>
     </room>
 
     <room file="penitentiary18fish.xml">
@@ -839,28 +839,28 @@
     </room>
 
     <room file="penitentiary20.xml">
-        <roof>penitentiary21.xml</roof>
+        <above>penitentiary21.xml</above>
     </room>
 
     <room file="penitentiary21.xml">
         <west>penitentiary19.xml</west>
-        <floor>penitentiary20.xml</floor>
-        <roof>penitentiary22.xml</roof>
+        <below>penitentiary20.xml</below>
+        <above>penitentiary22.xml</above>
     </room>
 
     <room file="penitentiary22.xml">
-        <floor>penitentiary21.xml</floor>
-        <roof>penitentiary23.xml</roof>
+        <below>penitentiary21.xml</below>
+        <above>penitentiary23.xml</above>
     </room>
 
     <room file="penitentiary23.xml">
-        <floor>penitentiary22.xml</floor>
-        <roof>penitentiary24.xml</roof>
+        <below>penitentiary22.xml</below>
+        <above>penitentiary24.xml</above>
     </room>
 
     <room file="penitentiary24.xml">
         <east>penitentiary25.xml</east>
-        <floor>penitentiary23.xml</floor>
+        <below>penitentiary23.xml</below>
     </room>
 
     <room file="penitentiary25.xml">
@@ -886,7 +886,7 @@
 
     <room file="penitentiary29.xml">
         <north>penitentiary28.xml</north>
-        <floor>penitentiary31.xml</floor>
+        <below>penitentiary31.xml</below>
     </room>
 
     <room file="penitentiary30.xml">
@@ -895,13 +895,13 @@
     </room>
 
     <room file="penitentiary31.xml">
-        <floor>penitentiary32.xml</floor>
-        <roof>penitentiary30.xml</roof>
+        <below>penitentiary32.xml</below>
+        <above>penitentiary30.xml</above>
     </room>
 
     <room file="penitentiary32.xml">
         <west>penitentiary33.xml</west>
-        <roof>penitentiary31.xml</roof>
+        <above>penitentiary31.xml</above>
     </room>
 
     <room file="penitentiary33.xml">
@@ -1057,12 +1057,12 @@
 
     <room file="byblos28.xml">
         <east>byblos27.xml</east>
-        <roof>byblos29.xml</roof>
+        <above>byblos29.xml</above>
     </room>
 
     <room file="byblos29.xml">
         <south>byblos30.xml</south>
-        <floor>byblos28.xml</floor>
+        <below>byblos28.xml</below>
     </room>
 
     <room file="byblos30.xml">
@@ -1077,13 +1077,13 @@
 
     <room file="byblos32.xml">
         <north>byblos31.xml</north>
-        <floor>byblos33.xml</floor>
+        <below>byblos33.xml</below>
     </room>
 
     <room file="byblos33.xml">
         <south>byblos35.xml</south>
         <east>byblos34.xml</east>
-        <roof>byblos32.xml</roof>
+        <above>byblos32.xml</above>
     </room>
 
     <room file="byblos34.xml">
@@ -1108,18 +1108,18 @@
 
     <room file="byblos38.xml">
         <west>byblos37.xml</west>
-        <floor>byblos39.xml</floor>
+        <below>byblos39.xml</below>
     </room>
 
     <room file="byblos39.xml">
-        <floor>byblos40.xml</floor>
-        <roof>byblos38.xml</roof>
+        <below>byblos40.xml</below>
+        <above>byblos38.xml</above>
         <teleport>byblos1.xml</teleport>
     </room>
 
     <room file="byblos40.xml">
         <east>byblos41crown.xml</east>
-        <roof>byblos39.xml</roof>
+        <above>byblos39.xml</above>
     </room>
 
     <room file="byblos41crown.xml">
@@ -1172,12 +1172,12 @@
     <room file="safari9.xml">
         <north>safari14.xml</north>
         <south>safari8.xml</south>
-        <floor>safari10.xml</floor>
+        <below>safari10.xml</below>
     </room>
 
     <room file="safari10.xml">
         <north>safari11.xml</north>
-        <roof>safari9.xml</roof>
+        <above>safari9.xml</above>
     </room>
 
     <room file="safari11.xml">
@@ -1187,13 +1187,13 @@
 
     <room file="safari12.xml">
         <south>safari11.xml</south>
-        <roof>safari13.xml</roof>
+        <above>safari13.xml</above>
     </room>
 
     <room file="safari13.xml">
         <south>safari14.xml</south>
         <east>safari15.xml</east>
-        <floor>safari12.xml</floor>
+        <below>safari12.xml</below>
     </room>
 
     <room file="safari14.xml">
@@ -1298,23 +1298,23 @@
         <north>safari34.xml</north>
         <south>safari32.xml</south>
         <east>safari37crown.xml</east>
-        <roof>safari36.xml</roof>
+        <above>safari36.xml</above>
     </room>
 
     <room file="safari34.xml">
         <south>safari33.xml</south>
-        <roof>safari35.xml</roof>
+        <above>safari35.xml</above>
         <teleport>safari1.xml</teleport>
     </room>
 
     <room file="safari35.xml">
         <south>safari36.xml</south>
-        <floor>safari34.xml</floor>
+        <below>safari34.xml</below>
     </room>
 
     <room file="safari36.xml">
         <north>safari35.xml</north>
-        <floor>safari33.xml</floor>
+        <below>safari33.xml</below>
     </room>
 
     <room file="safari37crown.xml">
@@ -1398,11 +1398,11 @@
     <room file="blacktooth78.xml">
         <north>blacktooth72.xml</north>
         <east>blacktooth80.xml</east>
-        <roof>blacktooth79fish.xml</roof>
+        <above>blacktooth79fish.xml</above>
     </room>
 
     <room file="blacktooth79fish.xml">
-        <floor>blacktooth78.xml</floor>
+        <below>blacktooth78.xml</below>
     </room>
 
     <room file="blacktooth80.xml">

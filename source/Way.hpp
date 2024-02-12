@@ -44,14 +44,14 @@ public:
         static const unsigned int North = 2 ;           // north, top left of screen
         static const unsigned int East = 3 ;            // east, top right of screen
 
-        static const unsigned int Northeast = 4 ;       // northeast, top of screen
-        static const unsigned int Southeast = 5 ;       // southeast, right side of screen
-        static const unsigned int Southwest = 6 ;       // southwest, bottom of screen
-        static const unsigned int Northwest = 7 ;       // northwest, left side of screen
-        static const unsigned int Eastnorth = 8 ;       // door located to the east, north
-        static const unsigned int Eastsouth = 9 ;       // door located to the east, south
-        static const unsigned int Westnorth = 10 ;      // door located to the west, north
-        static const unsigned int Westsouth = 11 ;      // door located to the west, south
+        static const unsigned int Northeast = 4 ;
+        static const unsigned int Southeast = 5 ;
+        static const unsigned int Southwest = 6 ;
+        static const unsigned int Northwest = 7 ;
+        static const unsigned int Eastnorth = 8 ;
+        static const unsigned int Eastsouth = 9 ;
+        static const unsigned int Westnorth = 10 ;
+        static const unsigned int Westsouth = 11 ;
 
         static const unsigned int Above = 22 ;          // to room without floor
         static const unsigned int Below = 23 ;          // to room without ceiling
@@ -66,6 +66,8 @@ public:
         static const unsigned int JustWait = 99 ;       // just wait in room
 
         static const unsigned int Nowhere = 200 ;       // for items with only one direction
+
+        static std::string exitToEntry ( const std::string & wayOfExit ) ;
 
 private:
 

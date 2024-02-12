@@ -96,7 +96,7 @@ public:
         /**
          * Character just liberated a planet
          */
-        void liberatePlanet() ;
+        void liberateCurrentPlanet() ;
 
         /**
          * Save game when a character meets reincarnation fish

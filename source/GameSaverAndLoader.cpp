@@ -94,27 +94,27 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
         tinyxml2::XMLElement* byblos = root->FirstChildElement( "Byblos" ) ;
         if ( byblos != nilPointer )
                 if ( std::string( byblos->Attribute( "free" ) ) == "yes" )
-                        gameManager.liberatePlanet( "byblos", false );
+                        gameManager.liberatePlanet( "byblos", true );
 
         tinyxml2::XMLElement* egyptus = root->FirstChildElement( "Egyptus" ) ;
         if ( egyptus != nilPointer )
                 if ( std::string( egyptus->Attribute( "free" ) ) == "yes" )
-                        gameManager.liberatePlanet( "egyptus", false );
+                        gameManager.liberatePlanet( "egyptus", true );
 
         tinyxml2::XMLElement* penitentiary = root->FirstChildElement( "Penitentiary" ) ;
         if ( penitentiary != nilPointer )
                 if ( std::string( penitentiary->Attribute( "free" ) ) == "yes" )
-                        gameManager.liberatePlanet( "penitentiary", false );
+                        gameManager.liberatePlanet( "penitentiary", true );
 
         tinyxml2::XMLElement* safari = root->FirstChildElement( "Safari" ) ;
         if ( safari != nilPointer )
                 if ( std::string( safari->Attribute( "free" ) ) == "yes" )
-                        gameManager.liberatePlanet( "safari", false );
+                        gameManager.liberatePlanet( "safari", true );
 
         tinyxml2::XMLElement* blacktooth = root->FirstChildElement( "Blacktooth" ) ;
         if ( blacktooth != nilPointer )
                 if ( std::string( blacktooth->Attribute( "free" ) ) == "yes" )
-                        gameManager.liberatePlanet( "blacktooth", false );
+                        gameManager.liberatePlanet( "blacktooth", true );
 
         // already taken bonuses
 

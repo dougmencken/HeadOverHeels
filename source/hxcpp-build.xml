@@ -48,7 +48,7 @@
         <file name="TimerPOSIX.cpp" />
         <file name="TimerWindows.cpp" />
         <file name="Room.cpp" />
-        <file name="RoomConnections.cpp" />
+        <file name="ConnectedRooms.cpp" />
         <file name="MapManager.cpp" />
         <file name="RoomBuilder.cpp" />
         <file name="BonusManager.cpp" />

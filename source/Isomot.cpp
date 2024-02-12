@@ -242,11 +242,10 @@ Picture* Isomot::updateMe ()
 
                 Miniature miniatureOfRoom( *activeRoom, 24, 24, sizeOfTileForMiniature );
 
-                Way connectsAt( "nowhere" );
-                std::string roomAtSouth = activeRoom->getConnections()->findConnectedRoom( "south", &connectsAt );
-                std::string roomAtNorth = activeRoom->getConnections()->findConnectedRoom( "north", &connectsAt );
-                std::string roomAtEast = activeRoom->getConnections()->findConnectedRoom( "east", &connectsAt );
-                std::string roomAtWest = activeRoom->getConnections()->findConnectedRoom( "west", &connectsAt );
+                std::string roomAtSouth = activeRoom->getConnections()->getConnectedRoomAt( "south" );
+                std::string roomAtNorth = activeRoom->getConnections()->getConnectedRoomAt( "north" );
+                std::string roomAtEast = activeRoom->getConnections()->getConnectedRoomAt( "east" );
+                std::string roomAtWest = activeRoom->getConnections()->getConnectedRoomAt( "west" );
 
                 if ( ! roomAtSouth.empty () )
                 {

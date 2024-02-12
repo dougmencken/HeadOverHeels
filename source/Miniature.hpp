@@ -23,7 +23,7 @@
 class Color ;
 
 class Room ;
-class RoomConnections ;
+class ConnectedRooms ;
 
 
 class Miniature : public Drawable

@@ -103,8 +103,8 @@ headoverheels_SOURCES = main.cpp \
 			ItemDescriptions.hpp \
 			MapManager.cpp \
 			MapManager.hpp \
-			RoomConnections.cpp \
-			RoomConnections.hpp \
+			ConnectedRooms.cpp \
+			ConnectedRooms.hpp \
 			RoomBuilder.cpp \
 			RoomBuilder.hpp \
 			Room.cpp \

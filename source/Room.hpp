@@ -19,13 +19,12 @@
 #include "Picture.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
-#include "RoomConnections.hpp"
 #include "Item.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
 #include "Door.hpp"
-
+#include "ConnectedRooms.hpp"
 
 class FloorTile ;
 class Wall ;
@@ -33,7 +32,7 @@ class Camera ;
 
 
 /**
- * A room drawn in isometric perspective. It is composed of grid on which most of items are placed
+ * A room drawn in isometric perspective. It is composed of the grid on which the most of items are placed
  */
 
 class Room : public Drawable, public Mediated
@@ -143,14 +142,14 @@ public:
          * @param z the Z coordinate of entrance, initially the Z of exit from the previous room
          * @return true if coordinates are okay to enter the room or false otherwise
          */
-        bool calculateEntryCoordinates ( const Way & wayOfEntry,
+        bool calculateEntryCoordinates ( const std::string & way,
                                                 int widthX, int widthY,
                                                 int previousNorthBound, int previousEastBound, int previousSouthBound, int previousWestBound,
                                                 int * x, int * y, int * z ) ;
 
-        const RoomConnections * getConnections () const {  return connections ;  }
+        const ConnectedRooms * getConnections () const {  return connections ;  }
 
-        void setConnections ( const RoomConnections * links ) {  connections = links ;  }
+        void setConnections ( const ConnectedRooms * links ) {  connections = links ;  }
 
         unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
 
@@ -255,8 +254,8 @@ private:
 
         friend class Mediator ;
 
-        // the connections of this room with other rooms
-        const RoomConnections * connections ;
+        // the connections of this room with other rooms on the map
+        const ConnectedRooms * connections ;
 
         std::vector < AvatarItemPtr > charactersYetInRoom ;
 

@@ -39,7 +39,7 @@ MapManager::~MapManager( )
         }
         gameRooms.clear() ;
 
-        for ( std::map< std::string, RoomConnections * >::const_iterator ci = linksBetweenRooms.begin () ; ci != linksBetweenRooms.end () ; ++ ci )
+        for ( std::map< std::string, ConnectedRooms * >::const_iterator ci = linksBetweenRooms.begin () ; ci != linksBetweenRooms.end () ; ++ ci )
         {
                 delete ci->second ;
         }
@@ -85,15 +85,13 @@ void MapManager::readMap ( const std::string& fileName )
         {
                 ++ roomNth ;
 
-                std::string roomFile = room->Attribute( "file" );
-
                 tinyxml2::XMLElement* north = room->FirstChildElement( "north" ) ;
                 tinyxml2::XMLElement* south = room->FirstChildElement( "south" ) ;
                 tinyxml2::XMLElement* east = room->FirstChildElement( "east" ) ;
                 tinyxml2::XMLElement* west = room->FirstChildElement( "west" ) ;
 
-                tinyxml2::XMLElement* floor = room->FirstChildElement( "floor" ) ;
-                tinyxml2::XMLElement* roof = room->FirstChildElement( "roof" ) ;
+                tinyxml2::XMLElement* below = room->FirstChildElement( "below" ) ;
+                tinyxml2::XMLElement* above = room->FirstChildElement( "above" ) ;
                 tinyxml2::XMLElement* teleport = room->FirstChildElement( "teleport" ) ;
                 tinyxml2::XMLElement* teleport2 = room->FirstChildElement( "teleport2" ) ;
 
@@ -106,55 +104,57 @@ void MapManager::readMap ( const std::string& fileName )
                 tinyxml2::XMLElement* westnorth = room->FirstChildElement( "westnorth" ) ;
                 tinyxml2::XMLElement* westsouth = room->FirstChildElement( "westsouth" ) ;
 
-                RoomConnections* connections = new RoomConnections();
+                ConnectedRooms * connections = new ConnectedRooms() ;
 
-                if ( north != nilPointer ) // connection on north
-                        connections->setNorth( north->FirstChild()->ToText()->Value() );
+                if ( north != nilPointer )
+                        connections->setRoomAtNorth( north->FirstChild()->ToText()->Value () );
 
-                if ( south != nilPointer ) // connection on south
-                        connections->setSouth( south->FirstChild()->ToText()->Value() );
+                if ( south != nilPointer )
+                        connections->setRoomAtSouth( south->FirstChild()->ToText()->Value () );
 
-                if ( east != nilPointer ) // connection on east
-                        connections->setEast( east->FirstChild()->ToText()->Value() );
+                if ( east != nilPointer )
+                        connections->setRoomAtEast( east->FirstChild()->ToText()->Value () );
 
-                if ( west != nilPointer ) // connection on west
-                        connections->setWest( west->FirstChild()->ToText()->Value() );
+                if ( west != nilPointer )
+                        connections->setRoomAtWest( west->FirstChild()->ToText()->Value () );
 
-                if ( floor != nilPointer ) // connection on bottom
-                        connections->setFloor( floor->FirstChild()->ToText()->Value() );
+                if ( below != nilPointer )
+                        connections->setRoomBelow( below->FirstChild()->ToText()->Value () );
 
-                if ( roof != nilPointer ) // connection on top
-                        connections->setRoof( roof->FirstChild()->ToText()->Value() );
+                if ( above != nilPointer )
+                        connections->setRoomAbove( above->FirstChild()->ToText()->Value () );
 
-                if ( teleport != nilPointer ) // connection via teleport
-                        connections->setTeleport( teleport->FirstChild()->ToText()->Value() );
+                if ( teleport != nilPointer )
+                        connections->setRoomToTeleport( teleport->FirstChild()->ToText()->Value () );
 
-                if ( teleport2 != nilPointer ) // connection via second teleport
-                        connections->setTeleportToo( teleport2->FirstChild()->ToText()->Value() );
+                if ( teleport2 != nilPointer )
+                        connections->setRoomToTeleportToo( teleport2->FirstChild()->ToText()->Value () );
 
-                if ( northeast != nilPointer ) // connection on northeast
-                        connections->setNorthEast( northeast->FirstChild()->ToText()->Value() );
+                if ( northeast != nilPointer )
+                        connections->setRoomAtNorthEast( northeast->FirstChild()->ToText()->Value () );
 
-                if ( northwest != nilPointer ) // connection on northwest
-                        connections->setNorthWest( northwest->FirstChild()->ToText()->Value() );
+                if ( northwest != nilPointer )
+                        connections->setRoomAtNorthWest( northwest->FirstChild()->ToText()->Value () );
 
-                if ( southeast != nilPointer ) // connection on southeast
-                        connections->setSouthEast( southeast->FirstChild()->ToText()->Value() );
+                if ( southeast != nilPointer )
+                        connections->setRoomAtSouthEast( southeast->FirstChild()->ToText()->Value () );
 
-                if ( southwest != nilPointer ) // connection on southwest
-                        connections->setSouthWest( southwest->FirstChild()->ToText()->Value() );
+                if ( southwest != nilPointer )
+                        connections->setRoomAtSouthWest( southwest->FirstChild()->ToText()->Value () );
 
-                if ( eastnorth != nilPointer ) // connection on eastnorth
-                        connections->setEastNorth( eastnorth->FirstChild()->ToText()->Value() );
+                if ( eastnorth != nilPointer )
+                        connections->setRoomAtEastNorth( eastnorth->FirstChild()->ToText()->Value () );
 
-                if ( eastsouth != nilPointer ) // connection on eastsouth
-                        connections->setEastSouth( eastsouth->FirstChild()->ToText()->Value() );
+                if ( eastsouth != nilPointer )
+                        connections->setRoomAtEastSouth( eastsouth->FirstChild()->ToText()->Value () );
 
-                if ( westnorth != nilPointer ) // connection on westnorth
-                        connections->setWestNorth( westnorth->FirstChild()->ToText()->Value() );
+                if ( westnorth != nilPointer )
+                        connections->setRoomAtWestNorth( westnorth->FirstChild()->ToText()->Value () );
 
-                if ( westsouth != nilPointer ) // connection on westsouth
-                        connections->setWestSouth( westsouth->FirstChild()->ToText()->Value() );
+                if ( westsouth != nilPointer )
+                        connections->setRoomAtWestSouth( westsouth->FirstChild()->ToText()->Value () );
+
+                std::string roomFile = room->Attribute( "file" );
 
                 linksBetweenRooms[ roomFile ] = connections ;
 
@@ -514,15 +514,12 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         Room* previousRoom = this->activeRoom ;
 
         std::string fileOfPreviousRoom = previousRoom->getNameOfRoomDescriptionFile() ;
-        const RoomConnections* previousRoomLinks = previousRoom->getConnections();
+        const ConnectedRooms * previousRoomLinks = previousRoom->getConnections() ;
 
-        Way wayOfEntry( "just wait" ) ;
-
-        // search the map for next room and get way of entry to it
-        std::string fileOfNextRoom = previousRoomLinks->findConnectedRoom( wayOfExit, &wayOfEntry );
+        // look for the next room
+        std::string fileOfNextRoom = previousRoomLinks->getConnectedRoomAt( wayOfExit );
         if ( fileOfNextRoom.empty() )
-        {
-                // no room there, so continue with current one
+        {       // no room there, so continue with the current one
                 return previousRoom ;
         }
 
@@ -535,10 +532,6 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         std::string nameOfRoamer = oldItemOfRoamer.getOriginalKind (); // the original, because the current kind may be "bubbles" when teleporting
         const DescriptionOfItem * descriptionOfRoamer = ItemDescriptions::descriptions ().getDescriptionByKind( nameOfRoamer ) ;
-
-        std::cout << "\"" << nameOfRoamer << "\" migrates"
-                        << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit << "\""
-                        << " to room \"" << fileOfNextRoom << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
 
         const int exitX = oldItemOfRoamer.getX ();
         const int exitY = oldItemOfRoamer.getY ();
@@ -564,7 +557,16 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         }
 
         Room* newRoom = getOrBuildRoomByFile( fileOfNextRoom );
-        newRoom->getConnections()->adjustEntry( &wayOfEntry, fileOfPreviousRoom );
+        assert( newRoom != nilPointer );
+
+        std::string wayOfEntry = Way::exitToEntry( wayOfExit ) ;
+
+        if ( ! newRoom->isSingleRoom () )
+                wayOfEntry = newRoom->getConnections()->clarifyTheWayOfEntryToABigRoom( wayOfEntry, fileOfPreviousRoom );
+
+        std::cout << "\"" << nameOfRoamer << "\" migrates"
+                        << " from the room \"" << fileOfPreviousRoom << "\" at \"" << wayOfExit << "\""
+                        << " to the room \"" << fileOfNextRoom << "\" at \"" << wayOfEntry << "\"" << std::endl ;
 
         addRoomInPlay( newRoom );
 
@@ -595,21 +597,17 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         // create character
 
-        if ( wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
-        {
+        if ( wayOfEntry == "via teleport" || wayOfEntry == "via second teleport" )
                 entryZ = Isomot::FloorZ ;
-        }
 
         // no taken item in new room
         GameManager::getInstance().emptyHandbag();
 
         AvatarItemPtr newItemOfRoamer = RoomBuilder::createCharacterInRoom( newRoom, nameOfRoamer, true,
                                                                             entryX, entryY, entryZ,
-                                                                            exitOrientation, wayOfEntry.toString () );
+                                                                            exitOrientation, wayOfEntry );
         if ( newItemOfRoamer != nilPointer )
-        {
-                newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );
-        }
+                newItemOfRoamer->autoMoveOnEntry( wayOfEntry );
 
         addRoomAsVisited( newRoom->getNameOfRoomDescriptionFile () ) ;
 

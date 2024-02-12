@@ -535,9 +535,9 @@ void AvatarItem::decrementShieldOverTime ()
         gameInfo.setShieldSecondsByName( character, shieldSecondsRemaining );
 }
 
-void AvatarItem::liberatePlanet ()
+void AvatarItem::liberateCurrentPlanet ()
 {
-        std::string scenery = this->mediator->getRoom()->getScenery();
+        const std::string & scenery = this->mediator->getRoom()->getScenery ();
 
         if ( scenery == "jail" || scenery == "blacktooth" || scenery == "market" )
         {

@@ -193,10 +193,10 @@ public:
 
         /**
          * Libera un planeta
-         * @param planet Planet to liberate
-         * @param now Whether is it just liberated or was already liberated in previous game
+         * @param planet the planet to liberate
+         * @param previously true if restoring a game where that planet was already liberated
          */
-        void liberatePlanet ( const std::string& planet, bool now = true ) ;
+        void liberatePlanet ( const std::string & planet, bool previously = false ) ;
 
         /**
          * Indica si un planeta es libre

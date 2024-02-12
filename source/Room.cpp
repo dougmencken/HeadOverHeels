@@ -1475,13 +1475,11 @@ bool Room::continueWithAliveCharacter ()
         return false ;
 }
 
-bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
+bool Room::calculateEntryCoordinates( const std::string & way,
                                         int widthX, int widthY,
                                         int previousNorthBound, int previousEastBound, int previousSouthBound, int previousWestBound,
                                         int* x, int* y, int* z )
 {
-        std::string way = wayOfEntry.toString () ;
-
         int northToSouth = bounds[ "south" ] - bounds[ "north" ] ;           //  N + N2S = S     *------>(N)----->(S)
         int previousSouth2North = previousNorthBound - previousSouthBound ;  //  N' = S' + S2N'  *-->(N')<-------------(S')
         int previousNorth2South = - previousSouth2North ;                    //  N2S' = - S2N'   *-->(N')------------->(S')
@@ -1524,7 +1522,7 @@ bool Room::calculateEntryCoordinates( const Way & wayOfEntry,
         unsigned int oneTileSize = getSizeOfOneTile ();
 
         // calculate coordinates by the way of entry
-        switch ( wayOfEntry.getIntegerOfWay () )
+        switch ( Way( way ).getIntegerOfWay () )
         {
                 case Way::North:
                         *x = bounds[ way ] - oneTileSize + 1 ;
