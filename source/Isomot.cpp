@@ -4,6 +4,7 @@
 #include "Color.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
+#include "MapManager.hpp"
 #include "BonusManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
@@ -19,7 +20,6 @@
 
 Isomot::Isomot( ) :
         view( nilPointer ),
-        mapManager( ),
         paused( false ),
         finalRoomTimer( new Timer() ),
         finalRoomBuilt( false ),
@@ -60,7 +60,7 @@ void Isomot::prepare ()
         else
                 view->fillWithColor( Color::byName( "orange" ) );
 
-        mapManager.binRoomsInPlay();
+        MapManager::getInstance().binRoomsInPlay();
 }
 
 void Isomot::beginNewGame ()
@@ -70,7 +70,7 @@ void Isomot::beginNewGame ()
         // bin taken bonuses
         BonusManager::getInstance().clearAbsentBonuses () ;
 
-        mapManager.beginNewGame( GameManager::getInstance().getHeadRoom(), GameManager::getInstance().getHeelsRoom() );
+        MapManager::getInstance().beginNewGame( GameManager::getInstance().getHeadRoom(), GameManager::getInstance().getHeelsRoom() );
 
         std::cout << "play new game" << std::endl ;
         SoundManager::getInstance().playOgg ( "music/begin.ogg", /* loop */ false );
@@ -102,20 +102,18 @@ void Isomot::offInviolability ()
 
 void Isomot::pause ()
 {
-        if ( mapManager.getActiveRoom() != nilPointer )
-        {
-                mapManager.getActiveRoom()->deactivate();
-        }
+        Room * activeRoom = MapManager::getInstance().getActiveRoom() ;
+        if ( activeRoom != nilPointer )
+                activeRoom->deactivate() ;
 
         paused = true ;
 }
 
 void Isomot::resume ()
 {
-        if ( mapManager.getActiveRoom() != nilPointer )
-        {
-                mapManager.getActiveRoom()->activate();
-        }
+        Room * activeRoom = MapManager::getInstance().getActiveRoom() ;
+        if ( activeRoom != nilPointer )
+                activeRoom->activate() ;
 
         paused = false ;
 }
@@ -147,6 +145,8 @@ Picture* Isomot::updateMe ()
 
         handleMagicKeys ();
 
+        MapManager & mapManager = MapManager::getInstance () ;
+
         Room* activeRoom = mapManager.getActiveRoom();
         if ( activeRoom == nilPointer ) return view ;
 
@@ -170,9 +170,7 @@ Picture* Isomot::updateMe ()
                         {
                                 // swap in the same room or between different rooms
                                 if ( ! activeRoom->swapCharactersInRoom() )
-                                {
-                                        activeRoom = mapManager.swapRoom();
-                                }
+                                        activeRoom = mapManager.swapRoom() ;
                         }
 
                         InputManager::getInstance().releaseKeyFor( "swap" );
@@ -183,7 +181,7 @@ Picture* Isomot::updateMe ()
                         // the active character lost one life
 
                         if ( activeCharacter.getLives () > 0 || activeCharacter.getKind () == "headoverheels" )
-                                activeRoom = mapManager.rebuildRoom();
+                                activeRoom = mapManager.rebuildRoom ();
                         else if ( ! activeRoom->continueWithAliveCharacter () )
                                 activeRoom = mapManager.noLivesSwap ();
                 }
@@ -191,7 +189,7 @@ Picture* Isomot::updateMe ()
                 {
                         // the room is changing
 
-                        Room* newRoom = mapManager.changeRoom();
+                        Room* newRoom = mapManager.changeRoom() ;
 
                         if ( newRoom != nilPointer && newRoom != activeRoom )
                         {
@@ -312,8 +310,10 @@ Picture* Isomot::updateMe ()
 
 void Isomot::handleMagicKeys ()
 {
-        Room* activeRoom = mapManager.getActiveRoom();
         GameManager & gameManager = GameManager::getInstance() ;
+        MapManager & mapManager = MapManager::getInstance() ;
+
+        Room * activeRoom = mapManager.getActiveRoom() ;
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "v" ) )
         {
@@ -453,7 +453,7 @@ void Isomot::handleMagicKeys ()
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
         {
                 playTuneForScenery( activeRoom->getScenery () );
-                activeRoom = mapManager.rebuildRoom();
+                activeRoom = mapManager.rebuildRoom() ;
 
                 allegro::releaseKey( "r" );
         }
@@ -465,7 +465,7 @@ void Isomot::handleMagicKeys ()
                 {
                         AvatarItemPtr otherCharacter ;
 
-                        Room* roomWithInactiveCharacter = mapManager.getRoomOfInactiveCharacter();
+                        Room* roomWithInactiveCharacter = mapManager.getRoomOfInactiveCharacter() ;
                         if ( roomWithInactiveCharacter != nilPointer )
                         {
                                 otherCharacter = roomWithInactiveCharacter->getMediator()->getActiveCharacter() ;
@@ -506,7 +506,7 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "l" ) )
         {
-                if ( gameManager.countFreePlanets() < 5 )
+                if ( gameManager.howManyFreePlanets() < 5 )
                 {
                         if ( activeRoom->getMediator()->findItemOfKind( "crown" ) == nilPointer )
                         {
@@ -591,7 +591,7 @@ void Isomot::playTuneForScenery ( const std::string& scenery )
 
 void Isomot::updateFinalRoom()
 {
-        Room* activeRoom = mapManager.getActiveRoom();
+        Room* activeRoom = MapManager::getInstance().getActiveRoom();
         assert( activeRoom != nilPointer );
         Mediator* mediator = activeRoom->getMediator();
         assert( mediator != nilPointer );

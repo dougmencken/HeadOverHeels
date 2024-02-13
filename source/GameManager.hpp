@@ -208,7 +208,7 @@ public:
         /**
          * How many planets are already liberated
          */
-        unsigned short countFreePlanets () const ;
+        unsigned short howManyFreePlanets () const ;
 
         /**
          * Eat fish, that is, begin the process to save the game
@@ -226,8 +226,6 @@ public:
         bool isSimpleGraphicsSet () const {  return ( chosenGraphicsSet == "gfx.simple" ) ;  }
 
         Isomot & getIsomot () {  return isomot ;  }
-
-        unsigned int getVisitedRooms () ;
 
         // at the end of the game it's time to count the crowns
         void inFreedomWithSoManyCrowns( unsigned int crowns ) ;

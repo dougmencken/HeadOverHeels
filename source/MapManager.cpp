@@ -20,7 +20,16 @@
 #define GENERATE_ROOM_DESCRIPTIONS      0
 
 
+/* static */ MapManager MapManager::instance ;
+
 bool MapManager::buildEveryRoomAtOnce = false ;
+
+
+/* static */
+MapManager & MapManager::getInstance ()
+{
+        return MapManager::instance ;
+}
 
 MapManager::~MapManager( )
 {

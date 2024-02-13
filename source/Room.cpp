@@ -12,13 +12,11 @@
 #include "Behavior.hpp"
 #include "Elevator.hpp"
 
-#if defined( DEBUG ) && DEBUG
-# define DEBUG_ORIGIN_OF_ROOM   0
+# define SHOW_ORIGIN_OF_ROOM    0
 
-# if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
+# if defined( SHOW_ORIGIN_OF_ROOM ) && SHOW_ORIGIN_OF_ROOM
   # include "FlickeringColor.hpp"
 # endif
-#endif
 
 #include <tinyxml2.h>
 
@@ -1356,17 +1354,13 @@ void Room::draw ()
         mediator->unlockFreeItemsMutex();
 
 
-
-#if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
-        // draw point of room’s origin
-        if ( FlickeringColor::flickerWhiteAndTransparent() != Color::whiteColor() )
-        {
-                allegro::fillCircle( getX0(), getY0(), 4, Color::blackColor().toAllegroColor() );
+#if defined( SHOW_ORIGIN_OF_ROOM ) && SHOW_ORIGIN_OF_ROOM
+        // draw point of the room’s origin
+        if ( FlickeringColor::flickerWhiteAndTransparent() != Color::whiteColor() ) {
+                allegro::fillCircle( getX0(), getY0(), 3, Color::blackColor().toAllegroColor() );
                 where.drawPixelAt( getX0(), getY0(), Color::whiteColor().toAllegroColor() );
-        }
-        else
-        {
-                allegro::fillCircle( getX0(), getY0(), 4, Color::whiteColor().toAllegroColor() );
+        } else {
+                allegro::fillCircle( getX0(), getY0(), 3, Color::whiteColor().toAllegroColor() );
                 where.drawPixelAt( getX0(), getY0(), Color::blackColor().toAllegroColor() );
         }
 #endif
@@ -1392,21 +1386,6 @@ void Room::calculateBounds()
                 bounds[ "westnorth" ] = hasDoorAt( "westnorth" ) ? doors[ "westnorth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
                 bounds[ "westsouth" ] = hasDoorAt( "westsouth" ) ? doors[ "westsouth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
         }
-}
-
-void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor )
-{
-        coordinatesOfOrigin.second = ( Isomot::MaxLayers + 2 ) * Isomot::LayerHeight ;
-        coordinatesOfOrigin.first = getTilesY () * ( getSizeOfOneTile () << 1 ) ;
-
-        if ( ! hasNorthDoor && ! hasWestDoor && hasFloor() ) coordinatesOfOrigin.first += getSizeOfOneTile () ;
-        ( void ) hasEastDoor ; ( void ) hasSouthDoor ;
-
-#if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
-        std::cout << "origin of room \"" << getNameOfRoomDescriptionFile() << "\" is at " <<
-                        "( " << coordinatesOfOrigin.first << ", " << coordinatesOfOrigin.second << " )" <<
-                        std::endl ;
-#endif
 }
 
 bool Room::activateCharacterByName( const std::string & name )

@@ -20,6 +20,7 @@
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 #include "Item.hpp"
+#include "Isomot.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
@@ -106,11 +107,9 @@ public:
         void drawRoom () ;
 
         /**
-         * Calculate boundaries of room from its size and its doors
+         * Calculate boundaries of room from its size and doors
          */
         void calculateBounds () ;
-
-        void calculateCoordinatesOfOrigin ( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor ) ;
 
         /**
          * @return true if the character with this name is found in the room and activated
@@ -171,14 +170,14 @@ public:
         void setColor ( const std::string & roomColor ) {  this->color = roomColor ;  }
 
         /**
-         * the X coordinate of the room’s origin
+         * the X coordinate of the room’s origin point
          */
-        int getX0 () const {  return coordinatesOfOrigin.first ;  }
+        int getX0 () const {  return getTilesY () * ( getSizeOfOneTile () << 1 ) ;  }
 
         /**
-         * the Y coordinate of the room’s origin
+         * the Y coordinate of the room’s origin point
          */
-        int getY0 () const {  return coordinatesOfOrigin.second ;  }
+        int getY0 () const {  return ( Isomot::MaxLayers + 2 ) * Isomot::LayerHeight ;  }
 
         unsigned int getWidthOfRoomImage () const ;
 
@@ -272,11 +271,6 @@ private:
         std::string scenery ;
 
         std::string color ;
-
-        /**
-         * Where the origin of the room is
-         */
-        std::pair < int /* x */, int /* y */ > coordinatesOfOrigin ;
 
         const std::pair < unsigned int /* tilesX */, unsigned int /* tilesY */ > howManyTiles ;
 

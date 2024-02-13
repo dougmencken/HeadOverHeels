@@ -335,7 +335,7 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                 }
 
                 // the guardian of throne flees from the player with four crowns
-                if ( item->getKind() == "throne-guard" && GameManager::getInstance().countFreePlanets() >= 4 )
+                if ( item->getKind() == "throne-guard" && GameManager::getInstance().howManyFreePlanets() >= 4 )
                 {
                         setActivityOfItem( activities::Activity::MoveSouthwest );
                 }

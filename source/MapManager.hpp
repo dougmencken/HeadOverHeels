@@ -22,9 +22,13 @@
 class MapManager
 {
 
-public:
+private:
 
         MapManager( ) : activeRoom( nilPointer ) { }
+
+public:
+
+        static MapManager & getInstance () ;
 
         virtual ~MapManager( ) ;
 
@@ -84,15 +88,17 @@ public:
 
         Room * getOrBuildRoomByFile ( const std::string& roomFile ) ;
 
-        const std::set< std::string > & getVisitedRooms () const {  return visitedRooms ;  }
+        const std::set< std::string > & listAllVisitedRooms () const {  return visitedRooms ;  }
 
-        unsigned int countVisitedRooms() const {  return visitedRooms.size() ;  }
+        unsigned int howManyVisitedRooms () const {  return visitedRooms.size() ;  }
 
         void parseVisitedRooms ( const std::vector< std::string > & visitedRooms ) ;
 
         static bool buildEveryRoomAtOnce ;
 
 private:
+
+        static MapManager instance ;
 
         /**
          * The room to draw yet

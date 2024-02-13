@@ -3,6 +3,7 @@
 
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
+#include "MapManager.hpp"
 #include "SoundManager.hpp"
 #include "CreatePlanetsScreen.hpp"
 #include "CreateEndScreen.hpp"
@@ -68,7 +69,7 @@ void ContinueGame::doAction ()
         {
                 CreateEndScreen * endScreenAction =
                         new CreateEndScreen(
-                                gameManager.getVisitedRooms(), gameManager.countFreePlanets()
+                                MapManager::getInstance().howManyVisitedRooms(), gameManager.howManyFreePlanets()
                         );
 
                 endScreenAction->doIt ();
@@ -77,7 +78,7 @@ void ContinueGame::doAction ()
         {
                 CreateCongratulationsScreen * congratulationsScreenAction =
                         new CreateCongratulationsScreen(
-                                gameManager.getVisitedRooms(), gameManager.countFreePlanets()
+                                MapManager::getInstance().howManyVisitedRooms(), gameManager.howManyFreePlanets()
                         );
 
                 congratulationsScreenAction->doIt ();

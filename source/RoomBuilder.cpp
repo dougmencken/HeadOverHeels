@@ -52,7 +52,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         if ( fromLastSlash != nilPointer )
                 roomName = std::string( fromLastSlash + 1 );
 
-        if ( GameManager::getInstance().getIsomot().getMapManager().findRoomByFile( roomName ) == nilPointer )
+        if ( MapManager::getInstance().findRoomByFile( roomName ) == nilPointer )
                 std::cout << "building new" ;
         else
                 std::cout << "rebuilding" ;
@@ -76,57 +76,6 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         std::cout << "the color of room is " << Color::byName( roomColor ).toString () << std::endl ;
 #endif
         theRoom->setColor( roomColor );
-
-        // need to know about presence of doors
-        // to calculate coordinates of room’s origin in isometric space
-        bool hasNorthDoor = false;
-        bool hasEastDoor = false;
-        bool hasSouthDoor = false;
-        bool hasWestDoor = false;
-
-        tinyxml2::XMLElement* items = root->FirstChildElement( "items" );
-
-        // scroll through list of items to look for doors
-        for ( tinyxml2::XMLElement* item = items->FirstChildElement( "item" ) ;
-                        item != nilPointer ;
-                        item = item->NextSiblingElement( "item" ) )
-        {
-                std::string whichClass = "" ;
-                tinyxml2::XMLElement* itemClass = item->FirstChildElement( "class" );
-                if ( itemClass != nilPointer )
-                        whichClass = itemClass->FirstChild()->ToText()->Value() ;
-
-                if ( whichClass == "door" )
-                {
-                        std::string whereIsDoor = "nowhere" ;
-                        tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
-                        if ( orientation != nilPointer )
-                                whereIsDoor = orientation->FirstChild()->ToText()->Value() ;
-                        else {
-                                tinyxml2::XMLElement* kind = item->FirstChildElement( "kind" );
-                                if ( kind != nilPointer ) {
-                                        std::string kindOfDoor = kind->FirstChild()->ToText()->Value();
-
-                                        // the door's kind is %scenery%-door-%at%
-                                        size_t doorInKind = kindOfDoor.find( "door-" );
-                                        if ( doorInKind != std::string::npos )
-                                                whereIsDoor = kindOfDoor.substr( doorInKind + 5 );
-                                }
-                        }
-
-                        if ( whereIsDoor == "north" || whereIsDoor == "northeast" || whereIsDoor == "northwest" )
-                                hasNorthDoor = true ;
-                        else if ( whereIsDoor == "east" || whereIsDoor == "eastnorth" || whereIsDoor == "eastsouth" )
-                                hasEastDoor = true ;
-                        else if ( whereIsDoor == "south" || whereIsDoor == "southeast" || whereIsDoor == "southwest" )
-                                hasSouthDoor = true ;
-                        else if ( whereIsDoor == "west" || whereIsDoor == "westnorth" || whereIsDoor == "westsouth" )
-                                hasWestDoor = true ;
-                }
-        }
-
-        // knowing about the doors, calculate the coordinates of origin
-        theRoom->calculateCoordinatesOfOrigin( hasNorthDoor, hasEastDoor, hasSouthDoor, hasWestDoor );
 
         // build walls without doors
 
@@ -155,7 +104,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
         // add items to room
 
-        items = root->FirstChildElement( "items" );
+        tinyxml2::XMLElement* items = root->FirstChildElement( "items" );
 
         for ( tinyxml2::XMLElement* item = items->FirstChildElement( "item" ) ;
                         item != nilPointer ;

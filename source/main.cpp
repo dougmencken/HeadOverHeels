@@ -17,6 +17,7 @@
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
 #include "GuiManager.hpp"
+#include "MapManager.hpp"
 
 #if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 #include "SoundManager.hpp"

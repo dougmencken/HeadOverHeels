@@ -86,7 +86,7 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
                         visitedRooms.push_back( visited->Attribute( "room" ) );
                 }
 
-                gameManager.getIsomot().getMapManager().parseVisitedRooms( visitedRooms );
+                MapManager::getInstance().parseVisitedRooms( visitedRooms );
         }
 
         // liberated planets
@@ -136,7 +136,7 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
                                 BonusManager::getInstance().markAsAbsent( BonusInRoom( /* which bonus */ kind, /* in which room */ room ) );
 
                                 std::cout << "rebuilding room \"" << room << "\" without bonus \"" << kind << "\"" << std::endl ;
-                                gameManager.getIsomot().getMapManager().rebuildRoom( gameManager.getIsomot().getMapManager().findRoomByFile( room ) );
+                                MapManager::getInstance().rebuildRoom( MapManager::getInstance().findRoomByFile( room ) );
                         }
                 }
         }
@@ -265,7 +265,7 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                         std::cout << "continue the previous game" << std::endl ;
                         // no begin.ogg here
 
-                        gameManager.getIsomot().getMapManager().beginOldGameWithCharacter(
+                        MapManager::getInstance().beginOldGameWithCharacter(
                                         room, characterName, x, y, z, orientationString, entryString, isActiveCharacter ) ;
                 }
         } else
@@ -287,7 +287,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         // rooms visited
 
-        const std::set< std::string > & visitedRooms = gameManager.getIsomot().getMapManager().getVisitedRooms() ;
+        const std::set< std::string > & visitedRooms = MapManager::getInstance().listAllVisitedRooms() ;
         if ( visitedRooms.size () > 0 )
         {
                 tinyxml2::XMLElement* exploredRooms = saveXml.NewElement( "exploredRooms" );
@@ -438,8 +438,8 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         std::string whoWaitsToPlay = "nobody";
 
-        Room* activeRoom = gameManager.getIsomot().getMapManager().getActiveRoom () ;
-        Room* secondRoom = gameManager.getIsomot().getMapManager().getRoomOfInactiveCharacter () ;
+        Room* activeRoom = MapManager::getInstance().getActiveRoom () ;
+        Room* secondRoom = MapManager::getInstance().getRoomOfInactiveCharacter () ;
         // there may be no more rooms when there’re no more characters
         // or when other character is in the same room as active character
 

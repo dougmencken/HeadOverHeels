@@ -18,8 +18,6 @@
 
 #include <tinyxml2.h>
 
-#include "MapManager.hpp"
-
 
 class Color ;
 class Picture ;
@@ -51,8 +49,6 @@ public:
         void resume () ;
 
         Picture * updateMe () ;
-
-        MapManager & getMapManager () {  return mapManager ;  }
 
         bool doesCameraFollowCharacter () const {  return cameraFollowsCharacter ;  }
 
@@ -95,8 +91,6 @@ private:
          * Where to draw isometric view
          */
         Picture * view ;
-
-        MapManager mapManager ;
 
         bool paused ;
 
