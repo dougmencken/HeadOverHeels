@@ -2,7 +2,6 @@
 #include "PlayerControlled.hpp"
 
 #include "AvatarItem.hpp"
-#include "Isomot.hpp"
 #include "DescriptionOfItem.hpp"
 #include "ItemDescriptions.hpp"
 #include "Room.hpp"
@@ -256,7 +255,7 @@ void PlayerControlled::jump( ::AvatarItem & character )
         }
 
         // when the active character is at the maximum height of room, it moves to the room above
-        if ( character.isActiveCharacter() && character.getZ() >= Isomot::MaxLayers * Isomot::LayerHeight )
+        if ( character.isActiveCharacter() && character.getZ() >= Room::MaxLayers * Room::LayerHeight )
         {
                 character.setWayOfExit( "above" );
         }
@@ -497,11 +496,11 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
                 std::cout << "drop item \"" << character.getDescriptionOfTakenItem()->getKind () << "\"" << std::endl ;
 
                 // place a dropped item just below the character
-                if ( character.addToZ( Isomot::LayerHeight ) )
+                if ( character.addToZ( Room::LayerHeight ) )
                 {
                         FreeItemPtr freeItem( new FreeItem( character.getDescriptionOfTakenItem(),
                                                             character.getX(), character.getY(),
-                                                            character.getZ() - Isomot::LayerHeight,
+                                                            character.getZ() - Room::LayerHeight,
                                                             "none" ) );
 
                         freeItem->setBehaviorOf( character.getBehaviorOfTakenItem() );

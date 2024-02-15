@@ -3,7 +3,6 @@
 
 #include "GameManager.hpp"
 #include "GameInfo.hpp"
-#include "Isomot.hpp"
 #include "MapManager.hpp"
 #include "BonusManager.hpp"
 #include "Mediator.hpp"

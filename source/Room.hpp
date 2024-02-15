@@ -20,7 +20,6 @@
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 #include "Item.hpp"
-#include "Isomot.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
@@ -177,7 +176,7 @@ public:
         /**
          * the Y coordinate of the room’s origin point
          */
-        int getY0 () const {  return ( Isomot::MaxLayers + 2 ) * Isomot::LayerHeight ;  }
+        int getY0 () const {  return ( Room::MaxLayers + 2 ) * Room::LayerHeight ;  }
 
         unsigned int getWidthOfRoomImage () const ;
 
@@ -233,6 +232,23 @@ public:
         int getYCenterForItem ( const Item & item ) {  return getYCenterForItem( item.getDescriptionOfItem() ) ;  }
 
         int getYCenterForItem ( const DescriptionOfItem * data ) ;
+
+        /**
+         * The "z" position of the floor
+         */
+        static const int FloorZ = -1 ;
+
+        /**
+         * The height in isometric units of a layer
+         * Item in the grid at height n is n * LayerHeight units
+         */
+        static const int LayerHeight = 24 ;
+
+        /**
+         * The maximum number of layers in a room
+         * In isometric units, the maximum height of room is LayerHeight * MaxLayers
+         */
+        static const int MaxLayers = 10 ;
 
         /**
          * the rooms larger than this number of tiles are not "single"

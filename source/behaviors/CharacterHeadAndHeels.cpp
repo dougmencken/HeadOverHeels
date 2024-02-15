@@ -1,7 +1,6 @@
 
 #include "CharacterHeadAndHeels.hpp"
 
-#include "Isomot.hpp"
 #include "Item.hpp"
 #include "DescriptionOfItem.hpp"
 #include "AvatarItem.hpp"
@@ -143,7 +142,7 @@ bool CharacterHeadAndHeels::update ()
                         break;
 
                 case activities::Activity::ItemTaken:
-                        characterItem.addToZ( - Isomot::LayerHeight );
+                        characterItem.addToZ( - Room::LayerHeight );
                         activity = activities::Activity::Wait;
                         break;
 

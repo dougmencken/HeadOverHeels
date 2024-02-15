@@ -277,7 +277,7 @@ FreeItemPtr Door::getLeftJamb()
                                         ;
                         }
 
-                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Isomot::FloorZ, "none" ) );
+                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Room::FloorZ, "none" ) );
                         leftJamb->getRawImageToChangeIt().expandOrCropTo( leftJambImage->getWidth (), leftJambImage->getHeight () );
                         allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getRawImageToChangeIt ().getAllegroPict() );
                         leftJamb->getRawImageToChangeIt().setName( leftJambImage->getName() );
@@ -338,7 +338,7 @@ FreeItemPtr Door::getRightJamb()
                                         ;
                         }
 
-                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Isomot::FloorZ, "none" ) );
+                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Room::FloorZ, "none" ) );
                         rightJamb->getRawImageToChangeIt().expandOrCropTo( rightJambImage->getWidth (), rightJambImage->getHeight () );
                         allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getRawImageToChangeIt ().getAllegroPict() );
                         rightJamb->getRawImageToChangeIt().setName( rightJambImage->getName() );
@@ -395,7 +395,7 @@ FreeItemPtr Door::getLintel()
                                         ;
                         }
 
-                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Isomot::FloorZ, "none" ) );
+                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Room::FloorZ, "none" ) );
                         lintel->getRawImageToChangeIt().expandOrCropTo( lintelImage->getWidth (), lintelImage->getHeight () );
                         allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getRawImageToChangeIt ().getAllegroPict() );
                         lintel->getRawImageToChangeIt().setName( lintelImage->getName() );

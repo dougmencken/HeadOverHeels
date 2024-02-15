@@ -1,9 +1,9 @@
 
 #include "Elevator.hpp"
 
-#include "Isomot.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
+#include "Room.hpp"
 #include "Moving.hpp"
 #include "SoundManager.hpp"
 
@@ -47,7 +47,7 @@ bool Elevator::update ()
                                 speedTimer->reset();
 
                                 // elevator reached the top
-                                if ( freeItem.getZ() > top * Isomot::LayerHeight )
+                                if ( freeItem.getZ() > top * Room::LayerHeight )
                                 {
                                         activity = activities::Activity::StopAtTop;
                                         lastActivity = activity;
@@ -66,7 +66,7 @@ bool Elevator::update ()
                                 speedTimer->reset();
 
                                 // elevator reached its bottom
-                                if ( freeItem.getZ() <= bottom * Isomot::LayerHeight )
+                                if ( freeItem.getZ() <= bottom * Room::LayerHeight )
                                 {
                                         activity = activities::Activity::StopAtBottom;
                                         lastActivity = activity;

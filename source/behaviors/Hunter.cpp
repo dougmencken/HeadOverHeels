@@ -1,7 +1,6 @@
 
 #include "Hunter.hpp"
 
-#include "Isomot.hpp"
 #include "Item.hpp"
 #include "DescriptionOfItem.hpp"
 #include "ItemDescriptions.hpp"
@@ -349,14 +348,14 @@ bool Hunter::createFullBody()
         FreeItem& thisItem = dynamic_cast< FreeItem& >( * this->item );
         bool created = false;
 
-        if ( thisItem.getKind() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, - Isomot::LayerHeight ) )
+        if ( thisItem.getKind() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, - Room::LayerHeight ) )
         {
                 created = true;
 
                 // create the new item at the same location
                 FreeItemPtr newItem( new FreeItem (
                         ItemDescriptions::descriptions().getDescriptionByKind( "imperial-guard" ),
-                        thisItem.getX(), thisItem.getY(), thisItem.getZ() - Isomot::LayerHeight,
+                        thisItem.getX(), thisItem.getY(), thisItem.getZ() - Room::LayerHeight,
                         thisItem.getOrientation() ) );
 
                 newItem->setBehaviorOf( "behavior of hunter in four directions" );

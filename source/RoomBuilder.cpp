@@ -1,7 +1,6 @@
 
 #include "RoomBuilder.hpp"
 
-#include "Isomot.hpp"
 #include "MapManager.hpp"
 #include "Room.hpp"
 #include "Behavior.hpp"
@@ -624,7 +623,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 int itemX = std::atoi( item->Attribute( "x" ) );
                 int itemY = std::atoi( item->Attribute( "y" ) );
                 int itemZ = std::atoi( item->Attribute( "z" ) );
-                itemZ = ( itemZ > Isomot::FloorZ ) ? itemZ * Isomot::LayerHeight : Isomot::FloorZ ;
+                itemZ = ( itemZ > Room::FloorZ ) ? itemZ * Room::LayerHeight : Room::FloorZ ;
 
                 std::string theWay = "nowhere" ;
                 tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
@@ -664,7 +663,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 unsigned int oneTileLong = room->getSizeOfOneTile ();
                 int fx = itemX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
                 int fy = ( itemY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
-                int fz = ( itemZ != Isomot::FloorZ ) ? itemZ * Isomot::LayerHeight : Isomot::FloorZ ;
+                int fz = ( itemZ != Room::FloorZ ) ? itemZ * Room::LayerHeight : Room::FloorZ ;
 
                 // don’t create an item if it's a bonus that disappears once when taken
                 if ( BonusManager::getInstance().isAbsent( BonusInRoom( itemDescription->getKind (), room->getNameOfRoomDescriptionFile() ) ) )
@@ -743,8 +742,8 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         int itemY = std::atoi( item->Attribute( "y" ) );
         int itemZ = std::atoi( item->Attribute( "z" ) );
 
-        // "z" can't be below the floor, that's less than Isomot::FloorZ = -1
-        itemZ = ( itemZ > Isomot::FloorZ ) ? itemZ * Isomot::LayerHeight : Isomot::FloorZ ;
+        // "z" can't be below the floor, that's less than Room::FloorZ = -1
+        itemZ = ( itemZ > Room::FloorZ ) ? itemZ * Room::LayerHeight : Room::FloorZ ;
 
         std::string doorOrientation = "nowhere" ;
         tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );

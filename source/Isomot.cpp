@@ -479,7 +479,7 @@ void Isomot::handleMagicKeys ()
 
                                 int characterX = activeCharacter->getX() ;
                                 int characterY = activeCharacter->getY() ;
-                                int characterZ = activeCharacter->getZ() + 2 * LayerHeight ;
+                                int characterZ = activeCharacter->getZ() + 2 * Room::LayerHeight ;
                                 const std::string & orientation = otherCharacter->getOrientation() ;
 
                                 AvatarItemPtr joinedCharacter( new AvatarItem(
@@ -610,7 +610,7 @@ void Isomot::updateFinalRoom()
 
                 if ( arrived != nilPointer )
                 {
-                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Isomot::FloorZ, "south" ) );
+                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Room::FloorZ, "south" ) );
                         activeRoom->addFreeItem( character );
                 }
 
@@ -627,35 +627,35 @@ void Isomot::updateFinalRoom()
                 // la corona de Safari
                 if ( gameManager.isFreePlanet( "safari" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Isomot::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Room::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Egyptus
                 if ( gameManager.isFreePlanet( "egyptus" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Isomot::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Room::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Penitentiary
                 if ( gameManager.isFreePlanet( "penitentiary" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Isomot::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Room::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Byblos
                 if ( gameManager.isFreePlanet( "byblos" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Isomot::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Room::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Blacktooth
                 if ( gameManager.isFreePlanet( "blacktooth" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Isomot::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Room::FloorZ, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
@@ -679,7 +679,7 @@ void Isomot::updateFinalRoom()
                 {
                         FreeItemPtr finalBall( new FreeItem (
                                 ItemDescriptions::descriptions().getDescriptionByKind( "ball" ),
-                                146, 93, LayerHeight, "none"
+                                146, 93, Room::LayerHeight, "none"
                         ) );
                         finalBall->setBehaviorOf( "behaivor of final ball" );
                         activeRoom->addFreeItem( finalBall );

@@ -271,7 +271,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                 }
 
                 // collision with ceiling
-                if ( z >= 0 && this->getZ() > ( Isomot::MaxLayers - 1 ) * Isomot::LayerHeight + ( Isomot::LayerHeight >> 1 ) )
+                if ( z >= 0 && this->getZ() > ( Room::MaxLayers - 1 ) * Room::LayerHeight + ( Room::LayerHeight >> 1 ) )
                 {
                         mediator->pushCollision( "ceiling" );
                 }

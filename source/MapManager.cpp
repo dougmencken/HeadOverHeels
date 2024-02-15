@@ -1,7 +1,6 @@
 
 #include "MapManager.hpp"
 
-#include "Isomot.hpp"
 #include "RoomBuilder.hpp"
 #include "AvatarItem.hpp"
 #include "Door.hpp"
@@ -607,7 +606,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         // create character
 
         if ( wayOfEntry == "via teleport" || wayOfEntry == "via second teleport" )
-                entryZ = Isomot::FloorZ ;
+                entryZ = Room::FloorZ ;
 
         // no taken item in new room
         GameManager::getInstance().emptyHandbag();

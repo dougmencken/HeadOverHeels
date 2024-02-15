@@ -1074,8 +1074,8 @@ bool Mediator::pickNextCharacter ()
                                 && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= currentCharacter->getX() + currentCharacter->getWidthX() )
                                 && ( previousCharacter->getY() + delta >= currentCharacter->getY() )
                                 && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= currentCharacter->getY() + currentCharacter->getWidthY() )
-                                && ( ( previousCharacter->getOriginalKind() == "head" && previousCharacter->getZ() - Isomot::LayerHeight == currentCharacter->getZ() )
-                                        || ( previousCharacter->getOriginalKind() == "heels" && currentCharacter->getZ() - Isomot::LayerHeight == previousCharacter->getZ() ) ) )
+                                && ( ( previousCharacter->getOriginalKind() == "head" && previousCharacter->getZ() - Room::LayerHeight == currentCharacter->getZ() )
+                                        || ( previousCharacter->getOriginalKind() == "heels" && currentCharacter->getZ() - Room::LayerHeight == previousCharacter->getZ() ) ) )
                         {
                                 lockFreeItemsMutex ();
 
@@ -1145,7 +1145,7 @@ bool Mediator::pickNextCharacter ()
                         characterHeels->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                 }
 
-                AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Isomot::LayerHeight, orientation );
+                AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Room::LayerHeight, orientation );
 
                 setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? characterHeels : characterHead );
 
