@@ -477,7 +477,7 @@ void Room::addFloorTile( FloorTile * floorTile )
         // bin old tile, if any
         removeFloorAt( floorTile->getCellX(), floorTile->getCellY() );
 
-        floorTiles[ floorTile->getColumn() ] = floorTile;
+        this->floorTiles[ floorTile->getIndexOfColumn() ] = floorTile;
 }
 
 void Room::addWall( Wall * wall )
@@ -959,7 +959,7 @@ void Room::removeFloorAt( int tileX, int tileY )
 void Room::removeFloorTile( FloorTile * floorTile )
 {
         if ( floorTile != nilPointer )
-                floorTiles[ floorTile->getColumn () ] = nilPointer ;
+                this->floorTiles[ floorTile->getIndexOfColumn () ] = nilPointer ;
 
         delete floorTile ;
 }

@@ -28,6 +28,8 @@ public:
 
         void clear () {  pictures.clear() ;  }
 
+        bool hasPicture ( const std::string & imageFile ) const ;
+
         PicturePtr getPicture ( const std::string & imageFile ) const ;
 
         PicturePtr getOrLoadAndGet ( const std::string & imageFile ) ;
@@ -37,6 +39,8 @@ public:
         PicturePtr makePicture ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
 
         void putPicture ( const std::string & imageFile, const PicturePtr & picture ) ;
+
+        static bool isPictureThere ( const std::string & imageFile ) ;
 
 private:
 

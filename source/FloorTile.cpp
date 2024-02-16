@@ -50,7 +50,7 @@ void FloorTile::freshShadyImage ()
         shadyImage->setName( "shaded " + getRawImage().getName() );
 }
 
-int FloorTile::getColumn () const
+unsigned int FloorTile::getIndexOfColumn () const
 {
         assert( mediator != nilPointer );
         return mediator->getRoom()->getTilesX() * getCellY() + getCellX();

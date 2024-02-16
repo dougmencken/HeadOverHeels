@@ -97,8 +97,6 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			item.png/toaster.png \
 			item.png/fish-shadows.png \
 			blacktooth.png/blacktooth-nofloor-sw.png \
-			blacktooth.png/blacktooth-nofloor-south.png \
-			blacktooth.png/blacktooth-nofloor-east.png \
 			blacktooth.png/blacktooth-wall-x-1.png \
 			blacktooth.png/blacktooth-floor-west.png \
 			blacktooth.png/blacktooth-door-north.png \
@@ -110,10 +108,10 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			blacktooth.png/blacktooth-mortalfloor.png \
 			blacktooth.png/blacktooth-floor-north.png \
 			blacktooth.png/blacktooth-wall-y-3.png \
-			blacktooth.png/blacktooth-nofloor-west.png \
-			blacktooth.png/blacktooth-nofloor-north.png \
+			blacktooth.png/blacktooth-nofloor-x.png \
 			blacktooth.png/blacktooth-wall-x-3.png \
 			blacktooth.png/blacktooth-column-capital-north.png \
+			blacktooth.png/blacktooth-nofloor-y.png \
 			blacktooth.png/blacktooth-column-capital-east.png \
 			blacktooth.png/blacktooth-door-south.png \
 			blacktooth.png/blacktooth-column-capital-west.png \
@@ -124,17 +122,15 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			blacktooth.png/blacktooth-wall-y-2.png \
 			blacktooth.png/blacktooth-column-shaft-north.png \
 			blacktooth.png/blacktooth-column-capital-south.png \
+			jail.png/jail-nofloor-y.png \
 			jail.png/jail-column-capital-east.png \
 			jail.png/jail-wall-x.png \
-			jail.png/jail-nofloor-west.png \
 			jail.png/jail-floor-west.png \
 			jail.png/jail-floor-sw.png \
-			jail.png/jail-nofloor-south.png \
 			jail.png/jail-floor-north.png \
 			jail.png/jail-door-north.png \
 			jail.png/jail-floor.png \
 			jail.png/jail-column-shaft-north.png \
-			jail.png/jail-nofloor-north.png \
 			jail.png/jail-mortalfloor.png \
 			jail.png/jail-wall-y.png \
 			jail.png/jail-column-capital-south.png \
@@ -144,10 +140,10 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			jail.png/jail-door-west.png \
 			jail.png/jail-door-south.png \
 			jail.png/jail-nofloor-sw.png \
+			jail.png/jail-nofloor-x.png \
 			jail.png/jail-door-east.png \
 			jail.png/jail-floor-south.png \
 			jail.png/jail-column-capital-north.png \
-			jail.png/jail-nofloor-east.png \
 			market.png/market-door-north.png \
 			market.png/market-floor-west.png \
 			market.png/market-column-capital-north.png \
@@ -155,12 +151,12 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			market.png/market-wall-y-3.png \
 			market.png/market-column-shaft-north.png \
 			market.png/market-wall-x-3.png \
+			market.png/market-nofloor-x.png \
 			market.png/market-column-capital-east.png \
 			market.png/market-floor-north.png \
 			market.png/market-mortalfloor.png \
 			market.png/market-wall-y-1.png \
 			market.png/market-door-east.png \
-			market.png/market-nofloor-east.png \
 			market.png/market-floor-sw.png \
 			market.png/market-door-south.png \
 			market.png/market-wall-x-1.png \
@@ -170,7 +166,7 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			market.png/market-wall-y-2.png \
 			market.png/market-floor-east.png \
 			market.png/market-floor.png \
-			market.png/market-nofloor-north.png \
+			market.png/market-nofloor-y.png \
 			market.png/market-floor-south.png \
 			market.png/market-column-capital-south.png \
 			moon.png/moon-wall-y-4.png \
@@ -180,6 +176,7 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			moon.png/moon-column-capital-west.png \
 			moon.png/moon-wall-x-3.png \
 			moon.png/moon-wall-x-4.png \
+			moon.png/moon-nofloor-x.png \
 			moon.png/moon-door-north.png \
 			moon.png/moon-wall-y-1.png \
 			moon.png/moon-column-capital-east.png \
@@ -188,21 +185,21 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			moon.png/moon-column-shaft-north.png \
 			moon.png/moon-wall-y-3.png \
 			moon.png/moon-door-west.png \
+			moon.png/moon-nofloor-y.png \
 			moon.png/moon-mortalfloor.png \
 			moon.png/moon-door-south.png \
 			moon.png/moon-floor-sw.png \
 			moon.png/moon-column-capital-north.png \
 			moon.png/moon-column-capital-south.png \
-			moon.png/moon-nofloor-north.png \
 			moon.png/moon-floor.png \
 			moon.png/moon-floor-north.png \
 			moon.png/moon-column-shaft-east.png \
-			moon.png/moon-nofloor-east.png \
 			moon.png/moon-wall-y-2.png \
 			moon.png/moon-wall-x-1.png \
 			byblos.png/byblos-floor-sw.png \
+			byblos.png/byblos-nofloor-y.png \
+			byblos.png/byblos-nofloor-x.png \
 			byblos.png/byblos-column-capital-east.png \
-			byblos.png/byblos-nofloor-south.png \
 			byblos.png/byblos-floor.png \
 			byblos.png/byblos-wall-x-2.png \
 			byblos.png/byblos-nofloor-sw.png \
@@ -210,10 +207,8 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			byblos.png/byblos-door-west.png \
 			byblos.png/byblos-column-capital-north.png \
 			byblos.png/byblos-floor-south.png \
-			byblos.png/byblos-nofloor-north.png \
 			byblos.png/byblos-floor-west.png \
 			byblos.png/byblos-wall-y-2.png \
-			byblos.png/byblos-nofloor-east.png \
 			byblos.png/byblos-door-south.png \
 			byblos.png/byblos-door-north.png \
 			byblos.png/byblos-column-capital-south.png \
@@ -224,18 +219,16 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			byblos.png/byblos-door-east.png \
 			byblos.png/byblos-wall-y-1.png \
 			byblos.png/byblos-column-shaft-north.png \
-			byblos.png/byblos-nofloor-west.png \
 			byblos.png/byblos-column-capital-west.png \
 			egyptus.png/egyptus-floor-sw.png \
 			egyptus.png/egyptus-mortalfloor.png \
 			egyptus.png/egyptus-column-shaft-north.png \
-			egyptus.png/egyptus-nofloor-north.png \
+			egyptus.png/egyptus-nofloor-y.png \
 			egyptus.png/egyptus-door-south.png \
 			egyptus.png/egyptus-column-capital-west.png \
 			egyptus.png/egyptus-floor-west.png \
-			egyptus.png/egyptus-nofloor-south.png \
+			egyptus.png/egyptus-nofloor-x.png \
 			egyptus.png/egyptus-door-east.png \
-			egyptus.png/egyptus-nofloor-east.png \
 			egyptus.png/egyptus-wall-y-2.png \
 			egyptus.png/egyptus-door-north.png \
 			egyptus.png/egyptus-door-west.png \
@@ -245,7 +238,6 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			egyptus.png/egyptus-wall-y-1.png \
 			egyptus.png/egyptus-nofloor-sw.png \
 			egyptus.png/egyptus-column-capital-north.png \
-			egyptus.png/egyptus-nofloor-west.png \
 			egyptus.png/egyptus-floor-north.png \
 			egyptus.png/egyptus-column-capital-south.png \
 			egyptus.png/egyptus-floor.png \
@@ -259,23 +251,21 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			penitentiary.png/penitentiary-column-capital-west.png \
 			penitentiary.png/penitentiary-floor-sw.png \
 			penitentiary.png/penitentiary-floor-west.png \
-			penitentiary.png/penitentiary-nofloor-south.png \
 			penitentiary.png/penitentiary-wall-x-2.png \
 			penitentiary.png/penitentiary-column-capital-south.png \
 			penitentiary.png/penitentiary-door-south.png \
 			penitentiary.png/penitentiary-column-shaft-east.png \
 			penitentiary.png/penitentiary-floor-south.png \
+			penitentiary.png/penitentiary-nofloor-y.png \
 			penitentiary.png/penitentiary-mortalfloor.png \
 			penitentiary.png/penitentiary-door-east.png \
 			penitentiary.png/penitentiary-floor-east.png \
 			penitentiary.png/penitentiary-wall-x-1.png \
 			penitentiary.png/penitentiary-floor.png \
 			penitentiary.png/penitentiary-column-capital-east.png \
-			penitentiary.png/penitentiary-nofloor-west.png \
-			penitentiary.png/penitentiary-nofloor-east.png \
+			penitentiary.png/penitentiary-nofloor-x.png \
 			penitentiary.png/penitentiary-door-west.png \
 			penitentiary.png/penitentiary-door-north.png \
-			penitentiary.png/penitentiary-nofloor-north.png \
 			penitentiary.png/penitentiary-wall-y-1.png \
 			penitentiary.png/penitentiary-nofloor-sw.png \
 			safari.png/safari-wall-x-2.png \
@@ -287,12 +277,11 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			safari.png/safari-column-capital-south.png \
 			safari.png/safari-door-south.png \
 			safari.png/safari-column-capital-west.png \
+			safari.png/safari-nofloor-y.png \
+			safari.png/safari-nofloor-x.png \
 			safari.png/safari-wall-x-1.png \
-			safari.png/safari-nofloor-west.png \
 			safari.png/safari-column-shaft-east.png \
-			safari.png/safari-nofloor-north.png \
 			safari.png/safari-wall-y-2.png \
-			safari.png/safari-nofloor-east.png \
 			safari.png/safari-door-west.png \
 			safari.png/safari-wall-y-1.png \
 			safari.png/safari-door-north.png \
@@ -301,7 +290,6 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			safari.png/safari-column-capital-north.png \
 			safari.png/safari-door-east.png \
 			safari.png/safari-floor-south.png \
-			safari.png/safari-nofloor-south.png \
 			safari.png/safari-floor-north.png \
 			safari.png/safari-column-shaft-north.png \
 			safari.png/safari-wall-x-3.png \

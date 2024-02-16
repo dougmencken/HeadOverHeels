@@ -10,18 +10,35 @@
 #endif
 
 
-PicturePtr PoolOfPictures::getPicture( const std::string& imageFile ) const
+/* static */
+bool PoolOfPictures::isPictureThere ( const std::string & imageFile )
 {
-        std::string gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
+        const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
+        std::string path = ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile );
+        autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( path ) );
+        return picture->isNotNil() ;
+}
+
+bool PoolOfPictures::hasPicture ( const std::string & imageFile ) const
+{
+        const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
+        std::string key = gfxPrefix + ":" + imageFile ;
+
+        return ( pictures.find( key ) != pictures.end () );
+}
+
+PicturePtr PoolOfPictures::getPicture( const std::string & imageFile ) const
+{
+        const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         std::map< std::string, PicturePtr >::const_iterator pi = pictures.find( key ) ;
         return ( pi != pictures.end () ) ? ( *pi ).second : PicturePtr () ;
 }
 
-PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
+PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string & imageFile )
 {
-        std::string gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
+        const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         if ( pictures.find( key ) == pictures.end () )
@@ -45,9 +62,9 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
         return pictures[ key ] ;
 }
 
-PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& imageFile, unsigned int imageWidth, unsigned int imageHeight )
+PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight )
 {
-        std::string gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
+        const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         if ( pictures.find( key ) == pictures.end () || pictures[ key ] == nilPointer )
@@ -71,9 +88,9 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
         return pictures[ key ] ;
 }
 
-PicturePtr PoolOfPictures::makePicture( const std::string& imageFile, unsigned int imageWidth, unsigned int imageHeight )
+PicturePtr PoolOfPictures::makePicture( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight )
 {
-        std::string gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
+        const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         pictures[ key ] = PicturePtr( new Picture( imageWidth, imageHeight ) ) ;
@@ -87,9 +104,9 @@ PicturePtr PoolOfPictures::makePicture( const std::string& imageFile, unsigned i
         return pictures[ key ] ;
 }
 
-void PoolOfPictures::putPicture( const std::string& imageFile, const PicturePtr& picture )
+void PoolOfPictures::putPicture( const std::string & imageFile, const PicturePtr & picture )
 {
-        std::string gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
+        const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         pictures[ key ] = picture ;

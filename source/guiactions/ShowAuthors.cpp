@@ -129,11 +129,9 @@ void ShowAuthors::doAction ()
 
         PictureWidget* widgetForLoadingScreen = nilPointer;
 
-        // move text up
-
         while ( ! screen.getEscapeAction()->hasBegun() )
         {
-                int yNow = linesOfCredits->getY() - 1;
+                int yNow = linesOfCredits->getY() - 1 ; // move it up
 
                 if ( allegro::isKeyPushed( "b" )
                                 || ( allegro::isKeyPushed( "Space" ) && allegro::isShiftKeyPushed() )

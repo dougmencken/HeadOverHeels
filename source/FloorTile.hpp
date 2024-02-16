@@ -64,9 +64,9 @@ private:
 public:
 
         /**
-         * Room’s column to which this tile belongs
+         * The number of room’s column where this tile is located
          */
-        int getColumn () const ;
+        unsigned int getIndexOfColumn () const ;
 
         std::string getUniqueName () const {  return uniqueName ;  }
 

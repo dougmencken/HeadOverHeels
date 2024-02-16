@@ -253,7 +253,7 @@ void Mediator::wantShadowFromGridItem( const GridItem& item )
 
         shadeFreeItemsBeneathItemAt( item, item.getX (), item.getY (), item.getZ () );
 
-        int column = item.getColumnOfGrid();
+        unsigned int column = item.getColumnOfGrid ();
 
         // shade grid items below
         if ( ! room->gridItems[ column ].empty() )
@@ -290,7 +290,7 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int
 
         shadeFreeItemsBeneathItemAt( item, x, y, z );
 
-        // the range of cells where this item is
+        // the range of tiles (columns, cells) where this item is
         int xStart = x / room->getSizeOfOneTile ();
         int xEnd = ( x + item.getWidthX() - 1 ) / room->getSizeOfOneTile () + 1 ;
         int yStart = ( y - item.getWidthY() + 1 ) / room->getSizeOfOneTile ();
@@ -299,14 +299,15 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int
         for ( int i = xStart; i < xEnd; ++ i ) {
                 for ( int j = yStart; j < yEnd; ++ j )
                 {
-                        // mark to shade every item below the free item in this cell
-                        int column = room->getTilesX() * j + i ;
+                        unsigned int column = room->getTilesX() * j + i ;
+
+                        // mark to shade grid items in the column
                         for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ]. begin ();
                                                                    g != room->gridItems[ column ]. end ();
                                                                 ++ g ) {
                                 GridItem & gridItem = *( *g );
 
-                                if ( z > gridItem.getZ () )
+                                if ( z > gridItem.getZ () ) // below the free item
                                 {
                                         gridItem.freshProcessedImage();
                                         gridItem.setWantShadow( true );
@@ -364,8 +365,8 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
 
         int xCell = floorTile.getCellX ();
         int yCell = floorTile.getCellY ();
-        int column = floorTile.getColumn ();
-        int tileSize = room->getSizeOfOneTile ();
+        unsigned int column = floorTile.getIndexOfColumn ();
+        unsigned int tileSize = room->getSizeOfOneTile ();
 
         // shade with every grid item above
         for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )

@@ -230,7 +230,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 }
         }
 
-        // read about tiles with no floor
+        // read about tiles with no floor in a triple room
 
         std::vector< std::pair< int, int > > tilesWithoutFloor ;
 
@@ -265,7 +265,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         {
                 // build the floor automatically
 
-                std::string sceneryPrefix = scenery + "-" ;
+                const std::string sceneryPrefix = scenery + "-" ;
 
                 int lastTileX = xTiles - 1 ;
                 int lastTileY = yTiles - 1 ;
@@ -376,14 +376,10 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 {
                                         if ( tileX == lastTileX && tileY == lastTileY )
                                                 suffixOfNotFullTile = "sw" ;
-                                        else if ( tileX == 0 )
-                                                suffixOfNotFullTile = "north" ;
-                                        else if ( tileY == 0 )
-                                                suffixOfNotFullTile = "east" ;
-                                        else if ( tileX == lastTileX )
-                                                suffixOfNotFullTile = "south" ;
-                                        else if ( tileY == lastTileY )
-                                                suffixOfNotFullTile = "west" ;
+                                        else if ( tileX == 0 || tileX == lastTileX )
+                                                suffixOfNotFullTile = "x" ;
+                                        else if ( tileY == 0 || tileY == lastTileY )
+                                                suffixOfNotFullTile = "y" ;
                                         else
                                                 continue ;
 
@@ -394,6 +390,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 std::string nameOfPicture = fileOfTile ;
                                 fileOfTile += ".png" ;
                                 fileOfFullTile += ".png" ;
+
+                                if ( ! PoolOfPictures::isPictureThere( fileOfTile ) )
+                                        std::cout << "picture \"" << fileOfTile << "\" is *not* there :(" << std::endl ;
 
                                 std::pair< int, int > tileXY( tileX, tileY );
 
@@ -413,8 +412,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 else
                                                 {
                                                         bool darken = GameManager::getInstance().getCastShadows() ;
-                                                        if ( GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
-                                                                GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
+                                                        if ( GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003"
+                                                                || GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
                                                         const PicturePtr& imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
                                                         PicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
@@ -422,9 +421,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 }
                                         }
 
-                                        if ( floorImages.getPicture( fileOfTile ) != nilPointer )
+                                        if ( floorImages.hasPicture( fileOfTile ) )
                                         {
-                                                const PicturePtr& image = floorImages.getPicture( fileOfTile ) ;
+                                                const PicturePtr & image = floorImages.getPicture( fileOfTile ) ;
                                                 image->setName( nameOfPicture );
 
                                                 if ( image->getHeight() < 40 )
