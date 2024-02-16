@@ -14,7 +14,7 @@ echo "    zlib"
 echo "    Massively Spiffy Yet Delicately Unobtrusive Compression Library"
 echo
 
-zlib_version="1.2.11"
+zlib_version="1.3.1"
 
 cd "${pathToExternal}"/zlib
 [ -d "zlib-$zlib_version" ] || tar xzf zlib-"$zlib_version".tar.gz

@@ -30,7 +30,7 @@ echo "    zlib"
 echo "    Massively Spiffy Yet Delicately Unobtrusive Compression Library"
 echo
 
-zlib_version="1.2.11"
+zlib_version="1.3.1"
 zlibname=zlib-"$zlib_version"
 zlibinstallpath="${installPath}"/"$zlibname"
 
