@@ -38,13 +38,57 @@ https://osgameclones.com/ was perhaps the only lone site on which a link to this
 In the spring of 2019, I lost interest in this project and almost forgot about it.
 François Bissy's ( @kiwifb ) contribution in the fall of 2023 seems to have awakened my care
 
-_(update)_
-so it happened, finalmente, that Jorge came to this project
-https://github.com/dougmencken/HeadOverHeels/commit/1f5cbbc4723150ccf5b74a1387330a126d0efeb9#commitcomment-131827424
-currently (November 9, 2023) we are sharing various stories via email
+And then it happened. *Finalmente* https://github.com/dougmencken/HeadOverHeels/commit/1f5cbbc4723150ccf5b74a1387330a126d0efeb9#commitcomment-131827424 Jorge came to this project. At the end of 2023 we were sharing various stories via email
 
 ## The Future
 
 But yep, all this is still quite “raw” for now and really needs some more love.
 Any playing, testing, issues found, spreading a word about this project somewhere, and other contributions are welcome.
 Especially patches, these are **very much** welcome ;)
+
+## Building
+
+Since I’m currently using the GNU/Linux operating system, I’ll describe how to build and run this game on GNU/Linux with the “apt” package manager (Debian, Ubuntu and others)
+
+For sure, you already know what the *console* aka *terminal* is, already did ``sudo apt-get install git`` for any deals with GitHub, and cloned the game’s repository somewhere on your local storage. For the case when there’s a completely fresh system in which nothing was compiled before, to get all the things needed for building at once, just type
+
+```
+sudo apt-get install build-essential binutils make cmake autoconf automake libtool
+```
+
+And yep, don’t forget ``libx11-dev`` for the “allegro” library (https://github.com/dougmencken/HeadOverHeels/issues/37#issuecomment-1743796681)
+
+```
+sudo apt install libx11-dev
+```
+
+Then building the “Head over Heels” game on GNU/Linux is pretty easy with the ``linux-build.sh`` script I provided, which also builds all the used dependences as well
+
+```
+./linux-build.sh
+```
+
+Unedited ``linux-build.sh`` script installs the game inside your build directory at *where-the-build-dir-is/_rootdir*, thus type
+
+```
+cd _rootdir
+bin/headoverheels
+```
+
+just after finishing the build to get the game running! 😲🥹😌
+
+## If something ’s wrong there
+
+Don’t hear any music and sounds? Try
+
+```
+padsp bin/headoverheels
+```
+
+And if that doesn’t work, maybe it will the more complicated way
+
+```
+LD_PRELOAD=$(find /usr/lib/ -name libpulsedsp.so) bin/headoverheels --linux-audio=oss
+```
+
+Any other gotchas? Feel free to write and ask 😚
