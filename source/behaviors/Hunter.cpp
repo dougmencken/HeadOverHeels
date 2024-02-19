@@ -200,25 +200,27 @@ bool Hunter::update ()
 
 ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
 {
-        if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
-                        getNameOfBehavior() == "behavior of waiting hunter in four directions" )
-        {
-                return updateDirection4( activity );
-        }
-        else if ( getNameOfBehavior() == "behavior of hunter in eight directions" ||
-                        getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
-        {
-                return updateDirection8( activity );
+        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter() ;
+        if ( whoToHunt != nilPointer ) {
+                // a character above hunter is unseen
+                if ( whoToHunt->getZ () <= this->item->getZ () + this->item->getHeight () )
+                {
+                        if ( getNameOfBehavior() == "behavior of hunter in four directions"
+                                        || getNameOfBehavior() == "behavior of waiting hunter in four directions" )
+                                return updateDirection4( activity );
+                        else if ( getNameOfBehavior() == "behavior of hunter in eight directions"
+                                        || getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
+                                return updateDirection8( activity );
+                }
         }
 
-        return activities::Activity::Wait;
+        return activities::Activity::Wait ;
 }
 
 ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
 {
-        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter();
-
-        if ( whoToHunt != nilPointer ) // if there’s the active character in the room
+        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter() ;
+        if ( whoToHunt != nilPointer )
         {
                 int dx = this->item->getX() - whoToHunt->getX();
                 int dy = this->item->getY() - whoToHunt->getY();
