@@ -149,7 +149,7 @@ public:
 
         void setConnections ( const ConnectedRooms * links ) {  connections = links ;  }
 
-        unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
+        unsigned short getTransparencyOfShadows () const {  return this->shadingTransparency ;  }
 
         const std::vector < AvatarItemPtr > & getCharactersYetInRoom () const {  return charactersYetInRoom ;  }
 
@@ -298,10 +298,10 @@ private:
         unsigned int * drawSequence ;
 
         /**
-         * The opacity of shadows
+         * The transparency of shadows
          * from 0 for pure black shadows, thru 128 for 50% opacity, up to 256 for no shadows
          */
-        unsigned short shadingOpacity ;
+        unsigned short shadingTransparency ;
 
         std::vector < std::pair < int, int > > tilesWithoutFloor ;
 

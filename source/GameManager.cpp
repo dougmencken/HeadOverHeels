@@ -6,6 +6,7 @@
 #include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "ColorCyclingLabel.hpp"
+#include "TextField.hpp"
 #include "Camera.hpp"
 #include "GamePreferences.hpp"
 #include "GuiManager.hpp"
@@ -197,39 +198,42 @@ void GameManager::pause ()
         {
                 gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager() ;
                 gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
-                int deltaY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
+                int textAtY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
 
-                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
+                gui::TextField ateFishText( GamePreferences::getScreenWidth(), "center" );
+                ateFishText.moveTo( 0, textAtY );
+                ateFishText.setInterlignePercentage( 80 );
+                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
                         const gui::LanguageLine & line = text->getNthLine( i );
-                        gui::Label label( line.getText(), gui::Font::fontByColorAndSize( line.getColor(), line.isBigHeight() ) );
-                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw ();
+                        ateFishText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
                 text = language->findLanguageStringForAlias( "confirm-resume" );
-                deltaY += 20;
+                textAtY += ateFishText.getHeightOfField () + 20 ;
 
-                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
+                gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
+                resumeText.moveTo( 0, textAtY );
+                resumeText.setInterlignePercentage( 80 );
+                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
                         const gui::LanguageLine & line = text->getNthLine( i );
-                        gui::Label label( line.getText(), gui::Font::fontByColorAndSize( line.getColor(), line.isBigHeight() ) );
-                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw ();
+                        resumeText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
                 allegro::emptyKeyboardBuffer();
 
-                bool saveit = false;
-                bool resume = false;
+                bool saveit = false ;
+                bool resume = false ;
 
                 // as long as the user doesn't pick one of the two options, to save or not to save
                 while ( ! saveit && ! resume )
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
+
+                        ateFishText.draw ();
+                        resumeText.draw ();
 
                         if ( allegro::areKeypushesWaiting() )
                         {
@@ -282,27 +286,27 @@ void GameManager::pause ()
 
                 gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
                 gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
-                int deltaY = ( GamePreferences::getScreenHeight() >> 2 );
+                int textAtY = ( GamePreferences::getScreenHeight() >> 2 );
 
-                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
+                gui::TextField quitText( GamePreferences::getScreenWidth(), "center" );
+                quitText.moveTo( 0, textAtY );
+                quitText.setInterlignePercentage( 80 );
+                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
                         const gui::LanguageLine & line = text->getNthLine( i );
-                        gui::Label label( line.getText(), gui::Font::fontByColorAndSize( line.getColor(), line.isBigHeight() ) );
-                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw ();
+                        quitText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
                 text = language->findLanguageStringForAlias( "confirm-resume" );
-                deltaY += 20;
+                textAtY += quitText.getHeightOfField () + 20 ;
 
-                for ( size_t i = 0; i < text->howManyLinesOfText (); i ++ )
+                gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
+                resumeText.moveTo( 0, textAtY );
+                resumeText.setInterlignePercentage( 80 );
+                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
                 {
                         const gui::LanguageLine & line = text->getNthLine( i );
-                        gui::Label label( line.getText(), gui::Font::fontByColorAndSize( line.getColor(), line.isBigHeight() ) );
-                        label.moveTo( ( GamePreferences::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw ();
+                        resumeText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
                 bool quit = false ;
@@ -312,6 +316,9 @@ void GameManager::pause ()
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
+
+                        quitText.draw ();
+                        resumeText.draw ();
 
                         if ( allegro::areKeypushesWaiting() )
                         {

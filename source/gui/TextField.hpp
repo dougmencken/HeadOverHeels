@@ -38,7 +38,13 @@ public:
          * @param width of field
          * @param align horizontal alignment: left, center, or right
          */
-        TextField( unsigned int width, const std::string & align ) ;
+        TextField( unsigned int widthOField, const std::string & howToAlign )
+                : Widget( )
+                , width( widthOField )
+                , height( 0 )
+                , alignment( howToAlign )
+                , interlignePercentage( 100 )
+        {}
 
         virtual ~TextField( ) ;
 
@@ -48,7 +54,7 @@ public:
 
         void appendText ( const std::string & text, bool height2x, const std::string & color ) ;
 
-        void moveTo ( int x, int y ) ;
+        void moveTo ( int x, int y ) {  Widget::moveTo( x, y ) ; updatePositions () ;  }
 
         unsigned int getWidthOfField () const {  return this->width ;  }
 
@@ -56,7 +62,11 @@ public:
 
         const std::string & getAlignment () const {  return this->alignment ;  }
 
-        void setAlignment( const std::string & newAlignment ) ;
+        void setAlignment( const std::string & newAlignment ) {  this->alignment = newAlignment ; updatePositions() ;  }
+
+        short getInterlignePercentage () const {  return this->interlignePercentage ;  }
+
+        void setInterlignePercentage ( short newInterligne ) {  this->interlignePercentage = newInterligne ; updatePositions() ;  }
 
 private:
 
@@ -67,9 +77,17 @@ private:
         std::string alignment ;
 
         /**
+         * the next line is going at
+         *    previousLabel.getY() + previousLabel.getHeight() * interlignePercentage / 100
+         */
+        short interlignePercentage ;
+
+        /**
          * The text field is made up of labels
          */
         std::vector < Label * > lines ;
+
+        void updatePositions () ;
 
 };
 

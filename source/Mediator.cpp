@@ -249,7 +249,7 @@ void Mediator::wantToMaskWithGridItemAt( const GridItem & gridItem, int x, int y
 
 void Mediator::wantShadowFromGridItem( const GridItem& item )
 {
-        if ( room->getOpacityOfShadows() >= 256 ) return ;
+        if ( room->getTransparencyOfShadows() >= 256 ) return ;
 
         shadeFreeItemsBeneathItemAt( item, item.getX (), item.getY (), item.getZ () );
 
@@ -286,7 +286,7 @@ void Mediator::wantShadowFromFreeItem( const FreeItem& item )
 
 void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int z )
 {
-        if ( room->getOpacityOfShadows() >= 256 ) return ;
+        if ( room->getTransparencyOfShadows() >= 256 ) return ;
 
         shadeFreeItemsBeneathItemAt( item, x, y, z );
 
@@ -361,7 +361,7 @@ void Mediator::shadeFreeItemsBeneathItemAt( const Item& item, int x, int y, int 
 
 void Mediator::castShadowOnFloor( FloorTile& floorTile )
 {
-        if ( room->getOpacityOfShadows() >= 256 ) return ;
+        if ( room->getTransparencyOfShadows() >= 256 ) return ;
 
         int xCell = floorTile.getCellX ();
         int yCell = floorTile.getCellY ();
@@ -393,7 +393,7 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
                                                 - ( static_cast< int >( gridItem.getImageOfShadow().getHeight() ) >> 1 )
                                                 + room->getY0() - 1,
                         /* shadow */ gridItem.getImageOfShadow(),
-                        /* shading */ room->getOpacityOfShadows()
+                        /* shading */ room->getTransparencyOfShadows()
                         /* transparency = 0 */
                 ) ;
         }
@@ -431,7 +431,7 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
                                                 + ( ( freeItem.getWidthX() - freeItem.getWidthY() + 1 ) >> 1 )
                                                 - ( static_cast< int >( freeItem.getImageOfShadow().getHeight() ) >> 1 ),
                                 /* shadow */ freeItem.getImageOfShadow(),
-                                /* shading */ room->getOpacityOfShadows(),
+                                /* shading */ room->getTransparencyOfShadows(),
                                 /* transparency */ freeItem.getTransparency()
                         ) ;
                 }
@@ -440,7 +440,7 @@ void Mediator::castShadowOnFloor( FloorTile& floorTile )
 
 void Mediator::castShadowOnGridItem( GridItem& gridItem )
 {
-        if ( room->getOpacityOfShadows() >= 256 ) return ;
+        if ( room->getTransparencyOfShadows() >= 256 ) return ;
 
         int tileSize = room->getSizeOfOneTile ();
         int column = gridItem.getColumnOfGrid();
@@ -478,7 +478,7 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                                                 + heightOfItemImage - tileSize - gridItem.getHeight()
                                                 - ( heightOfAboveShadow >> 1 ),
                                 /* shadow */ aboveItem.getImageOfShadow(),
-                                /* shading */ room->getOpacityOfShadows()
+                                /* shading */ room->getTransparencyOfShadows()
                                 /* transparency = 0 */
                         ) ;
                 }
@@ -525,7 +525,7 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
                                                         - ( heightOfAboveShadow >> 1 )
                                                         - gridItem.getZ() - gridItem.getHeight(),
                                         /* shadow */ freeItem.getImageOfShadow(),
-                                        /* shading */ room->getOpacityOfShadows(),
+                                        /* shading */ room->getTransparencyOfShadows(),
                                         /* transparency */ freeItem.getTransparency()
                                 ) ;
                         }
@@ -535,7 +535,7 @@ void Mediator::castShadowOnGridItem( GridItem& gridItem )
 
 void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
 {
-        if ( room->getOpacityOfShadows() >= 256 ) return ;
+        if ( room->getTransparencyOfShadows() >= 256 ) return ;
 
         int tileSize = room->getSizeOfOneTile ();
 
@@ -580,7 +580,7 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
                                                                 - freeItem.getZ() - freeItem.getHeight()
                                                                 - ( heightOfAboveShadow >> 1 ) - 1,
                                                 /* shadow */ gridItem.getImageOfShadow(),
-                                                /* shading */ room->getOpacityOfShadows()
+                                                /* shading */ room->getTransparencyOfShadows()
                                                 /* transparency = 0 */
                                         ) ;
                                 }
@@ -626,7 +626,7 @@ void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
                                                         + ( ( aboveItem.getWidthX() - aboveItem.getWidthY()
                                                                 - heightOfAboveShadow ) >> 1 ),
                                         /* shadow */ aboveItem.getImageOfShadow(),
-                                        /* shading */ room->getOpacityOfShadows(),
+                                        /* shading */ room->getTransparencyOfShadows(),
                                         /* transparency */ freeItem.getTransparency()
                                 );
                         }

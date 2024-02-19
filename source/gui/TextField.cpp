@@ -3,21 +3,13 @@
 
 #include "Font.hpp"
 #include "Label.hpp"
+#include "ColorCyclingLabel.hpp"
 
 #include <algorithm> // std::for_each
 
-using gui::TextField;
-using gui::Label;
+using gui::TextField ;
+using gui::Label ;
 
-
-TextField::TextField( unsigned int width, const std::string & align )
-        : Widget( )
-        , width( width )
-        , height( 0 )
-        , alignment( align )
-{
-
-}
 
 TextField::~TextField()
 {
@@ -42,48 +34,37 @@ void TextField::draw ()
 void TextField::appendText( const std::string & text, bool height2x, const std::string & color )
 {
         bool multicolor = ( color == "multicolor" ) ;
-        Label* label = new Label( text, Font::fontByColorAndSize( multicolor ? "" : color, height2x ), multicolor );
+        bool colorcycling = ( color == "cycling" ) ;
+        Label* label = colorcycling ? new ColorCyclingLabel( text, height2x )
+                                    : new Label( text, Font::fontByColorAndSize( multicolor ? "" : color, height2x ), multicolor ) ;
 
-        const int deltaW = static_cast< int >( this->width ) - static_cast< int >( label->getWidth() );
-        int posX = 0;
+        const int differenceInWidth = static_cast< int >( this->width ) - static_cast< int >( label->getWidth() );
+        int offsetX = 0 ;
 
-        if ( alignment == "center" )
-                posX = deltaW >> 1;
-        else if ( alignment == "right" )
-                posX = deltaW;
+        if ( alignment == "center" ) offsetX = differenceInWidth >> 1 ;
+        else if ( alignment == "right" ) offsetX = differenceInWidth ;
 
-        label->moveTo( posX + this->getX (), this->getY () + this->height );
-        this->height += label->getHeight();
+        label->moveTo( offsetX + this->getX (), this->getY () + this->height );
+        this->height += label->getHeight() * interlignePercentage / 100 ;
 
         lines.push_back( label );
 }
 
-void TextField::setAlignment( const std::string& newAlignment )
+/* private */
+void TextField::updatePositions ()
 {
-        for ( std::vector< Label * >::const_iterator i = this->lines.begin (); i != this->lines.end (); ++ i )
-        {
-                Label* label = ( *i );
+        this->height = 0 ;
 
-                int offsetX = 0;
+        for ( unsigned int l = 0 ; l < this->lines.size (); ++ l ) {
+                Label* label = this->lines[ l ];
 
-                if ( newAlignment == "center" )
-                        offsetX = ( this->width - label->getWidth() ) >> 1;
-                else if ( newAlignment == "right" )
-                        offsetX = this->width - label->getWidth();
+                const int differenceInWidth = static_cast< int >( this->width ) - static_cast< int >( label->getWidth() );
+                int offsetX = 0 ;
 
-                label->moveTo( offsetX + this->getX (), label->getY () );
+                if ( this->alignment == "center" ) offsetX = differenceInWidth >> 1 ;
+                else if ( this->alignment == "right" ) offsetX = differenceInWidth ;
+
+                label->moveTo( offsetX + this->getX (), this->getY () + this->height );
+                this->height += label->getHeight() * interlignePercentage / 100 ;
         }
-
-        this->alignment = newAlignment;
-}
-
-void TextField::moveTo( int x, int y )
-{
-        for ( std::vector< Label * >::const_iterator i = this->lines.begin (); i != this->lines.end (); ++ i )
-        {
-                Label* label = ( *i );
-                label->moveTo( label->getX() + x - this->getX(), label->getY() + y - this->getY() );
-        }
-
-        Widget::moveTo( x, y );
 }

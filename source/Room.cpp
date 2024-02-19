@@ -125,8 +125,8 @@ Room::Room( const std::string & roomFile, const std::string & scenery,
                 }
         }
 
-        // 0 for pure black shadows, 128 for 50% opacity of shadows, 256 for no shadows
-        shadingOpacity = GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
+        // 0 for black shadows, 128 for 50% opacity, 256 for no shadows
+        this->shadingTransparency = GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
 
 #if defined( DEBUG ) && DEBUG
         std::cout << "created room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
@@ -656,16 +656,15 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         addGridItemToContainer( gridItem );
 
-        if ( gridItem->getZ() != Room::FloorZ )
-        {
-                // when item goes lower than top, look for collisions
+        if ( gridItem->getZ() != Room::FloorZ ) {
+                // when the position on Z is set, look for collisions there
                 mediator->lookForCollisionsOf( gridItem->getUniqueName() );
-        }
-        else
-        {
-                // whem item goes to top, modify its position on Z
+        } else
+        {       // an item with z = FloorZ goes above the previously added ones in the column with the same x and y
+                // and its position on Z is calculated
                 gridItem->setZ( mediator->findHighestZ( *gridItem ) );
-                std::cout << "for " << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" on top Z is " << gridItem->getZ() << std::endl ;
+                std::cout << "for " << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName()
+                                        << "\" the calculated “Z above others” is " << gridItem->getZ() << std::endl ;
         }
 
         if ( ! mediator->isStackOfCollisionsEmpty () )
@@ -1262,25 +1261,20 @@ void Room::draw ()
 
         // draw tiles o’floor
 
-        for ( unsigned int xCell = 0; xCell < getTilesX(); xCell++ )
-        {
-                for ( unsigned int yCell = 0; yCell < getTilesY(); yCell++ )
+        for ( unsigned int xCell = 0; xCell < getTilesX(); xCell ++ ) {
+                for ( unsigned int yCell = 0; yCell < getTilesY(); yCell ++ )
                 {
-                        unsigned int column = getTilesX() * yCell + xCell;
+                        unsigned int column = getTilesX() * yCell + xCell ;
                         FloorTile* tile = floorTiles[ column ];
 
-                        if ( tile != nilPointer )  // if there is tile of floor here
+                        if ( tile != nilPointer ) // there’s tile of floor here
                         {
-                                // shade this tile when shadows are on
-                                if ( shadingOpacity < 256 )
-                                {
+                                if ( shadingTransparency < 256 /* shadows are visible */ ) {
                                         mediator->lockGridItemsMutex();
                                         mediator->lockFreeItemsMutex();
 
                                         if ( tile->getWantShadow() )
-                                        {
                                                 mediator->castShadowOnFloor( *tile );
-                                        }
 
                                         mediator->unlockGridItemsMutex();
                                         mediator->unlockFreeItemsMutex();
@@ -1314,7 +1308,7 @@ void Room::draw ()
                 {
                         GridItem& gridItem = *( *gi );
 
-                        if ( shadingOpacity < 256 )
+                        if ( shadingTransparency < 256 )
                         {
                                 // cast shadow
                                 if ( gridItem.getWantShadow() )
@@ -1335,7 +1329,7 @@ void Room::draw ()
                 FreeItem& freeItem = *( *fi );
 
                 // shade an item when shadows are on
-                if ( shadingOpacity < 256 )
+                if ( shadingTransparency < 256 )
                 {
                         freeItem.requestShadow();
                 }
