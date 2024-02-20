@@ -38,7 +38,7 @@ bool Driven::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         if ( moving )
                         {
                                 switch ( Way( freeItem.getOrientation() ).getIntegerOfWay() )
@@ -116,7 +116,7 @@ bool Driven::update ()
                                         if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
                                         {
                                                 moving = false;
-                                                activity = activities::Activity::Wait;
+                                                activity = activities::Activity::Waiting;
 
                                                 SoundManager::getInstance().play( freeItem.getKind(), "collision" );
                                         }
@@ -141,7 +141,7 @@ bool Driven::update ()
                         {
                                 if ( ! activities::Displacing::getInstance().displace( this, &activity, true ) )
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 speedTimer->reset();
@@ -166,7 +166,7 @@ bool Driven::update ()
                         {
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 fallTimer->reset();
@@ -179,7 +179,7 @@ bool Driven::update ()
 
                 case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 default:

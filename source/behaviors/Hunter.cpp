@@ -36,9 +36,9 @@ bool Hunter::update ()
 
         bool alive = true;
 
-        switch ( activity )
+        switch ( this->activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         // if the hunter is not a waiting one, activate it just now
                         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                                         getNameOfBehavior() == "behavior of hunter in eight directions" )
@@ -171,7 +171,7 @@ bool Hunter::update ()
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
                                 activities::Displacing::getInstance().displace( this, &activity, false );
-                                activity = activities::Activity::Wait;
+                                activity = activities::Activity::Waiting;
                                 speedTimer->reset();
                         }
 
@@ -188,14 +188,14 @@ bool Hunter::update ()
 
                 case activities::Activity::WakeUp:
                         dynamic_cast< FreeItem& >( * this->item ).setFrozen( false );
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 default:
                         ;
         }
 
-        return ! alive;
+        return ! alive ;
 }
 
 ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
@@ -203,7 +203,7 @@ ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
         AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter() ;
         if ( whoToHunt != nilPointer ) {
                 // a character above hunter is unseen
-                if ( whoToHunt->getZ () <= this->item->getZ () + this->item->getHeight () )
+                if ( whoToHunt->getZ () < this->item->getZ () + this->item->getHeight () )
                 {
                         if ( getNameOfBehavior() == "behavior of hunter in four directions"
                                         || getNameOfBehavior() == "behavior of waiting hunter in four directions" )
@@ -214,7 +214,7 @@ ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
                 }
         }
 
-        return activities::Activity::Wait ;
+        return activities::Activity::Waiting ;
 }
 
 ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
@@ -263,7 +263,7 @@ ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
                 }
         }
 
-        return activity;
+        return activity ;
 }
 
 ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )

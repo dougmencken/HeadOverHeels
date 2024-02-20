@@ -40,7 +40,7 @@ bool Trampoline::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         // fold trampoline when there are items on top of it
                         if ( ! freeItem.canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -104,7 +104,7 @@ bool Trampoline::update ()
 
                                 if ( activity != activities::Activity::Fall )
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 speedTimer->reset();
@@ -127,7 +127,7 @@ bool Trampoline::update ()
                                 {
                                         // play the sound of falling
                                         SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 fallTimer->reset();

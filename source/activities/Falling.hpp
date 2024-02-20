@@ -14,43 +14,38 @@
 #include <string>
 #include <vector>
 
-#include "KindOfActivity.hpp"
-#include "FreeItem.hpp"
+#include "Behavior.hpp"
+#include "Mediator.hpp"
 
 
 namespace activities
 {
 
-/**
- * Item falls
- */
-
-class Falling : public KindOfActivity
+class Falling
 {
-
-protected:
-
-        Falling( ) : KindOfActivity( ) {}
 
 public:
 
         virtual ~Falling( ) {}
 
-       /**
-        * @return true if the item may fall or false when there’s a collision
-        */
-        virtual bool fall ( behaviors::Behavior * behavior ) ;
+        /**
+         * Item is falling
+         * @return true if the item falls, or false when there’s a collision
+         */
+        bool fall ( behaviors::Behavior * behavior ) ;
 
         static Falling & getInstance () ;
 
 private:
 
-       /**
-        * When item falls on some other one, that one becomes item’s anchor
-        */
+        /**
+         * When the item falls on some other one, that one becomes the item’s anchor
+         */
         void assignAnchor ( const std::string & uniqueNameOfItem, Mediator * mediator, const std::vector < std::string > & itemsBelow ) ;
 
 private:
+
+        Falling( ) {}
 
         static Falling * instance ;
 

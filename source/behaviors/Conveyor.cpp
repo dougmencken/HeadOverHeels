@@ -9,6 +9,8 @@
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
+#include <stack>
+
 
 namespace behaviors
 {
@@ -32,33 +34,31 @@ bool Conveyor::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                                 {
-                                        std::stack< std::string > topItems;
+                                        // copy the stack of collisions
+                                        std::stack< std::string > itemsAbove ;
                                         while ( ! mediator->isStackOfCollisionsEmpty() )
-                                        {
-                                                topItems.push( mediator->popCollision() );
-                                        }
+                                                itemsAbove.push( mediator->popCollision() );
 
-                                        // check conditions as long as there are items on top
-                                        while ( ! topItems.empty () )
+                                        while ( ! itemsAbove.empty () ) // for each such item
                                         {
-                                                ItemPtr collision = mediator->findItemByUniqueName( topItems.top() );
-                                                topItems.pop();
+                                                ItemPtr collision = mediator->findItemByUniqueName( itemsAbove.top() );
+                                                itemsAbove.pop() ;
 
                                                 // is it free item
                                                 if ( collision != nilPointer &&
                                                         ( collision->whichItemClass() == "free item" || collision->whichItemClass() == "avatar item" ) )
                                                 {
-                                                        FreeItem& itemAbove = dynamic_cast< FreeItem & >( *collision );
+                                                        FreeItem & itemAbove = dynamic_cast< FreeItem & >( *collision );
 
-                                                        // is it item with behavior
-                                                        if ( itemAbove.getBehavior() != nilPointer )
+                                                        if ( /* the carrier is this conveyor */ this->item->getUniqueName() == itemAbove.getCarrier()
+                                                                        || /* or any other carrying item */ ! itemAbove.getCarrier().empty() )
                                                         {
-                                                                if ( ! itemAbove.getAnchor().empty() || this->item->getUniqueName() == itemAbove.getAnchor() )
+                                                                if ( itemAbove.getBehavior() != nilPointer )
                                                                 {
                                                                         ActivityOfItem activityOfItemAbove = itemAbove.getBehavior()->getActivityOfItem() ;
                                                                         bool outOfGravity = ( activityOfItemAbove == activities::Activity::Jump
@@ -95,7 +95,7 @@ bool Conveyor::update ()
                         break;
 
                 default:
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
         }
 
         return false;

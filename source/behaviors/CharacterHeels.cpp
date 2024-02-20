@@ -57,7 +57,7 @@ bool CharacterHeels::update()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         wait( characterItem );
                         break;
 
@@ -124,7 +124,7 @@ bool CharacterHeels::update()
 
                 case activities::Activity::ItemTaken:
                         characterItem.addToZ( - Room::LayerHeight );
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 case activities::Activity::DropItem:
@@ -154,7 +154,7 @@ void CharacterHeels::behave ()
                         && activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
         {
                 // when waiting or blinking
-                if ( activity == activities::Activity::Wait || activity == activities::Activity::Blink )
+                if ( activity == activities::Activity::Waiting || activity == activities::Activity::Blinking )
                 {
                         if ( input.takeTyped() )
                         {
@@ -233,7 +233,7 @@ void CharacterHeels::behave ()
                         else if ( ! input.anyMoveTyped() )
                         {
                                 SoundManager::getInstance().stop( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
-                                activity = activities::Activity::Wait ;
+                                activity = activities::Activity::Waiting ;
                         }
                 }
                 // if you are being displaced

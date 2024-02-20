@@ -68,7 +68,7 @@ bool CharacterHeadAndHeels::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         wait( characterItem );
                         break;
 
@@ -132,7 +132,7 @@ bool CharacterHeadAndHeels::update ()
                         glide( characterItem );
                         break;
 
-                case activities::Activity::Blink:
+                case activities::Activity::Blinking:
                         blink( characterItem );
                         break;
 
@@ -143,7 +143,7 @@ bool CharacterHeadAndHeels::update ()
 
                 case activities::Activity::ItemTaken:
                         characterItem.addToZ( - Room::LayerHeight );
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 case activities::Activity::DropItem:
@@ -173,7 +173,7 @@ void CharacterHeadAndHeels::behave ()
                         && activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
         {
                 // when waiting or blinking
-                if ( activity == activities::Activity::Wait || activity == activities::Activity::Blink )
+                if ( activity == activities::Activity::Waiting || activity == activities::Activity::Blinking )
                 {
                         if ( input.jumpTyped() )
                         {
@@ -261,7 +261,7 @@ void CharacterHeadAndHeels::behave ()
                         else if ( ! input.anyMoveTyped() )
                         {
                                 SoundManager::getInstance().stop( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
-                                activity = activities::Activity::Wait ;
+                                activity = activities::Activity::Waiting ;
                         }
                 }
                 // the character is being displaced
@@ -422,7 +422,7 @@ void CharacterHeadAndHeels::wait( AvatarItem & characterItem )
         if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
                 timerForBlinking->reset();
-                activity = activities::Activity::Blink;
+                activity = activities::Activity::Blinking;
         }
 
         if ( activities::Falling::getInstance().fall( this ) )
@@ -449,7 +449,7 @@ void CharacterHeadAndHeels::blink( AvatarItem & characterItem )
         else if ( blinkTime > 0.800 )
         {
                 timerForBlinking->reset();
-                activity = activities::Activity::Wait;
+                activity = activities::Activity::Waiting;
         }
 }
 

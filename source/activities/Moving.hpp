@@ -11,19 +11,16 @@
 #ifndef Moving_hpp_
 #define Moving_hpp_
 
-#include "KindOfActivity.hpp"
 #include "FreeItem.hpp"
+#include "Behavior.hpp"
+#include "ActivityOfItem.hpp"
 
 
 namespace activities
 {
 
-class Moving : public KindOfActivity
+class Moving
 {
-
-protected:
-
-        Moving( ) : KindOfActivity( ) {}
 
 public:
 
@@ -31,14 +28,14 @@ public:
 
         static Moving & getInstance () ;
 
-       /**
-        * Move the item
-        * @param behavior the behavior of item
-        * @param activity the current activity
-        * @param itFalls whether the item falls, false for a flying one
-        * @return true for a move or activity change, false for a collision
-        */
-        virtual bool move ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool itFalls ) ;
+        /**
+         * Item is moving
+         * @param behavior the behavior of item
+         * @param activity the current activity
+         * @param itFalls whether the item falls, false for a flying one
+         * @return true for a move or changed activity, false for a collision
+         */
+        bool move ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool itFalls ) ;
 
 protected:
 
@@ -57,6 +54,8 @@ protected:
         void descend ( FreeItem & freeItem, int z ) ;
 
 private:
+
+        Moving( ) {}
 
         static Moving * instance ;
 

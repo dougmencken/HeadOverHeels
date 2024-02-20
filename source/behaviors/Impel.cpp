@@ -17,7 +17,7 @@ Impel::Impel( const ItemPtr & item, const std::string & behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        activity = activities::Activity::Wait ;
+        activity = activities::Activity::Waiting ;
 
         speedTimer->go();
         fallTimer->go();
@@ -34,7 +34,7 @@ bool Impel::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -50,7 +50,7 @@ bool Impel::update ()
                         {
                                 if ( ! activities::Displacing::getInstance().displace( this, &activity, true ) )
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 speedTimer->reset();
@@ -71,7 +71,7 @@ bool Impel::update ()
                         {
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 fallTimer->reset();

@@ -33,8 +33,8 @@ class Activity /* only constants here */
 
 public:
 
-        static const unsigned int Wait = 0 ;
-        static const unsigned int Blink = 8 ;
+        static const unsigned int Waiting       = 0 ;
+        static const unsigned int Blinking      = 8 ;
 
         static const unsigned int MoveNorth = 24 ;
         static const unsigned int MoveSouth = 25 ;

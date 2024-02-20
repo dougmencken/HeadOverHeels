@@ -11,18 +11,15 @@
 #ifndef Displacing_hpp_
 #define Displacing_hpp_
 
-#include "KindOfActivity.hpp"
+#include "ActivityOfItem.hpp"
+#include "Behavior.hpp"
 
 
 namespace activities
 {
 
-class Displacing : public KindOfActivity
+class Displacing
 {
-
-protected:
-
-        Displacing( ) : KindOfActivity( ) {}
 
 public:
 
@@ -30,16 +27,18 @@ public:
 
         static Displacing & getInstance() ;
 
-       /**
-        * Item is being displaced
-        * @param behavior the behavior of item
-        * @param activity subactivity to get way of movement
-        * @param canFall whether an item falls, false if it flies
-        * @return true for displace or change of activity, false for collision
-        */
-        virtual bool displace ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
+        /**
+         * Item is being displaced
+         * @param behavior the behavior of item
+         * @param activity subactivity to get way of movement
+         * @param canFall whether an item falls, false if it flies
+         * @return true for displacing or changing activity, false for a collision
+         */
+        bool displace ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 private:
+
+        Displacing( ) {}
 
         static Displacing * instance ;
 

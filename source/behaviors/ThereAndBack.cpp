@@ -35,7 +35,7 @@ bool ThereAndBack::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         letsMove();
                         break;
 
@@ -79,7 +79,7 @@ bool ThereAndBack::update ()
                                 // displace this item by other one
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
-                                activity = activities::Activity::Wait;
+                                activity = activities::Activity::Waiting;
 
                                 // preserve inactivity for frozen item
                                 if ( freeItem.isFrozen() )
@@ -87,7 +87,7 @@ bool ThereAndBack::update ()
                         }
                         else
                         {
-                                activity = activities::Activity::Wait;
+                                activity = activities::Activity::Waiting;
                         }
                         break;
 
@@ -107,7 +107,7 @@ bool ThereAndBack::update ()
                                         {
                                                 // emit the sound of falling
                                                 SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                                activity = activities::Activity::Wait;
+                                                activity = activities::Activity::Waiting;
                                         }
 
                                         fallTimer->reset();
@@ -115,7 +115,7 @@ bool ThereAndBack::update ()
                         }
                         else
                         {
-                                activity = activities::Activity::Wait;
+                                activity = activities::Activity::Waiting;
                         }
                         break;
 
@@ -125,7 +125,7 @@ bool ThereAndBack::update ()
 
                 case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 default:

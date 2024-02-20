@@ -38,7 +38,7 @@ bool Detector::update ()
         {
                 switch ( activity )
                 {
-                        case activities::Activity::Wait:
+                        case activities::Activity::Waiting:
                                 // the character meets the detector on the X way
                                 if ( freeItem.getX() >= activeCharacter->getX() - 1 && freeItem.getX() <= activeCharacter->getX() + 1 )
                                 {
@@ -66,7 +66,7 @@ bool Detector::update ()
                                 }
 
                                 // if it changed activity, play the sound
-                                if ( activity != activities::Activity::Wait )
+                                if ( activity != activities::Activity::Waiting )
                                 {
                                         SoundManager::getInstance().play( freeItem.getKind(), "move" );
                                 }
@@ -85,7 +85,7 @@ bool Detector::update ()
                                                 // move item, if there’s collision let’s wait
                                                 if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
                                                 {
-                                                        activity = activities::Activity::Wait;
+                                                        activity = activities::Activity::Waiting;
                                                 }
 
                                                 speedTimer->reset();
@@ -108,7 +108,7 @@ bool Detector::update ()
                                 {
                                         if ( ! activities::Displacing::getInstance().displace( this, &activity, true ) )
                                         {
-                                                activity = activities::Activity::Wait;
+                                                activity = activities::Activity::Waiting;
                                         }
 
                                         speedTimer->reset();
@@ -132,7 +132,7 @@ bool Detector::update ()
                                 {
                                         if ( ! activities::Falling::getInstance().fall( this ) )
                                         {
-                                                activity = activities::Activity::Wait;
+                                                activity = activities::Activity::Waiting;
                                         }
 
                                         fallTimer->reset();
@@ -145,7 +145,7 @@ bool Detector::update ()
 
                         case activities::Activity::WakeUp:
                                 freeItem.setFrozen( false );
-                                activity = activities::Activity::Wait;
+                                activity = activities::Activity::Waiting;
                                 break;
 
                         default:

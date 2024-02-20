@@ -33,7 +33,7 @@ bool Switch::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         // look if there’re items near the switch
                         if ( lookForItemsNearby( itemsNearby ) )
                         {
@@ -45,7 +45,7 @@ bool Switch::update ()
                                         ItemPtr trigger = triggers[ i ];
 
                                         if ( std::find( itemsNearby.begin (), itemsNearby.end (), trigger ) == itemsNearby.end () ||
-                                                ( trigger->whichItemClass() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == activities::Activity::Wait ) )
+                                                ( trigger->whichItemClass() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == activities::Activity::Waiting ) )
                                         {
                                                 triggers.erase( std::remove( triggers.begin (), triggers.end (), trigger ), triggers.end () );
                                         }
@@ -120,7 +120,7 @@ bool Switch::update ()
                                 SoundManager::getInstance().play( item->getKind (), "switch" );
                         }
 
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 default:

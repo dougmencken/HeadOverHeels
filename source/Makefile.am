@@ -121,8 +121,8 @@ headoverheels_SOURCES = main.cpp \
 			TimerWindows.cpp \
 			TimerWindows.hpp \
 			activities/ActivityOfItem.hpp \
-			activities/KindOfActivity.cpp \
-			activities/KindOfActivity.hpp \
+			activities/PropagateActivity.cpp \
+			activities/PropagateActivity.hpp \
 			activities/Displacing.cpp \
 			activities/Displacing.hpp \
 			activities/Falling.cpp \

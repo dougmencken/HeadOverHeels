@@ -16,7 +16,7 @@ Elevator::Elevator( const ItemPtr & item, const std::string & behavior )
         , top( 10 )
         , bottom( 0 )
         , ascent( true )
-        , lastActivity( activities::Activity::Wait )
+        , lastActivity( activities::Activity::Waiting )
         , speedTimer( new Timer() )
         , stopTimer( new Timer() )
 {
@@ -34,7 +34,7 @@ bool Elevator::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         setActivityOfItem ( ascent ? activities::Activity::MoveUp : activities::Activity::MoveDown );
                         lastActivity = activity;
                         break;

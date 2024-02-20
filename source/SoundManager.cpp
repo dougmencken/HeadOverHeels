@@ -186,9 +186,9 @@ std::string SoundManager::activityToString ( const activities::ActivityOfItem & 
 {
         switch ( activity )
         {
-                case activities::Activity::Wait : return "wait" ;
+                case activities::Activity::Waiting : return "wait" ;
 
-                case activities::Activity::Blink : return "blink" ;
+                case activities::Activity::Blinking : return "blink" ;
 
                 case activities::Activity::MoveNorth :
                 case activities::Activity::MoveSouth :

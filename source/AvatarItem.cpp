@@ -399,7 +399,7 @@ void AvatarItem::wait ()
                 // set waiting frame by orientation
                 changeFrame( firstFrame () );
 
-                getBehavior()->setActivityOfItem( activities::Activity::Wait );
+                getBehavior()->setActivityOfItem( activities::Activity::Waiting );
         }
 }
 

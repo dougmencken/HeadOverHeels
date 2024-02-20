@@ -33,7 +33,7 @@ bool Mobile::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         // see if the item falls yet
                         if ( activities::Falling::getInstance().fall( this ) )
                         {
@@ -62,7 +62,7 @@ bool Mobile::update ()
                                 this->setActivityOfItem( activity );
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
-                                activity = activities::Activity::Wait;
+                                activity = activities::Activity::Waiting;
 
                                 speedTimer->reset();
                         }
@@ -99,7 +99,7 @@ bool Mobile::update ()
                                 {
                                         // play the sound of falling
                                         SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 fallTimer->reset();

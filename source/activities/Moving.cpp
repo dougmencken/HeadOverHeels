@@ -2,11 +2,11 @@
 #include "Moving.hpp"
 
 #include "Falling.hpp"
-#include "Behavior.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
+#include "PropagateActivity.hpp"
 
-#include <iostream>
+#include <stack>
 
 
 namespace activities
@@ -29,7 +29,7 @@ bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool
 {
         bool moved = false ;
 
-        ActivityOfItem toItemsNearby = activities::Activity::Wait ;
+        ActivityOfItem toItemsNearby = activities::Activity::Waiting ;
 
         ItemPtr item = behavior->getItem();
         if ( item == nilPointer ) return false ;
@@ -171,11 +171,11 @@ bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool
                                 || /* there’s a collision */ ! moved )
                 {
                         // move adjacent items
-                        this->propagateActivityToAdjacentItems( *item, toItemsNearby );
+                        PropagateActivity::toAdjacentItems( *item, toItemsNearby );
                 }
         }
 
-        if ( itFalls /* doesn’t fly */ && *activity != activities::Activity::Wait )
+        if ( itFalls /* doesn’t fly */ && *activity != activities::Activity::Waiting )
         {
                 if ( Falling::getInstance().fall( behavior ) )
                 {

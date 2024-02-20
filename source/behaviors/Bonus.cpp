@@ -32,7 +32,7 @@ bool Bonus::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         // is there an item above this one
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -112,7 +112,7 @@ bool Bonus::update ()
                         {
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 fallTimer->reset();

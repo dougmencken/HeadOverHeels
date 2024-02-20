@@ -19,7 +19,8 @@ namespace behaviors
 {
 
 /**
- * For items which lack autonomous movement and move only on touch by some other item
+ * The behavior of item that disappears for some reason, like
+ * over time or when another item touches it
  */
 
 class Volatile : public Behavior
@@ -35,14 +36,14 @@ public:
 
 private:
 
-       /**
-        * True if item isn’t volatile yet by toggle of switch in room
-        */
+        /**
+         * is true when this item isn’t currently volatile, such as when a switch is toggled
+         */
         bool solid ;
 
-       /**
-        * Timer for disappearance of volatile item
-        */
+        /**
+         * Timer for disappearance
+         */
         autouniqueptr < Timer > disappearanceTimer ;
 
 };

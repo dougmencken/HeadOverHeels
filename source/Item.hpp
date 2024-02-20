@@ -255,11 +255,11 @@ public:
         virtual int getImageOffsetY () const = 0 ;
 
         /**
-         * Reference item below which would move this item
+         * When the carrier moves, the item above it (this item) also moves
          */
-        std::string getAnchor () const {  return this->anchor ;  }
+        const std::string & getCarrier () const {  return this->carrier ;  }
 
-        void setAnchor ( const std::string & item ) {  this->anchor = item ;  }
+        void setCarrier ( const std::string & itemBelow ) {  this->carrier = itemBelow ;  }
 
         /**
          * false to track if the item is colliding with something, true to ignore
@@ -354,9 +354,9 @@ private:
         autouniqueptr< Behavior > behavior ;
 
         /**
-         * Unique name of item below this one, when anchor moves item above it moves too
+         * The unique name of item below this one, the item above the carrier moves along with the moving carrier
          */
-        std::string anchor ;
+        std::string carrier ;
 
 protected:
 

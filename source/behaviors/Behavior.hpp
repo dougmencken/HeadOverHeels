@@ -22,8 +22,8 @@ namespace behaviors
 {
 
 /**
- * Abstraction for the item's behavior. A game's item changes its activity in each cycle of update.
- * Different kinds of behavior define different ways of transition between these activities
+ * Abstraction for the item’s behavior. A game’s item changes its activity in each cycle of update.
+ * Different kinds of behavior define different transitions between these activities
  */
 
 class Behavior
@@ -31,14 +31,14 @@ class Behavior
 
 protected:
 
-        Behavior( const ItemPtr & whichItem, const std::string & behaviorFromFile ) ;
+        Behavior( const ItemPtr & itemThatBehaves, const std::string & behaviorName ) ;
 
 public:
 
         virtual ~Behavior( ) ;
 
         /**
-         * Updates the item's behavior in each cycle
+         * Updates the item’s behavior in each cycle
          * @return true if the item is still alive after this update or false otherwise
          */
         virtual bool update () = 0 ;
@@ -50,13 +50,16 @@ public:
         }
 
         virtual void changeActivityOfItemDueTo ( const ActivityOfItem & newActivity, const ItemPtr & dueTo )
-                {  this->activity = newActivity ;  this->affectedBy = dueTo ;  }
+        {
+                this->activity = newActivity ;
+                this->affectedBy = dueTo ;
+        }
 
-        std::string getNameOfBehavior () const {  return nameOfBehavior ;  }
+        std::string getNameOfBehavior () const {  return this->nameOfBehavior ;  }
 
-        ActivityOfItem getActivityOfItem () const {  return activity ;  }
+        ActivityOfItem getActivityOfItem () const {  return this->activity ;  }
 
-        const ItemPtr & getItem () {  return item ;  }
+        const ItemPtr & getItem () {  return this->item ;  }
 
 protected:
 
@@ -78,7 +81,7 @@ protected:
         ActivityOfItem activity ;
 
         /**
-         * Another item that changed the activity of this one
+         * Another item that changed activity of this one
          */
         ItemPtr affectedBy ;
 

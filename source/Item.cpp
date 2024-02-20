@@ -35,7 +35,7 @@ Item::Item( const DescriptionOfItem* description, int z, const std::string& way 
         ignoreCollisions( true ),
         motionTimer( new Timer () ),
         behavior( nilPointer ),
-        anchor( )
+        carrier( "" )
 {
         readGraphicsOfItem ();
 
@@ -62,7 +62,7 @@ Item::Item( const Item& item )
         ignoreCollisions( item.ignoreCollisions ),
         motionTimer( new Timer () ),
         behavior( nilPointer ),
-        anchor( item.anchor )
+        carrier( item.carrier )
 {
         for ( std::vector< PicturePtr >::const_iterator it = item.motion.begin (); it != item.motion.end (); ++ it )
         {

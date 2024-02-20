@@ -166,7 +166,7 @@ Picture* Isomot::updateMe ()
                 {
                         activeCharacter.wait(); // stop the active character
 
-                        if ( activeCharacter.getBehavior()->getActivityOfItem() == activities::Activity::Wait )
+                        if ( activeCharacter.getBehavior()->getActivityOfItem() == activities::Activity::Waiting )
                         {
                                 // swap in the same room or between different rooms
                                 if ( ! activeRoom->swapCharactersInRoom() )

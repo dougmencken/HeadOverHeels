@@ -1,9 +1,9 @@
 
 #include "Jumping.hpp"
 
-#include "Behavior.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
+#include "PropagateActivity.hpp"
 #include "GameManager.hpp"
 
 
@@ -26,7 +26,7 @@ Jumping & Jumping::getInstance()
 bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
 {
         bool itemMoved = false;
-        ActivityOfItem displaceActivity = activities::Activity::Wait;
+        ActivityOfItem displaceActivity = activities::Activity::Waiting;
         AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * behavior->getItem() );
         Mediator* mediator = characterItem.getMediator();
 
@@ -111,7 +111,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
         {
                 // is it okay to move items above
                 // it is okay after the fourth phase of jump so the character can get rid of the item above
-                this->propagateActivityToAdjacentItems( characterItem, displaceActivity );
+                PropagateActivity::toAdjacentItems( characterItem, displaceActivity );
         }
 
         // end jump when it’s the last phase

@@ -34,7 +34,7 @@ bool Turn::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         begin();
                         break;
 
@@ -72,7 +72,7 @@ bool Turn::update ()
 
                         activities::Displacing::getInstance().displace( this, &activity, true );
 
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
 
                         // inactive item continues to be inactive
                         if ( freeItem.isFrozen() )
@@ -93,7 +93,7 @@ bool Turn::update ()
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Wait ;
+                                        activity = activities::Activity::Waiting ;
                                 }
 
                                 fallTimer->reset();
@@ -106,7 +106,7 @@ bool Turn::update ()
 
                 case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 default:

@@ -6,6 +6,7 @@
 #include "Item.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
+#include "PropagateActivity.hpp"
 
 
 namespace activities
@@ -93,11 +94,11 @@ bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activi
                 if ( ! displaced )
                 {
                         // move involved items
-                        this->propagateActivityToAdjacentItems( *item, activityToPropagate );
+                        PropagateActivity::toAdjacentItems( *item, activityToPropagate );
                 }
                 else {
                         // maybe there’s something on top
-                        this->propagateActivityToItemsAbove( *item, *activity );
+                        PropagateActivity::toItemsAbove( *item, *activity );
                 }
         }
 

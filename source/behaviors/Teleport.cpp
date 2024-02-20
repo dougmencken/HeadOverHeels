@@ -30,7 +30,7 @@ bool Teleport::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         // is there items above
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -86,7 +86,7 @@ bool Teleport::update ()
                         break;
 
                 default:
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
         }
 
         return false;

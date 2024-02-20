@@ -11,8 +11,6 @@
 
 #include "sleep.hpp"
 
-#include <algorithm>
-
 #ifdef DEBUG
 #  define DEBUG_COLLISIONS      0
 #  define DEBUG_SHADOWS         0
@@ -1203,7 +1201,7 @@ void Mediator::toggleSwitchInRoom ()
                                         gridItem.getBehavior()->setActivityOfItem(
                                                 this->switchInRoomIsOn ?
                                                         activities::Activity::Freeze :
-                                                        activities::Activity::Wait );
+                                                        activities::Activity::Waiting );
                                 }
                         }
                 }

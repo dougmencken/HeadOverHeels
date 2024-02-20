@@ -142,11 +142,11 @@ void PlayerControlled::autoMove( ::AvatarItem & character )
                 {
                         // done auto~moving
                         automaticStepsThruDoor = automaticSteps ;
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                 }
         }
 
-        if ( activity == activities::Activity::Wait )
+        if ( activity == activities::Activity::Waiting )
         {       // stop playing the sound of moving
                 SoundManager::getInstance().stop( character.getOriginalKind(), "move" );
         }
@@ -160,7 +160,7 @@ void PlayerControlled::displace( ::AvatarItem & character )
         {
                 activities::Displacing::getInstance().displace( this, &activity, true );
 
-                activity = activities::Activity::Wait;
+                activity = activities::Activity::Waiting;
 
                 speedTimer->reset();
         }
@@ -197,7 +197,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
                 }
                 else if ( activity != activities::Activity::MeetMortalItem || character.hasShield() )
                 {
-                        activity = activities::Activity::Wait ;
+                        activity = activities::Activity::Waiting ;
                 }
 
                 fallTimer->reset();
@@ -269,7 +269,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
                 if ( ! activities::Falling::getInstance().fall( this ) &&
                         ( activity != activities::Activity::MeetMortalItem || character.hasShield() ) )
                 {
-                        activity = activities::Activity::Wait ;
+                        activity = activities::Activity::Waiting ;
                 }
 
                 glideTimer->reset();
@@ -277,7 +277,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
 
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
-                ActivityOfItem subactivity( activities::Activity::Wait );
+                ActivityOfItem subactivity( activities::Activity::Waiting );
 
                 switch ( Way( character.getOrientation() ).getIntegerOfWay () )
                 {
@@ -349,7 +349,7 @@ void PlayerControlled::exitTeletransport( ::AvatarItem & character )
         // back to the original appearance of character
         character.metamorphInto( character.getOriginalKind(), "end teletransportation" );
 
-        activity = activities::Activity::Wait ;
+        activity = activities::Activity::Waiting ;
 }
 
 void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
@@ -369,7 +369,7 @@ void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
                         }
                         else
                         {
-                                activity = activities::Activity::Wait ;
+                                activity = activities::Activity::Waiting ;
                         }
                         break;
 
@@ -485,7 +485,7 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
 
         if ( activity != activities::Activity::ItemTaken && activity != activities::Activity::Jump )
         {
-                activity = activities::Activity::Wait;
+                activity = activities::Activity::Waiting;
         }
 }
 
@@ -512,7 +512,7 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
                         character.emptyBag();
 
                         // update activity
-                        activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jump : activities::Activity::Wait );
+                        activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jump : activities::Activity::Waiting );
 
                         SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
                         SoundManager::getInstance().play( character.getOriginalKind(), "drop" );
@@ -526,6 +526,6 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
 
         if ( activity != activities::Activity::Jump )
         {
-                activity = activities::Activity::Wait;
+                activity = activities::Activity::Waiting;
         }
 }

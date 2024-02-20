@@ -5,7 +5,6 @@
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
 
-#include "KindOfActivity.hpp"
 #include "Moving.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
@@ -14,10 +13,10 @@
 namespace behaviors
 {
 
-Behavior::Behavior( const ItemPtr & whichItem, const std::string & behavior )
-        : nameOfBehavior( behavior )
-        , item( whichItem )
-        , activity( activities::Activity::Wait )
+Behavior::Behavior( const ItemPtr & itemThatBehaves, const std::string & behaviorName )
+        : nameOfBehavior( behaviorName )
+        , item( itemThatBehaves )
+        , activity( activities::Activity::Waiting )
         , affectedBy( nilPointer )
 {
 #if defined( DEBUG ) && DEBUG
@@ -40,8 +39,7 @@ void Behavior::propagateActivity( const Item& sender, const ActivityOfItem& acti
 {
         Mediator* mediator = sender.getMediator();
 
-        // as long as there are elements collided with issuer
-        while ( ! mediator->isStackOfCollisionsEmpty () )
+        while ( ! mediator->isStackOfCollisionsEmpty () ) // there are items collided with the sender
         {
                 ItemPtr item = mediator->findCollisionPop( );
 

@@ -68,7 +68,7 @@ bool CharacterHead::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         wait( characterItem );
                         break;
 
@@ -132,7 +132,7 @@ bool CharacterHead::update ()
                         glide( characterItem );
                         break;
 
-                case activities::Activity::Blink:
+                case activities::Activity::Blinking:
                         blink( characterItem );
                         break;
 
@@ -158,7 +158,7 @@ void CharacterHead::behave ()
                         && activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
         {
                 // when waiting or blinking
-                if ( activity == activities::Activity::Wait || activity == activities::Activity::Blink )
+                if ( activity == activities::Activity::Waiting || activity == activities::Activity::Blinking )
                 {
                         if ( input.jumpTyped() )
                         {
@@ -226,7 +226,7 @@ void CharacterHead::behave ()
                         else if ( ! input.anyMoveTyped() )
                         {
                                 SoundManager::getInstance().stop( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
-                                activity = activities::Activity::Wait ;
+                                activity = activities::Activity::Waiting ;
                         }
                 }
                 // if you are being displaced
@@ -367,7 +367,7 @@ void CharacterHead::wait( AvatarItem & characterItem )
         if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
                 timerForBlinking->reset();
-                activity = activities::Activity::Blink;
+                activity = activities::Activity::Blinking;
         }
 
         if ( activities::Falling::getInstance().fall( this ) )
@@ -391,7 +391,7 @@ void CharacterHead::blink( AvatarItem & characterItem )
         else if ( timeToBlink > 0.800 )
         {
                 timerForBlinking->reset();
-                activity = activities::Activity::Wait;
+                activity = activities::Activity::Waiting;
         }
 }
 

@@ -35,7 +35,7 @@ bool Volatile::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                 case activities::Activity::WakeUp:
                         // for such activity it is always volatile
                         this->solid = false;
@@ -156,7 +156,7 @@ bool Volatile::update ()
                                 }
                                 else
                                 {
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
                         }
                         else

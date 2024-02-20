@@ -36,7 +36,7 @@ bool Patrol::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         changeOrientation();
                         break;
 
@@ -90,7 +90,7 @@ bool Patrol::update ()
                         // displace this item by some other one
                         activities::Displacing::getInstance().displace( this, &activity, true );
 
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
 
                         // preserve inactivity for frozen item
                         if ( freeItem.isFrozen() )
@@ -111,7 +111,7 @@ bool Patrol::update ()
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 fallTimer->reset();
@@ -124,7 +124,7 @@ bool Patrol::update ()
 
                 case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = activities::Activity::Wait;
+                        activity = activities::Activity::Waiting;
                         break;
 
                 default:

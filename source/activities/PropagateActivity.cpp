@@ -1,18 +1,20 @@
 
-#include "KindOfActivity.hpp"
+#include "PropagateActivity.hpp"
 
 #include "Behavior.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
-#include "GameManager.hpp"
+
+#include <stack>
 
 
 namespace activities
 {
 
-void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const ActivityOfItem & activity )
+/* static */
+void PropagateActivity::toAdjacentItems( Item & sender, const ActivityOfItem & activity )
 {
         Mediator* mediator = sender.getMediator();
 
@@ -122,19 +124,18 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
         }
 }
 
-void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const ActivityOfItem& activity )
+/* static */
+void PropagateActivity::toItemsAbove( Item & sender, const ActivityOfItem & activity )
 {
         Mediator* mediator = sender.getMediator();
 
-        // is there anything above
+        // is there’s anything above
         if ( ! sender.canAdvanceTo( 0, 0, 1 ) )
         {
-                // copy stack of collisions
+                // copy the stack of collisions
                 std::stack< std::string > itemsAbove;
                 while ( ! mediator->isStackOfCollisionsEmpty() )
-                {
                         itemsAbove.push( mediator->popCollision() );
-                }
 
                 while ( ! itemsAbove.empty() )
                 {
@@ -154,8 +155,8 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                 // look for collisions of that free item with the items below it
                                 if ( ! freeItemAbove.canAdvanceTo( 0, 0, -1 ) )
                                 {
-                                        // propagate activity when there’s no more than one item below or when the sender is anchor of that item
-                                        if ( mediator->depthOfStackOfCollisions() <= 1 || sender.getUniqueName() == freeItemAbove.getAnchor() )
+                                        // propagate activity when there’s no more than one item below or when the sender carries that item
+                                        if ( mediator->depthOfStackOfCollisions() <= 1 || sender.getUniqueName() == freeItemAbove.getCarrier() )
                                         {
                                                 if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
@@ -165,8 +166,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                                 freeItemAbove.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
                                                         }
                                                         // if not, propagate activity to that item above
-                                                        else
-                                                        {
+                                                        else {
                                                                 ActivityOfItem currentActivity = freeItemAbove.getBehavior()->getActivityOfItem();
                                                                 if ( currentActivity != activities::Activity::PushedNorth &&
                                                                         currentActivity != activities::Activity::PushedSouth &&

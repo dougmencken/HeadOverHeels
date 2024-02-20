@@ -18,7 +18,7 @@ RemoteControl::RemoteControl( const ItemPtr & item, const std::string & behavior
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        activity = activities::Activity::Wait;
+        activity = activities::Activity::Waiting;
 
         // move controlled one but not controller
         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
@@ -45,7 +45,7 @@ bool RemoteControl::update ()
 
         switch ( activity )
         {
-                case activities::Activity::Wait:
+                case activities::Activity::Waiting:
                         break;
 
                 case activities::Activity::MoveNorth:
@@ -61,7 +61,7 @@ bool RemoteControl::update ()
 
                                         if ( activity != activities::Activity::Fall )
                                         {
-                                                activity = activities::Activity::Wait;
+                                                activity = activities::Activity::Waiting;
                                         }
 
                                         speedTimer->reset();
@@ -93,7 +93,7 @@ bool RemoteControl::update ()
 
                                         if ( activity != activities::Activity::Fall )
                                         {
-                                                activity = activities::Activity::Wait;
+                                                activity = activities::Activity::Waiting;
                                         }
 
                                         speedTimer->reset();
@@ -108,7 +108,7 @@ bool RemoteControl::update ()
                         {
                                 if ( getNameOfBehavior() == "behavior of remote control" )
                                 {
-                                        ActivityOfItem motionActivity = activities::Activity::Wait;
+                                        ActivityOfItem motionActivity = activities::Activity::Waiting;
 
                                         switch ( activity )
                                         {
@@ -133,7 +133,7 @@ bool RemoteControl::update ()
                                         }
 
                                         dynamic_cast< RemoteControl * >( controlledItem->getBehavior().get () )->setActivityOfItem( motionActivity );
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
                         }
                         break;
@@ -152,7 +152,7 @@ bool RemoteControl::update ()
                                 {
                                         // play the sound of falling down
                                         SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Wait;
+                                        activity = activities::Activity::Waiting;
                                 }
 
                                 fallTimer->reset();

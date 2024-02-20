@@ -53,7 +53,7 @@
         <file name="RoomBuilder.cpp" />
         <file name="BonusManager.cpp" />
         <file name="SoundManager.cpp" />
-        <file name="activities/KindOfActivity.cpp" />
+        <file name="activities/PropagateActivity.cpp" />
         <file name="activities/Displacing.cpp" />
         <file name="activities/Falling.cpp" />
         <file name="activities/Jumping.cpp" />
