@@ -46,8 +46,9 @@ void FloorTile::draw ()
 
 void FloorTile::freshShadyImage ()
 {
-        shadyImage = PicturePtr( new Picture( getRawImage() ) );
-        shadyImage->setName( "shaded " + getRawImage().getName() );
+        shadyImage->fillWithColor( Color::keyColor () );
+        allegro::bitBlit( /* from */ rawImage->getAllegroPict(), /* to */ shadyImage->getAllegroPict() );
+        shadyImage->setName( "shaded " + rawImage->getName() );
 }
 
 unsigned int FloorTile::getIndexOfColumn () const

@@ -52,14 +52,14 @@ private:
         std::pair < int, int > offset ;
 
         /**
-         * Picture of tile
+         * Picture of the tile
          */
-        PicturePtr rawImage ;
+        autouniqueptr< Picture > rawImage ;
 
         /**
-         * Picture of shaded tile
+         * Picture of the shaded tile
          */
-        PicturePtr shadyImage ;
+        autouniqueptr< Picture > shadyImage ;
 
 public:
 

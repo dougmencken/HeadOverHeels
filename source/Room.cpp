@@ -1269,16 +1269,9 @@ void Room::draw ()
 
                         if ( tile != nilPointer ) // there’s tile of floor here
                         {
-                                if ( shadingTransparency < 256 /* shadows are visible */ ) {
-                                        mediator->lockGridItemsMutex();
-                                        mediator->lockFreeItemsMutex();
-
+                                if ( shadingTransparency < 256 ) // visible shadows
                                         if ( tile->getWantShadow() )
                                                 mediator->castShadowOnFloor( *tile );
-
-                                        mediator->unlockGridItemsMutex();
-                                        mediator->unlockFreeItemsMutex();
-                                }
 
                                 tile->draw ();
                         }
@@ -1287,12 +1280,10 @@ void Room::draw ()
 
         // draw walls without doors
 
-        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
-        {
+        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx ) {
                 ( *wx )->draw ();
         }
-        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy )
-        {
+        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy ) {
                 ( *wy )->draw ();
         }
 

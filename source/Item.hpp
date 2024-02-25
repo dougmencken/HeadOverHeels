@@ -297,7 +297,7 @@ private:
         /**
          * Image of this item with shadows from other items, for free item it is also masked
          */
-        PicturePtr processedImage ;
+        autouniqueptr< Picture > processedImage ;
 
         /**
          * The spatial position on X in isometric units

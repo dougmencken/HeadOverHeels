@@ -20,7 +20,7 @@ FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, c
         , transparency ( 0 )
         , frozen ( false )
         , partOfDoor ( false )
-        , shadedNonmaskedImage ( )
+        , shadedNonmaskedImage( new Picture( getRawImage() ) )
 {
         setX( x );
         setY( y >= 0 ? y : 0 );
@@ -84,13 +84,7 @@ void FreeItem::freshProcessedImage ()
         getProcessedImage().setName( "processed " + getShadedNonmaskedImage().getName() );
 
 #if defined( DEBUG_SHADOWS_AND_MASKS ) && DEBUG_SHADOWS_AND_MASKS
-        if ( getUniqueName().find( "bars" ) != std::string::npos )
-        {
-                std::cout << CONSOLE_COLOR_BLUE << "\"" << getProcessedImage().getName()
-                                << "\" of " << whichItemClass() << " \"" << getUniqueName()
-                                << "\" just refreshed from shaded nonmasked image"
-                                << CONSOLE_COLOR_OFF << std::endl ;
-
+        if ( getUniqueName().find( "bars" ) != std::string::npos ) {
                 Color::multiplyWithColor( getProcessedImage(), Color::byName( "cyan" ) );
         }
 #endif
@@ -98,17 +92,12 @@ void FreeItem::freshProcessedImage ()
 
 void FreeItem::freshBothProcessedImages ()
 {
-        shadedNonmaskedImage = PicturePtr( new Picture( getRawImage () ) );
+        shadedNonmaskedImage->fillWithColor( Color::keyColor () );
+        allegro::bitBlit( /* from */ getRawImage().getAllegroPict(), /* to */ shadedNonmaskedImage->getAllegroPict() );
         shadedNonmaskedImage->setName( "shaded " + getRawImage().getName() );
 
 #if defined( DEBUG_SHADOWS_AND_MASKS ) && DEBUG_SHADOWS_AND_MASKS
-        if ( getUniqueName().find( "bars" ) != std::string::npos )
-        {
-                std::cout << CONSOLE_COLOR_RED << "\"" << getShadedNonmaskedImage().getName()
-                                << "\" of " << whichItemClass() << " \"" << getUniqueName()
-                                << "\" just refreshed from raw image"
-                                << CONSOLE_COLOR_OFF << std::endl ;
-
+        if ( getUniqueName().find( "bars" ) != std::string::npos ) {
                 Color::multiplyWithColor( getShadedNonmaskedImage(), Color::byName( "yellow" ) );
         }
 #endif

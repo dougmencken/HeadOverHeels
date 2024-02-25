@@ -190,7 +190,8 @@ void Item::updateShadow ()
 
 void Item::freshProcessedImage()
 {
-        processedImage = PicturePtr( new Picture( getRawImage () ) );
+        processedImage->fillWithColor( Color::keyColor () );
+        allegro::bitBlit( /* from */ getRawImage().getAllegroPict(), /* to */ processedImage->getAllegroPict() );
         processedImage->setName( "processed " + getRawImage().getName() );
 }
 

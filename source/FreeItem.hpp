@@ -170,7 +170,7 @@ private:
         /**
          * Current frame of this item shaded but not masked yet
          */
-        PicturePtr shadedNonmaskedImage ;
+        autouniqueptr< Picture > shadedNonmaskedImage ;
 
 };
 
