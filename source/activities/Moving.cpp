@@ -25,11 +25,11 @@ Moving& Moving::getInstance()
 }
 
 
-bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool itFalls )
+bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFalls )
 {
         bool moved = false ;
 
-        ActivityOfItem toItemsNearby = activities::Activity::Waiting ;
+        Activity toItemsNearby = activities::Activity::Waiting ;
 
         ItemPtr item = behavior->getItem();
         if ( item == nilPointer ) return false ;

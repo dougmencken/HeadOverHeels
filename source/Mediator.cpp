@@ -1176,7 +1176,7 @@ void Mediator::toggleSwitchInRoom ()
                         if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" ||
                                         std::find( badBoys.begin (), badBoys.end (), behavior ) != badBoys.end () )
                         {
-                                freeItem.getBehavior()->setActivityOfItem(
+                                freeItem.getBehavior()->setCurrentActivity(
                                         this->switchInRoomIsOn ?
                                                 activities::Activity::Freeze :
                                                 activities::Activity::WakeUp );
@@ -1198,7 +1198,7 @@ void Mediator::toggleSwitchInRoom ()
 
                                 if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" )
                                 {
-                                        gridItem.getBehavior()->setActivityOfItem(
+                                        gridItem.getBehavior()->setCurrentActivity(
                                                 this->switchInRoomIsOn ?
                                                         activities::Activity::Freeze :
                                                         activities::Activity::Waiting );

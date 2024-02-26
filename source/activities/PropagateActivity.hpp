@@ -11,7 +11,7 @@
 #ifndef PropagateActivity_hpp_
 #define PropagateActivity_hpp_
 
-#include "ActivityOfItem.hpp"
+#include "Activity.hpp"
 #include "Item.hpp"
 
 
@@ -26,12 +26,12 @@ public:
         /**
          * Change activity of items that collide with the sender
          */
-        static void toAdjacentItems ( Item & sender, const ActivityOfItem & activity ) ;
+        static void toAdjacentItems ( Item & sender, const Activity & activity ) ;
 
         /**
          * Change activity of items above the sender
          */
-        static void toItemsAbove ( Item & sender, const ActivityOfItem & activity ) ;
+        static void toItemsAbove ( Item & sender, const Activity & activity ) ;
 
 };
 

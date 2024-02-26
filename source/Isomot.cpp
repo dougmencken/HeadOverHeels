@@ -166,7 +166,7 @@ Picture* Isomot::updateMe ()
                 {
                         activeCharacter.wait(); // stop the active character
 
-                        if ( activeCharacter.getBehavior()->getActivityOfItem() == activities::Activity::Waiting )
+                        if ( activeCharacter.getBehavior()->getCurrentActivity() == activities::Activity::Waiting )
                         {
                                 // swap in the same room or between different rooms
                                 if ( ! activeRoom->swapCharactersInRoom() )
@@ -494,7 +494,7 @@ void Isomot::handleMagicKeys ()
                                 joinedCharacter->setBehaviorOf( behavior );
 
                                 activeRoom->addCharacterToRoom( joinedCharacter, true );
-                                joinedCharacter->getBehavior()->setActivityOfItem( activities::Activity::EndTeletransportation );
+                                joinedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
                                 mapManager.removeRoomInPlay( roomWithInactiveCharacter );
@@ -547,7 +547,7 @@ void Isomot::handleMagicKeys ()
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
                                 roomWithTeleportToFinalScene->addCharacterToRoom( teleportedCharacter, true );
-                                teleportedCharacter->getBehavior()->setActivityOfItem( activities::Activity::EndTeletransportation );
+                                teleportedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 

@@ -49,7 +49,7 @@ bool PlayerControlled::isInvulnerableToLethalItems () const
                         || GameManager::getInstance().isImmuneToCollisionsWithMortalItems () ;
 }
 
-void PlayerControlled::setActivityOfItem ( const ActivityOfItem & newActivity )
+void PlayerControlled::setCurrentActivity ( const Activity & newActivity )
 {
         if ( this->affectedBy != nilPointer ) this->affectedBy = ItemPtr () ;
 
@@ -58,7 +58,7 @@ void PlayerControlled::setActivityOfItem ( const ActivityOfItem & newActivity )
         this->activity = newActivity ;
 }
 
-void PlayerControlled::changeActivityOfItemDueTo ( const ActivityOfItem & newActivity, const ItemPtr & dueTo )
+void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
 {
         if ( newActivity == activities::Activity::MeetMortalItem && isInvulnerableToLethalItems () ) return ;
 
@@ -277,7 +277,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
 
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
-                ActivityOfItem subactivity( activities::Activity::Waiting );
+                Activity subactivity( activities::Activity::Waiting );
 
                 switch ( Way( character.getOrientation() ).getIntegerOfWay () )
                 {
@@ -472,7 +472,7 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
 
                                 character.placeItemInBag( takenItem->getKind (), takenItem->getBehavior()->getNameOfBehavior () );
 
-                                takenItem->getBehavior()->setActivityOfItem( activities::Activity::Vanish );
+                                takenItem->getBehavior()->setCurrentActivity( activities::Activity::Vanish );
                                 activity = ( activity == activities::Activity::TakeAndJump )
                                                 ? activities::Activity::Jump : activities::Activity::ItemTaken ;
 

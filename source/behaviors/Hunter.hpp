@@ -39,19 +39,19 @@ private:
          * Changes the direction in which the item moves to hunt the active character,
          * calls updateDirection4 or updateDirection8 depending on the hunter's behavior
          */
-        ActivityOfItem updateDirection ( const ActivityOfItem & activity ) ;
+        Activity updateDirection ( const Activity & activity ) ;
 
         /**
          * Changes the direction in which the item moves to hunt the active character,
          * the updated direction may be north, south, east, and west
          */
-        ActivityOfItem updateDirection4 ( const ActivityOfItem & activity ) ;
+        Activity updateDirection4 ( const Activity & activity ) ;
 
         /**
          * Changes the direction in which the item moves to hunt the active character,
          * the updated direction may be any of the eight possible ones
          */
-        ActivityOfItem updateDirection8 ( const ActivityOfItem & activity ) ;
+        Activity updateDirection8 ( const Activity & activity ) ;
 
         /**
          * Morph the hidden imperial guard into the full-bodied hunter

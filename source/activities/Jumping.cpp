@@ -23,10 +23,10 @@ Jumping & Jumping::getInstance()
 }
 
 
-bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
+bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
 {
         bool itemMoved = false;
-        ActivityOfItem displaceActivity = activities::Activity::Waiting;
+        Activity displaceActivity = activities::Activity::Waiting;
         AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * behavior->getItem() );
         Mediator* mediator = characterItem.getMediator();
 
@@ -65,7 +65,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, uns
                                 // a mortal thing is above
                                 if ( item->isMortal() )
                                 {
-                                        characterItem.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
+                                        characterItem.getBehavior()->setCurrentActivity( activities::Activity::MeetMortalItem );
                                 }
                                 else
                                 {
@@ -132,7 +132,7 @@ void Jumping::lift( FreeItem& sender, Item& item, int z )
                 if ( behavior->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 behavior->getNameOfBehavior () == "behavior of bonus" )
                 {
-                        behavior->changeActivityOfItemDueTo( activities::Activity::PushedUp, ItemPtr( &sender ) );
+                        behavior->changeActivityDueTo( activities::Activity::PushedUp, ItemPtr( &sender ) );
                 }
                 // raise if the item isn’t an elevator
                 else if ( behavior->getNameOfBehavior () != "behavior of elevator" )

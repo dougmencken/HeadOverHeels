@@ -35,7 +35,7 @@ bool Elevator::update ()
         switch ( activity )
         {
                 case activities::Activity::Waiting:
-                        setActivityOfItem ( ascent ? activities::Activity::MoveUp : activities::Activity::MoveDown );
+                        setCurrentActivity ( ascent ? activities::Activity::MoveUp : activities::Activity::MoveDown );
                         lastActivity = activity;
                         break;
 
@@ -81,7 +81,7 @@ bool Elevator::update ()
                 case activities::Activity::StopAtBottom:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                setActivityOfItem( activities::Activity::MoveUp );
+                                setCurrentActivity( activities::Activity::MoveUp );
                                 lastActivity = activity;
                         }
 
@@ -92,7 +92,7 @@ bool Elevator::update ()
                 case activities::Activity::StopAtTop:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                setActivityOfItem( activities::Activity::MoveDown );
+                                setCurrentActivity( activities::Activity::MoveDown );
                                 lastActivity = activity;
                         }
 

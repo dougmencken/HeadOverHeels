@@ -8,30 +8,25 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef ActivityOfItem_hpp_
-#define ActivityOfItem_hpp_
+#ifndef Activity_hpp_
+#define Activity_hpp_
 
 namespace activities
 {
 
-class ActivityOfItem
+class Activity
 {
 
 public:
 
-        ActivityOfItem( unsigned int business ) : activity( business ) { }
+        Activity( unsigned int business ) : activity( business ) { }
         operator unsigned int() const {  return activity ;  }
 
 private:
 
         unsigned int activity ;
 
-} ;
-
-class Activity /* only constants here */
-{
-
-public:
+public: /* constants */
 
         static const unsigned int Waiting       = 0 ;
         static const unsigned int Blinking      = 8 ;

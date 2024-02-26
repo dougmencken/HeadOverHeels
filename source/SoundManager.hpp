@@ -16,7 +16,7 @@
 
 #include "WrappersAllegro.hpp"
 
-#include "ActivityOfItem.hpp"
+#include "Activity.hpp"
 
 
 class SoundManager
@@ -67,7 +67,7 @@ public:
 
         allegro::Sample * getSampleFor ( const std::string & item, const std::string & event ) ;
 
-        static std::string activityToString ( const activities::ActivityOfItem & activity ) ;
+        static std::string activityToString ( const activities::Activity & activity ) ;
 
         void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = ( volume <= 99 ) ? volume : 99 ;  }
 

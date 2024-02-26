@@ -35,7 +35,7 @@ Behavior::~Behavior( )
 {
 }
 
-void Behavior::propagateActivity( const Item& sender, const ActivityOfItem& activity )
+void Behavior::propagateActivity( const Item& sender, const Activity& activity )
 {
         Mediator* mediator = sender.getMediator();
 
@@ -50,7 +50,7 @@ void Behavior::propagateActivity( const Item& sender, const ActivityOfItem& acti
                         // change activity for item with behavior
                         if ( item->getBehavior() != nilPointer )
                         {
-                                item->getBehavior()->setActivityOfItem( activity );
+                                item->getBehavior()->setCurrentActivity( activity );
                         }
                 }
         }

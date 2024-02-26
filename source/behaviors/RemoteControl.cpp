@@ -108,7 +108,7 @@ bool RemoteControl::update ()
                         {
                                 if ( getNameOfBehavior() == "behavior of remote control" )
                                 {
-                                        ActivityOfItem motionActivity = activities::Activity::Waiting;
+                                        Activity motionActivity = activities::Activity::Waiting;
 
                                         switch ( activity )
                                         {
@@ -132,7 +132,7 @@ bool RemoteControl::update ()
                                                         ;
                                         }
 
-                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior().get () )->setActivityOfItem( motionActivity );
+                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior().get () )->setCurrentActivity( motionActivity );
                                         activity = activities::Activity::Waiting;
                                 }
                         }

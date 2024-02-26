@@ -45,7 +45,7 @@ bool Switch::update ()
                                         ItemPtr trigger = triggers[ i ];
 
                                         if ( std::find( itemsNearby.begin (), itemsNearby.end (), trigger ) == itemsNearby.end () ||
-                                                ( trigger->whichItemClass() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == activities::Activity::Waiting ) )
+                                                ( trigger->whichItemClass() == "avatar item" && trigger->getBehavior()->getCurrentActivity() == activities::Activity::Waiting ) )
                                         {
                                                 triggers.erase( std::remove( triggers.begin (), triggers.end (), trigger ), triggers.end () );
                                         }
@@ -79,7 +79,7 @@ bool Switch::update ()
                                                 if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
                                                                 // the switch doesn’t toggle when the character jumps
-                                                                itemAbove->getBehavior()->getActivityOfItem() != activities::Activity::Jump )
+                                                                itemAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jump )
                                                 {
                                                         // toggle the switch when there’s only one item below the character
                                                         if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )

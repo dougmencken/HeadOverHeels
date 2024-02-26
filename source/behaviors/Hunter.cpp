@@ -120,7 +120,7 @@ bool Hunter::update ()
                                         {
                                                 if ( activity == activities::Activity::MoveNortheast || activity == activities::Activity::MoveNorthwest )
                                                 {
-                                                        ActivityOfItem tempActivity = activities::Activity::MoveNorth;
+                                                        Activity tempActivity = activities::Activity::MoveNorth;
                                                         if ( ! activities::Moving::getInstance().move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == activities::Activity::MoveNortheast ? activities::Activity::MoveEast : activities::Activity::MoveWest );
@@ -132,7 +132,7 @@ bool Hunter::update ()
                                                 }
                                                 else
                                                 {
-                                                        ActivityOfItem tempActivity = activities::Activity::MoveSouth;
+                                                        Activity tempActivity = activities::Activity::MoveSouth;
                                                         if ( ! activities::Moving::getInstance().move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == activities::Activity::MoveSoutheast ? activities::Activity::MoveEast : activities::Activity::MoveWest );
@@ -198,7 +198,7 @@ bool Hunter::update ()
         return ! alive ;
 }
 
-ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
+Activity Hunter::updateDirection( const Activity & activity )
 {
         AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter() ;
         if ( whoToHunt != nilPointer ) {
@@ -217,7 +217,7 @@ ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
         return activities::Activity::Waiting ;
 }
 
-ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
+Activity Hunter::updateDirection4( const Activity & activity )
 {
         AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter() ;
         if ( whoToHunt != nilPointer )
@@ -229,36 +229,36 @@ ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
                 {
                         if ( dx > 0 )
                         {
-                                setActivityOfItem( activities::Activity::MoveNorth );
+                                setCurrentActivity( activities::Activity::MoveNorth );
                         }
                         else if ( dx < 0 )
                         {
-                                setActivityOfItem( activities::Activity::MoveSouth );
+                                setCurrentActivity( activities::Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        setActivityOfItem( activities::Activity::MoveEast );
+                                        setCurrentActivity( activities::Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        setActivityOfItem( activities::Activity::MoveWest );
+                                        setCurrentActivity( activities::Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
                 {
                         if ( dy > 0 )
                         {
-                                setActivityOfItem( activities::Activity::MoveEast );
+                                setCurrentActivity( activities::Activity::MoveEast );
                         }
                         else if ( dy < 0 )
                         {
-                                setActivityOfItem( activities::Activity::MoveWest );
+                                setCurrentActivity( activities::Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        setActivityOfItem( activities::Activity::MoveNorth );
+                                        setCurrentActivity( activities::Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        setActivityOfItem( activities::Activity::MoveSouth );
+                                        setCurrentActivity( activities::Activity::MoveSouth );
                         }
                 }
         }
@@ -266,7 +266,7 @@ ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
         return activity ;
 }
 
-ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
+Activity Hunter::updateDirection8( const Activity& activity )
 {
         AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter();
 
@@ -283,27 +283,27 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                         if ( dx > 1 )
                         {
                                 if ( dy > 1 )
-                                        setActivityOfItem( activities::Activity::MoveNortheast );
+                                        setCurrentActivity( activities::Activity::MoveNortheast );
                                 else if ( dy < -1 )
-                                        setActivityOfItem( activities::Activity::MoveNorthwest );
+                                        setCurrentActivity( activities::Activity::MoveNorthwest );
                                 else
-                                        setActivityOfItem( activities::Activity::MoveNorth );
+                                        setCurrentActivity( activities::Activity::MoveNorth );
                         }
                         else if ( dx < -1 )
                         {
                                 if ( dy > 1 )
-                                        setActivityOfItem( activities::Activity::MoveSoutheast );
+                                        setCurrentActivity( activities::Activity::MoveSoutheast );
                                 else if ( dy < -1 )
-                                        setActivityOfItem( activities::Activity::MoveSouthwest );
+                                        setCurrentActivity( activities::Activity::MoveSouthwest );
                                 else
-                                        setActivityOfItem( activities::Activity::MoveSouth );
+                                        setCurrentActivity( activities::Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        setActivityOfItem( activities::Activity::MoveEast );
+                                        setCurrentActivity( activities::Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        setActivityOfItem( activities::Activity::MoveWest );
+                                        setCurrentActivity( activities::Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
@@ -311,34 +311,34 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                         if ( dy > 1 )
                         {
                                 if ( dx > 1 )
-                                        setActivityOfItem( activities::Activity::MoveNortheast );
+                                        setCurrentActivity( activities::Activity::MoveNortheast );
                                 else if ( dx < -1 )
-                                        setActivityOfItem( activities::Activity::MoveSoutheast );
+                                        setCurrentActivity( activities::Activity::MoveSoutheast );
                                 else
-                                        setActivityOfItem( activities::Activity::MoveEast );
+                                        setCurrentActivity( activities::Activity::MoveEast );
                         }
                         else if ( dy < -1 )
                         {
                                 if ( dx > 1 )
-                                        setActivityOfItem( activities::Activity::MoveNorthwest );
+                                        setCurrentActivity( activities::Activity::MoveNorthwest );
                                 else if ( dx < -1 )
-                                        setActivityOfItem( activities::Activity::MoveSouthwest );
+                                        setCurrentActivity( activities::Activity::MoveSouthwest );
                                 else
-                                        setActivityOfItem( activities::Activity::MoveWest );
+                                        setCurrentActivity( activities::Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        setActivityOfItem( activities::Activity::MoveNorth );
+                                        setCurrentActivity( activities::Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        setActivityOfItem( activities::Activity::MoveSouth );
+                                        setCurrentActivity( activities::Activity::MoveSouth );
                         }
                 }
 
                 // the guardian of throne flees from the player with four crowns
                 if ( item->getKind() == "throne-guard" && GameManager::getInstance().howManyFreePlanets() >= 4 )
                 {
-                        setActivityOfItem( activities::Activity::MoveSouthwest );
+                        setCurrentActivity( activities::Activity::MoveSouthwest );
                 }
         }
 

@@ -120,7 +120,7 @@ headoverheels_SOURCES = main.cpp \
 			TimerPOSIX.hpp \
 			TimerWindows.cpp \
 			TimerWindows.hpp \
-			activities/ActivityOfItem.hpp \
+			activities/Activity.hpp \
 			activities/PropagateActivity.cpp \
 			activities/PropagateActivity.hpp \
 			activities/Displacing.cpp \

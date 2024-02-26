@@ -13,10 +13,10 @@
 
 #include <string>
 
-#include "ActivityOfItem.hpp"
+#include "Activity.hpp"
 #include "Item.hpp"
 
-using activities::ActivityOfItem ;
+using activities::Activity ;
 
 namespace behaviors
 {
@@ -43,13 +43,13 @@ public:
          */
         virtual bool update () = 0 ;
 
-        virtual void setActivityOfItem ( const ActivityOfItem & newActivity )
+        virtual void setCurrentActivity ( const Activity & newActivity )
         {
                 this->activity = newActivity ;
                 if ( this->affectedBy != nilPointer ) this->affectedBy = ItemPtr () ;
         }
 
-        virtual void changeActivityOfItemDueTo ( const ActivityOfItem & newActivity, const ItemPtr & dueTo )
+        virtual void changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
         {
                 this->activity = newActivity ;
                 this->affectedBy = dueTo ;
@@ -57,7 +57,7 @@ public:
 
         std::string getNameOfBehavior () const {  return this->nameOfBehavior ;  }
 
-        ActivityOfItem getActivityOfItem () const {  return this->activity ;  }
+        Activity getCurrentActivity () const {  return this->activity ;  }
 
         const ItemPtr & getItem () {  return this->item ;  }
 
@@ -66,7 +66,7 @@ protected:
         /**
          * Change activity of every item collided with the sender
          */
-        void propagateActivity ( const Item & sender, const ActivityOfItem & activity ) ;
+        void propagateActivity ( const Item & sender, const Activity & activity ) ;
 
         std::string nameOfBehavior ;
 
@@ -78,7 +78,7 @@ protected:
         /**
          * The current activity
          */
-        ActivityOfItem activity ;
+        Activity activity ;
 
         /**
          * Another item that changed activity of this one

@@ -25,14 +25,14 @@ Displacing& Displacing::getInstance()
 }
 
 
-bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
+bool Displacing::displace( behaviors::Behavior* behavior, Activity* activity, bool canFall )
 {
         bool displaced = false ;
 
         ItemPtr item = behavior->getItem ();
         if ( item == nilPointer ) return false ;
 
-        ActivityOfItem activityToPropagate = *activity;
+        Activity activityToPropagate = *activity;
 
         switch ( *activity )
         {

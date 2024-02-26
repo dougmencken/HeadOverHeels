@@ -41,9 +41,9 @@ public:
         */
         virtual void behave () = 0 ;
 
-        virtual void setActivityOfItem ( const ActivityOfItem & newActivity ) ;
+        virtual void setCurrentActivity ( const Activity & newActivity ) ;
 
-        virtual void changeActivityOfItemDueTo ( const ActivityOfItem & newActivity, const ItemPtr & dueTo ) ;
+        virtual void changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo ) ;
 
         bool isInvulnerableToLethalItems () const ;
 

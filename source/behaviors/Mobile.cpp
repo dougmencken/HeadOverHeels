@@ -59,7 +59,7 @@ bool Mobile::update ()
                                         SoundManager::getInstance().play( freeItem.getKind (), "push" );
                                 }
 
-                                this->setActivityOfItem( activity );
+                                this->setCurrentActivity( activity );
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 activity = activities::Activity::Waiting;
@@ -94,7 +94,7 @@ bool Mobile::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                this->setActivityOfItem( activity );
+                                this->setCurrentActivity( activity );
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play the sound of falling

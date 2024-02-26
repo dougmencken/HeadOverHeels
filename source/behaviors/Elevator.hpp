@@ -62,7 +62,7 @@ private:
         */
         bool ascent ;
 
-        ActivityOfItem lastActivity ;
+        Activity lastActivity ;
 
        /**
         * Timer for speed of movement

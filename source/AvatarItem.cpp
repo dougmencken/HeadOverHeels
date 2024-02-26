@@ -84,34 +84,34 @@ void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
                 case Way::North:
                 case Way::Northeast:
                 case Way::Northwest:
-                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveSouth );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveSouth );
                         break;
 
                 case Way::South:
                 case Way::Southeast:
                 case Way::Southwest:
-                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveNorth );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveNorth );
                         break;
 
                 case Way::East:
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveWest );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveWest );
                         break;
 
                 case Way::West:
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        getBehavior()->setActivityOfItem( activities::Activity::AutoMoveEast );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveEast );
                         break;
 
                 case Way::ByTeleport:
                 case Way::ByTeleportToo:
-                        getBehavior()->setActivityOfItem( activities::Activity::EndTeletransportation );
+                        getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
                         break;
 
                 case Way::Above:
-                        getBehavior()->setActivityOfItem( activities::Activity::Fall );
+                        getBehavior()->setCurrentActivity( activities::Activity::Fall );
                         break;
 
                 default:
@@ -121,10 +121,10 @@ void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
 
 bool AvatarItem::addToPosition( int x, int y, int z )
 {
-        bool itAutomoves = getBehavior()->getActivityOfItem() == activities::Activity::AutoMoveNorth ||
-                                getBehavior()->getActivityOfItem() == activities::Activity::AutoMoveSouth ||
-                                getBehavior()->getActivityOfItem() == activities::Activity::AutoMoveEast ||
-                                getBehavior()->getActivityOfItem() == activities::Activity::AutoMoveWest ;
+        bool itAutomoves = getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveNorth ||
+                                getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveSouth ||
+                                getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveEast ||
+                                getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveWest ;
 
         bool itFallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
 
@@ -390,7 +390,7 @@ bool AvatarItem::update ()
 
 void AvatarItem::wait ()
 {
-        ActivityOfItem activity = getBehavior()->getActivityOfItem();
+        Activity activity = getBehavior()->getCurrentActivity();
 
         // don’t wait while teleporting or loosing life
         if ( activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
@@ -399,7 +399,7 @@ void AvatarItem::wait ()
                 // set waiting frame by orientation
                 changeFrame( firstFrame () );
 
-                getBehavior()->setActivityOfItem( activities::Activity::Waiting );
+                getBehavior()->setCurrentActivity( activities::Activity::Waiting );
         }
 }
 

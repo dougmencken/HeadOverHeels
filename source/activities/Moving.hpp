@@ -13,7 +13,7 @@
 
 #include "FreeItem.hpp"
 #include "Behavior.hpp"
-#include "ActivityOfItem.hpp"
+#include "Activity.hpp"
 
 
 namespace activities
@@ -35,7 +35,7 @@ public:
          * @param itFalls whether the item falls, false for a flying one
          * @return true for a move or changed activity, false for a collision
          */
-        bool move ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool itFalls ) ;
+        bool move ( behaviors::Behavior * behavior, Activity * activity, bool itFalls ) ;
 
 protected:
 

@@ -182,7 +182,7 @@ allegro::Sample* SoundManager::getSampleFor( const std::string & item, const std
 }
 
 /* static */
-std::string SoundManager::activityToString ( const activities::ActivityOfItem & activity )
+std::string SoundManager::activityToString ( const activities::Activity & activity )
 {
         switch ( activity )
         {

@@ -14,7 +14,7 @@ namespace activities
 {
 
 /* static */
-void PropagateActivity::toAdjacentItems( Item & sender, const ActivityOfItem & activity )
+void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activity )
 {
         Mediator* mediator = sender.getMediator();
 
@@ -36,45 +36,45 @@ void PropagateActivity::toAdjacentItems( Item & sender, const ActivityOfItem & a
                                         // if it’s the character and the sender is mortal, then the character loses one life
                                         if ( itemMeetsSender->whichItemClass() == "avatar item" && sender.isMortal() )
                                         {
-                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem
-                                                        && itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::MeetMortalItem
+                                                        && itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanish )
                                                 {
                                                         // is the contact direct
                                                         if ( mediator->depthOfStackOfCollisions() <= 1 )
                                                         {
-                                                                itemMeetsSender->getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
+                                                                itemMeetsSender->getBehavior()->setCurrentActivity( activities::Activity::MeetMortalItem );
                                                         }
                                                 }
                                         }
                                         // if the sender is the character and the colliding one is mortal, then the character loses one life
                                         else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
                                         {
-                                                if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem
-                                                        && sender.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                if ( sender.getBehavior()->getCurrentActivity() != activities::Activity::MeetMortalItem
+                                                        && sender.getBehavior()->getCurrentActivity() != activities::Activity::Vanish )
                                                 {
-                                                        sender.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
+                                                        sender.getBehavior()->setCurrentActivity( activities::Activity::MeetMortalItem );
                                                 }
-                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanish )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityOfItemDueTo( activity, ItemPtr( &sender ) );
+                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, ItemPtr( &sender ) );
                                                 }
                                         }
                                         // if not, just propagate activity to that item
                                         else
                                         {
-                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanish )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityOfItemDueTo( activity, ItemPtr( &sender ) );
+                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, ItemPtr( &sender ) );
                                                 }
                                         }
                                 }
                                 // otherwise it is an item without behavior, which may be mortal too
                                 else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
                                 {
-                                        if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem
-                                                && sender.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                        if ( sender.getBehavior()->getCurrentActivity() != activities::Activity::MeetMortalItem
+                                                && sender.getBehavior()->getCurrentActivity() != activities::Activity::Vanish )
                                         {
-                                                sender.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
+                                                sender.getBehavior()->setCurrentActivity( activities::Activity::MeetMortalItem );
                                         }
                                 }
                         }
@@ -125,7 +125,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const ActivityOfItem & a
 }
 
 /* static */
-void PropagateActivity::toItemsAbove( Item & sender, const ActivityOfItem & activity )
+void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity )
 {
         Mediator* mediator = sender.getMediator();
 
@@ -158,22 +158,22 @@ void PropagateActivity::toItemsAbove( Item & sender, const ActivityOfItem & acti
                                         // propagate activity when there’s no more than one item below or when the sender carries that item
                                         if ( mediator->depthOfStackOfCollisions() <= 1 || sender.getUniqueName() == freeItemAbove.getCarrier() )
                                         {
-                                                if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
+                                                if ( freeItemAbove.getBehavior()->getCurrentActivity() != activities::Activity::Vanish )
                                                 {
                                                         // if it’s the character above the mortal sender, then the character loses its life
                                                         if ( freeItemAbove.whichItemClass() == "avatar item" && sender.isMortal() )
                                                         {
-                                                                freeItemAbove.getBehavior()->setActivityOfItem( activities::Activity::MeetMortalItem );
+                                                                freeItemAbove.getBehavior()->setCurrentActivity( activities::Activity::MeetMortalItem );
                                                         }
                                                         // if not, propagate activity to that item above
                                                         else {
-                                                                ActivityOfItem currentActivity = freeItemAbove.getBehavior()->getActivityOfItem();
+                                                                Activity currentActivity = freeItemAbove.getBehavior()->getCurrentActivity();
                                                                 if ( currentActivity != activities::Activity::PushedNorth &&
                                                                         currentActivity != activities::Activity::PushedSouth &&
                                                                         currentActivity != activities::Activity::PushedEast &&
                                                                         currentActivity != activities::Activity::PushedWest )
                                                                 {
-                                                                        freeItemAbove.getBehavior()->changeActivityOfItemDueTo( activity, ItemPtr( &freeItemAbove ) );
+                                                                        freeItemAbove.getBehavior()->changeActivityDueTo( activity, ItemPtr( &freeItemAbove ) );
                                                                 }
                                                         }
                                                 }

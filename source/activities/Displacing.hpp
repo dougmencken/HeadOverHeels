@@ -11,7 +11,7 @@
 #ifndef Displacing_hpp_
 #define Displacing_hpp_
 
-#include "ActivityOfItem.hpp"
+#include "Activity.hpp"
 #include "Behavior.hpp"
 
 
@@ -34,7 +34,7 @@ public:
          * @param canFall whether an item falls, false if it flies
          * @return true for displacing or changing activity, false for a collision
          */
-        bool displace ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
+        bool displace ( behaviors::Behavior * behavior, Activity * activity, bool canFall ) ;
 
 private:
 

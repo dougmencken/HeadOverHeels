@@ -98,7 +98,7 @@ bool Volatile::update ()
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" ) ||
                                                                         ( bottomItem->getBehavior() != nilPointer
-                                                                                && bottomItem->getBehavior()->getActivityOfItem() == activities::Activity::Vanish ) )
+                                                                                && bottomItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanish ) )
                                                                 {
                                                                         gone = false;
                                                                 }
