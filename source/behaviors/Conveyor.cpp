@@ -61,8 +61,8 @@ bool Conveyor::update ()
                                                                 if ( itemAbove.getBehavior() != nilPointer )
                                                                 {
                                                                         Activity activityOfItemAbove = itemAbove.getBehavior()->getCurrentActivity() ;
-                                                                        bool outOfGravity = ( activityOfItemAbove == activities::Activity::Jump
-                                                                                                  || activityOfItemAbove == activities::Activity::Vanish ) ;
+                                                                        bool outOfGravity = ( activityOfItemAbove == activities::Activity::Jumping
+                                                                                                  || activityOfItemAbove == activities::Activity::Vanishing ) ;
 
                                                                         if ( ! outOfGravity ) {
                                                                                 if ( item->getOrientation() == "south" )

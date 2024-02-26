@@ -33,19 +33,19 @@ bool Doughnut::update ()
                         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
                         {
                                 case Way::North:
-                                        activity = activities::Activity::MoveNorth;
+                                        activity = activities::Activity::MovingNorth;
                                         break;
 
                                 case Way::South:
-                                        activity = activities::Activity::MoveSouth;
+                                        activity = activities::Activity::MovingSouth;
                                         break;
 
                                 case Way::East:
-                                        activity = activities::Activity::MoveEast;
+                                        activity = activities::Activity::MovingEast;
                                         break;
 
                                 case Way::West:
-                                        activity = activities::Activity::MoveWest;
+                                        activity = activities::Activity::MovingWest;
                                         break;
 
                                 default:
@@ -54,25 +54,25 @@ bool Doughnut::update ()
 
                         break;
 
-                case activities::Activity::MoveNorth:
-                case activities::Activity::MoveSouth:
-                case activities::Activity::MoveEast:
-                case activities::Activity::MoveWest:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
                                 // look for collisions with other items
                                 freeItem.setIgnoreCollisions( false );
 
-                                if ( activity == activities::Activity::MoveNorth ) {
+                                if ( activity == activities::Activity::MovingNorth ) {
                                         // -1, 0, 0 for collisions at north
                                         freeItem.canAdvanceTo( -1, 0, 0 );
-                                } else if ( activity == activities::Activity::MoveSouth ) {
+                                } else if ( activity == activities::Activity::MovingSouth ) {
                                         // 1, 0, 0 for collisions at south
                                         freeItem.canAdvanceTo( 1, 0, 0 );
-                                } else if ( activity == activities::Activity::MoveEast ) {
+                                } else if ( activity == activities::Activity::MovingEast ) {
                                         // 0, -1, 0 for collisions at east
                                         freeItem.canAdvanceTo( 0, -1, 0 );
-                                } else if ( activity == activities::Activity::MoveWest ) {
+                                } else if ( activity == activities::Activity::MovingWest ) {
                                         // 0, 1, 0 for collisions at west
                                         freeItem.canAdvanceTo( 0, 1, 0 );
                                 }

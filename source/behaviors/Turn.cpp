@@ -38,10 +38,10 @@ bool Turn::update ()
                         begin();
                         break;
 
-                case activities::Activity::MoveNorth:
-                case activities::Activity::MoveSouth:
-                case activities::Activity::MoveEast:
-                case activities::Activity::MoveWest:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
                         if ( ! freeItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
@@ -81,7 +81,7 @@ bool Turn::update ()
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
@@ -121,19 +121,19 @@ void Turn::begin()
         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = activities::Activity::MoveNorth;
+                        activity = activities::Activity::MovingNorth;
                         break;
 
                 case Way::South:
-                        activity = activities::Activity::MoveSouth;
+                        activity = activities::Activity::MovingSouth;
                         break;
 
                 case Way::East:
-                        activity = activities::Activity::MoveEast;
+                        activity = activities::Activity::MovingEast;
                         break;
 
                 case Way::West:
-                        activity = activities::Activity::MoveWest;
+                        activity = activities::Activity::MovingWest;
                         break;
 
                 default:
@@ -149,40 +149,40 @@ void Turn::turn()
         {
                 case Way::North:
                         if ( turnLeft ) {
-                                activity = activities::Activity::MoveWest ;
+                                activity = activities::Activity::MovingWest ;
                                 item->changeOrientation( "west" );
                         } else {
-                                activity = activities::Activity::MoveEast ;
+                                activity = activities::Activity::MovingEast ;
                                 item->changeOrientation( "east" );
                         }
                         break;
 
                 case Way::South:
                         if ( turnLeft ) {
-                                activity = activities::Activity::MoveEast ;
+                                activity = activities::Activity::MovingEast ;
                                 item->changeOrientation( "east" );
                         } else {
-                                activity = activities::Activity::MoveWest ;
+                                activity = activities::Activity::MovingWest ;
                                 item->changeOrientation( "west" );
                         }
                         break;
 
                 case Way::East:
                         if ( turnLeft ) {
-                                activity = activities::Activity::MoveNorth ;
+                                activity = activities::Activity::MovingNorth ;
                                 item->changeOrientation( "north" );
                         } else {
-                                activity = activities::Activity::MoveSouth ;
+                                activity = activities::Activity::MovingSouth ;
                                 item->changeOrientation( "south" );
                         }
                         break;
 
                 case Way::West:
                         if ( turnLeft ) {
-                                activity = activities::Activity::MoveSouth ;
+                                activity = activities::Activity::MovingSouth ;
                                 item->changeOrientation( "south" );
                         } else {
-                                activity = activities::Activity::MoveNorth ;
+                                activity = activities::Activity::MovingNorth ;
                                 item->changeOrientation( "north" );
                         }
                         break;

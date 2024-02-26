@@ -84,25 +84,25 @@ void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
                 case Way::North:
                 case Way::Northeast:
                 case Way::Northwest:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveSouth );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingSouth );
                         break;
 
                 case Way::South:
                 case Way::Southeast:
                 case Way::Southwest:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveNorth );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingNorth );
                         break;
 
                 case Way::East:
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveWest );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingWest );
                         break;
 
                 case Way::West:
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutoMoveEast );
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingEast );
                         break;
 
                 case Way::ByTeleport:
@@ -111,7 +111,7 @@ void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
                         break;
 
                 case Way::Above:
-                        getBehavior()->setCurrentActivity( activities::Activity::Fall );
+                        getBehavior()->setCurrentActivity( activities::Activity::Falling );
                         break;
 
                 default:
@@ -121,10 +121,10 @@ void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
 
 bool AvatarItem::addToPosition( int x, int y, int z )
 {
-        bool itAutomoves = getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveNorth ||
-                                getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveSouth ||
-                                getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveEast ||
-                                getBehavior()->getCurrentActivity() == activities::Activity::AutoMoveWest ;
+        bool itAutomoves = getBehavior()->getCurrentActivity() == activities::Activity::AutomovingNorth ||
+                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingSouth ||
+                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingEast ||
+                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingWest ;
 
         bool itFallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
 
@@ -394,7 +394,7 @@ void AvatarItem::wait ()
 
         // don’t wait while teleporting or loosing life
         if ( activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
-                        && activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
+                        && activity != activities::Activity::MetLethalItem && activity != activities::Activity::Vanishing )
         {
                 // set waiting frame by orientation
                 changeFrame( firstFrame () );

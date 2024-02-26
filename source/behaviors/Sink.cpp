@@ -31,11 +31,11 @@ bool Sink::update ()
                         // begin to fall when there’s an item above
                         if ( ! gridItem.canAdvanceTo( 0, 0, 1 ) )
                         {
-                                this->setCurrentActivity( activities::Activity::Fall );
+                                this->setCurrentActivity( activities::Activity::Falling );
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // is it time to lower one unit yet
                         if ( fallTimer->getValue() > gridItem.getWeight() )
                         {

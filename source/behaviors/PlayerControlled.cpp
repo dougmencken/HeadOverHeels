@@ -53,14 +53,14 @@ void PlayerControlled::setCurrentActivity ( const Activity & newActivity )
 {
         if ( this->affectedBy != nilPointer ) this->affectedBy = ItemPtr () ;
 
-        if ( newActivity == activities::Activity::MeetMortalItem && isInvulnerableToLethalItems () ) return ;
+        if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
 
         this->activity = newActivity ;
 }
 
 void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
 {
-        if ( newActivity == activities::Activity::MeetMortalItem && isInvulnerableToLethalItems () ) return ;
+        if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
 
         this->activity = newActivity ;
         this->affectedBy = dueTo ;
@@ -73,7 +73,7 @@ void PlayerControlled::wait( ::AvatarItem & character )
         if ( activities::Falling::getInstance().fall( this ) )
         {
                 speedTimer->reset();
-                activity = activities::Activity::Fall;
+                activity = activities::Activity::Falling;
 
                 if ( character.isHead ()
                                 && character.getQuickSteps() > 0
@@ -101,7 +101,7 @@ void PlayerControlled::move( ::AvatarItem & character )
 
                         // decrement the quick steps
                         if ( character.getQuickSteps() > 0
-                                        && moved && activity != activities::Activity::Fall )
+                                        && moved && activity != activities::Activity::Falling )
                         {
                                 this->highSpeedSteps ++ ;
 
@@ -195,7 +195,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
                                 character.changeFrame( fallFrames[ character.getOrientation() ] );
                         }
                 }
-                else if ( activity != activities::Activity::MeetMortalItem || character.hasShield() )
+                else if ( activity != activities::Activity::MetLethalItem || character.hasShield() )
                 {
                         activity = activities::Activity::Waiting ;
                 }
@@ -203,7 +203,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
                 fallTimer->reset();
         }
 
-        if ( activity != activities::Activity::Fall )
+        if ( activity != activities::Activity::Falling )
         {
                 SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
         }
@@ -211,7 +211,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
 
 void PlayerControlled::jump( ::AvatarItem & character )
 {
-        if ( activity == activities::Activity::Jump )
+        if ( activity == activities::Activity::Jumping )
         {
                 if ( jumpPhase < 0 )
                 {
@@ -241,7 +241,7 @@ void PlayerControlled::jump( ::AvatarItem & character )
                         // to the next phase of jump
                         ++ jumpPhase ;
 
-                        if ( activity == activities::Activity::Fall ) jumpPhase = -1 ; // end of jump
+                        if ( activity == activities::Activity::Falling ) jumpPhase = -1 ; // end of jump
 
                         speedTimer->reset();
 
@@ -249,7 +249,7 @@ void PlayerControlled::jump( ::AvatarItem & character )
                 }
         }
 
-        if ( activity != activities::Activity::Jump )
+        if ( activity != activities::Activity::Jumping )
         {       // not jumping, then stop the sound
                 SoundManager::getInstance().stop( character.getOriginalKind(), "jump" );
         }
@@ -267,7 +267,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
         {
                 // when there’s a collision then stop falling and return to waiting
                 if ( ! activities::Falling::getInstance().fall( this ) &&
-                        ( activity != activities::Activity::MeetMortalItem || character.hasShield() ) )
+                        ( activity != activities::Activity::MetLethalItem || character.hasShield() ) )
                 {
                         activity = activities::Activity::Waiting ;
                 }
@@ -282,19 +282,19 @@ void PlayerControlled::glide( ::AvatarItem & character )
                 switch ( Way( character.getOrientation() ).getIntegerOfWay () )
                 {
                         case Way::North:
-                                subactivity = activities::Activity::MoveNorth;
+                                subactivity = activities::Activity::MovingNorth;
                                 break;
 
                         case Way::South:
-                                subactivity = activities::Activity::MoveSouth;
+                                subactivity = activities::Activity::MovingSouth;
                                 break;
 
                         case Way::East:
-                                subactivity = activities::Activity::MoveEast;
+                                subactivity = activities::Activity::MovingEast;
                                 break;
 
                         case Way::West:
-                                subactivity = activities::Activity::MoveWest;
+                                subactivity = activities::Activity::MovingWest;
                                 break;
 
                         default:
@@ -309,7 +309,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
                 speedTimer->reset();
         }
 
-        if ( activity != activities::Activity::Glide )
+        if ( activity != activities::Activity::Gliding )
         {       // not gliding yet, so stop the sound
                 SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
         }
@@ -357,7 +357,7 @@ void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
         switch ( activity )
         {
                 // the character just met something mortal
-                case activities::Activity::MeetMortalItem:
+                case activities::Activity::MetLethalItem:
                         // do you have immunity
                         if ( ! character.hasShield() )
                         {
@@ -365,7 +365,7 @@ void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
                                 character.metamorphInto( kindOfBubbles, "hit something mortal" );
 
                                 this->isLosingLife = true ;
-                                activity = activities::Activity::Vanish ;
+                                activity = activities::Activity::Vanishing ;
                         }
                         else
                         {
@@ -373,7 +373,7 @@ void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
                         }
                         break;
 
-                case activities::Activity::Vanish:
+                case activities::Activity::Vanishing:
                         if ( ! character.isActiveCharacter() )
                         {
                                 std::cout << "inactive " << character.getUniqueName() << " is going to vanish, activate it" << std::endl ;
@@ -472,9 +472,9 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
 
                                 character.placeItemInBag( takenItem->getKind (), takenItem->getBehavior()->getNameOfBehavior () );
 
-                                takenItem->getBehavior()->setCurrentActivity( activities::Activity::Vanish );
+                                takenItem->getBehavior()->setCurrentActivity( activities::Activity::Vanishing );
                                 activity = ( activity == activities::Activity::TakeAndJump )
-                                                ? activities::Activity::Jump : activities::Activity::ItemTaken ;
+                                                ? activities::Activity::Jumping : activities::Activity::ItemTaken ;
 
                                 SoundManager::getInstance().play( character.getOriginalKind(), "take" );
 
@@ -483,7 +483,7 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                 }
         }
 
-        if ( activity != activities::Activity::ItemTaken && activity != activities::Activity::Jump )
+        if ( activity != activities::Activity::ItemTaken && activity != activities::Activity::Jumping )
         {
                 activity = activities::Activity::Waiting;
         }
@@ -512,7 +512,7 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
                         character.emptyBag();
 
                         // update activity
-                        activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jump : activities::Activity::Waiting );
+                        activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jumping : activities::Activity::Waiting );
 
                         SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
                         SoundManager::getInstance().play( character.getOriginalKind(), "drop" );
@@ -524,7 +524,7 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
                 }
         }
 
-        if ( activity != activities::Activity::Jump )
+        if ( activity != activities::Activity::Jumping )
         {
                 activity = activities::Activity::Waiting;
         }

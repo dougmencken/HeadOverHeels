@@ -35,11 +35,11 @@ bool Elevator::update ()
         switch ( activity )
         {
                 case activities::Activity::Waiting:
-                        setCurrentActivity ( ascent ? activities::Activity::MoveUp : activities::Activity::MoveDown );
+                        setCurrentActivity ( ascent ? activities::Activity::GoingUp : activities::Activity::GoingDown );
                         lastActivity = activity;
                         break;
 
-                case activities::Activity::MoveUp:
+                case activities::Activity::GoingUp:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
                                 activities::Moving::getInstance().move( this, &activity, false );
@@ -58,7 +58,7 @@ bool Elevator::update ()
                         freeItem.animate();
                         break;
 
-                case activities::Activity::MoveDown:
+                case activities::Activity::GoingDown:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
                                 activities::Moving::getInstance().move( this, &activity, false );
@@ -81,7 +81,7 @@ bool Elevator::update ()
                 case activities::Activity::StopAtBottom:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                setCurrentActivity( activities::Activity::MoveUp );
+                                setCurrentActivity( activities::Activity::GoingUp );
                                 lastActivity = activity;
                         }
 
@@ -92,7 +92,7 @@ bool Elevator::update ()
                 case activities::Activity::StopAtTop:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                setCurrentActivity( activities::Activity::MoveDown );
+                                setCurrentActivity( activities::Activity::GoingDown );
                                 lastActivity = activity;
                         }
 

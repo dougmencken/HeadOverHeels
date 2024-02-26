@@ -40,7 +40,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
                 if ( deltaZ < 0 ) deltaZ = 0;
                 else deltaZ = 2;
 
-                *activity = activities::Activity::Fall;
+                *activity = activities::Activity::Falling;
         }
 
         // let’s move up
@@ -65,7 +65,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
                                 // a mortal thing is above
                                 if ( item->isMortal() )
                                 {
-                                        characterItem.getBehavior()->setCurrentActivity( activities::Activity::MeetMortalItem );
+                                        characterItem.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
                                 }
                                 else
                                 {
@@ -117,7 +117,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
         // end jump when it’s the last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
         {
-                *activity = activities::Activity::Fall ;
+                *activity = activities::Activity::Falling ;
         }
 
         return itemMoved ;

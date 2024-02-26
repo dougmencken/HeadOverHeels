@@ -98,7 +98,7 @@ bool Volatile::update ()
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" ) ||
                                                                         ( bottomItem->getBehavior() != nilPointer
-                                                                                && bottomItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanish ) )
+                                                                                && bottomItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanishing ) )
                                                                 {
                                                                         gone = false;
                                                                 }
@@ -109,7 +109,7 @@ bool Volatile::update ()
 
                                 if ( gone )
                                 {
-                                        activity = activities::Activity::Vanish;
+                                        activity = activities::Activity::Vanishing;
                                         disappearanceTimer->reset();
                                 }
                         }
@@ -119,7 +119,7 @@ bool Volatile::update ()
                                 if ( mediator->findItemOfKind( "head" ) != nilPointer ||
                                         mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                 {
-                                        activity = activities::Activity::Vanish;
+                                        activity = activities::Activity::Vanishing;
                                         disappearanceTimer->reset();
                                 }
                         }
@@ -144,14 +144,14 @@ bool Volatile::update ()
                         {
                                 if ( getNameOfBehavior () == "behavior of disappearance on touch" )
                                 {
-                                                activity = activities::Activity::Vanish;
+                                                activity = activities::Activity::Vanishing;
                                 }
                                 else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                                 {
                                         if ( mediator->findItemOfKind( "head" ) != nilPointer ||
                                                 mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                         {
-                                                activity = activities::Activity::Vanish;
+                                                activity = activities::Activity::Vanishing;
                                         }
                                 }
                                 else
@@ -165,7 +165,7 @@ bool Volatile::update ()
                         }
                         break;
 
-                case activities::Activity::Vanish:
+                case activities::Activity::Vanishing:
                         if ( ( getNameOfBehavior () != "behavior of disappearance on jump into" &&
                                         getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
                                         getNameOfBehavior () != "behavior of disappearance as soon as Head appears" ) ||

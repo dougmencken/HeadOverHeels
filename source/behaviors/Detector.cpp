@@ -44,11 +44,11 @@ bool Detector::update ()
                                 {
                                         if ( activeCharacter->getY() <= freeItem.getY() )
                                         {
-                                                setCurrentActivity( activities::Activity::MoveEast );
+                                                setCurrentActivity( activities::Activity::MovingEast );
                                         }
                                         else if ( activeCharacter->getY() >= freeItem.getY() )
                                         {
-                                                setCurrentActivity( activities::Activity::MoveWest );
+                                                setCurrentActivity( activities::Activity::MovingWest );
                                         }
                                 }
                                 // the character meets the detector on the Y way
@@ -56,12 +56,12 @@ bool Detector::update ()
                                 {
                                         if ( activeCharacter->getX() <= freeItem.getX() )
                                         {
-                                                setCurrentActivity( activities::Activity::MoveNorth );
+                                                setCurrentActivity( activities::Activity::MovingNorth );
                                         }
                                         else
                                         if ( activeCharacter->getX() >= freeItem.getX() )
                                         {
-                                                setCurrentActivity( activities::Activity::MoveSouth );
+                                                setCurrentActivity( activities::Activity::MovingSouth );
                                         }
                                 }
 
@@ -72,10 +72,10 @@ bool Detector::update ()
                                 }
                                 break;
 
-                        case activities::Activity::MoveNorth:
-                        case activities::Activity::MoveSouth:
-                        case activities::Activity::MoveEast:
-                        case activities::Activity::MoveWest:
+                        case activities::Activity::MovingNorth:
+                        case activities::Activity::MovingSouth:
+                        case activities::Activity::MovingEast:
+                        case activities::Activity::MovingWest:
                                 // is item active
                                 if ( ! freeItem.isFrozen() )
                                 {
@@ -121,7 +121,7 @@ bool Detector::update ()
                                 }
                                 break;
 
-                        case activities::Activity::Fall:
+                        case activities::Activity::Falling:
                                 // look for reaching floor in a room without floor
                                 if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                                 {

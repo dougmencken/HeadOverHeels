@@ -44,19 +44,19 @@ bool Driven::update ()
                                 switch ( Way( freeItem.getOrientation() ).getIntegerOfWay() )
                                 {
                                         case Way::North:
-                                                setCurrentActivity( activities::Activity::MoveNorth );
+                                                setCurrentActivity( activities::Activity::MovingNorth );
                                                 break;
 
                                         case Way::South:
-                                                setCurrentActivity( activities::Activity::MoveSouth );
+                                                setCurrentActivity( activities::Activity::MovingSouth );
                                                 break;
 
                                         case Way::East:
-                                                setCurrentActivity( activities::Activity::MoveEast );
+                                                setCurrentActivity( activities::Activity::MovingEast );
                                                 break;
 
                                         case Way::West:
-                                                setCurrentActivity( activities::Activity::MoveWest );
+                                                setCurrentActivity( activities::Activity::MovingWest );
                                                 break;
 
                                         default:
@@ -80,19 +80,19 @@ bool Driven::update ()
                                                         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
                                                         {
                                                                 case Way::North:
-                                                                        setCurrentActivity( activities::Activity::MoveNorth );
+                                                                        setCurrentActivity( activities::Activity::MovingNorth );
                                                                         break;
 
                                                                 case Way::South:
-                                                                        setCurrentActivity( activities::Activity::MoveSouth );
+                                                                        setCurrentActivity( activities::Activity::MovingSouth );
                                                                         break;
 
                                                                 case Way::East:
-                                                                        setCurrentActivity( activities::Activity::MoveEast );
+                                                                        setCurrentActivity( activities::Activity::MovingEast );
                                                                         break;
 
                                                                 case Way::West:
-                                                                        setCurrentActivity( activities::Activity::MoveWest );
+                                                                        setCurrentActivity( activities::Activity::MovingWest );
                                                                         break;
 
                                                                 default:
@@ -104,10 +104,10 @@ bool Driven::update ()
                         }
                         break;
 
-                case activities::Activity::MoveNorth:
-                case activities::Activity::MoveSouth:
-                case activities::Activity::MoveEast:
-                case activities::Activity::MoveWest:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
                         // item is active and it is time to move
                         if ( ! freeItem.isFrozen() )
                         {
@@ -154,7 +154,7 @@ bool Driven::update ()
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {

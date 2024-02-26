@@ -78,7 +78,7 @@ bool Trampoline::update ()
                         if ( activities::Falling::getInstance().fall( this ) )
                         {
                                 fallTimer->reset();
-                                activity = activities::Activity::Fall;
+                                activity = activities::Activity::Falling;
                         }
                         break;
 
@@ -98,7 +98,7 @@ bool Trampoline::update ()
 
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
-                                if ( activity != activities::Activity::Fall )
+                                if ( activity != activities::Activity::Falling )
                                 {
                                         activity = activities::Activity::Waiting;
                                 }
@@ -107,7 +107,7 @@ bool Trampoline::update ()
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         if ( springItem.getZ() == 0 && ! springItem.getMediator()->getRoom()->hasFloor() ) {
                                 // disappear when reached bottom of a room without floor
                                 present = false ;
@@ -126,7 +126,7 @@ bool Trampoline::update ()
                         }
                         break;
 
-                case activities::Activity::Vanish:
+                case activities::Activity::Vanishing:
                         present = false ;
                         break;
 

@@ -59,7 +59,7 @@ bool Impel::update ()
                         freeItem.animate();
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {

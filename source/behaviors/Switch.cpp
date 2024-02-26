@@ -79,7 +79,7 @@ bool Switch::update ()
                                                 if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
                                                                 // the switch doesn’t toggle when the character jumps
-                                                                itemAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jump )
+                                                                itemAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jumping )
                                                 {
                                                         // toggle the switch when there’s only one item below the character
                                                         if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )

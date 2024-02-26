@@ -40,14 +40,14 @@ bool Patrol::update ()
                         changeOrientation();
                         break;
 
-                case activities::Activity::MoveNorth:
-                case activities::Activity::MoveSouth:
-                case activities::Activity::MoveEast:
-                case activities::Activity::MoveWest:
-                case activities::Activity::MoveNortheast:
-                case activities::Activity::MoveNorthwest:
-                case activities::Activity::MoveSoutheast:
-                case activities::Activity::MoveSouthwest:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
+                case activities::Activity::MovingNortheast:
+                case activities::Activity::MovingNorthwest:
+                case activities::Activity::MovingSoutheast:
+                case activities::Activity::MovingSouthwest:
                         if ( ! freeItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue () > freeItem.getSpeed () )
@@ -99,7 +99,7 @@ bool Patrol::update ()
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // look for reaching floor in a room without floor
                         if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
                         {
@@ -155,35 +155,35 @@ void Patrol::changeOrientation()
         switch ( orientation )
         {
                 case Way::North:
-                        activity = activities::Activity::MoveNorth;
+                        activity = activities::Activity::MovingNorth;
                         break;
 
                 case Way::South:
-                        activity = activities::Activity::MoveSouth;
+                        activity = activities::Activity::MovingSouth;
                         break;
 
                 case Way::East:
-                        activity = activities::Activity::MoveEast;
+                        activity = activities::Activity::MovingEast;
                         break;
 
                 case Way::West:
-                        activity = activities::Activity::MoveWest;
+                        activity = activities::Activity::MovingWest;
                         break;
 
                 case Way::Northeast:
-                        activity = activities::Activity::MoveNortheast;
+                        activity = activities::Activity::MovingNortheast;
                         break;
 
                 case Way::Northwest:
-                        activity = activities::Activity::MoveNorthwest;
+                        activity = activities::Activity::MovingNorthwest;
                         break;
 
                 case Way::Southeast:
-                        activity = activities::Activity::MoveSoutheast;
+                        activity = activities::Activity::MovingSoutheast;
                         break;
 
                 case Way::Southwest:
-                        activity = activities::Activity::MoveSouthwest;
+                        activity = activities::Activity::MovingSouthwest;
                         break;
 
                 default:

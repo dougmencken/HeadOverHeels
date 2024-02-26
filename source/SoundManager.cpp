@@ -190,26 +190,26 @@ std::string SoundManager::activityToString ( const activities::Activity & activi
 
                 case activities::Activity::Blinking : return "blink" ;
 
-                case activities::Activity::MoveNorth :
-                case activities::Activity::MoveSouth :
-                case activities::Activity::MoveEast :
-                case activities::Activity::MoveWest :
-                case activities::Activity::MoveNortheast :
-                case activities::Activity::MoveSoutheast :
-                case activities::Activity::MoveSouthwest :
-                case activities::Activity::MoveNorthwest :
-                case activities::Activity::MoveUp :
-                case activities::Activity::MoveDown :
-                case activities::Activity::AutoMoveNorth :
-                case activities::Activity::AutoMoveSouth :
-                case activities::Activity::AutoMoveEast :
-                case activities::Activity::AutoMoveWest :
+                case activities::Activity::MovingNorth :
+                case activities::Activity::MovingSouth :
+                case activities::Activity::MovingEast :
+                case activities::Activity::MovingWest :
+                case activities::Activity::MovingNortheast :
+                case activities::Activity::MovingSoutheast :
+                case activities::Activity::MovingSouthwest :
+                case activities::Activity::MovingNorthwest :
+                case activities::Activity::GoingUp :
+                case activities::Activity::GoingDown :
+                case activities::Activity::AutomovingNorth :
+                case activities::Activity::AutomovingSouth :
+                case activities::Activity::AutomovingEast :
+                case activities::Activity::AutomovingWest :
                         return "move" ;
 
-                case activities::Activity::Jump : return "jump" ;
+                case activities::Activity::Jumping : return "jump" ;
 
-                case activities::Activity::Fall : return "fall" ;
-                case activities::Activity::Glide : return "fall" ;
+                case activities::Activity::Falling : return "fall" ;
+                case activities::Activity::Gliding : return "fall" ;
 
                 case activities::Activity::TakeItem : case activities::Activity::TakeAndJump : return "take" ;
                 case activities::Activity::ItemTaken : return "taken" ;
@@ -231,8 +231,8 @@ std::string SoundManager::activityToString ( const activities::Activity & activi
                 case activities::Activity::BeginTeletransportation : return "teleport-out" ;
                 case activities::Activity::EndTeletransportation : return "teleport-in" ;
 
-                case activities::Activity::MeetMortalItem : return "lose-life" ;
-                case activities::Activity::Vanish : return "vanish" ;
+                case activities::Activity::MetLethalItem : return "lose-life" ;
+                case activities::Activity::Vanishing : return "vanish" ;
                 case activities::Activity::Collision : return "collision" ;
                 case activities::Activity::Function : return "function" ;
                 case activities::Activity::Mistake : return "mistake" ;

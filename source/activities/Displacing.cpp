@@ -108,7 +108,7 @@ bool Displacing::displace( behaviors::Behavior* behavior, Activity* activity, bo
                 // look if it falls yet
                 if ( Falling::getInstance().fall( behavior ) )
                 {
-                        *activity = activities::Activity::Fall ;
+                        *activity = activities::Activity::Falling ;
                         displaced = true ;
                 }
         }

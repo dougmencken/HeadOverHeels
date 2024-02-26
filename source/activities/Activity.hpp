@@ -28,62 +28,73 @@ private:
 
 public: /* constants */
 
-        static const unsigned int Waiting       = 0 ;
-        static const unsigned int Blinking      = 8 ;
+        static const unsigned int Waiting               =  0 ;
+        static const unsigned int Blinking              =  8 ;
 
-        static const unsigned int MoveNorth = 24 ;
-        static const unsigned int MoveSouth = 25 ;
-        static const unsigned int MoveEast = 26 ;
-        static const unsigned int MoveWest = 27 ;
-        static const unsigned int MoveNortheast = 32 ;
-        static const unsigned int MoveSoutheast = 33 ;
-        static const unsigned int MoveSouthwest = 34 ;
-        static const unsigned int MoveNorthwest = 35 ;
-        static const unsigned int MoveDown = 60 ;
-        static const unsigned int MoveUp = 70 ;
-        static const unsigned int AutoMoveNorth = 81 ;
-        static const unsigned int AutoMoveSouth = 82 ;
-        static const unsigned int AutoMoveEast = 83 ;
-        static const unsigned int AutoMoveWest = 84 ;
+        static const unsigned int MovingNorth           = 24 ;
+        static const unsigned int MovingSouth           = 25 ;
+        static const unsigned int MovingEast            = 26 ;
+        static const unsigned int MovingWest            = 27 ;
 
-        static const unsigned int Jump = 90 ;
-        static const unsigned int Fall = 95 ;
-        static const unsigned int Glide = 98 ;
+        static const unsigned int MovingNortheast       = 32 ;
+        static const unsigned int MovingSoutheast       = 33 ;
+        static const unsigned int MovingSouthwest       = 34 ;
+        static const unsigned int MovingNorthwest       = 35 ;
+
+        static const unsigned int AutomovingNorth       = 41 ;
+        static const unsigned int AutomovingSouth       = 42 ;
+        static const unsigned int AutomovingEast        = 43 ;
+        static const unsigned int AutomovingWest        = 44 ;
+
+        static const unsigned int GoingDown             = 60 ;
+        static const unsigned int GoingUp               = 70 ;
+
+        static const unsigned int Jumping               = 80 ;
+        static const unsigned int Falling               = 90 ;
+        static const unsigned int Gliding               = 98 ;
+
         static const unsigned int TakeItem = 100 ;
         static const unsigned int ItemTaken = 101 ;
         static const unsigned int DropItem = 102 ;
         static const unsigned int TakeAndJump = 115 ;
         static const unsigned int DropAndJump = 116 ;
 
-        static const unsigned int PushedNorth = 124 ;
-        static const unsigned int PushedSouth = 125 ;
-        static const unsigned int PushedEast = 126 ;
-        static const unsigned int PushedWest = 127 ;
-        static const unsigned int PushedNortheast = 132 ;
-        static const unsigned int PushedSoutheast = 133 ;
-        static const unsigned int PushedSouthwest = 134 ;
-        static const unsigned int PushedNorthwest = 135 ;
+        static const unsigned int PushedNorth                   = 124 ;
+        static const unsigned int PushedSouth                   = 125 ;
+        static const unsigned int PushedEast                    = 126 ;
+        static const unsigned int PushedWest                    = 127 ;
+
+        static const unsigned int PushedNortheast               = 132 ;
+        static const unsigned int PushedSoutheast               = 133 ;
+        static const unsigned int PushedSouthwest               = 134 ;
+        static const unsigned int PushedNorthwest               = 135 ;
+
         static const unsigned int PushedUp = 150 ;
         /* static const unsigned int PushedDown = 160 ; */
 
-        static const unsigned int DraggedNorth = 181 ;
-        static const unsigned int DraggedSouth = 182 ;
-        static const unsigned int DraggedEast = 183 ;
-        static const unsigned int DraggedWest = 184 ;
-        static const unsigned int CancelDragNorth = 191 ;
-        static const unsigned int CancelDragSouth = 192 ;
-        static const unsigned int CancelDragEast = 193 ;
-        static const unsigned int CancelDragWest = 194 ;
+        static const unsigned int DraggedNorth                  = 181 ;
+        static const unsigned int DraggedSouth                  = 182 ;
+        static const unsigned int DraggedEast                   = 183 ;
+        static const unsigned int DraggedWest                   = 184 ;
 
-        static const unsigned int BeginTeletransportation = 222 ;
-        static const unsigned int EndTeletransportation = 223 ;
+        ///////static const unsigned int CancelDragging                = 190 ;
+        static const unsigned int CancelDragNorth               = 191 ;
+        static const unsigned int CancelDragSouth               = 192 ;
+        static const unsigned int CancelDragEast                = 193 ;
+        static const unsigned int CancelDragWest                = 194 ;
 
-        static const unsigned int Freeze = 281 ;
-        static const unsigned int WakeUp = 282 ;
+        static const unsigned int BeginTeletransportation       = 222 ;
+        static const unsigned int EndTeletransportation         = 234 ;
+
+        static const unsigned int Freeze = 271 ;
+        static const unsigned int WakeUp = 272 ;
+
         static const unsigned int StopAtTop = 287 ;
         static const unsigned int StopAtBottom = 288 ;
-        static const unsigned int MeetMortalItem = 290 ;
-        static const unsigned int Vanish = 299 ;
+
+        static const unsigned int MetLethalItem                 = 290 ;
+        static const unsigned int Vanishing                     = 299 ;
+
         static const unsigned int Collision = 330 ;
         static const unsigned int Function = 360 ;
 

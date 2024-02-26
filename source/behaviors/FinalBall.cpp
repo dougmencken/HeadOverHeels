@@ -23,10 +23,10 @@ bool FinalBall::update ()
         switch ( activity )
         {
                 case activities::Activity::Waiting:
-                        this->setCurrentActivity( activities::Activity::MoveNorth );
+                        this->setCurrentActivity( activities::Activity::MovingNorth );
                         break;
 
-                case activities::Activity::MoveNorth:
+                case activities::Activity::MovingNorth:
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
                                 speedTimer->reset();

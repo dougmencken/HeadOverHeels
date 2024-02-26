@@ -61,17 +61,17 @@ bool CharacterHeels::update()
                         wait( characterItem );
                         break;
 
-                case activities::Activity::AutoMoveNorth:
-                case activities::Activity::AutoMoveSouth:
-                case activities::Activity::AutoMoveEast:
-                case activities::Activity::AutoMoveWest:
+                case activities::Activity::AutomovingNorth:
+                case activities::Activity::AutomovingSouth:
+                case activities::Activity::AutomovingEast:
+                case activities::Activity::AutomovingWest:
                         autoMove( characterItem );
                         break;
 
-                case activities::Activity::MoveNorth:
-                case activities::Activity::MoveSouth:
-                case activities::Activity::MoveEast:
-                case activities::Activity::MoveWest:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
                         move( characterItem );
                         break;
 
@@ -97,11 +97,11 @@ bool CharacterHeels::update()
                         cancelDragging( characterItem );
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         fall( characterItem );
                         break;
 
-                case activities::Activity::Jump :
+                case activities::Activity::Jumping :
                         jump( characterItem );
                         break;
 
@@ -112,8 +112,8 @@ bool CharacterHeels::update()
                         exitTeletransport( characterItem );
                         break;
 
-                case activities::Activity::MeetMortalItem:
-                case activities::Activity::Vanish:
+                case activities::Activity::MetLethalItem:
+                case activities::Activity::Vanishing:
                         collideWithMortalItem( characterItem );
                         break;
 
@@ -148,10 +148,10 @@ void CharacterHeels::behave ()
         const InputManager & input = InputManager::getInstance ();
 
         // if it’s not a move by inertia or some other exotic activity
-        if ( activity != activities::Activity::AutoMoveNorth && activity != activities::Activity::AutoMoveSouth
-                        && activity != activities::Activity::AutoMoveEast && activity != activities::Activity::AutoMoveWest
+        if ( activity != activities::Activity::AutomovingNorth && activity != activities::Activity::AutomovingSouth
+                        && activity != activities::Activity::AutomovingEast && activity != activities::Activity::AutomovingWest
                         && activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
-                        && activity != activities::Activity::MeetMortalItem && activity != activities::Activity::Vanish )
+                        && activity != activities::Activity::MetLethalItem && activity != activities::Activity::Vanishing )
         {
                 // when waiting or blinking
                 if ( activity == activities::Activity::Waiting || activity == activities::Activity::Blinking )
@@ -168,19 +168,19 @@ void CharacterHeels::behave ()
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                activity = activities::Activity::MoveNorth;
+                                activity = activities::Activity::MovingNorth;
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = activities::Activity::MoveSouth;
+                                activity = activities::Activity::MovingSouth;
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = activities::Activity::MoveEast;
+                                activity = activities::Activity::MovingEast;
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = activities::Activity::MoveWest;
+                                activity = activities::Activity::MovingWest;
                         }
                         else if ( input.jumpTyped() )
                         {
@@ -189,12 +189,12 @@ void CharacterHeels::behave ()
                                 // key to teleport is the same as for jump
                                 activity =
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
+                                                activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
                         }
                 }
                 // already moving
-                else if ( activity == activities::Activity::MoveNorth || activity == activities::Activity::MoveSouth ||
-                        activity == activities::Activity::MoveEast || activity == activities::Activity::MoveWest )
+                else if ( activity == activities::Activity::MovingNorth || activity == activities::Activity::MovingSouth ||
+                        activity == activities::Activity::MovingEast || activity == activities::Activity::MovingWest )
                 {
                         if( input.jumpTyped() )
                         {
@@ -202,7 +202,7 @@ void CharacterHeels::behave ()
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
                                         characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginTeletransportation : activities::Activity::Jump ;
+                                                activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
                         }
                         else if ( input.takeTyped() )
                         {
@@ -216,19 +216,19 @@ void CharacterHeels::behave ()
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                activity = activities::Activity::MoveNorth;
+                                activity = activities::Activity::MovingNorth;
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = activities::Activity::MoveSouth;
+                                activity = activities::Activity::MovingSouth;
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = activities::Activity::MoveEast;
+                                activity = activities::Activity::MovingEast;
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = activities::Activity::MoveWest;
+                                activity = activities::Activity::MovingWest;
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
@@ -242,7 +242,7 @@ void CharacterHeels::behave ()
                 {
                         if ( input.jumpTyped() )
                         {
-                                activity = activities::Activity::Jump;
+                                activity = activities::Activity::Jumping;
                         }
                         else if ( input.takeTyped() )
                         {
@@ -256,19 +256,19 @@ void CharacterHeels::behave ()
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                activity = activities::Activity::MoveNorth;
+                                activity = activities::Activity::MovingNorth;
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = activities::Activity::MoveSouth;
+                                activity = activities::Activity::MovingSouth;
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = activities::Activity::MoveEast;
+                                activity = activities::Activity::MovingEast;
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = activities::Activity::MoveWest;
+                                activity = activities::Activity::MovingWest;
                         }
                 }
                 // if the character is dragged by a conveyor
@@ -277,32 +277,32 @@ void CharacterHeels::behave ()
                 {
                         if ( input.jumpTyped() )
                         {
-                                activity = activities::Activity::Jump;
+                                activity = activities::Activity::Jumping;
                         }
                         // the character moves while being dragged
                         // moving in the opposite way cancels dragging
                         else if ( input.movenorthTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedSouth ? activities::Activity::CancelDragSouth : activities::Activity::MoveNorth );
+                                activity = ( activity == activities::Activity::DraggedSouth ? activities::Activity::CancelDragSouth : activities::Activity::MovingNorth );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedNorth ? activities::Activity::CancelDragNorth : activities::Activity::MoveSouth );
+                                activity = ( activity == activities::Activity::DraggedNorth ? activities::Activity::CancelDragNorth : activities::Activity::MovingSouth );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedWest ? activities::Activity::CancelDragWest : activities::Activity::MoveEast );
+                                activity = ( activity == activities::Activity::DraggedWest ? activities::Activity::CancelDragWest : activities::Activity::MovingEast );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                activity = ( activity == activities::Activity::DraggedEast ? activities::Activity::CancelDragEast : activities::Activity::MoveWest );
+                                activity = ( activity == activities::Activity::DraggedEast ? activities::Activity::CancelDragEast : activities::Activity::MovingWest );
                         }
                 }
-                else if ( activity == activities::Activity::Jump )
+                else if ( activity == activities::Activity::Jumping )
                 {
                         // nothing here
                 }
-                else if ( activity == activities::Activity::Fall )
+                else if ( activity == activities::Activity::Falling )
                 {
                         // pick or drop an item when falling
                         if ( input.takeTyped() )

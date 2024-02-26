@@ -39,10 +39,10 @@ bool ThereAndBack::update ()
                         letsMove();
                         break;
 
-                case activities::Activity::MoveNorth:
-                case activities::Activity::MoveSouth:
-                case activities::Activity::MoveEast:
-                case activities::Activity::MoveWest:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
                         if ( ! freeItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
@@ -91,7 +91,7 @@ bool ThereAndBack::update ()
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         if ( ! this->isFlying )
                         {
                                 // look for reaching floor in a room without floor
@@ -140,19 +140,19 @@ void ThereAndBack::letsMove()
         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = activities::Activity::MoveNorth;
+                        activity = activities::Activity::MovingNorth;
                         break;
 
                 case Way::South:
-                        activity = activities::Activity::MoveSouth;
+                        activity = activities::Activity::MovingSouth;
                         break;
 
                 case Way::East:
-                        activity = activities::Activity::MoveEast;
+                        activity = activities::Activity::MovingEast;
                         break;
 
                 case Way::West:
-                        activity = activities::Activity::MoveWest;
+                        activity = activities::Activity::MovingWest;
                         break;
 
                 default:
@@ -165,22 +165,22 @@ void ThereAndBack::turnRound()
         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = activities::Activity::MoveSouth ;
+                        activity = activities::Activity::MovingSouth ;
                         item->changeOrientation( "south" );
                         break;
 
                 case Way::South:
-                        activity = activities::Activity::MoveNorth ;
+                        activity = activities::Activity::MovingNorth ;
                         item->changeOrientation( "north" );
                         break;
 
                 case Way::East:
-                        activity = activities::Activity::MoveWest ;
+                        activity = activities::Activity::MovingWest ;
                         item->changeOrientation( "west" );
                         break;
 
                 case Way::West:
-                        activity = activities::Activity::MoveEast ;
+                        activity = activities::Activity::MovingEast ;
                         item->changeOrientation( "east" );
                         break;
 

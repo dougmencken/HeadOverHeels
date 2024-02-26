@@ -38,7 +38,7 @@ bool Mobile::update ()
                         if ( activities::Falling::getInstance().fall( this ) )
                         {
                                 fallTimer->reset();
-                                activity = activities::Activity::Fall;
+                                activity = activities::Activity::Falling;
                         }
                         break;
 
@@ -79,13 +79,13 @@ bool Mobile::update ()
                         {
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
-                                activity = activities::Activity::Fall;
+                                activity = activities::Activity::Falling;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
@@ -106,7 +106,7 @@ bool Mobile::update ()
                         }
                         break;
 
-                case activities::Activity::Vanish:
+                case activities::Activity::Vanishing:
                         // disappear when this item is caught
                         isGone = true;
                         break;

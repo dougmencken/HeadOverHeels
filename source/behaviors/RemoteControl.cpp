@@ -48,10 +48,10 @@ bool RemoteControl::update ()
                 case activities::Activity::Waiting:
                         break;
 
-                case activities::Activity::MoveNorth:
-                case activities::Activity::MoveSouth:
-                case activities::Activity::MoveEast:
-                case activities::Activity::MoveWest:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
@@ -59,7 +59,7 @@ bool RemoteControl::update ()
                                         // move item
                                         activities::Moving::getInstance().move( this, &activity, true );
 
-                                        if ( activity != activities::Activity::Fall )
+                                        if ( activity != activities::Activity::Falling )
                                         {
                                                 activity = activities::Activity::Waiting;
                                         }
@@ -91,7 +91,7 @@ bool RemoteControl::update ()
 
                                         activities::Displacing::getInstance().displace( this, &activity, true );
 
-                                        if ( activity != activities::Activity::Fall )
+                                        if ( activity != activities::Activity::Falling )
                                         {
                                                 activity = activities::Activity::Waiting;
                                         }
@@ -113,19 +113,19 @@ bool RemoteControl::update ()
                                         switch ( activity )
                                         {
                                                 case activities::Activity::PushedNorth:
-                                                        motionActivity = activities::Activity::MoveNorth;
+                                                        motionActivity = activities::Activity::MovingNorth;
                                                         break;
 
                                                 case activities::Activity::PushedSouth:
-                                                        motionActivity = activities::Activity::MoveSouth;
+                                                        motionActivity = activities::Activity::MovingSouth;
                                                         break;
 
                                                 case activities::Activity::PushedEast:
-                                                        motionActivity = activities::Activity::MoveEast;
+                                                        motionActivity = activities::Activity::MovingEast;
                                                         break;
 
                                                 case activities::Activity::PushedWest:
-                                                        motionActivity = activities::Activity::MoveWest;
+                                                        motionActivity = activities::Activity::MovingWest;
                                                         break;
 
                                                 default:
@@ -138,7 +138,7 @@ bool RemoteControl::update ()
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {

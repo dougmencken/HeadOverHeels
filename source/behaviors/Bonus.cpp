@@ -43,7 +43,7 @@ bool Bonus::update ()
                                         && itemAbove->whichItemClass() == "avatar item"
                                                 && mayTake( itemAbove->getOriginalKind() ) )
                                 {
-                                        activity = activities::Activity::Vanish ;
+                                        activity = activities::Activity::Vanishing ;
                                         affectedBy = itemAbove ; // vanishing is caused by the character
 
                                         disappearanceTimer->reset();
@@ -53,9 +53,9 @@ bool Bonus::update ()
                         item->animate();
 
                         // fall if it’s not taken
-                        if ( activity != activities::Activity::Vanish )
+                        if ( activity != activities::Activity::Vanishing )
                         {
-                                activity = activities::Activity::Fall;
+                                activity = activities::Activity::Falling;
                         }
                         break;
 
@@ -71,7 +71,7 @@ bool Bonus::update ()
                         // if the character touches the bonus item and may take this bonus
                         if ( affectedBy->whichItemClass() == "avatar item" && mayTake( affectedBy->getOriginalKind() ) )
                         {
-                                activity = activities::Activity::Vanish ;
+                                activity = activities::Activity::Vanishing ;
                         }
                         // otherwise it's some other item which pushes the bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
@@ -79,7 +79,7 @@ bool Bonus::update ()
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 // after displaced, back to falling
-                                activity = activities::Activity::Fall;
+                                activity = activities::Activity::Falling;
 
                                 speedTimer->reset();
                         }
@@ -95,13 +95,13 @@ bool Bonus::update ()
                                 activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 // after displaced, back to falling
-                                activity = activities::Activity::Fall;
+                                activity = activities::Activity::Falling;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case activities::Activity::Fall:
+                case activities::Activity::Falling:
                         // is it fall in room without floor
                         if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
                         {
@@ -134,7 +134,7 @@ bool Bonus::update ()
                                                 // disappear on take
                                                 if ( takeIt )
                                                 {
-                                                        activity = activities::Activity::Vanish ;
+                                                        activity = activities::Activity::Vanishing ;
                                                         affectedBy = itemBelow ; // vanishing is caused by the character
 
                                                         disappearanceTimer->reset();
@@ -144,7 +144,7 @@ bool Bonus::update ()
                         }
                         break;
 
-                case activities::Activity::Vanish:
+                case activities::Activity::Vanishing:
                         if ( disappearanceTimer->getValue() > 0.100 )
                         {
                                 isGone = true ;

@@ -37,55 +37,55 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
 
         switch ( *activity )
         {
-                case activities::Activity::MoveNorth:
-                case activities::Activity::AutoMoveNorth:
+                case activities::Activity::MovingNorth:
+                case activities::Activity::AutomovingNorth:
                         item->changeOrientation( "north" );
                         moved = item->addToX( -1 );
                         toItemsNearby = activities::Activity::PushedNorth ;
                         break;
 
-                case activities::Activity::MoveSouth:
-                case activities::Activity::AutoMoveSouth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::AutomovingSouth:
                         item->changeOrientation( "south" );
                         moved = item->addToX( 1 );
                         toItemsNearby = activities::Activity::PushedSouth ;
                         break;
 
-                case activities::Activity::MoveEast:
-                case activities::Activity::AutoMoveEast:
+                case activities::Activity::MovingEast:
+                case activities::Activity::AutomovingEast:
                         item->changeOrientation( "east" );
                         moved = item->addToY( -1 );
                         toItemsNearby = activities::Activity::PushedEast ;
                         break;
 
-                case activities::Activity::MoveWest:
-                case activities::Activity::AutoMoveWest:
+                case activities::Activity::MovingWest:
+                case activities::Activity::AutomovingWest:
                         item->changeOrientation( "west" );
                         moved = item->addToY( 1 );
                         toItemsNearby = activities::Activity::PushedWest ;
                         break;
 
-                case activities::Activity::MoveNortheast:
+                case activities::Activity::MovingNortheast:
                         moved = item->addToPosition( -1, -1, 0 );
                         toItemsNearby = activities::Activity::PushedNortheast ;
                         break;
 
-                case activities::Activity::MoveNorthwest:
+                case activities::Activity::MovingNorthwest:
                         moved = item->addToPosition( -1, 1, 0 );
                         toItemsNearby = activities::Activity::PushedNorthwest ;
                         break;
 
-                case activities::Activity::MoveSoutheast:
+                case activities::Activity::MovingSoutheast:
                         moved = item->addToPosition( 1, -1, 0 );
                         toItemsNearby = activities::Activity::PushedSoutheast ;
                         break;
 
-                case activities::Activity::MoveSouthwest:
+                case activities::Activity::MovingSouthwest:
                         moved = item->addToPosition( 1, 1, 0 );
                         toItemsNearby = activities::Activity::PushedSouthwest ;
                         break;
 
-                case activities::Activity::MoveUp:
+                case activities::Activity::GoingUp:
                         moved = item->addToZ( 1 );
 
                         // if can’t move up, raise the items above
@@ -112,7 +112,7 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
                         }
                         break;
 
-                case activities::Activity::MoveDown:
+                case activities::Activity::GoingDown:
                 {
                         // is there anything above
                         bool loaded = ! item->canAdvanceTo( 0, 0, /* 2 */ 1 );
@@ -167,7 +167,7 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
         if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
                 if ( /* not moving up or down, to not change the activity of items on elevator */
-                        ( *activity != activities::Activity::MoveUp && *activity != activities::Activity::MoveDown )
+                        ( *activity != activities::Activity::GoingUp && *activity != activities::Activity::GoingDown )
                                 || /* there’s a collision */ ! moved )
                 {
                         // move adjacent items
@@ -179,7 +179,7 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
         {
                 if ( Falling::getInstance().fall( behavior ) )
                 {
-                        *activity = activities::Activity::Fall;
+                        *activity = activities::Activity::Falling;
                         moved = true;
                 }
         }
