@@ -110,7 +110,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( const ItemPt
         {
                 behaviorToReturn = new Teleport( item, behavior );
         }
-        else if ( behavior == "behavior of spring leap" )
+        else if ( behavior == "behavior of spring stool" )
         {
                 behaviorToReturn = new Trampoline( item, behavior );
         }

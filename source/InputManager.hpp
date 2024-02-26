@@ -44,58 +44,46 @@ public:
 
         void changeUserKey ( const std::string & action, const std::string & key ) ;
 
-       /**
-        * Move character to the north
-        */
         bool movenorthTyped () const ;
 
-       /**
-        * Move character to the south
-        */
         bool movesouthTyped () const ;
 
-       /**
-        * Move character to the east
-        */
         bool moveeastTyped () const ;
 
-       /**
-        * Move character to the west
-        */
         bool movewestTyped () const ;
 
         bool anyMoveTyped () const ;
 
-       /**
-        * Take or drop some object
-        */
+        /**
+         * Take an object below or drop what’s already taken
+         */
         bool takeTyped () const ;
 
-       /**
-        * Character jumps
-        */
+        /**
+         * Character jumps
+         */
         bool jumpTyped () const ;
 
         bool takeAndJumpTyped () const ;
 
-       /**
-        * Release a doughnut
-        */
+        /**
+         * Release a doughnut
+         */
         bool doughnutTyped () const ;
 
-       /**
-        * Swap characters
-        */
+        /**
+         * Swap the characters
+         */
         bool swapTyped () const ;
 
-       /**
-        * Pause game
-        */
+        /**
+         * Pause the game
+         */
         bool pauseTyped () const ;
 
-       /**
-        * Show automap
-        */
+        /**
+         * Show the automap
+         */
         bool automapTyped () const ;
 
         void releaseKeyFor ( const std::string& keyAction ) const ;

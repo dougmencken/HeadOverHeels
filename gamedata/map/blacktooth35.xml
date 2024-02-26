@@ -148,13 +148,13 @@
         <item x="3" y="11" z="0">
             <kind>trampoline</kind>
             <orientation>none</orientation>
-            <behavior>behavior of spring leap</behavior>
+            <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="13" z="0">
             <kind>trampoline</kind>
             <orientation>none</orientation>
-            <behavior>behavior of spring leap</behavior>
+            <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="0" y="3" z="-1">

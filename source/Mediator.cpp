@@ -823,7 +823,7 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
 
                 if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isNotIgnoringCollisions () )
                 {
-                        if ( item->intersectsWith( freeItem ) )
+                        if ( item->crossesWith( freeItem ) )
                         {
                                 collisions.push_back( freeItem.getUniqueName() );
                                 collisionFound = true;
@@ -844,7 +844,7 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
 
                         if ( gridItem.getUniqueName() != item->getUniqueName() )
                         {
-                                if ( item->intersectsWith( gridItem ) )
+                                if ( item->crossesWith( gridItem ) )
                                 {
                                         collisions.push_back( gridItem.getUniqueName() );
                                         collisionFound = true;

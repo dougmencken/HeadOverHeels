@@ -17,11 +17,12 @@
 
 #include <WrappersAllegro.hpp>
 
+#include "Mediated.hpp"
+#include "Shady.hpp"
+
 #include "Timer.hpp"
 #include "Picture.hpp"
 #include "PoolOfPictures.hpp"
-#include "Mediated.hpp"
-#include "Shady.hpp"
 
 namespace behaviors {  class Behavior ;  }
 using behaviors::Behavior ;
@@ -60,6 +61,9 @@ public:
                         ( getY() - getWidthY() < y ) ;
         }
 
+        /**
+         * For an item with behavior, update that behavior programmatically
+         */
         virtual bool updateItem () ;
 
         void animate () ;
@@ -72,12 +76,12 @@ public:
         void changeOrientation ( const std::string & way ) ;
 
         /**
-         * Change the current frame for this item. Frames usually change when an orientation changes
+         * Changes the current frame. Frames usually change when the angular orientation changes
          * or when looping in a sequence of animation. However there’re some cases when frames
-         * change manually. As example, in the behavior of trampoline the one frame is for rest
-         * and the other is for fold
+         * are changed manually. As example, in the behavior of spring stool the one frame
+         * is for rest and the other is for fold
          */
-        void changeFrame ( size_t newFrame ) ;
+        void changeFrame ( unsigned int newFrame ) ;
 
         /**
          * Add value to coordinate X
@@ -113,7 +117,7 @@ public:
          */
         virtual bool canAdvanceTo ( int x, int y, int z ) ;
 
-        bool intersectsWith ( const Item & item ) const ;
+        bool crossesWith ( const Item & item ) const ;
 
         bool doGraphicsOverlap ( const Item & item ) const ;
 
@@ -135,14 +139,14 @@ public:
 
         static PoolOfPictures & getPoolOfPictures () {  return * poolOfPictures ;  }
 
-        const std::string& getUniqueName () const {  return uniqueName ;  }
+        const std::string & getUniqueName () const {  return this->uniqueName ;  }
 
         void setUniqueName ( const std::string& name ) {  this->uniqueName = name ;  }
 
         /**
          * Gives the original kind of item, while the current kind may change via metamorphosis
          */
-        const std::string& getOriginalKind () const {  return originalKind ;  }
+        const std::string & getOriginalKind () const {  return this->originalKind ;  }
 
         const DescriptionOfItem * getDescriptionOfItem () const {  return descriptionOfItem ;  }
 
@@ -182,8 +186,6 @@ public:
 
         bool isMortal () const ;
 
-        size_t firstFrameForOrientation ( const std::string & way ) const ;
-
         /**
          * Time in seconds to move item
          */
@@ -206,7 +208,9 @@ public:
 
         const std::string & getOrientation () const {  return orientation ;  }
 
-        size_t firstFrame () const {  return firstFrameForOrientation( orientation ) ;  }
+        unsigned int firstFrameForOrientation ( const std::string & way ) const ;
+
+        unsigned int firstFrame () const {  return firstFrameForOrientation( orientation ) ;  }
 
         bool animationFinished () const ;
 
@@ -316,46 +320,31 @@ private:
 
         unsigned int height ;
 
+        // the (angular) orientation
         std::string orientation ;
 
-        /**
-         * Current frame for item
-         */
+        // current frame for item
         size_t currentFrame ;
 
-        /**
-         * True to reverse sequence of animation
-         */
+        // true to reverse the animation sequence
         bool backwardsMotion ;
 
-        /**
-         * Whether to ignore that this item collides with something
-         */
+        // whether to ignore that this item collides with something
         bool ignoreCollisions ;
 
-        /**
-         * Pictures of item
-         */
+        // the pictures of item
         std::vector< PicturePtr > motion ;
 
-        /**
-         * Pictures of item’s shadow
-         */
+        // the pictures of item’s shadow
         std::vector< PicturePtr > shadows ;
 
-        /**
-         * Timer for animation of item
-         */
         autouniqueptr < Timer > motionTimer ;
 
-        /**
-         * Behavior of item
-         */
+        // the behaviour of item
         autouniqueptr< Behavior > behavior ;
 
-        /**
-         * The unique name of item below this one, the item above the carrier moves along with the moving carrier
-         */
+        // the unique name of item below this one
+        // the item above the carrier moves along with the moving carrier
         std::string carrier ;
 
 protected:

@@ -205,7 +205,7 @@ void Item::changeOrientation( const std::string& way )
         }
 }
 
-void Item::changeFrame( size_t newFrame )
+void Item::changeFrame( unsigned int newFrame )
 {
         if ( howManyMotions() > newFrame )
         {
@@ -275,7 +275,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         return ! collisionFound;
 }
 
-bool Item::intersectsWith( const Item& item ) const
+bool Item::crossesWith( const Item & item ) const
 {
         return  ( this->getX() < item.getX() + item.getWidthX() ) &&
                         ( item.getX() < this->getX() + this->getWidthX() ) &&
@@ -338,7 +338,7 @@ bool Item::isMortal() const
         return descriptionOfItem->isMortal() ;
 }
 
-size_t Item::firstFrameForOrientation ( const std::string& way ) const
+unsigned int Item::firstFrameForOrientation ( const std::string & way ) const
 {
         if ( descriptionOfItem->howManyOrientations() > 1 )
         {

@@ -220,7 +220,7 @@ void PlayerControlled::jump( ::AvatarItem & character )
                         // look for an item below
                         character.canAdvanceTo( 0, 0, -1 );
 
-                        bool onASpringStool = ( character.getMediator()->collisionWithBehavingAs( "behavior of spring leap" ) != nilPointer );
+                        bool onASpringStool = ( character.getMediator()->collisionWithBehavingAs( "behavior of spring stool" ) != nilPointer );
                         this->highJump = onASpringStool || ( character.isHeels() && character.getHighJumps() > 0 ) ;
 
                         if ( this->highJump ) {
@@ -451,7 +451,7 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                                 // pick a free pushable item less than or equal to 3/4 of the size of one tile
                                 if ( bottomItem != nilPointer && bottomItem->getBehavior() != nilPointer
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
-                                                bottomItem->getBehavior()->getNameOfBehavior() == "behavior of spring leap" )
+                                                bottomItem->getBehavior()->getNameOfBehavior() == "behavior of spring stool" )
                                         && bottomItem->getUnsignedWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
                                         && bottomItem->getUnsignedWidthY() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
                                 {

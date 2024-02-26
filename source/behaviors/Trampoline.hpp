@@ -31,39 +31,25 @@ public:
 
 private:
 
-       /**
-        * Is trampoline folded due to weight of item on top of it
-        */
+        // is the spring folded due to the weight of something above
         bool folded ;
 
-       /**
-        * Does trampoline bounce
-        */
+        // does the spring bounce
         bool rebounding ;
 
-       /**
-        * Frame of undeformed trampoline, usually 0th frame
-        */
-        int plainFrame ;
+        // frame for undeformed spring stool, usually 0th
+        int unstrainedFrame ;
 
-       /**
-        * Frame of folded trampoline, usually 1st frame
-        */
+        // frame for folded spring stool, usually 1st
         int foldedFrame ;
 
-       /**
-        * Timer for speed of movement
-        */
+        // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 
-       /**
-        * Timer for speed of falling
-        */
+        // timer for the speed of falling
         autouniqueptr < Timer > fallTimer ;
 
-       /**
-        * Chronometer for bouncing
-        */
+        // chronometer for bouncing
         autouniqueptr < Timer > reboundTimer ;
 
 };
