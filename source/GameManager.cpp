@@ -737,7 +737,7 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room, int x, int
                 room->getNameOfRoomDescriptionFile (),
                 character.getKind (),
                 x, y, z,
-                character.getOrientation ()
+                character.getHeading ()
         );
 }
 

@@ -340,19 +340,19 @@ void CharacterHeadAndHeels::behave ()
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                characterItem.changeOrientation( "north" );
+                                characterItem.changeHeading( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                characterItem.changeOrientation( "south" );
+                                characterItem.changeHeading( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                characterItem.changeOrientation( "east" );
+                                characterItem.changeHeading( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                characterItem.changeOrientation( "west" );
+                                characterItem.changeHeading( "west" );
                         }
                 }
                 else if ( activity == activities::Activity::Falling )
@@ -393,19 +393,19 @@ void CharacterHeadAndHeels::behave ()
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                characterItem.changeOrientation( "north" );
+                                characterItem.changeHeading( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                characterItem.changeOrientation( "south" );
+                                characterItem.changeHeading( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                characterItem.changeOrientation( "east" );
+                                characterItem.changeHeading( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                characterItem.changeOrientation( "west" );
+                                characterItem.changeHeading( "west" );
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
@@ -439,7 +439,7 @@ void CharacterHeadAndHeels::blink( AvatarItem & characterItem )
         // close the eyes
         if ( ( blinkTime > 0.0 && blinkTime < 0.050 ) || ( blinkTime > 0.400 && blinkTime < 0.450 ) )
         {
-                characterItem.changeFrame( blinkFrames[ characterItem.getOrientation() ] );
+                characterItem.changeFrame( blinkFrames[ characterItem.getHeading() ] );
         }
         // open the eyes
         else if ( ( blinkTime > 0.250 && blinkTime < 0.300 ) || ( blinkTime > 0.750 && blinkTime < 0.800 ) )

@@ -39,28 +39,28 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
         {
                 case activities::Activity::MovingNorth:
                 case activities::Activity::AutomovingNorth:
-                        item->changeOrientation( "north" );
+                        item->changeHeading( "north" );
                         moved = item->addToX( -1 );
                         toItemsNearby = activities::Activity::PushedNorth ;
                         break;
 
                 case activities::Activity::MovingSouth:
                 case activities::Activity::AutomovingSouth:
-                        item->changeOrientation( "south" );
+                        item->changeHeading( "south" );
                         moved = item->addToX( 1 );
                         toItemsNearby = activities::Activity::PushedSouth ;
                         break;
 
                 case activities::Activity::MovingEast:
                 case activities::Activity::AutomovingEast:
-                        item->changeOrientation( "east" );
+                        item->changeHeading( "east" );
                         moved = item->addToY( -1 );
                         toItemsNearby = activities::Activity::PushedEast ;
                         break;
 
                 case activities::Activity::MovingWest:
                 case activities::Activity::AutomovingWest:
-                        item->changeOrientation( "west" );
+                        item->changeHeading( "west" );
                         moved = item->addToY( 1 );
                         toItemsNearby = activities::Activity::PushedWest ;
                         break;
@@ -144,19 +144,19 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
                         break;
 
                 case activities::Activity::CancelDragNorth:
-                        item->changeOrientation( "south" );
+                        item->changeHeading( "south" );
                         break;
 
                 case activities::Activity::CancelDragSouth:
-                        item->changeOrientation( "north" );
+                        item->changeHeading( "north" );
                         break;
 
                 case activities::Activity::CancelDragEast:
-                        item->changeOrientation( "west" );
+                        item->changeHeading( "west" );
                         break;
 
                 case activities::Activity::CancelDragWest:
-                        item->changeOrientation( "east" );
+                        item->changeHeading( "east" );
                         break;
 
                 default:

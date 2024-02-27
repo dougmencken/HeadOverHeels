@@ -345,7 +345,7 @@ bool Room::saveAsXML( const std::string & file )
                                         item->InsertEndChild( kindOfItem );
 
                                         tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                        std::string orientation = theItem->getOrientation();
+                                        std::string orientation = theItem->getHeading ();
                                         if ( orientation == "nowhere" ) orientation = "none" ;
                                         itemOrientation->SetText( orientation.c_str () );
                                         item->InsertEndChild( itemOrientation );
@@ -384,7 +384,7 @@ bool Room::saveAsXML( const std::string & file )
                                 item->InsertEndChild( kindOfItem );
 
                                 tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                std::string orientation = theItem->getOrientation();
+                                std::string orientation = theItem->getHeading ();
                                 if ( orientation == "nowhere" ) orientation = "none" ;
                                 itemOrientation->SetText( orientation.c_str () );
                                 item->InsertEndChild( itemOrientation );

@@ -480,11 +480,11 @@ void Isomot::handleMagicKeys ()
                                 int characterX = activeCharacter->getX() ;
                                 int characterY = activeCharacter->getY() ;
                                 int characterZ = activeCharacter->getZ() + 2 * Room::LayerHeight ;
-                                const std::string & orientation = otherCharacter->getOrientation() ;
+                                const std::string & heading = otherCharacter->getHeading ();
 
                                 AvatarItemPtr joinedCharacter( new AvatarItem(
                                         ItemDescriptions::descriptions().getDescriptionByKind( nameOfAnotherCharacter ),
-                                        characterX, characterY, characterZ, orientation
+                                        characterX, characterY, characterZ, heading
                                 ) );
 
                                 std::string behavior = "still";
@@ -526,7 +526,7 @@ void Isomot::handleMagicKeys ()
                         if ( activeCharacter != nilPointer )
                         {
                                 const std::string & nameOfCharacter = activeCharacter->getKind () ;
-                                const std::string & orientation = activeCharacter->getOrientation() ;
+                                const std::string & heading = activeCharacter->getHeading () ;
                                 int teleportedX = 0;
                                 int teleportedY = 95;
                                 int teleportedZ = 240;
@@ -534,7 +534,7 @@ void Isomot::handleMagicKeys ()
                                 AvatarItemPtr teleportedCharacter( new AvatarItem(
                                         ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacter ),
                                         teleportedX, teleportedY, teleportedZ,
-                                        orientation
+                                        heading
                                 ) ) ;
 
                                 std::string behaviorOfCharacter = "still";

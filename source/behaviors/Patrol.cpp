@@ -1,7 +1,6 @@
 
 #include "Patrol.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Moving.hpp"
 #include "Displacing.hpp"
@@ -18,11 +17,11 @@ Patrol::Patrol( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
-        , changeTimer( new Timer() )
+        , patrolTimer( new Timer() )
 {
         speedTimer->go ();
         fallTimer->go ();
-        changeTimer->go ();
+        patrolTimer->go ();
 }
 
 Patrol::~Patrol()
@@ -31,13 +30,14 @@ Patrol::~Patrol()
 
 bool Patrol::update ()
 {
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        bool isGone = false;
+        FreeItem & patrolItem = dynamic_cast< FreeItem & >( * this->item );
+
+        bool present = true ;
 
         switch ( activity )
         {
                 case activities::Activity::Waiting:
-                        changeOrientation();
+                        randomlyChangeOrientation ();
                         break;
 
                 case activities::Activity::MovingNorth:
@@ -48,32 +48,31 @@ bool Patrol::update ()
                 case activities::Activity::MovingNorthwest:
                 case activities::Activity::MovingSoutheast:
                 case activities::Activity::MovingSouthwest:
-                        if ( ! freeItem.isFrozen() )
+                        if ( ! patrolItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue () > freeItem.getSpeed () )
+                                if ( speedTimer->getValue () > patrolItem.getSpeed () )
                                 {
                                         // ¿ cambio de dirección ?
-                                        if ( changeTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
+                                        if ( patrolTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
                                         {
-                                                changeOrientation();
-                                                changeTimer->reset();
+                                                randomlyChangeOrientation ();
+                                                patrolTimer->reset();
                                         }
 
                                         // move item
                                         if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
                                         {
-                                                changeOrientation();
+                                                randomlyChangeOrientation ();
 
-                                                SoundManager::getInstance().play( freeItem.getKind (), "collision" );
+                                                SoundManager::getInstance().play( patrolItem.getKind (), "collision" );
                                         }
 
-                                        // play the sound of moving
-                                        SoundManager::getInstance().play( freeItem.getKind (), "move" );
+                                        SoundManager::getInstance().play( patrolItem.getKind (), "move" );
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem.animate();
+                                patrolItem.animate() ;
                         }
                         break;
 
@@ -85,33 +84,30 @@ bool Patrol::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
-                        SoundManager::getInstance().play( freeItem.getKind (), "push" );
+                        SoundManager::getInstance().play( patrolItem.getKind (), "push" );
 
-                        // displace this item by some other one
+                        // displace this item when it’s pushed by some other one
                         activities::Displacing::getInstance().displace( this, &activity, true );
 
-                        activity = activities::Activity::Waiting;
+                        if ( patrolItem.isFrozen() ) // frozen item remains frozen
+                                setCurrentActivity( activities::Activity::Freeze );
+                        else
+                                setCurrentActivity( activities::Activity::Waiting );
 
-                        // preserve inactivity for frozen item
-                        if ( freeItem.isFrozen() )
-                        {
-                                activity = activities::Activity::Freeze;
-                        }
                         break;
 
                 case activities::Activity::Falling:
-                        // look for reaching floor in a room without floor
-                        if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
-                        {
-                                isGone = true;
+                        if ( patrolItem.getZ() == 0 && ! patrolItem.getMediator()->getRoom()->hasFloor() )
+                        {       // disappear when reached floor in a room without floor
+                                present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > freeItem.getWeight() )
+                        else if ( fallTimer->getValue() > patrolItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Waiting;
+                                        SoundManager::getInstance().play( patrolItem.getKind (), "fall" );
+                                        setCurrentActivity( activities::Activity::Waiting );
                                 }
 
                                 fallTimer->reset();
@@ -119,71 +115,70 @@ bool Patrol::update ()
                         break;
 
                 case activities::Activity::Freeze:
-                        freeItem.setFrozen( true );
+                        patrolItem.setFrozen( true );
                         break;
 
                 case activities::Activity::WakeUp:
-                        freeItem.setFrozen( false );
-                        activity = activities::Activity::Waiting;
+                        patrolItem.setFrozen( false );
+                        setCurrentActivity( activities::Activity::Waiting );
                         break;
 
                 default:
                         ;
         }
 
-        return isGone ;
+        return ! present ;
 }
 
-void Patrol::changeOrientation()
+void Patrol::randomlyChangeOrientation ()
 {
-        unsigned int orientation = 0;
+        int randomOrientation = -1 ;
 
         if ( getNameOfBehavior() == "behavior of random patroling in four primary directions" )
         {
-                orientation = ( rand() % 4 );
+                randomOrientation = ( rand() % 4 );
         }
         else if ( getNameOfBehavior() == "behavior of random patroling in four secondary directions" )
         {
-                orientation = ( rand() % 4 ) + 4;
+                randomOrientation = ( rand() % 4 ) + 4 ;
         }
         else if ( getNameOfBehavior() == "behavior of random patroling in eight directions" )
         {
-                orientation = ( rand() % 8 );
+                randomOrientation = ( rand() % 8 );
         }
 
-        // change activity depending on value of calculated direction
-        switch ( orientation )
+        switch ( randomOrientation )
         {
-                case Way::North:
-                        activity = activities::Activity::MovingNorth;
+                case 0:
+                        setCurrentActivity( activities::Activity::MovingNorth );
                         break;
 
-                case Way::South:
-                        activity = activities::Activity::MovingSouth;
+                case 1:
+                        setCurrentActivity( activities::Activity::MovingSouth );
                         break;
 
-                case Way::East:
-                        activity = activities::Activity::MovingEast;
+                case 2:
+                        setCurrentActivity( activities::Activity::MovingEast );
                         break;
 
-                case Way::West:
-                        activity = activities::Activity::MovingWest;
+                case 3:
+                        setCurrentActivity( activities::Activity::MovingWest );
                         break;
 
-                case Way::Northeast:
-                        activity = activities::Activity::MovingNortheast;
+                case 4:
+                        setCurrentActivity( activities::Activity::MovingNortheast );
                         break;
 
-                case Way::Northwest:
-                        activity = activities::Activity::MovingNorthwest;
+                case 5:
+                        setCurrentActivity( activities::Activity::MovingNorthwest );
                         break;
 
-                case Way::Southeast:
-                        activity = activities::Activity::MovingSoutheast;
+                case 6:
+                        setCurrentActivity( activities::Activity::MovingSoutheast );
                         break;
 
-                case Way::Southwest:
-                        activity = activities::Activity::MovingSouthwest;
+                case 7:
+                        setCurrentActivity( activities::Activity::MovingSouthwest );
                         break;
 
                 default:

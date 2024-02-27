@@ -71,9 +71,7 @@ public:
         /**
          * Used for the metamorphosis into bubbles, such as when the character teleports
          */
-        void metamorphInto ( const std::string & kindOfItem, const std::string & initiatedBy ) ;
-
-        void changeOrientation ( const std::string & way ) ;
+        void metamorphInto ( const std::string & newKind, const std::string & initiatedBy ) ;
 
         /**
          * Changes the current frame. Frames usually change when the angular orientation changes
@@ -201,16 +199,13 @@ public:
          */
         float getDelayBetweenFrames () const ;
 
-        /**
-         * Set current orientation of item
-         */
-        void setOrientation ( const std::string & way ) {  this->orientation = way ;  }
+        const std::string & getHeading () const {  return this->heading ;  }
 
-        const std::string & getOrientation () const {  return orientation ;  }
+        void changeHeading ( const std::string & where ) ;
 
-        unsigned int firstFrameForOrientation ( const std::string & way ) const ;
+        unsigned int firstFrameWhenHeading ( const std::string & where ) const ;
 
-        unsigned int firstFrame () const {  return firstFrameForOrientation( orientation ) ;  }
+        unsigned int firstFrame () const {  return firstFrameWhenHeading( getHeading() ) ;  }
 
         bool animationFinished () const ;
 
@@ -320,8 +315,8 @@ private:
 
         unsigned int height ;
 
-        // the (angular) orientation
-        std::string orientation ;
+        // the angular orientation
+        std::string heading ;
 
         // current frame for item
         size_t currentFrame ;

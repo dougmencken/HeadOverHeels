@@ -192,7 +192,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
                         // as long as there's no collision below
                         if ( character.canAdvanceTo( 0, 0, -1 ) )
                         {       // show images of falling character
-                                character.changeFrame( fallFrames[ character.getOrientation() ] );
+                                character.changeFrame( fallFrames[ character.getHeading() ] );
                         }
                 }
                 else if ( activity != activities::Activity::MetLethalItem || character.hasShield() )
@@ -279,7 +279,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
         {
                 Activity subactivity( activities::Activity::Waiting );
 
-                switch ( Way( character.getOrientation() ).getIntegerOfWay () )
+                switch ( Way( character.getHeading() ).getIntegerOfWay () )
                 {
                         case Way::North:
                                 subactivity = activities::Activity::MovingNorth;
@@ -304,7 +304,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
                 activities::Moving::getInstance().move( this, &subactivity, false );
 
                 // pick picture of falling
-                character.changeFrame( fallFrames[ character.getOrientation() ] );
+                character.changeFrame( fallFrames[ character.getHeading() ] );
 
                 speedTimer->reset();
         }
@@ -412,7 +412,7 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
                                 whatIsDonut,
                                 character.getX(), character.getY(),
                                 z < 0 ? 0 : z,
-                                character.getOrientation () ) );
+                                character.getHeading () ) );
 
                         donut->setBehaviorOf( "behavior of freezing doughnut" );
 

@@ -13,8 +13,8 @@
 #include <algorithm> // std::find
 
 
-AvatarItem::AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& way )
-        : FreeItem( description, x, y, z, way )
+AvatarItem::AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string & heading )
+        : FreeItem( description, x, y, z, heading )
         , wayOfExit( "did not quit" )
         , wayOfEntry( "just wait" )
         , shieldTimer( new Timer () )
@@ -31,9 +31,9 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
 {
 }
 
-void AvatarItem::setWayOfExit ( const std::string& way )
+void AvatarItem::setWayOfExit ( const std::string & way )
 {
-        this->wayOfExit = way;
+        this->wayOfExit = way ;
 
         switch ( Way( way ).getIntegerOfWay () )
         {
@@ -41,27 +41,27 @@ void AvatarItem::setWayOfExit ( const std::string& way )
                 case Way::South:
                 case Way::East:
                 case Way::West:
-                        setOrientation( way );
+                        changeHeading( way );
                         break;
 
                 case Way::Northeast:
                 case Way::Northwest:
-                        setOrientation( "north" );
+                        changeHeading( "north" );
                         break;
 
                 case Way::Southeast:
                 case Way::Southwest:
-                        setOrientation( "south" );
+                        changeHeading( "south" );
                         break;
 
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        setOrientation( "east" );
+                        changeHeading( "east" );
                         break;
 
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        setOrientation( "west" );
+                        changeHeading( "west" );
                         break;
 
                 default:
@@ -162,12 +162,10 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                         {
                                 // see if the character hits a north door’s jamb
                                 doorCollision = isCollidingWithDoor( "north", what, xBefore, yBefore );
-                                if ( ! doorCollision )
-                                {
+                                if ( ! doorCollision ) {
                                         // then maybe the character hits a north-east door’s jamb
                                         doorCollision = isCollidingWithDoor( "northeast", what, xBefore, yBefore );
-                                        if ( ! doorCollision )
-                                        {
+                                        if ( ! doorCollision ) {
                                                 // or a north-west door’s jamb
                                                 doorCollision = isCollidingWithDoor( "northwest", what, xBefore, yBefore );
                                         }
@@ -177,12 +175,10 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                         {
                                 // see if the character hits a south door’s jamb
                                 doorCollision = isCollidingWithDoor( "south", what, xBefore, yBefore );
-                                if ( ! doorCollision )
-                                {
+                                if ( ! doorCollision ) {
                                         // then maybe the character hits a south-east door’s jamb
                                         doorCollision = isCollidingWithDoor( "southeast", what, xBefore, yBefore );
-                                        if ( ! doorCollision )
-                                        {
+                                        if ( ! doorCollision ) {
                                                 // or a south-west door’s jamb
                                                 doorCollision = isCollidingWithDoor( "southwest", what, xBefore, yBefore );
                                         }
@@ -192,12 +188,10 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                         {
                                 // see if the character hits an east door’s jamb
                                 doorCollision = isCollidingWithDoor( "east", what, xBefore, yBefore );
-                                if ( ! doorCollision )
-                                {
+                                if ( ! doorCollision ) {
                                         // maybe the character hits an east-north door’s jamb
                                         doorCollision = isCollidingWithDoor( "eastnorth", what, xBefore, yBefore );
-                                        if ( ! doorCollision )
-                                        {
+                                        if ( ! doorCollision ) {
                                                 // or an east-south door’s jamb
                                                 doorCollision = isCollidingWithDoor( "eastsouth", what, xBefore, yBefore );
                                         }
@@ -207,12 +201,10 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                         {
                                 // see if the character hits a west door’s jamb
                                 doorCollision = isCollidingWithDoor( "west", what, xBefore, yBefore );
-                                if ( ! doorCollision )
-                                {
+                                if ( ! doorCollision ) {
                                         // maybe the character hits a west-north door’s jamb
                                         doorCollision = isCollidingWithDoor( "westnorth", what, xBefore, yBefore );
-                                        if ( ! doorCollision )
-                                        {
+                                        if ( ! doorCollision ) {
                                                 // or a west-south door’s jamb
                                                 doorCollision = isCollidingWithDoor( "westsouth", what, xBefore, yBefore );
                                         }
@@ -380,23 +372,15 @@ void AvatarItem::behave ()
                 dynamic_cast< behaviors::PlayerControlled * >( getBehavior ().get() )->behave ();
 }
 
-bool AvatarItem::update ()
-{
-        if ( getBehavior() != nilPointer )
-                getBehavior()->update ();
-
-        return false;
-}
-
 void AvatarItem::wait ()
 {
-        Activity activity = getBehavior()->getCurrentActivity();
+        Activity activity = getBehavior()->getCurrentActivity() ;
 
         // don’t wait while teleporting or loosing life
         if ( activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
                         && activity != activities::Activity::MetLethalItem && activity != activities::Activity::Vanishing )
         {
-                // set waiting frame by orientation
+                // set waiting frame by angular orientation
                 changeFrame( firstFrame () );
 
                 getBehavior()->setCurrentActivity( activities::Activity::Waiting );

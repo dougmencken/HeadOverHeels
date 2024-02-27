@@ -436,7 +436,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                         int characterX = character->getX();
                                         int characterY = character->getY();
                                         int characterZ = character->getZ();
-                                        const std::string & characterOrientation = character->getOrientation() ;
+                                        const std::string & characterOrientation = character->getHeading() ;
                                         const std::string & characterEntry = character->getWayOfEntry() ;
 
                                         // create the simple character
@@ -451,7 +451,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                         continue ;
                                 }
 
-                                theWay = character->getOrientation() ;
+                                theWay = character->getHeading() ;
 
                                 std::string entry = character->getWayOfEntry() ;
 
@@ -551,7 +551,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         int previousSouthBound = previousRoom->getLimitAt( "south" );
         int previousWestBound = previousRoom->getLimitAt( "west" );
 
-        const std::string exitOrientation = oldItemOfRoamer.getOrientation() ;
+        const std::string exitOrientation = oldItemOfRoamer.getHeading() ;
 
         // remove the active character from the previous room
         previousRoom->removeCharacterFromRoom( oldItemOfRoamer, true );

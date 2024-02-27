@@ -49,22 +49,10 @@ public:
 
 protected:
 
-       /**
-        * Character waits, game shows first frame of character’s animation for current orientation
-        */
         virtual void wait( AvatarItem & character ) ;
 
-       /**
-        * Character moves at speed specified in item’s data, in the direction of north or south or west or east
-        */
         virtual void move( AvatarItem & character ) ;
 
-       /**
-        * Character moves automatically
-        * at distance equal to number of automatic steps,
-        * in direction of north or south or west or east,
-        * at speed specified in item’s data
-        */
         virtual void autoMove( AvatarItem & character ) ;
 
         /**

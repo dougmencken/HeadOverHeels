@@ -19,9 +19,11 @@ namespace behaviors
 {
 
 /**
- * Moves item randomly. For "four primary directions" variant move north, south, east or west.
- * For variant "four secondary directions" move northeast, northwest, southeast and southwest.
- * And for "eight directions" variant move in all these eight directions
+ * Moves item randomly
+ *
+ * For “in four primary directions” behavior move north, south, east or west.
+ * For behavior “in four secondary directions” move northeast, northwest, southeast and southwest.
+ * And for “in eight directions” move in all these eight directions
  */
 
 class Patrol : public Behavior
@@ -35,29 +37,18 @@ public:
 
         virtual bool update () ;
 
-protected:
-
-       /**
-        * El elemento cambia aleatoriamente de dirección
-        */
-        void changeOrientation () ;
-
 private:
 
-       /**
-        * Timer for item’s speed of movement
-        */
+        void randomlyChangeOrientation () ;
+
+        // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 
-       /**
-        * Timer for item’s speed of falling
-        */
+        // timer for the speed of falling
         autouniqueptr < Timer > fallTimer ;
 
-       /**
-        * Timer for change of item’s direction
-        */
-        autouniqueptr < Timer > changeTimer ;
+        // timer for the next change of orientation
+        autouniqueptr < Timer > patrolTimer ;
 
 };
 

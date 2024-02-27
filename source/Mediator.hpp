@@ -18,7 +18,6 @@
 #include <WrappersAllegro.hpp>
 
 #include <pthread.h>
-#include <sys/time.h>
 
 #include "Mediated.hpp"
 #include "Room.hpp"

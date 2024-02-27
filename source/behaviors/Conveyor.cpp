@@ -65,13 +65,13 @@ bool Conveyor::update ()
                                                                                                   || activityOfItemAbove == activities::Activity::Vanishing ) ;
 
                                                                         if ( ! outOfGravity ) {
-                                                                                if ( item->getOrientation() == "south" )
+                                                                                if ( item->getHeading() == "south" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedSouth );
-                                                                                else if ( item->getOrientation() == "west" )
+                                                                                else if ( item->getHeading() == "west" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedWest );
-                                                                                else if ( item->getOrientation() == "north" )
+                                                                                else if ( item->getHeading() == "north" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedNorth );
-                                                                                else if ( item->getOrientation() == "east" )
+                                                                                else if ( item->getHeading() == "east" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedEast );
                                                                         }
 

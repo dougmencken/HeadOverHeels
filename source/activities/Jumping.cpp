@@ -15,20 +15,19 @@ Jumping * Jumping::instance = nilPointer ;
 Jumping & Jumping::getInstance()
 {
         if ( instance == nilPointer )
-        {
-                instance = new Jumping();
-        }
+                instance = new Jumping () ;
 
         return *instance;
 }
 
-
 bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
 {
-        bool itemMoved = false;
-        Activity displaceActivity = activities::Activity::Waiting;
-        AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * behavior->getItem() );
-        Mediator* mediator = characterItem.getMediator();
+        bool jumped = false ;
+
+        Activity displaceActivity = activities::Activity::Waiting ;
+
+        AvatarItem & character = dynamic_cast< AvatarItem & >( * behavior->getItem() );
+        Mediator* mediator = character.getMediator() ;
 
         int deltaXY = jumpVector[ jumpPhase ].first ;
         int deltaZ = jumpVector[ jumpPhase ].second ;
@@ -44,74 +43,71 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
         }
 
         // let’s move up
-        if ( ! characterItem.addToZ( deltaZ ) )
+        if ( ! character.addToZ( deltaZ ) )
         {
                 // if can’t, raise the pile of items above
                 if ( deltaZ > 0 )
                 {
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                std::string collision = mediator->popCollision ();
+                                const std::string & collision = mediator->popCollision ();
 
-                                if ( collision == "ceiling" && characterItem.isActiveCharacter() )
+                                if ( collision == "ceiling" && character.isActiveCharacter() )
                                 {
-                                        characterItem.setWayOfExit( "above" );
+                                        character.setWayOfExit( "above" );
                                         continue ;
                                 }
 
                                 ItemPtr item = mediator->findItemByUniqueName( collision );
                                 if ( item == nilPointer ) continue ;
 
-                                // a mortal thing is above
-                                if ( item->isMortal() )
-                                {
-                                        characterItem.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
+                                if ( item->isMortal() ) {
+                                        // a lethal thing is above
+                                        character.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
                                 }
-                                else
-                                {
-                                        // non mortal free item
+                                else {  // a harmless free item
                                         if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
                                         {
                                                 // raise items recursively
-                                                lift( characterItem, *item, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
+                                                lift( character, *item, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                                         }
                                 }
                         }
 
                         // yet you may ascend
-                        characterItem.addToZ( deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
+                        character.addToZ( deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                 }
         }
 
-        std::string orientation = characterItem.getOrientation() ;
+        const std::string & heading = character.getHeading () ;
 
-        if ( orientation == "north" )
+        if ( heading == "north" )
         {
-                itemMoved = characterItem.addToX( - deltaXY );
+                jumped = character.addToX( - deltaXY );
                 displaceActivity = activities::Activity::PushedNorth ;
         }
-        else if ( orientation == "south" )
+        else if ( heading == "south" )
         {
-                itemMoved = characterItem.addToX( deltaXY );
+                jumped = character.addToX( deltaXY );
                 displaceActivity = activities::Activity::PushedSouth ;
         }
-        else if ( orientation == "east" )
+        else if ( heading == "east" )
         {
-                itemMoved = characterItem.addToY( - deltaXY );
+                jumped = character.addToY( - deltaXY );
                 displaceActivity = activities::Activity::PushedEast ;
         }
-        else if ( orientation == "west" )
+        else if ( heading == "west" )
         {
-                itemMoved = characterItem.addToY( deltaXY );
+                jumped = character.addToY( deltaXY );
                 displaceActivity = activities::Activity::PushedWest ;
         }
 
-        // displace adjacent items when there’s horizontal collision
-        if ( ! itemMoved || ( itemMoved && jumpPhase > 4 ) )
+        // displace adjacent items when there’s a horizontal collision
+        if ( ! jumped || ( jumped && jumpPhase > 4 ) )
         {
                 // is it okay to move items above
                 // it is okay after the fourth phase of jump so the character can get rid of the item above
-                PropagateActivity::toAdjacentItems( characterItem, displaceActivity );
+                PropagateActivity::toAdjacentItems( character, displaceActivity );
         }
 
         // end jump when it’s the last phase
@@ -120,10 +116,10 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
                 *activity = activities::Activity::Falling ;
         }
 
-        return itemMoved ;
+        return jumped ;
 }
 
-void Jumping::lift( FreeItem& sender, Item& item, int z )
+void Jumping::lift( FreeItem & sender, Item & item, int z )
 {
         const autouniqueptr< Behavior > & behavior = item.getBehavior() ;
         if ( behavior != nilPointer )
@@ -144,16 +140,16 @@ void Jumping::lift( FreeItem& sender, Item& item, int z )
 
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        ItemPtr topItem = mediator->findCollisionPop();
+                                        ItemPtr itemAtop = mediator->findCollisionPop();
 
-                                        if ( topItem != nilPointer )
+                                        if ( itemAtop != nilPointer )
                                         {
                                                 // raise free items recursively
-                                                lift( sender, *topItem, z );
+                                                lift( sender, *itemAtop, z );
                                         }
                                 }
 
-                                // ahora ya puede ascender
+                                // now it can move up
                                 item.addToZ( z );
                         }
                 }

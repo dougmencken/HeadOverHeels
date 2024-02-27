@@ -28,7 +28,7 @@ class AvatarItem : public FreeItem
 
 public:
 
-        AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& orientation ) ;
+        AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string & heading ) ;
 
         AvatarItem( const AvatarItem & toCopy ) ;
 
@@ -44,12 +44,12 @@ public:
 
         void autoMoveOnEntry ( const std::string & wayOfEntry ) ;
 
+        /**
+         * Updates the character’s behavior according to the player’s controls
+         */
         virtual void behave () ;
 
-        /**
-         * Update the behavior
-         */
-        virtual bool update () ;
+        /////////virtual bool update () ;
 
         void wait () ;
 
@@ -133,10 +133,8 @@ public:
 
         void setWayOfEntry ( const std::string& way ) {  wayOfEntry = way ;  }
 
-protected:
-
         /**
-         * See if the character crosses the limits of room, if yes then change the room
+         * See if the character crosses the limits of room
          */
         bool isCollidingWithLimitsOfRoom( const std::string & onWhichWay ) ;
 

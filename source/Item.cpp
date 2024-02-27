@@ -29,7 +29,7 @@ Item::Item( const DescriptionOfItem* description, int z, const std::string& way 
         yYet( 0 ),
         zYet( z ),
         height( description->getHeight() ),
-        orientation( way == "none" ? "nowhere" : way ),
+        heading( way == "none" ? "nowhere" : way ),
         currentFrame( firstFrame () ),
         backwardsMotion( false ),
         ignoreCollisions( true ),
@@ -56,7 +56,7 @@ Item::Item( const Item& item )
         yYet( item.yYet ),
         zYet( item.zYet ),
         height( item.height ),
-        orientation( item.orientation ),
+        heading( item.heading ),
         currentFrame( item.currentFrame ),
         backwardsMotion( item.backwardsMotion ),
         ignoreCollisions( item.ignoreCollisions ),
@@ -163,16 +163,16 @@ bool Item::atExtraFrame() const
         return currentFrame >= howManyMotions() - descriptionOfItem->howManyExtraFrames() ;
 }
 
-void Item::metamorphInto( const std::string & kindOfItem, const std::string & initiatedBy )
+void Item::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
 {
-        const DescriptionOfItem * description = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfItem );
+        const DescriptionOfItem * description = ItemDescriptions::descriptions ().getDescriptionByKind( newKind );
         if ( description == nilPointer ) return ;
 
         std::cout << "metamorphosis of item \"" << getUniqueName ()
                         << "\" into \"" << description->getKind ()
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
-        this->descriptionOfItem = description;
+        this->descriptionOfItem = description ;
 
         doForthMotion ();
 
@@ -195,11 +195,11 @@ void Item::freshProcessedImage()
         processedImage->setName( "processed " + getRawImage().getName() );
 }
 
-void Item::changeOrientation( const std::string& way )
+void Item::changeHeading( const std::string & where )
 {
-        if ( orientation != way )
+        if ( this->heading != where )
         {
-                this->orientation = way ;
+                this->heading = where ;
 
                 changeFrame( firstFrame() );
         }
@@ -236,34 +236,28 @@ bool Item::canAdvanceTo( int x, int y, int z )
         yYet += y ;
         zYet += z ;
 
-        // look for collision with wall
-        if ( this->getX() < mediator->getRoom()->getLimitAt( "north" ) )
-        {
+        // look for collisions with walls
+        if ( this->getX() < mediator->getRoom()->getLimitAt( "north" ) ) {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( this->getX() + this->getWidthX() > mediator->getRoom()->getLimitAt( "south" ) )
-        {
+        else if ( this->getX() + this->getWidthX() > mediator->getRoom()->getLimitAt( "south" ) ) {
                 mediator->pushCollision( "some segment of wall at south" );
         }
-        if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" ) )
-        {
+        if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" ) ) {
                 mediator->pushCollision( "some segment of wall at west" );
         }
-        else if ( this->getY() - this->getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
-        {
+        else if ( this->getY() - this->getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) ) {
                 mediator->pushCollision( "some segment of wall at east" );
         }
 
-        // look for collision with floor
-        if ( this->getZ() < 0 )
-        {
+        // look for a collision with floor
+        if ( this->getZ() < 0 && mediator->getRoom()->hasFloor() ) {
                 mediator->pushCollision( "some tile of floor" );
         }
 
         collisionFound = ! mediator->isStackOfCollisionsEmpty ();
-        if ( ! collisionFound )
-        {
-                // look for collisions with other items in room
+        if ( ! collisionFound ) {
+                // look for collisions with other items in the room
                 collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
         }
 
@@ -272,7 +266,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         yYet = originalY ;
         zYet = originalZ ;
 
-        return ! collisionFound;
+        return ! collisionFound ;
 }
 
 bool Item::crossesWith( const Item & item ) const
@@ -338,11 +332,11 @@ bool Item::isMortal() const
         return descriptionOfItem->isMortal() ;
 }
 
-unsigned int Item::firstFrameForOrientation ( const std::string & way ) const
+unsigned int Item::firstFrameWhenHeading ( const std::string & where ) const
 {
         if ( descriptionOfItem->howManyOrientations() > 1 )
         {
-                unsigned int integerOfWay = Way( way ).getIntegerOfWay() ;
+                unsigned int integerOfWay = Way( where ).getIntegerOfWay() ;
                 unsigned int orientOccident = ( integerOfWay == Way::Nowhere ? 0 : integerOfWay );
                 return descriptionOfItem->howManyFramesPerOrientation() * orientOccident ;
         }

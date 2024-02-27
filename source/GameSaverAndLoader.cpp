@@ -18,19 +18,19 @@ GameSaverAndLoader::GameSaverAndLoader( )
         , xFish( 0 )
         , yFish( 0 )
         , zFish( 0 )
-        , orientationOFish( "nowhere" )
+        , whereLooksFish( "nowhere" )
 {
 
 }
 
-void GameSaverAndLoader::ateFish( const std::string & room, const std::string & character, int x, int y, int z, const std::string & orientation )
+void GameSaverAndLoader::ateFish( const std::string & room, const std::string & character, int x, int y, int z, const std::string & heading )
 {
         this->fishRoom = room ;
         this->nameOfCharacterWhoCaughtTheFish = character ;
         this->xFish = x ;
         this->yFish = y ;
         this->zFish = z ;
-        this->orientationOFish = orientation ;
+        this->whereLooksFish = heading ;
 }
 
 bool GameSaverAndLoader::loadGame( const std::string & file )
@@ -400,9 +400,9 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 lives->SetText( howManyLives );
                 activeCharacter->InsertEndChild( lives );
 
-                tinyxml2::XMLElement* orientation = saveXml.NewElement( "orientation" );
-                orientation->SetText( orientationOFish.c_str () );
-                activeCharacter->InsertEndChild( orientation );
+                tinyxml2::XMLElement* heading = saveXml.NewElement( "heading" );
+                heading->SetText( whereLooksFish.c_str () );
+                activeCharacter->InsertEndChild( heading );
 
                 tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
                 entry->SetText( "just wait" );
@@ -492,9 +492,9 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                         lives->SetText( characterToo->getLives() );
                         inactiveCharacter->InsertEndChild( lives );
 
-                        tinyxml2::XMLElement* orientation = saveXml.NewElement( "orientation" );
-                        orientation->SetText( characterToo->getOrientation().c_str () );
-                        inactiveCharacter->InsertEndChild( orientation );
+                        tinyxml2::XMLElement* heading = saveXml.NewElement( "heading" );
+                        heading->SetText( characterToo->getHeading().c_str () );
+                        inactiveCharacter->InsertEndChild( heading );
 
                         tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
                         entry->SetText( characterToo->getWayOfEntry().c_str () );

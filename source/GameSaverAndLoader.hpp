@@ -37,21 +37,21 @@ public:
          * @param room Where the reincarnation fish is caught
          * @param character Who caught the fish
          */
-        void ateFish ( const std::string & room, const std::string & character, int x, int y, int z, const std::string & orientation ) ;
+        void ateFish ( const std::string & room, const std::string & character, int x, int y, int z, const std::string & heading ) ;
 
         bool loadGame ( const std::string & file ) ;
 
         bool saveGame ( const std::string & file ) ;
 
-        static const std::string Current_Save_Version () {  return "2.2" ;  }
+        static const std::string Current_Save_Version () {  return "2.3" ;  }
 
         static const std::vector< std::string > Parsable_Save_Versions ()
         {
         ///#ifdef __Cxx11__
-                ///return { std::string( "2.2" ) };
+                ///return { std::string( "2.3" ) };
         ///#else
                 std::vector< std::string > versions ;
-                ///versions.push_back( "2.2" );
+                ///versions.push_back( "2.3" );
                 return versions ;
         ///#endif
         }
@@ -60,14 +60,9 @@ private:
 
         void continueSavedGame ( tinyxml2::XMLElement * characters ) ;
 
-       /**
-        * The room where the reincarnation fish is caught
-        */
+        // the room where the reincarnation fish is caught
         std::string fishRoom ;
 
-       /**
-        * The name of character who caught the fish
-        */
         std::string nameOfCharacterWhoCaughtTheFish ;
 
         int xFish ;
@@ -76,7 +71,7 @@ private:
 
         int zFish ;
 
-        std::string orientationOFish ;
+        std::string whereLooksFish ;
 
 } ;
 

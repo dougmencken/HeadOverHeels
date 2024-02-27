@@ -41,7 +41,7 @@ bool Driven::update ()
                 case activities::Activity::Waiting:
                         if ( moving )
                         {
-                                switch ( Way( freeItem.getOrientation() ).getIntegerOfWay() )
+                                switch ( Way( freeItem.getHeading() ).getIntegerOfWay() )
                                 {
                                         case Way::North:
                                                 setCurrentActivity( activities::Activity::MovingNorth );
@@ -77,7 +77,7 @@ bool Driven::update ()
                                                         characterFound = true ;
                                                         moving = true ;
 
-                                                        switch ( Way( item->getOrientation() ).getIntegerOfWay () )
+                                                        switch ( Way( item->getHeading() ).getIntegerOfWay () )
                                                         {
                                                                 case Way::North:
                                                                         setCurrentActivity( activities::Activity::MovingNorth );

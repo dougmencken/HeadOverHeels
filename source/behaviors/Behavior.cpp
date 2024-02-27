@@ -25,7 +25,7 @@ Behavior::Behavior( const ItemPtr & itemThatBehaves, const std::string & behavio
                 std::cout << "creation of behavior \"" << behavior << "\" for " << whichItem->whichItemClass()
                                 << " \"" << whichItem->getUniqueName() << "\" ( \"" << whichItem->getKind () << "\" )"
                                 << " at x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ()
-                                << " with orientation \"" << whichItem->getOrientation() << "\""
+                                << " with angular orientation \"" << whichItem->getHeading() << "\""
                                 << std::endl ;
         }
 #endif

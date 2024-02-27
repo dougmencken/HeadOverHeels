@@ -1078,13 +1078,13 @@ bool Mediator::pickNextCharacter ()
                         {
                                 lockFreeItemsMutex ();
 
-                                AvatarItemPtr reference = previousCharacter->getOriginalKind() == "heels" ? previousCharacter : currentCharacter ;
-                                this->lastActiveCharacterBeforeJoining = previousCharacter->getOriginalKind() == "heels" ? "heels" : "head" ;
+                                AvatarItemPtr reference = ( previousCharacter->getOriginalKind() == "heels" ) ? previousCharacter : currentCharacter ;
+                                this->lastActiveCharacterBeforeJoining = ( previousCharacter->getOriginalKind() == "heels" ) ? "heels" : "head" ;
 
                                 int x = reference->getX();
                                 int y = reference->getY();
                                 int z = reference->getZ();
-                                std::string orientation = reference->getOrientation() ;
+                                const std::string & heading = reference->getHeading() ;
 
                                 // an item that Heels may have in the handbag
                                 AvatarItemPtr heels = reference;
@@ -1096,7 +1096,7 @@ bool Mediator::pickNextCharacter ()
                                 this->room->removeCharacterFromRoom( *currentCharacter, false );
 
                                 // create the composite character
-                                setActiveCharacter( RoomBuilder::createCharacterInRoom( this->room, "headoverheels", false, x, y, z, orientation ) );
+                                setActiveCharacter( RoomBuilder::createCharacterInRoom( this->room, "headoverheels", false, x, y, z, heading ) );
 
                                 // transfer an item in the handbag
                                 if ( descriptionOfItemInBag != nilPointer )
@@ -1122,7 +1122,7 @@ bool Mediator::pickNextCharacter ()
                 int x = currentCharacter->getX ();
                 int y = currentCharacter->getY ();
                 int z = currentCharacter->getZ ();
-                std::string orientation = currentCharacter->getOrientation ();
+                const std::string & heading = currentCharacter->getHeading () ;
 
                 lockFreeItemsMutex ();
 
@@ -1135,7 +1135,7 @@ bool Mediator::pickNextCharacter ()
 
                 // create the simple characters
 
-                AvatarItemPtr characterHeels = RoomBuilder::createCharacterInRoom( this->room, "heels", false, x, y, z, orientation );
+                AvatarItemPtr characterHeels = RoomBuilder::createCharacterInRoom( this->room, "heels", false, x, y, z, heading );
 
                 if ( descriptionOfItemInBag != nilPointer )
                 {
@@ -1144,7 +1144,7 @@ bool Mediator::pickNextCharacter ()
                         characterHeels->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                 }
 
-                AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Room::LayerHeight, orientation );
+                AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Room::LayerHeight, heading );
 
                 setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? characterHeels : characterHead );
 
