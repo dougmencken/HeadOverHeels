@@ -104,7 +104,7 @@ bool Elevator::update ()
                         break;
         }
 
-        SoundManager::getInstance().play( freeItem.getKind (), SoundManager::activityToString( activity ) );
+        SoundManager::getInstance().play( freeItem.getKind (), SoundManager::activityToNameOfSound( activity ) );
 
         return false;
 }

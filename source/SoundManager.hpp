@@ -45,9 +45,9 @@ public:
 
         /**
          * Plays the sound
-         * @param item What gives out the sound
-         * @param activity The current activity of item
-         * @param loop If true, the playing is repeated
+         * @param item What emits the sound
+         * @param event What event is the sound playing for
+         * @param loop If true, the sound repeats in a loop
          */
         void play ( const std::string & item, const std::string & event, bool loop = false ) ;
 
@@ -67,7 +67,7 @@ public:
 
         allegro::Sample * getSampleFor ( const std::string & item, const std::string & event ) ;
 
-        static std::string activityToString ( const activities::Activity & activity ) ;
+        static std::string activityToNameOfSound ( const activities::Activity & activity ) ;
 
         void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = ( volume <= 99 ) ? volume : 99 ;  }
 

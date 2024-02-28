@@ -77,11 +77,7 @@ public: /* constants */
         static const unsigned int DraggedEast                   = 183 ;
         static const unsigned int DraggedWest                   = 184 ;
 
-        ///////static const unsigned int CancelDragging                = 190 ;
-        static const unsigned int CancelDragNorth               = 191 ;
-        static const unsigned int CancelDragSouth               = 192 ;
-        static const unsigned int CancelDragEast                = 193 ;
-        static const unsigned int CancelDragWest                = 194 ;
+        static const unsigned int CancelDragging                = 190 ;
 
         static const unsigned int BeginTeletransportation       = 222 ;
         static const unsigned int EndTeletransportation         = 234 ;

@@ -1,11 +1,8 @@
 
 #include "CharacterHead.hpp"
 
-#include "Item.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
-#include "Moving.hpp"
-#include "Displacing.hpp"
 #include "Falling.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
@@ -56,34 +53,34 @@ CharacterHead::~CharacterHead( )
 
 bool CharacterHead::update ()
 {
-        AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
 
-        if ( characterItem.hasShield() )
-        {
-                characterItem.decrementShieldOverTime () ;
-        }
+        if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
 
-        // change the height to climb bars easier
-        characterItem.changeHeightTo( activity == activities::Activity::Falling || activity == activities::Activity::Gliding ? 23 : 24 );
+        // change the height for climbing bars easier
+        avatar.changeHeightTo (
+                ( getCurrentActivity() == activities::Activity::Gliding ||
+                                getCurrentActivity() == activities::Activity::Falling )
+                ? 23 : 24 );
 
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        wait( characterItem );
+                        wait( avatar );
                         break;
 
                 case activities::Activity::AutomovingNorth:
                 case activities::Activity::AutomovingSouth:
                 case activities::Activity::AutomovingEast:
                 case activities::Activity::AutomovingWest:
-                        autoMove( characterItem );
+                        automove( avatar );
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        move( characterItem );
+                        move( avatar );
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -98,42 +95,39 @@ bool CharacterHead::update ()
                 case activities::Activity::DraggedSouth:
                 case activities::Activity::DraggedEast:
                 case activities::Activity::DraggedWest:
-                        displace( characterItem );
+                        displace( avatar );
                         break;
 
-                case activities::Activity::CancelDragNorth:
-                case activities::Activity::CancelDragSouth:
-                case activities::Activity::CancelDragEast:
-                case activities::Activity::CancelDragWest:
-                        cancelDragging( characterItem );
+                case activities::Activity::CancelDragging:
+                        cancelDragging( avatar );
                         break;
 
                 case activities::Activity::Falling:
-                        fall( characterItem );
+                        fall( avatar );
                         break;
 
                 case activities::Activity::Jumping :
-                        jump( characterItem );
+                        jump( avatar );
                         break;
 
                 case activities::Activity::BeginTeletransportation:
-                        enterTeletransport( characterItem );
+                        enterTeletransport( avatar );
                         break;
                 case activities::Activity::EndTeletransportation:
-                        exitTeletransport( characterItem );
+                        exitTeletransport( avatar );
                         break;
 
                 case activities::Activity::MetLethalItem:
                 case activities::Activity::Vanishing:
-                        collideWithMortalItem( characterItem );
+                        collideWithALethalItem( avatar );
                         break;
 
                 case activities::Activity::Gliding:
-                        glide( characterItem );
+                        glide( avatar );
                         break;
 
                 case activities::Activity::Blinking:
-                        blink( characterItem );
+                        blink( avatar );
                         break;
 
                 default:
@@ -141,14 +135,14 @@ bool CharacterHead::update ()
         }
 
         // play sound for the current activity
-        SoundManager::getInstance().play( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
+        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
-        return false;
+        return false ;
 }
 
 void CharacterHead::behave ()
 {
-        AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
         const InputManager & input = InputManager::getInstance ();
 
         // if it’s not a move by inertia or some other exotic activity
@@ -163,14 +157,14 @@ void CharacterHead::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // jump or teleport
-                                characterItem.canAdvanceTo( 0, 0, -1 );
+                                avatar.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
+                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
                         }
                         else if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
@@ -197,14 +191,14 @@ void CharacterHead::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // look for teletransport below
-                                characterItem.canAdvanceTo( 0, 0, -1 );
+                                avatar.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
+                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
                         }
                         else if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
@@ -225,7 +219,7 @@ void CharacterHead::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
+                                SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( activity ) );
                                 activity = activities::Activity::Waiting ;
                         }
                 }
@@ -239,7 +233,7 @@ void CharacterHead::behave ()
                         }
                         else if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
@@ -259,63 +253,47 @@ void CharacterHead::behave ()
                                 activity = activities::Activity::MovingWest;
                         }
                 }
-                // if the character is dragged by a conveyor
+                // dragged by a conveyor
                 else if ( activity == activities::Activity::DraggedNorth || activity == activities::Activity::DraggedSouth ||
-                        activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
+                                activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
                 {
-                        if ( input.jumpTyped() )
-                        {
-                                activity = activities::Activity::Jumping ;
+                        if ( input.jumpTyped() ) {
+                                setCurrentActivity( activities::Activity::Jumping );
                         }
-                        // the character moves while being dragged
-                        // moving in the opposite way cancels dragging
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedSouth ) ? activities::Activity::CancelDragSouth : activities::Activity::MovingNorth ;
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedNorth ) ? activities::Activity::CancelDragNorth : activities::Activity::MovingSouth ;
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedWest ) ? activities::Activity::CancelDragWest : activities::Activity::MovingEast ;
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedEast ) ? activities::Activity::CancelDragEast : activities::Activity::MovingWest ;
+                        else {
+                                handleMoveKeyWhenDragged () ;
                         }
                 }
                 else if ( activity == activities::Activity::Jumping )
                 {
                         if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // Head may change orientation when jumping
                         else if ( input.movenorthTyped() )
                         {
-                                characterItem.changeHeading( "north" );
+                                avatar.changeHeading( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                characterItem.changeHeading( "south" );
+                                avatar.changeHeading( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                characterItem.changeHeading( "east" );
+                                avatar.changeHeading( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                characterItem.changeHeading( "west" );
+                                avatar.changeHeading( "west" );
                         }
                 }
                 else if ( activity == activities::Activity::Falling )
                 {
                         if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // entonces Head planea
@@ -332,25 +310,25 @@ void CharacterHead::behave ()
                 {
                         if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // Head may change orientation when gliding
                         else if ( input.movenorthTyped() )
                         {
-                                characterItem.changeHeading( "north" );
+                                avatar.changeHeading( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                characterItem.changeHeading( "south" );
+                                avatar.changeHeading( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                characterItem.changeHeading( "east" );
+                                avatar.changeHeading( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                characterItem.changeHeading( "west" );
+                                avatar.changeHeading( "west" );
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
@@ -360,9 +338,9 @@ void CharacterHead::behave ()
         }
 }
 
-void CharacterHead::wait( AvatarItem & characterItem )
+void CharacterHead::wait( AvatarItem & avatar )
 {
-        characterItem.wait();
+        avatar.wait();
 
         if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
@@ -377,13 +355,13 @@ void CharacterHead::wait( AvatarItem & characterItem )
         }
 }
 
-void CharacterHead::blink( AvatarItem & characterItem )
+void CharacterHead::blink( AvatarItem & avatar )
 {
         double timeToBlink = timerForBlinking->getValue();
 
         if ( ( timeToBlink > 0.0 && timeToBlink < 0.050 ) || ( timeToBlink > 0.400 && timeToBlink < 0.450 ) )
         {
-                characterItem.changeFrame( blinkFrames[ characterItem.getHeading() ] );
+                avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
         else if ( ( timeToBlink > 0.250 && timeToBlink < 0.300 ) || ( timeToBlink > 0.750 && timeToBlink < 0.800 ) )
         {

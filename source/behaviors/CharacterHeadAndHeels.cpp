@@ -1,8 +1,6 @@
 
 #include "CharacterHeadAndHeels.hpp"
 
-#include "Item.hpp"
-#include "DescriptionOfItem.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
 #include "Falling.hpp"
@@ -59,31 +57,28 @@ CharacterHeadAndHeels::~CharacterHeadAndHeels( )
 
 bool CharacterHeadAndHeels::update ()
 {
-        AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
 
-        if ( characterItem.hasShield() )
-        {
-                characterItem.decrementShieldOverTime () ;
-        }
+        if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
 
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        wait( characterItem );
+                        wait( avatar );
                         break;
 
                 case activities::Activity::AutomovingNorth:
                 case activities::Activity::AutomovingSouth:
                 case activities::Activity::AutomovingEast:
                 case activities::Activity::AutomovingWest:
-                        autoMove( characterItem );
+                        automove( avatar );
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        move( characterItem );
+                        move( avatar );
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -98,57 +93,54 @@ bool CharacterHeadAndHeels::update ()
                 case activities::Activity::DraggedSouth:
                 case activities::Activity::DraggedEast:
                 case activities::Activity::DraggedWest:
-                        displace( characterItem );
+                        displace( avatar );
                         break;
 
-                case activities::Activity::CancelDragNorth:
-                case activities::Activity::CancelDragSouth:
-                case activities::Activity::CancelDragEast:
-                case activities::Activity::CancelDragWest:
-                        cancelDragging( characterItem );
+                case activities::Activity::CancelDragging:
+                        cancelDragging( avatar );
                         break;
 
                 case activities::Activity::Falling:
-                        fall( characterItem );
+                        fall( avatar );
                         break;
 
                 case activities::Activity::Jumping :
-                        jump( characterItem );
+                        jump( avatar );
                         break;
 
                 case activities::Activity::BeginTeletransportation:
-                        enterTeletransport( characterItem );
+                        enterTeletransport( avatar );
                         break;
                 case activities::Activity::EndTeletransportation:
-                        exitTeletransport( characterItem );
+                        exitTeletransport( avatar );
                         break;
 
                 case activities::Activity::MetLethalItem:
                 case activities::Activity::Vanishing:
-                        collideWithMortalItem( characterItem );
+                        collideWithALethalItem( avatar );
                         break;
 
                 case activities::Activity::Gliding:
-                        glide( characterItem );
+                        glide( avatar );
                         break;
 
                 case activities::Activity::Blinking:
-                        blink( characterItem );
+                        blink( avatar );
                         break;
 
                 case activities::Activity::TakeItem:
                 case activities::Activity::TakeAndJump:
-                        takeItem( characterItem );
+                        takeItem( avatar );
                         break;
 
                 case activities::Activity::ItemTaken:
-                        characterItem.addToZ( - Room::LayerHeight );
+                        avatar.addToZ( - Room::LayerHeight );
                         activity = activities::Activity::Waiting;
                         break;
 
                 case activities::Activity::DropItem:
                 case activities::Activity::DropAndJump:
-                        dropItem( characterItem );
+                        dropItem( avatar );
                         break;
 
                 default:
@@ -156,14 +148,14 @@ bool CharacterHeadAndHeels::update ()
         }
 
         // play sound for the current activity
-        SoundManager::getInstance().play( characterItem.getOriginalKind(), SoundManager::activityToString ( activity ) );
+        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound ( getCurrentActivity() ) );
 
-        return false;
+        return false ;
 }
 
 void CharacterHeadAndHeels::behave ()
 {
-        AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
         const InputManager & input = InputManager::getInstance() ;
 
         // if it’s not a move by inertia or some other exotic activity
@@ -178,24 +170,24 @@ void CharacterHeadAndHeels::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // is there teleport below
-                                characterItem.canAdvanceTo( 0, 0, -1 );
+                                avatar.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
+                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
                         }
                         else if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -222,24 +214,24 @@ void CharacterHeadAndHeels::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // jump or teleport
-                                characterItem.canAdvanceTo( 0, 0, -1 );
+                                avatar.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        characterItem.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
+                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
                                                 activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
                         }
                         else if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -260,7 +252,7 @@ void CharacterHeadAndHeels::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( characterItem.getOriginalKind(), SoundManager::activityToString( activity ) );
+                                SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( activity ) );
                                 activity = activities::Activity::Waiting ;
                         }
                 }
@@ -274,17 +266,17 @@ void CharacterHeadAndHeels::behave ()
                         }
                         else if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -304,68 +296,52 @@ void CharacterHeadAndHeels::behave ()
                                 activity = activities::Activity::MovingWest;
                         }
                 }
-                // the character is dragged by a conveyor
+                // dragged by a conveyor
                 else if ( activity == activities::Activity::DraggedNorth || activity == activities::Activity::DraggedSouth ||
-                        activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
+                                activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
                 {
-                        if ( input.jumpTyped() )
-                        {
-                                activity = activities::Activity::Jumping ;
+                        if ( input.jumpTyped() ) {
+                                setCurrentActivity( activities::Activity::Jumping );
                         }
-                        // the character moves while being dragged
-                        // moving in the opposite way cancels dragging
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedSouth ? activities::Activity::CancelDragSouth : activities::Activity::MovingNorth );
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedNorth ? activities::Activity::CancelDragNorth : activities::Activity::MovingSouth );
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedWest ? activities::Activity::CancelDragWest : activities::Activity::MovingEast );
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = ( activity == activities::Activity::DraggedEast ? activities::Activity::CancelDragEast : activities::Activity::MovingWest );
+                        else {
+                                handleMoveKeyWhenDragged () ;
                         }
                 }
                 else if ( activity == activities::Activity::Jumping )
                 {
                         if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                characterItem.changeHeading( "north" );
+                                avatar.changeHeading( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                characterItem.changeHeading( "south" );
+                                avatar.changeHeading( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                characterItem.changeHeading( "east" );
+                                avatar.changeHeading( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                characterItem.changeHeading( "west" );
+                                avatar.changeHeading( "west" );
                         }
                 }
                 else if ( activity == activities::Activity::Falling )
                 {
                         if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // pick or drop an item when falling
                         else if ( input.takeTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         // entonces Head y Heels planean
@@ -382,30 +358,30 @@ void CharacterHeadAndHeels::behave ()
                 {
                         if ( input.doughnutTyped() )
                         {
-                                useHooter( characterItem );
+                                useHooter( avatar );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // pick or drop an item when gliding
                         else if ( input.takeTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
+                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                characterItem.changeHeading( "north" );
+                                avatar.changeHeading( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                characterItem.changeHeading( "south" );
+                                avatar.changeHeading( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                characterItem.changeHeading( "east" );
+                                avatar.changeHeading( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                characterItem.changeHeading( "west" );
+                                avatar.changeHeading( "west" );
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
@@ -415,9 +391,9 @@ void CharacterHeadAndHeels::behave ()
         }
 }
 
-void CharacterHeadAndHeels::wait( AvatarItem & characterItem )
+void CharacterHeadAndHeels::wait( AvatarItem & avatar )
 {
-        characterItem.wait();
+        avatar.wait();
 
         if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
@@ -432,14 +408,14 @@ void CharacterHeadAndHeels::wait( AvatarItem & characterItem )
         }
 }
 
-void CharacterHeadAndHeels::blink( AvatarItem & characterItem )
+void CharacterHeadAndHeels::blink( AvatarItem & avatar )
 {
         double blinkTime = timerForBlinking->getValue();
 
         // close the eyes
         if ( ( blinkTime > 0.0 && blinkTime < 0.050 ) || ( blinkTime > 0.400 && blinkTime < 0.450 ) )
         {
-                characterItem.changeFrame( blinkFrames[ characterItem.getHeading() ] );
+                avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
         // open the eyes
         else if ( ( blinkTime > 0.250 && blinkTime < 0.300 ) || ( blinkTime > 0.750 && blinkTime < 0.800 ) )

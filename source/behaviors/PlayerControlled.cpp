@@ -13,19 +13,17 @@
 #include "Doughnut.hpp"
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
+#include "InputManager.hpp"
 
 using behaviors::PlayerControlled ;
 
 
 PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , isLosingLife( false )
         , jumpPhase( -1 )
         , highJump( false )
-        , automaticSteps( 16 /* pasos automáticos */ )
-        , automaticStepsThruDoor( automaticSteps )
-        , highSpeedSteps( 0 )
-        , shieldSteps( 0 )
+        , automoveStepsRemained( automatic_steps )
+        , quickSteps( 0 )
         , kindOfBubbles( "bubbles" )
         , kindOfFiredDoughnut( "bubbles" )
         , speedTimer( new Timer () )
@@ -33,14 +31,15 @@ PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & be
         , glideTimer( new Timer () )
         , timerForBlinking( new Timer () )
         , donutFromHooterInRoom( false )
+        , isLosingLife( false )
 {
 
 }
 
-PlayerControlled::~PlayerControlled()
+PlayerControlled::~PlayerControlled( )
 {
-        jumpVector.clear();
-        highJumpVector.clear();
+        jumpVector.clear() ;
+        highJumpVector.clear() ;
 }
 
 bool PlayerControlled::isInvulnerableToLethalItems () const
@@ -68,7 +67,7 @@ void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const
 
 void PlayerControlled::wait( ::AvatarItem & character )
 {
-        character.wait();
+        character.wait ();
 
         if ( activities::Falling::getInstance().fall( this ) )
         {
@@ -77,49 +76,45 @@ void PlayerControlled::wait( ::AvatarItem & character )
 
                 if ( character.isHead ()
                                 && character.getQuickSteps() > 0
-                                        && this->highSpeedSteps < 4 )
+                                        && this->quickSteps < 4 )
                 {
-                        // reset the double speed steps counter
-                        this->highSpeedSteps = 0;
+                        // reset the quick steps counter
+                        this->quickSteps = 0 ;
                 }
         }
 }
 
 void PlayerControlled::move( ::AvatarItem & character )
 {
-        // move when character isn’t frozen
-        if ( ! character.isFrozen() )
+        if ( character.isFrozen() ) return ;
+
+        // apply the effect of quick steps bonus bunny
+        double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
+
+        // is it time to move
+        if ( speedTimer->getValue() > speed )
         {
-                // apply the effect of quick steps bonus bunny
-                double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
+                bool moved = activities::Moving::getInstance().move( this, &activity, true );
 
-                // is it time to move
-                if ( speedTimer->getValue() > speed )
+                // decrement the quick steps
+                if ( character.getQuickSteps() > 0
+                                && moved && activity != activities::Activity::Falling )
                 {
-                        // move it
-                        bool moved = activities::Moving::getInstance().move( this, &activity, true );
+                        this->quickSteps ++ ;
 
-                        // decrement the quick steps
-                        if ( character.getQuickSteps() > 0
-                                        && moved && activity != activities::Activity::Falling )
-                        {
-                                this->highSpeedSteps ++ ;
-
-                                if ( this->highSpeedSteps == 8 )
-                                {
-                                        character.decrementBonusQuickSteps () ;
-                                        this->highSpeedSteps = 4 ;
-                                }
+                        if ( this->quickSteps == 8 ) {
+                                character.decrementBonusQuickSteps () ;
+                                this->quickSteps = 4 ;
                         }
-
-                        speedTimer->reset();
-
-                        character.animate();
                 }
+
+                speedTimer->reset();
+
+                character.animate();
         }
 }
 
-void PlayerControlled::autoMove( ::AvatarItem & character )
+void PlayerControlled::automove( ::AvatarItem & character )
 {
         // apply the effect of quick steps bonus bunny
         double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
@@ -132,21 +127,19 @@ void PlayerControlled::autoMove( ::AvatarItem & character )
 
                 speedTimer->reset();
 
-                character.animate();
+                character.animate() ;
 
-                if ( automaticStepsThruDoor > 0 )
+                if ( this->automoveStepsRemained > 0 )
                 {
-                        -- automaticStepsThruDoor ;
+                        -- this->automoveStepsRemained ;
                 }
-                else
-                {
-                        // done auto~moving
-                        automaticStepsThruDoor = automaticSteps ;
-                        activity = activities::Activity::Waiting;
+                else {  // done auto~moving
+                        this->automoveStepsRemained = automatic_steps ; // reset remained steps
+                        setCurrentActivity( activities::Activity::Waiting );
                 }
         }
 
-        if ( activity == activities::Activity::Waiting )
+        if ( getCurrentActivity() == activities::Activity::Waiting )
         {       // stop playing the sound of moving
                 SoundManager::getInstance().stop( character.getOriginalKind(), "move" );
         }
@@ -154,15 +147,47 @@ void PlayerControlled::autoMove( ::AvatarItem & character )
 
 void PlayerControlled::displace( ::AvatarItem & character )
 {
-        // the character is moved by another item
-        // when the displacement couldn’t be performed due to a collision then the activity propagates to the collided items
         if ( speedTimer->getValue() > character.getSpeed() )
         {
                 activities::Displacing::getInstance().displace( this, &activity, true );
+                // when the displacement couldn’t be performed due to a collision
+                // then the activity is propagated to the collided items
 
-                activity = activities::Activity::Waiting;
+                setCurrentActivity( activities::Activity::Waiting );
 
                 speedTimer->reset();
+        }
+}
+
+void PlayerControlled::handleMoveKeyWhenDragged ()
+{
+        const InputManager & input = InputManager::getInstance ();
+        ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( * getItem () );
+        Activity whatDoing = getCurrentActivity() ;
+
+        if ( input.movenorthTyped() ) {
+                avatar.changeHeading( "north" );
+                setCurrentActivity( whatDoing == activities::Activity::DraggedSouth
+                                        ? activities::Activity::CancelDragging
+                                        : activities::Activity::MovingNorth );
+        }
+        else if ( input.movesouthTyped() ) {
+                avatar.changeHeading( "south" );
+                setCurrentActivity( whatDoing == activities::Activity::DraggedNorth
+                                        ? activities::Activity::CancelDragging
+                                        : activities::Activity::MovingSouth );
+        }
+        else if ( input.moveeastTyped() ) {
+                avatar.changeHeading( "east" );
+                setCurrentActivity( whatDoing == activities::Activity::DraggedWest
+                                        ? activities::Activity::CancelDragging
+                                        : activities::Activity::MovingEast );
+        }
+        else if ( input.movewestTyped() ) {
+                avatar.changeHeading( "west" );
+                setCurrentActivity( whatDoing == activities::Activity::DraggedEast
+                                        ? activities::Activity::CancelDragging
+                                        : activities::Activity::MovingWest );
         }
 }
 
@@ -177,7 +202,7 @@ void PlayerControlled::cancelDragging( ::AvatarItem & character )
 
                         speedTimer->reset();
 
-                        character.animate();
+                        character.animate ();
                 }
         }
 }
@@ -187,33 +212,28 @@ void PlayerControlled::fall( ::AvatarItem & character )
         // is it time to lower by one unit
         if ( fallTimer->getValue() > character.getWeight() )
         {
-                if ( activities::Falling::getInstance().fall( this ) )
-                {
+                if ( activities::Falling::getInstance().fall( this ) ) {
                         // as long as there's no collision below
                         if ( character.canAdvanceTo( 0, 0, -1 ) )
                         {       // show images of falling character
-                                character.changeFrame( fallFrames[ character.getHeading() ] );
+                                character.changeFrame( fallFrames[ character.getHeading () ] );
                         }
                 }
-                else if ( activity != activities::Activity::MetLethalItem || character.hasShield() )
-                {
-                        activity = activities::Activity::Waiting ;
-                }
+                else if ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() )
+                        setCurrentActivity( activities::Activity::Waiting );
 
                 fallTimer->reset();
         }
 
-        if ( activity != activities::Activity::Falling )
-        {
+        if ( getCurrentActivity() != activities::Activity::Falling )
                 SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
-        }
 }
 
 void PlayerControlled::jump( ::AvatarItem & character )
 {
-        if ( activity == activities::Activity::Jumping )
+        if ( getCurrentActivity() == activities::Activity::Jumping )
         {
-                if ( jumpPhase < 0 )
+                if ( this->jumpPhase < 0 )
                 {
                         this->highJump = false ;
 
@@ -230,46 +250,44 @@ void PlayerControlled::jump( ::AvatarItem & character )
                                 SoundManager::getInstance().play( character.getOriginalKind(), "rebound" );
                         }
 
-                        jumpPhase = 0 ;
+                        this->jumpPhase = 0 ;
                 }
 
                 // is it time to jump
                 if ( speedTimer->getValue() > character.getSpeed() )
                 {
-                        activities::Jumping::getInstance().jump( this, &activity, jumpPhase, this->highJump ? highJumpVector : jumpVector );
+                        activities::Jumping::getInstance().jump( this, &activity, this->jumpPhase, this->highJump ? this->highJumpVector : this->jumpVector );
 
                         // to the next phase of jump
-                        ++ jumpPhase ;
+                        ++ this->jumpPhase ;
 
-                        if ( activity == activities::Activity::Falling ) jumpPhase = -1 ; // end of jump
+                        if ( getCurrentActivity() == activities::Activity::Falling ) this->jumpPhase = -1 ; // end of jump
 
                         speedTimer->reset();
 
-                        character.animate();
+                        character.animate() ;
                 }
         }
 
-        if ( activity != activities::Activity::Jumping )
-        {       // not jumping, then stop the sound
+        if ( getCurrentActivity() != activities::Activity::Jumping )
+                // not jumping yet stop the sound
                 SoundManager::getInstance().stop( character.getOriginalKind(), "jump" );
-        }
 
-        // when the active character is at the maximum height of room, it moves to the room above
+        // when active character reaches the room’s maximum height
         if ( character.isActiveCharacter() && character.getZ() >= Room::MaxLayers * Room::LayerHeight )
-        {
+                // go to the room above
                 character.setWayOfExit( "above" );
-        }
 }
 
 void PlayerControlled::glide( ::AvatarItem & character )
 {
         if ( glideTimer->getValue() > character.getWeight() /* character.getSpeed() / 2.0 */ )
         {
-                // when there’s a collision then stop falling and return to waiting
                 if ( ! activities::Falling::getInstance().fall( this ) &&
-                        ( activity != activities::Activity::MetLethalItem || character.hasShield() ) )
+                        ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() ) )
                 {
-                        activity = activities::Activity::Waiting ;
+                        // not falling, back to waiting
+                        setCurrentActivity( activities::Activity::Waiting );
                 }
 
                 glideTimer->reset();
@@ -277,47 +295,45 @@ void PlayerControlled::glide( ::AvatarItem & character )
 
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
-                Activity subactivity( activities::Activity::Waiting );
+                Activity glideActivity = activities::Activity::Waiting ;
 
                 switch ( Way( character.getHeading() ).getIntegerOfWay () )
                 {
                         case Way::North:
-                                subactivity = activities::Activity::MovingNorth;
+                                glideActivity = activities::Activity::MovingNorth;
                                 break;
 
                         case Way::South:
-                                subactivity = activities::Activity::MovingSouth;
+                                glideActivity = activities::Activity::MovingSouth;
                                 break;
 
                         case Way::East:
-                                subactivity = activities::Activity::MovingEast;
+                                glideActivity = activities::Activity::MovingEast;
                                 break;
 
                         case Way::West:
-                                subactivity = activities::Activity::MovingWest;
+                                glideActivity = activities::Activity::MovingWest;
                                 break;
 
                         default:
                                 ;
                 }
 
-                activities::Moving::getInstance().move( this, &subactivity, false );
+                activities::Moving::getInstance().move( this, &glideActivity, false );
 
-                // pick picture of falling
+                // may turn while gliding so update the frame of falling
                 character.changeFrame( fallFrames[ character.getHeading() ] );
 
                 speedTimer->reset();
         }
 
-        if ( activity != activities::Activity::Gliding )
-        {       // not gliding yet, so stop the sound
+        if ( getCurrentActivity() != activities::Activity::Gliding )
                 SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
-        }
 }
 
 void PlayerControlled::enterTeletransport( ::AvatarItem & character )
 {
-	if ( activity != activities::Activity::BeginTeletransportation ) return ;
+	if ( getCurrentActivity() != activities::Activity::BeginTeletransportation ) return ;
 
         // morph into bubbles
         if ( character.getKind() != kindOfBubbles )
@@ -327,14 +343,14 @@ void PlayerControlled::enterTeletransport( ::AvatarItem & character )
         character.animate() ;
         if ( ! character.animationFinished () ) return ;
 
-        character.addToZ( -1 );
+        character.addToZ( -1 ); // which teleport is below
         character.setWayOfExit( character.getMediator()->collisionWithSomeKindOf( "teleport" ) != nilPointer
                                         ? "via teleport" : "via second teleport" );
 }
 
 void PlayerControlled::exitTeletransport( ::AvatarItem & character )
 {
-	if ( activity != activities::Activity::EndTeletransportation ) return ;
+	if ( getCurrentActivity() != activities::Activity::EndTeletransportation ) return ;
 
         // morph back from bubbles
         if ( character.getKind() != kindOfBubbles ) {
@@ -349,39 +365,34 @@ void PlayerControlled::exitTeletransport( ::AvatarItem & character )
         // back to the original appearance of character
         character.metamorphInto( character.getOriginalKind(), "end teletransportation" );
 
-        activity = activities::Activity::Waiting ;
+        setCurrentActivity( activities::Activity::Waiting );
 }
 
-void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
+void PlayerControlled::collideWithALethalItem( ::AvatarItem & character )
 {
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
-                // the character just met something mortal
+                // the character just met something lethal
                 case activities::Activity::MetLethalItem:
-                        // do you have immunity
-                        if ( ! character.hasShield() )
+                        if ( ! isInvulnerableToLethalItems() )
                         {
                                 // change to bubbles
-                                character.metamorphInto( kindOfBubbles, "hit something mortal" );
+                                character.metamorphInto( kindOfBubbles, "met something lethal" );
 
                                 this->isLosingLife = true ;
-                                activity = activities::Activity::Vanishing ;
-                        }
-                        else
-                        {
-                                activity = activities::Activity::Waiting ;
-                        }
+                                setCurrentActivity( activities::Activity::Vanishing );
+                        } else
+                                setCurrentActivity( activities::Activity::Waiting );
+
                         break;
 
                 case activities::Activity::Vanishing:
-                        if ( ! character.isActiveCharacter() )
-                        {
+                        if ( ! character.isActiveCharacter() ) {
                                 std::cout << "inactive " << character.getUniqueName() << " is going to vanish, activate it" << std::endl ;
                                 character.getMediator()->pickNextCharacter();
                         }
 
-                        if ( character.isActiveCharacter() )
-                        {
+                        if ( character.isActiveCharacter() ) {
                                 character.animate ();
                                 if ( character.animationFinished () && this->isLosingLife ) {
                                         character.loseLife() ;
@@ -517,15 +528,12 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
                         SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
                         SoundManager::getInstance().play( character.getOriginalKind(), "drop" );
                 }
-                else
-                {
+                else {
                         // emit the sound of o~ ou
                         SoundManager::getInstance().play( character.getOriginalKind(), "mistake" );
                 }
         }
 
-        if ( activity != activities::Activity::Jumping )
-        {
-                activity = activities::Activity::Waiting;
-        }
+        if ( getCurrentActivity() != activities::Activity::Jumping )
+                setCurrentActivity( activities::Activity::Waiting );
 }

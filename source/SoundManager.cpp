@@ -182,7 +182,7 @@ allegro::Sample* SoundManager::getSampleFor( const std::string & item, const std
 }
 
 /* static */
-std::string SoundManager::activityToString ( const activities::Activity & activity )
+std::string SoundManager::activityToNameOfSound ( const activities::Activity & activity )
 {
         switch ( activity )
         {
@@ -225,8 +225,7 @@ std::string SoundManager::activityToString ( const activities::Activity & activi
                 case activities::Activity::DraggedNorth : case activities::Activity::DraggedSouth :
                 case activities::Activity::DraggedEast : case activities::Activity::DraggedWest : return "dragged" ;
 
-                case activities::Activity::CancelDragNorth : case activities::Activity::CancelDragSouth :
-                case activities::Activity::CancelDragEast : case activities::Activity::CancelDragWest : return "move" ;
+                case activities::Activity::CancelDragging: return "move" ;
 
                 case activities::Activity::BeginTeletransportation : return "teleport-out" ;
                 case activities::Activity::EndTeletransportation : return "teleport-in" ;

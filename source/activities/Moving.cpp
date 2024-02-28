@@ -143,20 +143,8 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
                 }
                         break;
 
-                case activities::Activity::CancelDragNorth:
-                        item->changeHeading( "south" );
-                        break;
-
-                case activities::Activity::CancelDragSouth:
-                        item->changeHeading( "north" );
-                        break;
-
-                case activities::Activity::CancelDragEast:
-                        item->changeHeading( "west" );
-                        break;
-
-                case activities::Activity::CancelDragWest:
-                        item->changeHeading( "east" );
+                case activities::Activity::CancelDragging:
+                        // not moving
                         break;
 
                 default:

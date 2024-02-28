@@ -24,7 +24,7 @@ namespace behaviors
 {
 
 /**
- * Models the behavior of a character controlled by the player
+ * Models the behavior of a character whose actions are controlled by the player
  */
 
 class PlayerControlled : public Behavior
@@ -36,9 +36,9 @@ public:
 
         virtual ~PlayerControlled( ) ;
 
-       /**
-        * Updates the character's behavior by the user controls
-        */
+        /**
+         * Updates the character’s behavior according to the player’s controls
+         */
         virtual void behave () = 0 ;
 
         virtual void setCurrentActivity ( const Activity & newActivity ) ;
@@ -53,16 +53,21 @@ protected:
 
         virtual void move( AvatarItem & character ) ;
 
-        virtual void autoMove( AvatarItem & character ) ;
+        virtual void automove( AvatarItem & character ) ;
 
         /**
-         * Move the character at the speed of an item that pushes it
+         * The character is moved by another item at the speed of the pusher
          */
         virtual void displace( AvatarItem & character ) ;
 
         /**
-         * Move in the opposite direction of pushing, leaving the character at the current place.
-         * It happens when the moving character is dragged by a conveyor
+         * The character moves while being dragged by a conveyor, moving in the opposite way cancels dragging
+         */
+        virtual void handleMoveKeyWhenDragged () ;
+
+        /**
+         * Moving in the opposite direction of dragging leaves the character at the current place.
+         * Happens when a moving character is dragged by a conveyor
          */
         virtual void cancelDragging( AvatarItem & character ) ;
 
@@ -88,12 +93,12 @@ protected:
         virtual void exitTeletransport( AvatarItem & character ) ;
 
         /**
-         * The character collides with a mortal item
+         * The character collides with a lethal item
          */
-        virtual void collideWithMortalItem( AvatarItem & character ) ;
+        virtual void collideWithALethalItem( AvatarItem & character ) ;
 
         /**
-         * The character releases something that can freeze another item
+         * The character releases a doughnut that can freeze another item
          */
         virtual void useHooter( AvatarItem & character ) ;
 
@@ -109,72 +114,44 @@ protected:
 
 protected:
 
-       /**
-        * Defines the character’s jump by pairs of horizontal and vertical offsets on each cycle
-        */
+        // defines the character’s jump via the pairs of horizontal and vertical offsets on each cycle
         std::vector < std::pair< int /* xy */, int /* z */ > > jumpVector ;
 
-       /**
-        * Defines the long jump of character from a trampoline or with a bunny's bonus
-        */
+        // defines the long jump from a spring or with a bunny’s bonus
         std::vector < std::pair< int /* xy */, int /* z */ > > highJumpVector ;
-
-        bool isLosingLife ;
 
         int jumpPhase ;
 
-        /**
-         * true when on a trampoline or has a bonus high jump
-         */
+        // true when on a spring stool or has a bonus high jump
         bool highJump ;
 
-       /**
-        * Number of steps to take when character moves automatically
-        */
-        const unsigned int automaticSteps ;
+        // pasos automáticos
+        // the number of steps to take when character moves automatically after entering a room through door
+        static const unsigned int automatic_steps = 16 ;
 
-       /**
-        * Number of steps that remains after entering room through door
-        */
-        unsigned int automaticStepsThruDoor ;
+        // how many automove steps remained
+        unsigned int automoveStepsRemained ;
 
-       /**
-        * Number of steps at double speed
-        */
-        unsigned int highSpeedSteps ;
+        // the number of steps at the double speed
+        unsigned int quickSteps ;
 
-       /**
-        * Number of steps for character with immunity
-        */
-        unsigned int shieldSteps ;
-
-       /**
-        * Frames of falling, one for each of north south west east
-        */
+        // the frames of falling, one for each of north south west east
         std::map < std::string, unsigned int > fallFrames ;
 
         std::string kindOfBubbles ;
 
         std::string kindOfFiredDoughnut ;
 
-        /**
-         * Timer for the speed of movement
-         */
+        // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 
-        /**
-         * Timer for the speed of falling
-         */
+        // timer for the speed of falling
         autouniqueptr < Timer > fallTimer ;
 
-        /**
-         * Timer for the speed of gliding
-         */
+        // timer for the speed of gliding
         autouniqueptr < Timer > glideTimer ;
 
-        /**
-         * Timer for blinking
-         */
+        // timer for blinking
         autouniqueptr < Timer > timerForBlinking ;
 
 public:
@@ -183,10 +160,10 @@ public:
 
 private:
 
-        /**
-         * is there a doughnut from the hooter in the room?
-         */
+        // is there a doughnut from the hooter in the room?
         bool donutFromHooterInRoom ;
+
+        bool isLosingLife ;
 
 } ;
 

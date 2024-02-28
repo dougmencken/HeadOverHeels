@@ -53,7 +53,7 @@ bool Sink::update ()
                         activity = activities::Activity::Waiting;
         }
 
-        SoundManager::getInstance().play( gridItem.getKind (), SoundManager::activityToString( activity ) );
+        SoundManager::getInstance().play( gridItem.getKind (), SoundManager::activityToNameOfSound( activity ) );
 
         return false;
 }
