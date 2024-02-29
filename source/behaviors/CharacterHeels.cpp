@@ -30,10 +30,10 @@ CharacterHeels::CharacterHeels( const ItemPtr & item, const std::string & behavi
         }
 
         // fotogramas de caída (falling)
-        fallFrames[ "north" ] = 8;
-        fallFrames[ "south" ] = 0;
-        fallFrames[ "east" ] = 12;
-        fallFrames[ "west" ] = 4;
+        fallFrames[ "north" ] =  8 ;
+        fallFrames[ "south" ] =  0 ;
+        fallFrames[ "east" ]  = 12 ;
+        fallFrames[ "west" ]  =  4 ;
 
         // activate chronometers
         speedTimer->go ();
@@ -116,7 +116,7 @@ bool CharacterHeels::update()
 
                 case activities::Activity::ItemTaken:
                         avatar.addToZ( - Room::LayerHeight );
-                        activity = activities::Activity::Waiting;
+                        setCurrentActivity( activities::Activity::Waiting );
                         break;
 
                 case activities::Activity::DropItem:
@@ -136,156 +136,125 @@ bool CharacterHeels::update()
 
 void CharacterHeels::behave ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
+
+        Activity whatDoing = getCurrentActivity() ;
+
+        if ( whatDoing == activities::Activity::AutomovingNorth || whatDoing == activities::Activity::AutomovingSouth ||
+                whatDoing == activities::Activity::AutomovingEast || whatDoing == activities::Activity::AutomovingWest ||
+                        whatDoing == activities::Activity::BeginTeletransportation || whatDoing == activities::Activity::EndTeletransportation
+                                || whatDoing == activities::Activity::MetLethalItem || whatDoing == activities::Activity::Vanishing )
+                return ; // moving by inertia, teleporting, or vanishing is not controlled by the player
+
+        if ( whatDoing == activities::Activity::Jumping )
+                return ; // Heels’ jump cannot be controlled
+
         const InputManager & input = InputManager::getInstance ();
 
-        // if it’s not a move by inertia or some other exotic activity
-        if ( activity != activities::Activity::AutomovingNorth && activity != activities::Activity::AutomovingSouth
-                        && activity != activities::Activity::AutomovingEast && activity != activities::Activity::AutomovingWest
-                        && activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
-                        && activity != activities::Activity::MetLethalItem && activity != activities::Activity::Vanishing )
+        // when waiting
+        if ( whatDoing == activities::Activity::Waiting /* || whatDoing == activities::Activity::Blinking */ )
         {
-                // when waiting
-                if ( activity == activities::Activity::Waiting /* || activity == activities::Activity::Blinking */ )
-                {
-                        if ( input.takeTyped() )
-                        {
-                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
-                                input.releaseKeyFor( "take" );
-                        }
-                        else if ( input.takeAndJumpTyped() )
-                        {
-                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
-                                input.releaseKeyFor( "take&jump" );
-                        }
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = activities::Activity::MovingNorth;
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = activities::Activity::MovingSouth;
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = activities::Activity::MovingEast;
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = activities::Activity::MovingWest;
-                        }
-                        else if ( input.jumpTyped() )
-                        {
-                                // look for item below
-                                avatar.canAdvanceTo( 0, 0, -1 );
-                                // key to teleport is the same as for jump
-                                activity =
-                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
-                        }
+                if ( input.takeTyped() ) {
+                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        input.releaseKeyFor( "take" );
                 }
-                // already moving
-                else if ( activity == activities::Activity::MovingNorth || activity == activities::Activity::MovingSouth ||
-                        activity == activities::Activity::MovingEast || activity == activities::Activity::MovingWest )
-                {
-                        if( input.jumpTyped() )
-                        {
-                                // teleport when teletransport is below
-                                avatar.canAdvanceTo( 0, 0, -1 );
-                                activity =
-                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
-                        }
-                        else if ( input.takeTyped() )
-                        {
-                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
-                                input.releaseKeyFor( "take" );
-                        }
-                        else if ( input.takeAndJumpTyped() )
-                        {
-                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
-                                input.releaseKeyFor( "take&jump" );
-                        }
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = activities::Activity::MovingNorth;
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = activities::Activity::MovingSouth;
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = activities::Activity::MovingEast;
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = activities::Activity::MovingWest;
-                        }
-                        else if ( ! input.anyMoveTyped() )
-                        {
-                                SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( activity ) );
-                                activity = activities::Activity::Waiting ;
-                        }
+                else if ( input.takeAndJumpTyped() ) {
+                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        input.releaseKeyFor( "take&jump" );
                 }
-                // if you are being displaced
-                else if ( activity == activities::Activity::PushedNorth || activity == activities::Activity::PushedSouth ||
-                        activity == activities::Activity::PushedEast || activity == activities::Activity::PushedWest )
-                {
-                        if ( input.jumpTyped() )
-                        {
-                                activity = activities::Activity::Jumping;
-                        }
-                        else if ( input.takeTyped() )
-                        {
-                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
-                                input.releaseKeyFor( "take" );
-                        }
-                        else if ( input.takeAndJumpTyped() )
-                        {
-                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump );
-                                input.releaseKeyFor( "take&jump" );
-                        }
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = activities::Activity::MovingNorth;
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = activities::Activity::MovingSouth;
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = activities::Activity::MovingEast;
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = activities::Activity::MovingWest;
-                        }
+                else if ( input.movenorthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingNorth );
                 }
-                // dragged by a conveyor
-                else if ( activity == activities::Activity::DraggedNorth || activity == activities::Activity::DraggedSouth ||
-                                activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
-                {
-                        if ( input.jumpTyped() ) {
-                                setCurrentActivity( activities::Activity::Jumping );
-                        }
-                        else {
-                                handleMoveKeyWhenDragged () ;
-                        }
+                else if ( input.movesouthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingSouth );
                 }
-                else if ( activity == activities::Activity::Jumping )
-                {
-                        // nothing here
+                else if ( input.moveeastTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingEast );
                 }
-                else if ( activity == activities::Activity::Falling )
-                {
-                        // pick or drop an item when falling
-                        if ( input.takeTyped() )
-                        {
-                                activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ? activities::Activity::TakeItem : activities::Activity::DropItem );
-                                input.releaseKeyFor( "take" );
-                        }
+                else if ( input.movewestTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingWest );
+                }
+                else if ( input.jumpTyped() ) {
+                        toJumpOrTeleport ();
+                }
+        }
+        // already moving
+        else if ( whatDoing == activities::Activity::MovingNorth || whatDoing == activities::Activity::MovingSouth
+                        || whatDoing == activities::Activity::MovingEast || whatDoing == activities::Activity::MovingWest )
+        {
+                if ( input.jumpTyped() ) {
+                        toJumpOrTeleport ();
+                }
+                else if ( input.takeTyped() ) {
+                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        input.releaseKeyFor( "take" );
+                }
+                else if ( input.takeAndJumpTyped() ) {
+                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        input.releaseKeyFor( "take&jump" );
+                }
+                else if ( input.movenorthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingNorth );
+                }
+                else if ( input.movesouthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingSouth );
+                }
+                else if ( input.moveeastTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingEast );
+                }
+                else if ( input.movewestTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingWest );
+                }
+                else if ( ! input.anyMoveTyped() ) {
+                        SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
+                        setCurrentActivity( activities::Activity::Waiting );
+                }
+        }
+        // being pushed
+        else if ( whatDoing == activities::Activity::PushedNorth || whatDoing == activities::Activity::PushedSouth ||
+                        whatDoing == activities::Activity::PushedEast || whatDoing == activities::Activity::PushedWest )
+        {
+                if ( input.jumpTyped() ) {
+                        setCurrentActivity( activities::Activity::Jumping );
+                }
+                else if ( input.takeTyped() ) {
+                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        input.releaseKeyFor( "take" );
+                }
+                else if ( input.takeAndJumpTyped() ) {
+                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        input.releaseKeyFor( "take&jump" );
+                }
+                else if ( input.movenorthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingNorth );
+                }
+                else if ( input.movesouthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingSouth );
+                }
+                else if ( input.moveeastTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingEast );
+                }
+                else if ( input.movewestTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingWest );
+                }
+        }
+        // dragged by a conveyor
+        else if ( whatDoing == activities::Activity::DraggedNorth || whatDoing == activities::Activity::DraggedSouth ||
+                        whatDoing == activities::Activity::DraggedEast || whatDoing == activities::Activity::DraggedWest )
+        {
+                if ( input.jumpTyped() ) {
+                        setCurrentActivity( activities::Activity::Jumping );
+                }
+                else {
+                        handleMoveKeyWhenDragged () ;
+                }
+        }
+        else if ( whatDoing == activities::Activity::Falling )
+        {
+                // pick or drop an item when falling
+                if ( input.takeTyped() ) {
+                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        input.releaseKeyFor( "take" );
                 }
         }
 }

@@ -29,16 +29,16 @@ CharacterHead::CharacterHead( const ItemPtr & item, const std::string & behavior
         }
 
         // fotogramas de caída (falling)
-        fallFrames[ "north" ] = 8;
-        fallFrames[ "south" ] = 16;
-        fallFrames[ "east" ] = 12;
-        fallFrames[ "west" ] = 17;
+        fallFrames[ "north" ] =  8 ;
+        fallFrames[ "south" ] = 16 ;
+        fallFrames[ "east" ]  = 12 ;
+        fallFrames[ "west" ]  = 17 ;
 
         // fotogramas de parpadeo (blinking)
-        blinkFrames[ "north" ] = 8;
-        blinkFrames[ "south" ] = 19;
-        blinkFrames[ "east" ] = 12;
-        blinkFrames[ "west" ] = 20;
+        blinkFrames[ "north" ] =  8 ;
+        blinkFrames[ "south" ] = 19 ;
+        blinkFrames[ "east" ]  = 12 ;
+        blinkFrames[ "west" ]  = 20 ;
 
         // activate chronometers
         speedTimer->go ();
@@ -53,7 +53,7 @@ CharacterHead::~CharacterHead( )
 
 bool CharacterHead::update ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
 
         if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
 
@@ -142,234 +142,193 @@ bool CharacterHead::update ()
 
 void CharacterHead::behave ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
+
+        Activity whatDoing = getCurrentActivity() ;
+
+        if ( whatDoing == activities::Activity::AutomovingNorth || whatDoing == activities::Activity::AutomovingSouth ||
+                whatDoing == activities::Activity::AutomovingEast || whatDoing == activities::Activity::AutomovingWest ||
+                        whatDoing == activities::Activity::BeginTeletransportation || whatDoing == activities::Activity::EndTeletransportation
+                                || whatDoing == activities::Activity::MetLethalItem || whatDoing == activities::Activity::Vanishing )
+                return ; // moving by inertia, teleporting, or vanishing is not controlled by the player
+
         const InputManager & input = InputManager::getInstance ();
 
-        // if it’s not a move by inertia or some other exotic activity
-        if ( activity != activities::Activity::AutomovingNorth && activity != activities::Activity::AutomovingSouth
-                        && activity != activities::Activity::AutomovingEast && activity != activities::Activity::AutomovingWest
-                        && activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
-                        && activity != activities::Activity::MetLethalItem && activity != activities::Activity::Vanishing )
+        // when waiting or blinking
+        if ( whatDoing == activities::Activity::Waiting || whatDoing == activities::Activity::Blinking )
         {
-                // when waiting or blinking
-                if ( activity == activities::Activity::Waiting || activity == activities::Activity::Blinking )
-                {
-                        if ( input.jumpTyped() )
-                        {
-                                // jump or teleport
-                                avatar.canAdvanceTo( 0, 0, -1 );
-                                activity =
-                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
-                        }
-                        else if ( input.doughnutTyped() )
-                        {
-                                useHooter( avatar );
-                                input.releaseKeyFor( "doughnut" );
-                        }
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = activities::Activity::MovingNorth;
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = activities::Activity::MovingSouth;
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = activities::Activity::MovingEast;
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = activities::Activity::MovingWest;
-                        }
+                if ( input.jumpTyped() ) {
+                        toJumpOrTeleport ();
                 }
-                // already moving
-                else if ( activity == activities::Activity::MovingNorth || activity == activities::Activity::MovingSouth ||
-                        activity == activities::Activity::MovingEast || activity == activities::Activity::MovingWest )
-                {
-                        if ( input.jumpTyped() )
-                        {
-                                // look for teletransport below
-                                avatar.canAdvanceTo( 0, 0, -1 );
-                                activity =
-                                        avatar.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer ?
-                                                activities::Activity::BeginTeletransportation : activities::Activity::Jumping ;
-                        }
-                        else if ( input.doughnutTyped() )
-                        {
-                                useHooter( avatar );
-                                input.releaseKeyFor( "doughnut" );
-                        }
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = activities::Activity::MovingNorth;
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = activities::Activity::MovingSouth;
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = activities::Activity::MovingEast;
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = activities::Activity::MovingWest;
-                        }
-                        else if ( ! input.anyMoveTyped() )
-                        {
-                                SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( activity ) );
-                                activity = activities::Activity::Waiting ;
-                        }
+                else if ( input.doughnutTyped() ) {
+                        useHooter( avatar );
+                        input.releaseKeyFor( "doughnut" );
                 }
-                // if you are being displaced
-                else if ( activity == activities::Activity::PushedNorth || activity == activities::Activity::PushedSouth ||
-                        activity == activities::Activity::PushedEast || activity == activities::Activity::PushedWest )
-                {
-                        if ( input.jumpTyped() )
-                        {
-                                activity = activities::Activity::Jumping;
-                        }
-                        else if ( input.doughnutTyped() )
-                        {
-                                useHooter( avatar );
-                                input.releaseKeyFor( "doughnut" );
-                        }
-                        else if ( input.movenorthTyped() )
-                        {
-                                activity = activities::Activity::MovingNorth;
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                activity = activities::Activity::MovingSouth;
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                activity = activities::Activity::MovingEast;
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                activity = activities::Activity::MovingWest;
-                        }
+                else if ( input.movenorthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingNorth );
                 }
-                // dragged by a conveyor
-                else if ( activity == activities::Activity::DraggedNorth || activity == activities::Activity::DraggedSouth ||
-                                activity == activities::Activity::DraggedEast || activity == activities::Activity::DraggedWest )
-                {
-                        if ( input.jumpTyped() ) {
-                                setCurrentActivity( activities::Activity::Jumping );
-                        }
-                        else {
-                                handleMoveKeyWhenDragged () ;
-                        }
+                else if ( input.movesouthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingSouth );
                 }
-                else if ( activity == activities::Activity::Jumping )
-                {
-                        if ( input.doughnutTyped() )
-                        {
-                                useHooter( avatar );
-                                input.releaseKeyFor( "doughnut" );
-                        }
-                        // Head may change orientation when jumping
-                        else if ( input.movenorthTyped() )
-                        {
-                                avatar.changeHeading( "north" );
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                avatar.changeHeading( "south" );
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                avatar.changeHeading( "east" );
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                avatar.changeHeading( "west" );
-                        }
+                else if ( input.moveeastTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingEast );
                 }
-                else if ( activity == activities::Activity::Falling )
-                {
-                        if ( input.doughnutTyped() )
-                        {
-                                useHooter( avatar );
-                                input.releaseKeyFor( "doughnut" );
-                        }
-                        // entonces Head planea
-                        else if ( input.anyMoveTyped() )
-                        {
-                                activity = activities::Activity::Gliding;
-                        }
+                else if ( input.movewestTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingWest );
                 }
+        }
+        // already moving
+        else if ( whatDoing == activities::Activity::MovingNorth || whatDoing == activities::Activity::MovingSouth
+                        || whatDoing == activities::Activity::MovingEast || whatDoing == activities::Activity::MovingWest )
+        {
+                if ( input.jumpTyped() ) {
+                        toJumpOrTeleport ();
+                }
+                else if ( input.doughnutTyped() ) {
+                        useHooter( avatar );
+                        input.releaseKeyFor( "doughnut" );
+                }
+                else if ( input.movenorthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingNorth );
+                }
+                else if ( input.movesouthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingSouth );
+                }
+                else if ( input.moveeastTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingEast );
+                }
+                else if ( input.movewestTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingWest );
+                }
+                else if ( ! input.anyMoveTyped() ) {
+                        SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
+                        setCurrentActivity( activities::Activity::Waiting );
+                }
+        }
+        // being pushed
+        else if ( whatDoing == activities::Activity::PushedNorth || whatDoing == activities::Activity::PushedSouth ||
+                        whatDoing == activities::Activity::PushedEast || whatDoing == activities::Activity::PushedWest )
+        {
+                if ( input.jumpTyped() ) {
+                        setCurrentActivity( activities::Activity::Jumping );
+                }
+                else if ( input.doughnutTyped() ) {
+                        useHooter( avatar );
+                        input.releaseKeyFor( "doughnut" );
+                }
+                else if ( input.movenorthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingNorth );
+                }
+                else if ( input.movesouthTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingSouth );
+                }
+                else if ( input.moveeastTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingEast );
+                }
+                else if ( input.movewestTyped() ) {
+                        setCurrentActivity( activities::Activity::MovingWest );
+                }
+        }
+        // dragged by a conveyor
+        else if ( whatDoing == activities::Activity::DraggedNorth || whatDoing == activities::Activity::DraggedSouth ||
+                        whatDoing == activities::Activity::DraggedEast || whatDoing == activities::Activity::DraggedWest )
+        {
+                if ( input.jumpTyped() ) {
+                        setCurrentActivity( activities::Activity::Jumping );
+                }
+                else {
+                        handleMoveKeyWhenDragged () ;
+                }
+        }
+        else if ( whatDoing == activities::Activity::Jumping )
+        {
+                if ( input.doughnutTyped() ) {
+                        useHooter( avatar );
+                        input.releaseKeyFor( "doughnut" );
+                }
+                // Head may change orientation when jumping
+                else if ( input.movenorthTyped() ) {
+                        avatar.changeHeading( "north" );
+                }
+                else if ( input.movesouthTyped() ) {
+                        avatar.changeHeading( "south" );
+                }
+                else if ( input.moveeastTyped() ) {
+                        avatar.changeHeading( "east" );
+                }
+                else if ( input.movewestTyped() ) {
+                        avatar.changeHeading( "west" );
+                }
+        }
+        else if ( whatDoing == activities::Activity::Falling )
+        {
+                if ( input.doughnutTyped() ) {
+                        useHooter( avatar );
+                        input.releaseKeyFor( "doughnut" );
+                }
+                // entonces Head planea
+                else if ( input.anyMoveTyped() ) {
+                        setCurrentActivity( activities::Activity::Gliding );
+                }
+        }
 
-                // for gliding, don’t wait for next cycle because there’s possibility
-                // that gliding comes from falling, and waiting for next cycle may prevent
-                // to enter gap between two grid items
-                if ( activity == activities::Activity::Gliding )
-                {
-                        if ( input.doughnutTyped() )
-                        {
-                                useHooter( avatar );
-                                input.releaseKeyFor( "doughnut" );
-                        }
-                        // Head may change orientation when gliding
-                        else if ( input.movenorthTyped() )
-                        {
-                                avatar.changeHeading( "north" );
-                        }
-                        else if ( input.movesouthTyped() )
-                        {
-                                avatar.changeHeading( "south" );
-                        }
-                        else if ( input.moveeastTyped() )
-                        {
-                                avatar.changeHeading( "east" );
-                        }
-                        else if ( input.movewestTyped() )
-                        {
-                                avatar.changeHeading( "west" );
-                        }
-                        else if ( ! input.anyMoveTyped() )
-                        {
-                                activity = activities::Activity::Falling;
-                        }
+        // for gliding don’t wait for the next cycle because gliding can happen just after falling, and
+        // waiting for the next cycle may take away the chance of entering the gap between two items
+        if ( getCurrentActivity() == activities::Activity::Gliding )
+        {
+                if ( input.doughnutTyped() ) {
+                        useHooter( avatar );
+                        input.releaseKeyFor( "doughnut" );
+                }
+                // Head may change orientation when gliding
+                else if ( input.movenorthTyped() ) {
+                        avatar.changeHeading( "north" );
+                }
+                else if ( input.movesouthTyped() ) {
+                        avatar.changeHeading( "south" );
+                }
+                else if ( input.moveeastTyped() ) {
+                        avatar.changeHeading( "east" );
+                }
+                else if ( input.movewestTyped() ) {
+                        avatar.changeHeading( "west" );
+                }
+                else if ( ! input.anyMoveTyped() ) {
+                        setCurrentActivity( activities::Activity::Falling );
                 }
         }
 }
 
 void CharacterHead::wait( AvatarItem & avatar )
 {
-        avatar.wait();
+        avatar.wait ();
 
-        if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
-        {
+        if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 ) {
                 timerForBlinking->reset();
-                activity = activities::Activity::Blinking;
+                setCurrentActivity( activities::Activity::Blinking );
         }
 
-        if ( activities::Falling::getInstance().fall( this ) )
-        {
+        if ( activities::Falling::getInstance().fall( this ) ) { ////// here??
                 speedTimer->reset();
-                activity = activities::Activity::Falling;
+                setCurrentActivity( activities::Activity::Falling );
         }
 }
 
 void CharacterHead::blink( AvatarItem & avatar )
 {
-        double timeToBlink = timerForBlinking->getValue();
+        double time = timerForBlinking->getValue();
 
-        if ( ( timeToBlink > 0.0 && timeToBlink < 0.050 ) || ( timeToBlink > 0.400 && timeToBlink < 0.450 ) )
-        {
+        // eyes closed
+        if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {
                 avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
-        else if ( ( timeToBlink > 0.250 && timeToBlink < 0.300 ) || ( timeToBlink > 0.750 && timeToBlink < 0.800 ) )
-        {
+        // eyes open
+        else if ( ( time > 0.250 && time < 0.300 ) || ( time > 0.750 && time < 0.800 ) ) {
         }
-        else if ( timeToBlink > 0.800 )
-        {
+        // end blinking
+        else if ( time > 0.800 ) {
                 timerForBlinking->reset();
-                activity = activities::Activity::Waiting;
+                setCurrentActivity( activities::Activity::Waiting );
         }
 }
 

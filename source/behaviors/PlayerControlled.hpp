@@ -77,6 +77,12 @@ protected:
         virtual void fall( AvatarItem & character ) ;
 
         /**
+         * Jump or teleport if the device is below, since
+         * the key for teleporting is the same as for jumping
+         */
+        virtual void toJumpOrTeleport () ;
+
+        /**
          * The character jumps
          */
         virtual void jump( AvatarItem & character ) ;

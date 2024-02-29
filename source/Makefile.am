@@ -155,16 +155,8 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/Impel.hpp \
 			behaviors/Mobile.cpp \
 			behaviors/Mobile.hpp \
-			behaviors/ThereAndBack.cpp \
-			behaviors/ThereAndBack.hpp \
 			behaviors/Patrol.cpp \
 			behaviors/Patrol.hpp \
-			behaviors/CharacterHeadAndHeels.cpp \
-			behaviors/CharacterHeadAndHeels.hpp \
-			behaviors/CharacterHead.cpp \
-			behaviors/CharacterHead.hpp \
-			behaviors/CharacterHeels.cpp \
-			behaviors/CharacterHeels.hpp \
 			behaviors/RemoteControl.cpp \
 			behaviors/RemoteControl.hpp \
 			behaviors/Sink.cpp \
@@ -173,14 +165,22 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/Switch.hpp \
 			behaviors/Teleport.cpp \
 			behaviors/Teleport.hpp \
+			behaviors/ThereAndBack.cpp \
+			behaviors/ThereAndBack.hpp \
 			behaviors/Trampoline.cpp \
 			behaviors/Trampoline.hpp \
 			behaviors/Turn.cpp \
 			behaviors/Turn.hpp \
-			behaviors/PlayerControlled.cpp \
-			behaviors/PlayerControlled.hpp \
 			behaviors/Volatile.cpp \
 			behaviors/Volatile.hpp \
+			behaviors/PlayerControlled.cpp \
+			behaviors/PlayerControlled.hpp \
+			behaviors/CharacterHead.cpp \
+			behaviors/CharacterHead.hpp \
+			behaviors/CharacterHeels.cpp \
+			behaviors/CharacterHeels.hpp \
+			behaviors/CharacterHeadAndHeels.cpp \
+			behaviors/CharacterHeadAndHeels.hpp \
 			gui/Font.cpp \
 			gui/Font.hpp \
 			gui/GuiManager.cpp \

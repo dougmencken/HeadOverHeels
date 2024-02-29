@@ -229,6 +229,16 @@ void PlayerControlled::fall( ::AvatarItem & character )
                 SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
 }
 
+void PlayerControlled::toJumpOrTeleport ()
+{
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
+        character.canAdvanceTo( 0, 0, -1 ); // is there a device underneath the character
+        setCurrentActivity( character.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer
+                                        ? activities::Activity::BeginTeletransportation
+                                        : activities::Activity::Jumping );
+}
+
 void PlayerControlled::jump( ::AvatarItem & character )
 {
         if ( getCurrentActivity() == activities::Activity::Jumping )
@@ -374,8 +384,7 @@ void PlayerControlled::collideWithALethalItem( ::AvatarItem & character )
         {
                 // the character just met something lethal
                 case activities::Activity::MetLethalItem:
-                        if ( ! isInvulnerableToLethalItems() )
-                        {
+                        if ( ! isInvulnerableToLethalItems() ) {
                                 // change to bubbles
                                 character.metamorphInto( kindOfBubbles, "met something lethal" );
 
@@ -484,8 +493,10 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                                 character.placeItemInBag( takenItem->getKind (), takenItem->getBehavior()->getNameOfBehavior () );
 
                                 takenItem->getBehavior()->setCurrentActivity( activities::Activity::Vanishing );
-                                activity = ( activity == activities::Activity::TakeAndJump )
-                                                ? activities::Activity::Jumping : activities::Activity::ItemTaken ;
+                                setCurrentActivity ( // update activity
+                                        ( getCurrentActivity() == activities::Activity::TakeAndJump )
+                                                ? activities::Activity::Jumping
+                                                : activities::Activity::ItemTaken );
 
                                 SoundManager::getInstance().play( character.getOriginalKind(), "take" );
 
@@ -494,10 +505,8 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                 }
         }
 
-        if ( activity != activities::Activity::ItemTaken && activity != activities::Activity::Jumping )
-        {
-                activity = activities::Activity::Waiting;
-        }
+        if ( getCurrentActivity() != activities::Activity::ItemTaken && getCurrentActivity() != activities::Activity::Jumping )
+                setCurrentActivity( activities::Activity::Waiting );
 }
 
 void PlayerControlled::dropItem( ::AvatarItem & character )
@@ -520,10 +529,12 @@ void PlayerControlled::dropItem( ::AvatarItem & character )
 
                         GameManager::getInstance().emptyHandbag () ;
 
-                        character.emptyBag();
+                        character.emptyBag ();
 
-                        // update activity
-                        activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jumping : activities::Activity::Waiting );
+                        setCurrentActivity ( // update activity
+                                ( getCurrentActivity() == activities::Activity::DropAndJump )
+                                        ? activities::Activity::Jumping
+                                        : activities::Activity::Waiting );
 
                         SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
                         SoundManager::getInstance().play( character.getOriginalKind(), "drop" );
