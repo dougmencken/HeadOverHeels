@@ -30,16 +30,11 @@ public:
 
         RemoteControl( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~RemoteControl( ) ;
+        virtual ~RemoteControl( ) {}
 
         virtual bool update () ;
 
 private:
-
-       /**
-        * Item to move by remote control
-        */
-        ItemPtr controlledItem ;
 
         autouniqueptr < Timer > speedTimer ;
 

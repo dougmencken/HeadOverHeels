@@ -173,7 +173,7 @@ void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity )
                                                                         currentActivity != activities::Activity::PushedEast &&
                                                                         currentActivity != activities::Activity::PushedWest )
                                                                 {
-                                                                        freeItemAbove.getBehavior()->changeActivityDueTo( activity, ItemPtr( &freeItemAbove ) );
+                                                                        freeItemAbove.getBehavior()->changeActivityDueTo( activity, ItemPtr( &sender ) );
                                                                 }
                                                         }
                                                 }

@@ -14,13 +14,10 @@ namespace behaviors
 
 RemoteControl::RemoteControl( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , controlledItem ()
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        activity = activities::Activity::Waiting;
-
-        // move controlled one but not controller
+        // move the controlled one but not the controller
         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
         {
                 speedTimer->go();
@@ -28,22 +25,13 @@ RemoteControl::RemoteControl( const ItemPtr & item, const std::string & behavior
         }
 }
 
-RemoteControl::~RemoteControl()
-{
-}
-
 bool RemoteControl::update ()
 {
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        bool vanish = false;
+        FreeItem & thisItem = dynamic_cast< FreeItem & >( * getItem() );
 
-        // get controlled item
-        if ( getNameOfBehavior() == "behavior of remote control" && controlledItem == nilPointer )
-        {
-                controlledItem = freeItem.getMediator()->findItemByBehavior( "behavior of remotely controlled one" );
-        }
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
                         break;
@@ -54,20 +42,17 @@ bool RemoteControl::update ()
                 case activities::Activity::MovingWest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
-                                if ( speedTimer->getValue() > freeItem.getSpeed() )
+                                if ( speedTimer->getValue() > thisItem.getSpeed() )
                                 {
-                                        // move item
                                         activities::Moving::getInstance().move( this, &activity, true );
 
-                                        if ( activity != activities::Activity::Falling )
-                                        {
-                                                activity = activities::Activity::Waiting;
-                                        }
+                                        if ( getCurrentActivity() != activities::Activity::Falling )
+                                                setCurrentActivity( activities::Activity::Waiting );
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem.animate();
+                                thisItem.animate() ;
                         }
                         break;
 
@@ -81,78 +66,80 @@ bool RemoteControl::update ()
                 case activities::Activity::PushedSouthwest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
-                                if ( speedTimer->getValue() > freeItem.getSpeed() )
+                                if ( speedTimer->getValue() > thisItem.getSpeed() )
                                 {
                                         // if the item isn't dragged
-                                        if ( this->affectedBy == nilPointer || this->affectedBy != this->item )
-                                        {       // emit the sound of pushing
-                                                SoundManager::getInstance().play( freeItem.getKind (), "push" );
+                                        if ( this->affectedBy == nilPointer || this->affectedBy->getUniqueName() != thisItem.getUniqueName() ) {
+                                                // emit the sound of pushing
+                                                SoundManager::getInstance().play( thisItem.getKind(), "push" );
                                         }
 
                                         activities::Displacing::getInstance().displace( this, &activity, true );
 
-                                        if ( activity != activities::Activity::Falling )
-                                        {
-                                                activity = activities::Activity::Waiting;
-                                        }
+                                        if ( getCurrentActivity() != activities::Activity::Falling )
+                                                setCurrentActivity( activities::Activity::Waiting );
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem.animate();
+                                thisItem.animate() ;
                         }
-
-                        // controller changes movement of controlled item
-                        if ( activity == activities::Activity::PushedNorth || activity == activities::Activity::PushedSouth ||
-                                activity == activities::Activity::PushedEast || activity == activities::Activity::PushedWest )
+                        else
+                        if ( getNameOfBehavior() == "behavior of remote control" )
                         {
-                                if ( getNameOfBehavior() == "behavior of remote control" )
+                                // what to move by the remote control
+                                ItemPtr controlledItem = thisItem.getMediator()->findItemByBehavior( "behavior of remotely controlled one" );
+                                if ( controlledItem != nilPointer )
                                 {
-                                        Activity motionActivity = activities::Activity::Waiting;
+                                        Activity toRemotelyControlled = activities::Activity::Waiting ;
 
-                                        switch ( activity )
+                                        switch ( getCurrentActivity() )
                                         {
                                                 case activities::Activity::PushedNorth:
-                                                        motionActivity = activities::Activity::MovingNorth;
+                                                        controlledItem->changeHeading( "north" );
+                                                        toRemotelyControlled = activities::Activity::PushedNorth ; /// previously MovingNorth ;
                                                         break;
 
                                                 case activities::Activity::PushedSouth:
-                                                        motionActivity = activities::Activity::MovingSouth;
+                                                        controlledItem->changeHeading( "south" );
+                                                        toRemotelyControlled = activities::Activity::PushedSouth ; /// previously MovingSouth ;
                                                         break;
 
                                                 case activities::Activity::PushedEast:
-                                                        motionActivity = activities::Activity::MovingEast;
+                                                        controlledItem->changeHeading( "east" );
+                                                        toRemotelyControlled = activities::Activity::PushedEast ; /// previously MovingEast ;
                                                         break;
 
                                                 case activities::Activity::PushedWest:
-                                                        motionActivity = activities::Activity::MovingWest;
+                                                        controlledItem->changeHeading( "west" );
+                                                        toRemotelyControlled = activities::Activity::PushedWest ; /// previously MovingWest ;
                                                         break;
 
                                                 default:
                                                         ;
                                         }
 
-                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior().get () )->setCurrentActivity( motionActivity );
-                                        activity = activities::Activity::Waiting;
+                                        controlledItem->getBehavior()->setCurrentActivity( toRemotelyControlled );
                                 }
+
+                                setCurrentActivity( activities::Activity::Waiting );
                         }
+
                         break;
 
                 case activities::Activity::Falling:
-                        // look for reaching floor in a room without floor
-                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
-                        {
-                                // item disappears
-                                vanish = true;
+                        if ( thisItem.getZ() == 0 && ! thisItem.getMediator()->getRoom()->hasFloor() ) {
+                                // disappear when reached bottom of a room without floor
+                                present = false ;
                         }
-                        // is it time to fall for controlled item
-                        else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > freeItem.getWeight() )
+                        // is it time to fall for the controlled item
+                        else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > thisItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) )
-                                {
-                                        // play the sound of falling down
-                                        SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Waiting;
+                                if ( ! activities::Falling::getInstance().fall( this ) ) {
+                                        // emit the sound for the end of falling down
+                                        SoundManager::getInstance().play( thisItem.getKind (), "fall" );
+
+                                        setCurrentActivity( activities::Activity::Waiting );
                                 }
 
                                 fallTimer->reset();
@@ -163,7 +150,7 @@ bool RemoteControl::update ()
                         ;
         }
 
-        return vanish;
+        return ! present ;
 }
 
 }
