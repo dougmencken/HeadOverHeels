@@ -154,12 +154,17 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
         // if the item can move freely
         if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
-                if ( /* not moving up or down, to not change the activity of items on elevator */
-                        ( *activity != activities::Activity::GoingUp && *activity != activities::Activity::GoingDown )
-                                || /* there’s a collision */ ! moved )
+                bool onElevator = ( *activity == activities::Activity::GoingUp || *activity == activities::Activity::GoingDown );
+                if ( /* don’t affect activity of items on elevator */ ! onElevator )
                 {
-                        // move adjacent items
-                        PropagateActivity::toAdjacentItems( *item, toItemsNearby );
+                        if ( /* there’s a collision */ ! moved ) {
+                                // move adjacent items
+                                PropagateActivity::toAdjacentItems( *item, toItemsNearby );
+                        }
+                        else {
+                                // maybe there’s something above
+                                PropagateActivity::toItemsAbove( *item, toItemsNearby );
+                        }
                 }
         }
 
