@@ -68,11 +68,8 @@ bool RemoteControl::update ()
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )
                                 {
-                                        // if the item isn't dragged
-                                        if ( this->affectedBy == nilPointer || this->affectedBy->getUniqueName() != thisItem.getUniqueName() ) {
-                                                // emit the sound of pushing
+                                        if ( this->affectedBy != nilPointer )
                                                 SoundManager::getInstance().play( thisItem.getKind(), "push" );
-                                        }
 
                                         activities::Displacing::getInstance().displace( this, &activity, true );
 
