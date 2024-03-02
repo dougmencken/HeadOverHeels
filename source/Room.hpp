@@ -72,6 +72,10 @@ public:
 
         void addGridItem ( const GridItemPtr & gridItem ) ;
 
+        void sortGridItems () ;
+
+        void sortFreeItems () ;
+
         void addFreeItem ( const FreeItemPtr & freeItem ) ;
 
         bool addCharacterToRoom ( const AvatarItemPtr & character, bool characterEntersRoom ) ;

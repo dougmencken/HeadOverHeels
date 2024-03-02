@@ -69,11 +69,11 @@ public:
         void binRoomsInPlay () ;
 
         /**
-         * The room to draw yet
+         * The room being drawn
          */
-        Room * getActiveRoom () const {  return activeRoom ;  }
+        Room * getActiveRoom () const {  return this->activeRoom ;  }
 
-        void setActiveRoom ( Room * newRoom ) {  activeRoom = newRoom ;  }
+        void setActiveRoom ( Room * newRoom ) {  this->activeRoom = newRoom ;  }
 
         /**
          * @return room or nil if there’re no more characters
@@ -100,14 +100,12 @@ private:
 
         static MapManager instance ;
 
-        /**
-         * The room to draw yet
-         */
+        // the room being drawn
         Room * activeRoom ;
 
         std::vector < Room * > roomsInPlay ;
 
-        std::map< std::string, ConnectedRooms* > linksBetweenRooms ;
+        std::map < std::string, ConnectedRooms* > linksBetweenRooms ;
 
         /**
          * Every room on the map

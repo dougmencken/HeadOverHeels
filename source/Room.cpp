@@ -69,10 +69,16 @@ Room::Room( const std::string & roomFile, const std::string & scenery,
         doors[ "westnorth" ] = nilPointer;
         doors[ "westsouth" ] = nilPointer;
 
-        // create empty floor
-        for ( unsigned int i = 0 ; i < xTiles * yTiles /* + 1 */ ; i ++ )
+        // make nil floor
+        for ( unsigned int i = 0 ; i < xTiles * yTiles /* + 1 */ ; ++ i )
         {
                 this->floorTiles.push_back( nilPointer );
+        }
+
+        // make the room’s grid structure
+        for ( unsigned int i = 0 ; i < xTiles * yTiles /* + 1 */ ; ++ i )
+        {
+                this->gridItems.push_back( std::vector< GridItemPtr > () );
         }
 
         // create the sequence of drawing, as example for the 8 x 8 grid
@@ -685,6 +691,19 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 #endif
 }
 
+void Room::sortGridItems ()
+{
+        mediator->lockGridItemsMutex ();
+
+        for ( unsigned int column = 0; column < this->gridItems.size(); ++ column )
+        {
+                if ( ! this->gridItems[ column ].empty() )
+                        std::sort( this->gridItems[ column ].begin (), this->gridItems[ column ].end () );
+        }
+
+        mediator->unlockGridItemsMutex ();
+}
+
 void Room::addFreeItemToContainer( const FreeItemPtr& freeItem )
 {
         freeItems.push_back( freeItem );
@@ -758,6 +777,19 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 #if defined( DEBUG ) && DEBUG
         std::cout << freeItem->whichItemClass() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 #endif
+}
+
+void Room::sortFreeItems ()
+{
+        mediator->lockFreeItemsMutex ();
+
+        std::sort( this->freeItems.begin (), this->freeItems.end () );
+
+        // remask items after sorting because overlappings may change
+        for ( std::vector< FreeItemPtr >::iterator f = this->freeItems.begin (); f != this->freeItems.end (); ++ f )
+                ( *f )->setWantMaskTrue ();
+
+        mediator->unlockFreeItemsMutex ();
 }
 
 bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEntersRoom )
@@ -983,19 +1015,16 @@ void Room::removeWallOnY( Wall * segment )
         delete segment ;
 }
 
-void Room::removeGridItemByUniqueName( const std::string& uniqueName )
+void Room::removeGridItemByUniqueName( const std::string & uniqueName )
 {
-        GridItemPtr gridItem ;
-        bool found = false ;
+        GridItemPtr foundGridItem ;
 
-        for ( unsigned int column = 0 ; column < gridItems.size() ; column ++ )
-        {
+        for ( unsigned int column = 0 ; column < gridItems.size() ; column ++ ) {
                 for ( std::vector< GridItemPtr >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
                 {
                         if ( *g != nilPointer && ( *g )->getUniqueName() == uniqueName )
                         {
-                                gridItem = *g ;
-                                found = true ;
+                                foundGridItem = *g ;
 
                                 std::cout << "removing " << ( *g )->whichItemClass() << " \"" << uniqueName <<
                                         "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
@@ -1006,27 +1035,24 @@ void Room::removeGridItemByUniqueName( const std::string& uniqueName )
                         }
                 }
 
-                if ( found ) break ;
+                if ( foundGridItem != nilPointer ) break ;
         }
 
-        if ( found )
-        {
-                mediator->wantShadowFromGridItem( *gridItem );
-                mediator->wantToMaskWithGridItem( *gridItem );
+        if ( foundGridItem != nilPointer ) {
+                mediator->wantShadowFromGridItem( * foundGridItem );
+                mediator->wantToMaskWithGridItem( * foundGridItem );
         }
 }
 
-void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
+void Room::removeFreeItemByUniqueName( const std::string & uniqueName )
 {
-        FreeItemPtr freeItem ;
-        bool found = false ;
+        FreeItemPtr foundFreeItem ;
 
         for ( std::vector< FreeItemPtr >::iterator f = freeItems.begin (); f != freeItems.end (); ++ f )
         {
                 if ( *f != nilPointer && ( *f )->getUniqueName() == uniqueName )
                 {
-                        freeItem = *f ;
-                        found = true ;
+                        foundFreeItem = *f ;
 
                         std::cout << "removing " << ( *f )->whichItemClass() << " \"" << uniqueName <<
                                 "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
@@ -1037,10 +1063,9 @@ void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
                 }
         }
 
-        if ( found )
-        {
-                mediator->wantShadowFromFreeItem( *freeItem );
-                mediator->wantToMaskWithFreeItem( *freeItem );
+        if ( foundFreeItem != nilPointer ) {
+                mediator->wantShadowFromFreeItem( * foundFreeItem );
+                mediator->wantToMaskWithFreeItem( * foundFreeItem );
         }
 }
 
@@ -1177,7 +1202,7 @@ void Room::dontDisappearOnJump ()
 
         for ( std::vector< FreeItemPtr >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
         {
-                FreeItem& freeItem = *( *fi );
+                FreeItem & freeItem = *( *fi );
                 if ( freeItem.getBehavior() != nilPointer )
                 {
                         std::string behavior = freeItem.getBehavior()->getNameOfBehavior();
@@ -1317,19 +1342,16 @@ void Room::draw ()
         // at first shade every free item with grid items and other free items
         for ( std::vector< FreeItemPtr >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
         {
-                FreeItem& freeItem = *( *fi );
+                FreeItem & freeItem = *( *fi );
 
                 // shade an item when shadows are on
-                if ( shadingTransparency < 256 )
-                {
-                        freeItem.requestShadow();
-                }
+                if ( shadingTransparency < 256 ) freeItem.requestShadow();
         }
 
         // then mask it and finally draw it
         for ( std::vector< FreeItemPtr >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
         {
-                FreeItem& freeItem = *( *fi );
+                FreeItem & freeItem = *( *fi );
 
                 freeItem.requestMask();
                 freeItem.draw ();

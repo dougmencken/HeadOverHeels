@@ -18,8 +18,8 @@
 #endif
 
 
-Mediator::Mediator( Room* room )
-        : room( room )
+Mediator::Mediator( Room* whichRoom )
+        : room( whichRoom )
         , threadRunning( false )
         , needToSortGridItems( false )
         , needToSortFreeItems( false )
@@ -42,12 +42,6 @@ Mediator::Mediator( Room* room )
         badBoys.push_back( "behavior of random patroling in four secondary directions" );
         badBoys.push_back( "behavior of random patroling in four secondary directions" );
         badBoys.push_back( "behavior of random patroling in eight directions" );
-
-        // make structure of room
-        for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY() + 1; i++ )
-        {
-                room->gridItems.push_back( std::vector< GridItemPtr > () );
-        }
 }
 
 Mediator::~Mediator()
@@ -74,8 +68,7 @@ void Mediator::update()
         std::vector< std::string > vanishedGridItems ;
 
         // update grid items
-        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
-        {
+        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column ) {
                 for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
                         if ( ( *g )->updateItem() )
@@ -89,25 +82,15 @@ void Mediator::update()
                 room->removeGridItemByUniqueName( *i );
         }
 
-        if ( needToSortGridItems )
-        {
-                for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
-                {
-                        if ( ! room->gridItems[ column ].empty() )
-                        {
-                                std::sort( room->gridItems[ column ].begin (), room->gridItems[ column ].end () );
-                        }
-                }
-
-                needToSortGridItems = false;
-        }
-
         unlockGridItemsMutex ();
 
-        if ( this->currentlyActiveCharacter != nilPointer )
-        {
-                this->currentlyActiveCharacter->behave ();
+        if ( this->needToSortGridItems ) {
+                this->room->sortGridItems() ;
+                this->needToSortGridItems = false ;
         }
+
+        if ( this->currentlyActiveCharacter != nilPointer )
+                this->currentlyActiveCharacter->behave ();
 
         lockFreeItemsMutex ();
 
@@ -123,22 +106,18 @@ void Mediator::update()
 
         for ( std::vector< std::string >::const_iterator i = vanishedFreeItems.begin () ; i != vanishedFreeItems.end () ; ++ i )
         {
-                std::cout << "free item \"" << *i << "\" is to be gone" << std::endl ;
+                std::cout << "free item \"" << *i << "\" disappeared at the last update" << std::endl ;
                 room->removeFreeItemByUniqueName( *i );
         }
 
-        if ( needToSortFreeItems )
-        {
-                std::sort( room->freeItems.begin (), room->freeItems.end () );
-                needToSortFreeItems = false;
+        unlockFreeItemsMutex ();
 
-                // remask items after sorting because overlaps may change
-                for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
-                {
-                        ( *f )->setWantMaskTrue();
-                }
+        if ( this->needToSortFreeItems ) {
+                this->room->sortFreeItems() ;
+                this->needToSortFreeItems = false ;
         }
 
+        ///// here??
         std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom () ;
         for ( unsigned int i = 0 ; i < charactersInRoom.size () ; ++ i )
         {
@@ -153,8 +132,6 @@ void Mediator::update()
                         this->pickNextCharacter () ;
                 }
         }
-
-        unlockFreeItemsMutex ();
 }
 
 void Mediator::beginUpdate ()

@@ -436,14 +436,14 @@ Room* MapManager::rebuildRoom( Room* room )
                                         int characterX = character->getX();
                                         int characterY = character->getY();
                                         int characterZ = character->getZ();
-                                        const std::string & characterOrientation = character->getHeading() ;
-                                        const std::string & characterEntry = character->getWayOfEntry() ;
+                                        const std::string & angularOrientation = character->getHeading() ;
+                                        const std::string & wayOfEntry = character->getWayOfEntry() ;
 
                                         // create the simple character
                                         RoomBuilder::createCharacterInRoom( room,
                                                                             nameOfActiveCharacter, true,
                                                                             characterX, characterY, characterZ,
-                                                                            characterOrientation, characterEntry );
+                                                                            angularOrientation, wayOfEntry );
 
                                         // update the list of characters and rewind the loop
                                         charactersOnEntry = room->getCharactersWhoEnteredRoom ();
@@ -451,7 +451,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                         continue ;
                                 }
 
-                                theWay = character->getHeading() ;
+                                theWay = character->getHeading () ;
 
                                 std::string entry = character->getWayOfEntry() ;
 
@@ -512,8 +512,9 @@ Room* MapManager::rebuildRoom( Room* room )
         return newRoom;
 }
 
-Room* MapManager::changeRoom()
+Room* MapManager::changeRoom ()
 {
+        assert( activeRoom->getMediator()->getActiveCharacter() != nilPointer );
         return changeRoom( activeRoom->getMediator()->getActiveCharacter()->getWayOfExit() );
 }
 
@@ -551,7 +552,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         int previousSouthBound = previousRoom->getLimitAt( "south" );
         int previousWestBound = previousRoom->getLimitAt( "west" );
 
-        const std::string exitOrientation = oldItemOfRoamer.getHeading() ;
+        const std::string & exitOrientation = oldItemOfRoamer.getHeading () ;
 
         // remove the active character from the previous room
         previousRoom->removeCharacterFromRoom( oldItemOfRoamer, true );
