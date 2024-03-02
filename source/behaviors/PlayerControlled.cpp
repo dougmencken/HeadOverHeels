@@ -48,42 +48,43 @@ bool PlayerControlled::isInvulnerableToLethalItems () const
 
 void PlayerControlled::setCurrentActivity ( const Activity & newActivity )
 {
-        if ( this->affectedBy != nilPointer ) this->affectedBy = ItemPtr () ;
+        // nullify “changed due to” item
+        Behavior::setCurrentActivity( getCurrentActivity() );
 
         if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
 
-        this->activity = newActivity ;
+        Behavior::setCurrentActivity( newActivity );
 }
 
 void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
 {
         if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
 
-        this->activity = newActivity ;
-        this->affectedBy = dueTo ;
+        Behavior::changeActivityDueTo( newActivity, dueTo );
 }
 
-void PlayerControlled::wait( ::AvatarItem & character )
+void PlayerControlled::wait ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         character.wait ();
 
         if ( activities::Falling::getInstance().fall( this ) )
         {
-                speedTimer->reset();
-                activity = activities::Activity::Falling;
+                speedTimer->reset() ;
+                setCurrentActivity( activities::Activity::Falling );
 
                 if ( character.isHead ()
                                 && character.getQuickSteps() > 0
                                         && this->quickSteps < 4 )
-                {
-                        // reset the quick steps counter
-                        this->quickSteps = 0 ;
-                }
+                        this->quickSteps = 0 ; // reset the quick steps counter
         }
 }
 
-void PlayerControlled::move( ::AvatarItem & character )
+void PlayerControlled::move ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         if ( character.isFrozen() ) return ;
 
         // apply the effect of quick steps bonus bunny
@@ -96,7 +97,7 @@ void PlayerControlled::move( ::AvatarItem & character )
 
                 // decrement the quick steps
                 if ( character.getQuickSteps() > 0
-                                && moved && activity != activities::Activity::Falling )
+                                && moved && getCurrentActivity() != activities::Activity::Falling )
                 {
                         this->quickSteps ++ ;
 
@@ -112,8 +113,10 @@ void PlayerControlled::move( ::AvatarItem & character )
         }
 }
 
-void PlayerControlled::automove( ::AvatarItem & character )
+void PlayerControlled::automove ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         // apply the effect of quick steps bonus bunny
         double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
 
@@ -143,9 +146,9 @@ void PlayerControlled::automove( ::AvatarItem & character )
         }
 }
 
-void PlayerControlled::displace( ::AvatarItem & character )
+void PlayerControlled::displace ()
 {
-        if ( speedTimer->getValue() > character.getSpeed() )
+        if ( speedTimer->getValue() > getItem()->getSpeed() )
         {
                 activities::Displacing::getInstance().displace( this, &activity, true );
                 // when the displacement couldn’t be performed due to a collision
@@ -189,8 +192,10 @@ void PlayerControlled::handleMoveKeyWhenDragged ()
         }
 }
 
-void PlayerControlled::cancelDragging( ::AvatarItem & character )
+void PlayerControlled::cancelDragging ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         if ( ! character.isFrozen() )
         {
                 if ( speedTimer->getValue() > character.getSpeed() )
@@ -205,8 +210,10 @@ void PlayerControlled::cancelDragging( ::AvatarItem & character )
         }
 }
 
-void PlayerControlled::fall( ::AvatarItem & character )
+void PlayerControlled::fall ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         // is it time to lower by one unit
         if ( fallTimer->getValue() > character.getWeight() )
         {
@@ -237,8 +244,10 @@ void PlayerControlled::toJumpOrTeleport ()
                                         : activities::Activity::Jumping );
 }
 
-void PlayerControlled::jump( ::AvatarItem & character )
+void PlayerControlled::jump ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         if ( getCurrentActivity() == activities::Activity::Jumping )
         {
                 if ( this->jumpPhase < 0 )
@@ -287,8 +296,10 @@ void PlayerControlled::jump( ::AvatarItem & character )
                 character.setWayOfExit( "above" );
 }
 
-void PlayerControlled::glide( ::AvatarItem & character )
+void PlayerControlled::glide ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         if ( glideTimer->getValue() > character.getWeight() /* character.getSpeed() / 2.0 */ )
         {
                 if ( ! activities::Falling::getInstance().fall( this ) &&
@@ -339,9 +350,11 @@ void PlayerControlled::glide( ::AvatarItem & character )
                 SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
 }
 
-void PlayerControlled::enterTeletransport( ::AvatarItem & character )
+void PlayerControlled::enterTeletransport ()
 {
-	if ( getCurrentActivity() != activities::Activity::BeginTeletransportation ) return ;
+        if ( getCurrentActivity() != activities::Activity::BeginTeletransportation ) return ;
+
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
 
         // morph into bubbles
         if ( ! character.isMetamorphed () )
@@ -356,9 +369,11 @@ void PlayerControlled::enterTeletransport( ::AvatarItem & character )
                                         ? "via teleport" : "via second teleport" );
 }
 
-void PlayerControlled::exitTeletransport( ::AvatarItem & character )
+void PlayerControlled::exitTeletransport ()
 {
-	if ( getCurrentActivity() != activities::Activity::EndTeletransportation ) return ;
+        if ( getCurrentActivity() != activities::Activity::EndTeletransportation ) return ;
+
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
 
         // morph back from bubbles
         if ( ! character.isMetamorphed () ) {
@@ -376,8 +391,10 @@ void PlayerControlled::exitTeletransport( ::AvatarItem & character )
         setCurrentActivity( activities::Activity::Waiting );
 }
 
-void PlayerControlled::collideWithALethalItem( ::AvatarItem & character )
+void PlayerControlled::collideWithALethalItem ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         switch ( getCurrentActivity () )
         {
                 // the character just met something lethal
@@ -414,8 +431,10 @@ void PlayerControlled::collideWithALethalItem( ::AvatarItem & character )
         }
 }
 
-void PlayerControlled::useHooter( ::AvatarItem & character )
+void PlayerControlled::useHooter ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         if ( character.hasTool( "horn" ) && character.getDonuts() > 0 && ! this->donutFromHooterInRoom )
         {
                 this->donutFromHooterInRoom = true ;
@@ -451,8 +470,10 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
         }
 }
 
-void PlayerControlled::takeItem( ::AvatarItem & character )
+void PlayerControlled::takeItem ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         if ( character.hasTool( "handbag" ) )
         {
                 Mediator* mediator = character.getMediator();
@@ -508,8 +529,10 @@ void PlayerControlled::takeItem( ::AvatarItem & character )
                 setCurrentActivity( activities::Activity::Waiting );
 }
 
-void PlayerControlled::dropItem( ::AvatarItem & character )
+void PlayerControlled::dropItem ()
 {
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+
         if ( character.getDescriptionOfTakenItem() != nilPointer )
         {
                 std::cout << "drop item \"" << character.getDescriptionOfTakenItem()->getKind () << "\"" << std::endl ;

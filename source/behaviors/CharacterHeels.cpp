@@ -40,10 +40,6 @@ CharacterHeels::CharacterHeels( const ItemPtr & item, const std::string & behavi
         fallTimer->go ();
 }
 
-CharacterHeels::~CharacterHeels( )
-{
-}
-
 bool CharacterHeels::update()
 {
         AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
@@ -53,21 +49,21 @@ bool CharacterHeels::update()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        wait( avatar );
+                        wait ();
                         break;
 
                 case activities::Activity::AutomovingNorth:
                 case activities::Activity::AutomovingSouth:
                 case activities::Activity::AutomovingEast:
                 case activities::Activity::AutomovingWest:
-                        automove( avatar );
+                        automove ();
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        move( avatar );
+                        move ();
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -82,36 +78,36 @@ bool CharacterHeels::update()
                 case activities::Activity::DraggedSouth:
                 case activities::Activity::DraggedEast:
                 case activities::Activity::DraggedWest:
-                        displace( avatar );
+                        displace ();
                         break;
 
                 case activities::Activity::CancelDragging:
-                        cancelDragging( avatar );
+                        cancelDragging ();
                         break;
 
                 case activities::Activity::Falling:
-                        fall( avatar );
+                        fall ();
                         break;
 
                 case activities::Activity::Jumping :
-                        jump( avatar );
+                        jump ();
                         break;
 
                 case activities::Activity::BeginTeletransportation:
-                        enterTeletransport( avatar );
+                        enterTeletransport ();
                         break;
                 case activities::Activity::EndTeletransportation:
-                        exitTeletransport( avatar );
+                        exitTeletransport ();
                         break;
 
                 case activities::Activity::MetLethalItem:
                 case activities::Activity::Vanishing:
-                        collideWithALethalItem( avatar );
+                        collideWithALethalItem ();
                         break;
 
                 case activities::Activity::TakeItem:
                 case activities::Activity::TakeAndJump:
-                        takeItem( avatar );
+                        takeItem ();
                         break;
 
                 case activities::Activity::ItemTaken:
@@ -121,7 +117,7 @@ bool CharacterHeels::update()
 
                 case activities::Activity::DropItem:
                 case activities::Activity::DropAndJump:
-                        dropItem( avatar );
+                        dropItem ();
                         break;
 
                 default:

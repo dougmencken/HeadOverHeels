@@ -23,7 +23,7 @@ public:
 
         CharacterHead( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~CharacterHead( ) ;
+        virtual ~CharacterHead( ) {}
 
         virtual bool update () ;
 
@@ -31,9 +31,9 @@ public:
 
 protected:
 
-        virtual void wait ( AvatarItem & characterItem ) ;
+        virtual void wait () ;
 
-        virtual void blink ( AvatarItem & characterItem ) ;
+        virtual void blink () ;
 
 protected:
 

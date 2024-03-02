@@ -24,7 +24,7 @@ public:
 
         CharacterHeels( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~CharacterHeels( ) ;
+        virtual ~CharacterHeels( ) {}
 
         virtual bool update () ;
 

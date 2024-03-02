@@ -47,10 +47,6 @@ CharacterHead::CharacterHead( const ItemPtr & item, const std::string & behavior
         timerForBlinking->go ();
 }
 
-CharacterHead::~CharacterHead( )
-{
-}
-
 bool CharacterHead::update ()
 {
         AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
@@ -66,21 +62,21 @@ bool CharacterHead::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        wait( avatar );
+                        wait ();
                         break;
 
                 case activities::Activity::AutomovingNorth:
                 case activities::Activity::AutomovingSouth:
                 case activities::Activity::AutomovingEast:
                 case activities::Activity::AutomovingWest:
-                        automove( avatar );
+                        automove ();
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        move( avatar );
+                        move ();
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -95,39 +91,39 @@ bool CharacterHead::update ()
                 case activities::Activity::DraggedSouth:
                 case activities::Activity::DraggedEast:
                 case activities::Activity::DraggedWest:
-                        displace( avatar );
+                        displace ();
                         break;
 
                 case activities::Activity::CancelDragging:
-                        cancelDragging( avatar );
+                        cancelDragging ();
                         break;
 
                 case activities::Activity::Falling:
-                        fall( avatar );
+                        fall ();
                         break;
 
                 case activities::Activity::Jumping :
-                        jump( avatar );
+                        jump ();
                         break;
 
                 case activities::Activity::BeginTeletransportation:
-                        enterTeletransport( avatar );
+                        enterTeletransport ();
                         break;
                 case activities::Activity::EndTeletransportation:
-                        exitTeletransport( avatar );
+                        exitTeletransport ();
                         break;
 
                 case activities::Activity::MetLethalItem:
                 case activities::Activity::Vanishing:
-                        collideWithALethalItem( avatar );
+                        collideWithALethalItem ();
                         break;
 
                 case activities::Activity::Gliding:
-                        glide( avatar );
+                        glide ();
                         break;
 
                 case activities::Activity::Blinking:
-                        blink( avatar );
+                        blink ();
                         break;
 
                 default:
@@ -161,7 +157,7 @@ void CharacterHead::behave ()
                         toJumpOrTeleport ();
                 }
                 else if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -185,7 +181,7 @@ void CharacterHead::behave ()
                         toJumpOrTeleport ();
                 }
                 else if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -213,7 +209,7 @@ void CharacterHead::behave ()
                         setCurrentActivity( activities::Activity::Jumping );
                 }
                 else if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -243,7 +239,7 @@ void CharacterHead::behave ()
         else if ( whatDoing == activities::Activity::Jumping )
         {
                 if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 // Head may change orientation when jumping
@@ -263,7 +259,7 @@ void CharacterHead::behave ()
         else if ( whatDoing == activities::Activity::Falling )
         {
                 if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 // entonces Head planea
@@ -277,7 +273,7 @@ void CharacterHead::behave ()
         if ( getCurrentActivity() == activities::Activity::Gliding )
         {
                 if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 // Head may change orientation when gliding
@@ -299,27 +295,26 @@ void CharacterHead::behave ()
         }
 }
 
-void CharacterHead::wait( AvatarItem & avatar )
+void CharacterHead::wait ()
 {
-        avatar.wait ();
+        PlayerControlled::wait ();
 
-        if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 ) {
-                timerForBlinking->reset();
-                setCurrentActivity( activities::Activity::Blinking );
-        }
-
-        if ( activities::Falling::getInstance().fall( this ) ) { ////// here??
-                speedTimer->reset();
-                setCurrentActivity( activities::Activity::Falling );
+        if ( getCurrentActivity() == activities::Activity::Waiting ) {
+                if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
+                {
+                        timerForBlinking->reset();
+                        setCurrentActivity( activities::Activity::Blinking );
+                }
         }
 }
 
-void CharacterHead::blink( AvatarItem & avatar )
+void CharacterHead::blink ()
 {
-        double time = timerForBlinking->getValue();
+        double time = timerForBlinking->getValue ();
 
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {
+                AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem () );
                 avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
         // eyes open

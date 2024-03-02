@@ -49,16 +49,16 @@ public:
 
 protected:
 
-        virtual void wait( AvatarItem & character ) ;
+        virtual void wait () ;
 
-        virtual void move( AvatarItem & character ) ;
+        virtual void move () ;
 
-        virtual void automove( AvatarItem & character ) ;
+        virtual void automove () ;
 
         /**
          * The character is moved by another item at the speed of the pusher
          */
-        virtual void displace( AvatarItem & character ) ;
+        virtual void displace () ;
 
         /**
          * The character moves while being dragged by a conveyor, moving in the opposite way cancels dragging
@@ -69,12 +69,12 @@ protected:
          * Moving in the opposite direction of dragging leaves the character at the current place.
          * Happens when a moving character is dragged by a conveyor
          */
-        virtual void cancelDragging( AvatarItem & character ) ;
+        virtual void cancelDragging () ;
 
         /**
          * The character is falling down
          */
-        virtual void fall( AvatarItem & character ) ;
+        virtual void fall () ;
 
         /**
          * Jump or teleport if the device is below, since
@@ -85,38 +85,38 @@ protected:
         /**
          * The character jumps
          */
-        virtual void jump( AvatarItem & character ) ;
+        virtual void jump () ;
 
         /**
          * The character glides in the air when falling or jumping
          */
-        virtual void glide( AvatarItem & character ) ;
+        virtual void glide () ;
 
         /**
          * The character teleports to another room
          */
-        virtual void enterTeletransport( AvatarItem & character ) ;
-        virtual void exitTeletransport( AvatarItem & character ) ;
+        virtual void enterTeletransport () ;
+        virtual void exitTeletransport () ;
 
         /**
          * The character collides with a lethal item
          */
-        virtual void collideWithALethalItem( AvatarItem & character ) ;
+        virtual void collideWithALethalItem () ;
 
         /**
          * The character releases a doughnut that can freeze another item
          */
-        virtual void useHooter( AvatarItem & character ) ;
+        virtual void useHooter () ;
 
         /**
          * Take an item below the character
          */
-        virtual void takeItem( AvatarItem & character ) ;
+        virtual void takeItem () ;
 
         /**
          * Drop a taken item just under the character
          */
-        virtual void dropItem( AvatarItem & character ) ;
+        virtual void dropItem () ;
 
 protected:
 

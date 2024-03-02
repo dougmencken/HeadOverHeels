@@ -49,10 +49,6 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( const ItemPtr & item, const std::s
         timerForBlinking->go();
 }
 
-CharacterHeadAndHeels::~CharacterHeadAndHeels( )
-{
-}
-
 bool CharacterHeadAndHeels::update ()
 {
         AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
@@ -62,21 +58,25 @@ bool CharacterHeadAndHeels::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        wait( avatar );
+                        wait ();
+                        break;
+
+                case activities::Activity::Blinking:
+                        blink ();
                         break;
 
                 case activities::Activity::AutomovingNorth:
                 case activities::Activity::AutomovingSouth:
                 case activities::Activity::AutomovingEast:
                 case activities::Activity::AutomovingWest:
-                        automove( avatar );
+                        automove ();
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        move( avatar );
+                        move ();
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -91,44 +91,40 @@ bool CharacterHeadAndHeels::update ()
                 case activities::Activity::DraggedSouth:
                 case activities::Activity::DraggedEast:
                 case activities::Activity::DraggedWest:
-                        displace( avatar );
+                        displace ();
                         break;
 
                 case activities::Activity::CancelDragging:
-                        cancelDragging( avatar );
+                        cancelDragging ();
                         break;
 
                 case activities::Activity::Falling:
-                        fall( avatar );
+                        fall ();
+                        break;
+
+                case activities::Activity::Gliding:
+                        glide ();
                         break;
 
                 case activities::Activity::Jumping :
-                        jump( avatar );
+                        jump ();
                         break;
 
                 case activities::Activity::BeginTeletransportation:
-                        enterTeletransport( avatar );
+                        enterTeletransport ();
                         break;
                 case activities::Activity::EndTeletransportation:
-                        exitTeletransport( avatar );
+                        exitTeletransport ();
                         break;
 
                 case activities::Activity::MetLethalItem:
                 case activities::Activity::Vanishing:
-                        collideWithALethalItem( avatar );
-                        break;
-
-                case activities::Activity::Gliding:
-                        glide( avatar );
-                        break;
-
-                case activities::Activity::Blinking:
-                        blink( avatar );
+                        collideWithALethalItem ();
                         break;
 
                 case activities::Activity::TakeItem:
                 case activities::Activity::TakeAndJump:
-                        takeItem( avatar );
+                        takeItem ();
                         break;
 
                 case activities::Activity::ItemTaken:
@@ -138,7 +134,7 @@ bool CharacterHeadAndHeels::update ()
 
                 case activities::Activity::DropItem:
                 case activities::Activity::DropAndJump:
-                        dropItem( avatar );
+                        dropItem ();
                         break;
 
                 default:
@@ -146,7 +142,7 @@ bool CharacterHeadAndHeels::update ()
         }
 
         // play sound for the current activity
-        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound ( getCurrentActivity() ) );
+        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
         return false ;
 }
@@ -172,7 +168,7 @@ void CharacterHeadAndHeels::behave ()
                         toJumpOrTeleport ();
                 }
                 else if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
@@ -204,7 +200,7 @@ void CharacterHeadAndHeels::behave ()
                         toJumpOrTeleport ();
                 }
                 else if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
@@ -240,7 +236,7 @@ void CharacterHeadAndHeels::behave ()
                         setCurrentActivity( activities::Activity::Jumping );
                 }
                 else if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
@@ -278,7 +274,7 @@ void CharacterHeadAndHeels::behave ()
         else if ( whatDoing == activities::Activity::Jumping )
         {
                 if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -297,7 +293,7 @@ void CharacterHeadAndHeels::behave ()
         else if ( whatDoing == activities::Activity::Falling )
         {
                 if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 // pick or drop an item when falling
@@ -316,7 +312,7 @@ void CharacterHeadAndHeels::behave ()
         if ( getCurrentActivity() == activities::Activity::Gliding )
         {
                 if ( input.doughnutTyped() ) {
-                        useHooter( avatar );
+                        useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 // pick or drop an item when gliding
@@ -342,27 +338,26 @@ void CharacterHeadAndHeels::behave ()
         }
 }
 
-void CharacterHeadAndHeels::wait( AvatarItem & avatar )
+void CharacterHeadAndHeels::wait ()
 {
-        avatar.wait ();
+        PlayerControlled::wait() ;
 
-        if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 ) {
-                timerForBlinking->reset();
-                setCurrentActivity( activities::Activity::Blinking );
-        }
-
-        if ( activities::Falling::getInstance().fall( this ) ) { ////// here??
-                speedTimer->reset();
-                setCurrentActivity( activities::Activity::Falling );
+        if ( getCurrentActivity() == activities::Activity::Waiting ) {
+                if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
+                {
+                        timerForBlinking->reset() ;
+                        setCurrentActivity( activities::Activity::Blinking );
+                }
         }
 }
 
-void CharacterHeadAndHeels::blink( AvatarItem & avatar )
+void CharacterHeadAndHeels::blink ()
 {
-        double time = timerForBlinking->getValue();
+        double time = timerForBlinking->getValue() ;
 
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {
+                AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem () );
                 avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
         // eyes open

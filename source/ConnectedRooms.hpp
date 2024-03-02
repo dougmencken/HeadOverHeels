@@ -14,11 +14,9 @@
 #include <string>
 #include <map>
 
-#include "Way.hpp"
-
 
 /**
- * Other rooms connected with the room
+ * Other rooms connected to the same room on the game’s map
  */
 
 class ConnectedRooms

@@ -570,7 +570,7 @@ void AvatarItem::saveAt ( int x, int y, int z )
 void AvatarItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
 {
         // when the composite character morphs into bubbles, it’s actually double bubbles
-        bool doubleBubbles = ( getKind() == "headoverheels" && newKind == "bubbles" );
+        bool doubleBubbles = ( isHeadOverHeels() && newKind == "bubbles" );
         Item::metamorphInto( doubleBubbles ? "double-bubbles" : newKind, initiatedBy );
 }
 
