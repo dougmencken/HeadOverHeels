@@ -165,7 +165,7 @@ bool Item::atExtraFrame() const
 
 void Item::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
 {
-        const DescriptionOfItem * description = ItemDescriptions::descriptions ().getDescriptionByKind( newKind );
+        const DescriptionOfItem * description = ItemDescriptions::descriptions().getDescriptionByKind( newKind );
         if ( description == nilPointer ) return ;
 
         std::cout << "metamorphosis of item \"" << getUniqueName ()

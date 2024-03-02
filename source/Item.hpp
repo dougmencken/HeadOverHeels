@@ -69,9 +69,9 @@ public:
         void animate () ;
 
         /**
-         * Used for the metamorphosis into bubbles, such as when the character teleports
+         * Metamorph into another kind of item, such as into bubbles when a character teleports
          */
-        void metamorphInto ( const std::string & newKind, const std::string & initiatedBy ) ;
+        virtual void metamorphInto ( const std::string & newKind, const std::string & initiatedBy ) ;
 
         /**
          * Changes the current frame. Frames usually change when the angular orientation changes
@@ -145,6 +145,8 @@ public:
          * Gives the original kind of item, while the current kind may change via metamorphosis
          */
         const std::string & getOriginalKind () const {  return this->originalKind ;  }
+
+        bool isMetamorphed () const {  return getKind() != getOriginalKind() ;  }
 
         const DescriptionOfItem * getDescriptionOfItem () const {  return descriptionOfItem ;  }
 

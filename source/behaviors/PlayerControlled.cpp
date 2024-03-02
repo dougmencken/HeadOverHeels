@@ -24,8 +24,6 @@ PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & be
         , highJump( false )
         , automoveStepsRemained( automatic_steps )
         , quickSteps( 0 )
-        , kindOfBubbles( "bubbles" )
-        , kindOfFiredDoughnut( "bubbles" )
         , speedTimer( new Timer () )
         , fallTimer( new Timer () )
         , glideTimer( new Timer () )
@@ -44,7 +42,7 @@ PlayerControlled::~PlayerControlled( )
 
 bool PlayerControlled::isInvulnerableToLethalItems () const
 {
-        return ( dynamic_cast< const ::AvatarItem & >( * this->item ) ).hasShield ()
+        return ( dynamic_cast< const ::AvatarItem & >( * getItem () ) ).hasShield ()
                         || GameManager::getInstance().isImmuneToCollisionsWithMortalItems () ;
 }
 
@@ -346,8 +344,8 @@ void PlayerControlled::enterTeletransport( ::AvatarItem & character )
 	if ( getCurrentActivity() != activities::Activity::BeginTeletransportation ) return ;
 
         // morph into bubbles
-        if ( character.getKind() != kindOfBubbles )
-                character.metamorphInto( kindOfBubbles, "begin teletransportation" );
+        if ( ! character.isMetamorphed () )
+                character.metamorphInto( "bubbles", "begin teletransportation" );
 
         // animate item, change room when the animation finishes
         character.animate() ;
@@ -363,8 +361,8 @@ void PlayerControlled::exitTeletransport( ::AvatarItem & character )
 	if ( getCurrentActivity() != activities::Activity::EndTeletransportation ) return ;
 
         // morph back from bubbles
-        if ( character.getKind() != kindOfBubbles ) {
-                character.metamorphInto( kindOfBubbles, "backwards motion" );
+        if ( ! character.isMetamorphed () ) {
+                character.metamorphInto( "bubbles", "backwards motion" );
                 character.doBackwardsMotion(); // reverse the animation of bubbles
         }
 
@@ -386,7 +384,7 @@ void PlayerControlled::collideWithALethalItem( ::AvatarItem & character )
                 case activities::Activity::MetLethalItem:
                         if ( ! isInvulnerableToLethalItems() ) {
                                 // change to bubbles
-                                character.metamorphInto( kindOfBubbles, "met something lethal" );
+                                character.metamorphInto( "bubbles", "met something lethal" );
 
                                 this->isLosingLife = true ;
                                 setCurrentActivity( activities::Activity::Vanishing );
@@ -408,6 +406,7 @@ void PlayerControlled::collideWithALethalItem( ::AvatarItem & character )
                                         this->isLosingLife = false ;
                                 }
                         }
+
                         break;
 
                 default:
@@ -421,7 +420,7 @@ void PlayerControlled::useHooter( ::AvatarItem & character )
         {
                 this->donutFromHooterInRoom = true ;
 
-                const DescriptionOfItem * whatIsDonut = ItemDescriptions::descriptions().getDescriptionByKind( kindOfFiredDoughnut );
+                const DescriptionOfItem * whatIsDonut = ItemDescriptions::descriptions().getDescriptionByKind( "bubbles" );
                 if ( whatIsDonut != nilPointer )
                 {
                         SoundManager::getInstance().stop( character.getOriginalKind(), "donut" );

@@ -567,6 +567,13 @@ void AvatarItem::saveAt ( int x, int y, int z )
         GameManager::getInstance().eatFish( *this, this->mediator->getRoom(), x, y, z );
 }
 
+void AvatarItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
+{
+        // when the composite character morphs into bubbles, it’s actually double bubbles
+        bool doubleBubbles = ( getKind() == "headoverheels" && newKind == "bubbles" );
+        Item::metamorphInto( doubleBubbles ? "double-bubbles" : newKind, initiatedBy );
+}
+
 bool AvatarItem::hasTool( const std::string & tool ) const
 {
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;

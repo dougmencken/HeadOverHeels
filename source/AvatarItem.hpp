@@ -116,6 +116,11 @@ public:
         const std::string & getBehaviorOfTakenItem () const {  return this->behaviorOfTakenItem ;  }
 
         /**
+         * Metamorph into another kind of item, such as into bubbles when a character teleports
+         */
+        virtual void metamorphInto ( const std::string & newKind, const std::string & initiatedBy ) ;
+
+        /**
          * This character has the temporary invulnerability or doesn't have
          */
         bool hasShield () const ;

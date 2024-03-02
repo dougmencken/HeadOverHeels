@@ -144,10 +144,6 @@ protected:
         // the frames of falling, one for each of north south west east
         std::map < std::string, unsigned int > fallFrames ;
 
-        std::string kindOfBubbles ;
-
-        std::string kindOfFiredDoughnut ;
-
         // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 

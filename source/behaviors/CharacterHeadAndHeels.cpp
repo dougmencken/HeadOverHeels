@@ -42,8 +42,6 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( const ItemPtr & item, const std::s
         blinkFrames[ "east" ]  = 12 ;
         blinkFrames[ "west" ]  = 19 ;
 
-        kindOfBubbles = "double-bubbles";
-
         // activate chronometers
         speedTimer->go();
         fallTimer->go();

@@ -59,7 +59,7 @@ public:
 
         Activity getCurrentActivity () const {  return this->activity ;  }
 
-        const ItemPtr & getItem () {  return this->item ;  }
+        const ItemPtr & getItem () const {  return this->item ;  }
 
 protected:
 
