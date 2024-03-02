@@ -36,7 +36,7 @@ bool Teleport::update ()
                         {
                                 // copy stack of collisions
                                 std::stack< std::string > topItems;
-                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                while ( mediator->isThereAnyCollision() )
                                 {
                                         topItems.push( mediator->popCollision() );
                                 }
@@ -57,7 +57,7 @@ bool Teleport::update ()
                                                 {
                                                         bool characterIsAboveTeleport = false ;
 
-                                                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                                                        while ( mediator->isThereAnyCollision() )
                                                         {
                                                                 ItemPtr belowItem = mediator->findCollisionPop( );
 

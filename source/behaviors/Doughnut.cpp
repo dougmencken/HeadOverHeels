@@ -81,7 +81,7 @@ bool Doughnut::update ()
                                 bool collisionWithCharacter = ( mediator->collisionWithSomeKindOf( this->character->getOriginalKind() ) != nilPointer ) ;
 
                                 // if no collisions or a collision with the character
-                                if ( mediator->isStackOfCollisionsEmpty() || collisionWithCharacter )
+                                if ( ! mediator->isThereAnyCollision() || collisionWithCharacter )
                                 {
                                         freeItem.setIgnoreCollisions( true );
 

@@ -48,7 +48,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
                 // if can’t, raise the pile of items above
                 if ( deltaZ > 0 )
                 {
-                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                        while ( mediator->isThereAnyCollision() )
                         {
                                 const std::string & collision = mediator->popCollision ();
 
@@ -138,7 +138,7 @@ void Jumping::lift( FreeItem & sender, Item & item, int z )
                         {
                                 Mediator* mediator = item.getMediator();
 
-                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                while ( mediator->isThereAnyCollision() )
                                 {
                                         ItemPtr itemAtop = mediator->findCollisionPop();
 

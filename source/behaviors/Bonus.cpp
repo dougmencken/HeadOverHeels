@@ -129,7 +129,7 @@ bool Bonus::update ()
                                                 itemBelow->canAdvanceTo( 0, 0, 1 );
 
                                                 // if that avatar item is just below the bonus then it’s okay to take it
-                                                bool takeIt = ( mediator->depthOfStackOfCollisions() <= 1 );
+                                                bool takeIt = ( mediator->howManyCollisions() <= 1 );
 
                                                 // disappear on take
                                                 if ( takeIt )

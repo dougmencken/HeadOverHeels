@@ -51,7 +51,7 @@ bool Volatile::update ()
                                 std::stack< ItemPtr > topItems;
 
                                 // look for every item above it
-                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                while ( mediator->isThereAnyCollision() )
                                 {
                                         ItemPtr topItem = mediator->findCollisionPop( );
 
@@ -80,9 +80,9 @@ bool Volatile::update ()
                                         topItem->canAdvanceTo( 0, 0, -1 );
 
                                         // when item that triggers disappearance is just on this volatile then it’s okay to vanish
-                                        if ( mediator->depthOfStackOfCollisions() > 1 )
+                                        if ( mediator->howManyCollisions() > 1 )
                                         {
-                                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                                while ( mediator->isThereAnyCollision() )
                                                 {
                                                         ItemPtr bottomItem = mediator->findCollisionPop( );
 

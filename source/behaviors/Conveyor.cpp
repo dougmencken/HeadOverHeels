@@ -41,7 +41,7 @@ bool Conveyor::update ()
                                 {
                                         // copy the stack of collisions
                                         std::stack< std::string > itemsAbove ;
-                                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                                        while ( mediator->isThereAnyCollision() )
                                                 itemsAbove.push( mediator->popCollision() );
 
                                         while ( ! itemsAbove.empty () ) // for each such item

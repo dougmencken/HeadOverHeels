@@ -61,7 +61,7 @@ bool Switch::update ()
                         {
                                 // copy the stack of collisions
                                 std::stack< std::string > aboveItems;
-                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                while ( mediator->isThereAnyCollision() )
                                 {
                                         aboveItems.push( mediator->popCollision() );
                                 }
@@ -82,7 +82,7 @@ bool Switch::update ()
                                                                 itemAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jumping )
                                                 {
                                                         // toggle the switch when there’s only one item below the character
-                                                        if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )
+                                                        if ( ! isItemAbove && mediator->howManyCollisions() <= 1 )
                                                         {
                                                                 isItemAbove = true;
 
@@ -137,7 +137,7 @@ bool Switch::lookForItemsNearby( std::vector< ItemPtr > & itemsNearby )
         // is there an item at north
         if ( ! item->canAdvanceTo( -1, 0, 0 ) )
         {
-                while ( ! mediator->isStackOfCollisionsEmpty() )
+                while ( mediator->isThereAnyCollision() )
                 {
                         itemsNearby.push_back( mediator->findCollisionPop() );
                 }
@@ -146,7 +146,7 @@ bool Switch::lookForItemsNearby( std::vector< ItemPtr > & itemsNearby )
         // is there an item at south
         if ( ! item->canAdvanceTo( 1, 0, 0 ) )
         {
-                while ( ! mediator->isStackOfCollisionsEmpty() )
+                while ( mediator->isThereAnyCollision() )
                 {
                         itemsNearby.push_back( mediator->findCollisionPop() );
                 }
@@ -155,7 +155,7 @@ bool Switch::lookForItemsNearby( std::vector< ItemPtr > & itemsNearby )
         // is there an item at east
         if ( ! item->canAdvanceTo( 0, -1, 0 ) )
         {
-                while ( ! mediator->isStackOfCollisionsEmpty() )
+                while ( mediator->isThereAnyCollision() )
                 {
                         itemsNearby.push_back( mediator->findCollisionPop() );
                 }
@@ -164,7 +164,7 @@ bool Switch::lookForItemsNearby( std::vector< ItemPtr > & itemsNearby )
         // is there an item at west
         if ( ! item->canAdvanceTo( 0, 1, 0 ) )
         {
-                while ( ! mediator->isStackOfCollisionsEmpty() )
+                while ( mediator->isThereAnyCollision() )
                 {
                         itemsNearby.push_back( mediator->findCollisionPop() );
                 }

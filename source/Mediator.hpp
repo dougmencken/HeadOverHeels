@@ -28,8 +28,7 @@ class Door ;
 
 
 /**
- * Mediator for various items in one room. It collects requests sent by items at some events,
- * and forwards them to other items
+ * Intermediary for the coexistence and interaction of various items within the same room
  */
 
 class Mediator
@@ -37,28 +36,25 @@ class Mediator
 
 public:
 
-       /**
-        * @param room Room in which this mediator negotiates
-        */
-        Mediator( Room* room ) ;
+        /**
+         * @param room the room in which this mediator negotiates
+         */
+        Mediator( Room* whichRoom ) ;
 
         virtual ~Mediator( ) ;
 
         static void * updateThread ( void * mediatorAsVoid ) ;
 
-       /**
-        * Update behavior of every item for one cycle
-        */
+        /**
+         * Update every item’s behavior
+         */
         void update () ;
 
-       /**
-        * Begin update of items in separate thread
-        */
+        /**
+         * Begin updating items in a separate thread
+         */
         void beginUpdate () ;
 
-       /**
-        * End update of items
-        */
         void endUpdate () ;
 
         void wantToMaskWithFreeItemImageAt ( const FreeItem & item, int x, int y ) ;
@@ -85,59 +81,60 @@ public:
 
         void maskFreeItem ( FreeItem & freeItem ) ;
 
-       /**
-        * Find item in room by its unique name
-        */
-        ItemPtr findItemByUniqueName ( const std::string & uniqueName ) ;
-
-       /**
-        * Look for an item in the room by its kind
-        * When there are several items of this kind, the first found one is returned
-        */
-        ItemPtr findItemOfKind ( const std::string & kind ) ;
-
-       /**
-        * Look for an item in the room by its behavior
-        */
-        ItemPtr findItemByBehavior ( const std::string & behavior ) ;
-
-       /**
-        * Look for collisions between the given item and other items in room
-        * @return true if collisions were found or false otherwise
-        */
-        bool lookForCollisionsOf ( const std::string & uniqueNameOfItem ) ;
-
-       /**
-        * Search for Z coordinate which is the highest position to place the given item
-        * @return value of Z or zero if can’t get it
-        */
+        /**
+         * Look for the Z coordinate of the highest position in the column
+         * to place the given item above
+         * @return the value of Z or zero if can’t get it
+         */
         int findHighestZ ( const Item & item ) ;
 
-        void pushCollision ( const std::string& uniqueName ) ;
+        /**
+         * Look for an item in the room by its unique name
+         */
+        ItemPtr findItemByUniqueName ( const std::string & uniqueName ) ;
 
-       /**
-        * @return unique name of item or empty string when stack is empty
-        */
+        /**
+         * Look for an item in the room by its kind
+         * When there are several items of this kind, the first found one is returned
+         */
+        ItemPtr findItemOfKind ( const std::string & kind ) ;
+
+        /**
+         * Look for an item in the room with the given behavior
+         */
+        ItemPtr findItemBehavingAs ( const std::string & behavior ) ;
+
+        /**
+         * Collect collisions between the given item and other items in the active room
+         * @return true if any collision is found, or false otherwise
+         */
+        bool collectCollisionsWith ( const std::string & uniqueNameOfItem ) ;
+
+        void addCollisionWith ( const std::string & what ) ;
+
+        bool isThereAnyCollision () {  return ! this->collisions.empty() ;  }
+
+        unsigned int howManyCollisions () {  return this->collisions.size() ;  }
+
+        void clearCollisions () {  this->collisions.clear() ;  }
+
+        /**
+         * @return the unique name of item, or empty string if there are no collisions
+         */
         std::string popCollision () ;
-
-        void clearStackOfCollisions () {  collisions.clear() ;  }
-
-        bool isStackOfCollisionsEmpty () {  return collisions.empty() ;  }
-
-        unsigned int depthOfStackOfCollisions () {  return collisions.size() ;  }
 
         ItemPtr findCollisionPop () {  return findItemByUniqueName( popCollision() ) ;  }
 
-       /**
-        * Is there collision with item of a given kind
-        * @return item with which collision is happened or nil if there’s no collision
-        */
+        /**
+         * Is there a collision with some item of a given kind
+         * @return the item with which collision is happened or nil if there’s no collision
+         */
         ItemPtr collisionWithSomeKindOf ( const std::string & kind ) ;
 
-       /**
-        * Is there collision with item of a given behavior
-        * @return item with which collision is happened or nil if there’s no collision
-        */
+        /**
+         * Is there a collision with an item of a given behavior
+         * @return the item with which collision is happened or nil if there’s no collision
+         */
         ItemPtr collisionWithBehavingAs ( const std::string & behavior ) ;
 
         ItemPtr collisionWithBadBoy () ;
@@ -155,21 +152,15 @@ public:
         */
         void toggleSwitchInRoom () ;
 
-        void markToSortGridItems () {  this->needGridItemsSorting = true ;  }
+        void markToSortGridItems () {  this->needToSortGridItems = true ;  }
 
-        void markToSortFreeItems () {  this->needFreeItemsSorting = true ;  }
+        void markToSortFreeItems () {  this->needToSortFreeItems = true ;  }
 
         void lockGridItemsMutex () {  pthread_mutex_lock( &gridItemsMutex ) ;  }
-
-        void lockFreeItemsMutex () {  pthread_mutex_lock( &freeItemsMutex ) ;  }
-
         void unlockGridItemsMutex () {  pthread_mutex_unlock( &gridItemsMutex ) ;  }
 
+        void lockFreeItemsMutex () {  pthread_mutex_lock( &freeItemsMutex ) ;  }
         void unlockFreeItemsMutex () {  pthread_mutex_unlock( &freeItemsMutex ) ;  }
-
-        void lockCollisionsMutex () {  pthread_mutex_lock( &collisionsMutex ) ;  }
-
-        void unlockCollisionsMutex () {  pthread_mutex_unlock( &collisionsMutex ) ;  }
 
 private:
 
@@ -189,9 +180,12 @@ private:
 
         pthread_mutex_t collisionsMutex ;
 
-        bool needGridItemsSorting ;
+        void lockCollisionsMutex () {  pthread_mutex_lock( & this->collisionsMutex ) ;  }
+        void unlockCollisionsMutex () {  pthread_mutex_unlock( & this->collisionsMutex ) ;  }
 
-        bool needFreeItemsSorting ;
+        bool needToSortGridItems ;
+
+        bool needToSortFreeItems ;
 
         bool switchInRoomIsOn ;
 
@@ -210,9 +204,6 @@ private:
          */
         std::string lastActiveCharacterBeforeJoining ;
 
-        /**
-         * The unique names of items collided in the room
-         */
         std::deque < std::string > collisions ;
 
 public:

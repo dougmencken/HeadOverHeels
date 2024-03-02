@@ -484,7 +484,7 @@ void PlayerControlled::takeItem ()
                 {
                         int whereIsItemToPick = 0 ;
 
-                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                        while ( mediator->isThereAnyCollision() )
                         {
                                 ItemPtr bottomItem = mediator->findCollisionPop( );
 

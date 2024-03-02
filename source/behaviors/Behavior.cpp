@@ -39,7 +39,7 @@ void Behavior::propagateActivity( const Item& sender, const Activity& activity )
 {
         Mediator* mediator = sender.getMediator();
 
-        while ( ! mediator->isStackOfCollisionsEmpty () ) // there are items collided with the sender
+        while ( mediator->isThereAnyCollision () ) // there are items collided with the sender
         {
                 ItemPtr item = mediator->findCollisionPop( );
 

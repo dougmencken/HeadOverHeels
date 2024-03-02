@@ -133,7 +133,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                 return FreeItem::addToPosition( x, y, z );
         }
 
-        mediator->clearStackOfCollisions( );
+        mediator->clearCollisions ();
 
         const int xBefore = getX() ;
         const int yBefore = getY() ;
@@ -150,11 +150,11 @@ bool AvatarItem::addToPosition( int x, int y, int z )
 
         bool doorCollision = false;
 
-        bool collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
+        bool collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
 
         if ( collisionFound )
         {
-                while ( ! mediator->isStackOfCollisionsEmpty () )
+                while ( mediator->isThereAnyCollision () )
                 {
                         std::string what = mediator->popCollision();
 
@@ -217,26 +217,26 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         if ( this->getX() < mediator->getRoom()->getLimitAt( "north" )
                         && isNotUnderDoorAt( "north" ) && isNotUnderDoorAt( "northeast" ) && isNotUnderDoorAt( "northwest" ) )
         {
-                mediator->pushCollision( "some segment of wall at north" );
+                mediator->addCollisionWith( "some segment of wall at north" );
         }
         else if ( this->getX() + static_cast< int >( getDescriptionOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" )
                         && isNotUnderDoorAt( "south" ) && isNotUnderDoorAt( "southeast" ) && isNotUnderDoorAt( "southwest" ) )
         {
-                mediator->pushCollision( "some segment of wall at south" );
+                mediator->addCollisionWith( "some segment of wall at south" );
         }
 
         if ( this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" )
                         && isNotUnderDoorAt( "east" ) && isNotUnderDoorAt( "eastnorth" ) && isNotUnderDoorAt( "eastsouth" ) )
         {
-                mediator->pushCollision( "some segment of wall at east" );
+                mediator->addCollisionWith( "some segment of wall at east" );
         }
         else if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" )
                         && isNotUnderDoorAt( "west" ) && isNotUnderDoorAt( "westnorth" ) && isNotUnderDoorAt( "westsouth" ) )
         {
-                mediator->pushCollision( "some segment of wall at west" );
+                mediator->addCollisionWith( "some segment of wall at west" );
         }
 
-        collisionFound = ! mediator->isStackOfCollisionsEmpty ();
+        collisionFound = mediator->isThereAnyCollision ();
         if ( ! collisionFound )
         {
                 // now it is known that the character can go thru a door
@@ -251,7 +251,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                 {
                         if ( isCollidingWithLimitsOfRoom( doors[ i ] ) )
                         {
-                                mediator->pushCollision( doors[ i ] + " limit" );
+                                mediator->addCollisionWith( doors[ i ] + " limit" );
                                 break;
                         }
                 }
@@ -259,20 +259,20 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                 // collision with floor
                 if ( this->getZ() < 0 )
                 {
-                        mediator->pushCollision( "some tile of floor" );
+                        mediator->addCollisionWith( "some tile of floor" );
                 }
 
                 // collision with ceiling
                 if ( z >= 0 && this->getZ() > ( Room::MaxLayers - 1 ) * Room::LayerHeight + ( Room::LayerHeight >> 1 ) )
                 {
-                        mediator->pushCollision( "ceiling" );
+                        mediator->addCollisionWith( "ceiling" );
                 }
 
-                collisionFound = ! mediator->isStackOfCollisionsEmpty ();
+                collisionFound = mediator->isThereAnyCollision ();
                 if ( ! collisionFound )
                 {
                         // look for collision with the rest of items in room
-                        collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
+                        collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
                         if ( ! collisionFound )
                         {
                                 // reshade and remask

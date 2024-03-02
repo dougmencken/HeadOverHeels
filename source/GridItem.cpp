@@ -69,7 +69,7 @@ void GridItem::updateShadow ()
 
 bool GridItem::addToPosition( int x, int y, int z )
 {
-        mediator->clearStackOfCollisions() ;
+        mediator->clearCollisions() ;
 
         bool collisionFound = false;
 
@@ -87,13 +87,13 @@ bool GridItem::addToPosition( int x, int y, int z )
         // is there collision with floor
         if ( this->getZ() < 0 )
         {
-                mediator->pushCollision( "some tile of floor" );
+                mediator->addCollisionWith( "some tile of floor" );
                 collisionFound = true;
         }
         // or maybe with other items in room
         else
         {
-                collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
+                collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
                 if ( ! collisionFound )
                 {
                         // change only the offset on Y because it depends on the 3D Z coordinate

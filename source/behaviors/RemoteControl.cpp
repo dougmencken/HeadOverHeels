@@ -85,7 +85,7 @@ bool RemoteControl::update ()
                         if ( getNameOfBehavior() == "behavior of remote control" )
                         {
                                 // what to move by the remote control
-                                ItemPtr controlledItem = thisItem.getMediator()->findItemByBehavior( "behavior of remotely controlled one" );
+                                ItemPtr controlledItem = thisItem.getMediator()->findItemBehavingAs( "behavior of remotely controlled one" );
                                 if ( controlledItem != nilPointer )
                                 {
                                         Activity toRemotelyControlled = activities::Activity::Waiting ;

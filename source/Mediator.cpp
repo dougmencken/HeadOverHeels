@@ -21,8 +21,8 @@
 Mediator::Mediator( Room* room )
         : room( room )
         , threadRunning( false )
-        , needGridItemsSorting( false )
-        , needFreeItemsSorting( false )
+        , needToSortGridItems( false )
+        , needToSortFreeItems( false )
         , switchInRoomIsOn( false )
         , currentlyActiveCharacter( nilPointer )
 {
@@ -89,7 +89,7 @@ void Mediator::update()
                 room->removeGridItemByUniqueName( *i );
         }
 
-        if ( needGridItemsSorting )
+        if ( needToSortGridItems )
         {
                 for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
                 {
@@ -99,7 +99,7 @@ void Mediator::update()
                         }
                 }
 
-                needGridItemsSorting = false;
+                needToSortGridItems = false;
         }
 
         unlockGridItemsMutex ();
@@ -127,10 +127,10 @@ void Mediator::update()
                 room->removeFreeItemByUniqueName( *i );
         }
 
-        if ( needFreeItemsSorting )
+        if ( needToSortFreeItems )
         {
                 std::sort( room->freeItems.begin (), room->freeItems.end () );
-                needFreeItemsSorting = false;
+                needToSortFreeItems = false;
 
                 // remask items after sorting because overlaps may change
                 for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
@@ -782,7 +782,7 @@ ItemPtr Mediator::findItemOfKind( const std::string & kind )
         return ItemPtr() ;
 }
 
-ItemPtr Mediator::findItemByBehavior( const std::string & behavior )
+ItemPtr Mediator::findItemBehavingAs( const std::string & behavior )
 {
         // look for a free item
         for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
@@ -808,7 +808,7 @@ ItemPtr Mediator::findItemByBehavior( const std::string & behavior )
         return ItemPtr() ;
 }
 
-bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
+bool Mediator::collectCollisionsWith( const std::string & uniqueNameOfItem )
 {
         const ItemPtr item = findItemByUniqueName( uniqueNameOfItem ) ;
         if ( item == nilPointer ) return false ;
@@ -958,14 +958,14 @@ int Mediator::findHighestZ( const Item& item )
         return z;
 }
 
-void Mediator::pushCollision( const std::string& name )
+void Mediator::addCollisionWith( const std::string & what )
 {
 # if defined( DEBUG_COLLISIONS ) && DEBUG_COLLISIONS
-        std::cout << ")( pushing collision with \"" << name << "\"" << std::endl ;
+        std::cout << ")( pushing collision with \"" << what << "\"" << std::endl ;
 # endif
 
         lockCollisionsMutex ();
-        collisions.push_front( name );
+        collisions.push_front( what );
         unlockCollisionsMutex ();
 }
 

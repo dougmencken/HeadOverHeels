@@ -152,7 +152,7 @@ void FreeItem::requestMask()
 
 bool FreeItem::addToPosition( int x, int y, int z )
 {
-        mediator->clearStackOfCollisions( );
+        mediator->clearCollisions ();
 
         bool collisionFound = false;
 
@@ -170,32 +170,32 @@ bool FreeItem::addToPosition( int x, int y, int z )
         // look for collision with real wall, one which limits the room
         if ( getX() < mediator->getRoom()->getLimitAt( "north" ) )
         {
-                mediator->pushCollision( "some segment of wall at north" );
+                mediator->addCollisionWith( "some segment of wall at north" );
         }
         else if ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( "south" ) )
         {
-                mediator->pushCollision( "some segment of wall at south" );
+                mediator->addCollisionWith( "some segment of wall at south" );
         }
         if ( getY() >= mediator->getRoom()->getLimitAt( "west" ) )
         {
-                mediator->pushCollision( "some segment of wall at west" );
+                mediator->addCollisionWith( "some segment of wall at west" );
         }
         else if ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
-                mediator->pushCollision( "some segment of wall at east" );
+                mediator->addCollisionWith( "some segment of wall at east" );
         }
 
         // look for collision with floor
         if ( getZ() < 0 )
         {
-                mediator->pushCollision( "some tile of floor" );
+                mediator->addCollisionWith( "some tile of floor" );
         }
 
-        collisionFound = ! mediator->isStackOfCollisionsEmpty ();
+        collisionFound = mediator->isThereAnyCollision ();
         if ( ! collisionFound )
         {
                 // look for collision with other items in room
-                collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
+                collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
                 if ( ! collisionFound ) // is it okay to move
                 {
                         // reshade and remask

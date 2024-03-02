@@ -47,7 +47,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
 
                 // collect the collisions
                 std::vector< std::string > itemsBelow ;
-                while ( ! mediator->isStackOfCollisionsEmpty() )
+                while ( mediator->isThereAnyCollision() )
                 {
                         itemsBelow.push_back( mediator->popCollision() );
                 }
@@ -89,7 +89,7 @@ bool Falling::fall( behaviors::Behavior * behavior )
                                                         bool onlyMortal = true;
 
                                                         // look if some item underneath the character is not mortal
-                                                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                                                        while ( mediator->isThereAnyCollision() )
                                                                 if ( ! mediator->findCollisionPop()->isMortal() )
                                                                 {
                                                                         onlyMortal = false ;

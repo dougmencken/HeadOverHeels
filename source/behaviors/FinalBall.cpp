@@ -20,33 +20,33 @@ FinalBall::FinalBall( const ItemPtr & item, const std::string & behavior )
 
 bool FinalBall::update ()
 {
-        switch ( activity )
+        Item & thisBall = * getItem() ;
+
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        this->setCurrentActivity( activities::Activity::MovingNorth );
+                        setCurrentActivity( activities::Activity::MovingNorth );
                         break;
 
                 case activities::Activity::MovingNorth:
-                        if ( speedTimer->getValue() > this->item->getSpeed() )
+                        if ( speedTimer->getValue() > thisBall.getSpeed() )
                         {
                                 speedTimer->reset();
 
-                                item->animate();
+                                thisBall.animate() ;
 
                                 // look for collisions with items that are to the north
-                                this->item->canAdvanceTo( -1, 0, 0 );
+                                thisBall.canAdvanceTo( -1, 0, 0 );
 
-                                // move the ball when there’s no collision
-                                if ( this->item->getMediator()->isStackOfCollisionsEmpty() )
-                                {
+                                if ( ! thisBall.getMediator()->isThereAnyCollision() ) {
+                                        // move the ball
                                         activities::Moving::getInstance().move( this, &activity, false );
                                 }
-                                else
-                                {
-                                        item->setIgnoreCollisions( true );
+                                else {
+                                        thisBall.setIgnoreCollisions( true );
 
-                                        item->metamorphInto( "bubbles", "vanishing final ball" );
-                                        item->setBehaviorOf( "behavior of disappearance in time" );
+                                        thisBall.metamorphInto( "bubbles", "vanishing final ball" );
+                                        thisBall.setBehaviorOf( "behavior of disappearance in time" );
                                 }
                         }
                         break;

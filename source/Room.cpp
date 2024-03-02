@@ -638,7 +638,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         gridItem->setMediator( mediator );
 
-        mediator->clearStackOfCollisions ();
+        mediator->clearCollisions ();
 
         const std::string & kindOfItem = gridItem->getKind () ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
@@ -658,7 +658,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         if ( gridItem->getZ() != Room::FloorZ ) {
                 // when the position on Z is set, look for collisions there
-                mediator->lookForCollisionsOf( gridItem->getUniqueName() );
+                mediator->collectCollisionsWith( gridItem->getUniqueName() );
         } else
         {       // an item with z = FloorZ goes above the previously added ones in the column with the same x and y
                 // and its position on Z is calculated
@@ -667,7 +667,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                                         << "\" the calculated “Z above others” is " << gridItem->getZ() << std::endl ;
         }
 
-        if ( ! mediator->isStackOfCollisionsEmpty () )
+        if ( mediator->isThereAnyCollision () )
         {
                 // can’t add item when there’s some collision
                 std::cerr << "there’s collision with " << gridItem->whichItemClass() << std::endl ;
@@ -719,7 +719,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 
         freeItem->setMediator( mediator );
 
-        mediator->clearStackOfCollisions ();
+        mediator->clearCollisions ();
 
         const std::string & kindOfItem = freeItem->getKind () ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
@@ -736,7 +736,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         // for item which is placed at some height, look for collisions
         if ( freeItem->getZ() > Room::FloorZ )
         {
-                mediator->lookForCollisionsOf( freeItem->getUniqueName() );
+                mediator->collectCollisionsWith( freeItem->getUniqueName() );
         }
         // for item at the top of column
         else
@@ -745,7 +745,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         }
 
         // collision is found, so can’t add this item
-        if ( ! mediator->isStackOfCollisionsEmpty () )
+        if ( mediator->isThereAnyCollision () )
         {
                 std::cerr << "there’s collision with " << freeItem->whichItemClass() << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
@@ -830,7 +830,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
 
         character->setMediator( mediator );
 
-        mediator->clearStackOfCollisions ();
+        mediator->clearCollisions ();
 
         std::string kindOfItem = "character " + character->getOriginalKind() ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
@@ -850,12 +850,12 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         // for item which is placed at some height, look for collisions
         if ( character->getZ() > Room::FloorZ )
         {
-                mediator->lookForCollisionsOf( character->getUniqueName() );
-                while ( ! mediator->isStackOfCollisionsEmpty () )
+                mediator->collectCollisionsWith( character->getUniqueName() );
+                while ( mediator->isThereAnyCollision () )
                 {
                         character->setZ( character->getZ() + Room::LayerHeight );
-                        mediator->clearStackOfCollisions ();
-                        mediator->lookForCollisionsOf( character->getUniqueName() );
+                        mediator->clearCollisions ();
+                        mediator->collectCollisionsWith( character->getUniqueName() );
                 }
         }
         // for item at the top of column
@@ -865,7 +865,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         }
 
         // collision is found, so can’t add this item
-        if ( ! mediator->isStackOfCollisionsEmpty () )
+        if ( mediator->isThereAnyCollision () )
         {
                 std::cerr << "there’s collision with " << character->whichItemClass() << std::endl ;
                 dumpItemInsideThisRoom( *character );

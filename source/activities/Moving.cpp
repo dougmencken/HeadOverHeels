@@ -91,7 +91,7 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
                         // if can’t move up, raise the items above
                         if ( ! moved )
                         {
-                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                while ( mediator->isThereAnyCollision() )
                                 {
                                         ItemPtr aboveItem = mediator->findCollisionPop ();
 
@@ -119,7 +119,7 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
 
                         // collect the stack of such items
                         std::stack< std::string > itemsAbove ;
-                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                        while ( mediator->isThereAnyCollision() )
                         {
                                 itemsAbove.push( mediator->popCollision() );
                         }
@@ -190,7 +190,7 @@ void Moving::ascent( FreeItem & freeItem, int z )
                         {
                                 Mediator* mediator = freeItem.getMediator();
 
-                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                while ( mediator->isThereAnyCollision() )
                                 {
                                         std::string collision = mediator->popCollision ();
 
@@ -244,7 +244,7 @@ void Moving::descend( FreeItem & freeItem, int z )
 
                         // collect the stack of items above
                         std::stack< std::string > itemsAbove ;
-                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                        while ( mediator->isThereAnyCollision() )
                         {
                                 itemsAbove.push( mediator->popCollision() );
                         }
@@ -256,7 +256,7 @@ void Moving::descend( FreeItem & freeItem, int z )
                         }
 
                         // for each item above
-                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                        while ( mediator->isThereAnyCollision() )
                         {
                                 ItemPtr aboveItem = mediator->findItemByUniqueName( itemsAbove.top () );
                                 itemsAbove.pop ();

@@ -68,7 +68,7 @@ bool Driven::update ()
                         {
                                 if ( ! freeItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
-                                        while ( ! mediator->isStackOfCollisionsEmpty() && ! characterFound )
+                                        while ( mediator->isThereAnyCollision() && ! characterFound )
                                         {
                                                 ItemPtr item = mediator->findCollisionPop ();
 
