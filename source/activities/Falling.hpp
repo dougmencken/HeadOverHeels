@@ -32,7 +32,7 @@ public:
          * Item is falling
          * @return true if the item falls, or false when there’s a collision
          */
-        bool fall ( behaviors::Behavior * behavior ) ;
+        bool fall ( behaviors::Behavior & behavior ) ;
 
         static Falling & getInstance () ;
 

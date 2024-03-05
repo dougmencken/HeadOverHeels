@@ -63,6 +63,7 @@ public:
 
         /**
          * For an item with behavior, update that behavior programmatically
+         * @return true if the item can be updated thereafter (it didn’t disappear from the room)
          */
         virtual bool updateItem () ;
 

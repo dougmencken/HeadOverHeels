@@ -12,7 +12,7 @@
 namespace behaviors
 {
 
-Trampoline::Trampoline( const ItemPtr & item, const std::string & behavior )
+Trampoline::Trampoline( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , folded( false )
         , rebounding( false )
@@ -22,22 +22,18 @@ Trampoline::Trampoline( const ItemPtr & item, const std::string & behavior )
         , fallTimer( new Timer() )
         , reboundTimer( new Timer() )
 {
-        speedTimer->go();
-        fallTimer->go();
-        reboundTimer->go();
+        speedTimer->go() ;
+        fallTimer->go() ;
+        reboundTimer->go() ;
 }
 
-Trampoline::~Trampoline()
+bool Trampoline::update_returningdisappearance ()
 {
-}
-
-bool Trampoline::update ()
-{
-        FreeItem & springItem = dynamic_cast< FreeItem & >( * this->item );
+        FreeItem & springItem = dynamic_cast< FreeItem & >( getItem () );
 
         bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
                         // is there anything above
@@ -60,9 +56,8 @@ bool Trampoline::update ()
                                 }
                                 else
                                 {
-                                        // begin bouncing when item on top moves away
-                                        if ( this->folded )
-                                        {
+                                        // begin bouncing when an item above moves away
+                                        if ( this->folded ) {
                                                 this->rebounding = true ;
                                                 reboundTimer->reset();
                                         }
@@ -74,12 +69,12 @@ bool Trampoline::update ()
                                 }
                         }
 
-                        // look if it falls down
-                        if ( activities::Falling::getInstance().fall( this ) )
-                        {
+                        if ( activities::Falling::getInstance().fall( *this ) ) {
+                                // it falls down
                                 fallTimer->reset();
-                                activity = activities::Activity::Falling;
+                                setCurrentActivity( activities::Activity::Falling );
                         }
+
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -91,17 +86,14 @@ bool Trampoline::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                         // is it time to move
-                        if ( speedTimer->getValue() > springItem.getSpeed() )
-                        {
-                                // play the sound of displacing
+                        if ( speedTimer->getValue() > springItem.getSpeed() ) {
+                                // play the sound of pushing
                                 SoundManager::getInstance().play( springItem.getKind(), "push" );
 
-                                activities::Displacing::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( *this, true );
 
-                                if ( activity != activities::Activity::Falling )
-                                {
-                                        activity = activities::Activity::Waiting;
-                                }
+                                if ( getCurrentActivity() != activities::Activity::Falling )
+                                        setCurrentActivity( activities::Activity::Waiting );
 
                                 speedTimer->reset();
                         }
@@ -109,17 +101,16 @@ bool Trampoline::update ()
 
                 case activities::Activity::Falling:
                         if ( springItem.getZ() == 0 && ! springItem.getMediator()->getRoom()->hasFloor() ) {
-                                // disappear when reached bottom of a room without floor
+                                // disappear when reached the bottom of a room without floor
                                 present = false ;
                         }
                         // is it time to fall
                         else if ( fallTimer->getValue() > springItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) )
-                                {
-                                        // play the sound of falling
+                                if ( ! activities::Falling::getInstance().fall( *this ) ) {
+                                        // play the end of falling sound
                                         SoundManager::getInstance().play( springItem.getKind (), "fall" );
-                                        activity = activities::Activity::Waiting;
+                                        setCurrentActivity( activities::Activity::Waiting );
                                 }
 
                                 fallTimer->reset();

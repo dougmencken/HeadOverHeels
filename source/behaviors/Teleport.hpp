@@ -18,7 +18,7 @@ namespace behaviors
 {
 
 /**
- * Teleports item between rooms, activates when item is above it
+ * Teleports between rooms, activates when some item is above it
  */
 
 class Teleport : public Behavior
@@ -26,11 +26,11 @@ class Teleport : public Behavior
 
 public:
 
-        Teleport( const ItemPtr & item, const std::string & behavior ) ;
+        Teleport( Item & item, const std::string & behavior ) ;
 
-        virtual ~Teleport( ) ;
+        virtual ~Teleport( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 

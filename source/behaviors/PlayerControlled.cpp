@@ -18,7 +18,7 @@
 using behaviors::PlayerControlled ;
 
 
-PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & behavior )
+PlayerControlled::PlayerControlled( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , jumpPhase( -1 )
         , highJump( false )
@@ -28,7 +28,6 @@ PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & be
         , fallTimer( new Timer () )
         , glideTimer( new Timer () )
         , timerForBlinking( new Timer () )
-        , donutFromHooterInRoom( false )
         , isLosingLife( false )
 {
 
@@ -42,7 +41,7 @@ PlayerControlled::~PlayerControlled( )
 
 bool PlayerControlled::isInvulnerableToLethalItems () const
 {
-        return ( dynamic_cast< const ::AvatarItem & >( * getItem () ) ).hasShield ()
+        return ( dynamic_cast< const ::AvatarItem & >( getItem () ) ).hasShield ()
                         || GameManager::getInstance().isImmuneToCollisionsWithMortalItems () ;
 }
 
@@ -65,11 +64,11 @@ void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const
 
 void PlayerControlled::wait ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         character.wait ();
 
-        if ( activities::Falling::getInstance().fall( this ) )
+        if ( activities::Falling::getInstance().fall( * this ) )
         {
                 speedTimer->reset() ;
                 setCurrentActivity( activities::Activity::Falling );
@@ -83,7 +82,7 @@ void PlayerControlled::wait ()
 
 void PlayerControlled::move ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         if ( character.isFrozen() ) return ;
 
@@ -93,7 +92,7 @@ void PlayerControlled::move ()
         // is it time to move
         if ( speedTimer->getValue() > speed )
         {
-                bool moved = activities::Moving::getInstance().move( this, &activity, true );
+                bool moved = activities::Moving::getInstance().move( *this, true );
 
                 // decrement the quick steps
                 if ( character.getQuickSteps() > 0
@@ -115,7 +114,7 @@ void PlayerControlled::move ()
 
 void PlayerControlled::automove ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         // apply the effect of quick steps bonus bunny
         double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
@@ -124,7 +123,7 @@ void PlayerControlled::automove ()
         if ( speedTimer->getValue() > speed )
         {
                 // move it
-                activities::Moving::getInstance().move( this, &activity, true );
+                activities::Moving::getInstance().move( *this, true );
 
                 speedTimer->reset();
 
@@ -148,9 +147,9 @@ void PlayerControlled::automove ()
 
 void PlayerControlled::displace ()
 {
-        if ( speedTimer->getValue() > getItem()->getSpeed() )
+        if ( speedTimer->getValue() > getItem().getSpeed() )
         {
-                activities::Displacing::getInstance().displace( this, &activity, true );
+                activities::Displacing::getInstance().displace( *this, true );
                 // when the displacement couldn’t be performed due to a collision
                 // then the activity is propagated to the collided items
 
@@ -163,7 +162,7 @@ void PlayerControlled::displace ()
 void PlayerControlled::handleMoveKeyWhenDragged ()
 {
         const InputManager & input = InputManager::getInstance ();
-        ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( getItem () );
         Activity whatDoing = getCurrentActivity() ;
 
         if ( input.movenorthTyped() ) {
@@ -194,14 +193,14 @@ void PlayerControlled::handleMoveKeyWhenDragged ()
 
 void PlayerControlled::cancelDragging ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         if ( ! character.isFrozen() )
         {
                 if ( speedTimer->getValue() > character.getSpeed() )
                 {
                         // move it
-                        activities::Moving::getInstance().move( this, &activity, false );
+                        activities::Moving::getInstance().move( *this, false );
 
                         speedTimer->reset();
 
@@ -212,12 +211,12 @@ void PlayerControlled::cancelDragging ()
 
 void PlayerControlled::fall ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         // is it time to lower by one unit
         if ( fallTimer->getValue() > character.getWeight() )
         {
-                if ( activities::Falling::getInstance().fall( this ) ) {
+                if ( activities::Falling::getInstance().fall( *this ) ) {
                         // as long as there's no collision below
                         if ( character.canAdvanceTo( 0, 0, -1 ) )
                         {       // show images of falling character
@@ -236,7 +235,7 @@ void PlayerControlled::fall ()
 
 void PlayerControlled::toJumpOrTeleport ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         character.canAdvanceTo( 0, 0, -1 ); // is there a device underneath the character
         setCurrentActivity( character.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer
@@ -246,7 +245,7 @@ void PlayerControlled::toJumpOrTeleport ()
 
 void PlayerControlled::jump ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         if ( getCurrentActivity() == activities::Activity::Jumping )
         {
@@ -273,7 +272,7 @@ void PlayerControlled::jump ()
                 // is it time to jump
                 if ( speedTimer->getValue() > character.getSpeed() )
                 {
-                        activities::Jumping::getInstance().jump( this, &activity, this->jumpPhase, this->highJump ? this->highJumpVector : this->jumpVector );
+                        activities::Jumping::getInstance().jump( *this, this->jumpPhase, this->highJump ? this->highJumpVector : this->jumpVector );
 
                         // to the next phase of jump
                         ++ this->jumpPhase ;
@@ -298,11 +297,11 @@ void PlayerControlled::jump ()
 
 void PlayerControlled::glide ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         if ( glideTimer->getValue() > character.getWeight() /* character.getSpeed() / 2.0 */ )
         {
-                if ( ! activities::Falling::getInstance().fall( this ) &&
+                if ( ! activities::Falling::getInstance().fall( * this ) &&
                         ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() ) )
                 {
                         // not falling, back to waiting
@@ -314,31 +313,26 @@ void PlayerControlled::glide ()
 
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
+                Activity priorActivity = getCurrentActivity() ;
                 Activity glideActivity = activities::Activity::Waiting ;
 
-                switch ( Way( character.getHeading() ).getIntegerOfWay () )
-                {
-                        case Way::North:
-                                glideActivity = activities::Activity::MovingNorth;
-                                break;
+                const std::string & heading = character.getHeading ();
+                if ( heading == "north" )
+                        glideActivity = activities::Activity::MovingNorth ;
+                else
+                if ( heading == "south" )
+                        glideActivity = activities::Activity::MovingSouth ;
+                else
+                if ( heading == "east" )
+                        glideActivity = activities::Activity::MovingEast ;
+                else
+                if ( heading == "west" )
+                        glideActivity = activities::Activity::MovingWest ;
 
-                        case Way::South:
-                                glideActivity = activities::Activity::MovingSouth;
-                                break;
+                setCurrentActivity( glideActivity );
+                activities::Moving::getInstance().move( *this, false );
 
-                        case Way::East:
-                                glideActivity = activities::Activity::MovingEast;
-                                break;
-
-                        case Way::West:
-                                glideActivity = activities::Activity::MovingWest;
-                                break;
-
-                        default:
-                                ;
-                }
-
-                activities::Moving::getInstance().move( this, &glideActivity, false );
+                setCurrentActivity( priorActivity );
 
                 // may turn while gliding so update the frame of falling
                 character.changeFrame( fallFrames[ character.getHeading() ] );
@@ -354,7 +348,7 @@ void PlayerControlled::enterTeletransport ()
 {
         if ( getCurrentActivity() != activities::Activity::BeginTeletransportation ) return ;
 
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         // morph into bubbles
         if ( ! character.isMetamorphed () )
@@ -373,7 +367,7 @@ void PlayerControlled::exitTeletransport ()
 {
         if ( getCurrentActivity() != activities::Activity::EndTeletransportation ) return ;
 
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         // morph back from bubbles
         if ( ! character.isMetamorphed () ) {
@@ -393,7 +387,7 @@ void PlayerControlled::exitTeletransport ()
 
 void PlayerControlled::collideWithALethalItem ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         switch ( getCurrentActivity () )
         {
@@ -433,12 +427,13 @@ void PlayerControlled::collideWithALethalItem ()
 
 void PlayerControlled::useHooter ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
-        if ( character.hasTool( "horn" ) && character.getDonuts() > 0 && ! this->donutFromHooterInRoom )
+        // can only release one doughnut in the room at a time
+        bool isDonutInRoom = ( character.getMediator()->findItemBehavingAs( "behavior of freezing doughnut" ) != nilPointer );
+
+        if ( character.hasTool( "horn" ) && character.getDonuts() > 0 && ! isDonutInRoom )
         {
-                this->donutFromHooterInRoom = true ;
-
                 const DescriptionOfItem * whatIsDonut = ItemDescriptions::descriptions().getDescriptionByKind( "bubbles" );
                 if ( whatIsDonut != nilPointer )
                 {
@@ -453,9 +448,6 @@ void PlayerControlled::useHooter ()
                                 character.getHeading () ) );
 
                         donut->setBehaviorOf( "behavior of freezing doughnut" );
-
-                        Doughnut * behaviorOfDonut = dynamic_cast< Doughnut * >( donut->getBehavior().get () );
-                        behaviorOfDonut->setCharacter( AvatarItemPtr( &character ) );
 
                         // initially the doughnut shares the same position as the character, therefore ignore collisions
                         // COMMENT THIS AND THE GAME CRASHES WHAHA ///////////
@@ -472,7 +464,7 @@ void PlayerControlled::useHooter ()
 
 void PlayerControlled::takeItem ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         if ( character.hasTool( "handbag" ) )
         {
@@ -513,6 +505,7 @@ void PlayerControlled::takeItem ()
                                 character.placeItemInBag( takenItem->getKind (), takenItem->getBehavior()->getNameOfBehavior () );
 
                                 takenItem->getBehavior()->setCurrentActivity( activities::Activity::Vanishing );
+
                                 setCurrentActivity ( // update activity
                                         ( getCurrentActivity() == activities::Activity::TakeAndJump )
                                                 ? activities::Activity::Jumping
@@ -531,7 +524,7 @@ void PlayerControlled::takeItem ()
 
 void PlayerControlled::dropItem ()
 {
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( * getItem () );
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         if ( character.getDescriptionOfTakenItem() != nilPointer )
         {

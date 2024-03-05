@@ -19,7 +19,7 @@ namespace behaviors
 {
 
 /**
- * Moves item above it up and down
+ * Moves an item above it up and down
  */
 
 class Elevator : public Behavior
@@ -27,11 +27,11 @@ class Elevator : public Behavior
 
 public:
 
-        Elevator( const ItemPtr & item, const std::string & behavior ) ;
+        Elevator( Item & item, const std::string & behavior ) ;
 
-        virtual ~Elevator( ) ;
+        virtual ~Elevator( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
         int getTop () const {  return top ;  }
 
@@ -47,32 +47,31 @@ public:
 
 private:
 
-       /**
-        * Maximum height at which elevator ascends
-        */
+        /**
+         * the maximum height at which elevator ascends
+         */
         int top ;
 
-       /**
-        * Minimum height at which elevator descends
-        */
+        /**
+         * the minimum height at which elevator descends
+         */
         int bottom ;
 
-       /**
-        * Is first movement of elevator ascending if true or descending if false
-        */
+        /**
+         * is the first movement of elevator ascending if true or descending if false
+         */
         bool ascent ;
 
+        /**
+         * used to retain the previous activity
+         */
         Activity lastActivity ;
 
-       /**
-        * Timer for speed of movement
-        */
+        // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 
-       /**
-        * Timer for delays on change of direction
-        */
-        autouniqueptr < Timer > stopTimer ;
+        // timer for waiting at the highest and lowest points
+        autouniqueptr < Timer > waitingTimer ;
 
 };
 

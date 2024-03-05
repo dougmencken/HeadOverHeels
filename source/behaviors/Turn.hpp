@@ -28,19 +28,16 @@ class Turn : public Behavior
 
 public:
 
-        Turn( const ItemPtr & item, const std::string & behavior ) ;
+        Turn( Item & item, const std::string & behavior ) ;
 
-        virtual ~Turn( ) ;
+        virtual ~Turn( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 protected:
 
-        void begin () ;
+        void beginMoving () ;
 
-       /**
-        * When item turns around
-        */
         void turn () ;
 
 private:

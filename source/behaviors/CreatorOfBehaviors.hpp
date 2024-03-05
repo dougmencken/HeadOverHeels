@@ -29,7 +29,7 @@ private:
 
 public:
 
-        static autouniqueptr< Behavior > createBehaviorByName ( const ItemPtr & item, const std::string & behavior ) ;
+        static autouniqueptr< Behavior > createBehaviorByName ( Item & item, const std::string & behavior ) ;
 
 } ;
 

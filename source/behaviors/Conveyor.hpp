@@ -23,11 +23,11 @@ class Conveyor : public Behavior
 
 public:
 
-        Conveyor( const ItemPtr & item, const std::string & behavior ) ;
+        Conveyor( Item & item, const std::string & behavior ) ;
 
-        virtual ~Conveyor( ) ;
+        virtual ~Conveyor( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 

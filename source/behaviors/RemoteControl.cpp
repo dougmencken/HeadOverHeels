@@ -1,6 +1,7 @@
 
 #include "RemoteControl.hpp"
 
+#include "FreeItem.hpp"
 #include "Moving.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
@@ -12,7 +13,7 @@
 namespace behaviors
 {
 
-RemoteControl::RemoteControl( const ItemPtr & item, const std::string & behavior )
+RemoteControl::RemoteControl( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
@@ -20,14 +21,14 @@ RemoteControl::RemoteControl( const ItemPtr & item, const std::string & behavior
         // move the controlled one but not the controller
         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
         {
-                speedTimer->go();
-                fallTimer->go();
+                speedTimer->go ();
+                fallTimer->go ();
         }
 }
 
-bool RemoteControl::update ()
+bool RemoteControl::update_returningdisappearance ()
 {
-        FreeItem & thisItem = dynamic_cast< FreeItem & >( * getItem() );
+        FreeItem & thisItem = dynamic_cast< FreeItem & >( getItem() );
 
         bool present = true ;
 
@@ -44,7 +45,7 @@ bool RemoteControl::update ()
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )
                                 {
-                                        activities::Moving::getInstance().move( this, &activity, true );
+                                        activities::Moving::getInstance().move( *this, true );
 
                                         if ( getCurrentActivity() != activities::Activity::Falling )
                                                 setCurrentActivity( activities::Activity::Waiting );
@@ -68,10 +69,10 @@ bool RemoteControl::update ()
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )
                                 {
-                                        if ( this->affectedBy != nilPointer )
+                                        if ( getWhatAffectedThisBehavior() != nilPointer )
                                                 SoundManager::getInstance().play( thisItem.getKind(), "push" );
 
-                                        activities::Displacing::getInstance().displace( this, &activity, true );
+                                        activities::Displacing::getInstance().displace( *this, true );
 
                                         if ( getCurrentActivity() != activities::Activity::Falling )
                                                 setCurrentActivity( activities::Activity::Waiting );
@@ -132,7 +133,7 @@ bool RemoteControl::update ()
                         // is it time to fall for the controlled item
                         else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > thisItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) ) {
+                                if ( ! activities::Falling::getInstance().fall( * this ) ) {
                                         // emit the sound for the end of falling down
                                         SoundManager::getInstance().play( thisItem.getKind (), "fall" );
 

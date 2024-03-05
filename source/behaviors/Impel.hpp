@@ -19,7 +19,7 @@ namespace behaviors
 {
 
 /**
- * Move item in one direction as result of displacement of another item. Stop when something is hit
+ * Moves an item in one direction when pushed by another item. Stops when it hits something
  */
 
 class Impel : public Behavior
@@ -27,22 +27,18 @@ class Impel : public Behavior
 
 public:
 
-        Impel( const ItemPtr & item, const std::string & behavior ) ;
+        Impel( Item & item, const std::string & behavior ) ;
 
-        virtual ~Impel( ) ;
+        virtual ~Impel( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
-       /**
-        * Timer for speed of movement
-        */
+        // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 
-       /**
-        * Timer for speed of falling
-        */
+        // timer for the speed of falling
         autouniqueptr < Timer > fallTimer ;
 
 };

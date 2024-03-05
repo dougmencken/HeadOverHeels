@@ -23,11 +23,11 @@ class Trampoline : public Behavior
 
 public:
 
-        Trampoline( const ItemPtr & item, const std::string & behavior ) ;
+        Trampoline( Item & item, const std::string & behavior ) ;
 
-        virtual ~Trampoline( ) ;
+        virtual ~Trampoline( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
@@ -37,10 +37,10 @@ private:
         // does the spring bounce
         bool rebounding ;
 
-        // frame for undeformed spring stool, usually 0th
+        // frame for an undeformed spring stool, usually 0th
         int unstrainedFrame ;
 
-        // frame for folded spring stool, usually 1st
+        // frame for a folded spring stool, usually 1st
         int foldedFrame ;
 
         // timer for the motion speed

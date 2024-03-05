@@ -27,11 +27,11 @@ class Mobile : public Behavior
 
 public:
 
-        Mobile( const ItemPtr & item, const std::string & behavior ) ;
+        Mobile( Item & item, const std::string & behavior ) ;
 
-        virtual ~Mobile( ) ;
+        virtual ~Mobile( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 

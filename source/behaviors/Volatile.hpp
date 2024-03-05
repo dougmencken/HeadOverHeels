@@ -28,11 +28,11 @@ class Volatile : public Behavior
 
 public:
 
-        Volatile( const ItemPtr & item, const std::string & behavior ) ;
+        Volatile( Item & item, const std::string & behavior ) ;
 
-        virtual ~Volatile( ) ;
+        virtual ~Volatile( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
@@ -41,9 +41,6 @@ private:
          */
         bool solid ;
 
-        /**
-         * Timer for disappearance
-         */
         autouniqueptr < Timer > disappearanceTimer ;
 
 };

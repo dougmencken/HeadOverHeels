@@ -31,7 +31,7 @@
 namespace behaviors
 {
 
-autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( const ItemPtr & item, const std::string & behavior )
+autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( Item & item, const std::string & behavior )
 {
         Behavior * behaviorToReturn = nilPointer ;
 

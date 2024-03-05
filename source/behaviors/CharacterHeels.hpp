@@ -22,11 +22,11 @@ class CharacterHeels : public PlayerControlled
 
 public:
 
-        CharacterHeels( const ItemPtr & item, const std::string & behavior ) ;
+        CharacterHeels( Item & item, const std::string & behavior ) ;
 
         virtual ~CharacterHeels( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
         virtual void behave () ;
 

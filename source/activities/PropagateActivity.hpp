@@ -24,12 +24,18 @@ class PropagateActivity
 public:
 
         /**
-         * Change activity of items that collide with the sender
+         * Spread activity to every item collided with the sender
+         */
+        static void spreadEasily( const Item & sender, const Activity & activity ) ;
+
+        /**
+         * The comprehensive version of
+         * Spread activity to items that collide with the sender
          */
         static void toAdjacentItems ( Item & sender, const Activity & activity ) ;
 
         /**
-         * Change activity of items above the sender
+         * Spread activity to items above the sender
          */
         static void toItemsAbove ( Item & sender, const Activity & activity ) ;
 

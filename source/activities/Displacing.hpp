@@ -30,11 +30,10 @@ public:
         /**
          * Item is being displaced
          * @param behavior the behavior of item
-         * @param activity subactivity to get way of movement
          * @param canFall whether an item falls, false if it flies
          * @return true for displacing or changing activity, false for a collision
          */
-        bool displace ( behaviors::Behavior * behavior, Activity * activity, bool canFall ) ;
+        bool displace ( behaviors::Behavior & behavior, bool canFall ) ;
 
 private:
 

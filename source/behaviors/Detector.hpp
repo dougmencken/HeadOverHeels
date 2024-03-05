@@ -19,7 +19,7 @@ namespace behaviors
 {
 
 /**
- * Detect the active character and move to hunt it
+ * Detects the active character and moves to hunt it
  */
 
 class Detector : public Behavior
@@ -27,22 +27,16 @@ class Detector : public Behavior
 
 public:
 
-        Detector( const ItemPtr & item, const std::string & behavior ) ;
+        Detector( Item & item, const std::string & behavior ) ;
 
-        virtual ~Detector( ) ;
+        virtual ~Detector( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
-       /**
-        * Timer for the movement speed
-        */
         autouniqueptr < Timer > speedTimer ;
 
-       /**
-        * Timer for the speed of falling
-        */
         autouniqueptr < Timer > fallTimer ;
 
 };

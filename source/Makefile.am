@@ -131,7 +131,6 @@ headoverheels_SOURCES = main.cpp \
 			activities/Jumping.hpp \
 			activities/Moving.cpp \
 			activities/Moving.hpp \
-			behaviors/Behavior.cpp \
 			behaviors/Behavior.hpp \
 			behaviors/CreatorOfBehaviors.cpp \
 			behaviors/CreatorOfBehaviors.hpp \

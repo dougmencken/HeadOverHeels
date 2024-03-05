@@ -27,31 +27,31 @@ class Hunter : public Behavior
 
 public:
 
-        Hunter( const ItemPtr & item, const std::string & behavior ) ;
+        Hunter( Item & item, const std::string & behavior ) ;
 
-        virtual ~Hunter( ) ;
+        virtual ~Hunter( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
         /**
          * Changes the direction in which the item moves to hunt the active character,
-         * calls updateDirection4 or updateDirection8 depending on the hunter's behavior
+         * calls updateDirection4 or updateDirection8 depending on the hunter’s behavior
          */
-        Activity updateDirection ( const Activity & activity ) ;
+        void updateDirection () ;
 
         /**
          * Changes the direction in which the item moves to hunt the active character,
-         * the updated direction may be north, south, east, and west
+         * the new direction may be north, south, east, and west
          */
-        Activity updateDirection4 ( const Activity & activity ) ;
+        void updateDirection4 () ;
 
         /**
          * Changes the direction in which the item moves to hunt the active character,
-         * the updated direction may be any of the eight possible ones
+         * the new direction may be any of the eight possible ones
          */
-        Activity updateDirection8 ( const Activity & activity ) ;
+        void updateDirection8 () ;
 
         /**
          * Morph the hidden imperial guard into the full-bodied hunter
@@ -61,9 +61,7 @@ private:
 
 private:
 
-       /**
-        * Timer for item’s speed of movement
-        */
+        // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 
 };

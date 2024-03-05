@@ -11,16 +11,16 @@
 namespace behaviors
 {
 
-FinalBall::FinalBall( const ItemPtr & item, const std::string & behavior )
+FinalBall::FinalBall( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
 {
         speedTimer->go();
 }
 
-bool FinalBall::update ()
+bool FinalBall::update_returningdisappearance ()
 {
-        Item & thisBall = * getItem() ;
+        Item & thisBall = getItem() ;
 
         switch ( getCurrentActivity () )
         {
@@ -40,7 +40,7 @@ bool FinalBall::update ()
 
                                 if ( ! thisBall.getMediator()->isThereAnyCollision() ) {
                                         // move the ball
-                                        activities::Moving::getInstance().move( this, &activity, false );
+                                        activities::Moving::getInstance().move( *this, false );
                                 }
                                 else {
                                         thisBall.setIgnoreCollisions( true );

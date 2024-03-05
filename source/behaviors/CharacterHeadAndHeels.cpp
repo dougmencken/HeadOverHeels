@@ -11,7 +11,7 @@
 namespace behaviors
 {
 
-CharacterHeadAndHeels::CharacterHeadAndHeels( const ItemPtr & item, const std::string & behavior )
+CharacterHeadAndHeels::CharacterHeadAndHeels( Item & item, const std::string & behavior )
         : PlayerControlled( item, behavior )
 {
         // salto
@@ -49,9 +49,9 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( const ItemPtr & item, const std::s
         timerForBlinking->go();
 }
 
-bool CharacterHeadAndHeels::update ()
+bool CharacterHeadAndHeels::update_returningdisappearance ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
         if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
 
@@ -149,7 +149,7 @@ bool CharacterHeadAndHeels::update ()
 
 void CharacterHeadAndHeels::behave ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
         Activity whatDoing = getCurrentActivity() ;
 
@@ -172,11 +172,15 @@ void CharacterHeadAndHeels::behave ()
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeAndJump
+                                                : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -192,7 +196,7 @@ void CharacterHeadAndHeels::behave ()
                         setCurrentActivity( activities::Activity::MovingWest );
                 }
         }
-        // when already moving
+        // already moving
         else if ( whatDoing == activities::Activity::MovingNorth || whatDoing == activities::Activity::MovingSouth
                         || whatDoing == activities::Activity::MovingEast || whatDoing == activities::Activity::MovingWest )
         {
@@ -204,11 +208,15 @@ void CharacterHeadAndHeels::behave ()
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeAndJump
+                                                : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -224,7 +232,8 @@ void CharacterHeadAndHeels::behave ()
                         setCurrentActivity( activities::Activity::MovingWest );
                 }
                 else if ( ! input.anyMoveTyped() ) {
-                        SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( activity ) );
+                        // not moving is waiting
+                        SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
                         setCurrentActivity( activities::Activity::Waiting );
                 }
         }
@@ -240,11 +249,15 @@ void CharacterHeadAndHeels::behave ()
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeAndJump
+                                                : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -298,7 +311,9 @@ void CharacterHeadAndHeels::behave ()
                 }
                 // pick or drop an item when falling
                 else if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 // entonces Head y Heels planean
@@ -315,9 +330,11 @@ void CharacterHeadAndHeels::behave ()
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
-                // pick or drop an item when gliding
                 else if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        // pick or drop an item when gliding
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -357,7 +374,7 @@ void CharacterHeadAndHeels::blink ()
 
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {
-                AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem () );
+                AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
                 avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
         // eyes open

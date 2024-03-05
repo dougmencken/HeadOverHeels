@@ -31,8 +31,17 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
 {
 }
 
+void AvatarItem::setWayOfEntry ( const std::string & way )
+{
+        std::cout << "setting the way of entry = \"" << way << "\" for " << getUniqueName() << std::endl ;
+
+        this->wayOfEntry = way ;
+}
+
 void AvatarItem::setWayOfExit ( const std::string & way )
 {
+        std::cout << "setting the way of exit = \"" << way << "\" for " << getUniqueName() << std::endl ;
+
         this->wayOfExit = way ;
 
         switch ( Way( way ).getIntegerOfWay () )
@@ -366,10 +375,10 @@ bool AvatarItem::isCollidingWithLimitsOfRoom( const std::string & onWhichWay )
         return result;
 }
 
-void AvatarItem::behave ()
+void AvatarItem::behaveCharacter ()
 {
         if ( getBehavior() != nilPointer )
-                dynamic_cast< behaviors::PlayerControlled * >( getBehavior ().get() )->behave ();
+                dynamic_cast< behaviors::PlayerControlled & >( * getBehavior() ).behave ();
 }
 
 void AvatarItem::wait ()

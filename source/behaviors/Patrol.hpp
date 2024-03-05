@@ -31,11 +31,11 @@ class Patrol : public Behavior
 
 public:
 
-        Patrol( const ItemPtr & item, const std::string & behavior ) ;
+        Patrol( Item & item, const std::string & behavior ) ;
 
-        virtual ~Patrol( ) ;
+        virtual ~Patrol( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 

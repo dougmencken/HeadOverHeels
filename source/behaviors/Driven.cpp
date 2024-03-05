@@ -1,9 +1,7 @@
 
 #include "Driven.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
-#include "AvatarItem.hpp"
 #include "Moving.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
@@ -15,31 +13,27 @@
 namespace behaviors
 {
 
-Driven::Driven( const ItemPtr & item, const std::string& behavior )
+Driven::Driven( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , moving( false )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        speedTimer->go();
-        fallTimer->go();
+        speedTimer->go() ;
+        fallTimer->go() ;
 }
 
-Driven::~Driven( )
+bool Driven::update_returningdisappearance ()
 {
-}
+        FreeItem & freeItem = dynamic_cast< FreeItem & >( getItem () );
+        Mediator * mediator = freeItem.getMediator() ;
 
-bool Driven::update ()
-{
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        Mediator* mediator = freeItem.getMediator();
-        bool isGone = false;
-        bool characterFound = false;
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
-                        if ( moving )
+                        if ( this->moving )
                         {
                                 switch ( Way( freeItem.getHeading() ).getIntegerOfWay() )
                                 {
@@ -63,19 +57,20 @@ bool Driven::update ()
                                                 ;
                                 }
                         }
-                        // when stopped, see if there is a character on it and use its orientation to begin moving
-                        else
+                        else // when stopped, see if there is a character on it and use its orientation to begin moving
                         {
                                 if ( ! freeItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
-                                        while ( mediator->isThereAnyCollision() && ! characterFound )
+                                        bool foundCharacter = false ;
+
+                                        while ( mediator->isThereAnyCollision() && ! foundCharacter )
                                         {
                                                 ItemPtr item = mediator->findCollisionPop ();
 
                                                 if ( item->whichItemClass() == "avatar item" )
                                                 {
-                                                        characterFound = true ;
-                                                        moving = true ;
+                                                        foundCharacter = true ;
+                                                        this->moving = true ;
 
                                                         switch ( Way( item->getHeading() ).getIntegerOfWay () )
                                                         {
@@ -108,15 +103,14 @@ bool Driven::update ()
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        // item is active and it is time to move
-                        if ( ! freeItem.isFrozen() )
-                        {
+                        // not frozen and it’s time to move
+                        if ( ! freeItem.isFrozen() ) {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
-                                        if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
-                                        {
-                                                moving = false;
-                                                activity = activities::Activity::Waiting;
+                                        if ( ! activities::Moving::getInstance().move( *this, true ) ) {
+                                                // when can’t move
+                                                this->moving = false ;
+                                                setCurrentActivity( activities::Activity::Waiting );
 
                                                 SoundManager::getInstance().play( freeItem.getKind(), "collision" );
                                         }
@@ -124,7 +118,7 @@ bool Driven::update ()
                                         speedTimer->reset();
                                 }
 
-                                freeItem.animate();
+                                freeItem.animate() ;
                         }
                         break;
 
@@ -136,38 +130,30 @@ bool Driven::update ()
                 case activities::Activity::PushedNorthwest:
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
-                        // is it time to move
-                        if ( speedTimer->getValue() > freeItem.getSpeed() )
+                        if ( speedTimer->getValue() > freeItem.getSpeed() ) // is it time to move
                         {
-                                if ( ! activities::Displacing::getInstance().displace( this, &activity, true ) )
-                                {
-                                        activity = activities::Activity::Waiting;
-                                }
+                                if ( ! activities::Displacing::getInstance().displace( *this, true ) )
+                                        setCurrentActivity( activities::Activity::Waiting );
 
                                 speedTimer->reset();
                         }
 
-                        // inactive item continues to be inactive
+                        // frozen item continues to be frozen
                         if ( freeItem.isFrozen() )
-                        {
-                                activity = activities::Activity::Freeze;
-                        }
+                                setCurrentActivity( activities::Activity::Freeze );
+
                         break;
 
                 case activities::Activity::Falling:
-                        // look for reaching floor in a room without floor
-                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
-                        {
-                                // item disappears
-                                isGone = true;
+                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() ) {
+                                // disappear when reached the bottom of a room without floor
+                                present = false ;
                         }
                         // is it time to fall
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) )
-                                {
-                                        activity = activities::Activity::Waiting;
-                                }
+                                if ( ! activities::Falling::getInstance().fall( *this ) )
+                                        setCurrentActivity( activities::Activity::Waiting );
 
                                 fallTimer->reset();
                         }
@@ -179,14 +165,14 @@ bool Driven::update ()
 
                 case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = activities::Activity::Waiting;
+                        setCurrentActivity( activities::Activity::Waiting );
                         break;
 
                 default:
                         ;
         }
 
-        return isGone;
+        return ! present ;
 }
 
 }

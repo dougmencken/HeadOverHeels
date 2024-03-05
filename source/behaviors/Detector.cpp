@@ -1,7 +1,6 @@
 
 #include "Detector.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
 #include "Moving.hpp"
@@ -15,7 +14,7 @@
 namespace behaviors
 {
 
-Detector::Detector( const ItemPtr & item, const std::string & behavior )
+Detector::Detector( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
@@ -24,136 +23,113 @@ Detector::Detector( const ItemPtr & item, const std::string & behavior )
         fallTimer->go();
 }
 
-Detector::~Detector( )
+bool Detector::update_returningdisappearance ()
 {
-}
+        FreeItem & detectorItem = dynamic_cast< FreeItem & >( getItem () );
+        AvatarItemPtr activeCharacter = detectorItem.getMediator()->getActiveCharacter();
 
-bool Detector::update ()
-{
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        AvatarItemPtr activeCharacter = freeItem.getMediator()->getActiveCharacter();
-        bool isGone = false;
+        if ( activeCharacter == nilPointer ) return false ;
 
-        if ( activeCharacter != nilPointer )
+        bool present = true ;
+
+        switch ( getCurrentActivity() )
         {
-                switch ( activity )
-                {
-                        case activities::Activity::Waiting:
-                                // the character meets the detector on the X way
-                                if ( freeItem.getX() >= activeCharacter->getX() - 1 && freeItem.getX() <= activeCharacter->getX() + 1 )
-                                {
-                                        if ( activeCharacter->getY() <= freeItem.getY() )
-                                        {
-                                                setCurrentActivity( activities::Activity::MovingEast );
-                                        }
-                                        else if ( activeCharacter->getY() >= freeItem.getY() )
-                                        {
-                                                setCurrentActivity( activities::Activity::MovingWest );
-                                        }
-                                }
-                                // the character meets the detector on the Y way
-                                else if ( freeItem.getY() >= activeCharacter->getY() - 1 && freeItem.getY() <= activeCharacter->getY() + 1 )
-                                {
-                                        if ( activeCharacter->getX() <= freeItem.getX() )
-                                        {
-                                                setCurrentActivity( activities::Activity::MovingNorth );
-                                        }
-                                        else
-                                        if ( activeCharacter->getX() >= freeItem.getX() )
-                                        {
-                                                setCurrentActivity( activities::Activity::MovingSouth );
-                                        }
-                                }
+                case activities::Activity::Waiting:
+                        // meet the character on the X way
+                        if ( detectorItem.getX() >= activeCharacter->getX() - 1 && detectorItem.getX() <= activeCharacter->getX() + 1 )
+                        {
+                                if ( activeCharacter->getY() <= detectorItem.getY() )
+                                        setCurrentActivity( activities::Activity::MovingEast );
+                                else
+                                if ( activeCharacter->getY() >= detectorItem.getY() )
+                                        setCurrentActivity( activities::Activity::MovingWest );
+                        }
+                        // meet the character on the Y way
+                        else if ( detectorItem.getY() >= activeCharacter->getY() - 1 && detectorItem.getY() <= activeCharacter->getY() + 1 )
+                        {
+                                if ( activeCharacter->getX() <= detectorItem.getX() )
+                                        setCurrentActivity( activities::Activity::MovingNorth );
+                                else
+                                if ( activeCharacter->getX() >= detectorItem.getX() )
+                                        setCurrentActivity( activities::Activity::MovingSouth );
+                        }
 
-                                // if it changed activity, play the sound
-                                if ( activity != activities::Activity::Waiting )
+                        // play the sound if moving
+                        if ( getCurrentActivity() != activities::Activity::Waiting )
+                                SoundManager::getInstance().play( detectorItem.getKind(), "move" );
+
+                        break;
+
+                case activities::Activity::MovingNorth:
+                case activities::Activity::MovingSouth:
+                case activities::Activity::MovingEast:
+                case activities::Activity::MovingWest:
+                        if ( ! detectorItem.isFrozen() )
+                        {
+                                if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() )
                                 {
-                                        SoundManager::getInstance().play( freeItem.getKind(), "move" );
-                                }
-                                break;
-
-                        case activities::Activity::MovingNorth:
-                        case activities::Activity::MovingSouth:
-                        case activities::Activity::MovingEast:
-                        case activities::Activity::MovingWest:
-                                // is item active
-                                if ( ! freeItem.isFrozen() )
-                                {
-                                        // is it time to move
-                                        if ( speedTimer->getValue() > freeItem.getSpeed() )
-                                        {
-                                                // move item, if there’s collision let’s wait
-                                                if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
-                                                {
-                                                        activity = activities::Activity::Waiting;
-                                                }
-
-                                                speedTimer->reset();
-                                        }
-
-                                        freeItem.animate();
-                                }
-                                break;
-
-                        case activities::Activity::PushedNorth:
-                        case activities::Activity::PushedSouth:
-                        case activities::Activity::PushedEast:
-                        case activities::Activity::PushedWest:
-                        case activities::Activity::PushedNortheast:
-                        case activities::Activity::PushedNorthwest:
-                        case activities::Activity::PushedSoutheast:
-                        case activities::Activity::PushedSouthwest:
-                                // is it time to move
-                                if ( speedTimer->getValue() > freeItem.getSpeed() )
-                                {
-                                        if ( ! activities::Displacing::getInstance().displace( this, &activity, true ) )
-                                        {
-                                                activity = activities::Activity::Waiting;
-                                        }
+                                        if ( ! activities::Moving::getInstance().move( *this, true ) )
+                                                // to waiting when can’t move
+                                                setCurrentActivity( activities::Activity::Waiting );
 
                                         speedTimer->reset();
                                 }
 
-                                // preserve inactivity for inactive item
-                                if ( freeItem.isFrozen() )
-                                {
-                                        activity = activities::Activity::Freeze;
-                                }
-                                break;
+                                detectorItem.animate() ;
+                        }
+                        break;
 
-                        case activities::Activity::Falling:
-                                // look for reaching floor in a room without floor
-                                if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
-                                {
-                                        isGone = true;
-                                }
-                                // is it time to fall
-                                else if ( fallTimer->getValue() > freeItem.getWeight() )
-                                {
-                                        if ( ! activities::Falling::getInstance().fall( this ) )
-                                        {
-                                                activity = activities::Activity::Waiting;
-                                        }
+                case activities::Activity::PushedNorth:
+                case activities::Activity::PushedSouth:
+                case activities::Activity::PushedEast:
+                case activities::Activity::PushedWest:
+                case activities::Activity::PushedNortheast:
+                case activities::Activity::PushedNorthwest:
+                case activities::Activity::PushedSoutheast:
+                case activities::Activity::PushedSouthwest:
+                        if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() )
+                        {
+                                if ( ! activities::Displacing::getInstance().displace( *this, true ) )
+                                        setCurrentActivity( activities::Activity::Waiting );
 
-                                        fallTimer->reset();
-                                }
-                                break;
+                                speedTimer->reset();
+                        }
 
-                        case activities::Activity::Freeze:
-                                freeItem.setFrozen( true );
-                                break;
+                        // retain a frozen item’s inactivity
+                        if ( detectorItem.isFrozen() )
+                                setCurrentActivity( activities::Activity::Freeze );
 
-                        case activities::Activity::WakeUp:
-                                freeItem.setFrozen( false );
-                                activity = activities::Activity::Waiting;
-                                break;
+                        break;
 
-                        default:
-                                ;
-                }
+                case activities::Activity::Falling:
+                        if ( detectorItem.getZ() == 0 && ! detectorItem.getMediator()->getRoom()->hasFloor() ) {
+                                // disappear when at the bottom of a room without floor
+                                present = false ;
+                        }
+                        // is it time to fall
+                        else if ( fallTimer->getValue() > detectorItem.getWeight() )
+                        {
+                                if ( ! activities::Falling::getInstance().fall( * this ) )
+                                        setCurrentActivity( activities::Activity::Waiting );
+
+                                fallTimer->reset();
+                        }
+                        break;
+
+                case activities::Activity::Freeze:
+                        detectorItem.setFrozen( true );
+                        break;
+
+                case activities::Activity::WakeUp:
+                        detectorItem.setFrozen( false );
+                        setCurrentActivity( activities::Activity::Waiting );
+                        break;
+
+                default:
+                        ;
         }
 
-        return isGone;
+        return ! present ;
 }
 
 }

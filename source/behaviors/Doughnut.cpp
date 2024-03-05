@@ -1,109 +1,104 @@
 
 #include "Doughnut.hpp"
 
-#include "Mediator.hpp"
 #include "FreeItem.hpp"
+#include "AvatarItem.hpp"
+#include "Mediator.hpp"
 #include "PlayerControlled.hpp"
 #include "Moving.hpp"
+#include "PropagateActivity.hpp"
 
 
 namespace behaviors
 {
 
-Doughnut::Doughnut( const ItemPtr & item, const std::string & behavior )
+Doughnut::Doughnut( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , character( nilPointer )
         , speedTimer( new Timer() )
 {
         speedTimer->go();
 }
 
-Doughnut::~Doughnut( )
+bool Doughnut::update_returningdisappearance ()
 {
-}
+        FreeItem & donutItem = dynamic_cast< FreeItem & >( getItem () );
 
-bool Doughnut::update ()
-{
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        bool vanish = false;
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
-                        switch ( Way( item->getHeading() ).getIntegerOfWay () )
-                        {
-                                case Way::North:
-                                        activity = activities::Activity::MovingNorth;
-                                        break;
+                {
+                        const std::string & heading = donutItem.getHeading() ;
 
-                                case Way::South:
-                                        activity = activities::Activity::MovingSouth;
-                                        break;
-
-                                case Way::East:
-                                        activity = activities::Activity::MovingEast;
-                                        break;
-
-                                case Way::West:
-                                        activity = activities::Activity::MovingWest;
-                                        break;
-
-                                default:
-                                        ;
-                        }
-
+                             if ( heading == "north" ) setCurrentActivity( activities::Activity::MovingNorth );
+                        else if ( heading == "south" ) setCurrentActivity( activities::Activity::MovingSouth );
+                        else if ( heading == "east"  ) setCurrentActivity( activities::Activity::MovingEast );
+                        else if ( heading == "west"  ) setCurrentActivity( activities::Activity::MovingWest );
+                }
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        if ( speedTimer->getValue() > freeItem.getSpeed() )
+                        if ( speedTimer->getValue() > donutItem.getSpeed() )
                         {
                                 // look for collisions with other items
-                                freeItem.setIgnoreCollisions( false );
+                                donutItem.setIgnoreCollisions( false );
 
-                                if ( activity == activities::Activity::MovingNorth ) {
-                                        // -1, 0, 0 for collisions at north
-                                        freeItem.canAdvanceTo( -1, 0, 0 );
-                                } else if ( activity == activities::Activity::MovingSouth ) {
-                                        // 1, 0, 0 for collisions at south
-                                        freeItem.canAdvanceTo( 1, 0, 0 );
-                                } else if ( activity == activities::Activity::MovingEast ) {
-                                        // 0, -1, 0 for collisions at east
-                                        freeItem.canAdvanceTo( 0, -1, 0 );
-                                } else if ( activity == activities::Activity::MovingWest ) {
-                                        // 0, 1, 0 for collisions at west
-                                        freeItem.canAdvanceTo( 0, 1, 0 );
+                                Activity busyness = getCurrentActivity() ;
+
+                                if ( busyness == activities::Activity::MovingNorth ) {
+                                        // for collisions on north
+                                        donutItem.canAdvanceTo( -1, 0, 0 );
+                                }
+                                else if ( busyness == activities::Activity::MovingSouth ) {
+                                        // for collisions on south
+                                        donutItem.canAdvanceTo( 1, 0, 0 );
+                                }
+                                else if ( busyness == activities::Activity::MovingEast ) {
+                                        // for collisions on east
+                                        donutItem.canAdvanceTo( 0, -1, 0 );
+                                }
+                                else if ( busyness == activities::Activity::MovingWest ) {
+                                        // for collisions on west
+                                        donutItem.canAdvanceTo( 0, 1, 0 );
                                 }
 
-                                Mediator* mediator = freeItem.getMediator() ;
-                                bool collisionWithCharacter = ( mediator->collisionWithSomeKindOf( this->character->getOriginalKind() ) != nilPointer ) ;
+                                Mediator* mediator = donutItem.getMediator() ;
 
-                                // if no collisions or a collision with the character
-                                if ( ! mediator->isThereAnyCollision() || collisionWithCharacter )
-                                {
-                                        freeItem.setIgnoreCollisions( true );
-
-                                        // move a doughnut
-                                        activities::Moving::getInstance().move( this, &activity, false );
-                                }
-                                else
-                                {
-                                        // freeze “ bad boy ” on a collision with it
-                                        if ( mediator->collisionWithBadBoy() != nilPointer )
-                                        {
-                                                propagateActivity( *this->item, activities::Activity::Freeze );
+                                // is there initial collision with the character who released the doughnut
+                                bool initialCollision = false ;
+                                const std::vector< AvatarItemPtr > & charactersInRoom = mediator->getRoom()->getCharactersYetInRoom() ;
+                                for ( unsigned int c = 0 ; c < charactersInRoom.size() ; ++ c )
+                                        if ( mediator->collisionWithSomeKindOf( charactersInRoom[ c ]->getOriginalKind() ) != nilPointer
+                                                        && charactersInRoom[ c ]->hasTool( "horn" ) ) {
+                                                initialCollision = true ;
+                                                break ;
                                         }
 
-                                        // a doughnut disappears after a collison
-                                        dynamic_cast< PlayerControlled * >( this->character->getBehavior().get () )->unsetDoughnutInRoom() ;
-                                        vanish = true;
+                                // ignore such collisions
+                                if ( initialCollision ) donutItem.setIgnoreCollisions( true );
+
+                                // if no collisions or an initial collision
+                                if ( ! mediator->isThereAnyCollision() || initialCollision )
+                                {
+                                        // move the doughnut
+                                        activities::Moving::getInstance().move( *this, false );
+                                }
+                                else {
+                                        // freeze a bad boy on a collision
+                                        if ( mediator->collisionWithBadBoy() != nilPointer )
+                                                activities::PropagateActivity::spreadEasily( donutItem, activities::Activity::Freeze );
+
+                                        // the doughnut disappears after a collision
+                                        present = false ;
                                 }
 
                                 speedTimer->reset();
 
-                                freeItem.animate();
+                                donutItem.animate() ;
                         }
                         break;
 
@@ -111,7 +106,7 @@ bool Doughnut::update ()
                         ;
         }
 
-        return vanish;
+        return ! present ;
 }
 
 }

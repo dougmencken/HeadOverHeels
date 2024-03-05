@@ -20,13 +20,13 @@ Jumping & Jumping::getInstance()
         return *instance;
 }
 
-bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
+bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > > & jumpVector )
 {
         bool jumped = false ;
 
         Activity displaceActivity = activities::Activity::Waiting ;
 
-        AvatarItem & character = dynamic_cast< AvatarItem & >( * behavior->getItem() );
+        AvatarItem & character = dynamic_cast< AvatarItem & >( behavior.getItem() );
         Mediator* mediator = character.getMediator() ;
 
         int deltaXY = jumpVector[ jumpPhase ].first ;
@@ -39,7 +39,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
                 if ( deltaZ < 0 ) deltaZ = 0;
                 else deltaZ = 2;
 
-                *activity = activities::Activity::Falling;
+                behavior.setCurrentActivity( activities::Activity::Falling );
         }
 
         // let’s move up
@@ -113,7 +113,7 @@ bool Jumping::jump( behaviors::Behavior* behavior, Activity* activity, unsigned 
         // end jump when it’s the last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
         {
-                *activity = activities::Activity::Falling ;
+                behavior.setCurrentActivity( activities::Activity::Falling );
         }
 
         return jumped ;

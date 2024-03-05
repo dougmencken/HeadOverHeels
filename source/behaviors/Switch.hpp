@@ -11,7 +11,8 @@
 #ifndef Switch_hpp_
 #define Switch_hpp_
 
-#include <vector>
+#include <set>
+#include <string>
 
 #include "Behavior.hpp"
 
@@ -24,29 +25,30 @@ class Switch : public Behavior
 
 public:
 
-        Switch( const ItemPtr & item, const std::string & behavior ) ;
+        Switch( Item & item, const std::string & behavior ) ;
 
-        virtual ~Switch( ) ;
+        virtual ~Switch( ) {}
 
-        virtual bool update () ;
-
-private:
-
-       /**
-        * See if there are items near the switch
-        * @param Where to put items
-        * @return true if any item was found or false otherwise
-        */
-        bool lookForItemsNearby ( std::vector< ItemPtr > & itemsNearby ) ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
-        bool isItemAbove ;
+        void toggleIt () ;
 
         /**
-         * Items that triggered this switch
+         * See if there are items near the switch
+         * @param where to collect items
          */
-        std::vector< ItemPtr > triggers ;
+        void lookForItemsNearby ( std::set< std::string > & itemsNearby ) ;
+
+private:
+
+        bool switchedFromAbove ;
+
+        /**
+         * Items that triggered this switch and will not re~switch it again
+         */
+        std::set< std::string > switchers ;
 
 };
 

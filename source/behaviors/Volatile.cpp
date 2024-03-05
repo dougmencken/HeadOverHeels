@@ -2,38 +2,35 @@
 #include "Volatile.hpp"
 
 #include "Item.hpp"
-#include "FreeItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
 #include <stack>
 
-const float delayBeforeDisappearance = 0.04;
-const float longDelayBeforeDisappearance = delayBeforeDisappearance * 20;
+const float delayBeforeDisappearance = 0.04 ;
+const float longDelayBeforeDisappearance = delayBeforeDisappearance * 20 ;
 
 
 namespace behaviors
 {
 
-Volatile::Volatile( const ItemPtr & item, const std::string & behavior )
+Volatile::Volatile( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , solid( false )
         , disappearanceTimer( new Timer() )
 {
-        disappearanceTimer->go();
+        disappearanceTimer->go() ;
 }
 
-Volatile::~Volatile()
+bool Volatile::update_returningdisappearance ()
 {
-}
+        Item & volatileItem = getItem ();
+        Mediator * mediator = volatileItem.getMediator() ;
 
-bool Volatile::update ()
-{
-        bool vanish = false ;
-        Mediator* mediator = item->getMediator();
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
                 case activities::Activity::WakeUp:
@@ -44,72 +41,69 @@ bool Volatile::update ()
                         if ( ( getNameOfBehavior () == "behavior of disappearance on touch" ||
                                         getNameOfBehavior () == "behavior of disappearance on jump into" ||
                                                 getNameOfBehavior () == "behavior of slow disappearance on jump into" )
-                                && ! item->canAdvanceTo( 0, 0, 1 ) )
+                                && ! volatileItem.canAdvanceTo( 0, 0, 1 ) )
                         {
-                                bool gone = false;
+                                bool gone = false ;
 
-                                std::stack< ItemPtr > topItems;
+                                std::stack< ItemPtr > itemsAbove ;
 
                                 // look for every item above it
                                 while ( mediator->isThereAnyCollision() )
                                 {
-                                        ItemPtr topItem = mediator->findCollisionPop( );
+                                        ItemPtr atopItem = mediator->findCollisionPop( );
 
                                         // is it free item
-                                        if ( topItem != nilPointer &&
-                                                ( topItem->whichItemClass() == "free item" || topItem->whichItemClass() == "avatar item" ) )
+                                        if ( atopItem != nilPointer &&
+                                                ( atopItem->whichItemClass() == "free item" || atopItem->whichItemClass() == "avatar item" ) )
                                         {
-                                                // look at whether above item is volatile or special
+                                                // look at whether an item above is volatile or bonus
                                                 // because that item would disappear unless it is leaning on another one
-                                                if ( topItem->getBehavior() != nilPointer &&
-                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
-                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
-                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
-                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
+                                                if ( atopItem->getBehavior() != nilPointer &&
+                                                        atopItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
+                                                        atopItem->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
+                                                        atopItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
+                                                        atopItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
                                                 {
-                                                        gone = true;
-                                                        topItems.push( topItem );
+                                                        gone = true ;
+                                                        itemsAbove.push( atopItem );
                                                 }
                                         }
                                 }
 
                                 if ( gone )
                                 {
-                                        ItemPtr topItem = topItems.top();
-                                        topItems.pop();
-                                        topItem->canAdvanceTo( 0, 0, -1 );
+                                        ItemPtr atopItem = itemsAbove.top();
+                                        itemsAbove.pop();
+                                        atopItem->canAdvanceTo( 0, 0, -1 );
 
-                                        // when item that triggers disappearance is just on this volatile then it’s okay to vanish
-                                        if ( mediator->howManyCollisions() > 1 )
-                                        {
+                                        // when an item that caused the disappearance is just above this volatile item, then it’s okay to vanish
+                                        if ( mediator->howManyCollisions() > 1 ) {
                                                 while ( mediator->isThereAnyCollision() )
                                                 {
                                                         ItemPtr bottomItem = mediator->findCollisionPop( );
 
-                                                        if ( bottomItem != nilPointer )
-                                                        {
-                                                                // volatile doesn’t vanish if it is leaning~
-                                                                //   on item without behavior, or
-                                                                //   on item that is not volatile, or
-                                                                //   on item that yet disappears
-                                                                if ( ( bottomItem->getBehavior() == nilPointer ) ||
-                                                                        ( bottomItem->getBehavior() != nilPointer
+                                                        if ( bottomItem != nilPointer ) {
+                                                                // a volatile doesn’t vanish if it is leaning~
+                                                                //     on an item without behavior, or
+                                                                //     on a non-volatile item, or
+                                                                //     on another item that is vanishing
+                                                                if ( ( bottomItem->getBehavior() == nilPointer )
+                                                                        || ( bottomItem->getBehavior() != nilPointer
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into"
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
-                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" ) ||
-                                                                        ( bottomItem->getBehavior() != nilPointer
+                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
+                                                                        || ( bottomItem->getBehavior() != nilPointer
                                                                                 && bottomItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanishing ) )
                                                                 {
-                                                                        gone = false;
+                                                                        gone = false ;
                                                                 }
                                                         }
                                                 }
                                         }
                                 }
 
-                                if ( gone )
-                                {
-                                        activity = activities::Activity::Vanishing;
+                                if ( gone ) {
+                                        setCurrentActivity( activities::Activity::Vanishing );
                                         disappearanceTimer->reset();
                                 }
                         }
@@ -119,15 +113,17 @@ bool Volatile::update ()
                                 if ( mediator->findItemOfKind( "head" ) != nilPointer ||
                                         mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                 {
-                                        activity = activities::Activity::Vanishing;
+                                        setCurrentActivity( activities::Activity::Vanishing );
                                         disappearanceTimer->reset();
                                 }
                         }
                         // is it volatile in time
                         else if ( getNameOfBehavior () == "behavior of disappearance in time" )
                         {
-                                item->animate();
-                                vanish = ( disappearanceTimer->getValue() > item->getDelayBetweenFrames() * item->howManyMotions() );
+                                volatileItem.animate() ;
+
+                                if ( disappearanceTimer->getValue() > volatileItem.getDelayBetweenFrames() * volatileItem.howManyMotions() )
+                                        present = false ;
                         }
                         break;
 
@@ -139,30 +135,22 @@ bool Volatile::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
-                        // if displacing item which is volatile on contact then bin it
-                        if ( ! solid )
-                        {
+                        if ( ! solid ) {
                                 if ( getNameOfBehavior () == "behavior of disappearance on touch" )
                                 {
-                                                activity = activities::Activity::Vanishing;
+                                        // pushing item which is volatile on contact
+                                        setCurrentActivity( activities::Activity::Vanishing );
                                 }
                                 else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                                 {
-                                        if ( mediator->findItemOfKind( "head" ) != nilPointer ||
-                                                mediator->findItemOfKind( "headoverheels" ) != nilPointer )
-                                        {
-                                                activity = activities::Activity::Vanishing;
-                                        }
-                                }
-                                else
-                                {
-                                        activity = activities::Activity::Waiting;
-                                }
-                        }
-                        else
-                        {
-                                activity = activities::Activity::Freeze;
-                        }
+                                        if ( mediator->findItemOfKind( "head" ) != nilPointer
+                                                        || mediator->findItemOfKind( "headoverheels" ) != nilPointer )
+                                                setCurrentActivity( activities::Activity::Vanishing );
+                                } else
+                                        setCurrentActivity( activities::Activity::Waiting );
+                        } else
+                                setCurrentActivity( activities::Activity::Freeze );
+
                         break;
 
                 case activities::Activity::Vanishing:
@@ -173,27 +161,27 @@ bool Volatile::update ()
                                 ( getNameOfBehavior () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
                                 ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.5 ) )
                         {
-                                SoundManager::getInstance().play( item->getKind (), "vanish" );
+                                SoundManager::getInstance().play( volatileItem.getKind (), "vanish" );
 
                                 // morph into bubbles
 
-                                item->setIgnoreCollisions( true );
+                                volatileItem.setIgnoreCollisions( true );
 
-                                item->changeHeightTo( 0 );
-                                item->metamorphInto( "bubbles", "vanishing volatile item" );
-                                item->setBehaviorOf( "behavior of disappearance in time" );
+                                volatileItem.changeHeightTo( 0 );
+                                volatileItem.metamorphInto( "bubbles", "vanishing volatile item" );
+                                volatileItem.setBehaviorOf( "behavior of disappearance in time" );
                         }
                         break;
 
                 case activities::Activity::Freeze:
-                        this->solid = true;
+                        this->solid = true ;
                         break;
 
                 default:
                         ;
         }
 
-        return vanish ;
+        return ! present ;
 }
 
 }

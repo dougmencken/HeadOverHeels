@@ -27,17 +27,14 @@ class Sink : public Behavior
 
 public:
 
-        Sink( const ItemPtr & item, const std::string & behavior ) ;
+        Sink( Item & item, const std::string & behavior ) ;
 
-        virtual ~Sink( ) ;
+        virtual ~Sink( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
-       /**
-        * Timer for speed of falling
-        */
         autouniqueptr < Timer > fallTimer ;
 
 };

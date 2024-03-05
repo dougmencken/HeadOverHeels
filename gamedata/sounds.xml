@@ -25,7 +25,6 @@
 
 <for item="conveyor">
     <sound on="function" play="conveyor.wav"/>
-    <sound on="vanish" play="destruction.wav"/>
 </for>
 
 <for item="book">

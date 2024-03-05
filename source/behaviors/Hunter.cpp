@@ -1,11 +1,9 @@
 
 #include "Hunter.hpp"
 
-#include "Item.hpp"
-#include "DescriptionOfItem.hpp"
-#include "ItemDescriptions.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
+#include "ItemDescriptions.hpp"
 #include "Moving.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
@@ -18,57 +16,53 @@
 namespace behaviors
 {
 
-Hunter::Hunter( const ItemPtr & item, const std::string & behavior )
+Hunter::Hunter( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
 {
         speedTimer->go ();
 }
 
-Hunter::~Hunter()
+bool Hunter::update_returningdisappearance ()
 {
-}
+        FreeItem & hunterItem = dynamic_cast< FreeItem & >( getItem () );
+        AvatarItemPtr whoToHunt = hunterItem.getMediator()->getActiveCharacter() ;
 
-bool Hunter::update ()
-{
-        Mediator* mediator = this->item->getMediator();
-        AvatarItemPtr whoToHunt = mediator->getActiveCharacter();
+        bool present = true ;
 
-        bool alive = true;
-
-        switch ( this->activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
                         // if the hunter is not a waiting one, activate it just now
                         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                                         getNameOfBehavior() == "behavior of hunter in eight directions" )
                         {
-                                SoundManager::getInstance().play( this->item->getKind (), "wait" );
-                                activity = updateDirection( activity );
+                                SoundManager::getInstance().play( hunterItem.getKind (), "wait" );
+                                updateDirection() ;
                         }
                         // otherwise check if the character is within the defined rectangle near the hunter
                         else
                         {
                                 const unsigned int sizeOfRectangleInTiles = 3 ;
-                                const int coverage = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles ;
+                                const int coverage = hunterItem.getMediator()->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles ;
 
                                 if ( whoToHunt != nilPointer  &&
-                                        whoToHunt->getX() > this->item->getX() - coverage  &&
-                                        whoToHunt->getX() < this->item->getX() + this->item->getWidthX() + coverage  &&
-                                        whoToHunt->getY() > this->item->getY() - coverage  &&
-                                        whoToHunt->getY() < this->item->getY() + this->item->getWidthY() + coverage )
+                                        whoToHunt->getX() > hunterItem.getX() - coverage  &&
+                                        whoToHunt->getX() < hunterItem.getX() + hunterItem.getWidthX() + coverage  &&
+                                        whoToHunt->getY() > hunterItem.getY() - coverage  &&
+                                        whoToHunt->getY() < hunterItem.getY() + hunterItem.getWidthY() + coverage )
                                 {
-                                        activity = updateDirection( activity );
+                                        updateDirection() ;
                                 }
 
                                 // an eight-directional waiting hunter emits the sound when it waits
                                 if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
                                 {
-                                        SoundManager::getInstance().play( this->item->getKind (), "wait" );
+                                        SoundManager::getInstance().play( hunterItem.getKind (), "wait" );
                                 }
 
                                 // animate item while it waits
-                                this->item->animate ();
+                                hunterItem.animate ();
                         }
                 break;
 
@@ -79,31 +73,28 @@ bool Hunter::update ()
                         // bin original item when full-bodied guard is created
                         if ( getNameOfBehavior() == "behavior of waiting hunter in four directions" && createFullBody () )
                         {
-                                alive = false;
+                                present = false ;
                         }
-                        else if ( ! dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
+                        else if ( ! hunterItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > this->item->getSpeed() )
+                                if ( speedTimer->getValue() > hunterItem.getSpeed() )
                                 {
                                         // move item
-                                        activities::Moving::getInstance().move( this, &activity, false );
+                                        activities::Moving::getInstance().move( *this, false );
 
                                         // reset timer to next cycle
                                         speedTimer->reset();
 
-                                        // see if direction changes
-                                        activity = updateDirection( activity );
+                                        updateDirection () ;
 
-                                        // fall if you have to
-                                        if ( this->item->getWeight() > 0 )
-                                        {
-                                                activities::Falling::getInstance().fall( this );
-                                        }
+                                        // fall if it falls
+                                        if ( hunterItem.getWeight() > 0 )
+                                                activities::Falling::getInstance().fall( *this );
                                 }
 
-                                this->item->animate();
+                                hunterItem.animate() ;
 
-                                SoundManager::getInstance().play( this->item->getKind (), "move" );
+                                SoundManager::getInstance().play( hunterItem.getKind(), "move" );
                         }
                         break;
 
@@ -111,51 +102,48 @@ bool Hunter::update ()
                 case activities::Activity::MovingNorthwest:
                 case activities::Activity::MovingSoutheast:
                 case activities::Activity::MovingSouthwest:
-                        if ( ! dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
+                        if ( ! hunterItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > this->item->getSpeed() )
+                                if ( speedTimer->getValue() > hunterItem.getSpeed() )
                                 {
-                                        // move item
-                                        if ( ! activities::Moving::getInstance().move( this, &activity, false ) )
-                                        {
-                                                if ( activity == activities::Activity::MovingNortheast || activity == activities::Activity::MovingNorthwest )
+                                        // try to move item
+                                        if ( ! activities::Moving::getInstance().move( *this, false ) )
+                                        {       // can’t move that way
+                                                Activity thatActivity = getCurrentActivity() ;
+
+                                                if ( thatActivity == activities::Activity::MovingNortheast
+                                                                || thatActivity == activities::Activity::MovingNorthwest )
                                                 {
-                                                        Activity tempActivity = activities::Activity::MovingNorth;
-                                                        if ( ! activities::Moving::getInstance().move( this, &tempActivity, false ) )
-                                                        {
-                                                                activity = ( activity == activities::Activity::MovingNortheast ? activities::Activity::MovingEast : activities::Activity::MovingWest );
-                                                                if ( this->item->getWeight() > 0 )
-                                                                {
-                                                                        activities::Falling::getInstance().fall( this );
-                                                                }
-                                                        }
-                                                }
-                                                else
+                                                        // try moving north first and then west or east
+                                                        setCurrentActivity( activities::Activity::MovingNorth );
+                                                        if ( ! activities::Moving::getInstance().move( *this, false ) )
+                                                                setCurrentActivity( thatActivity == activities::Activity::MovingNorthwest
+                                                                                                        ? activities::Activity::MovingWest
+                                                                                                        : activities::Activity::MovingEast );
+                                                } else // MoveSoutheast or MoveSouthwest
                                                 {
-                                                        Activity tempActivity = activities::Activity::MovingSouth;
-                                                        if ( ! activities::Moving::getInstance().move( this, &tempActivity, false ) )
-                                                        {
-                                                                activity = ( activity == activities::Activity::MovingSoutheast ? activities::Activity::MovingEast : activities::Activity::MovingWest );
-                                                                if ( this->item->getWeight() > 0 )
-                                                                {
-                                                                        activities::Falling::getInstance().fall( this );
-                                                                }
-                                                        }
+                                                        // try moving south first and then east or west
+                                                        setCurrentActivity( activities::Activity::MovingSouth );
+                                                        if ( ! activities::Moving::getInstance().move( *this, false ) )
+                                                                setCurrentActivity( thatActivity == activities::Activity::MovingSoutheast
+                                                                                                        ? activities::Activity::MovingEast
+                                                                                                        : activities::Activity::MovingWest );
                                                 }
+
+                                                if ( hunterItem.getWeight() > 0 )
+                                                        activities::Falling::getInstance().fall( *this );
                                         }
-                                        else
-                                        {
-                                                // see if direction changes
-                                                activity = updateDirection( activity );
+                                        else {
+                                                updateDirection () ;
                                         }
 
                                         // reset timer to next cycle
                                         speedTimer->reset();
                                 }
 
-                                this->item->animate();
+                                hunterItem.animate() ;
 
-                                SoundManager::getInstance().play( this->item->getKind (), "move" );
+                                SoundManager::getInstance().play( hunterItem.getKind(), "move" );
                         }
                         break;
 
@@ -168,117 +156,110 @@ bool Hunter::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                         // when item is active and it’s time to move
-                        if ( speedTimer->getValue() > this->item->getSpeed() )
+                        if ( speedTimer->getValue() > hunterItem.getSpeed() )
                         {
-                                activities::Displacing::getInstance().displace( this, &activity, false );
-                                activity = activities::Activity::Waiting;
+                                activities::Displacing::getInstance().displace( *this, false );
+                                setCurrentActivity( activities::Activity::Waiting );
                                 speedTimer->reset();
                         }
 
-                        // preserve inactivity for frozen item
-                        if ( dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
-                        {
-                                activity = activities::Activity::Freeze;
-                        }
+                        // preserve inactivity for the frozen item
+                        if ( hunterItem.isFrozen() )
+                                setCurrentActivity( activities::Activity::Freeze );
+
                         break;
 
                 case activities::Activity::Freeze:
-                        dynamic_cast< FreeItem& >( * this->item ).setFrozen( true );
+                        hunterItem.setFrozen( true );
                         break;
 
                 case activities::Activity::WakeUp:
-                        dynamic_cast< FreeItem& >( * this->item ).setFrozen( false );
-                        activity = activities::Activity::Waiting;
+                        hunterItem.setFrozen( false );
+                        setCurrentActivity( activities::Activity::Waiting );
                         break;
 
                 default:
                         ;
         }
 
-        return ! alive ;
+        return ! present ;
 }
 
-Activity Hunter::updateDirection( const Activity & activity )
+void Hunter::updateDirection ()
 {
-        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter() ;
+        AvatarItemPtr whoToHunt = getItem().getMediator()->getActiveCharacter ();
+
         if ( whoToHunt != nilPointer ) {
                 // a character above hunter is unseen
-                if ( whoToHunt->getZ () < this->item->getZ () + this->item->getHeight () )
+                if ( whoToHunt->getZ () < getItem().getZ () + getItem().getHeight () )
                 {
                         if ( getNameOfBehavior() == "behavior of hunter in four directions"
                                         || getNameOfBehavior() == "behavior of waiting hunter in four directions" )
-                                return updateDirection4( activity );
+                        {
+                                updateDirection4 ();
+                                return ;
+                        }
                         else if ( getNameOfBehavior() == "behavior of hunter in eight directions"
                                         || getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
-                                return updateDirection8( activity );
+                        {
+                                updateDirection8 ();
+                                return ;
+                        }
                 }
         }
 
-        return activities::Activity::Waiting ;
+        setCurrentActivity( activities::Activity::Waiting );
 }
 
-Activity Hunter::updateDirection4( const Activity & activity )
+void Hunter::updateDirection4 ()
 {
-        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter() ;
+        AvatarItemPtr whoToHunt = getItem().getMediator()->getActiveCharacter() ;
+
         if ( whoToHunt != nilPointer )
         {
-                int dx = this->item->getX() - whoToHunt->getX();
-                int dy = this->item->getY() - whoToHunt->getY();
+                Item & hunterItem = getItem() ;
 
-                if ( abs( dy ) > abs( dx ) )
+                int dx = hunterItem.getX() - whoToHunt->getX();
+                int dy = hunterItem.getY() - whoToHunt->getY();
+
+                if ( abs( dx ) < abs( dy ) )
                 {
-                        if ( dx > 0 )
-                        {
-                                setCurrentActivity( activities::Activity::MovingNorth );
-                        }
-                        else if ( dx < 0 )
-                        {
-                                setCurrentActivity( activities::Activity::MovingSouth );
-                        }
+                        if ( dx > 0 ) setCurrentActivity( activities::Activity::MovingNorth );
                         else
-                        {
-                                if ( dy > 0 )
-                                        setCurrentActivity( activities::Activity::MovingEast );
-                                else if ( dy < 0 )
-                                        setCurrentActivity( activities::Activity::MovingWest );
-                        }
+                        if ( dx < 0 ) setCurrentActivity( activities::Activity::MovingSouth );
+                        else
+                        if ( dy > 0 ) setCurrentActivity( activities::Activity::MovingEast );
+                        else
+                        if ( dy < 0 ) setCurrentActivity( activities::Activity::MovingWest );
                 }
                 else if ( abs( dy ) < abs( dx ) )
                 {
-                        if ( dy > 0 )
-                        {
-                                setCurrentActivity( activities::Activity::MovingEast );
-                        }
-                        else if ( dy < 0 )
-                        {
-                                setCurrentActivity( activities::Activity::MovingWest );
-                        }
+                        if ( dy > 0 ) setCurrentActivity( activities::Activity::MovingEast );
                         else
-                        {
-                                if ( dx > 0 )
-                                        setCurrentActivity( activities::Activity::MovingNorth );
-                                else if ( dx < 0 )
-                                        setCurrentActivity( activities::Activity::MovingSouth );
-                        }
+                        if ( dy < 0 ) setCurrentActivity( activities::Activity::MovingWest );
+                        else
+                        if ( dx > 0 ) setCurrentActivity( activities::Activity::MovingNorth );
+                        else
+                        if ( dx < 0 ) setCurrentActivity( activities::Activity::MovingSouth );
                 }
         }
-
-        return activity ;
 }
 
-Activity Hunter::updateDirection8( const Activity& activity )
+void Hunter::updateDirection8 ()
 {
-        AvatarItemPtr whoToHunt = this->item->getMediator()->getActiveCharacter();
+        AvatarItemPtr whoToHunt = getItem().getMediator()->getActiveCharacter() ;
 
-        if ( whoToHunt != nilPointer ) // if there’s the active character in the room
+        if ( whoToHunt != nilPointer )
         {
-                int dx = this->item->getX() - whoToHunt->getX();
-                int dy = this->item->getY() - whoToHunt->getY();
+                Item & hunterItem = getItem() ;
+
+                int dx = hunterItem.getX() - whoToHunt->getX();
+                int dy = hunterItem.getY() - whoToHunt->getY();
 
                 // change the direction to reach the character as quick as possible
                 // look for the distances on X and Y between the hunter and the character
 
-                if ( abs( dy ) > abs( dx ) )
+                if ( abs( dx ) < abs( dy ) )
                 {
                         if ( dx > 1 )
                         {
@@ -336,18 +317,16 @@ Activity Hunter::updateDirection8( const Activity& activity )
                 }
 
                 // the guardian of throne flees from the player with four crowns
-                if ( item->getKind() == "throne-guard" && GameManager::getInstance().howManyFreePlanets() >= 4 )
+                if ( hunterItem.getKind() == "throne-guard" && GameManager::getInstance().howManyFreePlanets() >= 4 )
                 {
                         setCurrentActivity( activities::Activity::MovingSouthwest );
                 }
         }
-
-        return activity;
 }
 
-bool Hunter::createFullBody()
+bool Hunter::createFullBody ()
 {
-        FreeItem& thisItem = dynamic_cast< FreeItem& >( * this->item );
+        FreeItem & thisItem = dynamic_cast< FreeItem & >( getItem() );
         bool created = false;
 
         if ( thisItem.getKind() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, - Room::LayerHeight ) )

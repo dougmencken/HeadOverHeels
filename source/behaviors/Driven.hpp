@@ -19,7 +19,7 @@ namespace behaviors
 {
 
 /**
- * Move item in the direction set by item above it
+ * Moves an item along with the motion of the item above it
  */
 
 class Driven : public Behavior
@@ -27,24 +27,20 @@ class Driven : public Behavior
 
 public:
 
-        Driven( const ItemPtr & item, const std::string & behavior ) ;
+        Driven( Item & item, const std::string & behavior ) ;
 
-        virtual ~Driven( ) ;
+        virtual ~Driven( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 
         bool moving ;
 
-       /**
-        * Timer for speed of movement
-        */
+        // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;
 
-       /**
-        * Timer for speed of falling
-        */
+        // timer for the speed of falling
         autouniqueptr < Timer > fallTimer ;
 
 };

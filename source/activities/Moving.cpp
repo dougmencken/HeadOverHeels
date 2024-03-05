@@ -2,6 +2,7 @@
 #include "Moving.hpp"
 
 #include "Falling.hpp"
+#include "FreeItem.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
 #include "PropagateActivity.hpp"
@@ -17,76 +18,73 @@ Moving * Moving::instance = nilPointer ;
 Moving& Moving::getInstance()
 {
         if ( instance == nilPointer )
-        {
-                instance = new Moving();
-        }
+                instance = new Moving () ;
 
         return *instance;
 }
 
-
-bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFalls )
+bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
 {
         bool moved = false ;
 
+        Item & whatMoves = behavior.getItem() ;
+        Mediator * mediator = whatMoves.getMediator();
+
         Activity toItemsNearby = activities::Activity::Waiting ;
 
-        ItemPtr item = behavior->getItem();
-        if ( item == nilPointer ) return false ;
-        Mediator* mediator = item->getMediator();
-
-        switch ( *activity )
+        Activity activity = behavior.getCurrentActivity() ;
+        switch ( activity )
         {
                 case activities::Activity::MovingNorth:
                 case activities::Activity::AutomovingNorth:
-                        item->changeHeading( "north" );
-                        moved = item->addToX( -1 );
+                        whatMoves.changeHeading( "north" );
+                        moved = whatMoves.addToX( -1 );
                         toItemsNearby = activities::Activity::PushedNorth ;
                         break;
 
                 case activities::Activity::MovingSouth:
                 case activities::Activity::AutomovingSouth:
-                        item->changeHeading( "south" );
-                        moved = item->addToX( 1 );
+                        whatMoves.changeHeading( "south" );
+                        moved = whatMoves.addToX( 1 );
                         toItemsNearby = activities::Activity::PushedSouth ;
                         break;
 
                 case activities::Activity::MovingEast:
                 case activities::Activity::AutomovingEast:
-                        item->changeHeading( "east" );
-                        moved = item->addToY( -1 );
+                        whatMoves.changeHeading( "east" );
+                        moved = whatMoves.addToY( -1 );
                         toItemsNearby = activities::Activity::PushedEast ;
                         break;
 
                 case activities::Activity::MovingWest:
                 case activities::Activity::AutomovingWest:
-                        item->changeHeading( "west" );
-                        moved = item->addToY( 1 );
+                        whatMoves.changeHeading( "west" );
+                        moved = whatMoves.addToY( 1 );
                         toItemsNearby = activities::Activity::PushedWest ;
                         break;
 
                 case activities::Activity::MovingNortheast:
-                        moved = item->addToPosition( -1, -1, 0 );
+                        moved = whatMoves.addToPosition( -1, -1, 0 );
                         toItemsNearby = activities::Activity::PushedNortheast ;
                         break;
 
                 case activities::Activity::MovingNorthwest:
-                        moved = item->addToPosition( -1, 1, 0 );
+                        moved = whatMoves.addToPosition( -1, 1, 0 );
                         toItemsNearby = activities::Activity::PushedNorthwest ;
                         break;
 
                 case activities::Activity::MovingSoutheast:
-                        moved = item->addToPosition( 1, -1, 0 );
+                        moved = whatMoves.addToPosition( 1, -1, 0 );
                         toItemsNearby = activities::Activity::PushedSoutheast ;
                         break;
 
                 case activities::Activity::MovingSouthwest:
-                        moved = item->addToPosition( 1, 1, 0 );
+                        moved = whatMoves.addToPosition( 1, 1, 0 );
                         toItemsNearby = activities::Activity::PushedSouthwest ;
                         break;
 
                 case activities::Activity::GoingUp:
-                        moved = item->addToZ( 1 );
+                        moved = whatMoves.addToZ( 1 );
 
                         // if can’t move up, raise the items above
                         if ( ! moved )
@@ -100,7 +98,7 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
                                                 // that moves freely
                                                 && ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" )
                                                 // and isn’t bigger
-                                                && ( item->getWidthX() + item->getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
+                                                && ( whatMoves.getWidthX() + whatMoves.getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
                                         {
                                                         // then raise it
                                                         ascent( dynamic_cast< FreeItem & >( *aboveItem ), 1 );
@@ -108,14 +106,14 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
                                 }
 
                                 // now raise itself
-                                moved = item->addToZ( 1 );
+                                moved = whatMoves.addToZ( 1 );
                         }
                         break;
 
                 case activities::Activity::GoingDown:
                 {
                         // is there anything above
-                        bool loaded = ! item->canAdvanceTo( 0, 0, /* 2 */ 1 );
+                        bool loaded = ! whatMoves.canAdvanceTo( 0, 0, /* 2 */ 1 );
 
                         // collect the stack of such items
                         std::stack< std::string > itemsAbove ;
@@ -124,7 +122,7 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
                                 itemsAbove.push( mediator->popCollision() );
                         }
 
-                        moved = item->addToZ( -1 );
+                        moved = whatMoves.addToZ( -1 );
 
                         // fall together with the items above
                         if ( moved && loaded )
@@ -152,28 +150,27 @@ bool Moving::move( behaviors::Behavior* behavior, Activity* activity, bool itFal
         }
 
         // if the item can move freely
-        if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
+        if ( whatMoves.whichItemClass() == "free item" || whatMoves.whichItemClass() == "avatar item" )
         {
-                bool onElevator = ( *activity == activities::Activity::GoingUp || *activity == activities::Activity::GoingDown );
+                bool onElevator = ( activity == activities::Activity::GoingUp || activity == activities::Activity::GoingDown );
                 if ( /* don’t affect activity of items on elevator */ ! onElevator )
                 {
                         if ( /* there’s a collision */ ! moved ) {
                                 // move adjacent items
-                                PropagateActivity::toAdjacentItems( *item, toItemsNearby );
+                                PropagateActivity::toAdjacentItems( whatMoves, toItemsNearby );
                         }
                         else {
                                 // maybe there’s something above
-                                PropagateActivity::toItemsAbove( *item, toItemsNearby );
+                                PropagateActivity::toItemsAbove( whatMoves, toItemsNearby );
                         }
                 }
         }
 
-        if ( itFalls /* doesn’t fly */ && *activity != activities::Activity::Waiting )
+        if ( itFalls /* doesn’t fly */ && activity != activities::Activity::Waiting )
         {
-                if ( Falling::getInstance().fall( behavior ) )
-                {
-                        *activity = activities::Activity::Falling;
-                        moved = true;
+                if ( Falling::getInstance().fall( behavior ) ) {
+                        behavior.setCurrentActivity( activities::Activity::Falling );
+                        moved = true ;
                 }
         }
 
@@ -245,9 +242,7 @@ void Moving::descend( FreeItem & freeItem, int z )
                         // collect the stack of items above
                         std::stack< std::string > itemsAbove ;
                         while ( mediator->isThereAnyCollision() )
-                        {
                                 itemsAbove.push( mediator->popCollision() );
-                        }
 
                         // descend by the one at a time, otherwise there may be a collision which hinders descending
                         for ( int i = 0; i < ( z - 1 ); i++ )

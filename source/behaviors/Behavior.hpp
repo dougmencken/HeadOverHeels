@@ -31,58 +31,59 @@ class Behavior
 
 protected:
 
-        Behavior( const ItemPtr & itemThatBehaves, const std::string & behaviorName ) ;
+        Behavior( Item & item, const std::string & behaviorName )
+                : nameOfBehavior( behaviorName )
+                , itemThatBehaves( item )
+                , currentActivity( activities::Activity::Waiting )
+                , affectedBy( nilPointer )
+        {}
 
 public:
 
-        virtual ~Behavior( ) ;
+        virtual ~Behavior( ) {}
 
         /**
-         * Updates the item’s behavior in each cycle
-         * @return true if the item is still alive after this update or false otherwise
+         * Updates the item’s behavior programmatically
+         * @return true^Wfalse if the item can be updated thereafter (it didn’t disappear from the room)
          */
-        virtual bool update () = 0 ;
+        virtual bool update_returningdisappearance () = 0 ;
 
-        virtual void setCurrentActivity ( const Activity & newActivity )
-        {
-                this->activity = newActivity ;
-                if ( this->affectedBy != nilPointer ) this->affectedBy = ItemPtr () ;
-        }
-
-        virtual void changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
-        {
-                this->activity = newActivity ;
-                this->affectedBy = dueTo ;
-        }
-
-        std::string getNameOfBehavior () const {  return this->nameOfBehavior ;  }
-
-        Activity getCurrentActivity () const {  return this->activity ;  }
-
-        const ItemPtr & getItem () const {  return this->item ;  }
-
-protected:
-
-        /**
-         * Change activity of every item collided with the sender
-         */
-        void propagateActivity ( const Item & sender, const Activity & activity ) ;
-
-        std::string nameOfBehavior ;
-
-        /**
-         * The item that behaves
-         */
-        ItemPtr item ;
+        const std::string & getNameOfBehavior () const {  return this->nameOfBehavior ;  }
 
         /**
          * The current activity
          */
-        Activity activity ;
+        const Activity & getCurrentActivity () const {  return this->currentActivity ;  }
+
+        virtual void setCurrentActivity ( const Activity & newActivity )
+        {
+                changeActivityDueTo( newActivity, ItemPtr() );
+        }
+
+        virtual void changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
+        {
+                this->currentActivity = newActivity ;
+                this->affectedBy = dueTo ;
+        }
+
+        /**
+         * The item that behaves
+         */
+        Item & getItem () const {  return this->itemThatBehaves ;  }
 
         /**
          * Another item that changed activity of this one
          */
+        const ItemPtr & getWhatAffectedThisBehavior () const {  return this->affectedBy ;  }
+
+private:
+
+        std::string nameOfBehavior ;
+
+        Item & itemThatBehaves ;
+
+        Activity currentActivity ;
+
         ItemPtr affectedBy ;
 
 } ;

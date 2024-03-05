@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-Patrol::Patrol( const ItemPtr & item, const std::string & behavior )
+Patrol::Patrol( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
@@ -24,17 +24,13 @@ Patrol::Patrol( const ItemPtr & item, const std::string & behavior )
         patrolTimer->go ();
 }
 
-Patrol::~Patrol()
+bool Patrol::update_returningdisappearance ()
 {
-}
-
-bool Patrol::update ()
-{
-        FreeItem & patrolItem = dynamic_cast< FreeItem & >( * this->item );
+        FreeItem & patrolItem = dynamic_cast< FreeItem & >( getItem() );
 
         bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
                         randomlyChangeOrientation ();
@@ -60,7 +56,7 @@ bool Patrol::update ()
                                         }
 
                                         // move item
-                                        if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
+                                        if ( ! activities::Moving::getInstance().move( *this, true ) )
                                         {
                                                 randomlyChangeOrientation ();
 
@@ -87,7 +83,7 @@ bool Patrol::update ()
                         SoundManager::getInstance().play( patrolItem.getKind (), "push" );
 
                         // displace this item when it’s pushed by some other one
-                        activities::Displacing::getInstance().displace( this, &activity, true );
+                        activities::Displacing::getInstance().displace( *this, true );
 
                         if ( patrolItem.isFrozen() ) // frozen item remains frozen
                                 setCurrentActivity( activities::Activity::Freeze );
@@ -104,7 +100,7 @@ bool Patrol::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > patrolItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) )
+                                if ( ! activities::Falling::getInstance().fall( * this ) )
                                 {
                                         SoundManager::getInstance().play( patrolItem.getKind (), "fall" );
                                         setCurrentActivity( activities::Activity::Waiting );
@@ -135,17 +131,13 @@ void Patrol::randomlyChangeOrientation ()
         int randomOrientation = -1 ;
 
         if ( getNameOfBehavior() == "behavior of random patroling in four primary directions" )
-        {
                 randomOrientation = ( rand() % 4 );
-        }
-        else if ( getNameOfBehavior() == "behavior of random patroling in four secondary directions" )
-        {
+        else
+        if ( getNameOfBehavior() == "behavior of random patroling in four secondary directions" )
                 randomOrientation = ( rand() % 4 ) + 4 ;
-        }
-        else if ( getNameOfBehavior() == "behavior of random patroling in eight directions" )
-        {
+        else
+        if ( getNameOfBehavior() == "behavior of random patroling in eight directions" )
                 randomOrientation = ( rand() % 8 );
-        }
 
         switch ( randomOrientation )
         {

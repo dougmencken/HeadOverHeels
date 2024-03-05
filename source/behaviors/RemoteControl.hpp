@@ -12,7 +12,6 @@
 #define RemoteControl_hpp_
 
 #include "Behavior.hpp"
-#include "FreeItem.hpp"
 #include "Timer.hpp"
 
 
@@ -20,7 +19,7 @@ namespace behaviors
 {
 
 /**
- * A pair of controller & controlled item
+ * Models both the controller and the controlled item
  */
 
 class RemoteControl : public Behavior
@@ -28,11 +27,11 @@ class RemoteControl : public Behavior
 
 public:
 
-        RemoteControl( const ItemPtr & item, const std::string & behavior ) ;
+        RemoteControl( Item & item, const std::string & behavior ) ;
 
         virtual ~RemoteControl( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 

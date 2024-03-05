@@ -71,7 +71,7 @@ void Mediator::update()
         for ( unsigned int column = 0; column < room->gridItems.size(); ++ column ) {
                 for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
-                        if ( ( *g )->updateItem() )
+                        if ( ! ( *g )->updateItem() )
                                 vanishedGridItems.push_back( ( *g )->getUniqueName() );
                 }
         }
@@ -89,8 +89,9 @@ void Mediator::update()
                 this->needToSortGridItems = false ;
         }
 
+        // let the player play
         if ( this->currentlyActiveCharacter != nilPointer )
-                this->currentlyActiveCharacter->behave ();
+                this->currentlyActiveCharacter->behaveCharacter ();
 
         lockFreeItemsMutex ();
 
@@ -100,7 +101,7 @@ void Mediator::update()
         // update free items
         for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                if ( ( *f )->updateItem() )
+                if ( ! ( *f )->updateItem() )
                         vanishedFreeItems.push_back( ( *f )->getUniqueName() );
         }
 

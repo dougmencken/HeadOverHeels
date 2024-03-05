@@ -12,35 +12,26 @@
 #define Doughnut_hpp_
 
 #include "Behavior.hpp"
-#include "AvatarItem.hpp"
 #include "Timer.hpp"
 
 
 namespace behaviors
 {
 
-class AvatarItem ;
-
 class Doughnut : public Behavior
 {
 
 public:
 
-        Doughnut( const ItemPtr & item, const std::string & behavior ) ;
+        Doughnut( Item & item, const std::string & behavior ) ;
 
-        virtual ~Doughnut( ) ;
+        virtual ~Doughnut( ) {}
 
-        virtual bool update () ;
-
-        void setCharacter ( const AvatarItemPtr & thatCharacter ) {  this->character = thatCharacter ;  }
+        virtual bool update_returningdisappearance () ;
 
 private:
 
-        AvatarItemPtr character ;
-
-       /**
-        * Timer for speed of movement
-        */
+        // timer for the speed of motion
         autouniqueptr < Timer > speedTimer ;
 
 } ;

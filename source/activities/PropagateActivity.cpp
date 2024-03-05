@@ -14,6 +14,18 @@ namespace activities
 {
 
 /* static */
+void PropagateActivity::spreadEasily( const Item & sender, const Activity & activity )
+{
+        Mediator* mediator = sender.getMediator() ;
+        while ( mediator->isThereAnyCollision () ) // there are items collided with the sender
+        {
+                ItemPtr collidedItem = mediator->findCollisionPop() ;
+                if ( collidedItem != nilPointer && collidedItem->getBehavior() != nilPointer )
+                        collidedItem->getBehavior()->setCurrentActivity( activity );
+        }
+}
+
+/* static */
 void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activity )
 {
         Mediator* mediator = sender.getMediator();
@@ -149,7 +161,7 @@ void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity )
                         // is it free item
                         if ( itemAbove->whichItemClass() == "free item" || itemAbove->whichItemClass() == "avatar item" )
                         {
-                                FreeItem & freeItemAbove = dynamic_cast< FreeItem& >( *itemAbove );
+                                FreeItem & freeItemAbove = dynamic_cast< FreeItem & >( *itemAbove );
                                 if ( freeItemAbove.getBehavior() == nilPointer ) continue ; // nothing for an item without behavior
 
                                 // look for collisions of that free item with the items below it

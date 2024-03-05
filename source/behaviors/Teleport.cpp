@@ -1,8 +1,6 @@
 
 #include "Teleport.hpp"
 
-#include "Item.hpp"
-#include "GridItem.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
@@ -12,40 +10,33 @@
 namespace behaviors
 {
 
-Teleport::Teleport( const ItemPtr & item, const std::string & behavior ) :
+Teleport::Teleport( Item & item, const std::string & behavior ) :
         Behavior( item, behavior ),
         activated( false )
 {
-
 }
 
-Teleport::~Teleport()
+bool Teleport::update_returningdisappearance ()
 {
+        Item & teleportItem = getItem ();
+        Mediator * mediator = teleportItem.getMediator() ;
 
-}
-
-bool Teleport::update ()
-{
-        Mediator * mediator = item->getMediator();
-
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
                         // is there items above
-                        if ( ! item->canAdvanceTo( 0, 0, 1 ) )
+                        if ( ! teleportItem.canAdvanceTo( 0, 0, 1 ) )
                         {
-                                // copy stack of collisions
-                                std::stack< std::string > topItems;
+                                // copy the stack of collisions
+                                std::stack< std::string > itemsAbove ;
                                 while ( mediator->isThereAnyCollision() )
-                                {
-                                        topItems.push( mediator->popCollision() );
-                                }
+                                        itemsAbove.push( mediator->popCollision() );
 
-                                // as long as there are items above teleport
-                                while ( ! topItems.empty() )
+                                // as long as there are items above the teletransport
+                                while ( ! itemsAbove.empty() )
                                 {
-                                        ItemPtr aboveItem = mediator->findItemByUniqueName( topItems.top() );
-                                        topItems.pop();
+                                        ItemPtr aboveItem = mediator->findItemByUniqueName( itemsAbove.top() );
+                                        itemsAbove.pop();
 
                                         // is it a free item with behavior
                                         if ( aboveItem != nilPointer &&
@@ -61,35 +52,35 @@ bool Teleport::update ()
                                                         {
                                                                 ItemPtr belowItem = mediator->findCollisionPop( );
 
-                                                                if ( aboveItem->whichItemClass() == "avatar item" && belowItem == this->item )
+                                                                if ( aboveItem->whichItemClass() == "avatar item"
+                                                                        && belowItem->getUniqueName() == teleportItem.getUniqueName() )
                                                                 {
                                                                         characterIsAboveTeleport = true ;
                                                                         break;
                                                                 }
                                                         }
 
-                                                        activated = characterIsAboveTeleport ;
+                                                        this->activated = characterIsAboveTeleport ;
                                                 }
                                         }
                                 }
-                        }
-                        else
-                        {
-                                activated = false;
+                        } else
+                                this->activated = false ;
+
+                        if ( this->activated ) {
+                                // animate activated teleport
+                                teleportItem.animate ();
+                                SoundManager::getInstance().play( teleportItem.getKind (), "function" );
                         }
 
-                        if ( activated ) // animate activated teleport
-                        {
-                                item->animate ();
-                                SoundManager::getInstance().play( item->getKind (), "function" );
-                        }
                         break;
 
                 default:
-                        activity = activities::Activity::Waiting;
+                        setCurrentActivity( activities::Activity::Waiting );
         }
 
-        return false;
+        // teleports are eternal
+        return false ;
 }
 
 }

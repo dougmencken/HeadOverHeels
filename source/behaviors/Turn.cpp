@@ -1,7 +1,6 @@
 
 #include "Turn.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Moving.hpp"
 #include "Displacing.hpp"
@@ -14,49 +13,46 @@
 namespace behaviors
 {
 
-Turn::Turn( const ItemPtr & item, const std::string & behavior )
+Turn::Turn( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        speedTimer->go();
-        fallTimer->go();
+        speedTimer->go ();
+        fallTimer->go ();
 }
 
-Turn::~Turn()
+bool Turn::update_returningdisappearance ()
 {
-}
+        FreeItem & turningItem = dynamic_cast< FreeItem & >( getItem() );
 
-bool Turn::update ()
-{
-        bool isGone = false;
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        begin();
+                        beginMoving () ;
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        if ( ! freeItem.isFrozen() )
+                        if ( ! turningItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem.getSpeed() )
+                                if ( speedTimer->getValue() > turningItem.getSpeed() )
                                 {
-                                        if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
-                                        {
-                                                turn();
+                                        if ( ! activities::Moving::getInstance().move( *this, true ) ) {
+                                                // if can’t move on
+                                                turn () ;
 
-                                                SoundManager::getInstance().play( freeItem.getKind (), "collision" );
+                                                SoundManager::getInstance().play( turningItem.getKind (), "collision" );
                                         }
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem.animate();
+                                turningItem.animate() ;
                         }
                         break;
 
@@ -68,32 +64,28 @@ bool Turn::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
-                        SoundManager::getInstance().play( freeItem.getKind (), "push" );
+                        SoundManager::getInstance().play( turningItem.getKind (), "push" );
 
-                        activities::Displacing::getInstance().displace( this, &activity, true );
+                        activities::Displacing::getInstance().displace( *this, true );
 
-                        activity = activities::Activity::Waiting;
+                        if ( turningItem.isFrozen() ) // a frozen item remains to be frozen
+                                setCurrentActivity( activities::Activity::Freeze );
+                        else
+                                setCurrentActivity( activities::Activity::Waiting );
 
-                        // inactive item continues to be inactive
-                        if ( freeItem.isFrozen() )
-                        {
-                                activity = activities::Activity::Freeze;
-                        }
                         break;
 
                 case activities::Activity::Falling:
-                        // look for reaching floor in a room without floor
-                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
-                        {
-                                isGone = true;
+                        if ( turningItem.getZ() == 0 && ! turningItem.getMediator()->getRoom()->hasFloor() ) {
+                                // reached the bottom of a room without floor
+                                present = false ;
                         }
-                        // is it time to lower by one unit
-                        else if ( fallTimer->getValue() > freeItem.getWeight() )
+                        // is it time to fall
+                        else if ( fallTimer->getValue() > turningItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) )
-                                {
-                                        SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Waiting ;
+                                if ( ! activities::Falling::getInstance().fall( * this ) ) {
+                                        SoundManager::getInstance().play( turningItem.getKind (), "fall" );
+                                        setCurrentActivity( activities::Activity::Waiting );
                                 }
 
                                 fallTimer->reset();
@@ -101,39 +93,39 @@ bool Turn::update ()
                         break;
 
                 case activities::Activity::Freeze:
-                        freeItem.setFrozen( true );
+                        turningItem.setFrozen( true );
                         break;
 
                 case activities::Activity::WakeUp:
-                        freeItem.setFrozen( false );
-                        activity = activities::Activity::Waiting;
+                        turningItem.setFrozen( false );
+                        setCurrentActivity( activities::Activity::Waiting );
                         break;
 
                 default:
                         ;
         }
 
-        return isGone;
+        return ! present ;
 }
 
-void Turn::begin()
+void Turn::beginMoving ()
 {
-        switch ( Way( item->getHeading() ).getIntegerOfWay () )
+        switch ( Way( getItem().getHeading () ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = activities::Activity::MovingNorth;
+                        setCurrentActivity( activities::Activity::MovingNorth );
                         break;
 
                 case Way::South:
-                        activity = activities::Activity::MovingSouth;
+                        setCurrentActivity( activities::Activity::MovingSouth );
                         break;
 
                 case Way::East:
-                        activity = activities::Activity::MovingEast;
+                        setCurrentActivity( activities::Activity::MovingEast );
                         break;
 
                 case Way::West:
-                        activity = activities::Activity::MovingWest;
+                        setCurrentActivity( activities::Activity::MovingWest );
                         break;
 
                 default:
@@ -141,54 +133,48 @@ void Turn::begin()
         }
 }
 
-void Turn::turn()
+void Turn::turn ()
 {
         bool turnLeft = ( getNameOfBehavior() == "behavior of move then turn left and move" );
 
-        switch ( Way( item->getHeading() ).getIntegerOfWay () )
-        {
-                case Way::North:
-                        if ( turnLeft ) {
-                                activity = activities::Activity::MovingWest ;
-                                item->changeHeading( "west" );
-                        } else {
-                                activity = activities::Activity::MovingEast ;
-                                item->changeHeading( "east" );
-                        }
-                        break;
+        Item & item = getItem() ;
+        const std::string & heading = item.getHeading ();
 
-                case Way::South:
-                        if ( turnLeft ) {
-                                activity = activities::Activity::MovingEast ;
-                                item->changeHeading( "east" );
-                        } else {
-                                activity = activities::Activity::MovingWest ;
-                                item->changeHeading( "west" );
-                        }
-                        break;
-
-                case Way::East:
-                        if ( turnLeft ) {
-                                activity = activities::Activity::MovingNorth ;
-                                item->changeHeading( "north" );
-                        } else {
-                                activity = activities::Activity::MovingSouth ;
-                                item->changeHeading( "south" );
-                        }
-                        break;
-
-                case Way::West:
-                        if ( turnLeft ) {
-                                activity = activities::Activity::MovingSouth ;
-                                item->changeHeading( "south" );
-                        } else {
-                                activity = activities::Activity::MovingNorth ;
-                                item->changeHeading( "north" );
-                        }
-                        break;
-
-                default:
-                        ;
+        if ( heading == "north" ) {
+                if ( turnLeft ) {
+                        setCurrentActivity( activities::Activity::MovingWest );
+                        item.changeHeading( "west" );
+                } else {
+                        setCurrentActivity( activities::Activity::MovingEast );
+                        item.changeHeading( "east" );
+                }
+        }
+        else if ( heading == "south" ) {
+                if ( turnLeft ) {
+                        setCurrentActivity( activities::Activity::MovingEast );
+                        item.changeHeading( "east" );
+                } else {
+                        setCurrentActivity( activities::Activity::MovingWest );
+                        item.changeHeading( "west" );
+                }
+        }
+        else if ( heading == "east" ) {
+                if ( turnLeft ) {
+                        setCurrentActivity( activities::Activity::MovingNorth );
+                        item.changeHeading( "north" );
+                } else {
+                        setCurrentActivity( activities::Activity::MovingSouth );
+                        item.changeHeading( "south" );
+                }
+        }
+        else if ( heading == "west" ) {
+                if ( turnLeft ) {
+                        setCurrentActivity( activities::Activity::MovingSouth );
+                        item.changeHeading( "south" );
+                } else {
+                        setCurrentActivity( activities::Activity::MovingNorth );
+                        item.changeHeading( "north" );
+                }
         }
 }
 

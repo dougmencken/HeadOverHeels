@@ -21,11 +21,11 @@ class CharacterHead : public PlayerControlled
 
 public:
 
-        CharacterHead( const ItemPtr & item, const std::string & behavior ) ;
+        CharacterHead( Item & item, const std::string & behavior ) ;
 
         virtual ~CharacterHead( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
         virtual void behave () ;
 

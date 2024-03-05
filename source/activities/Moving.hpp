@@ -11,9 +11,10 @@
 #ifndef Moving_hpp_
 #define Moving_hpp_
 
-#include "FreeItem.hpp"
 #include "Behavior.hpp"
 #include "Activity.hpp"
+
+class FreeItem ;
 
 
 namespace activities
@@ -31,11 +32,10 @@ public:
         /**
          * Item is moving
          * @param behavior the behavior of item
-         * @param activity the current activity
          * @param itFalls whether the item falls, false for a flying one
          * @return true for a move or changed activity, false for a collision
          */
-        bool move ( behaviors::Behavior * behavior, Activity * activity, bool itFalls ) ;
+        bool move ( behaviors::Behavior & behavior, bool itFalls ) ;
 
 protected:
 

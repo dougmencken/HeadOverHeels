@@ -12,8 +12,10 @@
 #define Bonus_hpp_
 
 #include "Behavior.hpp"
-#include "AvatarItem.hpp"
 #include "Timer.hpp"
+
+class FreeItem ;
+class AvatarItem ;
 
 
 namespace behaviors
@@ -28,36 +30,30 @@ class Bonus : public Behavior
 
 public:
 
-        Bonus( const ItemPtr & item, const std::string & behavior ) ;
+        Bonus( Item & item, const std::string & behavior ) ;
 
         virtual ~Bonus () { }
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 protected:
 
         /**
-         * whether the character can take this item or not
+         * whether can take this item or not
          */
-        bool mayTake ( const std::string & character ) ;
+        bool mayTake ( const Item & taker ) ;
 
         void takeIt ( AvatarItem & whoTakes ) ;
 
 private:
 
-        /**
-         * Timer for disappearance of bonus
-         */
+        // timer for the disappearance of bonus
         autouniqueptr < Timer > disappearanceTimer ;
 
-        /**
-         * Timer for speed of item’s movement
-         */
+        // timer for the speed of motion
         autouniqueptr < Timer > speedTimer ;
 
-        /**
-         * Timer for speed of item’s falling
-         */
+        // timer for the speed of falling
         autouniqueptr < Timer > fallTimer ;
 
 };

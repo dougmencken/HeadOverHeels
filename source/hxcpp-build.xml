@@ -81,7 +81,6 @@
         <file name="behaviors/Turn.cpp" />
         <file name="behaviors/PlayerControlled.cpp" />
         <file name="behaviors/Volatile.cpp" />
-        <file name="behaviors/Behavior.cpp" />
         <file name="behaviors/CreatorOfBehaviors.cpp" />
         <file name="gui/Font.cpp" />
         <file name="gui/GuiManager.cpp" />

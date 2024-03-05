@@ -42,7 +42,7 @@ public:
          * @param jumpPhase the phase of jumping
          * @return true for jump or false when there’s a collision
          */
-        bool jump ( behaviors::Behavior * behavior, Activity * activity, unsigned int jumpPhase, const std::vector < std::pair< int /* xy */, int /* z */ > >& jumpVector ) ;
+        bool jump ( behaviors::Behavior & behavior, unsigned int jumpPhase, const std::vector < std::pair< int /* xy */, int /* z */ > > & jumpVector ) ;
 
 protected:
 

@@ -11,7 +11,7 @@
 namespace behaviors
 {
 
-CharacterHead::CharacterHead( const ItemPtr & item, const std::string & behavior )
+CharacterHead::CharacterHead( Item & item, const std::string & behavior )
         : PlayerControlled( item, behavior )
 {
         // salto
@@ -47,9 +47,9 @@ CharacterHead::CharacterHead( const ItemPtr & item, const std::string & behavior
         timerForBlinking->go ();
 }
 
-bool CharacterHead::update ()
+bool CharacterHead::update_returningdisappearance ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
         if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
 
@@ -138,7 +138,7 @@ bool CharacterHead::update ()
 
 void CharacterHead::behave ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
         Activity whatDoing = getCurrentActivity() ;
 
@@ -314,7 +314,7 @@ void CharacterHead::blink ()
 
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {
-                AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem () );
+                AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem () );
                 avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
         // eyes open

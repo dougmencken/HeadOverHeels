@@ -47,9 +47,7 @@ public:
         /**
          * Updates the character’s behavior according to the player’s controls
          */
-        virtual void behave () ;
-
-        /////////virtual bool update () ;
+        virtual void behaveCharacter () ;
 
         void wait () ;
 
@@ -130,13 +128,13 @@ public:
          */
         bool hasTool ( const std::string & tool ) const ;
 
-        void setWayOfExit ( const std::string& way ) ;
+        const std::string & getWayOfExit () const {  return this->wayOfExit ;  }
 
-        const std::string & getWayOfExit () const {  return wayOfExit ;  }
+        void setWayOfExit ( const std::string & way ) ;
 
-        const std::string & getWayOfEntry () const {  return wayOfEntry ;  }
+        const std::string & getWayOfEntry () const {  return this->wayOfEntry ;  }
 
-        void setWayOfEntry ( const std::string& way ) {  wayOfEntry = way ;  }
+        void setWayOfEntry ( const std::string & way ) ;
 
         /**
          * See if the character crosses the limits of room

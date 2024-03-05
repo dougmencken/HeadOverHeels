@@ -1,7 +1,7 @@
 
 #include "Bonus.hpp"
 
-#include "FreeItem.hpp"
+#include "AvatarItem.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
 #include "Room.hpp"
@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-Bonus::Bonus( const ItemPtr & item, const std::string & behavior )
+Bonus::Bonus( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , disappearanceTimer( new Timer() )
         , speedTimer( new Timer() )
@@ -24,39 +24,34 @@ Bonus::Bonus( const ItemPtr & item, const std::string & behavior )
         fallTimer->go();
 }
 
-bool Bonus::update ()
+bool Bonus::update_returningdisappearance ()
 {
-        bool isGone = false ;
+        bool present = true ;
 
-        Mediator* mediator = item->getMediator();
+        Item & bonusItem = getItem ();
+        Mediator * mediator = bonusItem.getMediator() ;
 
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
                         // is there an item above this one
-                        if ( ! item->canAdvanceTo( 0, 0, 1 ) )
+                        if ( ! bonusItem.canAdvanceTo( 0, 0, 1 ) )
                         {
                                 ItemPtr itemAbove = mediator->findCollisionPop( );
 
-                                // is that above item the character which may take this bonus
-                                if ( itemAbove != nilPointer
-                                        && itemAbove->whichItemClass() == "avatar item"
-                                                && mayTake( itemAbove->getOriginalKind() ) )
-                                {
-                                        activity = activities::Activity::Vanishing ;
-                                        affectedBy = itemAbove ; // vanishing is caused by the character
-
-                                        disappearanceTimer->reset();
+                                // can that above item take this bonus
+                                if ( itemAbove != nilPointer && mayTake( * itemAbove ) ) {
+                                        changeActivityDueTo( activities::Activity::Vanishing, itemAbove );
+                                        disappearanceTimer->reset() ;
                                 }
                         }
 
-                        item->animate();
+                        bonusItem.animate() ;
 
                         // fall if it’s not taken
-                        if ( activity != activities::Activity::Vanishing )
-                        {
-                                activity = activities::Activity::Falling;
-                        }
+                        if ( getCurrentActivity() != activities::Activity::Vanishing )
+                                setCurrentActivity( activities::Activity::Falling );
+
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -68,21 +63,24 @@ bool Bonus::update ()
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
                 case activities::Activity::PushedUp:
-                        // if the character touches the bonus item and may take this bonus
-                        if ( affectedBy->whichItemClass() == "avatar item" && mayTake( affectedBy->getOriginalKind() ) )
-                        {
-                                activity = activities::Activity::Vanishing ;
-                        }
-                        // otherwise it's some other item which pushes the bonus
-                        else if ( speedTimer->getValue() > item->getSpeed() )
-                        {
-                                activities::Displacing::getInstance().displace( this, &activity, true );
+                {
+                        const ItemPtr & taker = getWhatAffectedThisBehavior ();
 
-                                // after displaced, back to falling
-                                activity = activities::Activity::Falling;
+                        // if may take it
+                        if ( taker != nilPointer && mayTake( * taker ) ) {
+                                changeActivityDueTo( activities::Activity::Vanishing, taker );
+                        }
+                        // otherwise some other item is pushing the bonus
+                        else if ( speedTimer->getValue() > bonusItem.getSpeed() )
+                        {
+                                activities::Displacing::getInstance().displace( *this, true );
+
+                                // to falling
+                                setCurrentActivity( activities::Activity::Falling );
 
                                 speedTimer->reset();
                         }
+                }
                         break;
 
                 case activities::Activity::DraggedNorth:
@@ -90,52 +88,48 @@ bool Bonus::update ()
                 case activities::Activity::DraggedEast:
                 case activities::Activity::DraggedWest:
                         // the bonus item is on a conveyor
-                        if ( speedTimer->getValue() > item->getSpeed() )
+                        if ( speedTimer->getValue() > bonusItem.getSpeed() )
                         {
-                                activities::Displacing::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( *this, true );
 
-                                // after displaced, back to falling
-                                activity = activities::Activity::Falling;
+                                // to falling
+                                setCurrentActivity( activities::Activity::Falling );
 
                                 speedTimer->reset();
                         }
                         break;
 
                 case activities::Activity::Falling:
-                        // is it fall in room without floor
-                        if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
-                        {
-                                isGone = true;
+                        if ( bonusItem.getZ() == 0 && ! bonusItem.getMediator()->getRoom()->hasFloor() )
+                        {       // disappear when at the bottom of a room without floor
+                                present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > item->getWeight() )
+                        else if ( fallTimer->getValue() > bonusItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) )
+                                if ( ! activities::Falling::getInstance().fall( *this ) )
                                 {
-                                        activity = activities::Activity::Waiting;
+                                        // to waiting
+                                        setCurrentActivity( activities::Activity::Waiting );
                                 }
 
                                 fallTimer->reset();
 
-                                // look if the bonus falls on the character
-                                if ( ! item->canAdvanceTo( 0, 0, -1 ) )
+                                // look if the bonus falls on a character
+                                if ( ! bonusItem.canAdvanceTo( 0, 0, -1 ) )
                                 {
                                         ItemPtr itemBelow = mediator->findCollisionPop( );
 
-                                        // is that below item the character which may take this bonus
-                                        if ( itemBelow != nilPointer && itemBelow->whichItemClass() == "avatar item" && mayTake( itemBelow->getOriginalKind() ) )
+                                        // can that below item take this bonus
+                                        if ( itemBelow != nilPointer && mayTake( * itemBelow ) )
                                         {
-                                                // get collisions of the avatar item with the items above it
+                                                // get collisions with the bonus and other items above
                                                 itemBelow->canAdvanceTo( 0, 0, 1 );
 
                                                 // if that avatar item is just below the bonus then it’s okay to take it
-                                                bool takeIt = ( mediator->howManyCollisions() <= 1 );
-
-                                                // disappear on take
-                                                if ( takeIt )
-                                                {
-                                                        activity = activities::Activity::Vanishing ;
-                                                        affectedBy = itemBelow ; // vanishing is caused by the character
+                                                if ( mediator->howManyCollisions() <= 1 ) {
+                                                        // disappear when taken
+                                                        changeActivityDueTo( activities::Activity::Vanishing, itemBelow );
 
                                                         disappearanceTimer->reset();
                                                 }
@@ -147,30 +141,30 @@ bool Bonus::update ()
                 case activities::Activity::Vanishing:
                         if ( disappearanceTimer->getValue() > 0.100 )
                         {
-                                isGone = true ;
-
                                 // play the sound of taking
-                                SoundManager::getInstance().play( item->getKind (), "vanish" );
+                                SoundManager::getInstance().play( bonusItem.getKind (), "vanish" );
 
-                                // a bonus item disappears from the room once it's taken
+                                // a bonus item disappears from the room once it’s taken
                                 BonusManager::getInstance().markAsAbsent(
                                         BonusInRoom(
-                                                item->getKind (),
-                                                item->getMediator()->getRoom()->getNameOfRoomDescriptionFile()
+                                                bonusItem.getKind (),
+                                                bonusItem.getMediator()->getRoom()->getNameOfRoomDescriptionFile ()
                                         ) );
 
-                                takeIt( dynamic_cast< AvatarItem & >( * affectedBy ) );
+                                const ItemPtr & taker = getWhatAffectedThisBehavior ();
+                                if ( taker != nilPointer && taker->whichItemClass() == "avatar item" )
+                                        takeIt( dynamic_cast< AvatarItem & >( * taker ) );
 
-                                if ( item->getOriginalKind() != "crown" ) // no bubbles for crowns
+                                if ( bonusItem.getOriginalKind() != "crown" )
                                 {
-                                        item->setIgnoreCollisions( true );
+                                        bonusItem.setIgnoreCollisions( true );
 
-                                        item->changeHeightTo( 0 );
-                                        item->metamorphInto( "bubbles", "vanishing bonus item" );
-                                        item->setBehaviorOf( "behavior of disappearance in time" );
-
-                                        isGone = false ;
+                                        bonusItem.changeHeightTo( 0 );
+                                        bonusItem.metamorphInto( "bubbles", "vanishing bonus item" );
+                                        bonusItem.setBehaviorOf( "behavior of disappearance in time" );
                                 }
+                                else
+                                        present = false ; // no bubbles for a crown, just disappear
                         }
                         break;
 
@@ -178,12 +172,17 @@ bool Bonus::update ()
                         ;
         }
 
-        return isGone;
+        return ! present ;
 }
 
-bool Bonus::mayTake( const std::string & character )
+bool Bonus::mayTake( const Item & taker )
 {
-        std::string magicItem = this->item->getOriginalKind();
+        // only a character can take a bonus
+        if ( taker.whichItemClass() != "avatar item" ) return false ;
+
+        const AvatarItem & character = dynamic_cast< const AvatarItem & >( taker );
+
+        const std::string & magicItem = getItem().getOriginalKind ();
 
         if ( magicItem == "extra-life" || magicItem == "shield" ||
                 magicItem == "reincarnation-fish" || magicItem == "crown" )
@@ -191,56 +190,45 @@ bool Bonus::mayTake( const std::string & character )
                 return true ;
         }
 
-        return  ( character == "head"     &&  ( magicItem == "quick-steps" ||
-                                                magicItem == "horn" ||
-                                                magicItem == "donuts" ) )
-                ||
-
-                ( character == "heels"    &&  ( magicItem == "high-jumps" ||
-                                                magicItem == "handbag" ) )
-                ||
-
-                ( character == "headoverheels" && ( magicItem == "handbag" ||
-                                                magicItem == "horn" ||
-                                                magicItem == "donuts" ) ) ;
+        return     ( character.isHead() && ( magicItem == "quick-steps" ||
+                                             magicItem == "horn" ||
+                                             magicItem == "donuts" ) )
+                || ( character.isHeels()  && ( magicItem == "high-jumps" ||
+                                               magicItem == "handbag" ) )
+                || ( character.isHeadOverHeels() && ( magicItem == "handbag" ||
+                                                      magicItem == "horn" ||
+                                                      magicItem == "donuts" ) ) ;
 }
 
 void Bonus::takeIt( AvatarItem & whoTakes )
 {
-        std::string whichItem = this->item->getOriginalKind () ;
+        Item & it = getItem() ;
+        const std::string & whichItem = it.getOriginalKind ();
 
-        if ( whichItem == "donuts" )
-        {
+        if ( whichItem == "donuts" ) {
                 const unsigned short DonutsPerBox = 6 ;
                 whoTakes.addDonuts( DonutsPerBox );
         }
-        else if ( whichItem == "extra-life" )
-        {
+        else if ( whichItem == "extra-life" ) {
                 whoTakes.addLives( 2 );
         }
-        else if ( whichItem == "quick-steps" )
-        {
+        else if ( whichItem == "quick-steps" ) {
                 whoTakes.activateBonusQuickSteps () ;
         }
-        else if ( whichItem == "high-jumps" )
-        {
+        else if ( whichItem == "high-jumps" ) {
                 whoTakes.addBonusHighJumps( 10 );
         }
-        else if ( whichItem == "shield" )
-        {
+        else if ( whichItem == "shield" ) {
                 whoTakes.activateShield () ;
         }
-        else if ( whichItem == "crown" )
-        {
+        else if ( whichItem == "crown" ) {
                 whoTakes.liberateCurrentPlanet () ;
         }
-        else if ( whichItem == "horn" || whichItem == "handbag" )
-        {
+        else if ( whichItem == "horn" || whichItem == "handbag" ) {
                 whoTakes.takeMagicTool( whichItem );
         }
-        else if ( whichItem == "reincarnation-fish" )
-        {
-                whoTakes.saveAt( this->item->getX (), this->item->getY (), this->item->getZ () );
+        else if ( whichItem == "reincarnation-fish" ) {
+                whoTakes.saveAt( it.getX (), it.getY (), it.getZ () );
         }
 }
 

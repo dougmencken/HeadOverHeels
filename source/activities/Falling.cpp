@@ -18,31 +18,28 @@ Falling * Falling::instance = nilPointer ;
 Falling & Falling::getInstance()
 {
         if ( instance == nilPointer )
-        {
-                instance = new Falling();
-        }
+                instance = new Falling () ;
 
         return *instance;
 }
 
 
-bool Falling::fall( behaviors::Behavior * behavior )
+bool Falling::fall( behaviors::Behavior & behavior )
 {
-        if ( behavior == nilPointer ) return false ;
+        Item & whatFalls = behavior.getItem() ;
 
-        if ( behavior->getItem()->whichItemClass() == "avatar item" &&
-                GameManager::getInstance().charactersFly() &&
-                ! ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "PageDown" ) ) )
+        if ( whatFalls.whichItemClass() == "avatar item"
+                && GameManager::getInstance().charactersFly()
+                        && ! ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "PageDown" ) ) )
         {
                 return false ;
         }
 
-        bool mayFall = behavior->getItem()->addToZ( -1 );
+        bool mayFall = whatFalls.addToZ( -1 );
 
         // when there’s something below
         if ( ! mayFall )
         {
-                Item & whatFalls = *( behavior->getItem() );
                 Mediator* mediator = whatFalls.getMediator() ;
 
                 // collect the collisions

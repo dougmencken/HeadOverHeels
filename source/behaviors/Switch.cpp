@@ -1,76 +1,62 @@
 
 #include "Switch.hpp"
 
-#include "Item.hpp"
-#include "AvatarItem.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
-#include <stack>
-
-#include <algorithm> // std::find_if
+#include <algorithm> // std::find
 
 
 namespace behaviors
 {
 
-Switch::Switch( const ItemPtr & item, const std::string & behavior )
+Switch::Switch( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , isItemAbove( false )
+        , switchedFromAbove( false )
 {
 
 }
 
-Switch::~Switch( )
+bool Switch::update_returningdisappearance ()
 {
+        Item & switchItem = getItem () ;
+        Mediator * mediator = switchItem.getMediator();
 
-}
-
-bool Switch::update ()
-{
-        Mediator * mediator = item->getMediator();
-        std::vector< ItemPtr > itemsNearby ;
-
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
-                        // look if there’re items near the switch
-                        if ( lookForItemsNearby( itemsNearby ) )
-                        {
-                                // when some item that made the switch is no longer near,
-                                // or that item is near but it’s a character that is waiting,
-                                // then remove such an item from the list of triggers so that it may re~switch
-                                for ( size_t i = 0 ; i < triggers.size() ; i ++ )
-                                {
-                                        ItemPtr trigger = triggers[ i ];
+                {
+                        std::set< std::string > itemsNearbyNow ;
+                        lookForItemsNearby( itemsNearbyNow );
 
-                                        if ( std::find( itemsNearby.begin (), itemsNearby.end (), trigger ) == itemsNearby.end () ||
-                                                ( trigger->whichItemClass() == "avatar item" && trigger->getBehavior()->getCurrentActivity() == activities::Activity::Waiting ) )
+                        if ( ! itemsNearbyNow.empty () ) // if there’re items near the switch
+                        {
+                                for ( std::set< std::string >::iterator s = this->switchers.begin (), e = this->switchers.end () ; s != e ; )
+                                {
+                                        const std::string & switcher = *s ;
+                                        ItemPtr switcherItem = mediator->findItemByUniqueName( switcher );
+
+                                        // when an item that did the switch went away from it (is not near),
+                                        // or disappeared from the room,
+                                        // or that item may be near but it’s a character that is waiting
+                                        if ( std::find( itemsNearbyNow.begin (), itemsNearbyNow.end (), switcher ) == itemsNearbyNow.end ()
+                                                        || switcherItem == nilPointer ||
+                                                        ( switcherItem->whichItemClass() == "avatar item" &&
+                                                                switcherItem->getBehavior()->getCurrentActivity() == activities::Activity::Waiting ) )
                                         {
-                                                triggers.erase( std::remove( triggers.begin (), triggers.end (), trigger ), triggers.end () );
-                                        }
+                                                // then remove an item from the set of switchers so that it may re~switch
+                                                this->switchers.erase( s ++ );
+                                        } else
+                                                ++ s ; // to the next switcher
                                 }
-                        }
-                        else
-                        {
-                                triggers.clear ();
-                        }
+                        } else
+                                this->switchers.clear ();
 
-                        // look for items above
-                        if ( ! item->canAdvanceTo( 0, 0, 1 ) )
-                        {
-                                // copy the stack of collisions
-                                std::stack< std::string > aboveItems;
-                                while ( mediator->isThereAnyCollision() )
+                        // is there anything above the switch?
+                        if ( ! switchItem.canAdvanceTo( 0, 0, 1 ) ) {
+                                while ( mediator->isThereAnyCollision() ) // there’s something
                                 {
-                                        aboveItems.push( mediator->popCollision() );
-                                }
-
-                                // as long as there’re elements above this switch
-                                while ( ! aboveItems.empty() )
-                                {
-                                        ItemPtr itemAbove = mediator->findItemByUniqueName( aboveItems.top() );
-                                        aboveItems.pop();
+                                        ItemPtr itemAbove = mediator->findCollisionPop () ;
 
                                         // is it a free item
                                         if ( itemAbove != nilPointer &&
@@ -81,24 +67,19 @@ bool Switch::update ()
                                                                 // the switch doesn’t toggle when the character jumps
                                                                 itemAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jumping )
                                                 {
-                                                        // toggle the switch when there’s only one item below the character
-                                                        if ( ! isItemAbove && mediator->howManyCollisions() <= 1 )
+                                                        // toggle the switch when it’s the only one item below the switcher
+                                                        if ( ! this->switchedFromAbove && mediator->howManyCollisions() <= 1 )
                                                         {
-                                                                isItemAbove = true;
+                                                                this->switchedFromAbove = true ;
 
-                                                                this->item->animate();
-
-                                                                mediator->toggleSwitchInRoom();
-
-                                                                // play the sound of switching
-                                                                SoundManager::getInstance().play( item->getKind (), "switch" );
+                                                                toggleIt () ;
                                                         }
                                                 }
                                         }
                                 }
                         } else
-                                isItemAbove = false;
-
+                                this->switchedFromAbove = false ;
+                }
                         break;
 
                 case activities::Activity::PushedNorth:
@@ -109,68 +90,61 @@ bool Switch::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
-                        if ( std::find( triggers.begin (), triggers.end (), affectedBy ) == /* not there */ triggers.end () )
+                {
+                        const ItemPtr & pusher = getWhatAffectedThisBehavior() ;
+                        if ( pusher != nilPointer )
                         {
-                                triggers.push_back( affectedBy );
-                                item->animate ();
+                                bool isNewPusher = this->switchers.insert( pusher->getUniqueName () ).second ;
 
-                                mediator->toggleSwitchInRoom() ;
-
-                                // play the sound of switching
-                                SoundManager::getInstance().play( item->getKind (), "switch" );
+                                if ( isNewPusher ) toggleIt() ;
                         }
 
-                        activity = activities::Activity::Waiting;
+                        setCurrentActivity( activities::Activity::Waiting );
+                }
                         break;
 
                 default:
                         ;
         }
 
-        return false;
+        return false ;
 }
 
-bool Switch::lookForItemsNearby( std::vector< ItemPtr > & itemsNearby )
+void Switch::toggleIt ()
 {
-        Mediator* mediator = item->getMediator();
+        Item & switchItem = getItem() ;
+
+        switchItem.animate ();
+        switchItem.getMediator()->toggleSwitchInRoom () ;
+
+        // play the sound of switching
+        SoundManager::getInstance().play( switchItem.getKind(), "switch" );
+}
+
+void Switch::lookForItemsNearby ( std::set< std::string > & itemsNearby )
+{
+        Item & switchItem = getItem() ;
+        Mediator* mediator = switchItem.getMediator();
 
         // is there an item at north
-        if ( ! item->canAdvanceTo( -1, 0, 0 ) )
-        {
+        if ( ! switchItem.canAdvanceTo( -1, 0, 0 ) )
                 while ( mediator->isThereAnyCollision() )
-                {
-                        itemsNearby.push_back( mediator->findCollisionPop() );
-                }
-        }
+                        itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 
         // is there an item at south
-        if ( ! item->canAdvanceTo( 1, 0, 0 ) )
-        {
+        if ( ! switchItem.canAdvanceTo( 1, 0, 0 ) )
                 while ( mediator->isThereAnyCollision() )
-                {
-                        itemsNearby.push_back( mediator->findCollisionPop() );
-                }
-        }
+                        itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 
         // is there an item at east
-        if ( ! item->canAdvanceTo( 0, -1, 0 ) )
-        {
+        if ( ! switchItem.canAdvanceTo( 0, -1, 0 ) )
                 while ( mediator->isThereAnyCollision() )
-                {
-                        itemsNearby.push_back( mediator->findCollisionPop() );
-                }
-        }
+                        itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 
         // is there an item at west
-        if ( ! item->canAdvanceTo( 0, 1, 0 ) )
-        {
+        if ( ! switchItem.canAdvanceTo( 0, 1, 0 ) )
                 while ( mediator->isThereAnyCollision() )
-                {
-                        itemsNearby.push_back( mediator->findCollisionPop() );
-                }
-        }
-
-        return ! itemsNearby.empty() ;
+                        itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 }
 
 }

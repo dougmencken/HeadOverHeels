@@ -1,7 +1,6 @@
 
 #include "Impel.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
@@ -12,27 +11,22 @@
 namespace behaviors
 {
 
-Impel::Impel( const ItemPtr & item, const std::string & behavior )
+Impel::Impel( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        activity = activities::Activity::Waiting ;
-
-        speedTimer->go();
-        fallTimer->go();
+        speedTimer->go() ;
+        fallTimer->go() ;
 }
 
-Impel::~Impel()
+bool Impel::update_returningdisappearance ()
 {
-}
+        FreeItem & impelItem = dynamic_cast< FreeItem & >( getItem() );
 
-bool Impel::update ()
-{
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        bool vanish = false;
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
                         break;
@@ -46,33 +40,27 @@ bool Impel::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                         // is it time to move
-                        if ( speedTimer->getValue() > freeItem.getSpeed() )
+                        if ( speedTimer->getValue() > impelItem.getSpeed() )
                         {
-                                if ( ! activities::Displacing::getInstance().displace( this, &activity, true ) )
-                                {
-                                        activity = activities::Activity::Waiting;
-                                }
+                                if ( ! activities::Displacing::getInstance().displace( *this, true ) )
+                                        setCurrentActivity( activities::Activity::Waiting );
 
                                 speedTimer->reset();
                         }
 
-                        freeItem.animate();
+                        impelItem.animate() ;
                         break;
 
                 case activities::Activity::Falling:
-                        // look for reaching floor in a room without floor
-                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
-                        {
-                                // item disappears
-                                vanish = true;
+                        if ( impelItem.getZ() == 0 && ! impelItem.getMediator()->getRoom()->hasFloor() ) {
+                                // disappear if reached the bottom of a room without floor
+                                present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > freeItem.getWeight() )
+                        else if ( fallTimer->getValue() > impelItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( this ) )
-                                {
-                                        activity = activities::Activity::Waiting;
-                                }
+                                if ( ! activities::Falling::getInstance().fall( *this ) )
+                                        setCurrentActivity( activities::Activity::Waiting );
 
                                 fallTimer->reset();
                         }
@@ -82,7 +70,7 @@ bool Impel::update ()
                         ;
         }
 
-        return vanish;
+        return ! present ;
 }
 
 }

@@ -1,7 +1,6 @@
 
 #include "Mobile.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
@@ -13,7 +12,7 @@
 namespace behaviors
 {
 
-Mobile::Mobile( const ItemPtr & item, const std::string & behavior )
+Mobile::Mobile( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
@@ -22,23 +21,19 @@ Mobile::Mobile( const ItemPtr & item, const std::string & behavior )
         fallTimer->go ();
 }
 
-Mobile::~Mobile()
+bool Mobile::update_returningdisappearance ()
 {
-}
+        FreeItem & mobileItem = dynamic_cast< FreeItem & >( getItem() );
 
-bool Mobile::update ()
-{
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        bool isGone = false;
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        // see if the item falls yet
-                        if ( activities::Falling::getInstance().fall( this ) )
-                        {
+                        if ( activities::Falling::getInstance().fall( *this ) ) {
+                                // the item falls
                                 fallTimer->reset();
-                                activity = activities::Activity::Falling;
+                                setCurrentActivity( activities::Activity::Falling );
                         }
                         break;
 
@@ -51,55 +46,50 @@ bool Mobile::update ()
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
                         // is it time to move
-                        if ( speedTimer->getValue() > freeItem.getSpeed() )
+                        if ( speedTimer->getValue() > mobileItem.getSpeed() )
                         {
-                                // if the item isn't dragged
-                                if ( this->affectedBy == nilPointer || this->affectedBy != this->item )
-                                {       // emit the sound of pushing
-                                        SoundManager::getInstance().play( freeItem.getKind (), "push" );
-                                }
+                                const ItemPtr & otherItem = getWhatAffectedThisBehavior ();
+                                if ( otherItem == nilPointer || otherItem->getUniqueName() != mobileItem.getUniqueName() )
+                                        SoundManager::getInstance().play( mobileItem.getKind(), "push" );
 
-                                this->setCurrentActivity( activity );
-                                activities::Displacing::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( *this, true );
 
-                                activity = activities::Activity::Waiting;
+                                setCurrentActivity( activities::Activity::Waiting );
 
                                 speedTimer->reset();
                         }
 
-                        freeItem.animate();
+                        mobileItem.animate() ;
                         break;
 
                 case activities::Activity::DraggedNorth:
                 case activities::Activity::DraggedSouth:
                 case activities::Activity::DraggedEast:
                 case activities::Activity::DraggedWest:
-                        // item is on conveyor
-                        if ( speedTimer->getValue() > item->getSpeed() )
+                        // on a conveyor
+                        if ( speedTimer->getValue() > mobileItem.getSpeed() )
                         {
-                                activities::Displacing::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( *this, true );
 
-                                activity = activities::Activity::Falling;
+                                setCurrentActivity( activities::Activity::Falling );
 
                                 speedTimer->reset();
                         }
                         break;
 
                 case activities::Activity::Falling:
-                        // look for reaching floor in a room without floor
-                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
-                        {
-                                isGone = true;
+                        if ( mobileItem.getZ() == 0 && ! mobileItem.getMediator()->getRoom()->hasFloor() ) {
+                                // reached the bottom of a room with no floor
+                                present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > freeItem.getWeight() )
+                        else if ( fallTimer->getValue() > mobileItem.getWeight() )
                         {
-                                this->setCurrentActivity( activity );
-                                if ( ! activities::Falling::getInstance().fall( this ) )
-                                {
-                                        // play the sound of falling
-                                        SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                        activity = activities::Activity::Waiting;
+                                if ( ! activities::Falling::getInstance().fall( *this ) ) {
+                                        // play the end of the fall sound
+                                        SoundManager::getInstance().play( mobileItem.getKind(), "fall" );
+
+                                        setCurrentActivity( activities::Activity::Waiting );
                                 }
 
                                 fallTimer->reset();
@@ -107,15 +97,14 @@ bool Mobile::update ()
                         break;
 
                 case activities::Activity::Vanishing:
-                        // disappear when this item is caught
-                        isGone = true;
+                        present = false ;
                         break;
 
                 default:
                         ;
         }
 
-        return isGone;
+        return ! present ;
 }
 
 }

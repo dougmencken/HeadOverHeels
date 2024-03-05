@@ -10,7 +10,7 @@
 namespace behaviors
 {
 
-CharacterHeels::CharacterHeels( const ItemPtr & item, const std::string & behavior )
+CharacterHeels::CharacterHeels( Item & item, const std::string & behavior )
         : PlayerControlled( item, behavior )
 {
         // salto
@@ -40,9 +40,9 @@ CharacterHeels::CharacterHeels( const ItemPtr & item, const std::string & behavi
         fallTimer->go ();
 }
 
-bool CharacterHeels::update()
+bool CharacterHeels::update_returningdisappearance ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * this->item );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
         if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
 
@@ -132,7 +132,7 @@ bool CharacterHeels::update()
 
 void CharacterHeels::behave ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( * getItem() );
+        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
         Activity whatDoing = getCurrentActivity() ;
 
@@ -151,11 +151,15 @@ void CharacterHeels::behave ()
         if ( whatDoing == activities::Activity::Waiting /* || whatDoing == activities::Activity::Blinking */ )
         {
                 if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeAndJump
+                                                : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -182,11 +186,15 @@ void CharacterHeels::behave ()
                         toJumpOrTeleport ();
                 }
                 else if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeAndJump
+                                                : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -214,11 +222,15 @@ void CharacterHeels::behave ()
                         setCurrentActivity( activities::Activity::Jumping );
                 }
                 else if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeAndJump
+                                                : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( input.movenorthTyped() ) {
@@ -249,7 +261,9 @@ void CharacterHeels::behave ()
         {
                 // pick or drop an item when falling
                 if ( input.takeTyped() ) {
-                        activity = ( avatar.getDescriptionOfTakenItem() == nilPointer ) ? activities::Activity::TakeItem : activities::Activity::DropItem ;
+                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
+                                                ? activities::Activity::TakeItem
+                                                : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
         }

@@ -518,7 +518,7 @@ Room* MapManager::changeRoom ()
         return changeRoom( activeRoom->getMediator()->getActiveCharacter()->getWayOfExit() );
 }
 
-Room* MapManager::changeRoom( const std::string& wayOfExit )
+Room* MapManager::changeRoom( const std::string & wayOfExit )
 {
         Room* previousRoom = this->activeRoom ;
 
@@ -539,7 +539,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         const AvatarItem & oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
 
-        std::string nameOfRoamer = oldItemOfRoamer.getOriginalKind (); // the original, because the current kind may be "bubbles" when teleporting
+        std::string nameOfRoamer = oldItemOfRoamer.getOriginalKind (); // the original kind, because the current one may be "bubbles" when teleporting
         const DescriptionOfItem * descriptionOfRoamer = ItemDescriptions::descriptions ().getDescriptionByKind( nameOfRoamer ) ;
 
         const int exitX = oldItemOfRoamer.getX ();
@@ -552,7 +552,19 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         int previousSouthBound = previousRoom->getLimitAt( "south" );
         int previousWestBound = previousRoom->getLimitAt( "west" );
 
-        const std::string & exitOrientation = oldItemOfRoamer.getHeading () ;
+        const std::string exitOrientation( oldItemOfRoamer.getHeading() );
+
+        std::string wayOfEntry( Way::exitToEntry( wayOfExit ) );
+
+        Room* newRoom = getOrBuildRoomByFile( fileOfNextRoom );
+        assert( newRoom != nilPointer );
+
+        if ( ! newRoom->isSingleRoom () )
+                wayOfEntry = newRoom->getConnections()->clarifyTheWayOfEntryToABigRoom( wayOfEntry, fileOfPreviousRoom );
+
+        std::cout << "\"" << nameOfRoamer << "\" migrates"
+                        << " from the room \"" << fileOfPreviousRoom << "\" at \"" << wayOfExit << "\""
+                        << " to the room \"" << fileOfNextRoom << "\" at \"" << wayOfEntry << "\"" << std::endl ;
 
         // remove the active character from the previous room
         previousRoom->removeCharacterFromRoom( oldItemOfRoamer, true );
@@ -564,18 +576,6 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
                 removeRoomInPlay( previousRoom );
         }
-
-        Room* newRoom = getOrBuildRoomByFile( fileOfNextRoom );
-        assert( newRoom != nilPointer );
-
-        std::string wayOfEntry = Way::exitToEntry( wayOfExit ) ;
-
-        if ( ! newRoom->isSingleRoom () )
-                wayOfEntry = newRoom->getConnections()->clarifyTheWayOfEntryToABigRoom( wayOfEntry, fileOfPreviousRoom );
-
-        std::cout << "\"" << nameOfRoamer << "\" migrates"
-                        << " from the room \"" << fileOfPreviousRoom << "\" at \"" << wayOfExit << "\""
-                        << " to the room \"" << fileOfNextRoom << "\" at \"" << wayOfEntry << "\"" << std::endl ;
 
         addRoomInPlay( newRoom );
 

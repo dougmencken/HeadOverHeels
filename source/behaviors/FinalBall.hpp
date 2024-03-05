@@ -27,11 +27,11 @@ class FinalBall : public Behavior
 
 public:
 
-        FinalBall( const ItemPtr & item, const std::string & behavior ) ;
+        FinalBall( Item & item, const std::string & behavior ) ;
 
         virtual ~FinalBall( ) { }
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 private:
 

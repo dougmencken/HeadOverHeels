@@ -1,7 +1,6 @@
 
 #include "Elevator.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Room.hpp"
 #include "Moving.hpp"
@@ -11,47 +10,43 @@
 namespace behaviors
 {
 
-Elevator::Elevator( const ItemPtr & item, const std::string & behavior )
+Elevator::Elevator( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , top( 10 )
+        , top( Room::MaxLayers )
         , bottom( 0 )
         , ascent( true )
         , lastActivity( activities::Activity::Waiting )
         , speedTimer( new Timer() )
-        , stopTimer( new Timer() )
+        , waitingTimer( new Timer() )
 {
         speedTimer->go ();
-        stopTimer->go ();
+        waitingTimer->go ();
 }
 
-Elevator::~Elevator( )
+bool Elevator::update_returningdisappearance ()
 {
-}
+        FreeItem & freeItem = dynamic_cast< FreeItem & >( getItem() );
 
-bool Elevator::update ()
-{
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
                         setCurrentActivity ( ascent ? activities::Activity::GoingUp : activities::Activity::GoingDown );
-                        lastActivity = activity;
+                        this->lastActivity = getCurrentActivity ();
                         break;
 
                 case activities::Activity::GoingUp:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                activities::Moving::getInstance().move( this, &activity, false );
+                                activities::Moving::getInstance().move( *this, false );
 
-                                speedTimer->reset();
+                                speedTimer->reset() ;
 
                                 // elevator reached the top
                                 if ( freeItem.getZ() > top * Room::LayerHeight )
                                 {
-                                        activity = activities::Activity::StopAtTop;
-                                        lastActivity = activity;
-                                        stopTimer->reset();
+                                        setCurrentActivity( activities::Activity::StopAtTop );
+                                        this->lastActivity = getCurrentActivity ();
+                                        waitingTimer->reset() ;
                                 }
                         }
 
@@ -61,52 +56,52 @@ bool Elevator::update ()
                 case activities::Activity::GoingDown:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                activities::Moving::getInstance().move( this, &activity, false );
+                                activities::Moving::getInstance().move( *this, false );
 
-                                speedTimer->reset();
+                                speedTimer->reset() ;
 
-                                // elevator reached its bottom
+                                // elevator reached the bottom
                                 if ( freeItem.getZ() <= bottom * Room::LayerHeight )
                                 {
-                                        activity = activities::Activity::StopAtBottom;
-                                        lastActivity = activity;
-                                        stopTimer->reset();
+                                        setCurrentActivity( activities::Activity::StopAtBottom );
+                                        this->lastActivity = getCurrentActivity ();
+                                        waitingTimer->reset() ;
                                 }
                         }
 
                         freeItem.animate();
                         break;
 
-                // stop elevator for a moment when it reaches minimum height
+                // stop elevator for a moment when it reaches the lowest point
                 case activities::Activity::StopAtBottom:
-                        if ( stopTimer->getValue() >= 0.250 )
+                        if ( waitingTimer->getValue() >= 0.250 )
                         {
                                 setCurrentActivity( activities::Activity::GoingUp );
-                                lastActivity = activity;
+                                this->lastActivity = getCurrentActivity ();
                         }
 
                         freeItem.animate();
                         break;
 
-                // stop elevator for a moment when it reaches maximum height
+                // stop elevator for a moment when it reaches the highest point
                 case activities::Activity::StopAtTop:
-                        if ( stopTimer->getValue() >= 0.250 )
+                        if ( waitingTimer->getValue() >= 0.250 )
                         {
                                 setCurrentActivity( activities::Activity::GoingDown );
-                                lastActivity = activity;
+                                this->lastActivity = getCurrentActivity ();
                         }
 
                         freeItem.animate();
                         break;
 
                 default:
-                        activity = lastActivity;
+                        setCurrentActivity( this->lastActivity );
                         break;
         }
 
-        SoundManager::getInstance().play( freeItem.getKind (), SoundManager::activityToNameOfSound( activity ) );
+        SoundManager::getInstance().play( freeItem.getKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
-        return false;
+        return false ;
 }
 
 }

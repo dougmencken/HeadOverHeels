@@ -28,17 +28,17 @@ class ThereAndBack : public Behavior
 
 public:
 
-        ThereAndBack( const ItemPtr & item, const std::string & behavior, bool flying ) ;
+        ThereAndBack( Item & item, const std::string & behavior, bool flying ) ;
 
-        virtual ~ThereAndBack( ) ;
+        virtual ~ThereAndBack( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
 protected:
 
-        void letsMove () ;
+        void moveIt () ;
 
-        void turnRound () ;
+        void turnBack () ;
 
 private:
 

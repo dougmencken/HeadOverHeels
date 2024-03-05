@@ -32,7 +32,7 @@ class PlayerControlled : public Behavior
 
 public:
 
-        PlayerControlled( const ItemPtr & item, const std::string & behavior ) ;
+        PlayerControlled( Item & item, const std::string & behavior ) ;
 
         virtual ~PlayerControlled( ) ;
 
@@ -156,14 +156,7 @@ protected:
         // timer for blinking
         autouniqueptr < Timer > timerForBlinking ;
 
-public:
-
-        void unsetDoughnutInRoom () {  this->donutFromHooterInRoom = false ;  }
-
 private:
-
-        // is there a doughnut from the hooter in the room?
-        bool donutFromHooterInRoom ;
 
         bool isLosingLife ;
 

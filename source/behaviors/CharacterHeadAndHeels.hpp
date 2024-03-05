@@ -22,11 +22,11 @@ class CharacterHeadAndHeels : public PlayerControlled
 
 public:
 
-        CharacterHeadAndHeels( const ItemPtr & item, const std::string & behavior ) ;
+        CharacterHeadAndHeels( Item & item, const std::string & behavior ) ;
 
         virtual ~CharacterHeadAndHeels( ) {}
 
-        virtual bool update () ;
+        virtual bool update_returningdisappearance () ;
 
         virtual void behave () ;
 

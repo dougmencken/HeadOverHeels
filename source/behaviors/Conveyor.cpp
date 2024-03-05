@@ -1,9 +1,7 @@
 
 #include "Conveyor.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
-#include "AvatarItem.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
 #include "Mediator.hpp"
@@ -15,7 +13,7 @@
 namespace behaviors
 {
 
-Conveyor::Conveyor( const ItemPtr & item, const std::string & behavior )
+Conveyor::Conveyor( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , animationTimer( new Timer() )
@@ -24,20 +22,17 @@ Conveyor::Conveyor( const ItemPtr & item, const std::string & behavior )
         animationTimer->go();
 }
 
-Conveyor::~Conveyor( )
+bool Conveyor::update_returningdisappearance ()
 {
-}
+        Item & conveyorItem = getItem() ;
+        Mediator * mediator = conveyorItem.getMediator ();
 
-bool Conveyor::update ()
-{
-        Mediator* mediator = item->getMediator();
-
-        switch ( activity )
+        switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
-                        if ( speedTimer->getValue() > item->getSpeed() )
+                        if ( speedTimer->getValue() > conveyorItem.getSpeed() )
                         {
-                                if ( ! item->canAdvanceTo( 0, 0, 1 ) )
+                                if ( ! conveyorItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
                                         // copy the stack of collisions
                                         std::stack< std::string > itemsAbove ;
@@ -55,7 +50,7 @@ bool Conveyor::update ()
                                                 {
                                                         FreeItem & itemAbove = dynamic_cast< FreeItem & >( *collision );
 
-                                                        if ( /* the carrier is this conveyor */ this->item->getUniqueName() == itemAbove.getCarrier()
+                                                        if ( /* the carrier is this conveyor */ conveyorItem.getUniqueName() == itemAbove.getCarrier()
                                                                         || /* or any other carrying item */ ! itemAbove.getCarrier().empty() )
                                                         {
                                                                 if ( itemAbove.getBehavior() != nilPointer )
@@ -65,18 +60,18 @@ bool Conveyor::update ()
                                                                                                   || activityOfItemAbove == activities::Activity::Vanishing ) ;
 
                                                                         if ( ! outOfGravity ) {
-                                                                                if ( item->getHeading() == "south" )
+                                                                                if ( conveyorItem.getHeading() == "south" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedSouth );
-                                                                                else if ( item->getHeading() == "west" )
+                                                                                else if ( conveyorItem.getHeading() == "west" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedWest );
-                                                                                else if ( item->getHeading() == "north" )
+                                                                                else if ( conveyorItem.getHeading() == "north" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedNorth );
-                                                                                else if ( item->getHeading() == "east" )
+                                                                                else if ( conveyorItem.getHeading() == "east" )
                                                                                         itemAbove.getBehavior()->setCurrentActivity( activities::Activity::DraggedEast );
                                                                         }
 
                                                                         // play the sound of conveyor
-                                                                        SoundManager::getInstance().play( item->getKind (), "function" );
+                                                                        SoundManager::getInstance().play( conveyorItem.getKind (), "function" );
                                                                 }
                                                         }
                                                 }
@@ -86,19 +81,20 @@ bool Conveyor::update ()
                                 speedTimer->reset();
                         }
 
-                        if ( animationTimer->getValue() > 2 * item->getSpeed() )
+                        if ( animationTimer->getValue() > 2 * conveyorItem.getSpeed() )
                         {
-                                item->animate ();
+                                conveyorItem.animate ();
                                 animationTimer->reset();
                         }
 
                         break;
 
                 default:
-                        activity = activities::Activity::Waiting;
+                        setCurrentActivity( activities::Activity::Waiting );
         }
 
-        return false;
+        // conveyors are eternal
+        return false ;
 }
 
 }

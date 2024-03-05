@@ -86,6 +86,12 @@ Item::~Item( )
         shadows.clear ();
 }
 
+bool Item::updateItem ()
+{
+        return ( this->behavior != nilPointer ) ? ( ! this->behavior->update_returningdisappearance () ) : true ;
+}
+
+/* private */
 void Item::readGraphicsOfItem ()
 {
         motion.clear ();
@@ -105,16 +111,6 @@ void Item::readGraphicsOfItem ()
                 addFrame( Picture( descriptionOfItem->getWidthOfFrame(), descriptionOfItem->getHeightOfFrame() ) );
 
         updateImage ();
-}
-
-bool Item::updateItem()
-{
-        bool isGone = false;
-
-        if ( behavior != nilPointer )
-                isGone = behavior->update();
-
-        return isGone;
 }
 
 void Item::animate()
@@ -297,7 +293,7 @@ bool Item::doGraphicsOverlapAt( const Item & item, int x, int y ) const
 
 void Item::setBehaviorOf( const std::string & nameOfBehavior )
 {
-        this->behavior = behaviors::CreatorOfBehaviors::createBehaviorByName( ItemPtr( this ), nameOfBehavior );
+        this->behavior = behaviors::CreatorOfBehaviors::createBehaviorByName( * this , nameOfBehavior );
 }
 
 void Item::doForthMotion ()

@@ -1,7 +1,6 @@
 
 #include "ThereAndBack.hpp"
 
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Moving.hpp"
 #include "Displacing.hpp"
@@ -14,52 +13,48 @@
 namespace behaviors
 {
 
-ThereAndBack::ThereAndBack( const ItemPtr & item, const std::string & behavior, bool flying ) :
-        Behavior( item, behavior )
+ThereAndBack::ThereAndBack( Item & item, const std::string & behavior, bool flying )
+        : Behavior( item, behavior )
         , isFlying( flying )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        speedTimer->go();
-        if ( ! flying ) fallTimer->go();
+        speedTimer->go ();
+        if ( ! flying ) fallTimer->go ();
 }
 
-ThereAndBack::~ThereAndBack()
+bool ThereAndBack::update_returningdisappearance ()
 {
-}
+        FreeItem & thisItem = dynamic_cast< FreeItem & >( getItem () );
 
-bool ThereAndBack::update ()
-{
-        bool vanish = false;
-        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
+        bool present = true ;
 
-        switch ( activity )
+        switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        letsMove();
+                        moveIt() ;
                         break;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
                 case activities::Activity::MovingEast:
                 case activities::Activity::MovingWest:
-                        if ( ! freeItem.isFrozen() )
+                        if ( ! thisItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem.getSpeed() )
+                                if ( speedTimer->getValue() > thisItem.getSpeed() )
                                 {
                                         // move it
-                                        if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
+                                        if ( ! activities::Moving::getInstance().move( *this, true ) )
                                         {
-                                                turnRound();
+                                                turnBack() ;
 
-                                                // play the sound of collision
-                                                SoundManager::getInstance().play( freeItem.getKind (), "collision" );
+                                                SoundManager::getInstance().play( thisItem.getKind(), "collision" );
                                         }
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem.animate();
+                                thisItem.animate() ;
                         }
                         break;
 
@@ -71,88 +66,76 @@ bool ThereAndBack::update ()
                 case activities::Activity::PushedSoutheast:
                 case activities::Activity::PushedSouthwest:
                 case activities::Activity::PushedNorthwest:
-                        if ( ! this->isFlying )
-                        {
-                                // emit the sound of displacing
-                                SoundManager::getInstance().play( freeItem.getKind (), "push" );
+                        if ( ! this->isFlying ) {
+                                SoundManager::getInstance().play( thisItem.getKind(), "push" );
 
-                                // displace this item by other one
-                                activities::Displacing::getInstance().displace( this, &activity, true );
-
-                                activity = activities::Activity::Waiting;
-
-                                // preserve inactivity for frozen item
-                                if ( freeItem.isFrozen() )
-                                        activity = activities::Activity::Freeze;
+                                // this item is pushed by another one
+                                activities::Displacing::getInstance().displace( *this, true );
                         }
+
+                        if ( thisItem.isFrozen() ) // a frozen item remains frozen
+                                setCurrentActivity( activities::Activity::Freeze );
                         else
-                        {
-                                activity = activities::Activity::Waiting;
-                        }
+                                setCurrentActivity( activities::Activity::Waiting );
+
                         break;
 
                 case activities::Activity::Falling:
-                        if ( ! this->isFlying )
-                        {
-                                // look for reaching floor in a room without floor
-                                if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
-                                {
-                                        // item disappears
-                                        vanish = true;
+                        if ( ! this->isFlying ) {
+                                if ( thisItem.getZ() == 0 && ! thisItem.getMediator()->getRoom()->hasFloor() ) {
+                                        // disappear if on the bottom of a room with no floor
+                                        present = false ;
                                 }
                                 // is it time to fall
-                                else if ( fallTimer->getValue() > freeItem.getWeight() )
+                                else if ( fallTimer->getValue() > thisItem.getWeight() )
                                 {
-                                        if ( ! activities::Falling::getInstance().fall( this ) )
-                                        {
+                                        if ( ! activities::Falling::getInstance().fall( *this ) ) {
                                                 // emit the sound of falling
-                                                SoundManager::getInstance().play( freeItem.getKind (), "fall" );
-                                                activity = activities::Activity::Waiting;
+                                                SoundManager::getInstance().play( thisItem.getKind (), "fall" );
+                                                setCurrentActivity( activities::Activity::Waiting );
                                         }
 
                                         fallTimer->reset();
                                 }
-                        }
-                        else
-                        {
-                                activity = activities::Activity::Waiting;
-                        }
+                        } else
+                                setCurrentActivity( activities::Activity::Waiting );
+
                         break;
 
                 case activities::Activity::Freeze:
-                        freeItem.setFrozen( true );
+                        thisItem.setFrozen( true );
                         break;
 
                 case activities::Activity::WakeUp:
-                        freeItem.setFrozen( false );
-                        activity = activities::Activity::Waiting;
+                        thisItem.setFrozen( false );
+                        setCurrentActivity( activities::Activity::Waiting );
                         break;
 
                 default:
                         ;
         }
 
-        return vanish;
+        return ! present ;
 }
 
-void ThereAndBack::letsMove()
+void ThereAndBack::moveIt ()
 {
-        switch ( Way( item->getHeading() ).getIntegerOfWay () )
+        switch ( Way( getItem().getHeading() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = activities::Activity::MovingNorth;
+                        setCurrentActivity( activities::Activity::MovingNorth );
                         break;
 
                 case Way::South:
-                        activity = activities::Activity::MovingSouth;
+                        setCurrentActivity( activities::Activity::MovingSouth );
                         break;
 
                 case Way::East:
-                        activity = activities::Activity::MovingEast;
+                        setCurrentActivity( activities::Activity::MovingEast );
                         break;
 
                 case Way::West:
-                        activity = activities::Activity::MovingWest;
+                        setCurrentActivity( activities::Activity::MovingWest );
                         break;
 
                 default:
@@ -160,28 +143,30 @@ void ThereAndBack::letsMove()
         }
 }
 
-void ThereAndBack::turnRound()
+void ThereAndBack::turnBack ()
 {
-        switch ( Way( item->getHeading() ).getIntegerOfWay () )
+        Item & thisItem = getItem () ;
+
+        switch ( Way( thisItem.getHeading() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = activities::Activity::MovingSouth ;
-                        item->changeHeading( "south" );
+                        setCurrentActivity( activities::Activity::MovingSouth );
+                        thisItem.changeHeading( "south" );
                         break;
 
                 case Way::South:
-                        activity = activities::Activity::MovingNorth ;
-                        item->changeHeading( "north" );
+                        setCurrentActivity( activities::Activity::MovingNorth );
+                        thisItem.changeHeading( "north" );
                         break;
 
                 case Way::East:
-                        activity = activities::Activity::MovingWest ;
-                        item->changeHeading( "west" );
+                        setCurrentActivity( activities::Activity::MovingWest );
+                        thisItem.changeHeading( "west" );
                         break;
 
                 case Way::West:
-                        activity = activities::Activity::MovingEast ;
-                        item->changeHeading( "east" );
+                        setCurrentActivity( activities::Activity::MovingEast );
+                        thisItem.changeHeading( "east" );
                         break;
 
                 default:
