@@ -13,8 +13,9 @@ namespace behaviors
 Switch::Switch( Item & item, const std::string & behavior )
         : Behavior( item, behavior )
         , switchedFromAbove( false )
+        , whenToggledTimer( new Timer() )
 {
-
+        whenToggledTimer->go ();
 }
 
 bool Switch::update_returningdisappearance ()
@@ -56,18 +57,17 @@ bool Switch::update_returningdisappearance ()
                         if ( ! switchItem.canAdvanceTo( 0, 0, 1 ) ) {
                                 while ( mediator->isThereAnyCollision() ) // there’s something
                                 {
-                                        ItemPtr itemAbove = mediator->findCollisionPop () ;
+                                        ItemPtr switcherAbove = mediator->findCollisionPop () ;
+                                        if ( switcherAbove == nilPointer || switcherAbove->getBehavior() == nilPointer
+                                                || switcherAbove->canAdvanceTo( 0, 0, -1 ) ) continue ;
 
                                         // is it a free item
-                                        if ( itemAbove != nilPointer &&
-                                                ( itemAbove->whichItemClass() == "free item" || itemAbove->whichItemClass() == "avatar item" ) )
+                                        if ( switcherAbove->whichItemClass() == "free item" || switcherAbove->whichItemClass() == "avatar item" )
                                         {
-                                                if ( itemAbove->getBehavior() != nilPointer &&
-                                                        ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
-                                                                // the switch doesn’t toggle when the character jumps
-                                                                itemAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jumping )
+                                                // the switch doesn’t toggle when the switcher is jumping
+                                                if ( switcherAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jumping )
                                                 {
-                                                        // toggle the switch when it’s the only one item below the switcher
+                                                        // toggle if the switch is the only thing below the switcher
                                                         if ( ! this->switchedFromAbove && mediator->howManyCollisions() <= 1 )
                                                         {
                                                                 this->switchedFromAbove = true ;
@@ -112,10 +112,14 @@ bool Switch::update_returningdisappearance ()
 
 void Switch::toggleIt ()
 {
+        // switching again only after a second
+        if ( this->whenToggledTimer->getValue() < 1.0 ) return ;
+
         Item & switchItem = getItem() ;
 
         switchItem.animate ();
         switchItem.getMediator()->toggleSwitchInRoom () ;
+        this->whenToggledTimer->reset() ;
 
         // play the sound of switching
         SoundManager::getInstance().play( switchItem.getKind(), "switch" );

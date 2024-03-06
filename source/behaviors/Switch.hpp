@@ -15,6 +15,7 @@
 #include <string>
 
 #include "Behavior.hpp"
+#include "Timer.hpp"
 
 
 namespace behaviors
@@ -49,6 +50,8 @@ private:
          * Items that triggered this switch and will not re~switch it again
          */
         std::set< std::string > switchers ;
+
+        autouniqueptr < Timer > whenToggledTimer ;
 
 };
 
