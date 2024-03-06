@@ -278,9 +278,11 @@ void CharacterHeadAndHeels::behave ()
                         input.releaseKeyFor( "take" );
                 }
                 // entonces Head y Heels planean
-                else if ( input.anyMoveTyped() ) {
+                else if ( moveKeyChangesHeading() ) {
                         setCurrentActivity( activities::Activity::Gliding );
                 }
+                else
+                        resetHowLongFalls (); // don’t accelerate falling
         }
 
         // for gliding don’t wait for the next cycle because gliding can happen just after falling, and

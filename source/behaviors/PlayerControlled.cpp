@@ -264,15 +264,11 @@ void PlayerControlled::fall ()
 {
         ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
-        // is it time to lower by one unit
         if ( fallTimer->getValue() > character.getWeight() )
         {
                 if ( activities::Falling::getInstance().fall( *this ) ) {
-                        // as long as there's no collision below
-                        if ( character.canAdvanceTo( 0, 0, -1 ) )
-                        {       // show images of falling character
+                        if ( character.canAdvanceTo( 0, 0, -1 ) /* there’s nothing below the character */ )
                                 character.changeFrame( fallFrames[ character.getHeading () ] );
-                        }
                 }
                 else if ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() )
                         setCurrentActivity( activities::Activity::Waiting );
@@ -281,6 +277,58 @@ void PlayerControlled::fall ()
         }
 
         if ( getCurrentActivity() != activities::Activity::Falling )
+                SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
+}
+
+void PlayerControlled::glide ()
+{
+        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
+
+        if ( glideTimer->getValue() > character.getWeight() )
+        {
+                if ( ! activities::Falling::getInstance().fall( * this ) &&
+                        ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() ) )
+                {
+                        // not falling, back to waiting
+                        setCurrentActivity( activities::Activity::Waiting );
+                }
+
+                glideTimer->reset();
+        }
+
+        if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
+        {
+                Activity priorActivity = getCurrentActivity() ;
+                Activity glideActivity = activities::Activity::Waiting ;
+
+                const std::string & heading = character.getHeading ();
+                if ( heading == "north" )
+                        glideActivity = activities::Activity::MovingNorth ;
+                else
+                if ( heading == "south" )
+                        glideActivity = activities::Activity::MovingSouth ;
+                else
+                if ( heading == "east" )
+                        glideActivity = activities::Activity::MovingEast ;
+                else
+                if ( heading == "west" )
+                        glideActivity = activities::Activity::MovingWest ;
+
+                setCurrentActivity( glideActivity );
+                activities::Moving::getInstance().move( *this, false );
+
+                setCurrentActivity( priorActivity );
+
+                // may turn while gliding so update the frame of falling
+                character.changeFrame( fallFrames[ character.getHeading() ] );
+
+                speedTimer->reset();
+        }
+
+        // unlike falling, gliding doesn’t accelerate over time
+        resetHowLongFalls() ;
+
+        if ( getCurrentActivity() != activities::Activity::Gliding )
                 SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
 }
 
@@ -344,55 +392,6 @@ void PlayerControlled::jump ()
         if ( character.isActiveCharacter() && character.getZ() >= Room::MaxLayers * Room::LayerHeight )
                 // go to the room above
                 character.setWayOfExit( "above" );
-}
-
-void PlayerControlled::glide ()
-{
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
-
-        if ( glideTimer->getValue() > character.getWeight() /* character.getSpeed() / 2.0 */ )
-        {
-                if ( ! activities::Falling::getInstance().fall( * this ) &&
-                        ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() ) )
-                {
-                        // not falling, back to waiting
-                        setCurrentActivity( activities::Activity::Waiting );
-                }
-
-                glideTimer->reset();
-        }
-
-        if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
-        {
-                Activity priorActivity = getCurrentActivity() ;
-                Activity glideActivity = activities::Activity::Waiting ;
-
-                const std::string & heading = character.getHeading ();
-                if ( heading == "north" )
-                        glideActivity = activities::Activity::MovingNorth ;
-                else
-                if ( heading == "south" )
-                        glideActivity = activities::Activity::MovingSouth ;
-                else
-                if ( heading == "east" )
-                        glideActivity = activities::Activity::MovingEast ;
-                else
-                if ( heading == "west" )
-                        glideActivity = activities::Activity::MovingWest ;
-
-                setCurrentActivity( glideActivity );
-                activities::Moving::getInstance().move( *this, false );
-
-                setCurrentActivity( priorActivity );
-
-                // may turn while gliding so update the frame of falling
-                character.changeFrame( fallFrames[ character.getHeading() ] );
-
-                speedTimer->reset();
-        }
-
-        if ( getCurrentActivity() != activities::Activity::Gliding )
-                SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
 }
 
 void PlayerControlled::enterTeletransport ()

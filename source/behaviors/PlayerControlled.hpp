@@ -90,6 +90,11 @@ protected:
         virtual void fall () ;
 
         /**
+         * The character glides in the air when falling or jumping
+         */
+        virtual void glide () ;
+
+        /**
          * Jump or teleport if the device is below, since
          * the key for teleporting is the same as for jumping
          */
@@ -99,11 +104,6 @@ protected:
          * The character jumps
          */
         virtual void jump () ;
-
-        /**
-         * The character glides in the air when falling or jumping
-         */
-        virtual void glide () ;
 
         /**
          * The character teleports to another room

@@ -88,14 +88,6 @@ bool InputManager::movewestTyped() const
                         && ! allegro::isKeyPushed( getUserKeyFor( "moveeast" ) ) ;
 }
 
-bool InputManager::anyMoveTyped() const
-{
-        return allegro::isKeyPushed( getUserKeyFor( "movenorth" ) )
-                        || allegro::isKeyPushed( getUserKeyFor( "movesouth" ) )
-                                || allegro::isKeyPushed( getUserKeyFor( "moveeast" ) )
-                                        || allegro::isKeyPushed( getUserKeyFor( "movewest" ) ) ;
-}
-
 bool InputManager::jumpTyped() const
 {
         return allegro::isKeyPushed( getUserKeyFor( "jump" ) );

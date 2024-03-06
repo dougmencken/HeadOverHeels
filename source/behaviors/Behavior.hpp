@@ -36,6 +36,7 @@ protected:
                 , itemThatBehaves( item )
                 , currentActivity( activities::Activity::Waiting )
                 , affectedBy( nilPointer )
+                , howLongFalls( 0 )
         {}
 
 public:
@@ -76,6 +77,11 @@ public:
          */
         const ItemPtr & getWhatAffectedThisBehavior () const {  return this->affectedBy ;  }
 
+        unsigned int getHowLongFalls () const {  return this->howLongFalls ;  }
+
+        void incrementHowLongFalls () {  ++ this->howLongFalls ;  }
+        void resetHowLongFalls () {  this->howLongFalls = 0 ;  }
+
 private:
 
         std::string nameOfBehavior ;
@@ -85,6 +91,9 @@ private:
         Activity currentActivity ;
 
         ItemPtr affectedBy ;
+
+        // to accelerate a long fall
+        unsigned int howLongFalls ;
 
 } ;
 

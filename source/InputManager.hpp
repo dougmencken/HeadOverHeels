@@ -52,8 +52,6 @@ public:
 
         bool movewestTyped () const ;
 
-        bool anyMoveTyped () const ;
-
         /**
          * Take an object below or drop what’s already taken
          */

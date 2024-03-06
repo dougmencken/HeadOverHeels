@@ -224,9 +224,11 @@ void CharacterHead::behave ()
                         input.releaseKeyFor( "doughnut" );
                 }
                 // entonces Head planea
-                else if ( input.anyMoveTyped() ) {
+                else if ( moveKeyChangesHeading() ) {
                         setCurrentActivity( activities::Activity::Gliding );
                 }
+                else
+                        resetHowLongFalls (); // don’t accelerate falling
         }
 
         // for gliding don’t wait for the next cycle because gliding can happen just after falling, and

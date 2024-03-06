@@ -35,7 +35,12 @@ bool Falling::fall( behaviors::Behavior & behavior )
                 return false ;
         }
 
-        bool mayFall = whatFalls.addToZ( -1 );
+        int lowerBy = -1 ;
+        lowerBy -= behavior.getHowLongFalls() / Room::LayerHeight ; // accelerate
+
+        bool mayFall = false ;
+        while ( ! mayFall && lowerBy < 0 )
+                mayFall = whatFalls.addToZ( lowerBy ++ );
 
         // when there’s something below
         if ( ! mayFall )
@@ -45,9 +50,7 @@ bool Falling::fall( behaviors::Behavior & behavior )
                 // collect the collisions
                 std::vector< std::string > itemsBelow ;
                 while ( mediator->isThereAnyCollision() )
-                {
                         itemsBelow.push_back( mediator->popCollision() );
-                }
 
                 if ( whatFalls.whichItemClass() == "free item" || whatFalls.whichItemClass() == "avatar item" )
                 {
@@ -117,6 +120,9 @@ bool Falling::fall( behaviors::Behavior & behavior )
                         }
                 }
         }
+
+        if ( mayFall ) behavior.incrementHowLongFalls() ;
+        else behavior.resetHowLongFalls() ;
 
         return mayFall ;
 }

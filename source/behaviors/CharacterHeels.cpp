@@ -142,9 +142,6 @@ void CharacterHeels::behave ()
                                 || whatDoing == activities::Activity::MetLethalItem || whatDoing == activities::Activity::Vanishing )
                 return ; // moving by inertia, teleporting, or vanishing is not controlled by the player
 
-        if ( whatDoing == activities::Activity::Jumping )
-                return ; // Heels’ jump cannot be controlled
-
         const InputManager & input = InputManager::getInstance ();
 
         // when waiting
@@ -228,9 +225,9 @@ void CharacterHeels::behave ()
                         handleMoveKeyWhenDragged () ;
                 }
         }
-        else if ( whatDoing == activities::Activity::Falling )
+        else if ( whatDoing == activities::Activity::Jumping || whatDoing == activities::Activity::Falling )
         {
-                // pick or drop an item when falling
+                // take or drop an item when jumping or falling
                 if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
                                                 ? activities::Activity::TakeItem
