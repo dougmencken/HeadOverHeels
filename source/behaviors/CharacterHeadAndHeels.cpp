@@ -183,17 +183,8 @@ void CharacterHeadAndHeels::behave ()
                                                 : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
+                else {
+                        moveKeySetsActivity () ;
                 }
         }
         // already moving
@@ -219,19 +210,7 @@ void CharacterHeadAndHeels::behave ()
                                                 : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
-                }
-                else if ( ! input.anyMoveTyped() ) {
+                else if ( ! moveKeySetsActivity () ) {
                         // not moving is waiting
                         SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
                         setCurrentActivity( activities::Activity::Waiting );
@@ -260,17 +239,8 @@ void CharacterHeadAndHeels::behave ()
                                                 : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
+                else {
+                        moveKeySetsActivity () ;
                 }
         }
         // dragged by a conveyor
@@ -290,17 +260,8 @@ void CharacterHeadAndHeels::behave ()
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        avatar.changeHeading( "north" );
-                }
-                else if ( input.movesouthTyped() ) {
-                        avatar.changeHeading( "south" );
-                }
-                else if ( input.moveeastTyped() ) {
-                        avatar.changeHeading( "east" );
-                }
-                else if ( input.movewestTyped() ) {
-                        avatar.changeHeading( "west" );
+                else {
+                        moveKeyChangesHeading () ;
                 }
         }
         else if ( whatDoing == activities::Activity::Falling )
@@ -337,19 +298,7 @@ void CharacterHeadAndHeels::behave ()
                                                 : activities::Activity::DropItem );
                         input.releaseKeyFor( "take" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        avatar.changeHeading( "north" );
-                }
-                else if ( input.movesouthTyped() ) {
-                        avatar.changeHeading( "south" );
-                }
-                else if ( input.moveeastTyped() ) {
-                        avatar.changeHeading( "east" );
-                }
-                else if ( input.movewestTyped() ) {
-                        avatar.changeHeading( "west" );
-                }
-                else if ( ! input.anyMoveTyped() ) {
+                else if ( ! moveKeyChangesHeading () ) {
                         setCurrentActivity( activities::Activity::Falling );
                 }
         }

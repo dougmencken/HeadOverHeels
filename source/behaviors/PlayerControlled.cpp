@@ -145,6 +145,57 @@ void PlayerControlled::automove ()
         }
 }
 
+bool PlayerControlled::moveKeySetsActivity ()
+{
+        bool anyMoveTyped = false ;
+        const InputManager & input = InputManager::getInstance ();
+
+        if ( input.movenorthTyped() ) {
+                anyMoveTyped = true ;
+                setCurrentActivity( activities::Activity::MovingNorth );
+        }
+        else if ( input.movesouthTyped() ) {
+                anyMoveTyped = true ;
+                setCurrentActivity( activities::Activity::MovingSouth );
+        }
+        else if ( input.moveeastTyped() ) {
+                anyMoveTyped = true ;
+                setCurrentActivity( activities::Activity::MovingEast );
+        }
+        else if ( input.movewestTyped() ) {
+                anyMoveTyped = true ;
+                setCurrentActivity( activities::Activity::MovingWest );
+        }
+
+        return anyMoveTyped ;
+}
+
+bool PlayerControlled::moveKeyChangesHeading ()
+{
+        bool anyMoveTyped = false ;
+        const InputManager & input = InputManager::getInstance ();
+        ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( getItem () );
+
+        if ( input.movenorthTyped() ) {
+                anyMoveTyped = true ;
+                avatar.changeHeading( "north" );
+        }
+        else if ( input.movesouthTyped() ) {
+                anyMoveTyped = true ;
+                avatar.changeHeading( "south" );
+        }
+        else if ( input.moveeastTyped() ) {
+                anyMoveTyped = true ;
+                avatar.changeHeading( "east" );
+        }
+        else if ( input.movewestTyped() ) {
+                anyMoveTyped = true ;
+                avatar.changeHeading( "west" );
+        }
+
+        return anyMoveTyped ;
+}
+
 void PlayerControlled::displace ()
 {
         if ( speedTimer->getValue() > getItem().getSpeed() )

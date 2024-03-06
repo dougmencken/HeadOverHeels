@@ -162,20 +162,11 @@ void CharacterHeels::behave ()
                                                 : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
-                }
                 else if ( input.jumpTyped() ) {
                         toJumpOrTeleport ();
+                }
+                else {
+                        moveKeySetsActivity () ;
                 }
         }
         // already moving
@@ -197,19 +188,8 @@ void CharacterHeels::behave ()
                                                 : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
-                }
-                else if ( ! input.anyMoveTyped() ) {
+                else if ( ! moveKeySetsActivity () ) {
+                        // not moving is waiting
                         SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
                         setCurrentActivity( activities::Activity::Waiting );
                 }
@@ -233,17 +213,8 @@ void CharacterHeels::behave ()
                                                 : activities::Activity::DropAndJump );
                         input.releaseKeyFor( "take&jump" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
+                else {
+                        moveKeySetsActivity () ;
                 }
         }
         // dragged by a conveyor

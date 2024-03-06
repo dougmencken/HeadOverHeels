@@ -56,6 +56,19 @@ protected:
         virtual void automove () ;
 
         /**
+         * Sets the current activity according to the typed movement key
+         * @return true if any movement key is typed or false if not
+         */
+        virtual bool moveKeySetsActivity () ;
+
+        /*
+         * Changes the item’s heading according to the typed movement key
+         * without affecting the activity. Used when a character is gliding
+         * @return true if any movement key is typed, false otherwise
+         */
+        virtual bool moveKeyChangesHeading () ;
+
+        /**
          * The character is moved by another item at the speed of the pusher
          */
         virtual void displace () ;

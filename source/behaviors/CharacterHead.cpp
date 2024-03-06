@@ -160,17 +160,8 @@ void CharacterHead::behave ()
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
+                else {
+                        moveKeySetsActivity () ;
                 }
         }
         // already moving
@@ -184,19 +175,8 @@ void CharacterHead::behave ()
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
-                }
-                else if ( ! input.anyMoveTyped() ) {
+                else if ( ! moveKeySetsActivity () ) {
+                        // not moving is waiting
                         SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
                         setCurrentActivity( activities::Activity::Waiting );
                 }
@@ -212,17 +192,8 @@ void CharacterHead::behave ()
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
-                else if ( input.movenorthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                }
-                else if ( input.movesouthTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                }
-                else if ( input.moveeastTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
-                }
-                else if ( input.movewestTyped() ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
+                else {
+                        moveKeySetsActivity () ;
                 }
         }
         // dragged by a conveyor
@@ -242,18 +213,8 @@ void CharacterHead::behave ()
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
-                // Head may change orientation when jumping
-                else if ( input.movenorthTyped() ) {
-                        avatar.changeHeading( "north" );
-                }
-                else if ( input.movesouthTyped() ) {
-                        avatar.changeHeading( "south" );
-                }
-                else if ( input.moveeastTyped() ) {
-                        avatar.changeHeading( "east" );
-                }
-                else if ( input.movewestTyped() ) {
-                        avatar.changeHeading( "west" );
+                else {
+                        moveKeyChangesHeading () ;
                 }
         }
         else if ( whatDoing == activities::Activity::Falling )
@@ -276,20 +237,7 @@ void CharacterHead::behave ()
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
-                // Head may change orientation when gliding
-                else if ( input.movenorthTyped() ) {
-                        avatar.changeHeading( "north" );
-                }
-                else if ( input.movesouthTyped() ) {
-                        avatar.changeHeading( "south" );
-                }
-                else if ( input.moveeastTyped() ) {
-                        avatar.changeHeading( "east" );
-                }
-                else if ( input.movewestTyped() ) {
-                        avatar.changeHeading( "west" );
-                }
-                else if ( ! input.anyMoveTyped() ) {
+                else if ( ! moveKeyChangesHeading () ) {
                         setCurrentActivity( activities::Activity::Falling );
                 }
         }
