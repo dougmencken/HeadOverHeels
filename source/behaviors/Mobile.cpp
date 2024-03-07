@@ -12,7 +12,7 @@
 namespace behaviors
 {
 
-Mobile::Mobile( Item & item, const std::string & behavior )
+Mobile::Mobile( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )

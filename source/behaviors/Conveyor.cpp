@@ -1,6 +1,7 @@
 
 #include "Conveyor.hpp"
 
+#include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "Displacing.hpp"
 #include "Falling.hpp"
@@ -13,7 +14,7 @@
 namespace behaviors
 {
 
-Conveyor::Conveyor( Item & item, const std::string & behavior )
+Conveyor::Conveyor( GridItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , animationTimer( new Timer() )

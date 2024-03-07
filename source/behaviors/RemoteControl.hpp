@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class RemoteControl : public Behavior
 
 public:
 
-        RemoteControl( Item & item, const std::string & behavior ) ;
+        RemoteControl( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~RemoteControl( ) {}
 

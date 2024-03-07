@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class Driven : public Behavior
 
 public:
 
-        Driven( Item & item, const std::string & behavior ) ;
+        Driven( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Driven( ) {}
 

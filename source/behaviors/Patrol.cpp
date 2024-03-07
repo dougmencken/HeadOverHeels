@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-Patrol::Patrol( Item & item, const std::string & behavior )
+Patrol::Patrol( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )

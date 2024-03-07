@@ -32,7 +32,7 @@ class PlayerControlled : public Behavior
 
 public:
 
-        PlayerControlled( Item & item, const std::string & behavior ) ;
+        PlayerControlled( AvatarItem & item, const std::string & behavior ) ;
 
         virtual ~PlayerControlled( ) ;
 

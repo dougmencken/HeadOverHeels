@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-RemoteControl::RemoteControl( Item & item, const std::string & behavior )
+RemoteControl::RemoteControl( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )

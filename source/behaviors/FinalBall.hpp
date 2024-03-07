@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class FinalBall : public Behavior
 
 public:
 
-        FinalBall( Item & item, const std::string & behavior ) ;
+        FinalBall( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~FinalBall( ) { }
 

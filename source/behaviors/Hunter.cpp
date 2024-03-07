@@ -16,7 +16,7 @@
 namespace behaviors
 {
 
-Hunter::Hunter( Item & item, const std::string & behavior )
+Hunter::Hunter( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
 {

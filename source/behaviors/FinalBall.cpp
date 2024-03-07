@@ -11,7 +11,7 @@
 namespace behaviors
 {
 
-FinalBall::FinalBall( Item & item, const std::string & behavior )
+FinalBall::FinalBall( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
 {

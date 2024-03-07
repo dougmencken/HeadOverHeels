@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class Mobile : public Behavior
 
 public:
 
-        Mobile( Item & item, const std::string & behavior ) ;
+        Mobile( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Mobile( ) {}
 

@@ -9,7 +9,7 @@
 namespace behaviors
 {
 
-Sink::Sink( Item & item, const std::string & behavior )
+Sink::Sink( GridItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , fallTimer( new Timer() )
 {

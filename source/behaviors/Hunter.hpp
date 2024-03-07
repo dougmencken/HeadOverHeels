@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class Hunter : public Behavior
 
 public:
 
-        Hunter( Item & item, const std::string & behavior ) ;
+        Hunter( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Hunter( ) {}
 

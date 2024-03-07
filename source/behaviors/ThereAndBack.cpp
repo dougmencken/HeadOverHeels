@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-ThereAndBack::ThereAndBack( Item & item, const std::string & behavior, bool flying )
+ThereAndBack::ThereAndBack( FreeItem & item, const std::string & behavior, bool flying )
         : Behavior( item, behavior )
         , isFlying( flying )
         , speedTimer( new Timer() )

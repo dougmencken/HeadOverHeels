@@ -25,6 +25,10 @@
 #include "CharacterHeels.hpp"
 #include "CharacterHeadAndHeels.hpp"
 
+#include "AvatarItem.hpp"
+#include "FreeItem.hpp"
+#include "GridItem.hpp"
+
 #include "util.hpp"
 
 
@@ -35,112 +39,111 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( Item & item,
 {
         Behavior * behaviorToReturn = nilPointer ;
 
-        if ( behavior == "behavior of conveyor" )
+        if ( item.whichItemClass() == "avatar item" )
         {
-                behaviorToReturn = new Conveyor( item, behavior );
+                ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( item );
+
+                if ( behavior == "behavior of Head" )
+                        behaviorToReturn = new CharacterHead( avatar );
+                else
+                if ( behavior == "behavior of Heels" )
+                        behaviorToReturn = new CharacterHeels( avatar );
+                else
+                if ( behavior == "behavior of Head over Heels" )
+                        behaviorToReturn = new CharacterHeadAndHeels( avatar );
         }
-        else if ( behavior == "behavior of detector" )
+        else if ( item.whichItemClass() == "free item" )
         {
-                behaviorToReturn = new Detector( item, behavior );
+                ::FreeItem & free = dynamic_cast< ::FreeItem & >( item );
+
+                if ( behavior == "behavior of bonus" )
+                        behaviorToReturn = new Bonus( free, behavior );
+                else
+                if ( behavior == "behavior of detector" )
+                        behaviorToReturn = new Detector( free, behavior );
+                else
+                if ( behavior == "behavior of freezing doughnut" )
+                        behaviorToReturn = new Doughnut( free, behavior );
+                else
+                if ( behavior == "behavior of driven" )
+                        behaviorToReturn = new Driven( free, behavior );
+                else
+                if ( behavior == "behavior of elevator" )
+                        behaviorToReturn = new Elevator( free, behavior );
+                else
+                if ( behavior == "behaivor of final ball" )
+                        behaviorToReturn = new FinalBall( free, behavior );
+                else
+                if ( behavior == "behavior of hunter in four directions" ||
+                                behavior == "behavior of waiting hunter in four directions" ||
+                                behavior == "behavior of hunter in eight directions" ||
+                                behavior == "behavior of waiting hunter in eight directions" )
+                        behaviorToReturn = new Hunter( free, behavior );
+                else
+                if ( behavior == "behavior of impel" )
+                        behaviorToReturn = new Impel( free, behavior );
+                else
+                if ( behavior == "behavior of thing able to move by pushing" )
+                        behaviorToReturn = new Mobile( free, behavior );
+                else
+                if ( behavior == "behavior of random patroling in four primary directions" ||
+                                behavior == "behavior of random patroling in four secondary directions" ||
+                                behavior == "behavior of random patroling in eight directions" )
+                        behaviorToReturn = new Patrol( free, behavior );
+                else
+                if ( behavior == "behavior of remote control"
+                                || behavior == "behavior of remotely controlled one" )
+                        behaviorToReturn = new RemoteControl( free, behavior );
+                else
+                if ( behavior == "behavior of switch" )
+                        behaviorToReturn = new Switch( free, behavior );
+                else
+                if ( behavior == "behavior of there and back" )
+                        behaviorToReturn = new ThereAndBack( free, behavior, false );
+                else
+                if ( behavior == "behavior of flying there and back" )
+                        behaviorToReturn = new ThereAndBack( free, behavior, true );
+                else
+                if ( behavior == "behavior of spring stool" )
+                        behaviorToReturn = new Trampoline( free, behavior );
+                else
+                if ( behavior == "behavior of move then turn left and move"
+                                || behavior == "behavior of move then turn right and move" )
+                        behaviorToReturn = new Turn( free, behavior );
         }
-        else if ( behavior == "behavior of driven" )
+        else if ( item.whichItemClass() == "grid item" )
         {
-                behaviorToReturn = new Driven( item, behavior );
+                ::GridItem & onGrid = dynamic_cast< ::GridItem & >( item );
+
+                if ( behavior == "behavior of conveyor" )
+                        behaviorToReturn = new Conveyor( onGrid, behavior );
+                else
+                if ( behavior == "behavior of sinking downward" )
+                        behaviorToReturn = new Sink( onGrid, behavior );
+                else
+                if ( behavior == "behavior of teletransport" )
+                        behaviorToReturn = new Teleport( onGrid, behavior );
         }
-        else if ( behavior == "behavior of elevator" )
-        {
-                behaviorToReturn = new Elevator( item, behavior );
-        }
-        else if ( behavior == "behavior of hunter in four directions" ||
-                        behavior == "behavior of waiting hunter in four directions" ||
-                        behavior == "behavior of hunter in eight directions" ||
-                        behavior == "behavior of waiting hunter in eight directions" )
-        {
-                behaviorToReturn = new Hunter( item, behavior );
-        }
-        else if ( behavior == "behavior of impel" )
-        {
-                behaviorToReturn = new Impel( item, behavior );
-        }
-        else if ( behavior == "behavior of move then turn left and move" ||
-                        behavior == "behavior of move then turn right and move" )
-        {
-                behaviorToReturn = new Turn( item, behavior );
-        }
-        else if ( behavior == "behavior of thing able to move by pushing" )
-        {
-                behaviorToReturn = new Mobile( item, behavior );
-        }
-        else if ( behavior == "behavior of there and back" )
-        {
-                behaviorToReturn = new ThereAndBack( item, behavior, false );
-        }
-        else if ( behavior == "behavior of flying there and back" )
-        {
-                behaviorToReturn = new ThereAndBack( item, behavior, true );
-        }
-        else if ( behavior == "behavior of random patroling in four primary directions" ||
-                        behavior == "behavior of random patroling in four secondary directions" ||
-                        behavior == "behavior of random patroling in eight directions" )
-        {
-                behaviorToReturn = new Patrol( item, behavior );
-        }
-        else if ( behavior == "behavior of remote control" ||
-                        behavior == "behavior of remotely controlled one" )
-        {
-                behaviorToReturn = new RemoteControl( item, behavior );
-        }
-        else if ( behavior == "behavior of sinking downward" )
-        {
-                behaviorToReturn = new Sink( item, behavior );
-        }
-        else if ( behavior == "behavior of freezing doughnut" )
-        {
-                behaviorToReturn = new Doughnut( item, behavior );
-        }
-        else if ( behavior == "behavior of bonus" )
-        {
-                behaviorToReturn = new Bonus( item, behavior );
-        }
-        else if ( behavior == "behavior of switch" )
-        {
-                behaviorToReturn = new Switch( item, behavior );
-        }
-        else if ( behavior == "behavior of teletransport" )
-        {
-                behaviorToReturn = new Teleport( item, behavior );
-        }
-        else if ( behavior == "behavior of spring stool" )
-        {
-                behaviorToReturn = new Trampoline( item, behavior );
-        }
-        else if ( behavior == "behavior of disappearance in time" ||
-                        behavior == "behavior of disappearance on touch" ||
-                        behavior == "behavior of disappearance on jump into" ||
-                        behavior == "behavior of disappearance as soon as Head appears" ||
-                        behavior == "behavior of slow disappearance on jump into" )
-        {
-                behaviorToReturn = new Volatile( item, behavior );
-        }
-        else if ( behavior == "behaivor of final ball" )
-        {
-                behaviorToReturn = new FinalBall( item, behavior );
-        }
-        else if ( behavior == "behavior of Head" )
-        {
-                behaviorToReturn = new CharacterHead( item, behavior );
-        }
-        else if ( behavior == "behavior of Heels" )
-        {
-                behaviorToReturn = new CharacterHeels( item, behavior );
-        }
-        else if ( behavior == "behavior of Head over Heels" )
-        {
-                behaviorToReturn = new CharacterHeadAndHeels( item, behavior );
-        }
-        else // if ( behavior == "still" || behavior == "behavior of bubbles" )
-        {
-                // yeah, do nothing
+	else // none of the above
+	{
+                if ( behavior == "behavior of disappearance in time" ||
+                                behavior == "behavior of disappearance on touch" ||
+                                behavior == "behavior of disappearance on jump into" ||
+                                behavior == "behavior of disappearance as soon as Head appears" ||
+                                behavior == "behavior of slow disappearance on jump into" )
+                {
+                        behaviorToReturn = new Volatile( item, behavior );
+                }
+                else if ( behavior.empty () || behavior == "still" || behavior == "behavior of bubbles" )
+                {
+                        // yeah, do nothing
+                }
+                else {
+                        std::cout << "unknown behavior \"" << behavior << "\" for "
+                                        << item.whichItemClass() << " \"" << item.getUniqueName()
+                                                << "\" in CreatorOfBehaviors::createBehaviorByName" << std::endl ;
+                }
+
         }
 
         return autouniqueptr< Behavior >( behaviorToReturn );

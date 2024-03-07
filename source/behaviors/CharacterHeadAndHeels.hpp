@@ -22,7 +22,7 @@ class CharacterHeadAndHeels : public PlayerControlled
 
 public:
 
-        CharacterHeadAndHeels( Item & item, const std::string & behavior ) ;
+        CharacterHeadAndHeels( AvatarItem & item ) ;
 
         virtual ~CharacterHeadAndHeels( ) {}
 

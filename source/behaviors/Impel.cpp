@@ -11,7 +11,7 @@
 namespace behaviors
 {
 
-Impel::Impel( Item & item, const std::string & behavior )
+Impel::Impel( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )

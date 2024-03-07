@@ -13,6 +13,8 @@
 
 #include "Behavior.hpp"
 
+class GridItem ;
+
 
 namespace behaviors
 {
@@ -26,7 +28,7 @@ class Teleport : public Behavior
 
 public:
 
-        Teleport( Item & item, const std::string & behavior ) ;
+        Teleport( GridItem & item, const std::string & behavior ) ;
 
         virtual ~Teleport( ) {}
 

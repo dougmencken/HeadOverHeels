@@ -14,7 +14,7 @@
 namespace behaviors
 {
 
-Detector::Detector( Item & item, const std::string & behavior )
+Detector::Detector( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )

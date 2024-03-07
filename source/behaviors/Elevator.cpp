@@ -10,7 +10,7 @@
 namespace behaviors
 {
 
-Elevator::Elevator( Item & item, const std::string & behavior )
+Elevator::Elevator( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , top( Room::MaxLayers )
         , bottom( 0 )

@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class Detector : public Behavior
 
 public:
 
-        Detector( Item & item, const std::string & behavior ) ;
+        Detector( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Detector( ) {}
 

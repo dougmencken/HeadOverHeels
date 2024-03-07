@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -23,7 +25,7 @@ class Doughnut : public Behavior
 
 public:
 
-        Doughnut( Item & item, const std::string & behavior ) ;
+        Doughnut( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Doughnut( ) {}
 

@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-Bonus::Bonus( Item & item, const std::string & behavior )
+Bonus::Bonus( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , disappearanceTimer( new Timer() )
         , speedTimer( new Timer() )

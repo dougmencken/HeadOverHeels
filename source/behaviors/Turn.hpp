@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -28,7 +30,7 @@ class Turn : public Behavior
 
 public:
 
-        Turn( Item & item, const std::string & behavior ) ;
+        Turn( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Turn( ) {}
 

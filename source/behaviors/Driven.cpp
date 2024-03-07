@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-Driven::Driven( Item & item, const std::string & behavior )
+Driven::Driven( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , moving( false )
         , speedTimer( new Timer() )

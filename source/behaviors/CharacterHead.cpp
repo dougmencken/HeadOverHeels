@@ -11,8 +11,8 @@
 namespace behaviors
 {
 
-CharacterHead::CharacterHead( Item & item, const std::string & behavior )
-        : PlayerControlled( item, behavior )
+CharacterHead::CharacterHead( AvatarItem & item )
+        : PlayerControlled( item, "behavior of Head" )
 {
         // salto
         const unsigned int jumpPhases = 20 ;

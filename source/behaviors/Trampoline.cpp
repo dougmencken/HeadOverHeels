@@ -12,7 +12,7 @@
 namespace behaviors
 {
 
-Trampoline::Trampoline( Item & item, const std::string & behavior )
+Trampoline::Trampoline( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , folded( false )
         , rebounding( false )

@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class GridItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class Sink : public Behavior
 
 public:
 
-        Sink( Item & item, const std::string & behavior ) ;
+        Sink( GridItem & item, const std::string & behavior ) ;
 
         virtual ~Sink( ) {}
 

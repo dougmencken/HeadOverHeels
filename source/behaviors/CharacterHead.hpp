@@ -21,7 +21,7 @@ class CharacterHead : public PlayerControlled
 
 public:
 
-        CharacterHead( Item & item, const std::string & behavior ) ;
+        CharacterHead( AvatarItem & item ) ;
 
         virtual ~CharacterHead( ) {}
 

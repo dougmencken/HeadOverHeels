@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class Impel : public Behavior
 
 public:
 
-        Impel( Item & item, const std::string & behavior ) ;
+        Impel( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Impel( ) {}
 

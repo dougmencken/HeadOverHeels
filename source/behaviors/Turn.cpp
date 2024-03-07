@@ -13,7 +13,7 @@
 namespace behaviors
 {
 
-Turn::Turn( Item & item, const std::string & behavior )
+Turn::Turn( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )

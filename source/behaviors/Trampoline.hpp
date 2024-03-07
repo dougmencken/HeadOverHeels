@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -23,7 +25,7 @@ class Trampoline : public Behavior
 
 public:
 
-        Trampoline( Item & item, const std::string & behavior ) ;
+        Trampoline( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Trampoline( ) {}
 

@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -31,7 +33,7 @@ class Patrol : public Behavior
 
 public:
 
-        Patrol( Item & item, const std::string & behavior ) ;
+        Patrol( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Patrol( ) {}
 

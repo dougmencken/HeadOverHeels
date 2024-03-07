@@ -18,7 +18,7 @@
 using behaviors::PlayerControlled ;
 
 
-PlayerControlled::PlayerControlled( Item & item, const std::string & behavior )
+PlayerControlled::PlayerControlled( AvatarItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , jumpPhase( -1 )
         , highJump( false )

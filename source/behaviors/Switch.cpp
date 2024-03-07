@@ -1,6 +1,7 @@
 
 #include "Switch.hpp"
 
+#include "FreeItem.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
@@ -10,7 +11,7 @@
 namespace behaviors
 {
 
-Switch::Switch( Item & item, const std::string & behavior )
+Switch::Switch( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , switchedFromAbove( false )
         , whenToggledTimer( new Timer() )

@@ -17,6 +17,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -26,7 +28,7 @@ class Switch : public Behavior
 
 public:
 
-        Switch( Item & item, const std::string & behavior ) ;
+        Switch( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Switch( ) {}
 

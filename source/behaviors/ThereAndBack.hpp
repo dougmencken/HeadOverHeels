@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -28,7 +30,7 @@ class ThereAndBack : public Behavior
 
 public:
 
-        ThereAndBack( Item & item, const std::string & behavior, bool flying ) ;
+        ThereAndBack( FreeItem & item, const std::string & behavior, bool flying ) ;
 
         virtual ~ThereAndBack( ) {}
 

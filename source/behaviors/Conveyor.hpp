@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class GridItem ;
+
 
 namespace behaviors
 {
@@ -23,7 +25,7 @@ class Conveyor : public Behavior
 
 public:
 
-        Conveyor( Item & item, const std::string & behavior ) ;
+        Conveyor( GridItem & item, const std::string & behavior ) ;
 
         virtual ~Conveyor( ) {}
 

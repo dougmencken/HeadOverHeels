@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+class FreeItem ;
+
 
 namespace behaviors
 {
@@ -27,7 +29,7 @@ class Elevator : public Behavior
 
 public:
 
-        Elevator( Item & item, const std::string & behavior ) ;
+        Elevator( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Elevator( ) {}
 

@@ -1,6 +1,7 @@
 
 #include "Teleport.hpp"
 
+#include "GridItem.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
@@ -10,7 +11,7 @@
 namespace behaviors
 {
 
-Teleport::Teleport( Item & item, const std::string & behavior ) :
+Teleport::Teleport( GridItem & item, const std::string & behavior ) :
         Behavior( item, behavior ),
         activated( false )
 {

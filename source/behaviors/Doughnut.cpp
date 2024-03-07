@@ -12,7 +12,7 @@
 namespace behaviors
 {
 
-Doughnut::Doughnut( Item & item, const std::string & behavior )
+Doughnut::Doughnut( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
 {

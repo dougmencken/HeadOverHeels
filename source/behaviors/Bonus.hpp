@@ -30,7 +30,7 @@ class Bonus : public Behavior
 
 public:
 
-        Bonus( Item & item, const std::string & behavior ) ;
+        Bonus( FreeItem & item, const std::string & behavior ) ;
 
         virtual ~Bonus () { }
 
