@@ -43,17 +43,17 @@ public:
 
         bool saveGame ( const std::string & file ) ;
 
-        static const std::string Current_Save_Version () {  return "2.3" ;  }
+        static const std::string Current_Save_Version () {  return "2.4" ;  }
 
         static const std::vector< std::string > Parsable_Save_Versions ()
         {
-        ///#ifdef __Cxx11__
-                ///return { std::string( "2.3" ) };
-        ///#else
+        #ifdef __Cxx11__
+                return { std::string( "2.3" ) };
+        #else
                 std::vector< std::string > versions ;
-                ///versions.push_back( "2.3" );
+                versions.push_back( "2.3" );
                 return versions ;
-        ///#endif
+        #endif
         }
 
 private:

@@ -34,7 +34,7 @@ public:
         * @param cx the door's cell on X
         * @param cy the door's cell on Y
         * @param z the position on Z, that's how far from the ground
-        * @param way where is the door, in the north of the room, in the south, in the west or in the east
+        * @param where is the door, in the north of the room, in the south, in the west or in the east
         */
         Door( const std::string & kind, int cx, int cy, int z, const std::string & where ) ;
 
@@ -94,7 +94,12 @@ public:
 
         bool isUnderDoor ( int x, int y, int z ) const ;
 
-        std::string getWhereIsDoor () const {  return whereIsDoor ;  }
+        bool isUnderDoor ( const FreeItem & item ) const
+        {
+                return isUnderDoor( item.getX(), item.getY(), item.getZ() );
+        }
+
+        const std::string & getWhereIsDoor () const {  return this->whereIsDoor ;  }
 
         FreeItemPtr getLeftJamb () ;
 

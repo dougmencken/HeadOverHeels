@@ -37,9 +37,8 @@ public:
         virtual void beginNewGame ( const std::string & headRoom, const std::string & heelsRoom ) ;
 
         virtual void beginOldGameWithCharacter ( const std::string & roomFile, const std::string & characterName,
-                                                 int x, int y, int z,
-                                                 const std::string & direction, const std::string & entry,
-                                                 bool active ) ;
+                                                 int x, int y, int z, const std::string & heading,
+                                                 bool activeCharacter ) ;
 
         Room * changeRoom () ;
 
@@ -94,11 +93,15 @@ public:
 
         void parseVisitedRooms ( const std::vector< std::string > & visitedRooms ) ;
 
-        static bool buildEveryRoomAtOnce ;
+        void getAllRoomFiles ( std::vector< std::string > & whereToCollect ) ;
+
+        static void setBuildEveryRoomAtOnce ( bool allAtOnce ) {  buildEveryRoomAtOnce = allAtOnce ;  }
 
 private:
 
         static MapManager instance ;
+
+        static bool buildEveryRoomAtOnce ;
 
         // the room being drawn
         Room * activeRoom ;

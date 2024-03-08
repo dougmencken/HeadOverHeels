@@ -18,7 +18,7 @@ GameSaverAndLoader::GameSaverAndLoader( )
         , xFish( 0 )
         , yFish( 0 )
         , zFish( 0 )
-        , whereLooksFish( "nowhere" )
+        , whereLooksFish( "" )
 {
 
 }
@@ -192,12 +192,12 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                         if ( lives != nilPointer )
                                 howManyLives = std::atoi( lives->FirstChild()->ToText()->Value() );
 
-                        std::string orientationString = "nowhere" ;
-                        tinyxml2::XMLElement* orientation = character->FirstChildElement( "orientation" );
-                        if ( orientation != nilPointer )
-                                orientationString = orientation->FirstChild()->ToText()->Value() ;
+                        std::string headingString ;
+                        tinyxml2::XMLElement* heading = character->FirstChildElement( "heading" );
+                        if ( heading != nilPointer )
+                                headingString = heading->FirstChild()->ToText()->Value() ;
 
-                        std::string entryString = "just wait" ;
+                        std::string entryString ;
                         tinyxml2::XMLElement* entry = character->FirstChildElement( "entry" );
                         if ( entry != nilPointer )
                                 entryString = entry->FirstChild()->ToText()->Value() ;
@@ -265,7 +265,7 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                         // no begin.ogg here
 
                         MapManager::getInstance().beginOldGameWithCharacter(
-                                        room, characterName, x, y, z, orientationString, entryString, isActiveCharacter ) ;
+                                        room, characterName, x, y, z, headingString, isActiveCharacter ) ;
                 }
         } else
                 std::cerr << "can't continue the game without characters" << std::endl ;
@@ -404,10 +404,6 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 heading->SetText( whereLooksFish.c_str () );
                 activeCharacter->InsertEndChild( heading );
 
-                tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
-                entry->SetText( "just wait" );
-                activeCharacter->InsertEndChild( entry );
-
                 if ( whoPlaysYet == "head" || whoPlaysYet == "headoverheels" )
                 {
                         bool hasHorn = gameInfo.hasHorn () ;
@@ -496,9 +492,9 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                         heading->SetText( characterToo->getHeading().c_str () );
                         inactiveCharacter->InsertEndChild( heading );
 
-                        tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
-                        entry->SetText( characterToo->getWayOfEntry().c_str () );
-                        inactiveCharacter->InsertEndChild( entry );
+                        //////tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
+                        //////entry->SetText( characterToo->getWayOfEntry().c_str () );
+                        //////inactiveCharacter->InsertEndChild( entry );
 
                         if ( whoWaitsToPlay == "head" )
                         {

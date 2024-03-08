@@ -185,16 +185,13 @@ Picture* Isomot::updateMe ()
                         else if ( ! activeRoom->continueWithAliveCharacter () )
                                 activeRoom = mapManager.noLivesSwap ();
                 }
-                else if ( activeCharacter.getWayOfExit() != "did not quit" )
+                else if ( ! activeCharacter.getWayOfExit().empty() )
                 {
-                        // the room is changing
-
+                        // move to the next room
                         Room* newRoom = mapManager.changeRoom() ;
 
                         if ( newRoom != nilPointer && newRoom != activeRoom )
-                        {
                                 playTuneForScenery( newRoom->getScenery () );
-                        }
 
                         activeRoom = newRoom;
                 }
@@ -458,22 +455,20 @@ void Isomot::handleMagicKeys ()
                 allegro::releaseKey( "r" );
         }
 
+        // [ option / alt ] & [ shift ] & [ j ] summons the second character in the active room
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "j" ) )
         {
-                AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
+                AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter ();
                 if ( activeCharacter != nilPointer )
                 {
-                        AvatarItemPtr otherCharacter ;
-
                         Room* roomWithInactiveCharacter = mapManager.getRoomOfInactiveCharacter() ;
-                        if ( roomWithInactiveCharacter != nilPointer )
-                        {
-                                otherCharacter = roomWithInactiveCharacter->getMediator()->getActiveCharacter() ;
-                        }
+                        AvatarItemPtr otherCharacter = ( roomWithInactiveCharacter != nilPointer )
+                                                                ? roomWithInactiveCharacter->getMediator()->getActiveCharacter()
+                                                                : AvatarItemPtr() ;
 
                         if ( otherCharacter != nilPointer && roomWithInactiveCharacter != activeRoom )
                         {
-                                std::cout << "the both characters are in active room \"" << activeRoom->getNameOfRoomDescriptionFile() << "\" via pure magic" << std::endl ;
+                                std::cout << "both characters suddenly found themselves together in the active room \"" << activeRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                                 const std::string & nameOfAnotherCharacter = otherCharacter->getKind () ;
 
@@ -487,12 +482,6 @@ void Isomot::handleMagicKeys ()
                                         characterX, characterY, characterZ, heading
                                 ) );
 
-                                std::string behavior = "still";
-                                if ( nameOfAnotherCharacter == "head" ) behavior = "behavior of Head" ;
-                                else if ( nameOfAnotherCharacter == "heels" ) behavior = "behavior of Heels" ;
-
-                                joinedCharacter->setBehaviorOf( behavior );
-
                                 activeRoom->addCharacterToRoom( joinedCharacter, true );
                                 joinedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
 
@@ -504,26 +493,47 @@ void Isomot::handleMagicKeys ()
                 allegro::releaseKey( "j" );
         }
 
+        /*** THE FUTURE CHEAT /////////
+        // [ option / alt ] & [ shift ] & [ h ] for a hyperspace jump to a random room on the game map
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "h" ) )
+        {
+                std::vector< std::string > allRooms ;
+                mapManager.getAllRoomFiles( allRooms );
+
+                const std::string & randomRoom = allRooms[ rand() % allRooms.size() ] ;
+                std::cout << "hyper-jumping to the lucky map \"" << randomRoom << "\"" << std::endl ;
+
+                AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter() ;
+                if ( activeCharacter != nilPointer )
+                {
+                        activeCharacter->getBehavior()->setCurrentActivity( activities::Activity::BeginTeletransportation );
+                        // ....
+                }
+
+                allegro::releaseKey( "h" );
+        } ****/
+
+        // [ option / alt ] & [ shift ] & [ l ] to liberate the current planet,
+        //      the planet’s crown appears in the active room,
+        //      and when all the crowns are collected teleports the active character to the last room
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "l" ) )
         {
-                if ( gameManager.howManyFreePlanets() < 5 )
+                AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
+                if ( activeCharacter != nilPointer )
                 {
-                        if ( activeRoom->getMediator()->findItemOfKind( "crown" ) == nilPointer )
+                        if ( gameManager.howManyFreePlanets() < 5 )
                         {
-                                const DescriptionOfItem* chapeauDescription = ItemDescriptions::descriptions().getDescriptionByKind( "crown" );
-
-                                int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauDescription->getWidthX() ) >> 1 ;
-                                int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauDescription->getWidthY() ) >> 1 ;
-
-                                FreeItemPtr chapeau( new FreeItem( chapeauDescription, x, y, 250, "none" ) );
-                                chapeau->setBehaviorOf( "behavior of bonus" );
-                                activeRoom->addFreeItem( chapeau );
+                                if ( activeRoom->getMediator()->findItemOfKind( "crown" ) == nilPointer )
+                                {
+                                        const DescriptionOfItem* chapeauDescription = ItemDescriptions::descriptions().getDescriptionByKind( "crown" );
+                                        FreeItemPtr chapeau( new FreeItem( chapeauDescription,
+                                                                                activeCharacter->getX(), activeCharacter->getY(),
+                                                                                chapeauDescription->getHeight() + Room::LayerHeight * Room::MaxLayers ) );
+                                        chapeau->setBehaviorOf( "behavior of bonus" );
+                                        activeRoom->addFreeItem( chapeau );
+                                }
                         }
-                }
-                else
-                {
-                        AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
-                        if ( activeCharacter != nilPointer )
+                        else
                         {
                                 const std::string & nameOfCharacter = activeCharacter->getKind () ;
                                 const std::string & heading = activeCharacter->getHeading () ;
@@ -536,13 +546,6 @@ void Isomot::handleMagicKeys ()
                                         teleportedX, teleportedY, teleportedZ,
                                         heading
                                 ) ) ;
-
-                                std::string behaviorOfCharacter = "still";
-                                if ( nameOfCharacter == "head" ) behaviorOfCharacter = "behavior of Head";
-                                else if ( nameOfCharacter == "heels" ) behaviorOfCharacter = "behavior of Heels";
-                                else if ( nameOfCharacter == "headoverheels" ) behaviorOfCharacter = "behavior of Head over Heels";
-
-                                teleportedCharacter->setBehaviorOf( behaviorOfCharacter );
 
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
@@ -627,37 +630,37 @@ void Isomot::updateFinalRoom()
                 // la corona de Safari
                 if ( gameManager.isFreePlanet( "safari" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Room::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Room::FloorZ ) );
                         activeRoom->addFreeItem( chapeau );
-                        crowns++;
+                        crowns ++ ;
                 }
                 // la corona de Egyptus
                 if ( gameManager.isFreePlanet( "egyptus" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Room::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Room::FloorZ ) );
                         activeRoom->addFreeItem( chapeau );
-                        crowns++;
+                        crowns ++ ;
                 }
                 // la corona de Penitentiary
                 if ( gameManager.isFreePlanet( "penitentiary" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Room::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Room::FloorZ ) );
                         activeRoom->addFreeItem( chapeau );
-                        crowns++;
+                        crowns ++ ;
                 }
                 // la corona de Byblos
                 if ( gameManager.isFreePlanet( "byblos" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Room::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Room::FloorZ ) );
                         activeRoom->addFreeItem( chapeau );
-                        crowns++;
+                        crowns ++ ;
                 }
                 // la corona de Blacktooth
                 if ( gameManager.isFreePlanet( "blacktooth" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Room::FloorZ, "none" ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Room::FloorZ ) );
                         activeRoom->addFreeItem( chapeau );
-                        crowns++;
+                        ++ crowns ;
                 }
 
                 mediator->beginUpdate();

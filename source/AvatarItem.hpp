@@ -42,8 +42,6 @@ public:
 
         bool isHeadOverHeels () const {  return getOriginalKind() == "headoverheels" ;  }
 
-        void autoMoveOnEntry ( const std::string & wayOfEntry ) ;
-
         /**
          * Updates the character’s behavior according to the player’s controls
          */
@@ -97,11 +95,9 @@ public:
         void liberateCurrentPlanet() ;
 
         /**
-         * Save game when a character meets reincarnation fish
+         * Save game when the character meets the reincarnation fish
          */
-        void save () ;
-
-        void saveAt ( int x, int y, int z ) ;
+        void saveGame () ;
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
@@ -136,12 +132,22 @@ public:
 
         void setWayOfEntry ( const std::string & way ) ;
 
-        /**
-         * See if the character crosses the limits of room
-         */
-        bool isCollidingWithLimitsOfRoom( const std::string & onWhichWay ) ;
+        bool isWalkingThroughDoorAt( const std::string & where ) ;
 
 private:
+
+        // set the behavior according to the kind of character
+        void characterToBehaviour () ;
+
+        void autoMoveOnEntry () ;
+
+        /**
+         * @param where the door mentioned by its position in the room
+         * @return true if this item is under that door, false when not or if that door doesn’t exist
+         */
+        bool isNotUnderDoorAt ( const std::string & where ) ;
+
+        ////////bool isUnderSomeDoor () ;
 
         /**
          * The way by which the character leaves the room

@@ -215,8 +215,6 @@ public:
          */
         void eatFish ( const AvatarItem & character, Room * room ) ;
 
-        void eatFish ( const AvatarItem & character, Room * room, int x, int y, int z ) ;
-
         const std::string & getChosenGraphicsSet () const {  return chosenGraphicsSet ;  }
 
         void setChosenGraphicsSet ( const std::string & newSet ) {  chosenGraphicsSet = newSet ;  }

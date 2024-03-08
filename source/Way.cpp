@@ -36,12 +36,8 @@ Way::Way( const std::string & stringOfWay )
                 way = ByTeleport ;
         else if ( stringOfWay == "via second teleport" )
                 way = ByTeleportToo ;
-        else if ( stringOfWay == "did not quit" )
-                way = DidNotQuit ;
         else if ( stringOfWay == "rebuild room" || stringOfWay == "restart room" )
                 way = RestartRoom ;
-        else if ( stringOfWay == "just wait" )
-                way = JustWait ;
         else
                 way = Nowhere ;
 
@@ -71,16 +67,10 @@ std::string Way::toString () const
                 case ByTeleport:        return "via teleport" ;
                 case ByTeleportToo:     return "via second teleport" ;
 
-                case DidNotQuit:        return "did not quit" ;
-
                 case RestartRoom:       return "rebuild room" ;
-
-                case JustWait:          return "just wait" ;
-
-                case Nowhere:           return "nowhere" ;
         }
 
-        return "unknown way" ;
+        return "" ;
 }
 
 /* static */

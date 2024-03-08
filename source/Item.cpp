@@ -19,7 +19,7 @@
 PoolOfPictures * Item::poolOfPictures = new PoolOfPictures( ) ;
 
 
-Item::Item( const DescriptionOfItem* description, int z, const std::string& way )
+Item::Item( const DescriptionOfItem* description, int z, const std::string & where )
       : Mediated(), Shady(),
         descriptionOfItem( description ),
         uniqueName( description->getKind () + "." + util::makeRandomString( 12 ) ),
@@ -29,7 +29,7 @@ Item::Item( const DescriptionOfItem* description, int z, const std::string& way 
         yYet( 0 ),
         zYet( z ),
         height( description->getHeight() ),
-        heading( way == "none" ? "nowhere" : way ),
+        heading( where ),
         currentFrame( firstFrame () ),
         backwardsMotion( false ),
         ignoreCollisions( true ),
@@ -332,8 +332,7 @@ unsigned int Item::firstFrameWhenHeading ( const std::string & where ) const
 {
         if ( descriptionOfItem->howManyOrientations() > 1 )
         {
-                unsigned int integerOfWay = Way( where ).getIntegerOfWay() ;
-                unsigned int orientOccident = ( integerOfWay == Way::Nowhere ? 0 : integerOfWay );
+                unsigned int orientOccident = where.empty() ? 0 : Way( where ).getIntegerOfWay() ;
                 return descriptionOfItem->howManyFramesPerOrientation() * orientOccident ;
         }
 

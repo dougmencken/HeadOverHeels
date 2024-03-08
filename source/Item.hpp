@@ -39,7 +39,7 @@ class Item : public Mediated, public Shady
 
 public:
 
-        Item( const DescriptionOfItem * description, int z, const std::string& way ) ;
+        Item( const DescriptionOfItem * description, int z, const std::string & where = "" ) ;
 
         Item( const Item& item ) ;
 

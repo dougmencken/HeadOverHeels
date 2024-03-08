@@ -351,8 +351,8 @@ bool Room::saveAsXML( const std::string & file )
                                         item->InsertEndChild( kindOfItem );
 
                                         tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                        std::string orientation = theItem->getHeading ();
-                                        if ( orientation == "nowhere" ) orientation = "none" ;
+                                        const std::string & heading = theItem->getHeading ();
+                                        const std::string orientation = ( heading.empty() || heading == "nowhere" ) ? "none" : heading ;
                                         itemOrientation->SetText( orientation.c_str () );
                                         item->InsertEndChild( itemOrientation );
 
@@ -381,17 +381,17 @@ bool Room::saveAsXML( const std::string & file )
                         {
                                 tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
 
-                                item->SetAttribute( "x", theItem->getOriginalCellX() );
-                                item->SetAttribute( "y", theItem->getOriginalCellY() );
-                                item->SetAttribute( "z", theItem->getOriginalCellZ() );
+                                item->SetAttribute( "x", theItem->getInitialCellX () );
+                                item->SetAttribute( "y", theItem->getInitialCellY () );
+                                item->SetAttribute( "z", theItem->getInitialCellZ () );
 
                                 tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
                                 kindOfItem->SetText( theItem->getKind().c_str () );
                                 item->InsertEndChild( kindOfItem );
 
                                 tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                std::string orientation = theItem->getHeading ();
-                                if ( orientation == "nowhere" ) orientation = "none" ;
+                                const std::string & heading = theItem->getHeading ();
+                                const std::string orientation = ( heading.empty() || heading == "nowhere" ) ? "none" : heading ;
                                 itemOrientation->SetText( orientation.c_str () );
                                 item->InsertEndChild( itemOrientation );
 
@@ -563,7 +563,7 @@ void Room::updateWallsWithDoors ()
 
                                 const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
 
-                                addGridItem( GridItemPtr( new GridItem( descriptionOfWall, 0, segment->getPosition(), 0, "nowhere" ) ) );
+                                addGridItem( GridItemPtr( new GridItem( descriptionOfWall, 0, segment->getPosition(), 0 ) ) );
 
                                 wallsToBin.push_back( segment );
                         }
@@ -597,7 +597,7 @@ void Room::updateWallsWithDoors ()
 
                                 const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
 
-                                addGridItem( GridItemPtr( new GridItem( descriptionOfWall, segment->getPosition(), 0, 0, "nowhere" ) ) );
+                                addGridItem( GridItemPtr( new GridItem( descriptionOfWall, segment->getPosition(), 0, 0 ) ) );
 
                                 wallsToBin.push_back( segment );
                         }
@@ -959,7 +959,7 @@ void Room::copyAnotherCharacterAsEntered( const std::string & name )
                         {
                                 AvatarItemPtr copy( new AvatarItem( *( *pi ) ) );
                                 copy->setBehaviorOf( ( *pi )->getBehavior()->getNameOfBehavior() );
-                                copy->setWayOfEntry( "just wait" );
+                                copy->setWayOfEntry( "" );
 
                                 charactersWhoEnteredRoom.push_back( copy );
                         }
@@ -1172,11 +1172,10 @@ unsigned int Room::removeItemsOfKind ( const std::string & kind )
 
 void Room::dontDisappearOnJump ()
 {
-        for ( unsigned int column = 0; column < gridItems.size(); column ++ )
-        {
+        for ( unsigned int column = 0; column < gridItems.size(); column ++ ) {
                 for ( std::vector< GridItemPtr >::iterator gi = gridItems[ column ].begin (); gi != gridItems[ column ].end (); ++ gi )
                 {
-                        GridItem& gridItem = *( *gi );
+                        GridItem & gridItem = *( *gi );
                         if ( gridItem.getBehavior() != nilPointer )
                         {
                                 std::string behavior = gridItem.getBehavior()->getNameOfBehavior();

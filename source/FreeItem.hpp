@@ -38,9 +38,9 @@ public:
         * @param x Position on X
         * @param y Position on Y
         * @param z Position on Z, or how far is floor
-        * @param way Initial orientation of item
+        * @param where The initial orientation of item
         */
-        FreeItem( const DescriptionOfItem * description, int x, int y, int z, const std::string& way ) ;
+        FreeItem( const DescriptionOfItem * description, int x, int y, int z, const std::string & where = "" ) ;
 
         FreeItem( const FreeItem & freeItem ) ;
 
@@ -56,17 +56,21 @@ public:
                 return isBehind( that ) ;
         }
 
-        int getOriginalCellX () const {  return originalCellX ;  }
+        int getInitialCellX () const {  return this->initialCellX ;  }
 
-        int getOriginalCellY () const {  return originalCellY ;  }
+        int getInitialCellY () const {  return this->initialCellY ;  }
 
-        int getOriginalCellZ () const {  return originalCellZ ;  }
+        int getInitialCellZ () const {  return this->initialCellZ ;  }
 
-        void setOriginalCellX ( int x ) {  originalCellX = x ;  }
-
-        void setOriginalCellY ( int y ) {  originalCellY = y ;  }
-
-        void setOriginalCellZ ( int z ) {  originalCellZ = z ;  }
+        /**
+         * the initial grid cell where this item was located when the room was (re)built
+         */
+        void setInitialCellLocation ( int cx, int cy, int cz )
+        {
+                this->initialCellX = cx ;
+                this->initialCellY = cy ;
+                this->initialCellZ = cz ;
+        }
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
@@ -128,28 +132,21 @@ protected:
         virtual void updateShadow () ;
 
         /**
-         * See if this item hits a door's jamb, if yes it moves
-         * @param at the door mentioned by its location in room
-         * @param what the name of bumped item
-         * @param previousX the 3D X coordinate before hitting the door
-         * @param previousY the 3D Y coordinate before hitting the door
+         * See if this item hits a door’s jamb, if yes it moves
+         * @param at the door mentioned by its location in the room
+         * @param collision the unique name of item that collides with this one
+         * @param previousX the 3D X coordinate before hitting a door’s jamb
+         * @param previousY the 3D Y coordinate before hitting a door’s jamb
          */
-        bool isCollidingWithDoor ( const std::string& at, const std::string& what, const int previousX, const int previousY ) ;
+        bool isCollidingWithJamb ( const std::string & at, const std::string & collision, const int previousX, const int previousY ) ;
 
-        /**
-         * See if item is not under that door or that door doesn’t exist
-         * @param way door mentioned by its position in room
-         * @return true if item is under that door
-         */
-        bool isNotUnderDoorAt ( const std::string& way ) ;
+private:
 
-        bool isUnderSomeDoor () ;
+        int initialCellX ;
 
-        int originalCellX ;
+        int initialCellY ;
 
-        int originalCellY ;
-
-        int originalCellZ ;
+        int initialCellZ ;
 
         tribool wantMask ;
 
@@ -164,8 +161,6 @@ protected:
         bool frozen ;
 
         bool partOfDoor ;
-
-private:
 
         /**
          * Current frame of this item shaded but not masked yet

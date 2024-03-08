@@ -109,9 +109,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                int itemX = std::atoi( item->Attribute( "x" ) );
-                int itemY = std::atoi( item->Attribute( "y" ) );
-                int itemZ = std::atoi( item->Attribute( "z" ) );
+                int gridCellX = std::atoi( item->Attribute( "x" ) );
+                int gridCellY = std::atoi( item->Attribute( "y" ) );
+                int gridCellZ = std::atoi( item->Attribute( "z" ) );
 
                 tinyxml2::XMLElement* itemClass = item->FirstChildElement( "class" );
                 assert( itemClass != nilPointer );
@@ -124,7 +124,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         if ( door != nilPointer )
                                 theRoom->addDoor( door );
                         else
-                                std::cout << "oops, can’t build a door with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
+                                std::cout << "oops, can’t build a door at cell " << gridCellX << ", " << gridCellY << ", " << gridCellZ << std::endl ;
                 }
                 else if ( whichClass == "griditem" ) // is it a grid item
                 {
@@ -176,8 +176,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 wallsXY.push_back( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
                                 }
                                 else
-                                        std::cout << "oops, can’t build a grid item with coordinates "
-                                                        << itemX << ", " << itemY << ", " << itemZ << std::endl ;
+                                        std::cout << "oops, can’t build a grid item at cell "
+                                                        << gridCellX << ", " << gridCellY << ", " << gridCellZ << std::endl ;
                         }
                 }
                 else if ( whichClass == "freeitem" ) // is it a free item
@@ -187,7 +187,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         if ( freeItem != nilPointer )
                                 theRoom->addFreeItem( freeItem );
                         else // there may be bonus item already taken and thus absent
-                                std::cout << "free item with coordinates " << itemX << ", " << itemY << ", " << itemZ << " is absent" << std::endl ;
+                                std::cout << "free item at cell " << gridCellX << ", " << gridCellY << ", " << gridCellZ << " is absent" << std::endl ;
                 }
         }
 
@@ -497,70 +497,57 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                                                   const std::string & nameOfCharacter,
                                                   bool justEntered,
                                                   int x, int y, int z,
-                                                  const std::string & orientation, const std::string & wayOfEntry )
+                                                  const std::string & heading, const std::string & wayOfEntry )
 {
         if ( room == nilPointer ) return AvatarItemPtr () ;
 
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
 
-        std::string nameOfCharacterToCreate( nameOfCharacter );
+        std::string nameOfCharacterToCreate( "none" );
 
-        // when the composite character ran out of lives, check if any of the simple characters is survive
-        if ( gameInfo.getLivesByName( nameOfCharacter ) == 0 )
+        if ( gameInfo.getLivesByName( nameOfCharacter ) > 0 )
         {
-                if ( nameOfCharacter == "headoverheels" )
-                {
-                        if ( gameInfo.getLivesByName( "head" ) > 0 )
-                        {
-                                nameOfCharacterToCreate = "head";
-                        }
-                        else if ( gameInfo.getLivesByName( "heels" ) > 0 )
-                        {
-                                nameOfCharacterToCreate = "heels";
-                        }
-                        else
-                        {
-                                nameOfCharacterToCreate = "nobody";
-                        }
-                }
-                // it is possible that the two characters join and have no lives
+                nameOfCharacterToCreate = nameOfCharacter ;
+        }
+        else
+        if ( nameOfCharacter == "headoverheels" )
+        {
+                // when the composite character ran out of lives, check if any of the simple characters survived
+                if ( gameInfo.getLivesByName( "head" ) > 0 )
+                        nameOfCharacterToCreate = "head" ;
                 else
-                {
-                        if ( gameInfo.getLivesByName( "head" ) == 0 && gameInfo.getLivesByName( "heels" ) == 0 )
-                        {
-                                nameOfCharacterToCreate = "game over" ;
-                        }
-                }
+                if ( gameInfo.getLivesByName( "heels" ) > 0 )
+                        nameOfCharacterToCreate = "heels" ;
+        }
+        else
+        {
+                if ( gameInfo.getLivesByName( "head" ) == 0 && gameInfo.getLivesByName( "heels" ) == 0 )
+                        nameOfCharacterToCreate = "game over" ;
         }
 
         const DescriptionOfItem* itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
 
-        // if it is found and has some lives left, place it in room
+        // if the character has some lives left, place it in the room
         if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
-                && itemDescription != nilPointer )
+                        && itemDescription != nilPointer )
         {
                 if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 )
                 {
-                        AvatarItemPtr character( new AvatarItem( itemDescription, x, y, z, orientation ) );
+                        AvatarItemPtr character( new AvatarItem( itemDescription, x, y, z, heading ) );
+                        assert( character != nilPointer );
 
-                        std::string behaviorOfCharacter = "behavior of some character";
-
-                        if ( nameOfCharacterToCreate == "headoverheels" )
-                        {
-                                behaviorOfCharacter = "behavior of Head over Heels";
-                        }
-                        else if ( nameOfCharacterToCreate == "head" )
-                        {
-                                behaviorOfCharacter = "behavior of Head";
-                        }
-                        else if ( nameOfCharacterToCreate == "heels" )
-                        {
-                                behaviorOfCharacter = "behavior of Heels";
-                        }
-
-                        character->setBehaviorOf( behaviorOfCharacter );
-
-                        character->setWayOfEntry( wayOfEntry );
+                        // automove on entry
+                        if ( wayOfEntry.empty() ) {
+                                const std::map< std::string, Door* > & doors = room->getDoors() ;
+                                for ( std::map< std::string, Door* >::const_iterator di = doors.begin() ; di != doors.end() ; ++ di ) {
+                                        Door* door = di->second ;
+                                        if ( door != nilPointer && door->isUnderDoor( *character ) ) {
+                                                character->setWayOfEntry( di->first );
+                                                break ;
+                                        }
+                                }
+                        } else
+                                character->setWayOfEntry( wayOfEntry );
 
                         room->addCharacterToRoom( character, justEntered );
 
@@ -568,7 +555,7 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                 }
         }
 
-        return AvatarItemPtr () ;
+        return AvatarItemPtr() ;
 }
 
 /* static */
@@ -619,26 +606,27 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 
         if ( itemDescription != nilPointer )
         {
-                int itemX = std::atoi( item->Attribute( "x" ) );
-                int itemY = std::atoi( item->Attribute( "y" ) );
-                int itemZ = std::atoi( item->Attribute( "z" ) );
-                itemZ = ( itemZ > Room::FloorZ ) ? itemZ * Room::LayerHeight : Room::FloorZ ;
+                int gridCellX = std::atoi( item->Attribute( "x" ) );
+                int gridCellY = std::atoi( item->Attribute( "y" ) );
+                int gridCellZ = std::atoi( item->Attribute( "z" ) );
+                int freeZ = ( gridCellZ > Room::FloorZ ) ? gridCellZ * Room::LayerHeight : Room::FloorZ ;
 
-                std::string theWay = "nowhere" ;
+                std::string heading ;
                 tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
                 if ( orientation != nilPointer )
-                        theWay = orientation->FirstChild()->ToText()->Value();
+                        heading = orientation->FirstChild()->ToText()->Value();
 
-                GridItemPtr gridItem( new GridItem( itemDescription, itemX, itemY, itemZ, theWay ) );
+                //// for backward compatibility
+                if ( heading == "none" || heading == "nowhere" ) heading = "" ;
 
-                std::string behaviorOfItem = "still";
+                GridItemPtr gridItem( new GridItem( itemDescription, gridCellX, gridCellY, freeZ, heading ) );
+
+                std::string behaviorOfItem ;
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
-                if ( behavior != nilPointer && behavior->FirstChild() != nilPointer )
-                {
+                if ( behavior != nilPointer && behavior->FirstChild() != nilPointer ) {
                         behaviorOfItem = behavior->FirstChild()->ToText()->Value() ;
+                        gridItem->setBehaviorOf( behaviorOfItem );
                 }
-
-                gridItem->setBehaviorOf( behaviorOfItem );
 
                 return gridItem ;
         }
@@ -654,32 +642,30 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 
         if ( itemDescription != nilPointer )
         {
-                int itemX = std::atoi( item->Attribute( "x" ) );
-                int itemY = std::atoi( item->Attribute( "y" ) );
-                int itemZ = std::atoi( item->Attribute( "z" ) );
+                int gridCellX = std::atoi( item->Attribute( "x" ) );
+                int gridCellY = std::atoi( item->Attribute( "y" ) );
+                int gridCellZ = std::atoi( item->Attribute( "z" ) );
 
-                // in free coordinates
+                // convert the location of cell to the free coordinates
                 unsigned int oneTileLong = room->getSizeOfOneTile ();
-                int fx = itemX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
-                int fy = ( itemY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
-                int fz = ( itemZ != Room::FloorZ ) ? itemZ * Room::LayerHeight : Room::FloorZ ;
+                int freeX = gridCellX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
+                int freeY = ( gridCellY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
+                int freeZ = ( gridCellZ > Room::FloorZ ) ? gridCellZ * Room::LayerHeight : Room::FloorZ ;
 
                 // don’t create an item if it's a bonus that disappears once when taken
                 if ( BonusManager::getInstance().isAbsent( BonusInRoom( itemDescription->getKind (), room->getNameOfRoomDescriptionFile() ) ) )
-                {
                         return FreeItemPtr () ;
-                }
 
-                std::string theWay = "nowhere" ;
+                std::string heading ;
                 tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
                 if ( orientation != nilPointer )
-                        theWay = orientation->FirstChild()->ToText()->Value();
+                        heading = orientation->FirstChild()->ToText()->Value();
 
-                FreeItemPtr freeItem( new FreeItem( itemDescription, fx, fy, fz, theWay ) );
+                //// for backward compatibility
+                if ( heading == "none" || heading == "nowhere" ) heading = "" ;
 
-                freeItem->setOriginalCellX( itemX );
-                freeItem->setOriginalCellY( itemY );
-                freeItem->setOriginalCellZ( itemZ );
+                FreeItemPtr freeItem( new FreeItem( itemDescription, freeX, freeY, freeZ, heading ) );
+                freeItem->setInitialCellLocation( gridCellX, gridCellY, gridCellZ );
 
                 std::string behaviorOfItem = "still";
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
@@ -737,14 +723,14 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
 {
         std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
 
-        int itemX = std::atoi( item->Attribute( "x" ) );
-        int itemY = std::atoi( item->Attribute( "y" ) );
-        int itemZ = std::atoi( item->Attribute( "z" ) );
+        int gridCellX = std::atoi( item->Attribute( "x" ) );
+        int gridCellY = std::atoi( item->Attribute( "y" ) );
+        int gridCellZ = std::atoi( item->Attribute( "z" ) );
 
         // "z" can't be below the floor, that's less than Room::FloorZ = -1
-        itemZ = ( itemZ > Room::FloorZ ) ? itemZ * Room::LayerHeight : Room::FloorZ ;
+        int freeZ = ( gridCellZ > Room::FloorZ ) ? gridCellZ * Room::LayerHeight : Room::FloorZ ;
 
-        std::string doorOrientation = "nowhere" ;
+        std::string doorOrientation ;
         tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
         if ( orientation != nilPointer )
                 doorOrientation = orientation->FirstChild()->ToText()->Value() ;
@@ -755,5 +741,5 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
                         doorOrientation = kind.substr( doorInKind + 5 );
         }
 
-        return new Door( kind, itemX, itemY, itemZ, doorOrientation );
+        return new Door( kind, gridCellX, gridCellY, freeZ, doorOrientation );
 }

@@ -11,11 +11,11 @@
 #endif
 
 
-FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& way )
-        : Item ( description, z, way )
-        , originalCellX( farFarAway )
-        , originalCellY( farFarAway )
-        , originalCellZ( farFarAway )
+FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, const std::string & where )
+        : Item ( description, z, where )
+        , initialCellX( farFarAway )
+        , initialCellY( farFarAway )
+        , initialCellZ( farFarAway )
         , wantMask ( tritrue )
         , transparency ( 0 )
         , frozen ( false )
@@ -33,9 +33,9 @@ FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, c
 
 FreeItem::FreeItem( const FreeItem & freeItem )
         : Item( freeItem ), Drawable()
-        , originalCellX( freeItem.originalCellX )
-        , originalCellY( freeItem.originalCellY )
-        , originalCellZ( freeItem.originalCellZ )
+        , initialCellX( freeItem.initialCellX )
+        , initialCellY( freeItem.initialCellY )
+        , initialCellZ( freeItem.initialCellZ )
         , wantMask( freeItem.wantMask )
         , transparency( freeItem.transparency )
         , frozen( freeItem.frozen )
@@ -167,25 +167,25 @@ bool FreeItem::addToPosition( int x, int y, int z )
         setY( yBefore + y );
         setZ( zBefore + z );
 
-        // look for collision with real wall, one which limits the room
+        // look for a collision with a wall
         if ( getX() < mediator->getRoom()->getLimitAt( "north" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at north" );
+                mediator->addCollisionWith( "some segment of the north wall" );
         }
         else if ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( "south" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at south" );
+                mediator->addCollisionWith( "some segment of the south wall" );
         }
         if ( getY() >= mediator->getRoom()->getLimitAt( "west" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at west" );
+                mediator->addCollisionWith( "some segment of the east wall" );
         }
         else if ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at east" );
+                mediator->addCollisionWith( "some segment of the west wall" );
         }
 
-        // look for collision with floor
+        // collision with the floor
         if ( getZ() < 0 )
         {
                 mediator->addCollisionWith( "some tile of floor" );
@@ -226,13 +226,13 @@ bool FreeItem::addToPosition( int x, int y, int z )
         return ! collisionFound;
 }
 
-bool FreeItem::isCollidingWithDoor( const std::string& at, const std::string& what, const int previousX, const int previousY )
+bool FreeItem::isCollidingWithJamb( const std::string & at, const std::string & collision, const int previousX, const int previousY )
 {
         Door* door = mediator->getRoom()->getDoorAt( at );
         if ( door == nilPointer ) return false ;
 
-        // proceed only when colliding with a door's jamb
-        if ( door->getLeftJamb()->getUniqueName() != what && door->getRightJamb()->getUniqueName() != what ) return false ;
+        // proceed only when colliding with a door’s jamb
+        if ( door->getLeftJamb()->getUniqueName() != collision && door->getRightJamb()->getUniqueName() != collision ) return false ;
 
         const int xBefore = getX();
         const int yBefore = getY();
@@ -247,13 +247,13 @@ bool FreeItem::isCollidingWithDoor( const std::string& at, const std::string& wh
                 case Way::Southeast:
                 case Way::Southwest:
                         // move the character right when it collides with the left jamb
-                        if ( door->getLeftJamb()->getUniqueName() == what && this->getY() <= door->getLeftJamb()->getY() )
+                        if ( door->getLeftJamb()->getUniqueName() == collision && this->getY() <= door->getLeftJamb()->getY() )
                         {
                                 setY( getY() - 1 ) ;
                                 setX( previousX );
                         }
                         // move the character left when it hits the right jamb
-                        else if ( door->getRightJamb()->getUniqueName() == what
+                        else if ( door->getRightJamb()->getUniqueName() == collision
                                         && this->getY() - getWidthY() >= door->getRightJamb()->getY() - door->getRightJamb()->getWidthY() )
                         {
                                 setY( getY() + 1 ) ;
@@ -270,13 +270,13 @@ bool FreeItem::isCollidingWithDoor( const std::string& at, const std::string& wh
                 case Way::Westnorth:
                 case Way::Westsouth:
                         // move the character right when it hits the left jamb
-                        if ( door->getLeftJamb()->getUniqueName() == what && this->getX() >= door->getLeftJamb()->getX() )
+                        if ( door->getLeftJamb()->getUniqueName() == collision && this->getX() >= door->getLeftJamb()->getX() )
                         {
                                 setX( getX() + 1 ) ;
                                 setY( previousY );
                         }
                         // move the character left when it collides with the right jamb
-                        else if ( door->getRightJamb()->getUniqueName() == what
+                        else if ( door->getRightJamb()->getUniqueName() == collision
                                         && this->getX() - getWidthX() <= door->getRightJamb()->getX() + door->getRightJamb()->getWidthX() )
                         {
                                 setX( getX() - 1 ) ;
@@ -296,25 +296,4 @@ bool FreeItem::isCollidingWithDoor( const std::string& at, const std::string& wh
         }
 
         return false ;
-}
-
-bool FreeItem::isNotUnderDoorAt( const std::string& way )
-{
-        Door* door = mediator->getRoom()->getDoorAt( way );
-
-        return ( door == nilPointer || ! door->isUnderDoor( getX(), getY(), getZ() ) );
-}
-
-bool FreeItem::isUnderSomeDoor ()
-{
-        const std::map < std::string, Door* >& doors = mediator->getRoom()->getDoors();
-
-        for ( std::map < std::string, Door* >::const_iterator iter = doors.begin () ; iter != doors.end (); ++ iter )
-        {
-                Door* door = iter->second ;
-                if ( door != nilPointer && door->isUnderDoor( getX(), getY(), getZ() ) )
-                        return true;
-        }
-
-        return false;
 }

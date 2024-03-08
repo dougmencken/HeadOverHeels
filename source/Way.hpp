@@ -15,7 +15,8 @@
 
 
 /**
- * The way in which you move an item or the entry to a room or the exit from a room
+ * Where an item is heading or moving,
+ * or the way of entry to the room or the way of exit from the room
  */
 
 class Way
@@ -23,15 +24,13 @@ class Way
 
 public:
 
-        explicit Way( unsigned int way = Nowhere ) : way( way ) { }
+        explicit Way( unsigned int whichWay = Nowhere ) : way( whichWay ) { }
 
         explicit Way( const std::string & stringOfWay ) ;
 
         unsigned int getIntegerOfWay () const {  return way ;  }
 
         std::string toString () const ;
-
-        bool operator < ( const Way & toCompare ) const {  return way < toCompare.way ;  }
 
         Way & operator = ( unsigned int newWay )
         {
@@ -53,23 +52,19 @@ public:
         static const unsigned int Westnorth = 10 ;
         static const unsigned int Westsouth = 11 ;
 
-        static const unsigned int Above = 22 ;          // to room without floor
-        static const unsigned int Below = 23 ;          // to room without ceiling
+        static const unsigned int Above = 22 ;          // to a room without floor
+        static const unsigned int Below = 23 ;          // to a room without ceiling
 
         static const unsigned int ByTeleport = 33 ;     // to another room via teleport
         static const unsigned int ByTeleportToo = 34 ;  // to another room via second teleport
 
-        static const unsigned int DidNotQuit = 44 ;     // the character has not yet quit the room
-
-        static const unsigned int RestartRoom = 55 ;    // restart the room, for example when the character loses one life
-
-        static const unsigned int JustWait = 99 ;       // just wait in room
-
-        static const unsigned int Nowhere = 200 ;       // for items with only one direction
+        static const unsigned int RestartRoom = 55 ;    // restart the room, for example when a character loses one life
 
         static std::string exitToEntry ( const std::string & wayOfExit ) ;
 
 private:
+
+        static const unsigned int Nowhere = 0x500 ;
 
         unsigned int way ;
 

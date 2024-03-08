@@ -15,11 +15,12 @@
 
 AvatarItem::AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string & heading )
         : FreeItem( description, x, y, z, heading )
-        , wayOfExit( "did not quit" )
-        , wayOfEntry( "just wait" )
+        , wayOfExit( "" )
+        , wayOfEntry( "" )
         , shieldTimer( new Timer () )
         , descriptionOfTakenItem( nilPointer )
 {
+        characterToBehaviour ();
 }
 
 AvatarItem::AvatarItem( const AvatarItem & toCopy )
@@ -29,6 +30,63 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
         , shieldTimer( new Timer () )
         , descriptionOfTakenItem( nilPointer )
 {
+        characterToBehaviour ();
+}
+
+/* private */ void AvatarItem::characterToBehaviour ()
+{
+        if ( getOriginalKind() == "head" )
+                setBehaviorOf( "behavior of Head" );
+        else
+        if ( getOriginalKind() == "heels" )
+                setBehaviorOf( "behavior of Heels" );
+        else
+        if ( getOriginalKind() == "headoverheels" )
+                setBehaviorOf( "behavior of Head over Heels" );
+}
+
+/* private */ void AvatarItem::autoMoveOnEntry ()
+{
+        assert( getBehavior() != nilPointer );
+
+        switch ( Way( this->wayOfEntry ).getIntegerOfWay () )
+        {
+                case Way::North:
+                case Way::Northeast:
+                case Way::Northwest:
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingSouth );
+                        break;
+
+                case Way::South:
+                case Way::Southeast:
+                case Way::Southwest:
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingNorth );
+                        break;
+
+                case Way::East:
+                case Way::Eastnorth:
+                case Way::Eastsouth:
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingWest );
+                        break;
+
+                case Way::West:
+                case Way::Westnorth:
+                case Way::Westsouth:
+                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingEast );
+                        break;
+
+                case Way::ByTeleport:
+                case Way::ByTeleportToo:
+                        getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
+                        break;
+
+                /* case Way::Above: ////// will fall without this anyway
+                        getBehavior()->setCurrentActivity( activities::Activity::Falling );
+                        break; */
+
+                default:
+                        ;
+        }
 }
 
 void AvatarItem::setWayOfEntry ( const std::string & way )
@@ -36,6 +94,7 @@ void AvatarItem::setWayOfEntry ( const std::string & way )
         std::cout << "setting the way of entry = \"" << way << "\" for " << getUniqueName() << std::endl ;
 
         this->wayOfEntry = way ;
+        autoMoveOnEntry() ;
 }
 
 void AvatarItem::setWayOfExit ( const std::string & way )
@@ -78,69 +137,18 @@ void AvatarItem::setWayOfExit ( const std::string & way )
         }
 }
 
-void AvatarItem::autoMoveOnEntry ( const std::string & wayOfEntry )
-{
-        setWayOfEntry( wayOfEntry );
-
-        if ( getBehavior() == nilPointer )
-        {
-                std::cerr << "nil behavior at AvatarItem::autoMoveOnEntry" << std::endl ;
-                return;
-        }
-
-        switch ( Way( wayOfEntry ).getIntegerOfWay () )
-        {
-                case Way::North:
-                case Way::Northeast:
-                case Way::Northwest:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingSouth );
-                        break;
-
-                case Way::South:
-                case Way::Southeast:
-                case Way::Southwest:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingNorth );
-                        break;
-
-                case Way::East:
-                case Way::Eastnorth:
-                case Way::Eastsouth:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingWest );
-                        break;
-
-                case Way::West:
-                case Way::Westnorth:
-                case Way::Westsouth:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingEast );
-                        break;
-
-                case Way::ByTeleport:
-                case Way::ByTeleportToo:
-                        getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
-                        break;
-
-                case Way::Above:
-                        getBehavior()->setCurrentActivity( activities::Activity::Falling );
-                        break;
-
-                default:
-                        ;
-        }
-}
-
 bool AvatarItem::addToPosition( int x, int y, int z )
 {
-        bool itAutomoves = getBehavior()->getCurrentActivity() == activities::Activity::AutomovingNorth ||
+        /////??? hmmmm and when an inactive character *automoves*???
+        /*** bool itAutomoves = getBehavior()->getCurrentActivity() == activities::Activity::AutomovingNorth ||
                                 getBehavior()->getCurrentActivity() == activities::Activity::AutomovingSouth ||
                                 getBehavior()->getCurrentActivity() == activities::Activity::AutomovingEast ||
-                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingWest ;
+                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingWest ; ***/
 
-        bool itFallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
+        //////bool itFallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
 
-        if ( ! this->isActiveCharacter() && ! itAutomoves && ! itFallsUnderDoor )
-        {
+        if ( ! this->isActiveCharacter() /* && ! itAutomoves */ /* && ! itFallsUnderDoor */ )
                 return FreeItem::addToPosition( x, y, z );
-        }
 
         mediator->clearCollisions ();
 
@@ -155,123 +163,121 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         setY( yBefore + y );
         setZ( zBefore + z );
 
-        // look for collision with door
+        // look for a collision with a door’s jamb
 
-        bool doorCollision = false;
+        bool jambCollision = false;
 
         bool collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
-
         if ( collisionFound )
         {
                 while ( mediator->isThereAnyCollision () )
                 {
-                        std::string what = mediator->popCollision();
+                        std::string collision = mediator->popCollision() ;
 
                         if ( x < 0 ) // moving north
                         {
                                 // see if the character hits a north door’s jamb
-                                doorCollision = isCollidingWithDoor( "north", what, xBefore, yBefore );
-                                if ( ! doorCollision ) {
+                                jambCollision = isCollidingWithJamb( "north", collision, xBefore, yBefore );
+                                if ( ! jambCollision ) {
                                         // then maybe the character hits a north-east door’s jamb
-                                        doorCollision = isCollidingWithDoor( "northeast", what, xBefore, yBefore );
-                                        if ( ! doorCollision ) {
+                                        jambCollision = isCollidingWithJamb( "northeast", collision, xBefore, yBefore );
+                                        if ( ! jambCollision ) {
                                                 // or a north-west door’s jamb
-                                                doorCollision = isCollidingWithDoor( "northwest", what, xBefore, yBefore );
+                                                jambCollision = isCollidingWithJamb( "northwest", collision, xBefore, yBefore );
                                         }
                                 }
                         }
                         else if ( x > 0 ) // moving south
                         {
                                 // see if the character hits a south door’s jamb
-                                doorCollision = isCollidingWithDoor( "south", what, xBefore, yBefore );
-                                if ( ! doorCollision ) {
+                                jambCollision = isCollidingWithJamb( "south", collision, xBefore, yBefore );
+                                if ( ! jambCollision ) {
                                         // then maybe the character hits a south-east door’s jamb
-                                        doorCollision = isCollidingWithDoor( "southeast", what, xBefore, yBefore );
-                                        if ( ! doorCollision ) {
+                                        jambCollision = isCollidingWithJamb( "southeast", collision, xBefore, yBefore );
+                                        if ( ! jambCollision ) {
                                                 // or a south-west door’s jamb
-                                                doorCollision = isCollidingWithDoor( "southwest", what, xBefore, yBefore );
+                                                jambCollision = isCollidingWithJamb( "southwest", collision, xBefore, yBefore );
                                         }
                                 }
                         }
                         else if ( y < 0 ) // moving east
                         {
                                 // see if the character hits an east door’s jamb
-                                doorCollision = isCollidingWithDoor( "east", what, xBefore, yBefore );
-                                if ( ! doorCollision ) {
+                                jambCollision = isCollidingWithJamb( "east", collision, xBefore, yBefore );
+                                if ( ! jambCollision ) {
                                         // maybe the character hits an east-north door’s jamb
-                                        doorCollision = isCollidingWithDoor( "eastnorth", what, xBefore, yBefore );
-                                        if ( ! doorCollision ) {
+                                        jambCollision = isCollidingWithJamb( "eastnorth", collision, xBefore, yBefore );
+                                        if ( ! jambCollision ) {
                                                 // or an east-south door’s jamb
-                                                doorCollision = isCollidingWithDoor( "eastsouth", what, xBefore, yBefore );
+                                                jambCollision = isCollidingWithJamb( "eastsouth", collision, xBefore, yBefore );
                                         }
                                 }
                         }
                         else if ( y > 0 ) // moving west
                         {
                                 // see if the character hits a west door’s jamb
-                                doorCollision = isCollidingWithDoor( "west", what, xBefore, yBefore );
-                                if ( ! doorCollision ) {
+                                jambCollision = isCollidingWithJamb( "west", collision, xBefore, yBefore );
+                                if ( ! jambCollision ) {
                                         // maybe the character hits a west-north door’s jamb
-                                        doorCollision = isCollidingWithDoor( "westnorth", what, xBefore, yBefore );
-                                        if ( ! doorCollision ) {
+                                        jambCollision = isCollidingWithJamb( "westnorth", collision, xBefore, yBefore );
+                                        if ( ! jambCollision ) {
                                                 // or a west-south door’s jamb
-                                                doorCollision = isCollidingWithDoor( "westsouth", what, xBefore, yBefore );
+                                                jambCollision = isCollidingWithJamb( "westsouth", collision, xBefore, yBefore );
                                         }
                                 }
                         }
                 }
         }
 
-        // look for a collision with a wall that limits the room
-        if ( this->getX() < mediator->getRoom()->getLimitAt( "north" )
+        // look for a collision with a wall
+
+        if ( getX() < mediator->getRoom()->getLimitAt( "north" )
                         && isNotUnderDoorAt( "north" ) && isNotUnderDoorAt( "northeast" ) && isNotUnderDoorAt( "northwest" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at north" );
+                mediator->addCollisionWith( "some segment of the north wall" );
         }
-        else if ( this->getX() + static_cast< int >( getDescriptionOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" )
+        else if ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( "south" )
                         && isNotUnderDoorAt( "south" ) && isNotUnderDoorAt( "southeast" ) && isNotUnderDoorAt( "southwest" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at south" );
+                mediator->addCollisionWith( "some segment of the south wall" );
         }
 
-        if ( this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" )
+        if ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" )
                         && isNotUnderDoorAt( "east" ) && isNotUnderDoorAt( "eastnorth" ) && isNotUnderDoorAt( "eastsouth" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at east" );
+                mediator->addCollisionWith( "some segment of the east wall" );
         }
-        else if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" )
+        else if ( getY() >= mediator->getRoom()->getLimitAt( "west" )
                         && isNotUnderDoorAt( "west" ) && isNotUnderDoorAt( "westnorth" ) && isNotUnderDoorAt( "westsouth" ) )
         {
-                mediator->addCollisionWith( "some segment of wall at west" );
+                mediator->addCollisionWith( "some segment of the west wall" );
         }
 
         collisionFound = mediator->isThereAnyCollision ();
         if ( ! collisionFound )
         {
-                // now it is known that the character can go thru a door
-                // look for collisions with the limits of room
+                // the character may go thru a door
 
                 const std::string doors[ 12 ] =
                         {  "northeast", "northwest", "north", "southeast", "southwest", "south",
                                 "eastnorth", "eastsouth", "east", "westnorth", "westsouth", "west"  };
 
-                // check each limit of room
                 for ( unsigned int i = 0; i < 12; i++ )
                 {
-                        if ( isCollidingWithLimitsOfRoom( doors[ i ] ) )
+                        if ( isWalkingThroughDoorAt( doors[ i ] ) )
                         {
-                                mediator->addCollisionWith( doors[ i ] + " limit" );
+                                mediator->addCollisionWith( doors[ i ] + " door" );
                                 break;
                         }
                 }
 
-                // collision with floor
+                // collision with the floor
                 if ( this->getZ() < 0 )
                 {
                         mediator->addCollisionWith( "some tile of floor" );
                 }
 
-                // collision with ceiling
+                // collision with the ceiling
                 if ( z >= 0 && this->getZ() > ( Room::MaxLayers - 1 ) * Room::LayerHeight + ( Room::LayerHeight >> 1 ) )
                 {
                         mediator->addCollisionWith( "ceiling" );
@@ -303,7 +309,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                 }
         }
 
-        if ( collisionFound && ! doorCollision )
+        if ( collisionFound && ! jambCollision )
         {
                 // restore previous values
                 setX( xBefore );
@@ -314,65 +320,64 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         return ! collisionFound ;
 }
 
-bool AvatarItem::isCollidingWithLimitsOfRoom( const std::string & onWhichWay )
+bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 {
-        bool result = false;
+        Door* door = mediator->getRoom()->getDoorAt( where );
+        if ( door == nilPointer ) return false ;
 
-        Door* door = mediator->getRoom()->getDoorAt( onWhichWay );
+        bool walksThruDoor = false ;
 
-        switch ( Way( onWhichWay ).getIntegerOfWay () )
+        int widthX = static_cast< int >( getDescriptionOfItem()->getWidthX () );
+        int widthY = static_cast< int >( getDescriptionOfItem()->getWidthY () );
+        unsigned int oneTile = mediator->getRoom()->getSizeOfOneTile() ;
+
+        switch ( Way( where ).getIntegerOfWay () )
         {
                 case Way::North:
-                        result = ( this->getX() < 0 );
+                        walksThruDoor = ( getX() < 0 );
                         break;
 
                 case Way::Northeast:
                 case Way::Northwest:
-                        result = ( door != nilPointer &&
-                                        this->getX() < mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
+                        walksThruDoor = ( getX() < mediator->getRoom()->getLimitAt( where )
+                                                && door->isUnderDoor( *this ) );
                         break;
 
                 case Way::South:
-                        result = ( this->getX() + static_cast< int >( getDescriptionOfItem()->getWidthX() )
-                                        > static_cast< int >( mediator->getRoom()->getTilesX() * mediator->getRoom()->getSizeOfOneTile() ) );
+                        walksThruDoor = ( getX() + widthX > static_cast< int >( mediator->getRoom()->getTilesX() * oneTile ) );
                         break;
 
                 case Way::Southeast:
                 case Way::Southwest:
-                        result = ( door != nilPointer &&
-                                        this->getX() + static_cast< int >( getDescriptionOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
+                        walksThruDoor = ( getX() + widthX > mediator->getRoom()->getLimitAt( where )
+                                                && door->isUnderDoor( *this ) );
                         break;
 
                 case Way::East:
-                        result = ( this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() ) + 1 < 0 );
+                        walksThruDoor = ( getY() - widthY + 1 < 0 );
                         break;
 
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        result = ( door != nilPointer &&
-                                        this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
+                        walksThruDoor = ( getY() - widthY + 1 < mediator->getRoom()->getLimitAt( where )
+                                                && door->isUnderDoor( *this ) );
                         break;
 
                 case Way::West:
-                        result = ( this->getY()
-                                        >= static_cast< int >( mediator->getRoom()->getTilesY() * mediator->getRoom()->getSizeOfOneTile() ) );
+                        walksThruDoor = ( getY() >= static_cast< int >( mediator->getRoom()->getTilesY() * oneTile ) );
                         break;
 
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        result = ( door != nilPointer &&
-                                        this->getY() + static_cast< int >( getDescriptionOfItem()->getWidthY() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
+                        walksThruDoor = ( getY() + widthY > mediator->getRoom()->getLimitAt( where )
+                                                && door->isUnderDoor( *this ) );
                         break;
 
                 default:
                         ;
         }
 
-        return result;
+        return walksThruDoor ;
 }
 
 void AvatarItem::behaveCharacter ()
@@ -566,14 +571,9 @@ void AvatarItem::emptyBag ()
         this->behaviorOfTakenItem = "still" ;
 }
 
-void AvatarItem::save ()
+void AvatarItem::saveGame ()
 {
         GameManager::getInstance().eatFish( *this, this->mediator->getRoom() );
-}
-
-void AvatarItem::saveAt ( int x, int y, int z )
-{
-        GameManager::getInstance().eatFish( *this, this->mediator->getRoom(), x, y, z );
 }
 
 void AvatarItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
@@ -604,3 +604,24 @@ bool AvatarItem::hasShield () const
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
         return gameInfo.getShieldPointsByName( this->getOriginalKind() ) > 0 ;
 }
+
+bool AvatarItem::isNotUnderDoorAt( const std::string & where )
+{
+        Door* door = mediator->getRoom()->getDoorAt( where );
+
+        return ( door == nilPointer || ! door->isUnderDoor( *this ) );
+}
+
+/*** bool AvatarItem::isUnderSomeDoor ()
+{
+        const std::map < std::string, Door* > & doors = mediator->getRoom()->getDoors();
+
+        for ( std::map < std::string, Door* >::const_iterator iter = doors.begin () ; iter != doors.end (); ++ iter )
+        {
+                Door* door = iter->second ;
+                if ( door != nilPointer && door->isUnderDoor( *this ) )
+                        return true;
+        }
+
+        return false;
+} ***/

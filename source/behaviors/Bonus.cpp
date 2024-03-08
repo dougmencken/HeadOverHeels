@@ -228,7 +228,7 @@ void Bonus::takeIt( AvatarItem & whoTakes )
                 whoTakes.takeMagicTool( whichItem );
         }
         else if ( whichItem == "reincarnation-fish" ) {
-                whoTakes.saveAt( it.getX (), it.getY (), it.getZ () );
+                whoTakes.saveGame () ;
         }
 }
 

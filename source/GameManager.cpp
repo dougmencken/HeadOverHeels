@@ -22,6 +22,8 @@
 #include "ospaths.hpp"
 #include "sleep.hpp"
 
+#include "MayNotBePossible.hpp"
+
 
 GameManager GameManager::instance ;
 
@@ -142,14 +144,7 @@ void GameManager::update ()
                                                 drawOnScreen( view->getAllegroPict() );
                                         }
                                         else
-                                        {
-                                                autouniqueptr< allegro::Pict > nothing ( allegro::Pict::newPict(
-                                                                GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight()
-                                                ) );
-                                                nothing->clearToColor( Color::byName( "gray75" ).toAllegroColor() );
-                                                drawAmbianceOfGame( *nothing );
-                                                drawOnScreen( *nothing );
-                                        }
+                                                throw new MayNotBePossible( "GameManager::update doesn’t get a canvas to draw on" ) ;
 
                                         somn::milliSleep( 1000 / Isomot::updatesPerSecond );
                                 }
@@ -159,7 +154,7 @@ void GameManager::update ()
                                         keyMoments.gameOver() ;
                                 }
                         }
-                        else
+                        else // no lives left
                         {
                                 std::cout << "lives are exhausted, game over" << std::endl ;
                                 keyMoments.gameOver() ;
@@ -726,18 +721,33 @@ unsigned short GameManager::howManyFreePlanets () const
 
 void GameManager::eatFish ( const AvatarItem & character, Room* room )
 {
-        this->eatFish( character, room, character.getX (), character.getY (), character.getZ () ) ;
-}
+        assert( room != nilPointer );
 
-void GameManager::eatFish ( const AvatarItem & character, Room* room, int x, int y, int z )
-{
         keyMoments.fishEaten ();
+
+        ItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
+
+        int x = character.getX ();
+        int y = character.getY ();
+        int z = character.getZ ();
+
+        if ( fish != nilPointer && fish->whichItemClass() == "free item" ) {
+                const FreeItem & freeFish = dynamic_cast< const FreeItem & >( *fish );
+                int oneCell = room->getSizeOfOneTile ();
+
+                // get the initial location o’ fish in the room
+                x = freeFish.getInitialCellX() * oneCell ;
+                y = ( freeFish.getInitialCellY() + 1 ) * oneCell - 1 ;
+                z = fish->getZ ();
+        }
+
+        std::string whereLooks = character.getHeading ();
+        if ( fish != nilPointer ) whereLooks = fish->getHeading() ;
 
         saverAndLoader.ateFish (
                 room->getNameOfRoomDescriptionFile (),
-                character.getKind (),
-                x, y, z,
-                character.getHeading ()
+                character.getOriginalKind (),
+                x, y, z, whereLooks
         );
 }
 

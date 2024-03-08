@@ -34,13 +34,12 @@ class GridItem : public Item, public Drawable
 public:
 
         /**
-         * @param description Description of item
-         * @param cx Position on X of the cell in room where this item is
-         * @param cy Position on Y of the cell in room where this item is
-         * @param z Position on Z, or how far is floor
-         * @param way Initial orientation of item
+         * @param cx The X of the room grid cell where this item is
+         * @param cy The Y of the room grid cell where this item is
+         * @param z The position on Z, or how far is the floor, in free isometric units
+         * @param where The angular orientation of item
          */
-        GridItem( const DescriptionOfItem * description, int cx, int cy, int z, const std::string& way ) ;
+        GridItem( const DescriptionOfItem * description, int cx, int cy, int z, const std::string & where = "" ) ;
 
         virtual ~GridItem( ) ;
 

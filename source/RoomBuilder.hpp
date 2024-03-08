@@ -27,7 +27,7 @@
 class Room ;
 
 /**
- * Creates a room by constructing different parts of it via data from file
+ * Builds a room by constructing its various parts by the data from file
  */
 
 class RoomBuilder
@@ -42,14 +42,14 @@ public:
 
         /**
          * Create a character in a specified room
-         * @param justEntered Make the copy of character to recreate it when rebuilding the room or don't
+         * @param justEntered true to copy the character for ease of restoration when rebuilding the room
          */
         static AvatarItemPtr createCharacterInRoom ( Room * room,
                                                      const std::string & nameOfCharacter,
                                                      bool justEntered,
                                                      int x, int y, int z,
-                                                     const std::string & orientation,
-                                                     const std::string & wayOfEntry = "just wait" );
+                                                     const std::string & heading,
+                                                     const std::string & wayOfEntry = "" );
 
 private:
 

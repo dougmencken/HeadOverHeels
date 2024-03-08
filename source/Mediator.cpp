@@ -129,7 +129,7 @@ void Mediator::update()
                 if ( character->getWayOfExit() == "below" && ! character->isActiveCharacter() )
                 {
                         std::cout << "inactive character \"" << character->getKind () << "\" falls down to another room, swap characters to make it active" << std::endl ;
-                        this->currentlyActiveCharacter->setWayOfExit( "did not quit" );
+                        this->currentlyActiveCharacter->setWayOfExit( "" );
                         this->pickNextCharacter () ;
                 }
         }

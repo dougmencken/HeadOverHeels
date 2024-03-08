@@ -246,7 +246,7 @@ FreeItemPtr Door::getLeftJamb()
                                 case Way::Northwest:
                                         x = cellX * tileSize + leftJambData->getWidthX() - 2;
                                         y = ( cellY + 2 ) * tileSize - 2;
-                                        leftLimit = y + leftJambData->getWidthY();
+                                        this->leftLimit = y + leftJambData->getWidthY() ;
                                         break;
 
                                 case Way::South:
@@ -254,7 +254,7 @@ FreeItemPtr Door::getLeftJamb()
                                 case Way::Southwest:
                                         x = cellX * tileSize;
                                         y = ( cellY + 2 ) * tileSize - 2;
-                                        leftLimit = y + leftJambData->getWidthY();
+                                        this->leftLimit = y + leftJambData->getWidthY() ;
                                         break;
 
                                 case Way::East:
@@ -262,7 +262,7 @@ FreeItemPtr Door::getLeftJamb()
                                 case Way::Eastsouth:
                                         x = cellX * tileSize;
                                         y = ( cellY + 1 ) * tileSize - 1;
-                                        leftLimit = x + leftJambData->getWidthX();
+                                        this->leftLimit = x + leftJambData->getWidthX() ;
                                         break;
 
                                 case Way::West:
@@ -270,14 +270,14 @@ FreeItemPtr Door::getLeftJamb()
                                 case Way::Westsouth:
                                         x = cellX * tileSize;
                                         y = ( cellY + 1 ) * tileSize - leftJambData->getWidthY() + 1;
-                                        leftLimit = x + leftJambData->getWidthX();
+                                        this->leftLimit = x + leftJambData->getWidthX() ;
                                         break;
 
                                 default:
                                         ;
                         }
 
-                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Room::FloorZ, "none" ) );
+                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Room::FloorZ, getWhereIsDoor() ) );
                         leftJamb->getRawImageToChangeIt().expandOrCropTo( leftJambImage->getWidth (), leftJambImage->getHeight () );
                         allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getRawImageToChangeIt ().getAllegroPict() );
                         leftJamb->getRawImageToChangeIt().setName( leftJambImage->getName() );
@@ -307,7 +307,7 @@ FreeItemPtr Door::getRightJamb()
                                 case Way::Northwest:
                                         x = cellX * tileSize + rightJambData->getWidthX() - 2;
                                         y = cellY * tileSize + rightJambData->getWidthY() - 1;
-                                        rightLimit = y;
+                                        this->rightLimit = y ;
                                         break;
 
                                 case Way::South:
@@ -315,7 +315,7 @@ FreeItemPtr Door::getRightJamb()
                                 case Way::Southwest:
                                         x = cellX * tileSize;
                                         y = cellY * tileSize + rightJambData->getWidthY() - 1;
-                                        rightLimit = y;
+                                        this->rightLimit = y ;
                                         break;
 
                                 case Way::East:
@@ -323,7 +323,7 @@ FreeItemPtr Door::getRightJamb()
                                 case Way::Eastsouth:
                                         x = ( cellX + 2 ) * tileSize - rightJambData->getWidthX() - 2;
                                         y = ( cellY + 1 ) * tileSize - 1;
-                                        rightLimit = x;
+                                        this->rightLimit = x ;
                                         break;
 
                                 case Way::West:
@@ -331,14 +331,14 @@ FreeItemPtr Door::getRightJamb()
                                 case Way::Westsouth:
                                         x = ( cellX + 2 ) * tileSize - rightJambData->getWidthX() - 2;
                                         y = ( cellY + 1 ) * tileSize - rightJambData->getWidthY() + 1;
-                                        rightLimit = x;
+                                        this->rightLimit = x ;
                                         break;
 
                                 default:
                                         ;
                         }
 
-                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Room::FloorZ, "none" ) );
+                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Room::FloorZ, getWhereIsDoor() ) );
                         rightJamb->getRawImageToChangeIt().expandOrCropTo( rightJambImage->getWidth (), rightJambImage->getHeight () );
                         allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getRawImageToChangeIt ().getAllegroPict() );
                         rightJamb->getRawImageToChangeIt().setName( rightJambImage->getName() );
@@ -395,7 +395,7 @@ FreeItemPtr Door::getLintel()
                                         ;
                         }
 
-                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Room::FloorZ, "none" ) );
+                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Room::FloorZ, getWhereIsDoor() ) );
                         lintel->getRawImageToChangeIt().expandOrCropTo( lintelImage->getWidth (), lintelImage->getHeight () );
                         allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getRawImageToChangeIt ().getAllegroPict() );
                         lintel->getRawImageToChangeIt().setName( lintelImage->getName() );
@@ -409,9 +409,11 @@ FreeItemPtr Door::getLintel()
 
 bool Door::isUnderDoor( int x, int y, int z ) const
 {
-        bool result = false;
+        if ( z < 0 ) z = 0 ;
 
-        if ( z < 0 ) z = 0;
+        bool under = ( leftJamb->getZ() <= z && z <= lintel->getZ() );
+
+        const int oneCell = mediator->getRoom()->getSizeOfOneTile ();
 
         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
         {
@@ -421,7 +423,11 @@ bool Door::isUnderDoor( int x, int y, int z ) const
                 case Way::South:
                 case Way::Southeast:
                 case Way::Southwest:
-                        result = ( y >= rightLimit && y <= leftLimit && z >= leftJamb->getZ () && z <= lintel->getZ () );
+                        under = under && ( this->rightLimit <= y && y <= this->leftLimit );
+                        if ( under ) {
+                                int doorFreeX = getCellX() * oneCell ;
+                                under = ( doorFreeX - oneCell <= x && x <= doorFreeX + oneCell );
+                        }
                         break;
 
                 case Way::East:
@@ -430,12 +436,16 @@ bool Door::isUnderDoor( int x, int y, int z ) const
                 case Way::West:
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        result = ( x <= rightLimit && x >= leftLimit && z >= leftJamb->getZ () && z <= lintel->getZ () );
+                        under = under && ( this->leftLimit <= x && x <= this->rightLimit );
+                        if ( under ) {
+                                int doorFreeY = ( getCellY() + 1 ) * oneCell - 1 ;
+                                under = ( doorFreeY - oneCell <= y && y <= doorFreeY + oneCell );
+                        }
                         break;
 
                 default:
                         ;
         }
 
-        return result;
+        return under ;
 }

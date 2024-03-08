@@ -146,7 +146,7 @@ protected:
 
         // pasos automáticos
         // the number of steps to take when character moves automatically after entering a room through door
-        static const unsigned int automatic_steps = 16 ;
+        static const unsigned int automatic_steps = /* Room::Single_Tile_Size */ 16 ;
 
         // how many automove steps remained
         unsigned int automoveStepsRemained ;

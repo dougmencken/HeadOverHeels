@@ -311,63 +311,43 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
 }
 
 void MapManager::beginOldGameWithCharacter( const std::string & roomFile, const std::string & characterName,
-                                            int x, int y, int z,
-                                            const std::string & direction, const std::string & entry,
-                                            bool active )
+                                            int x, int y, int z, const std::string & heading,
+                                            bool activeCharacter )
 {
         std::cout << "MapManager::beginOldGameWithCharacter( \""
                         << roomFile << "\", \"" << characterName << "\", "
-                        << x << ", " << y << ", " << z << ", \""
-                        << direction << "\", \"" << entry << "\", "
-                        << ( active ? "true" : "false" ) << " )"
+                        << x << ", " << y << ", " << z << ", \"" << heading << "\", "
+                        << ( activeCharacter ? "true" : "false" ) << " )"
                         << std::endl ;
 
         Room * room = nilPointer ;
 
-        // if there is already created room, it happens when
-        // the room of the second character is the same as of the first character
+        // if there’s already created room,
+        // it happens when both characters are in the same room
         if ( activeRoom != nilPointer && activeRoom->getNameOfRoomDescriptionFile() == roomFile )
-        {
-                room = activeRoom;
-        }
+                room = activeRoom ;
         else
-        {
                 room = getOrBuildRoomByFile( roomFile );
-        }
 
-        // place character in room
+        // place the character in the room
         if ( room != nilPointer )
         {
                 addRoomInPlay( room );
 
-                // create character
                 AvatarItemPtr newCharacter = RoomBuilder::createCharacterInRoom (
                                                                 room, characterName, true,
-                                                                x, y, z, direction, entry );
+                                                                x, y, z, heading );
 
                 addRoomAsVisited( room->getNameOfRoomDescriptionFile () ) ;
 
-                std::string realEntry = entry ;
-
-                if ( realEntry == "just wait" )
-                {
-                        // it’s the case of resume of saved game
-                        // show bubbles only for active character
-                        if ( active )
-                        {
-                                realEntry = "via second teleport";
-                        }
-                }
-
                 room->activateCharacterByName( characterName );
 
-                newCharacter->autoMoveOnEntry( realEntry );
+                if ( activeCharacter ) {
+                        // show bubbles only for the active character when resuming a saved game
+                        newCharacter->setWayOfEntry( "via second teleport" );
 
-                // when other character is in the same room as active character then there’s no need to do anything more
-                if ( active )
-                {
-                        activeRoom = room;
-                        activeRoom->activate();
+                        activeRoom = room ;
+                        activeRoom->activate() ;
                 }
         }
 }
@@ -388,11 +368,10 @@ Room* MapManager::rebuildRoom( Room* room )
 
         if ( isRoomInPlay( room ) )
         {
-                std::string nameOfActiveCharacter = room->getMediator()->getNameOfActiveCharacter();
-                std::string nameOfActiveCharacterBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining();
+                bool characterInTheNewRoom = false ;
 
-                std::string theWay( "nowhere" );
-                AvatarItemPtr aliveCharacter ;
+                const std::string & nameOfActiveCharacter = room->getMediator()->getNameOfActiveCharacter() ;
+                const std::string & nameOfActiveCharacterBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining() ;
 
                 // for each character entered this room
                 std::vector< AvatarItemPtr > charactersOnEntry = room->getCharactersWhoEnteredRoom ();
@@ -410,11 +389,12 @@ Room* MapManager::rebuildRoom( Room* room )
                 for ( unsigned int i = 0 ; i < charactersOnEntry.size () ; )
                 {
                         const AvatarItemPtr character = charactersOnEntry[ i ];
-
-                        if ( character == nilPointer )
-                                std::cerr << "**nil** character among those who entered room \"" << fileOfRoom << "\""
+                        assert( character != nilPointer );
+                        /** std::cerr << "**nil** " << util::toStringWithOrdinalSuffix( i ) << " character"
+                                                << " among those who entered room \"" << fileOfRoom << "\""
                                                 << " @ MapManager::rebuildRoom" << std::endl ;
-                        else
+                        continue ; **/
+
                         if ( character->getKind() == "headoverheels" || character->getLives() > 0 )
                         {
                         //#ifdef DEBUG
@@ -430,20 +410,14 @@ Room* MapManager::rebuildRoom( Room* room )
                                 {
                                         std::cout << "some character migrated to another room, and only \"" << nameOfActiveCharacter << "\" is still here" << std::endl ;
 
-                                        // forget the composite character
+                                        // forget the composite character ---??? not sure why the old room’s active character is composite ???//////
                                         room->removeCharacterFromRoom( * room->getMediator()->getActiveCharacter(), true );
 
-                                        int characterX = character->getX();
-                                        int characterY = character->getY();
-                                        int characterZ = character->getZ();
-                                        const std::string & angularOrientation = character->getHeading() ;
-                                        const std::string & wayOfEntry = character->getWayOfEntry() ;
-
-                                        // create the simple character
+                                        // create the simple character in the old room
                                         RoomBuilder::createCharacterInRoom( room,
                                                                             nameOfActiveCharacter, true,
-                                                                            characterX, characterY, characterZ,
-                                                                            angularOrientation, wayOfEntry );
+                                                                            character->getX(), character->getY(), character->getZ(),
+                                                                            character->getHeading(), character->getWayOfEntry() );
 
                                         // update the list of characters and rewind the loop
                                         charactersOnEntry = room->getCharactersWhoEnteredRoom ();
@@ -451,19 +425,13 @@ Room* MapManager::rebuildRoom( Room* room )
                                         continue ;
                                 }
 
-                                theWay = character->getHeading () ;
-
-                                std::string entry = character->getWayOfEntry() ;
-
-                                // create character
-                                aliveCharacter = RoomBuilder::createCharacterInRoom( newRoom,
-                                                                                     character->getKind(),
-                                                                                     true,
+                                // create character in the new room
+                                AvatarItemPtr newCharacter = RoomBuilder::createCharacterInRoom( newRoom,
+                                                                                     character->getKind(), true,
                                                                                      character->getX(), character->getY(), character->getZ(),
-                                                                                     theWay, entry );
+                                                                                     character->getHeading(), character->getWayOfEntry() );
 
-                                if ( aliveCharacter != nilPointer )
-                                        aliveCharacter->autoMoveOnEntry( entry );
+                                if ( newCharacter != nilPointer ) characterInTheNewRoom = true ;
                         }
 
                         ++ i ; // next character
@@ -471,7 +439,7 @@ Room* MapManager::rebuildRoom( Room* room )
 
                 roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), room ), roomsInPlay.end() );
 
-                if ( aliveCharacter != nilPointer )
+                if ( characterInTheNewRoom )
                 {
                         addRoomInPlay( newRoom );
 
@@ -500,10 +468,9 @@ Room* MapManager::rebuildRoom( Room* room )
                 }
         }
 
-        if ( isActive )
-        {
-                activeRoom = newRoom;
-                if ( activeRoom != nilPointer ) activeRoom->activate();
+        if ( isActive ) {
+                activeRoom = newRoom ;
+                if ( activeRoom != nilPointer ) activeRoom->activate() ;
         }
 
         gameRooms[ fileOfRoom ] = newRoom ;
@@ -554,10 +521,10 @@ Room* MapManager::changeRoom( const std::string & wayOfExit )
 
         const std::string exitOrientation( oldItemOfRoamer.getHeading() );
 
-        std::string wayOfEntry( Way::exitToEntry( wayOfExit ) );
-
         Room* newRoom = getOrBuildRoomByFile( fileOfNextRoom );
         assert( newRoom != nilPointer );
+
+        std::string wayOfEntry( Way::exitToEntry( wayOfExit ) );
 
         if ( ! newRoom->isSingleRoom () )
                 wayOfEntry = newRoom->getConnections()->clarifyTheWayOfEntryToABigRoom( wayOfEntry, fileOfPreviousRoom );
@@ -595,14 +562,13 @@ Room* MapManager::changeRoom( const std::string & wayOfExit )
                 previousNorthBound, previousEastBound, previousSouthBound, previousWestBound,
                 &entryX, &entryY, &entryZ
         ) ;
-        if ( ! okayToEnter ) {
+        if ( ! okayToEnter )
                 std::cout << "coordinates"
                                 << " x=" << entryX << " y=" << entryY << " z=" << entryZ
                                 << " are not okay to enter room \"" << fileOfNextRoom << "\"" << std::endl ;
-        } else {
+        else
                 std::cout << "the entry coordinates to room \"" << fileOfNextRoom << "\" are"
                                 << " x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
-        }
 
         // create character
 
@@ -614,9 +580,7 @@ Room* MapManager::changeRoom( const std::string & wayOfExit )
 
         AvatarItemPtr newItemOfRoamer = RoomBuilder::createCharacterInRoom( newRoom, nameOfRoamer, true,
                                                                             entryX, entryY, entryZ,
-                                                                            exitOrientation, wayOfEntry );
-        if ( newItemOfRoamer != nilPointer )
-                newItemOfRoamer->autoMoveOnEntry( wayOfEntry );
+                                                                            exitOrientation, /* wayOfEntry */ "" );
 
         addRoomAsVisited( newRoom->getNameOfRoomDescriptionFile () ) ;
 
@@ -741,9 +705,7 @@ void MapManager::removeRoomInPlay( Room* whichRoom )
 void MapManager::binRoomsInPlay()
 {
         while ( ! roomsInPlay.empty () )
-        {
                 removeRoomInPlay( roomsInPlay.back () ) ;
-        }
 
         this->activeRoom = nilPointer ;
 }
@@ -752,10 +714,7 @@ Room* MapManager::getRoomOfInactiveCharacter () const
 {
         for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {
-                if ( *ri != this->activeRoom )
-                {
-                        return *ri ;
-                }
+                if ( *ri != this->activeRoom ) return *ri ;
         }
 
         return nilPointer ;
@@ -788,16 +747,13 @@ Room* MapManager::findRoomByFile( const std::string& roomFile ) const
 {
         for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
         {
-                if ( ri->first == roomFile )
-                {
-                        return ri->second ;
-                }
+                if ( ri->first == roomFile ) return ri->second ;
         }
 
         return nilPointer ;
 }
 
-Room* MapManager::getOrBuildRoomByFile( const std::string& roomFile )
+Room* MapManager::getOrBuildRoomByFile( const std::string & roomFile )
 {
         if ( gameRooms.empty() || linksBetweenRooms.empty() )
                 readMap( ospaths::sharePath() + "map" + ospaths::pathSeparator() + "map.xml" );
@@ -830,5 +786,15 @@ void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRoo
 
                 if ( visitedRoom != nilPointer )
                         addRoomAsVisited( visitedRoom->getNameOfRoomDescriptionFile () ) ;
+        }
+}
+
+void MapManager::getAllRoomFiles ( std::vector< std::string > & whereToCollect )
+{
+        whereToCollect.reserve( this->gameRooms.size() );
+
+        for ( std::map< std::string, Room * >::const_iterator i = this->gameRooms.begin(), e = this->gameRooms.end() ; i != e ; ++ i )
+        {
+                whereToCollect.push_back( i->first );
         }
 }

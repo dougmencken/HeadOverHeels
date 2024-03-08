@@ -198,7 +198,7 @@ int main( int argc, char** argv )
                         GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
 
                 if ( options.count( "build-all-rooms" ) > 0 )
-                        MapManager::buildEveryRoomAtOnce = true ;
+                        MapManager::setBuildEveryRoomAtOnce( true );
 
                 if ( options.count( "begin-game" ) > 0 )
                         newGameNoGui = true ;
