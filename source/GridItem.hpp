@@ -23,9 +23,9 @@
 class DescriptionOfItem ;
 
 /**
- * The grid items are those which are placed in a particular position and have the same widths
- * as the grid cells have. Grid items are mostly static. You can only change the Z coordinate
- * of a grid item, but can’t change the X and Y coordinates
+ * The grid items are those which are placed in a single grid cell. They have the same
+ * widths as the grid cells have. Grid items are mostly static. Only the Z coordinate
+ * of a grid item can be changed, but not the position on X and Y
  */
 
 class GridItem : public Item, public Drawable

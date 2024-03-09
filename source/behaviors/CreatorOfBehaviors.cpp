@@ -124,19 +124,16 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( Item & item,
                 if ( behavior == "behavior of teletransport" )
                         behaviorToReturn = new Teleport( onGrid, behavior );
         }
-	else // none of the above
-	{
-                if ( behavior == "behavior of disappearance in time" ||
-                                behavior == "behavior of disappearance on touch" ||
-                                behavior == "behavior of disappearance on jump into" ||
-                                behavior == "behavior of disappearance as soon as Head appears" ||
-                                behavior == "behavior of slow disappearance on jump into" )
+
+        if ( behaviorToReturn == nilPointer ) // none of the above
+        {
+                if ( behavior.find( "disappearance" ) != std::string::npos )
                 {
                         behaviorToReturn = new Volatile( item, behavior );
                 }
                 else if ( behavior.empty () || behavior == "still" || behavior == "behavior of bubbles" )
                 {
-                        // yeah, do nothing
+                        // no behavior, return nil
                 }
                 else {
                         std::cout << "unknown behavior \"" << behavior << "\" for "
