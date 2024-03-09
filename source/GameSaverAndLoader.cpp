@@ -194,13 +194,8 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
 
                         std::string headingString ;
                         tinyxml2::XMLElement* heading = character->FirstChildElement( "heading" );
-                        if ( heading != nilPointer )
+                        if ( heading != nilPointer && heading->FirstChild() != nilPointer )
                                 headingString = heading->FirstChild()->ToText()->Value() ;
-
-                        std::string entryString ;
-                        tinyxml2::XMLElement* entry = character->FirstChildElement( "entry" );
-                        if ( entry != nilPointer )
-                                entryString = entry->FirstChild()->ToText()->Value() ;
 
                         bool hasHorn = false ;
                         tinyxml2::XMLElement* horn = character->FirstChildElement( "hasHorn" );
@@ -431,26 +426,20 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         // inactive character, if any
 
-        std::string whoWaitsToPlay = "nobody";
+        std::string whoWaitsToPlay = "no one" ;
 
         Room* activeRoom = MapManager::getInstance().getActiveRoom () ;
         Room* secondRoom = MapManager::getInstance().getRoomOfInactiveCharacter () ;
-        // there may be no more rooms when there’re no more characters
-        // or when other character is in the same room as active character
 
         if ( secondRoom != nilPointer )
-        {
                 whoWaitsToPlay = secondRoom->getMediator()->getNameOfActiveCharacter() ;
-        }
         else
         if ( activeRoom->getMediator()->getWaitingCharacter() != nilPointer )
-        {
                 whoWaitsToPlay = activeRoom->getMediator()->getWaitingCharacter()->getKind () ;
-        }
 
         AvatarItemPtr characterToo ;
 
-        if ( whoWaitsToPlay != "nobody" )
+        if ( whoWaitsToPlay != "no one" )
         {
                 Room* roomWithWaitingGuy = ( secondRoom != nilPointer ) ? secondRoom : activeRoom ;
 
@@ -491,10 +480,6 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                         tinyxml2::XMLElement* heading = saveXml.NewElement( "heading" );
                         heading->SetText( characterToo->getHeading().c_str () );
                         inactiveCharacter->InsertEndChild( heading );
-
-                        //////tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
-                        //////entry->SetText( characterToo->getWayOfEntry().c_str () );
-                        //////inactiveCharacter->InsertEndChild( entry );
 
                         if ( whoWaitsToPlay == "head" )
                         {

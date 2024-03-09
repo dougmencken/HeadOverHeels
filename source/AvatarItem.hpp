@@ -143,7 +143,7 @@ private:
 
         /**
          * @param where the door mentioned by its position in the room
-         * @return true if this item is under that door, false when not or if that door doesn’t exist
+         * @return true if this item is *not* under that door or if no door there
          */
         bool isNotUnderDoorAt ( const std::string & where ) ;
 

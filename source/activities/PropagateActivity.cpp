@@ -28,12 +28,12 @@ void PropagateActivity::spreadEasily( const Item & sender, const Activity & acti
 /* static */
 void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activity )
 {
-        Mediator* mediator = sender.getMediator();
+        Mediator* mediator = sender.getMediator() ;
 
         // as long as there are items collided with the sender
         while ( mediator->isThereAnyCollision() )
         {
-                std::string nameOfCollision = mediator->popCollision();
+                const std::string & nameOfCollision = mediator->popCollision();
                 ItemPtr itemMeetsSender = mediator->findItemByUniqueName( nameOfCollision );
 
                 if ( itemMeetsSender != nilPointer )
@@ -61,8 +61,9 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                                         // if the sender is the character and the colliding one is mortal, then the character loses one life
                                         else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
                                         {
-                                                if ( sender.getBehavior()->getCurrentActivity() != activities::Activity::MetLethalItem
-                                                        && sender.getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
+                                                const Activity & activityOfSender = sender.getBehavior()->getCurrentActivity() ;
+                                                if ( activityOfSender != activities::Activity::MetLethalItem
+                                                                && activityOfSender != activities::Activity::Vanishing )
                                                 {
                                                         sender.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
                                                 }
@@ -83,8 +84,9 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                                 // otherwise it is an item without behavior, which may be mortal too
                                 else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
                                 {
-                                        if ( sender.getBehavior()->getCurrentActivity() != activities::Activity::MetLethalItem
-                                                && sender.getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
+                                        const Activity & activityOfSender = sender.getBehavior()->getCurrentActivity() ;
+                                        if ( activityOfSender != activities::Activity::MetLethalItem
+                                                        && activityOfSender != activities::Activity::Vanishing )
                                         {
                                                 sender.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
                                         }

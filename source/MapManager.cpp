@@ -580,7 +580,7 @@ Room* MapManager::changeRoom( const std::string & wayOfExit )
 
         AvatarItemPtr newItemOfRoamer = RoomBuilder::createCharacterInRoom( newRoom, nameOfRoamer, true,
                                                                             entryX, entryY, entryZ,
-                                                                            exitOrientation, /* wayOfEntry */ "" );
+                                                                            exitOrientation, "" /*///// wayOfEntry //////*/ );
 
         addRoomAsVisited( newRoom->getNameOfRoomDescriptionFile () ) ;
 

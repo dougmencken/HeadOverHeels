@@ -223,6 +223,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         int originalY = yYet ;
         int originalZ = zYet ;
 
+        assert( mediator != nilPointer );
         mediator->clearCollisions ();
 
         bool collisionFound = false;
@@ -234,16 +235,16 @@ bool Item::canAdvanceTo( int x, int y, int z )
 
         // look for collisions with walls
         if ( this->getX() < mediator->getRoom()->getLimitAt( "north" ) ) {
-                mediator->addCollisionWith( "some segment of wall at north" );
+                mediator->addCollisionWith( "some segment of the north wall" );
         }
         else if ( this->getX() + this->getWidthX() > mediator->getRoom()->getLimitAt( "south" ) ) {
-                mediator->addCollisionWith( "some segment of wall at south" );
+                mediator->addCollisionWith( "some segment of the south wall" );
         }
         if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" ) ) {
-                mediator->addCollisionWith( "some segment of wall at west" );
+                mediator->addCollisionWith( "some segment of the west wall" );
         }
         else if ( this->getY() - this->getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) ) {
-                mediator->addCollisionWith( "some segment of wall at east" );
+                mediator->addCollisionWith( "some segment of the east wall" );
         }
 
         // look for a collision with floor

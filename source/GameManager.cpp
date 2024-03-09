@@ -743,6 +743,8 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room )
 
         std::string whereLooks = character.getHeading ();
         if ( fish != nilPointer ) whereLooks = fish->getHeading() ;
+        if ( whereLooks.empty() ) whereLooks = "south" ; ///// better to indicate heading for every fish in the room description files
+                                                         ///// meanwhile, everything works well with empty <heading></heading> in a savegame file
 
         saverAndLoader.ateFish (
                 room->getNameOfRoomDescriptionFile (),

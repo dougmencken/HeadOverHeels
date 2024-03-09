@@ -75,7 +75,9 @@ public:
         void setActiveRoom ( Room * newRoom ) {  this->activeRoom = newRoom ;  }
 
         /**
-         * @return room or nil if there’re no more characters
+         * @return the room in which the inactive character is,
+         *         or nil if there’re no more characters or the other character
+         *         is in the same room
          */
         Room * getRoomOfInactiveCharacter () const ;
 

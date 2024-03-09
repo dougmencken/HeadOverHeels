@@ -80,12 +80,13 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
                         getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
                         break;
 
-                /* case Way::Above: ////// will fall without this anyway
+                /* case Way::Above: // will fall without this anyhow
                         getBehavior()->setCurrentActivity( activities::Activity::Falling );
                         break; */
 
                 default:
-                        ;
+                        getBehavior()->setCurrentActivity( activities::Activity::Waiting );
+                        break;
         }
 }
 
@@ -139,15 +140,16 @@ void AvatarItem::setWayOfExit ( const std::string & way )
 
 bool AvatarItem::addToPosition( int x, int y, int z )
 {
-        /////??? hmmmm and when an inactive character *automoves*???
-        /*** bool itAutomoves = getBehavior()->getCurrentActivity() == activities::Activity::AutomovingNorth ||
-                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingSouth ||
-                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingEast ||
-                                getBehavior()->getCurrentActivity() == activities::Activity::AutomovingWest ; ***/
+        // inactive character automoves when they both enter the same room
+        // and couldn’t go out the door with the parent FreeItem’s addToPosition method
+        const activities::Activity & activity = getBehavior()->getCurrentActivity() ;
+        bool autowalksThruDoor = ( activity == activities::Activity::AutomovingNorth || activity == activities::Activity::AutomovingSouth
+                                        || activity == activities::Activity::AutomovingEast || activity == activities::Activity::AutomovingWest );
 
-        //////bool itFallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
+        ////// can’t get what’s wrong with falling down near a door as uncontrolled FreeItem
+        //////bool fallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
 
-        if ( ! this->isActiveCharacter() /* && ! itAutomoves */ /* && ! itFallsUnderDoor */ )
+        if ( ! this->isActiveCharacter() && ! autowalksThruDoor /* && ! fallsUnderDoor */ )
                 return FreeItem::addToPosition( x, y, z );
 
         mediator->clearCollisions ();
@@ -258,38 +260,32 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         {
                 // the character may go thru a door
 
-                const std::string doors[ 12 ] =
+                static const std::string doors[ 12 ] =
                         {  "northeast", "northwest", "north", "southeast", "southwest", "south",
                                 "eastnorth", "eastsouth", "east", "westnorth", "westsouth", "west"  };
 
-                for ( unsigned int i = 0; i < 12; i++ )
-                {
-                        if ( isWalkingThroughDoorAt( doors[ i ] ) )
-                        {
+                for ( unsigned int i = 0; i < 12; i++ ) {
+                        if ( isWalkingThroughDoorAt( doors[ i ] ) ) {
                                 mediator->addCollisionWith( doors[ i ] + " door" );
                                 break;
                         }
                 }
 
                 // collision with the floor
-                if ( this->getZ() < 0 )
-                {
+                if ( this->getZ() < 0 ) {
                         mediator->addCollisionWith( "some tile of floor" );
                 }
 
                 // collision with the ceiling
-                if ( z >= 0 && this->getZ() > ( Room::MaxLayers - 1 ) * Room::LayerHeight + ( Room::LayerHeight >> 1 ) )
-                {
+                if ( z >= 0 && this->getZ() > ( Room::MaxLayers - 1 ) * Room::LayerHeight + ( Room::LayerHeight >> 1 ) ) {
                         mediator->addCollisionWith( "ceiling" );
                 }
 
                 collisionFound = mediator->isThereAnyCollision ();
-                if ( ! collisionFound )
-                {
-                        // look for collision with the rest of items in room
+                if ( ! collisionFound ) {
+                        // look for collisions with other items in the room
                         collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
-                        if ( ! collisionFound )
-                        {
+                        if ( ! collisionFound ) {
                                 // reshade and remask
                                 freshBothProcessedImages();
                                 setWantShadow( true );
@@ -299,18 +295,17 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                                 mediator->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
                                 mediator->wantToMaskWithFreeItem( *this );
 
-                                // reshade items
+                                // reshade other items
                                 mediator->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
                                 mediator->wantShadowFromFreeItem( *this );
 
-                                // mark to sort container of free items
+                                // re~sort
                                 mediator->markToSortFreeItems ();
                         }
                 }
         }
 
-        if ( collisionFound && ! jambCollision )
-        {
+        if ( collisionFound && ! jambCollision ) {
                 // restore previous values
                 setX( xBefore );
                 setY( yBefore );
@@ -327,9 +322,7 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 
         bool walksThruDoor = false ;
 
-        int widthX = static_cast< int >( getDescriptionOfItem()->getWidthX () );
-        int widthY = static_cast< int >( getDescriptionOfItem()->getWidthY () );
-        unsigned int oneTile = mediator->getRoom()->getSizeOfOneTile() ;
+        const unsigned int oneTile = mediator->getRoom()->getSizeOfOneTile() ;
 
         switch ( Way( where ).getIntegerOfWay () )
         {
@@ -344,22 +337,22 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
                         break;
 
                 case Way::South:
-                        walksThruDoor = ( getX() + widthX > static_cast< int >( mediator->getRoom()->getTilesX() * oneTile ) );
+                        walksThruDoor = ( getX() + getWidthX() > static_cast< int >( mediator->getRoom()->getTilesX() * oneTile ) );
                         break;
 
                 case Way::Southeast:
                 case Way::Southwest:
-                        walksThruDoor = ( getX() + widthX > mediator->getRoom()->getLimitAt( where )
+                        walksThruDoor = ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( where )
                                                 && door->isUnderDoor( *this ) );
                         break;
 
                 case Way::East:
-                        walksThruDoor = ( getY() - widthY + 1 < 0 );
+                        walksThruDoor = ( getY() - getWidthY() + 1 < 0 );
                         break;
 
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        walksThruDoor = ( getY() - widthY + 1 < mediator->getRoom()->getLimitAt( where )
+                        walksThruDoor = ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( where )
                                                 && door->isUnderDoor( *this ) );
                         break;
 
@@ -369,7 +362,7 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        walksThruDoor = ( getY() + widthY > mediator->getRoom()->getLimitAt( where )
+                        walksThruDoor = ( getY() + getWidthY() > mediator->getRoom()->getLimitAt( where )
                                                 && door->isUnderDoor( *this ) );
                         break;
 

@@ -797,10 +797,8 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
                 if ( character == *pi )
-                {
                         // this character is already in room
                         return false;
-                }
         }
 
         if ( characterEntersRoom )
@@ -923,7 +921,14 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                                 << " is created to rebuild this room" << std::endl ;
         }
 
-        return true;
+        // perhaps the character appeared in the room by means of teleportation
+        if ( character->getWayOfEntry().empty () ) {
+                character->canAdvanceTo( 0, 0, -1 ); // is there a teletransportation device under the character
+                if ( mediator->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer )
+                        character->setWayOfEntry( "via teleport" );
+        }
+
+        return true ;
 }
 
 void Room::dumpItemInsideThisRoom( const Item & item )

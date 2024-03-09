@@ -122,13 +122,13 @@ void Mediator::update()
         std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom () ;
         for ( unsigned int i = 0 ; i < charactersInRoom.size () ; ++ i )
         {
-                AvatarItemPtr character = charactersInRoom[ i ];
+                const AvatarItem & character = *( charactersInRoom[ i ] );
 
                 // when the inactive character falls down to the room below
                 // then make it active to let it fall
-                if ( character->getWayOfExit() == "below" && ! character->isActiveCharacter() )
+                if ( character.getWayOfExit() == "below" && ! character.isActiveCharacter() )
                 {
-                        std::cout << "inactive character \"" << character->getKind () << "\" falls down to another room, swap characters to make it active" << std::endl ;
+                        std::cout << "inactive character \"" << character.getKind () << "\" falls down to another room, swap characters to make it active" << std::endl ;
                         this->currentlyActiveCharacter->setWayOfExit( "" );
                         this->pickNextCharacter () ;
                 }

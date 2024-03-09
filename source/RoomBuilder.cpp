@@ -527,17 +527,17 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
 
         const DescriptionOfItem* itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
 
-        // if the character has some lives left, place it in the room
         if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
                         && itemDescription != nilPointer )
         {
-                if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 )
-                {
+                if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 ) {
+                        // there are lives left, create the character
                         AvatarItemPtr character( new AvatarItem( itemDescription, x, y, z, heading ) );
                         assert( character != nilPointer );
 
                         // automove on entry
                         if ( wayOfEntry.empty() ) {
+                                // perhaps the character walks through a door
                                 const std::map< std::string, Door* > & doors = room->getDoors() ;
                                 for ( std::map< std::string, Door* >::const_iterator di = doors.begin() ; di != doors.end() ; ++ di ) {
                                         Door* door = di->second ;
