@@ -9,7 +9,7 @@
 
 
 /* static */
-void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency )
 {
         if ( shading >= 256 ) return ;
 
@@ -63,10 +63,10 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
         rawImage.getAllegroPict().lock( true, false );
         shadyImage.getAllegroPict().lock( true, true );
 
-        int itemRow = 0 ;       // row of pixels in image and shady image of this item
-        int itemPixel = 0 ;     // pixel in row of image & shady image
-        int shadowRow = 0 ;     // row of pixels in shadow shading this item
-        int shadowPixel = 0 ;   // pixel in row of shadow shading this item
+        int itemRow = 0 ;       // a row of pixels in the image and shady image of this item
+        int itemPixel = 0 ;     // pixel in a row of the image & shady image
+        int shadowRow = 0 ;     // a row of pixels in the shadow shading this item
+        int shadowPixel = 0 ;   // pixel in a row of the shadow shading this item
 
         int deltaX = iniX + item.getImageOffsetX() - x ;
         int deltaY = iniY + item.getImageOffsetY() - y ;
@@ -82,16 +82,14 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
         // degree of opacity from 0, full opacity, to 255, full transparency
         short opacity = static_cast< short >( shading + ( ( 256.0 - shading ) * transparency / 100 ) );
 
-        // when opacity is power of 2 in interval [ 2 ... 128 ]
+        // when opacity is a power of 2 in [ 2, 4, 8, 16, 32, 64, 128 ]
         if ( opacity > 0 && static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
         {
-                short pixDiv = 7 ; // 2 ^ pixDiv is divisor for shaded pixels
+                short rgbDiv = 7 ; // 2 ^ rgbDiv is the divisor for shaded pixels
 
-                // tune divisor by opacity of shadow
-                while ( opacity != 2 )
-                {
+                while ( opacity > 2 ) {
                         opacity = opacity >> 1 ;
-                        pixDiv -- ;
+                        rgbDiv -- ;
                 }
 
                 // shade top surface of item
@@ -106,14 +104,14 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                                 AllegroColor itemColor = rawImage.getPixelAt( itemPixel, itemRow );
                                 AllegroColor resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
 
-                                // when pixel of shadow isn’t key color & pixel of item isn’t key color
-                                // and pixel of result isn’t changed before
-                                // then divide pixel of result by 2 ^ pixDiv, darkening it
+                                // when pixel of shadow isn’t transparent & pixel of item isn’t transparent
+                                // and a pixel of result isn’t changed before
+                                // then divide the colors of a result’s pixel by 2 ^ rgbDiv, darkening it
                                 if ( ! shadowColor.isKeyColor() && ! itemColor.isKeyColor() && resultColor.equalsRGB( itemColor ) )
                                 {
-                                        unsigned char resultRed = itemColor.getRed() >> pixDiv ;
-                                        unsigned char resultGreen = itemColor.getGreen() >> pixDiv ;
-                                        unsigned char resultBlue = itemColor.getBlue() >> pixDiv ;
+                                        unsigned char resultRed = itemColor.getRed() >> rgbDiv ;
+                                        unsigned char resultGreen = itemColor.getGreen() >> rgbDiv ;
+                                        unsigned char resultBlue = itemColor.getBlue() >> rgbDiv ;
                                         shadyImage.putPixelAt( itemPixel, itemRow, Color( resultRed, resultGreen, resultBlue, itemColor.getAlpha() ) );
                                 }
                         }
@@ -145,9 +143,9 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                                 {
                                         if ( ! itemColor.isKeyColor() && resultColor.equalsRGB( itemColor ) )
                                         {
-                                                unsigned char resultRed = itemColor.getRed() >> pixDiv ;
-                                                unsigned char resultGreen = itemColor.getGreen() >> pixDiv ;
-                                                unsigned char resultBlue = itemColor.getBlue() >> pixDiv ;
+                                                unsigned char resultRed = itemColor.getRed() >> rgbDiv ;
+                                                unsigned char resultGreen = itemColor.getGreen() >> rgbDiv ;
+                                                unsigned char resultBlue = itemColor.getBlue() >> rgbDiv ;
                                                 shadyImage.putPixelAt( itemPixel, itemRow, Color( resultRed, resultGreen, resultBlue, itemColor.getAlpha() ) );
                                         }
 
@@ -160,9 +158,9 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
 
                                                         if ( ! rawColor.isKeyColor() && shadyColor.equalsRGB( rawColor ) )
                                                         {
-                                                                unsigned char shadyRed = rawColor.getRed() >> pixDiv ;
-                                                                unsigned char shadyGreen = rawColor.getGreen() >> pixDiv ;
-                                                                unsigned char shadyBlue = rawColor.getBlue() >> pixDiv ;
+                                                                unsigned char shadyRed = rawColor.getRed() >> rgbDiv ;
+                                                                unsigned char shadyGreen = rawColor.getGreen() >> rgbDiv ;
+                                                                unsigned char shadyBlue = rawColor.getBlue() >> rgbDiv ;
                                                                 shadyImage.putPixelAt( itemPixel, yy, Color( shadyRed, shadyGreen, shadyBlue, rawColor.getAlpha() ) );
                                                         }
                                                 }
@@ -184,9 +182,9 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                                 AllegroColor itemColor = rawImage.getPixelAt( itemPixel, itemRow );
                                 AllegroColor resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
 
-                                // when pixel of shadow isn’t key color & pixel of item isn’t key color
-                                // and pixel of result isn’t changed before
-                                // then decrement color of result’s pixel to darken it
+                                // when pixel of shadow isn’t transparent & pixel of item isn’t transparent
+                                // and a pixel of result isn’t changed before
+                                // then lower the colors of a result’s pixel to darken it
                                 if ( ! shadowColor.isKeyColor() && ! itemColor.isKeyColor() && resultColor.equalsRGB( itemColor ) )
                                 {
                                         // there’s some transparency
@@ -200,7 +198,7 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                                         // zero opacity is full opacity
                                         else
                                         {
-                                                // the pixel of result is pure black
+                                                // a pixel of result is pure black
                                                 shadyImage.putPixelAt( itemPixel, itemRow, Color::blackColor() );
                                         }
                                 }
@@ -243,7 +241,7 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                                                 // zero opacity is full opacity
                                                 else
                                                 {
-                                                        // the pixel of result is pure black
+                                                        // a pixel of result is pure black
                                                         shadyImage.putPixelAt( itemPixel, itemRow, Color::blackColor() );
                                                 }
                                         }
@@ -268,7 +266,7 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
                                                                 // zero opacity is full opacity
                                                                 else
                                                                 {
-                                                                        // the pixel of result is pure black
+                                                                        // a pixel of result is pure black
                                                                         shadyImage.putPixelAt( itemPixel, yy, Color::blackColor() );
                                                                 }
                                                         }
@@ -289,14 +287,14 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
 }
 
 /* static */
-void ShadowCaster::castShadowOnFloor( FloorTile& tile, int x, int y, const Picture& shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency )
 {
         if ( shading >= 256 ) return ;
 
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return ;
 
-        const Picture& tileImage = tile.getRawImage() ;
+        const Picture & tileImage = tile.getRawImage() ;
 
         int iniX = x - tile.getOffsetX();       // initial X
         int iniY = y - tile.getOffsetY();       // initial Y
@@ -311,40 +309,31 @@ void ShadowCaster::castShadowOnFloor( FloorTile& tile, int x, int y, const Pictu
         // id est if ( iniY < endY && iniX < endX )
         if ( iniY >= endY || iniX >= endX ) return;
 
-        if ( tile.getWantShadow() )
-        {
-                // for the first or the only one shading item begin with the fresh image of tile
-                ////tile.freshShadyImage ();
-                tile.setWantShadow( false );
-        }
-
-        Picture& shadyImage = tile.getShadyImage(); // graphics of shaded tile
+        // the copy of the shaded tile graphics
+        Picture shadyTile( tile.getShadyImage() );
 
         shadow.getAllegroPict().lock( true, false );
         tileImage.getAllegroPict().lock( true, false );
-        shadyImage.getAllegroPict().lock( true, true );
 
-        int tileRow = 0 ;       // row of pixels in image and shady image of this tile
-        int tilePixel = 0 ;     // pixel in row of image & shady image
-        int shadowRow = 0 ;     // row of pixels in shadow shading this tile
-        int shadowPixel = 0 ;   // pixel in row of shadow shading this tile
+        int tileRow = 0 ;       // a row of pixels in the image and shady image of this tile
+        int tilePixel = 0 ;     // pixel in a row of the image & shady image
+        int shadowRow = 0 ;     // a row of pixels in the shadow shading this tile
+        int shadowPixel = 0 ;   // pixel in a row of the shadow shading this tile
 
         const int deltaX = iniX + tile.getOffsetX() - x ;
         const int deltaY = iniY + tile.getOffsetY() - y ;
 
-        // degree of opacity from 0, full opacity, to 255, full transparency
+        // the degree of opacity from 0, full opacity, to 255, full transparency
         short opacity = static_cast< short >( shading + ( ( 256.0 - shading ) * transparency / 100 ) );
 
-        // when opacity is power of 2 in interval [ 2 ... 128 ]
+        // when opacity is a power of 2 in [ 2, 4, 8, 16, 32, 64, 128 ]
         if ( opacity > 0 && static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
         {
-                short pixDiv = 7 ; // 2 ^ pixDiv is divisor for shaded pixels
+                short rgbDiv = 7 ; // 2 ^ rgbDiv is the divisor for shaded pixels
 
-                // tune divisor by opacity of shadow
-                while ( opacity != 2 )
-                {
+                while ( opacity > 2 ) {
                         opacity = opacity >> 1 ;
-                        pixDiv -- ;
+                        rgbDiv -- ;
                 }
 
                 // images are crossed within calculated limits
@@ -355,37 +344,37 @@ void ShadowCaster::castShadowOnFloor( FloorTile& tile, int x, int y, const Pictu
                         {
                                 AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
                                 AllegroColor tileColor = tileImage.getPixelAt( tilePixel, tileRow );
-                                AllegroColor resultColor = shadyImage.getPixelAt( tilePixel, tileRow );
+                                AllegroColor resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
 
-                                // when pixel of shadow isn’t key color & pixel of tile isn’t key color
-                                // and pixel of result isn’t changed before
-                                // then divide pixel of result by 2 ^ pixDiv, darkening it
+                                // when a pixel of shadow isn’t transparent & a pixel of tile isn’t transparent
+                                // and a pixel of result isn’t changed before
+                                // then divide the colors of a result’s pixel by 2 ^ rgbDiv, darkening it
                                 if ( ! shadowColor.isKeyColor() && ! tileColor.isKeyColor() && resultColor.equalsRGB( tileColor ) )
                                 {
-                                        unsigned char resultRed = tileColor.getRed() >> pixDiv ;
-                                        unsigned char resultGreen = tileColor.getGreen() >> pixDiv ;
-                                        unsigned char resultBlue = tileColor.getBlue() >> pixDiv ;
-                                        shadyImage.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
+                                        unsigned char resultRed = tileColor.getRed() >> rgbDiv ;
+                                        unsigned char resultGreen = tileColor.getGreen() >> rgbDiv ;
+                                        unsigned char resultBlue = tileColor.getBlue() >> rgbDiv ;
+                                        shadyTile.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
                                 }
                         }
                 }
         }
-        // opacity is not power of two
+        // opacity is not a power of two
         else
         {
                 // images are crossed within calculated limits
                 for ( tileRow = iniY, shadowRow = deltaY ; tileRow < endY ; tileRow ++, shadowRow ++ )
                 {
-                        // walk thru pixels of each row within calculated limits
+                        // walk thru the pixels of each row within calculated limits
                         for ( tilePixel = iniX, shadowPixel = deltaX ; tilePixel < endX ; tilePixel ++, shadowPixel ++ )
                         {
                                 AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
                                 AllegroColor tileColor = tileImage.getPixelAt( tilePixel, tileRow );
-                                AllegroColor resultColor = shadyImage.getPixelAt( tilePixel, tileRow );
+                                AllegroColor resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
 
-                                // when pixel of shadow isn’t key color & pixel of tile isn’t key color
-                                // and pixel of result isn’t changed before
-                                // then lower color of result’s pixel to darken it
+                                // when a pixel of shadow isn’t transparent & a pixel of tile isn’t transparent
+                                // and a pixel of result isn’t changed before
+                                // then lower the colors of a result’s pixel to darken it
                                 if ( ! shadowColor.isKeyColor() && ! tileColor.isKeyColor() && resultColor.equalsRGB( tileColor ) )
                                 {
                                         // there’s some transparency
@@ -394,22 +383,22 @@ void ShadowCaster::castShadowOnFloor( FloorTile& tile, int x, int y, const Pictu
                                                 unsigned char resultRed = ( tileColor.getRed() * opacity ) >> 8 ;
                                                 unsigned char resultGreen = ( tileColor.getGreen() * opacity ) >> 8 ;
                                                 unsigned char resultBlue = ( tileColor.getBlue() * opacity ) >> 8 ;
-                                                shadyImage.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
+                                                shadyTile.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
                                         }
                                         // zero opacity is full opacity
                                         else
                                         {
-                                                // the pixel of result is pure black
-                                                shadyImage.putPixelAt( tilePixel, tileRow, Color::blackColor() );
+                                                // a pixel of result is pure black
+                                                shadyTile.putPixelAt( tilePixel, tileRow, Color::blackColor() );
                                         }
                                 }
                         }
                 }
         }
 
-        shadyImage.getAllegroPict().unlock();
         tileImage.getAllegroPict().unlock();
         shadow.getAllegroPict().unlock();
 
-        /* shadyImage.setName( "+" + shadyImage.getName() ); */
+        tile.setAsShadyImage( shadyTile );
+        tile.setWantShadow( false );
 }

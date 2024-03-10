@@ -247,11 +247,11 @@ void Mediator::wantShadowFromGridItem( const GridItem& item )
                 }
         }
 
-        // shade floor in this column, if any
-        if ( room->floorTiles[ column ] != nilPointer )
-        {
-                room->floorTiles[ column ]->freshShadyImage();
-                room->floorTiles[ column ]->setWantShadow( true );
+        // shade the floor in this column, if any
+        FloorTile * floorTile = room->getFloorTileAtColumn( column );
+        if ( floorTile != nilPointer ) {
+                floorTile->freshShadyImage(); // begin shading with the fresh image of tile
+                floorTile->setWantShadow( true );
         }
 }
 
@@ -290,11 +290,11 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int
                                 }
                         }
 
-                        // shade floor in this column, if any
-                        if ( room->floorTiles[ column ] != nilPointer )
-                        {
-                                room->floorTiles[ column ]->freshShadyImage ();
-                                room->floorTiles[ column ]->setWantShadow( true );
+                        // shade the floor in this column, if any
+                        FloorTile * floorTile = room->getFloorTileAtColumn( column );
+                        if ( floorTile != nilPointer ) {
+                                floorTile->freshShadyImage (); // begin shading with the fresh image of tile
+                                floorTile->setWantShadow( true );
                         }
                 }
         }

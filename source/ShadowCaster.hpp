@@ -19,11 +19,11 @@
 /**
  * Shades the graphics of an item or a floor tile with the shadow from another item
  *
- * @param x Where is shading item on screen
- * @param y Where is shading item on screen
- * @param shadow Image of shadow to project on item
- * @param shading Degree of opacity from 0, without shadows, to 256, fully opaque shadows
- * @param transparency Degree of transparency of shading item
+ * @param x Where is the shading item on screen
+ * @param y Where’s the shading item on screen
+ * @param shadow The image of shadow to project on an item or a floor tile
+ * @param shading The degree of opacity from 0, without shadows, to 256, fully opaque shadows
+ * @param transparency The degree of transparency of the shading item
  */
 
 class ShadowCaster

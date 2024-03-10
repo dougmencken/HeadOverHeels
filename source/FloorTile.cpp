@@ -9,7 +9,7 @@
 #include <cassert>
 
 
-FloorTile::FloorTile( int cellX, int cellY, const Picture& graphicsOfTile )
+FloorTile::FloorTile( int cellX, int cellY, const Picture & graphicsOfTile )
         : Mediated (), Shady ()
         , uniqueName( "floor tile at cx=" + util::number2string( cellX ) + " cy=" + util::number2string( cellY ) )
         , coordinates( std::pair< int, int >( cellX, cellY ) )
@@ -34,21 +34,31 @@ void FloorTile::calculateOffset ()
 
 void FloorTile::draw ()
 {
-        if ( shadyImage != nilPointer )
-        {       // draw tile with shadow
-                allegro::drawSprite( shadyImage->getAllegroPict(), offset.first, offset.second );
-        }
-        else if ( rawImage != nilPointer )
-        {       // draw tile, just tile
-                allegro::drawSprite( rawImage->getAllegroPict(), offset.first, offset.second );
-        }
+        assert( this->shadyImage != nilPointer );
+
+        // draw tile with shadow
+        allegro::drawSprite( this->shadyImage->getAllegroPict(), offset.first, offset.second );
+
+        /* else if ( this->rawImage != nilPointer )
+                // draw tile, just tile
+                allegro::drawSprite( this->rawImage->getAllegroPict(), offset.first, offset.second ); */
+}
+
+void FloorTile::setAsShadyImage ( const Picture & toCopy )
+{
+        shadyImage->fillWithColor( Color::keyColor () );
+        allegro::bitBlit( /* from */ toCopy.getAllegroPict(), /* to */ this->shadyImage->getAllegroPict() );
+        this->shadyImage->setName( "shaded " + this->rawImage->getName() );
 }
 
 void FloorTile::freshShadyImage ()
 {
+        if ( getWantShadow() || this->shadyImage->getName().find( "fresh copy" ) != std::string::npos )
+                return ; // it’s fresh already or in the process of shading this tile
+
         shadyImage->fillWithColor( Color::keyColor () );
-        allegro::bitBlit( /* from */ rawImage->getAllegroPict(), /* to */ shadyImage->getAllegroPict() );
-        shadyImage->setName( "shaded " + rawImage->getName() );
+        allegro::bitBlit( /* from */ this->rawImage->getAllegroPict(), /* to */ this->shadyImage->getAllegroPict() );
+        this->shadyImage->setName( "fresh copy of " + this->rawImage->getName() );
 }
 
 unsigned int FloorTile::getIndexOfColumn () const

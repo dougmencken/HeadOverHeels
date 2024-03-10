@@ -211,9 +211,9 @@ public:
 
         void setTilesWithoutFloor ( const std::vector < std::pair < int, int > > & noFloor ) {  tilesWithoutFloor = noFloor ;  }
 
-        const std::vector < std::vector < GridItemPtr > > & getGridItems () const {  return gridItems ;  }
+        const std::vector < std::vector < GridItemPtr > > & getGridItems () const {  return this->gridItems ;  }
 
-        const std::vector < FreeItemPtr > & getFreeItems () const {  return freeItems ;  }
+        const std::vector < FreeItemPtr > & getFreeItems () const {  return this->freeItems ;  }
 
         Door * getDoorAt ( const std::string & way ) const
         {
@@ -223,7 +223,9 @@ public:
 
         bool hasDoorAt ( const std::string & way ) const {  return getDoorAt( way ) != nilPointer ;  }
 
-        const std::map < std::string, Door * > & getDoors () const {  return doors ;  }
+        const std::map < std::string, Door * > & getDoors () const {  return this->doors ;  }
+
+        FloorTile * getFloorTileAtColumn ( unsigned int column ) const {  return this->floorTiles[ column ] ;  }
 
         Camera * getCamera () const {  return camera ;  }
 
@@ -322,7 +324,7 @@ private:
         std::vector < std::vector < GridItemPtr > > gridItems ;
 
         /**
-         * Free items in room
+         * The free items in this room
          */
         std::vector < FreeItemPtr > freeItems ;
 

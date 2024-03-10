@@ -78,9 +78,11 @@ public:
 
         int getOffsetY () const {  return offset.second ;  }
 
-        const Picture & getRawImage () const {  return *rawImage ;  }
+        const Picture & getRawImage () const {  return * this->rawImage ;  }
 
-        Picture & getShadyImage () const {  return *shadyImage ;  }
+        const Picture & getShadyImage () const {  return * this->shadyImage ;  }
+
+        void setAsShadyImage ( const Picture & toCopy ) ;
 
         void freshShadyImage () ;
 
