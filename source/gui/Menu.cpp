@@ -10,7 +10,6 @@
 #include "ospaths.hpp"
 
 #include <algorithm> // std::for_each
-#include <cassert>
 
 
 namespace gui

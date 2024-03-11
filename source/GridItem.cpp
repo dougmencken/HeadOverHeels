@@ -4,10 +4,8 @@
 #include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 
-#include <cassert>
 
-
-GridItem::GridItem( const DescriptionOfItem* description, int cx, int cy, int z, const std::string & where )
+GridItem::GridItem( const DescriptionOfItem & description, int cx, int cy, int z, const std::string & where )
         : Item( description, z, where )
         , cell( std::pair< int, int >( cx, cy ) )
         , imageOffset( std::pair< int, int >( 0, 0 ) )

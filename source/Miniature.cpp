@@ -416,10 +416,8 @@ void Miniature::draw ()
                 if ( *fi == nilPointer || ( *fi )->whichItemClass() == "avatar item" ) continue ;
                 const FreeItem & item = *( *fi ) ;
 
-                const DescriptionOfItem * descriptionOfItem = item.getDescriptionOfItem () ;
-                if ( descriptionOfItem == nilPointer ) continue ;
-
-                std::string kind = descriptionOfItem->getKind ();
+                const DescriptionOfItem & descriptionOfItem = item.getDescriptionOfItem () ;
+                const std::string & kind = descriptionOfItem.getKind ();
 
                 // show tools
 
@@ -428,8 +426,8 @@ void Miniature::draw ()
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
                         // free coordinates to tile coordinates
-                        int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
-                        int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
+                        int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem.getWidthX() ) >> 1 ) ) / roomTileSize ;
+                        int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem.getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
                         fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "orange" ) );
                 }
@@ -441,8 +439,8 @@ void Miniature::draw ()
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
                         // free coordinates to tile coordinates
-                        int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
-                        int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
+                        int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem.getWidthX() ) >> 1 ) ) / roomTileSize ;
+                        int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem.getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
                         fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "cyan" ) );
                 }
@@ -454,8 +452,8 @@ void Miniature::draw ()
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
                         // free coordinates to tile coordinates
-                        int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
-                        int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
+                        int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem.getWidthX() ) >> 1 ) ) / roomTileSize ;
+                        int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem.getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
                         if ( kind == "reincarnation-fish" )
                                 fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "green" ) );

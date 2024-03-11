@@ -18,7 +18,7 @@
 
 
 /**
- * A floor tile of room, a set of such items forms the room’s ground
+ * A set of such tiles forms the floor of the room
  */
 
 class FloorTile : public Drawable, public Mediated, public Shady

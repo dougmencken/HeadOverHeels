@@ -11,7 +11,7 @@
 #endif
 
 
-FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, const std::string & where )
+FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & where )
         : Item ( description, z, where )
         , initialCellX( farFarAway )
         , initialCellY( farFarAway )

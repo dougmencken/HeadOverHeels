@@ -492,7 +492,7 @@ void PlayerControlled::useHooter ()
                         // create item at the same position as the character
                         int z = character.getZ() + character.getHeight() - whatIsDonut->getHeight() ;
                         FreeItemPtr donut( new FreeItem (
-                                whatIsDonut,
+                                * whatIsDonut,
                                 character.getX(), character.getY(),
                                 z < 0 ? 0 : z,
                                 character.getHeading () ) );
@@ -583,17 +583,15 @@ void PlayerControlled::dropItem ()
                 // place a dropped item just below the character
                 if ( character.addToZ( Room::LayerHeight ) )
                 {
-                        FreeItemPtr freeItem( new FreeItem( character.getDescriptionOfTakenItem(),
+                        FreeItemPtr freeItem( new FreeItem( * character.getDescriptionOfTakenItem(),
                                                             character.getX(), character.getY(),
                                                             character.getZ() - Room::LayerHeight,
                                                             "none" ) );
-
                         freeItem->setBehaviorOf( character.getBehaviorOfTakenItem() );
 
                         character.getMediator()->getRoom()->addFreeItem( freeItem );
 
                         GameManager::getInstance().emptyHandbag () ;
-
                         character.emptyBag ();
 
                         setCurrentActivity ( // update activity

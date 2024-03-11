@@ -231,13 +231,9 @@ public:
 
         PicturePtr getWhereToDraw () const {  return whereToDraw ;  }
 
-        int getXCenterForItem ( const Item & item ) {  return getXCenterForItem( item.getDescriptionOfItem() ) ;  }
+        int getXCenterForItem ( int widthX ) ;
 
-        int getXCenterForItem ( const DescriptionOfItem * data ) ;
-
-        int getYCenterForItem ( const Item & item ) {  return getYCenterForItem( item.getDescriptionOfItem() ) ;  }
-
-        int getYCenterForItem ( const DescriptionOfItem * data ) ;
+        int getYCenterForItem ( int widthY ) ;
 
         /**
          * The "z" position of the floor

@@ -6,8 +6,6 @@
 
 #include "WrappersAllegro.hpp"
 
-#include <cassert>
-
 
 FloorTile::FloorTile( int cellX, int cellY, const Picture & graphicsOfTile )
         : Mediated (), Shady ()
@@ -18,7 +16,7 @@ FloorTile::FloorTile( int cellX, int cellY, const Picture & graphicsOfTile )
         , shadyImage( new Picture( graphicsOfTile ) )
 {
         rawImage->setName( graphicsOfTile.getName() );
-        shadyImage->setName( "shaded " + graphicsOfTile.getName() );
+        shadyImage->setName( graphicsOfTile.getName() );
 
         setWantShadow( true );
 }

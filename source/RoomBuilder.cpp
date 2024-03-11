@@ -525,14 +525,14 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                         nameOfCharacterToCreate = "game over" ;
         }
 
-        const DescriptionOfItem* itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
+        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
 
         if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
                         && itemDescription != nilPointer )
         {
                 if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 ) {
                         // there are lives left, create the character
-                        AvatarItemPtr character( new AvatarItem( itemDescription, x, y, z, heading ) );
+                        AvatarItemPtr character( new AvatarItem( *itemDescription, x, y, z, heading ) );
                         assert( character != nilPointer );
 
                         // automove on entry
@@ -619,7 +619,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 //// for backward compatibility
                 if ( heading == "none" || heading == "nowhere" ) heading = "" ;
 
-                GridItemPtr gridItem( new GridItem( itemDescription, gridCellX, gridCellY, freeZ, heading ) );
+                GridItemPtr gridItem( new GridItem( *itemDescription, gridCellX, gridCellY, freeZ, heading ) );
 
                 std::string behaviorOfItem ;
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
@@ -664,7 +664,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 //// for backward compatibility
                 if ( heading == "none" || heading == "nowhere" ) heading = "" ;
 
-                FreeItemPtr freeItem( new FreeItem( itemDescription, freeX, freeY, freeZ, heading ) );
+                FreeItemPtr freeItem( new FreeItem( *itemDescription, freeX, freeY, freeZ, heading ) );
                 freeItem->setInitialCellLocation( gridCellX, gridCellY, gridCellZ );
 
                 std::string behaviorOfItem = "still";

@@ -28,7 +28,7 @@ class AvatarItem : public FreeItem
 
 public:
 
-        AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string & heading ) ;
+        AvatarItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & heading ) ;
 
         AvatarItem( const AvatarItem & toCopy ) ;
 

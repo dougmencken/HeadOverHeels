@@ -249,10 +249,10 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
                 {
                         addRoomInPlay( firstRoom );
 
-                        const DescriptionOfItem* headData = ItemDescriptions::descriptions ().getDescriptionByKind( "head" );
+                        const DescriptionOfItem & headData = * ItemDescriptions::descriptions ().getDescriptionByKind( "head" );
 
-                        int centerX = firstRoom->getXCenterForItem( headData );
-                        int centerY = firstRoom->getYCenterForItem( headData );
+                        int centerX = firstRoom->getXCenterForItem( headData.getWidthX() );
+                        int centerY = firstRoom->getYCenterForItem( headData.getWidthY() );
 
                         if ( headRoom != heelsRoom )
                         {
@@ -289,10 +289,10 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
                         {
                                 addRoomInPlay( secondRoom );
 
-                                const DescriptionOfItem* heelsData = ItemDescriptions::descriptions ().getDescriptionByKind( "heels" );
+                                const DescriptionOfItem & heelsData = * ItemDescriptions::descriptions ().getDescriptionByKind( "heels" );
 
-                                int centerX = secondRoom->getXCenterForItem( heelsData );
-                                int centerY = secondRoom->getYCenterForItem( heelsData );
+                                int centerX = secondRoom->getXCenterForItem( heelsData.getWidthX() );
+                                int centerY = secondRoom->getYCenterForItem( heelsData.getWidthY() );
 
                                 // create character Heels
                                 RoomBuilder::createCharacterInRoom( secondRoom, "heels", true, centerX, centerY, 0, "south" );

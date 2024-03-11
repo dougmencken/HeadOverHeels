@@ -39,7 +39,7 @@ public:
          * @param z The position on Z, or how far is the floor, in free isometric units
          * @param where The angular orientation of item
          */
-        GridItem( const DescriptionOfItem * description, int cx, int cy, int z, const std::string & where = "" ) ;
+        GridItem( const DescriptionOfItem & description, int cx, int cy, int z, const std::string & where = "" ) ;
 
         virtual ~GridItem( ) ;
 

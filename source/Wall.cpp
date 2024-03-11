@@ -2,8 +2,6 @@
 #include "Wall.hpp"
 #include "Mediator.hpp"
 
-#include <cassert>
-
 
 Wall::Wall( bool trueXfalseY, int index, Picture* image )
         : Mediated()

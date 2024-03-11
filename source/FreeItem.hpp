@@ -40,7 +40,7 @@ public:
         * @param z Position on Z, or how far is floor
         * @param where The initial orientation of item
         */
-        FreeItem( const DescriptionOfItem * description, int x, int y, int z, const std::string & where = "" ) ;
+        FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & where = "" ) ;
 
         FreeItem( const FreeItem & freeItem ) ;
 

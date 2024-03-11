@@ -13,7 +13,6 @@
 
 #include <string>
 #include <utility>
-#include <cassert>
 
 #include <WrappersAllegro.hpp>
 
@@ -39,7 +38,7 @@ class Item : public Mediated, public Shady
 
 public:
 
-        Item( const DescriptionOfItem * description, int z, const std::string & where = "" ) ;
+        Item( const DescriptionOfItem & description, int z, const std::string & where = "" ) ;
 
         Item( const Item& item ) ;
 
@@ -77,7 +76,7 @@ public:
         /**
          * Changes the current frame. Frames usually change when the angular orientation changes
          * or when looping in a sequence of animation. However there’re some cases when frames
-         * are changed manually. As example, in the behavior of spring stool the one frame
+         * are changed manually. As example, in the behavior of a spring stool the one frame
          * is for rest and the other is for fold
          */
         void changeFrame ( unsigned int newFrame ) ;
@@ -149,7 +148,7 @@ public:
 
         bool isMetamorphed () const {  return getKind() != getOriginalKind() ;  }
 
-        const DescriptionOfItem * getDescriptionOfItem () const {  return descriptionOfItem ;  }
+        const DescriptionOfItem & getDescriptionOfItem () const {  return * this->descriptionOfItem ;  }
 
         const std::string & getKind () const ;
 
@@ -214,9 +213,9 @@ public:
 
         bool atExtraFrame () const ;
 
-        const Picture & getRawImage () const {  return * getMotionAt( currentFrame ) ;  }
+        const Picture & getRawImage () const {  return * getFrameAt( currentFrame ) ;  }
 
-        Picture & getRawImageToChangeIt () const {  return * getMotionAt( currentFrame ) ;  }
+        Picture & getRawImageToChangeIt () const {  return * getFrameAt( currentFrame ) ;  }
 
         bool hasShadow () const {  return ! shadows.empty() ;  }
 
@@ -226,28 +225,18 @@ public:
 
         virtual void freshProcessedImage () ;
 
-        size_t howManyMotions () const {  return motion.size () ;  }
+        size_t howManyFrames () const {  return this->frames.size () ;  }
 
-        const PicturePtr getMotionAt( size_t at ) const
+        const PicturePtr getFrameAt( size_t at ) const
         {
-                return ( at < motion.size () ) ? motion[ at ] : PicturePtr () ;
+                return ( at < howManyFrames() ) ? this->frames[ at ] : PicturePtr() ;
         }
 
-        void addFrame( const Picture& frame )
-        {
-                motion.push_back( PicturePtr( new Picture( frame ) ) ) ;
-        }
-
-        size_t howManyShadows () const {  return shadows.size () ;  }
+        size_t howManyShadows () const {  return this->shadows.size () ;  }
 
         const PicturePtr getShadowAt( size_t at ) const
         {
-                return ( at < shadows.size () ) ? shadows[ at ] : PicturePtr () ;
-        }
-
-        void addFrameOfShadow( const Picture& frame )
-        {
-                shadows.push_back( PicturePtr( new Picture( frame ) ) ) ;
+                return ( at < howManyShadows() ) ? this->shadows[ at ] : PicturePtr() ;
         }
 
         /**
@@ -277,15 +266,25 @@ private:
 
         void readGraphicsOfItem () ;
 
-        /**
-         * Extract frames for this item from file
-         */
-        static void createFrames ( Item * item, const DescriptionOfItem & data ) ;
+        void addFrame( const Picture& frame )
+        {
+                this->frames.push_back( PicturePtr( new Picture( frame ) ) ) ;
+        }
+
+        void addFrameOfShadow( const Picture& frame )
+        {
+                this->shadows.push_back( PicturePtr( new Picture( frame ) ) ) ;
+        }
 
         /**
-         * Extract frames for shadow of this item from file
+         * Extract frames for this item from the picture file
          */
-        static void createShadowFrames ( Item * item, const DescriptionOfItem & data ) ;
+        void createFrames () ;
+
+        /**
+         * Extract frames for shadow of this item from the picture file
+         */
+        void createShadowFrames () ;
 
         const DescriptionOfItem * descriptionOfItem ;
 
@@ -331,7 +330,7 @@ private:
         bool ignoreCollisions ;
 
         // the pictures of item
-        std::vector< PicturePtr > motion ;
+        std::vector< PicturePtr > frames ;
 
         // the pictures of item’s shadow
         std::vector< PicturePtr > shadows ;

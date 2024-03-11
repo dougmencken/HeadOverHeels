@@ -7,9 +7,6 @@
 #include "GameManager.hpp"
 #include "UnicodeUtilities.hpp"
 
-#include <iostream>
-#include <cassert>
-
 
 namespace gui
 {

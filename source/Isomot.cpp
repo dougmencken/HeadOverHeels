@@ -479,7 +479,7 @@ void Isomot::handleMagicKeys ()
                                 const std::string & heading = otherCharacter->getHeading ();
 
                                 AvatarItemPtr joinedCharacter( new AvatarItem(
-                                        ItemDescriptions::descriptions().getDescriptionByKind( nameOfAnotherCharacter ),
+                                        * ItemDescriptions::descriptions().getDescriptionByKind( nameOfAnotherCharacter ),
                                         characterX, characterY, characterZ, heading
                                 ) );
 
@@ -527,7 +527,8 @@ void Isomot::handleMagicKeys ()
                                 if ( activeRoom->getMediator()->findItemOfKind( "crown" ) == nilPointer )
                                 {
                                         const DescriptionOfItem* chapeauDescription = ItemDescriptions::descriptions().getDescriptionByKind( "crown" );
-                                        FreeItemPtr chapeau( new FreeItem( chapeauDescription,
+                                        assert( chapeauDescription != nilPointer );
+                                        FreeItemPtr chapeau( new FreeItem( *chapeauDescription,
                                                                                 activeCharacter->getX(), activeCharacter->getY(),
                                                                                 chapeauDescription->getHeight() + Room::LayerHeight * Room::MaxLayers ) );
                                         chapeau->setBehaviorOf( "behavior of bonus" );
@@ -543,7 +544,7 @@ void Isomot::handleMagicKeys ()
                                 int teleportedZ = 240;
 
                                 AvatarItemPtr teleportedCharacter( new AvatarItem(
-                                        ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacter ),
+                                        * ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacter ),
                                         teleportedX, teleportedY, teleportedZ,
                                         heading
                                 ) ) ;
@@ -611,10 +612,8 @@ void Isomot::updateFinalRoom()
                 std::cout << "character \"" << arrivedCharacter << "\" arrived to the final room" << std::endl ;
 
                 const DescriptionOfItem* arrived = ItemDescriptions::descriptions().getDescriptionByKind( arrivedCharacter );
-
-                if ( arrived != nilPointer )
-                {
-                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Room::FloorZ, "south" ) );
+                if ( arrived != nilPointer ) {
+                        FreeItemPtr character( new FreeItem( *arrived, 66, 92, Room::FloorZ, "south" ) );
                         activeRoom->addFreeItem( character );
                 }
 
@@ -624,7 +623,7 @@ void Isomot::updateFinalRoom()
 
                 unsigned int crowns = 0;
 
-                const DescriptionOfItem* descriptionOfChapeau = ItemDescriptions::descriptions().getDescriptionByKind( "crown" );
+                const DescriptionOfItem & descriptionOfChapeau = * ItemDescriptions::descriptions().getDescriptionByKind( "crown" );
 
                 GameManager & gameManager = GameManager::getInstance() ;
 
@@ -682,7 +681,7 @@ void Isomot::updateFinalRoom()
                 if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
                         FreeItemPtr finalBall( new FreeItem (
-                                ItemDescriptions::descriptions().getDescriptionByKind( "ball" ),
+                                * ItemDescriptions::descriptions().getDescriptionByKind( "ball" ),
                                 146, 93, Room::LayerHeight, "none"
                         ) );
                         finalBall->setBehaviorOf( "behaivor of final ball" );

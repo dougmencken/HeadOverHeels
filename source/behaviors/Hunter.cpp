@@ -335,7 +335,7 @@ bool Hunter::createFullBody ()
 
                 // create the new item at the same location
                 FreeItemPtr newItem( new FreeItem (
-                        ItemDescriptions::descriptions().getDescriptionByKind( "imperial-guard" ),
+                        * ItemDescriptions::descriptions().getDescriptionByKind( "imperial-guard" ),
                         thisItem.getX(), thisItem.getY(), thisItem.getZ() - Room::LayerHeight,
                         thisItem.getHeading() ) );
 

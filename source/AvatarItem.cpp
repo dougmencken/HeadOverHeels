@@ -13,7 +13,7 @@
 #include <algorithm> // std::find
 
 
-AvatarItem::AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string & heading )
+AvatarItem::AvatarItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & heading )
         : FreeItem( description, x, y, z, heading )
         , wayOfExit( "" )
         , wayOfEntry( "" )
