@@ -85,7 +85,7 @@
         <item x="3" y="1" z="0">
             <kind>brick2</kind>
             <orientation>none</orientation>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>behavior of slow disappearance on jump into</behavior>
             <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
