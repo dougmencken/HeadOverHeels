@@ -40,7 +40,7 @@ bool Hunter::update_returningdisappearance ()
                                 SoundManager::getInstance().play( hunterItem.getKind (), "wait" );
                                 updateDirection() ;
                         }
-                        // otherwise check if the character is within the defined rectangle near the hunter
+                        // otherwise wait until the character is within the 3-tile rectangle around the hunter
                         else
                         {
                                 const unsigned int sizeOfRectangleInTiles = 3 ;
@@ -55,16 +55,15 @@ bool Hunter::update_returningdisappearance ()
                                         updateDirection() ;
                                 }
 
-                                // an eight-directional waiting hunter emits the sound when it waits
+                                // the eight-directional waiting hunter emits the sound while it waits
                                 if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
-                                {
                                         SoundManager::getInstance().play( hunterItem.getKind (), "wait" );
-                                }
-
-                                // animate item while it waits
-                                hunterItem.animate ();
                         }
-                break;
+
+                        // animate the waiting item
+                        hunterItem.animate ();
+
+                        break ;
 
                 case activities::Activity::MovingNorth:
                 case activities::Activity::MovingSouth:
