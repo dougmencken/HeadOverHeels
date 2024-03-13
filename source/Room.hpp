@@ -257,6 +257,9 @@ public:
          */
         static const unsigned int maxTilesOfSingleRoom = 10 ;
 
+        static const unsigned int Sides = 12 ;
+        static const std::string Sides_Of_Room [] ;
+
 protected:
 
         void copyAnotherCharacterAsEntered ( const std::string& name ) ;

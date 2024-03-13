@@ -259,14 +259,9 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         if ( ! collisionFound )
         {
                 // the character may go thru a door
-
-                static const std::string doors[ 12 ] =
-                        {  "northeast", "northwest", "north", "southeast", "southwest", "south",
-                                "eastnorth", "eastsouth", "east", "westnorth", "westsouth", "west"  };
-
-                for ( unsigned int i = 0; i < 12; i++ ) {
-                        if ( isWalkingThroughDoorAt( doors[ i ] ) ) {
-                                mediator->addCollisionWith( doors[ i ] + " door" );
+                for ( unsigned int i = 0 ; i < Room::Sides ; ++ i ) {
+                        if ( isWalkingThroughDoorAt( Room::Sides_Of_Room[ i ] ) ) {
+                                mediator->addCollisionWith( Room::Sides_Of_Room[ i ] + " door" );
                                 break;
                         }
                 }

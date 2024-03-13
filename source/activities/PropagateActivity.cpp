@@ -93,47 +93,20 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                                 }
                         }
                 }
-                // is it the character leaving the room via some door
-                else if ( sender.whichItemClass() == "avatar item" &&
-                        ( ( nameOfCollision == "north door"  &&  mediator->getRoom()->hasDoorAt( "north" ) ) ||
-                          ( nameOfCollision == "south door"  &&  mediator->getRoom()->hasDoorAt( "south" ) ) ||
-                          ( nameOfCollision == "east door"  &&  mediator->getRoom()->hasDoorAt( "east" ) ) ||
-                          ( nameOfCollision == "west door"  &&  mediator->getRoom()->hasDoorAt( "west" ) ) ||
-                          ( nameOfCollision == "northeast door"  &&  mediator->getRoom()->hasDoorAt( "northeast" ) ) ||
-                          ( nameOfCollision == "northwest door"  &&  mediator->getRoom()->hasDoorAt( "northwest" ) ) ||
-                          ( nameOfCollision == "southeast door"  &&  mediator->getRoom()->hasDoorAt( "southeast" ) ) ||
-                          ( nameOfCollision == "southwest door"  &&  mediator->getRoom()->hasDoorAt( "southwest" ) ) ||
-                          ( nameOfCollision == "eastnorth door"  &&  mediator->getRoom()->hasDoorAt( "eastnorth" ) ) ||
-                          ( nameOfCollision == "eastsouth door"  &&  mediator->getRoom()->hasDoorAt( "eastsouth" ) ) ||
-                          ( nameOfCollision == "westnorth door"  &&  mediator->getRoom()->hasDoorAt( "westnorth" ) ) ||
-                          ( nameOfCollision == "westsouth door"  &&  mediator->getRoom()->hasDoorAt( "westsouth" ) ) ) )
+                // a collision isn’t with an item
+                else
+                if ( sender.whichItemClass() == "avatar item" )
                 {
                         AvatarItem & character = dynamic_cast< AvatarItem & >( sender );
 
-                        if ( nameOfCollision == "north door" )
-                                character.setWayOfExit( "north" );
-                        else if ( nameOfCollision == "south door" )
-                                character.setWayOfExit( "south" );
-                        else if ( nameOfCollision == "east door" )
-                                character.setWayOfExit( "east" );
-                        else if ( nameOfCollision == "west door" )
-                                character.setWayOfExit( "west" );
-                        else if ( nameOfCollision == "northeast door" )
-                                character.setWayOfExit( "northeast" );
-                        else if ( nameOfCollision == "northwest door" )
-                                character.setWayOfExit( "northwest" );
-                        else if ( nameOfCollision == "southeast door" )
-                                character.setWayOfExit( "southeast" );
-                        else if ( nameOfCollision == "southwest door" )
-                                character.setWayOfExit( "southwest" );
-                        else if ( nameOfCollision == "eastnorth door" )
-                                character.setWayOfExit( "eastnorth" );
-                        else if ( nameOfCollision == "eastsouth door" )
-                                character.setWayOfExit( "eastsouth" );
-                        else if ( nameOfCollision == "westnorth door" )
-                                character.setWayOfExit( "westnorth" );
-                        else if ( nameOfCollision == "westsouth door" )
-                                character.setWayOfExit( "westsouth" );
+                        // maybe the character is leaving the room thru a door
+                        for ( int on = 0 ; on < Room::Sides ; ++ on ) {
+                                const std::string & where = Room::Sides_Of_Room[ on ];
+                                if ( nameOfCollision == ( where + " door" ) && mediator->getRoom()->hasDoorAt( where ) ) {
+                                        character.setWayOfExit( where );
+                                        return ;
+                                }
+                        }
                 }
         }
 }

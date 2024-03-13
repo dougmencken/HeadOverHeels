@@ -24,6 +24,10 @@
 
 using behaviors::Elevator ;
 
+/* static */
+const std::string Room::Sides_Of_Room[ Room::Sides ] =
+                        {  "northeast", "northwest", "north", "southeast", "southwest", "south",
+                                "eastnorth", "eastsouth", "east", "westnorth", "westsouth", "west"  };
 
 Room::Room( const std::string & roomFile, const std::string & scenery,
                 unsigned int xTiles, unsigned int yTiles,
@@ -41,33 +45,10 @@ Room::Room( const std::string & roomFile, const std::string & scenery,
 {
         this->mediator = new Mediator( this );
 
-        ///bounds.clear ();
-        bounds[ "north" ] = -1 ;
-        bounds[ "south" ] = -1 ;
-        bounds[ "east" ] = -1 ;
-        bounds[ "west" ] = -1 ;
-        bounds[ "northeast" ] = -2 ;
-        bounds[ "southeast" ] = -2 ;
-        bounds[ "southwest" ] = -2 ;
-        bounds[ "northwest" ] = -2 ;
-        bounds[ "eastnorth" ] = -2 ;
-        bounds[ "eastsouth" ] = -2 ;
-        bounds[ "westnorth" ] = -2 ;
-        bounds[ "westsouth" ] = -2 ;
-
-        ///doors.clear ();
-        doors[ "north" ] = nilPointer;
-        doors[ "south" ] = nilPointer;
-        doors[ "east" ] = nilPointer;
-        doors[ "west" ] = nilPointer;
-        doors[ "northeast" ] = nilPointer;
-        doors[ "southeast" ] = nilPointer;
-        doors[ "southwest" ] = nilPointer;
-        doors[ "northwest" ] = nilPointer;
-        doors[ "eastnorth" ] = nilPointer;
-        doors[ "eastsouth" ] = nilPointer;
-        doors[ "westnorth" ] = nilPointer;
-        doors[ "westsouth" ] = nilPointer;
+        for ( int i = 0 ; i < Room::Sides ; ++ i ) {
+                bounds[ Room::Sides_Of_Room[ i ] ] = -1 ;
+                doors[ Room::Sides_Of_Room[ i ] ] = nilPointer ;
+        }
 
         // make nil floor
         for ( unsigned int i = 0 ; i < xTiles * yTiles /* + 1 */ ; ++ i )
