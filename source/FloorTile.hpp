@@ -30,14 +30,15 @@ public:
 
         virtual ~FloorTile( ) { }
 
-        /**
-         * Calculate offset for tile’s graphics
-         */
-        void calculateOffset () ;
+        virtual void draw () ;
 
-        void draw () ;
+        virtual void setMediator ( Mediator* mediator )
+                {   Mediated::setMediator( mediator ); calculateOffset ();   }
 
 private:
+
+        // calculates the offset of this tile’s graphics in the room
+        void calculateOffset () ;
 
         std::string uniqueName;
 

@@ -18,7 +18,7 @@
 /* static */
 Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 {
-        tinyxml2::XMLDocument roomXml;
+        tinyxml2::XMLDocument roomXml ;
         tinyxml2::XMLError result = roomXml.LoadFile( roomFile.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
@@ -26,23 +26,23 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 return nilPointer;
         }
 
-        tinyxml2::XMLElement* root = roomXml.FirstChildElement( "room" );
+        tinyxml2::XMLElement* xmlRoot = roomXml.FirstChildElement( "room" );
 
-        const char* sceneryOfRoom = root->Attribute( "scenery" );
+        const char* sceneryOfRoom = xmlRoot->Attribute( "scenery" );
         std::string scenery( ( sceneryOfRoom != nilPointer ) ? sceneryOfRoom : "" );
 
-        tinyxml2::XMLElement* xTilesElement = root->FirstChildElement( "xTiles" ) ;
-        tinyxml2::XMLElement* yTilesElement = root->FirstChildElement( "yTiles" ) ;
+        tinyxml2::XMLElement* xTilesElement = xmlRoot->FirstChildElement( "xTiles" ) ;
+        tinyxml2::XMLElement* yTilesElement = xmlRoot->FirstChildElement( "yTiles" ) ;
 
         unsigned int xTiles = std::atoi( xTilesElement->FirstChild()->ToText()->Value() );
         unsigned int yTiles = std::atoi( yTilesElement->FirstChild()->ToText()->Value() );
 
         std::string roomColor = "white" ;
-        tinyxml2::XMLElement* colorElement = root->FirstChildElement( "color" ) ;
+        tinyxml2::XMLElement* colorElement = xmlRoot->FirstChildElement( "color" ) ;
         if ( colorElement != nilPointer ) roomColor = colorElement->FirstChild()->ToText()->Value() ;
 
-        tinyxml2::XMLElement* floorKind = root->FirstChildElement( "floorKind" ) ;
-        if ( floorKind == nilPointer ) floorKind = root->FirstChildElement( "floorType" ) ;
+        tinyxml2::XMLElement* floorKind = xmlRoot->FirstChildElement( "floorKind" ) ;
+        if ( floorKind == nilPointer ) floorKind = xmlRoot->FirstChildElement( "floorType" ) ;
         std::string kindOfFloor = floorKind->FirstChild()->ToText()->Value() ;
         if ( kindOfFloor == "none" ) kindOfFloor = "absent" ;
 
@@ -76,34 +76,11 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 #endif
         theRoom->setColor( roomColor );
 
-        // build walls without doors
-
-        std::vector< std::pair< int, int > > wallsXY ;
-
-        tinyxml2::XMLElement* walls = root->FirstChildElement( "walls" );
-        if ( walls != nilPointer )
-        {
-                for ( tinyxml2::XMLElement* wall = walls->FirstChildElement( "wall" ) ;
-                                wall != nilPointer ;
-                                wall = wall->NextSiblingElement( "wall" ) )
-                {
-                        Wall* wallSegment = buildWall( wall );
-
-                        if ( wallSegment != nilPointer )
-                        {
-                                if ( wallSegment->isOnX() )
-                                        wallsXY.push_back( std::pair< int, int >( wallSegment->getPosition(), 0 ) );
-                                else
-                                        wallsXY.push_back( std::pair< int, int >( 0, wallSegment->getPosition() ) );
-
-                                theRoom->addWall( wallSegment );
-                        }
-                }
-        }
-
         // add items to room
 
-        tinyxml2::XMLElement* items = root->FirstChildElement( "items" );
+        std::set< std::pair< int, int > > wallsXY ; // the pieces of walls
+
+        tinyxml2::XMLElement* items = xmlRoot->FirstChildElement( "items" );
 
         for ( tinyxml2::XMLElement* item = items->FirstChildElement( "item" ) ;
                         item != nilPointer ;
@@ -150,14 +127,14 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                                 if ( picture->isNotNil() )
                                 {
-                                        wallsXY.push_back( std::pair< int, int >( onX ? index : 0, onX ? 0 : index ) );
+                                        wallsXY.insert( std::pair< int, int >( onX ? index : 0, onX ? 0 : index ) );
 
                                         Picture* imageOfWall = new Picture( *picture );
                                         imageOfWall->setName( fileWithPicture );
 
-                                        Wall* wallSegment = new Wall( onX, index, imageOfWall );
+                                        WallPiece* wallSegment = new WallPiece( onX, index, imageOfWall );
 
-                                        theRoom->addWall( wallSegment );
+                                        theRoom->addWallPiece( wallSegment );
                                 }
                                 else
                                 {
@@ -173,7 +150,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         theRoom->addGridItem( gridItem );
 
                                         if ( gridItem->isSegmentOfWallOnX () || gridItem->isSegmentOfWallOnY () )
-                                                wallsXY.push_back( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
+                                                wallsXY.insert( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
                                 }
                                 else
                                         std::cout << "oops, can’t build a grid item at cell "
@@ -191,50 +168,155 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 }
         }
 
-        Door* eastDoor = theRoom->getDoorAt( "east" );
-        Door* southDoor = theRoom->getDoorAt( "south" );
-        Door* northDoor = theRoom->getDoorAt( "north" );
-        Door* westDoor = theRoom->getDoorAt( "west" );
+        // build the floor
+        buildFloor( theRoom, xmlRoot );
 
-        Door* eastnorthDoor = theRoom->getDoorAt( "eastnorth" );
-        Door* eastsouthDoor = theRoom->getDoorAt( "eastsouth" );
-        Door* southeastDoor = theRoom->getDoorAt( "southeast" );
-        Door* southwestDoor = theRoom->getDoorAt( "southwest" );
-        Door* northeastDoor = theRoom->getDoorAt( "northeast" );
-        Door* northwestDoor = theRoom->getDoorAt( "northwest" );
-        Door* westnorthDoor = theRoom->getDoorAt( "westnorth" );
-        Door* westsouthDoor = theRoom->getDoorAt( "westsouth" );
+        // add walls
 
-        // when room has floor and has no door at north and~or east, then north and~or east wall is outside room
-
-        if ( theRoom->hasFloor() )
+        tinyxml2::XMLElement* walls = xmlRoot->FirstChildElement( "walls" );
+        if ( walls != nilPointer )
         {
-                std::vector< std::pair< int, int > > outsideWalls ;
-
-                for ( std::vector< std::pair< int, int > >::const_iterator it = wallsXY.begin () ; it != wallsXY.end () ; ++ it )
+                for ( tinyxml2::XMLElement* wall = walls->FirstChildElement( "wall" ) ;
+                                wall != nilPointer ;
+                                wall = wall->NextSiblingElement( "wall" ) )
                 {
-                        if ( northDoor == nilPointer && northeastDoor == nilPointer && northwestDoor == nilPointer )
-                                if ( it->first == 0 )
-                                        outsideWalls.push_back( *it );
+                        WallPiece* wallSegment = buildWallPiece( wall );
 
-                        if ( eastDoor == nilPointer && eastnorthDoor == nilPointer && eastsouthDoor == nilPointer )
-                                if ( it->second == 0 )
-                                        outsideWalls.push_back( *it );
-                }
+                        if ( wallSegment != nilPointer )
+                        {
+                                if ( wallSegment->isOnX() )
+                                        wallsXY.insert( std::pair< int, int >( wallSegment->getPosition(), 0 ) );
+                                else
+                                        wallsXY.insert( std::pair< int, int >( 0, wallSegment->getPosition() ) );
 
-                while ( ! outsideWalls.empty () )
-                {
-                        std::vector< std::pair< int, int > >::iterator binMe = std::find( wallsXY.begin (), wallsXY.end (), outsideWalls.back () ) ;
-                        if ( binMe != wallsXY.end () /* 0,0 may be pushed twice */ ) wallsXY.erase( binMe );
-                        outsideWalls.pop_back();
+                                theRoom->addWallPiece( wallSegment );
+                        }
                 }
         }
 
+        //// when the room ??-has a floor-??? and has no door in the north or east, then the north or east wall is outside the room
+
+        /** if ( theRoom->hasFloor() ) ////// how about dealing with rooms without a floor the same as with rooms with one ??
+        {
+                std::set< std::pair< int, int > > outsideWalls ;
+
+                for ( std::set< std::pair< int, int > >::const_iterator it = wallsXY.begin () ; it != wallsXY.end () ; ++ it )
+                {
+                        if ( northDoor == nilPointer && northeastDoor == nilPointer && northwestDoor == nilPointer )
+                                if ( it->first == 0 )
+                                        outsideWalls.insert( *it );
+
+                        if ( eastDoor == nilPointer && eastnorthDoor == nilPointer && eastsouthDoor == nilPointer )
+                                if ( it->second == 0 )
+                                        outsideWalls.insert( *it );
+                }
+
+                for ( std::set< std::pair< int, int > >::iterator binMe = outsideWalls.begin() ; binMe != outsideWalls.end() ; ++ binMe )
+                {
+                        if ( std::find( wallsXY.begin(), wallsXY.end(), *binMe ) != wallsXY.end() )
+                                wallsXY.erase( *binMe );
+                }
+        } **/ ///// wallsXY isn’t used after that anymore
+
+        theRoom->convertWallsNearDoors() ;
+        theRoom->calculateBounds ();
+
+        std::cout << "built room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+
+        return theRoom ;
+}
+
+/* static */
+AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
+                                                  const std::string & nameOfCharacter,
+                                                  bool justEntered,
+                                                  int x, int y, int z,
+                                                  const std::string & heading, const std::string & wayOfEntry )
+{
+        if ( room == nilPointer ) return AvatarItemPtr () ;
+
+        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
+
+        std::string nameOfCharacterToCreate( "none" );
+
+        if ( gameInfo.getLivesByName( nameOfCharacter ) > 0 )
+        {
+                nameOfCharacterToCreate = nameOfCharacter ;
+        }
+        else
+        if ( nameOfCharacter == "headoverheels" )
+        {
+                // when the composite character ran out of lives, check if any of the simple characters survived
+                if ( gameInfo.getLivesByName( "head" ) > 0 )
+                        nameOfCharacterToCreate = "head" ;
+                else
+                if ( gameInfo.getLivesByName( "heels" ) > 0 )
+                        nameOfCharacterToCreate = "heels" ;
+        }
+        else
+        {
+                if ( gameInfo.getLivesByName( "head" ) == 0 && gameInfo.getLivesByName( "heels" ) == 0 )
+                        nameOfCharacterToCreate = "game over" ;
+        }
+
+        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
+
+        if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
+                        && itemDescription != nilPointer )
+        {
+                if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 ) {
+                        // there are lives left, create the character
+                        AvatarItemPtr character( new AvatarItem( *itemDescription, x, y, z, heading ) );
+                        assert( character != nilPointer );
+
+                        // automove on entry
+                        if ( wayOfEntry.empty() ) {
+                                // perhaps the character walks through a door
+                                const std::map< std::string, Door* > & doors = room->getDoors() ;
+                                for ( std::map< std::string, Door* >::const_iterator di = doors.begin() ; di != doors.end() ; ++ di ) {
+                                        Door* door = di->second ;
+                                        if ( door != nilPointer && door->isUnderDoor( *character ) ) {
+                                                character->setWayOfEntry( di->first );
+                                                break ;
+                                        }
+                                }
+                        } else
+                                character->setWayOfEntry( wayOfEntry );
+
+                        room->addCharacterToRoom( character, justEntered );
+
+                        return character ;
+                }
+        }
+
+        return AvatarItemPtr() ;
+}
+
+/* static */
+void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
+{
+        assert( room != nilPointer );
+        assert( xmlRootElement != nilPointer );
+
+        Door* eastDoor = room->getDoorAt( "east" );
+        Door* southDoor = room->getDoorAt( "south" );
+        Door* northDoor = room->getDoorAt( "north" );
+        Door* westDoor = room->getDoorAt( "west" );
+
+        Door* eastnorthDoor = room->getDoorAt( "eastnorth" );
+        Door* eastsouthDoor = room->getDoorAt( "eastsouth" );
+        Door* southeastDoor = room->getDoorAt( "southeast" );
+        Door* southwestDoor = room->getDoorAt( "southwest" );
+        Door* northeastDoor = room->getDoorAt( "northeast" );
+        Door* northwestDoor = room->getDoorAt( "northwest" );
+        Door* westnorthDoor = room->getDoorAt( "westnorth" );
+        Door* westsouthDoor = room->getDoorAt( "westsouth" );
+
         // read about tiles with no floor in a triple room
 
-        std::vector< std::pair< int, int > > tilesWithoutFloor ;
+        std::set< std::pair< int, int > > tilesWithoutFloor ;
 
-        for ( tinyxml2::XMLElement* nofloor = root->FirstChildElement( "nofloor" ) ;
+        for ( tinyxml2::XMLElement* nofloor = xmlRootElement->FirstChildElement( "nofloor" ) ;
                         nofloor != nilPointer ;
                         nofloor = nofloor->NextSiblingElement( "nofloor" ) )
         {
@@ -242,33 +324,26 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 int noFloorY = std::atoi( nofloor->Attribute( "y" ) ) ;
                 std::pair< int, int > noFloorXY( noFloorX, noFloorY ) ;
 
-                if ( std::find( tilesWithoutFloor.begin (), tilesWithoutFloor.end (), noFloorXY ) == tilesWithoutFloor.end () &&
-                        std::find( wallsXY.begin (), wallsXY.end (), noFloorXY ) == wallsXY.end () )
-                {
-                        tilesWithoutFloor.push_back( noFloorXY );
-                }
+                tilesWithoutFloor.insert( noFloorXY );
         }
 
         if ( ! tilesWithoutFloor.empty () )
-        {
-                std::sort( tilesWithoutFloor.begin (), tilesWithoutFloor.end () );
-                theRoom->setTilesWithoutFloor( tilesWithoutFloor );
-        }
+                room->setTilesWithoutFloor( tilesWithoutFloor );
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << "building floor in room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" ;
+        std::cout << "building floor in room \"" << room->getNameOfRoomDescriptionFile() << "\"" ;
 #endif
 
         PoolOfPictures floorImages ;
 
-        if ( scenery != "" )
+        if ( room->getScenery() != "" )
         {
                 // build the floor automatically
 
-                const std::string sceneryPrefix = scenery + "-" ;
+                const std::string sceneryPrefix = room->getScenery() + "-" ;
 
-                int lastTileX = xTiles - 1 ;
-                int lastTileY = yTiles - 1 ;
+                int lastTileX = room->getTilesX() - 1 ;
+                int lastTileY = room->getTilesY() - 1 ;
 
                 for ( int tileX = 0 ; tileX <= lastTileX ; ++ tileX )
                 {
@@ -368,11 +443,11 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                                 std::string fileOfFullTile = sceneryPrefix + "floor" ;
 
-                                if ( kindOfFloor == "mortal" )
+                                if ( room->getKindOfFloor() == "mortal" )
                                 {
                                         fileOfFullTile = sceneryPrefix + "mortalfloor" ;
                                 }
-                                else if ( kindOfFloor == "absent" )
+                                else if ( room->getKindOfFloor() == "absent" )
                                 {
                                         if ( tileX == lastTileX && tileY == lastTileY )
                                                 suffixOfNotFullTile = "sw" ;
@@ -396,8 +471,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                                 std::pair< int, int > tileXY( tileX, tileY );
 
-                                if ( std::find( tilesWithoutFloor.begin (), tilesWithoutFloor.end (), tileXY ) == tilesWithoutFloor.end () &&
-                                        ( std::find( wallsXY.begin (), wallsXY.end (), tileXY ) == wallsXY.end () || ! theRoom->hasFloor() ) )
+                                if ( std::find( tilesWithoutFloor.begin (), tilesWithoutFloor.end (), tileXY ) == tilesWithoutFloor.end ()
+                                                /* && ( std::find( wallsXY.begin (), wallsXY.end (), tileXY ) == wallsXY.end () || ! room->hasFloor() ) */ )
                                 {
                                 # if defined( DEBUG ) && DEBUG
                                         std::cout << " tile@" << tileX << "," << tileY ;
@@ -429,7 +504,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 if ( image->getHeight() < 40 )
                                                         image->expandOrCropTo( image->getWidth(), 40 );
 
-                                                theRoom->addFloorTile( new FloorTile( tileX, tileY, * image ) );
+                                                room->addFloorTile( new FloorTile( tileX, tileY, * image ) );
 
                                         # if defined( MAKE_PARTIAL_FLOOR_TILES ) && MAKE_PARTIAL_FLOOR_TILES
                                                 if ( suffixOfNotFullTile.empty() )
@@ -457,7 +532,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         }
         else
         {
-                tinyxml2::XMLElement* floor = root->FirstChildElement( "floor" );
+                tinyxml2::XMLElement* floor = xmlRootElement->FirstChildElement( "floor" );
                 if ( floor != nilPointer )
                 {
                         for ( tinyxml2::XMLElement* tile = floor->FirstChildElement( "tile" ) ;
@@ -470,12 +545,12 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                                 int tileX = std::atoi( x->FirstChild()->ToText()->Value() );
                                 int tileY = std::atoi( y->FirstChild()->ToText()->Value() );
-                                std::string imageFile = picture->FirstChild()->ToText()->Value();
+                                const std::string & imageFile = picture->FirstChild()->ToText()->Value();
 
-                                const PicturePtr& image = floorImages.getOrLoadAndGet( imageFile ) ;
+                                const PicturePtr & image = floorImages.getOrLoadAndGet( imageFile ) ;
 
                                 if ( image != nilPointer )
-                                        theRoom->addFloorTile( new FloorTile( tileX, tileY, * image ) );
+                                        room->addFloorTile( new FloorTile( tileX, tileY, * image ) );
                         }
                 }
         }
@@ -483,83 +558,10 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 #if defined( DEBUG ) && DEBUG
         std::cout << std::endl ;
 #endif
-
-        theRoom->calculateBounds();
-        theRoom->updateWallsWithDoors();
-
-        std::cout << "built room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
-
-        return theRoom ;
 }
 
 /* static */
-AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
-                                                  const std::string & nameOfCharacter,
-                                                  bool justEntered,
-                                                  int x, int y, int z,
-                                                  const std::string & heading, const std::string & wayOfEntry )
-{
-        if ( room == nilPointer ) return AvatarItemPtr () ;
-
-        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-
-        std::string nameOfCharacterToCreate( "none" );
-
-        if ( gameInfo.getLivesByName( nameOfCharacter ) > 0 )
-        {
-                nameOfCharacterToCreate = nameOfCharacter ;
-        }
-        else
-        if ( nameOfCharacter == "headoverheels" )
-        {
-                // when the composite character ran out of lives, check if any of the simple characters survived
-                if ( gameInfo.getLivesByName( "head" ) > 0 )
-                        nameOfCharacterToCreate = "head" ;
-                else
-                if ( gameInfo.getLivesByName( "heels" ) > 0 )
-                        nameOfCharacterToCreate = "heels" ;
-        }
-        else
-        {
-                if ( gameInfo.getLivesByName( "head" ) == 0 && gameInfo.getLivesByName( "heels" ) == 0 )
-                        nameOfCharacterToCreate = "game over" ;
-        }
-
-        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
-
-        if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
-                        && itemDescription != nilPointer )
-        {
-                if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 ) {
-                        // there are lives left, create the character
-                        AvatarItemPtr character( new AvatarItem( *itemDescription, x, y, z, heading ) );
-                        assert( character != nilPointer );
-
-                        // automove on entry
-                        if ( wayOfEntry.empty() ) {
-                                // perhaps the character walks through a door
-                                const std::map< std::string, Door* > & doors = room->getDoors() ;
-                                for ( std::map< std::string, Door* >::const_iterator di = doors.begin() ; di != doors.end() ; ++ di ) {
-                                        Door* door = di->second ;
-                                        if ( door != nilPointer && door->isUnderDoor( *character ) ) {
-                                                character->setWayOfEntry( di->first );
-                                                break ;
-                                        }
-                                }
-                        } else
-                                character->setWayOfEntry( wayOfEntry );
-
-                        room->addCharacterToRoom( character, justEntered );
-
-                        return character ;
-                }
-        }
-
-        return AvatarItemPtr() ;
-}
-
-/* static */
-Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall )
+WallPiece * RoomBuilder::buildWallPiece( tinyxml2::XMLElement* wall )
 {
         std::string xy;
         if ( wall->Attribute( "on" ) != nilPointer )
@@ -585,10 +587,10 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall )
 
         if ( image->isNotNil() )
         {
-                Picture* imageOfWall = new Picture( *image );
-                imageOfWall->setName( pictureString );
+                Picture* imageOfWallPiece = new Picture( *image );
+                imageOfWallPiece->setName( pictureString );
 
-                return new Wall( xy == "x" ? true : false, std::atoi( position->FirstChild()->ToText()->Value() ), imageOfWall );
+                return new WallPiece( xy == "x" ? true : false, std::atoi( position->FirstChild()->ToText()->Value() ), imageOfWallPiece );
         }
         else
                 std::cerr << "there’s no picture \"" << pictureString << "\"" << std::endl ;

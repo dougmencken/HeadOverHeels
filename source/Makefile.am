@@ -63,10 +63,12 @@ headoverheels_SOURCES = main.cpp \
 			Shady.hpp \
 			Camera.cpp \
 			Camera.hpp \
-			Door.cpp \
-			Door.hpp \
 			FloorTile.cpp \
 			FloorTile.hpp \
+			WallPiece.cpp \
+			WallPiece.hpp \
+			Door.cpp \
+			Door.hpp \
 			Item.cpp \
 			Item.hpp \
 			GridItem.cpp \
@@ -113,8 +115,6 @@ headoverheels_SOURCES = main.cpp \
 			BonusManager.hpp \
 			SoundManager.cpp \
 			SoundManager.hpp \
-			Wall.cpp \
-			Wall.hpp \
 			Timer.hpp \
 			TimerPOSIX.cpp \
 			TimerPOSIX.hpp \

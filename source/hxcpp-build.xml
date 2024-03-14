@@ -25,9 +25,9 @@
         <file name="Picture.cpp" />
         <file name="PoolOfPictures.cpp" />
         <file name="Camera.cpp" />
-        <file name="Wall.cpp" />
-        <file name="Door.cpp" />
         <file name="FloorTile.cpp" />
+        <file name="WallPiece.cpp" />
+        <file name="Door.cpp" />
         <file name="Item.cpp" />
         <file name="GridItem.cpp" />
         <file name="FreeItem.cpp" />

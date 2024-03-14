@@ -32,7 +32,7 @@ protected:
 
 public:
 
-        void setMediator ( Mediator* mediator ) {  this->mediator = mediator ;  }
+        virtual void setMediator ( Mediator* mediator ) {  this->mediator = mediator ;  }
 
         Mediator* getMediator () const {  return this->mediator ;  }
 

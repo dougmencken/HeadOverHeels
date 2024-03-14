@@ -3,7 +3,7 @@
 
 #include "Color.hpp"
 #include "FloorTile.hpp"
-#include "Wall.hpp"
+#include "WallPiece.hpp"
 #include "DescriptionOfItem.hpp"
 #include "ItemDescriptions.hpp"
 #include "Mediator.hpp"
@@ -45,7 +45,7 @@ Room::Room( const std::string & roomFile, const std::string & scenery,
 {
         this->mediator = new Mediator( this );
 
-        for ( int i = 0 ; i < Room::Sides ; ++ i ) {
+        for ( unsigned int i = 0 ; i < Room::Sides ; ++ i ) {
                 bounds[ Room::Sides_Of_Room[ i ] ] = -1 ;
                 doors[ Room::Sides_Of_Room[ i ] ] = nilPointer ;
         }
@@ -188,7 +188,7 @@ bool Room::saveAsXML( const std::string & file )
 
         if ( tilesWithoutFloor.size() > 0 )
         {
-                for ( std::vector< std::pair< int, int > >::const_iterator it = tilesWithoutFloor.begin () ; it != tilesWithoutFloor.end () ; ++ it )
+                for ( std::set< std::pair< int, int > >::const_iterator it = tilesWithoutFloor.begin () ; it != tilesWithoutFloor.end () ; ++ it )
                 {
                         tinyxml2::XMLElement* nofloor = roomXml.NewElement( "nofloor" );
 
@@ -239,9 +239,9 @@ bool Room::saveAsXML( const std::string & file )
 
         if ( wallX.size() + wallY.size() > 0 )
         {
-                for ( std::vector< Wall * >::const_iterator it = wallX.begin () ; it != wallX.end () ; ++ it )
+                for ( std::vector< WallPiece * >::const_iterator it = wallX.begin () ; it != wallX.end () ; ++ it )
                 {
-                        Wall* segment = *it ;
+                        WallPiece* segment = *it ;
                         if ( segment != nilPointer )
                         {
                                 tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
@@ -260,9 +260,9 @@ bool Room::saveAsXML( const std::string & file )
                         }
                 }
 
-                for ( std::vector< Wall * >::const_iterator it = wallY.begin () ; it != wallY.end () ; ++ it )
+                for ( std::vector< WallPiece * >::const_iterator it = wallY.begin () ; it != wallY.end () ; ++ it )
                 {
-                        Wall* segment = *it ;
+                        WallPiece* segment = *it ;
                         if ( segment != nilPointer )
                         {
                                 tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
@@ -459,7 +459,6 @@ void Room::addFloorTile( FloorTile * floorTile )
         if ( floorTile == nilPointer ) return ;
 
         floorTile->setMediator( mediator );
-        floorTile->calculateOffset();
 
         // bin old tile, if any
         removeFloorAt( floorTile->getCellX(), floorTile->getCellY() );
@@ -467,21 +466,16 @@ void Room::addFloorTile( FloorTile * floorTile )
         this->floorTiles[ floorTile->getIndexOfColumn() ] = floorTile;
 }
 
-void Room::addWall( Wall * wall )
+void Room::addWallPiece( WallPiece * segment )
 {
-        if ( wall == nilPointer ) return ;
+        if ( segment == nilPointer ) return ;
 
-        wall->setMediator( mediator );
-        wall->calculateOffset();
+        segment->setMediator( mediator );
 
-        if ( wall->isOnX() )
-        {
-                this->wallX.push_back( wall );
-        }
+        if ( segment->isOnX() )
+                this->wallX.push_back( segment );
         else
-        {
-                this->wallY.push_back( wall );
-        }
+                this->wallY.push_back( segment );
 }
 
 void Room::addDoor( Door * door )
@@ -508,19 +502,8 @@ void Room::addDoor( Door * door )
         camera->recenterRoom () ;
 }
 
-void Room::updateWallsWithDoors ()
+void Room::convertWallsNearDoors ()
 {
-        // update positions of walls
-
-        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
-        {
-                ( *wx )->calculateOffset();
-        }
-        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy )
-        {
-                ( *wy )->calculateOffset();
-        }
-
         // convert walls near doors to grid items to draw them after doors
 
         if ( hasDoorAt( "north" ) || hasDoorAt( "northeast" ) || hasDoorAt( "northwest" ) )
@@ -529,11 +512,11 @@ void Room::updateWallsWithDoors ()
                 Door* northeastDoor = getDoorAt( "northeast" );
                 Door* northwestDoor = getDoorAt( "northwest" );
 
-                std::vector< Wall* > wallsToBin ;
+                std::vector< WallPiece * > wallsToBin ;
 
-                for ( std::vector< Wall * >::iterator wy = wallY.begin (); wy != wallY.end (); ++ wy )
+                for ( std::vector< WallPiece * >::iterator wy = wallY.begin (); wy != wallY.end (); ++ wy )
                 {
-                        Wall* segment = *wy ;
+                        WallPiece* segment = *wy ;
 
                         if ( ( northDoor != nilPointer && segment->getPosition() == northDoor->getCellY() + 2 ) ||
                                 ( northeastDoor != nilPointer && segment->getPosition() == northeastDoor->getCellY() + 2 ) ||
@@ -550,10 +533,9 @@ void Room::updateWallsWithDoors ()
                         }
                 }
 
-                if ( ! wallsToBin.empty() )
-                {
-                        Wall* sayBye = wallsToBin.back ();
-                        wallsToBin.pop_back( );
+                while ( ! wallsToBin.empty() ) {
+                        WallPiece* sayBye = wallsToBin.back ();
+                        wallsToBin.pop_back() ;
                         removeWallOnY( sayBye );
                 }
         }
@@ -563,11 +545,11 @@ void Room::updateWallsWithDoors ()
                 Door* eastnorthDoor = getDoorAt( "eastnorth" );
                 Door* eastsouthDoor = getDoorAt( "eastsouth" );
 
-                std::vector< Wall* > wallsToBin ;
+                std::vector< WallPiece * > wallsToBin ;
 
-                for ( std::vector< Wall * >::iterator wx = wallX.begin (); wx != wallX.end (); ++ wx )
+                for ( std::vector< WallPiece * >::iterator wx = wallX.begin (); wx != wallX.end (); ++ wx )
                 {
-                        Wall* segment = *wx ;
+                        WallPiece * segment = *wx ;
 
                         if ( ( eastDoor != nilPointer && segment->getPosition() == eastDoor->getCellX() + 2 ) ||
                                 ( eastnorthDoor != nilPointer && segment->getPosition() == eastnorthDoor->getCellX() + 2 ) ||
@@ -584,18 +566,17 @@ void Room::updateWallsWithDoors ()
                         }
                 }
 
-                if ( ! wallsToBin.empty() )
-                {
-                        Wall* sayBye = wallsToBin.back ();
-                        wallsToBin.pop_back( );
+                while ( ! wallsToBin.empty() ) {
+                        WallPiece* sayBye = wallsToBin.back ();
+                        wallsToBin.pop_back() ;
                         removeWallOnX( sayBye );
                 }
         }
 
-        // sort walls
+        // sort wall segments
 
-        std::sort( wallX.begin (), wallX.end (), Wall::comparePointersToWall );
-        std::sort( wallY.begin (), wallY.end (), Wall::comparePointersToWall );
+        std::sort( wallX.begin (), wallX.end (), WallPiece::compareWallPointers );
+        std::sort( wallY.begin (), wallY.end (), WallPiece::compareWallPointers );
 }
 
 void Room::addGridItemToContainer( const GridItemPtr& gridItem )
@@ -981,21 +962,21 @@ void Room::removeFloorTile( FloorTile * floorTile )
         delete floorTile ;
 }
 
-void Room::removeWallOnX( Wall * segment )
+void Room::removeWallOnX( WallPiece * segment )
 {
         if ( segment == nilPointer ) return ;
 
-        std::vector< Wall* >::iterator si = std::find( wallX.begin (), wallX.end (), segment );
+        std::vector< WallPiece * >::iterator si = std::find( wallX.begin (), wallX.end (), segment );
         if ( si != wallX.end () ) wallX.erase( si );
 
         delete segment ;
 }
 
-void Room::removeWallOnY( Wall * segment )
+void Room::removeWallOnY( WallPiece * segment )
 {
         if ( segment == nilPointer ) return ;
 
-        std::vector< Wall* >::iterator si = std::find( wallY.begin (), wallY.end (), segment );
+        std::vector< WallPiece * >::iterator si = std::find( wallY.begin (), wallY.end (), segment );
         if ( si != wallY.end () ) wallY.erase( si );
 
         delete segment ;
@@ -1290,12 +1271,11 @@ void Room::draw ()
 
         // draw walls without doors
 
-        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx ) {
+        for ( std::vector< WallPiece * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++ wx )
                 ( *wx )->draw ();
-        }
-        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy ) {
+
+        for ( std::vector< WallPiece * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++ wy )
                 ( *wy )->draw ();
-        }
 
         mediator->lockGridItemsMutex();
         mediator->lockFreeItemsMutex();

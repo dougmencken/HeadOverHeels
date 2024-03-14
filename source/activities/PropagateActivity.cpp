@@ -100,7 +100,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                         AvatarItem & character = dynamic_cast< AvatarItem & >( sender );
 
                         // maybe the character is leaving the room thru a door
-                        for ( int on = 0 ; on < Room::Sides ; ++ on ) {
+                        for ( unsigned int on = 0 ; on < Room::Sides ; ++ on ) {
                                 const std::string & where = Room::Sides_Of_Room[ on ];
                                 if ( nameOfCollision == ( where + " door" ) && mediator->getRoom()->hasDoorAt( where ) ) {
                                         character.setWayOfExit( where );

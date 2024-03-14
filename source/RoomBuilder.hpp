@@ -17,7 +17,7 @@
 
 #include "Way.hpp"
 #include "FloorTile.hpp"
-#include "Wall.hpp"
+#include "WallPiece.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
@@ -55,7 +55,9 @@ private:
 
         RoomBuilder( ) { }
 
-        static Wall * buildWall ( tinyxml2::XMLElement * wall ) ;
+        static void buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement );
+
+        static WallPiece * buildWallPiece ( tinyxml2::XMLElement * wall ) ;
 
         static GridItemPtr buildGridItem ( tinyxml2::XMLElement * item, Room* room ) ;
 

@@ -13,6 +13,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 #include <map>
 
 #include "Way.hpp"
@@ -27,7 +28,7 @@
 #include "ConnectedRooms.hpp"
 
 class FloorTile ;
-class Wall ;
+class WallPiece ;
 class Camera ;
 
 
@@ -64,11 +65,14 @@ public:
 
         void addFloorTile ( FloorTile * floorTile ) ;
 
-        void addWall ( Wall * wall ) ;
+        void addWallPiece ( WallPiece * segment ) ;
 
         void addDoor ( Door * door ) ;
 
-        void updateWallsWithDoors () ;
+        /**
+         * convert walls near doors to grid items to draw them after doors
+         */
+        void convertWallsNearDoors () ;
 
         void addGridItem ( const GridItemPtr & gridItem ) ;
 
@@ -84,9 +88,9 @@ public:
 
         void removeFloorTile ( FloorTile * floorTile ) ;
 
-        void removeWallOnX ( Wall * segment ) ;
+        void removeWallOnX ( WallPiece * segment ) ;
 
-        void removeWallOnY ( Wall * segment ) ;
+        void removeWallOnY ( WallPiece * segment ) ;
 
         void removeGridItemByUniqueName ( const std::string & uniqueName ) ;
 
@@ -207,9 +211,9 @@ public:
 
         short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
-        const std::vector < std::pair < int, int > > & getTilesWithoutFloor () const {  return tilesWithoutFloor ;  }
+        const std::set < std::pair < int, int > > & getTilesWithoutFloor () const {  return this->tilesWithoutFloor ;  }
 
-        void setTilesWithoutFloor ( const std::vector < std::pair < int, int > > & noFloor ) {  tilesWithoutFloor = noFloor ;  }
+        void setTilesWithoutFloor ( const std::set < std::pair < int, int > > & noFloor ) {  this->tilesWithoutFloor = noFloor ;  }
 
         const std::vector < std::vector < GridItemPtr > > & getGridItems () const {  return this->gridItems ;  }
 
@@ -308,13 +312,13 @@ private:
          */
         unsigned short shadingTransparency ;
 
-        std::vector < std::pair < int, int > > tilesWithoutFloor ;
+        std::set < std::pair < int, int > > tilesWithoutFloor ;
 
         std::vector < FloorTile * > floorTiles ;
 
-        std::vector < Wall * > wallX ;
+        std::vector < WallPiece * > wallX ;
 
-        std::vector < Wall * > wallY ;
+        std::vector < WallPiece * > wallY ;
 
         /**
          * The set of grid items that make up the structure of the room. Each column is sorted
