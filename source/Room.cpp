@@ -1269,13 +1269,15 @@ void Room::draw ()
                 }
         }
 
-        // draw walls without doors
+        // draw walls
+        if ( GameManager::getInstance().getDrawingOfWalls () )
+        {
+                for ( std::vector< WallPiece * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++ wx )
+                        ( *wx )->draw ();
 
-        for ( std::vector< WallPiece * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++ wx )
-                ( *wx )->draw ();
-
-        for ( std::vector< WallPiece * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++ wy )
-                ( *wy )->draw ();
+                for ( std::vector< WallPiece * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++ wy )
+                        ( *wy )->draw ();
+        }
 
         mediator->lockGridItemsMutex();
         mediator->lockFreeItemsMutex();
@@ -1287,15 +1289,18 @@ void Room::draw ()
                 for ( std::vector< GridItemPtr >::iterator gi = gridItems[ drawSequence[ i ] ].begin () ;
                         gi != gridItems[ drawSequence[ i ] ].end () ; ++ gi )
                 {
-                        GridItem& gridItem = *( *gi );
+                        GridItem & gridItem = *( *gi );
 
-                        if ( shadingTransparency < 256 )
-                        {
+                        if ( ! GameManager::getInstance().getDrawingOfWalls()
+                                        && gridItem.getKind().find( "wall" ) != std::string::npos ) {
+                                ///gridItem.setTransparency( 80 );
+                                continue ;
+                        }
+
+                        if ( shadingTransparency < 256 ) {
                                 // cast shadow
                                 if ( gridItem.getWantShadow() )
-                                {
                                         mediator->castShadowOnGridItem( gridItem );
-                                }
                         }
 
                         gridItem.draw ();

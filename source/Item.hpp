@@ -246,6 +246,14 @@ public:
         virtual int getImageOffsetY () const = 0 ;
 
         /**
+         * The item’s degree of transparency
+         * @return transparency percentage from 0 to 100
+         */
+        unsigned char getTransparency () const {  return this->transparency ;  }
+
+        void setTransparency ( unsigned char newTransparency ) {  this->transparency = newTransparency ;  }
+
+        /**
          * When the carrier moves, the item above it (this item) also moves
          */
         const std::string & getCarrier () const {  return this->carrier ;  }
@@ -335,14 +343,17 @@ private:
         // the pictures of item’s shadow
         std::vector< PicturePtr > shadows ;
 
-        autouniqueptr < Timer > motionTimer ;
-
         // the behaviour of item
         autouniqueptr< Behavior > behavior ;
 
         // the unique name of item below this one
         // the item above the carrier moves along with the moving carrier
         std::string carrier ;
+
+        // the degree of image’s transparency as a percentage from 0 to 100
+        unsigned char transparency ;
+
+        autouniqueptr < Timer > motionTimer ;
 
 protected:
 

@@ -35,8 +35,18 @@ void GridItem::updateImageOffset ()
 
 void GridItem::draw ()
 {
-        allegro::drawSprite( getProcessedImage().getAllegroPict(),
-                mediator->getRoom()->getX0() + getImageOffsetX(), mediator->getRoom()->getY0() + getImageOffsetY() );
+        if ( getTransparency() >= 100 ) /* item is fully transparent */ return ;
+
+        if ( getTransparency() == 0 ) {
+                allegro::drawSprite( getProcessedImage().getAllegroPict(),
+                                        mediator->getRoom()->getX0() + getImageOffsetX(),
+                                        mediator->getRoom()->getY0() + getImageOffsetY() );
+        } else {
+                allegro::drawSpriteWithTransparency( getProcessedImage().getAllegroPict(),
+                                        mediator->getRoom()->getX0 () + getImageOffsetX (),
+                                        mediator->getRoom()->getY0 () + getImageOffsetY (),
+                                        static_cast < unsigned char > ( 255 - 2.55 * getTransparency() ) );
+        }
 }
 
 void GridItem::updateImage ()

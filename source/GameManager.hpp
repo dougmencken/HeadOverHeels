@@ -242,44 +242,41 @@ private:
 public:
 
         bool areLivesInexhaustible () const {  return vidasInfinitas ;  }
-
         void toggleInfiniteLives () {  vidasInfinitas = ! vidasInfinitas ;  }
 
         bool isImmuneToCollisionsWithMortalItems () const {  return immunityToCollisions ;  }
-
         void toggleImmunityToCollisionsWithMortalItems () {  immunityToCollisions = ! immunityToCollisions ;  }
 
         bool charactersFly () const {  return noFallingDown ;  }
-
         void setCharactersFly ( bool fly ) {  noFallingDown = fly ;  }
 
         bool playMelodyOfScenery () const {  return playTuneOfScenery ;  }
-
         void togglePlayMelodyOfScenery () {  playTuneOfScenery = ! playTuneOfScenery ;  }
 
         bool getCastShadows () const {  return castShadows ;  }
-
         void toggleCastShadows () {  castShadows = ! castShadows ;  }
 
         bool drawSceneryDecor () const {  return drawSceneryBackgrounds ;  }
-
         void toggleSceneryDecor () {  drawSceneryBackgrounds = ! drawSceneryBackgrounds ;  }
 
         bool drawRoomMiniatures () const {  return drawMiniatures ;  }
-
         void toggleRoomMiniatures () {  drawMiniatures = ! drawMiniatures ;  }
+
+        bool getDrawingOfWalls () const {  return drawWalls ;  }
+        void toggleDrawingOfWalls () {  drawWalls = ! drawWalls ;  }
 
         bool recordingCaptures () const {  return recordCaptures ;  }
 
         void toggleRecordingCaptures ()
         {
-                recordingTimer->reset () ;
                 recordCaptures = ! recordCaptures ;
 
-                if ( recordCaptures )
+                if ( recordCaptures ) {
                         prefixOfCaptures = util::makeRandomString( 10 );
-                else
-                        numberOfCapture += 1000 ;
+                        numberOfCapture = 0 ;
+                }
+
+                recordingTimer->reset () ;
         }
 
 private:
@@ -315,6 +312,8 @@ private:
         bool drawSceneryBackgrounds ;
 
         bool drawMiniatures ;
+
+        bool drawWalls ;
 
         bool recordCaptures ;
 

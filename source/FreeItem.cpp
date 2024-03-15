@@ -17,7 +17,6 @@ FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, 
         , initialCellY( farFarAway )
         , initialCellZ( farFarAway )
         , wantMask ( tritrue )
-        , transparency ( 0 )
         , frozen ( false )
         , partOfDoor ( false )
         , shadedNonmaskedImage( new Picture( getRawImage() ) )
@@ -37,7 +36,6 @@ FreeItem::FreeItem( const FreeItem & freeItem )
         , initialCellY( freeItem.initialCellY )
         , initialCellZ( freeItem.initialCellZ )
         , wantMask( freeItem.wantMask )
-        , transparency( freeItem.transparency )
         , frozen( freeItem.frozen )
         , partOfDoor( freeItem.partOfDoor )
         , shadedNonmaskedImage( new Picture( * freeItem.shadedNonmaskedImage ) )
@@ -56,23 +54,21 @@ int FreeItem::getImageOffsetY () const
 
 void FreeItem::draw ()
 {
-        if ( transparency >= 100 ) /* item is fully transparent */ return ;
+        if ( getTransparency() >= 100 ) /* item is fully transparent */ return ;
 
-        if ( transparency == 0 )
-        {
+        if ( getTransparency() == 0 ) {
                 allegro::drawSprite(
                         getProcessedImage().getAllegroPict(),
                         mediator->getRoom()->getX0 () + getImageOffsetX (),
                         mediator->getRoom()->getY0 () + getImageOffsetY ()
                 ) ;
         }
-        else
-        {
+        else {
                 allegro::drawSpriteWithTransparency(
                         getProcessedImage().getAllegroPict(),
                         mediator->getRoom()->getX0 () + getImageOffsetX (),
                         mediator->getRoom()->getY0 () + getImageOffsetY (),
-                        static_cast < unsigned char > ( 255 - 2.55 * this->transparency )
+                        static_cast < unsigned char > ( 255 - 2.55 * getTransparency() )
                 ) ;
         }
 }

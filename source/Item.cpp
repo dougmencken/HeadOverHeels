@@ -33,9 +33,10 @@ Item::Item( const DescriptionOfItem & description, int z, const std::string & wh
         currentFrame( firstFrame () ),
         backwardsMotion( false ),
         ignoreCollisions( true ),
-        motionTimer( new Timer () ),
         behavior( nilPointer ),
-        carrier( "" )
+        carrier( "" ),
+        transparency( 0 ),
+        motionTimer( new Timer () )
 {
         readGraphicsOfItem ();
 
@@ -44,7 +45,7 @@ Item::Item( const DescriptionOfItem & description, int z, const std::string & wh
                 motionTimer->go() ;
 }
 
-Item::Item( const Item& item )
+Item::Item( const Item & item )
       : Mediated( item ), Shady( item.wantShadow ),
         descriptionOfItem( item.descriptionOfItem ),
         uniqueName( item.uniqueName + " copy" ),
@@ -58,9 +59,10 @@ Item::Item( const Item& item )
         currentFrame( item.currentFrame ),
         backwardsMotion( item.backwardsMotion ),
         ignoreCollisions( item.ignoreCollisions ),
-        motionTimer( new Timer () ),
         behavior( nilPointer ),
-        carrier( item.carrier )
+        carrier( item.carrier ),
+        transparency( item.transparency ),
+        motionTimer( new Timer () )
 {
         for ( std::vector< PicturePtr >::const_iterator it = item.frames.begin (); it != item.frames.end (); ++ it )
         {

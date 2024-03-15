@@ -48,6 +48,11 @@ Color Color::multiply ( const Color & c ) const
         return Color( red * ( c.red / 255.0 ), green * ( c.green / 255.0 ), blue * ( c.blue / 255.0 ), alpha ) ;
 }
 
+Color Color::withAlteredAlpha ( unsigned char newAlpha ) const
+{
+        return Color( red, green, blue, newAlpha ) ;
+}
+
 std::string Color::toString () const
 {
         return   "color { r=" + util::number2string( red ) +
@@ -135,9 +140,8 @@ void Color::multiplyWithColor( Picture& picture, unsigned char red, unsigned cha
 {
         picture.getAllegroPict().lock( true, true );
 
-        for ( unsigned int y = 0; y < picture.getHeight(); y++ )
-        {
-                for ( unsigned int x = 0; x < picture.getWidth(); x++ )
+        for ( unsigned int y = 0; y < picture.getHeight(); ++ y ) {
+                for ( unsigned int x = 0; x < picture.getWidth(); ++ x )
                 {
                         AllegroColor color = picture.getPixelAt( x, y );
                         unsigned char r = color.getRed();
@@ -145,9 +149,25 @@ void Color::multiplyWithColor( Picture& picture, unsigned char red, unsigned cha
                         unsigned char b = color.getBlue();
 
                         if ( ! color.isKeyColor() ) // don’t touch pixels with the color of transparency
-                        {
                                 picture.putPixelAt( x, y, Color( r * ( red / 255.0 ), g * ( green / 255.0 ), b * ( blue / 255.0 ), color.getAlpha() ) );
-                        }
+                }
+        }
+
+        picture.getAllegroPict().unlock();
+}
+
+/* public static */
+void Color::changeAlpha ( Picture & picture, unsigned char newAlpha )
+{
+        picture.getAllegroPict().lock( true, true );
+
+        for ( unsigned int y = 0; y < picture.getHeight(); ++ y ) {
+                for ( unsigned int x = 0; x < picture.getWidth(); ++ x )
+                {
+                        Color color( picture.getPixelAt( x, y ) );
+
+                        if ( color != Color::keyColor() ) // don’t touch pixels with the color of transparency
+                                picture.putPixelAt( x, y, color.withAlteredAlpha( newAlpha ) );
                 }
         }
 

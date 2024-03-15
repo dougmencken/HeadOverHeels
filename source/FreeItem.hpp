@@ -105,12 +105,6 @@ public:
         void setWantMaskIndeterminate () {  wantMask.setIndeterminate() ;  }
 
         /**
-         * Grado de transparencia del elemento
-         * @return Un número entre 0 y 100, inclusive
-         */
-        unsigned char getTransparency () const {  return transparency ;  }
-
-        /**
          * Set item’s inactivity
          */
         void setFrozen ( bool frozen ) {  this->frozen = frozen ;  }
@@ -149,11 +143,6 @@ private:
         int initialCellZ ;
 
         tribool wantMask ;
-
-        /**
-         * Degree of item’s transparency in percentage 0 to 100
-         */
-        unsigned char transparency ;
 
         /**
          * Whether item is inactive

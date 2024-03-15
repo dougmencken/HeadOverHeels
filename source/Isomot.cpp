@@ -380,6 +380,12 @@ void Isomot::handleMagicKeys ()
                 allegro::releaseKey( "m" );
         }
 
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "w" ) )
+        {
+                gameManager.toggleDrawingOfWalls ();
+                allegro::releaseKey( "w" );
+        }
+
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "t" ) )
         {
                 gameManager.togglePlayMelodyOfScenery ();
@@ -400,32 +406,6 @@ void Isomot::handleMagicKeys ()
                         gameManager.eatFish ( * activeRoom->getMediator()->getActiveCharacter(), activeRoom );
 
                 allegro::releaseKey( "s" );
-        }
-
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 8" ) )
-        {
-                activeRoom->getCamera()->shiftAlongY( - 2 );
-        }
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 2" ) )
-        {
-                activeRoom->getCamera()->shiftAlongY( + 2 );
-        }
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 4" ) )
-        {
-                activeRoom->getCamera()->shiftAlongX( - 2 );
-        }
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 6" ) )
-        {
-                activeRoom->getCamera()->shiftAlongX( + 2 );
-        }
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 5" ) )
-        {
-                softCenteringOnRoom = true ;
-                cameraFollowsCharacter = false ;
-        }
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 0" ) )
-        {
-                cameraFollowsCharacter = true ;
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "-" ) )
@@ -565,6 +545,36 @@ void Isomot::handleMagicKeys ()
                 }
 
                 allegro::releaseKey( "l" );
+        }
+
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 8" ) )
+        {
+                activeRoom->getCamera()->shiftAlongY( - 2 );
+                cameraFollowsCharacter = false ;
+        }
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 2" ) )
+        {
+                activeRoom->getCamera()->shiftAlongY( + 2 );
+                cameraFollowsCharacter = false ;
+        }
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 4" ) )
+        {
+                activeRoom->getCamera()->shiftAlongX( - 2 );
+                cameraFollowsCharacter = false ;
+        }
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 6" ) )
+        {
+                activeRoom->getCamera()->shiftAlongX( + 2 );
+                cameraFollowsCharacter = false ;
+        }
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 5" ) )
+        {
+                softCenteringOnRoom = true ;
+                cameraFollowsCharacter = false ;
+        }
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 0" ) )
+        {
+                cameraFollowsCharacter = true ;
         }
 
         if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad -" ) )

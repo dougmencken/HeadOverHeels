@@ -110,7 +110,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         int wallX = std::atoi( item->Attribute( "x" ) );
                         int wallY = std::atoi( item->Attribute( "y" ) );
 
-                        if ( ( kind.find( "wall" ) != std::string::npos ) &&
+                        if ( kind.find( "wall" ) != std::string::npos &&
                                 ( ( wallY == 0 && kind.find( "-x" ) != std::string::npos ) || ( wallX == 0 && kind.find( "-y" ) != std::string::npos ) ) )
                         {
                                 bool onX = ( wallY == 0 && kind.find( "-x" ) != std::string::npos );
@@ -362,7 +362,7 @@ void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement
                                                 southeastDoor->getCellX() == tileX && eastnorthDoor->getCellY() == tileY &&
                                                         tileX == lastTileX && tileY == 0 ) )
                                 {
-                                        // no floor tile for “ se ” corner
+                                        // no floor tile for the “ se ” corner
                                         continue ;
                                 }
                                 else if ( ( northDoor != nilPointer && westDoor != nilPointer &&
@@ -385,48 +385,70 @@ void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement
                                                 northeastDoor->getCellX() == tileX && westnorthDoor->getCellY() == tileY &&
                                                         tileX == 0 && tileY == lastTileY ) )
                                 {
-                                        // no floor tile for “ nw ” corner
+                                        // no floor tile for the “ nw ” corner
                                         continue ;
                                 }
                                 else if ( ( eastDoor != nilPointer && eastDoor->getCellY() == tileY )
                                                 || ( eastnorthDoor != nilPointer && eastnorthDoor->getCellY() == tileY )
                                                         || ( eastsouthDoor != nilPointer && eastsouthDoor->getCellY() == tileY ) )
                                 {
-                                        suffixOfNotFullTile = "east" ;
+                                        bool isNotFull = true ;
+
+                                        if ( tileY > 0 ) {
+                                                // the tile is not full only if the tile further east is without floor
+                                                std::pair< int, int > easterTileXY( tileX, tileY - 1 );
+                                                isNotFull = ( tilesWithoutFloor.find( easterTileXY ) != tilesWithoutFloor.end() );
+                                        }
+
+                                        if ( isNotFull )
+                                        {
+                                                suffixOfNotFullTile = "east" ;
 
                         #if !defined( ALL_DOORLINE_FLOOR_TILES ) || ALL_DOORLINE_FLOOR_TILES == 0
-                                        //
-                                        // add floor tiles only under a door
-                                        //
-                                        if ( ( eastDoor != nilPointer && tileX != eastDoor->getCellX() && tileX != eastDoor->getCellX() + 1 )
-                                                || ( eastnorthDoor != nilPointer
-                                                        && tileX != eastnorthDoor->getCellX() && tileX != eastnorthDoor->getCellX() + 1 )
-                                                || ( eastsouthDoor != nilPointer
-                                                        && tileX != eastsouthDoor->getCellX() && tileX != eastsouthDoor->getCellX() + 1 ) )
-                                        {
-                                                addTile = false ;
-                                        }
+                                                //
+                                                // add floor tiles only under a door
+                                                //
+                                                if ( ( eastDoor != nilPointer && tileX != eastDoor->getCellX() && tileX != eastDoor->getCellX() + 1 )
+                                                        || ( eastnorthDoor != nilPointer && eastnorthDoor->getCellY() == tileY
+                                                                && tileX != eastnorthDoor->getCellX() && tileX != eastnorthDoor->getCellX() + 1 )
+                                                        || ( eastsouthDoor != nilPointer && eastsouthDoor->getCellY() == tileY
+                                                                && tileX != eastsouthDoor->getCellX() && tileX != eastsouthDoor->getCellX() + 1 ) )
+                                                {
+                                                        addTile = false ;
+                                                }
                         #endif
+                                        }
                                 }
                                 else if ( ( northDoor != nilPointer && northDoor->getCellX() == tileX )
                                                 || ( northeastDoor != nilPointer && northeastDoor->getCellX() == tileX )
                                                         || ( northwestDoor != nilPointer && northwestDoor->getCellX() == tileX ) )
                                 {
-                                        suffixOfNotFullTile = "north" ;
+                                        bool isNotFull = true ;
+
+                                        if ( tileX > 0 ) {
+                                                // the tile is not full only if the tile further north is without floor
+                                                std::pair< int, int > northerTileXY( tileX - 1, tileY );
+                                                isNotFull = ( tilesWithoutFloor.find( northerTileXY ) != tilesWithoutFloor.end() );
+                                        }
+
+                                        if ( isNotFull )
+                                        {
+                                                suffixOfNotFullTile = "north" ;
 
                         #if !defined( ALL_DOORLINE_FLOOR_TILES ) || ALL_DOORLINE_FLOOR_TILES == 0
-                                        //
-                                        // add floor tiles only under a door
-                                        //
-                                        if ( ( northDoor != nilPointer && tileY != northDoor->getCellY() && tileY != northDoor->getCellY() + 1 )
-                                                || ( northeastDoor != nilPointer
-                                                        && tileY != northeastDoor->getCellY() && tileY != northeastDoor->getCellY() + 1 )
-                                                || ( northwestDoor != nilPointer
-                                                        && tileY != northwestDoor->getCellY() && tileY != northwestDoor->getCellY() + 1 ) )
-                                        {
-                                                addTile = false ;
-                                        }
+                                                //
+                                                // add floor tiles only under a door
+                                                //
+                                                if ( ( northDoor != nilPointer && tileY != northDoor->getCellY() && tileY != northDoor->getCellY() + 1 )
+                                                        || ( northeastDoor != nilPointer && northeastDoor->getCellX() == tileX
+                                                                && tileY != northeastDoor->getCellY() && tileY != northeastDoor->getCellY() + 1 )
+                                                        || ( northwestDoor != nilPointer && northwestDoor->getCellX() == tileX
+                                                                && tileY != northwestDoor->getCellY() && tileY != northwestDoor->getCellY() + 1 ) )
+                                                {
+                                                        addTile = false ;
+                                                }
                         #endif
+                                        }
                                 }
                                 else if ( ( westDoor != nilPointer && westDoor->getCellY() == tileY )
                                                 || ( westnorthDoor != nilPointer && westnorthDoor->getCellY() == tileY )

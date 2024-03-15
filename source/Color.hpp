@@ -41,6 +41,8 @@ public:
 
         Color multiply ( const Color & c ) const ;
 
+        Color withAlteredAlpha ( unsigned char newAlpha ) const ;
+
         bool equals ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue && c.alpha == alpha ;  }
 
         bool operator == ( const Color & c ) const {  return   equals( c );  }
@@ -67,6 +69,8 @@ public:
         static void changeBlackToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, blackColor(), color ) ;  }
 
         static void multiplyWithColor ( Picture & picture, const Color & color ) ;
+
+        static void changeAlpha ( Picture & picture, unsigned char newAlpha ) ;
 
         static void pictureToGrayscale ( Picture & picture ) ;
 
