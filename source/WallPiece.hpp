@@ -27,7 +27,12 @@ class WallPiece : public Drawable, public Mediated
 
 public:
 
-        WallPiece( bool trueXfalseY, int index, Picture* image ) ;
+        /**
+         * @param trueXfalseY is this a piece of the wall along X or not
+         * @param index where’s this piece on the wall, the number from zero onwards
+         * @param graphicsOfPiece the picture of the piece
+         */
+        WallPiece( bool trueXfalseY, int index, Picture* graphicsOfPiece ) ;
 
         virtual ~WallPiece( ) ;
 
@@ -47,29 +52,30 @@ private:
         // calculates the offset of this wall piece’s graphics in the room
         void calculateOffset () ;
 
-        bool onX;
+        // if true, then this piece is part of the wall along X, otherwise along Y
+        bool alongX ;
 
-        /**
-         * Position of this piece on the wall, the smaller the closer to the room’s origin
-         */
+        // the position of this piece on the wall, the smaller the closer to the room’s origin
         int position ;
 
         std::pair < int, int > offset ;
 
-        /**
-         * Graphics of this wall segment
-         */
-        Picture * image ;
+        // graphics of this section of the wall
+        const Picture * image ;
 
 public:
 
-        bool isOnX () const {  return onX ;  }
+        bool isAlongX () const {  return this->alongX ;  }
 
-        bool isOnY () const {  return ! onX ;  }
+        bool isAlongY () const {  return ! this->alongX ;  }
 
-        int getPosition () const {  return position ;  }
+        int getPosition () const {  return this->position ;  }
 
-        Picture * getImage () const {  return image ;  }
+        const std::string & getNameOfImage () const
+        {
+                assert( this->image != nilPointer );
+                return this->image->getName () ;
+        }
 
 } ;
 

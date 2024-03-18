@@ -88,9 +88,7 @@ public:
 
         void removeFloorTile ( FloorTile * floorTile ) ;
 
-        void removeWallOnX ( WallPiece * segment ) ;
-
-        void removeWallOnY ( WallPiece * segment ) ;
+        void removeWallPiece ( WallPiece * segment ) ;
 
         void removeGridItemByUniqueName ( const std::string & uniqueName ) ;
 
@@ -314,9 +312,7 @@ private:
 
         std::vector < FloorTile * > floorTiles ;
 
-        std::vector < WallPiece * > wallX ;
-
-        std::vector < WallPiece * > wallY ;
+        std::vector < WallPiece * > wallPieces ;
 
         /**
          * The set of grid items that make up the structure of the room. Each column is sorted

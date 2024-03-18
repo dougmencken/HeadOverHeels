@@ -4,11 +4,11 @@
 #include "Mediator.hpp"
 
 
-WallPiece::WallPiece( bool trueXfalseY, int index, Picture* image )
+WallPiece::WallPiece( bool trueXfalseY, int index, Picture* graphicsOfPiece )
         : Mediated()
-        , onX( trueXfalseY )
+        , alongX( trueXfalseY )
         , position( index )
-        , image( image )
+        , image( graphicsOfPiece )
 {
 
 }
@@ -24,29 +24,33 @@ void WallPiece::calculateOffset()
         assert( mediator != nilPointer );
 
         Room * room = mediator->getRoom() ;
+
+        this->offset.first  = room->getX0 ();
+        this->offset.second = room->getY0 ();
+
         int tileSize = static_cast< int >( room->getSizeOfOneTile() );
 
-        if ( onX )
-                this->offset.first = ( this->position << 1 ) * tileSize + 1 + room->getX0();
+        if ( isAlongX() )
+                this->offset.first += ( this->position << 1 ) * tileSize + 1 ;
         else
-                this->offset.first = 1 - tileSize * ( ( this->position + 2 ) << 1 ) + room->getX0();
+                this->offset.first += 1 - tileSize * ( ( this->position + 2 ) << 1 ) ;
 
-        this->offset.second = ( this->position + 1 ) * tileSize - this->image->getHeight() - 1 + room->getY0();
+        this->offset.second += ( this->position + 1 ) * tileSize - this->image->getHeight() - 1 ;
 
-        if ( isOnX() && ( room->hasDoorAt( "east" ) ||
+        if ( isAlongX() && ( room->hasDoorAt( "east" ) ||
                                 room->hasDoorAt( "eastnorth" ) || room->hasDoorAt( "eastsouth" )
                                         || ! room->hasFloor() ) )
         {
                 this->offset.first -= ( tileSize << 1 );
-                this->offset.second += tileSize;
+                this->offset.second += tileSize ;
         }
 
-        if ( isOnY() && ( room->hasDoorAt( "north" ) ||
+        if ( isAlongY() && ( room->hasDoorAt( "north" ) ||
                                 room->hasDoorAt( "northeast" ) || room->hasDoorAt( "northwest" )
                                         || ! room->hasFloor() ) )
         {
                 this->offset.first += ( tileSize << 1 );
-                this->offset.second += tileSize;
+                this->offset.second += tileSize ;
         }
 }
 

@@ -132,8 +132,7 @@ Room::~Room()
         std::for_each( floorTiles.begin (), floorTiles.end (), DeleteIt() );
 
         // bin walls
-        std::for_each( wallX.begin (), wallX.end (), DeleteIt() );
-        std::for_each( wallY.begin (), wallY.end (), DeleteIt() );
+        std::for_each( wallPieces.begin (), wallPieces.end (), DeleteIt() );
 
         // bin the sequence of drawing
         delete [] drawSequence ;
@@ -235,54 +234,33 @@ bool Room::saveAsXML( const std::string & file )
 
         // write walls
 
-        tinyxml2::XMLElement* walls = roomXml.NewElement( "walls" );
-
-        if ( wallX.size() + wallY.size() > 0 )
+        if ( wallPieces.size() > 0 )
         {
-                for ( std::vector< WallPiece * >::const_iterator it = wallX.begin () ; it != wallX.end () ; ++ it )
+                tinyxml2::XMLElement* walls = roomXml.NewElement( "walls" );
+
+                for ( std::vector< WallPiece * >::const_iterator it = wallPieces.begin () ; it != wallPieces.end () ; ++ it )
                 {
-                        WallPiece* segment = *it ;
-                        if ( segment != nilPointer )
+                        WallPiece* piece = *it ;
+                        if ( piece != nilPointer )
                         {
                                 tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
 
-                                wall->SetAttribute( "on", segment->isOnX() ? "x" : "y" );
+                                wall->SetAttribute( "on", piece->isAlongX() ? "x" : "y" );
 
                                 tinyxml2::XMLElement* wallPosition = roomXml.NewElement( "position" );
-                                wallPosition->SetText( segment->getPosition() );
+                                wallPosition->SetText( piece->getPosition() );
                                 wall->InsertEndChild( wallPosition );
 
                                 tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
-                                wallPicture->SetText( segment->getImage()->getName().c_str () );
+                                wallPicture->SetText( piece->getNameOfImage().c_str () );
                                 wall->InsertEndChild( wallPicture );
 
                                 walls->InsertEndChild( wall );
                         }
                 }
 
-                for ( std::vector< WallPiece * >::const_iterator it = wallY.begin () ; it != wallY.end () ; ++ it )
-                {
-                        WallPiece* segment = *it ;
-                        if ( segment != nilPointer )
-                        {
-                                tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
-
-                                wall->SetAttribute( "on", segment->isOnX() ? "x" : "y" );
-
-                                tinyxml2::XMLElement* wallPosition = roomXml.NewElement( "position" );
-                                wallPosition->SetText( segment->getPosition() );
-                                wall->InsertEndChild( wallPosition );
-
-                                tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
-                                wallPicture->SetText( segment->getImage()->getName().c_str () );
-                                wall->InsertEndChild( wallPicture );
-
-                                walls->InsertEndChild( wall );
-                        }
-                }
+                root->InsertEndChild( walls );
         }
-
-        root->InsertEndChild( walls );
 
         // write items
 
@@ -299,15 +277,17 @@ bool Room::saveAsXML( const std::string & file )
                                 GridItemPtr theItem = *gi ;
                                 if ( theItem != nilPointer )
                                 {
-                                        if ( ( theItem->isSegmentOfWallOnX () && theItem->getCellY() == 0 ) ||
-                                                ( theItem->isSegmentOfWallOnY () && theItem->getCellX() == 0 ) )
+                                        /******* old code to convert grid items to walls
+                                        ////////
+                                        if ( ( theItem->isSegmentOfWallAlongX () && theItem->getCellY() == 0 )
+                                                        || ( theItem->isSegmentOfWallAlongY () && theItem->getCellX() == 0 ) )
                                         {
                                                 tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
 
-                                                wall->SetAttribute( "on", theItem->isSegmentOfWallOnX () ? "x" : "y" );
+                                                wall->SetAttribute( "on", theItem->isSegmentOfWallAlongX () ? "x" : "y" );
 
                                                 tinyxml2::XMLElement* wallPosition = roomXml.NewElement( "position" );
-                                                wallPosition->SetText( theItem->isSegmentOfWallOnX () ? theItem->getCellX() : theItem->getCellY() );
+                                                wallPosition->SetText( theItem->isSegmentOfWallAlongX() ? theItem->getCellX() : theItem->getCellY() );
                                                 wall->InsertEndChild( wallPosition );
 
                                                 tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
@@ -318,6 +298,7 @@ bool Room::saveAsXML( const std::string & file )
 
                                                 continue ;
                                         }
+                                        *******/
 
                                         tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
 
@@ -471,11 +452,7 @@ void Room::addWallPiece( WallPiece * segment )
         if ( segment == nilPointer ) return ;
 
         segment->setMediator( mediator );
-
-        if ( segment->isOnX() )
-                this->wallX.push_back( segment );
-        else
-                this->wallY.push_back( segment );
+        this->wallPieces.push_back( segment );
 }
 
 void Room::addDoor( Door * door )
@@ -506,23 +483,25 @@ void Room::convertWallsNearDoors ()
 {
         // convert walls near doors to grid items to draw them after doors
 
+        std::vector< WallPiece * > wallsToBin ;
+
         if ( hasDoorAt( "north" ) || hasDoorAt( "northeast" ) || hasDoorAt( "northwest" ) )
         {
                 Door* northDoor = getDoorAt( "north" );
                 Door* northeastDoor = getDoorAt( "northeast" );
                 Door* northwestDoor = getDoorAt( "northwest" );
 
-                std::vector< WallPiece * > wallsToBin ;
-
-                for ( std::vector< WallPiece * >::iterator wy = wallY.begin (); wy != wallY.end (); ++ wy )
+                for ( std::vector< WallPiece * >::iterator wy = wallPieces.begin (); wy != wallPieces.end (); ++ wy )
                 {
+                        if ( ( *wy )->isAlongX() ) continue ;
+
                         WallPiece* segment = *wy ;
 
                         if ( ( northDoor != nilPointer && segment->getPosition() == northDoor->getCellY() + 2 ) ||
                                 ( northeastDoor != nilPointer && segment->getPosition() == northeastDoor->getCellY() + 2 ) ||
                                 ( northwestDoor != nilPointer && segment->getPosition() == northwestDoor->getCellY() + 2 ) )
                         {
-                                std::string imageName = segment->getImage()->getName() ;
+                                std::string imageName = segment->getNameOfImage() ;
                                 imageName = imageName.substr( 0, imageName.find_last_of( "." ) );
 
                                 const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
@@ -532,12 +511,6 @@ void Room::convertWallsNearDoors ()
                                 }
                         }
                 }
-
-                while ( ! wallsToBin.empty() ) {
-                        WallPiece* sayBye = wallsToBin.back ();
-                        wallsToBin.pop_back() ;
-                        removeWallOnY( sayBye );
-                }
         }
         if ( hasDoorAt( "east" ) || hasDoorAt( "eastnorth" ) || hasDoorAt( "eastsouth" ) )
         {
@@ -545,17 +518,17 @@ void Room::convertWallsNearDoors ()
                 Door* eastnorthDoor = getDoorAt( "eastnorth" );
                 Door* eastsouthDoor = getDoorAt( "eastsouth" );
 
-                std::vector< WallPiece * > wallsToBin ;
-
-                for ( std::vector< WallPiece * >::iterator wx = wallX.begin (); wx != wallX.end (); ++ wx )
+                for ( std::vector< WallPiece * >::iterator wx = wallPieces.begin (); wx != wallPieces.end (); ++ wx )
                 {
+                        if ( ( *wx )->isAlongY() ) continue ;
+
                         WallPiece * segment = *wx ;
 
                         if ( ( eastDoor != nilPointer && segment->getPosition() == eastDoor->getCellX() + 2 ) ||
                                 ( eastnorthDoor != nilPointer && segment->getPosition() == eastnorthDoor->getCellX() + 2 ) ||
                                 ( eastsouthDoor != nilPointer && segment->getPosition() == eastsouthDoor->getCellX() + 2 ) )
                         {
-                                std::string imageName = segment->getImage()->getName() ;
+                                std::string imageName = segment->getNameOfImage() ;
                                 imageName = imageName.substr( 0, imageName.find_last_of( "." ) );
 
                                 const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
@@ -565,18 +538,18 @@ void Room::convertWallsNearDoors ()
                                 }
                         }
                 }
-
-                while ( ! wallsToBin.empty() ) {
-                        WallPiece* sayBye = wallsToBin.back ();
-                        wallsToBin.pop_back() ;
-                        removeWallOnX( sayBye );
-                }
         }
 
-        // sort wall segments
+        bool resort = ! wallsToBin.empty() ;
+        while ( ! wallsToBin.empty() ) {
+                WallPiece* sayBye = wallsToBin.back ();
+                wallsToBin.pop_back() ;
+                removeWallPiece( sayBye );
+        }
 
-        std::sort( wallX.begin (), wallX.end (), WallPiece::compareWallPointers );
-        std::sort( wallY.begin (), wallY.end (), WallPiece::compareWallPointers );
+        if ( resort )
+                // sort the pieces
+                std::sort( wallPieces.begin (), wallPieces.end (), WallPiece::compareWallPointers );
 }
 
 void Room::addGridItemToContainer( const GridItemPtr& gridItem )
@@ -962,22 +935,12 @@ void Room::removeFloorTile( FloorTile * floorTile )
         delete floorTile ;
 }
 
-void Room::removeWallOnX( WallPiece * segment )
+void Room::removeWallPiece( WallPiece * segment )
 {
         if ( segment == nilPointer ) return ;
 
-        std::vector< WallPiece * >::iterator si = std::find( wallX.begin (), wallX.end (), segment );
-        if ( si != wallX.end () ) wallX.erase( si );
-
-        delete segment ;
-}
-
-void Room::removeWallOnY( WallPiece * segment )
-{
-        if ( segment == nilPointer ) return ;
-
-        std::vector< WallPiece * >::iterator si = std::find( wallY.begin (), wallY.end (), segment );
-        if ( si != wallY.end () ) wallY.erase( si );
+        std::vector< WallPiece * >::iterator si = std::find( wallPieces.begin (), wallPieces.end (), segment );
+        if ( si != wallPieces.end () ) wallPieces.erase( si );
 
         delete segment ;
 }
@@ -1273,11 +1236,8 @@ void Room::draw ()
         // draw walls
         if ( GameManager::getInstance().getDrawingOfWalls () )
         {
-                for ( std::vector< WallPiece * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++ wx )
-                        ( *wx )->draw ();
-
-                for ( std::vector< WallPiece * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++ wy )
-                        ( *wy )->draw ();
+                for ( std::vector< WallPiece * >::iterator wi = this->wallPieces.begin (); wi != this->wallPieces.end (); ++ wi )
+                        ( *wi )->draw ();
         }
 
         mediator->lockGridItemsMutex();

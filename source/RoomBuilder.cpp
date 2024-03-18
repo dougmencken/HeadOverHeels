@@ -150,7 +150,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 {
                                         theRoom->addGridItem( gridItem );
 
-                                        if ( gridItem->isSegmentOfWallOnX () || gridItem->isSegmentOfWallOnY () )
+                                        if ( gridItem->isSegmentOfWallAlongX () || gridItem->isSegmentOfWallAlongY () )
                                                 wallsXY.insert( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
                                 }
                                 else
@@ -185,7 +185,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                         if ( wallSegment != nilPointer )
                         {
-                                if ( wallSegment->isOnX() )
+                                if ( wallSegment->isAlongX () )
                                         wallsXY.insert( std::pair< int, int >( wallSegment->getPosition(), 0 ) );
                                 else
                                         wallsXY.insert( std::pair< int, int >( 0, wallSegment->getPosition() ) );
