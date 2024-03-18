@@ -101,6 +101,8 @@ void GameManager::begin ()
 {
         IF_DEBUG( fprintf ( stdout, "GameManager::begin ()\n" ) )
 
+        this->drawWalls = true ;
+
         this->vidasInfinitas = false ;
         this->immunityToCollisions = false ;
 

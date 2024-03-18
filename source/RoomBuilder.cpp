@@ -388,6 +388,18 @@ void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement
                                         // no floor tile for the “ nw ” corner
                                         continue ;
                                 }
+                                else if ( ( westDoor != nilPointer && westDoor->getCellY() == tileY )
+                                                || ( westnorthDoor != nilPointer && westnorthDoor->getCellY() == tileY )
+                                                        || ( westsouthDoor != nilPointer && westsouthDoor->getCellY() == tileY ) )
+                                {
+                                        suffixOfNotFullTile = "west" ;
+                                }
+                                else if ( ( southDoor != nilPointer && southDoor->getCellX() == tileX )
+                                                || ( southeastDoor != nilPointer && southeastDoor->getCellX() == tileX )
+                                                        || ( southwestDoor != nilPointer && southwestDoor->getCellX() == tileX ) )
+                                {
+                                        suffixOfNotFullTile = "south" ;
+                                }
                                 else if ( ( eastDoor != nilPointer && eastDoor->getCellY() == tileY )
                                                 || ( eastnorthDoor != nilPointer && eastnorthDoor->getCellY() == tileY )
                                                         || ( eastsouthDoor != nilPointer && eastsouthDoor->getCellY() == tileY ) )
@@ -449,18 +461,6 @@ void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement
                                                 }
                         #endif
                                         }
-                                }
-                                else if ( ( westDoor != nilPointer && westDoor->getCellY() == tileY )
-                                                || ( westnorthDoor != nilPointer && westnorthDoor->getCellY() == tileY )
-                                                        || ( westsouthDoor != nilPointer && westsouthDoor->getCellY() == tileY ) )
-                                {
-                                        suffixOfNotFullTile = "west" ;
-                                }
-                                else if ( ( southDoor != nilPointer && southDoor->getCellX() == tileX )
-                                                || ( southeastDoor != nilPointer && southeastDoor->getCellX() == tileX )
-                                                        || ( southwestDoor != nilPointer && southwestDoor->getCellX() == tileX ) )
-                                {
-                                        suffixOfNotFullTile = "south" ;
                                 }
 
                                 std::string fileOfFullTile = sceneryPrefix + "floor" ;
