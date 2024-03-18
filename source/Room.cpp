@@ -1092,7 +1092,6 @@ unsigned int Room::removeItemsOfKind ( const std::string & kind )
         unsigned int howManyItemsWereRemoved = 0 ;
 
         mediator->lockGridItemsMutex();
-        mediator->lockFreeItemsMutex();
 
         std::vector< std::string > gridItemsToRemove ;
 
@@ -1114,6 +1113,9 @@ unsigned int Room::removeItemsOfKind ( const std::string & kind )
                 howManyItemsWereRemoved ++ ;
         }
 
+        mediator->unlockGridItemsMutex();
+        mediator->lockFreeItemsMutex();
+
         std::vector< std::string > freeItemsToRemove ;
 
         for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
@@ -1132,7 +1134,6 @@ unsigned int Room::removeItemsOfKind ( const std::string & kind )
         }
 
         mediator->unlockFreeItemsMutex();
-        mediator->unlockGridItemsMutex();
 
         return howManyItemsWereRemoved ;
 }

@@ -226,7 +226,7 @@ public:
         void setActiveCharacter ( const AvatarItemPtr & character ) ;
 
         /**
-         * The waiting character
+         * The waiting, or inactive, character
          * @return avatar item or nil if there’s no more character in this room
          */
         AvatarItemPtr getWaitingCharacter () const ;

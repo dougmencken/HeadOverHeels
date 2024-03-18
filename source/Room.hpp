@@ -276,8 +276,6 @@ protected:
 
 private:
 
-        friend class Mediator ;
-
         // the connections of this room with other rooms on the map
         const ConnectedRooms * connections ;
 

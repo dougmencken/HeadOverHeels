@@ -34,6 +34,8 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
         while ( mediator->isThereAnyCollision() )
         {
                 const std::string & nameOfCollision = mediator->popCollision();
+                // not mediator->findCollisionPop() because a collision may be not only with an item,
+                // to look at the collision name further
                 ItemPtr itemMeetsSender = mediator->findItemByUniqueName( nameOfCollision );
 
                 if ( itemMeetsSender != nilPointer )
