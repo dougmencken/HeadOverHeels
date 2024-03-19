@@ -53,8 +53,8 @@ unsigned char AllegroColor::getRed() const
 {
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        unsigned char red, green, blue ;
-        al_unmap_rgb( color, &red, &green, &blue );
+        unsigned char red, green, blue, alpha ;
+        al_unmap_rgba( color, &red, &green, &blue, &alpha );
         return red ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
@@ -68,8 +68,8 @@ unsigned char AllegroColor::getGreen() const
 {
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        unsigned char red, green, blue ;
-        al_unmap_rgb( color, &red, &green, &blue );
+        unsigned char red, green, blue, alpha ;
+        al_unmap_rgba( color, &red, &green, &blue, &alpha );
         return green ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
@@ -83,8 +83,8 @@ unsigned char AllegroColor::getBlue() const
 {
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        unsigned char red, green, blue ;
-        al_unmap_rgb( color, &red, &green, &blue );
+        unsigned char red, green, blue, alpha ;
+        al_unmap_rgba( color, &red, &green, &blue, &alpha );
         return blue ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
@@ -155,8 +155,6 @@ AllegroColor AllegroColor::makeColor( unsigned char r, unsigned char g, unsigned
 {
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        if ( a == 0 ) {  r = 0 ;  g = 0 ;  b = 0 ;  }
-
         return al_map_rgba( r, g, b, a );
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
@@ -169,15 +167,7 @@ AllegroColor AllegroColor::makeColor( unsigned char r, unsigned char g, unsigned
 /* static */
 AllegroColor AllegroColor::makeColor( unsigned char r, unsigned char g, unsigned char b )
 {
-#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
-
-        return al_map_rgba( r, g, b, 0xff );
-
-#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
-
-        return makeacol( r, g, b, 0xff );
-
-#endif
+        return AllegroColor::makeColor( r, g, b, 0xff );
 }
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
@@ -437,14 +427,13 @@ void Pict::unlock() const
         al_lock_bitmap( image, al_get_bitmap_format( image ), ALLEGRO_LOCK_READONLY );
         al_lock_bitmap( pict->it, al_get_bitmap_format( pict->it ), ALLEGRO_LOCK_WRITEONLY );
 
-        for ( unsigned int y = 0; y < imageHeight; y++ )
-        {
+        for ( unsigned int y = 0; y < imageHeight; y++ ) {
                 for ( unsigned int x = 0; x < imageWidth; x++ )
                 {
                         AllegroColor pixel = al_get_pixel( image, x, y );
 
-                        unsigned char red, green, blue ;
-                        al_unmap_rgb( pixel, &red, &green, &blue );
+                        unsigned char red, green, blue, alpha ;
+                        al_unmap_rgba( pixel, &red, &green, &blue, &alpha );
 
                         if ( red == 255 && green == 0 && blue == 255 )
                         {
@@ -452,7 +441,7 @@ void Pict::unlock() const
                         }
                         else /* if ( ! ( red == 255 && green == 0 && blue == 255 ) ) */
                         {
-                                al_put_pixel( x, y, al_map_rgba( red, green, blue, 0xff ) );
+                                al_put_pixel( x, y, al_map_rgba( red, green, blue, alpha ) );
                         }
                 }
         }

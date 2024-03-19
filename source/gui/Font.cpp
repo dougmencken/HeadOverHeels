@@ -35,13 +35,12 @@ Font::Font( const std::string & color, bool doubleHeightStretching )
 
                 autouniqueptr< Picture > blackLetters( new Picture( * fontFromFile ) );
 
-                // white to transparency
-                Color::replaceColor( * blackLetters, Color::whiteColor(), Color::keyColor() );
+                autouniqueptr< Picture > whiteLetters( new Picture( * fontFromFile ) );
+                Color::invertColors( * whiteLetters );
 
-                autouniqueptr< Picture > whiteLetters( new Picture( * blackLetters ) );
-
-                // black to white
-                Color::replaceColor( * whiteLetters, Color::blackColor(), Color::whiteColor() );
+                // background white or black to the color of transparency
+                Color::replaceColorAnyAlpha( * blackLetters, Color::whiteColor(), Color::keyColor() );
+                Color::replaceColorAnyAlpha( * whiteLetters, Color::blackColor(), Color::keyColor() );
 
                 unsigned int width  = fontFromFile->getW ();
                 unsigned int height = fontFromFile->getH ();
@@ -75,6 +74,7 @@ Font::Font( const std::string & color, bool doubleHeightStretching )
         if ( isDoubleHeight () )
         {       // stretch for the double height
                 autouniqueptr < allegro::Pict > bigfont( allegro::Pict::newPict( lettersOfFont.getWidth(), lettersOfFont.getHeight() << 1 ) );
+                bigfont->clearToColor( Color::keyColor().toAllegroColor() );
                 allegro::stretchBlit( lettersOfFont.getAllegroPict(), *bigfont,
                                         0, 0, lettersOfFont.getWidth(), lettersOfFont.getHeight(),
                                         0, 0, lettersOfFont.getWidth(), lettersOfFont.getHeight() << 1 );

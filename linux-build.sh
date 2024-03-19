@@ -22,7 +22,7 @@ pathToExternal="${buildFolder}"/external
 echo "path to external packages is" "${pathToExternal}"
 
 whereItGoes="_rootdir"
-installPath="${buildFolder}"/${whereItGoes}
+installPath="${buildFolder}"/"${whereItGoes}"
 echo "install path is" "${installPath}"
 
 echo
@@ -370,6 +370,10 @@ if [ -x "$( command -v cmake )" ]; then
         tar xzf "$allegro4name".tar.gz
         cd "$allegro4name"
         patch -p1 < ../false_three_finger.patch
+        sed -i 's/WANT_ALLEGROGL \"Enable AllegroGL\" on/WANT_ALLEGROGL \"Enable AllegroGL\" off/' ./CMakeLists.txt
+        sed -i 's/WANT_EXAMPLES \"Build example programs\" on/WANT_EXAMPLES \"Build example programs\" off/' ./CMakeLists.txt
+        sed -i 's/WANT_TOOLS \"Build tool programs\" on/WANT_TOOLS \"Build tool programs\" off/' ./CMakeLists.txt
+        sed -i 's/WANT_TESTS \"Build test programs\" on/WANT_TESTS \"Build test programs\" off/' ./CMakeLists.txt
         cd ..
     fi
 

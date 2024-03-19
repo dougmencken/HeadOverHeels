@@ -93,8 +93,7 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
 
         getAllegroPict().lock( true, true );
 
-        for ( unsigned int y = 0 ; y < height ; y ++ )
-        {
+        for ( unsigned int y = 0 ; y < height ; y ++ ) {
                 for ( unsigned int x = 0 ; x < width ; x ++ )
                 {
                         if ( getPixelAt( x, y ).isKeyColor() )
@@ -148,8 +147,7 @@ void Picture::flipHorizontal()
         picture->lock( true, false );
         flipped->lock( false, true );
 
-        for ( unsigned int y = 0 ; y < height ; y ++ )
-        {
+        for ( unsigned int y = 0 ; y < height ; y ++ ) {
                 for ( unsigned int x = 0 ; x < width ; x ++ )
                 {
                         flipped->putPixelAt( width - x - 1, y, picture->getPixelAt( x, y ) );
@@ -172,8 +170,7 @@ void Picture::flipVertical()
         picture->lock( true, false );
         flipped->lock( false, true );
 
-        for ( unsigned int y = 0 ; y < height ; y ++ )
-        {
+        for ( unsigned int y = 0 ; y < height ; y ++ ) {
                 for ( unsigned int x = 0 ; x < width ; x ++ )
                 {
                         flipped->putPixelAt( x, height - y - 1, picture->getPixelAt( x, y ) );
@@ -196,8 +193,7 @@ void Picture::rotate90 ()
         picture->lock( true, false );
         rotated->lock( false, true );
 
-        for ( unsigned int y = 0 ; y < height ; y ++ )
-        {
+        for ( unsigned int y = 0 ; y < height ; y ++ ) {
                 for ( unsigned int x = 0 ; x < width ; x ++ )
                 {
                         rotated->putPixelAt( y, x, picture->getPixelAt( x, y ) );
@@ -220,8 +216,7 @@ void Picture::rotate270 ()
         picture->lock( true, false );
         rotated->lock( false, true );
 
-        for ( unsigned int y = 0 ; y < height ; y ++ )
-        {
+        for ( unsigned int y = 0 ; y < height ; y ++ ) {
                 for ( unsigned int x = 0 ; x < width ; x ++ )
                 {
                         rotated->putPixelAt( height - y - 1, width - x - 1, picture->getPixelAt( x, y ) );

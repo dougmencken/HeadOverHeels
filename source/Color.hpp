@@ -64,6 +64,8 @@ public:
 
         static void replaceColor ( Picture & picture, const Color & from, const Color & to ) ;
 
+        static void replaceColorAnyAlpha ( Picture & picture, const Color & from, const Color & to ) ;
+
         static void changeWhiteToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, whiteColor(), color ) ;  }
 
         static void changeBlackToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, blackColor(), color ) ;  }

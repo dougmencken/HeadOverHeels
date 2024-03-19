@@ -62,7 +62,7 @@ std::string Color::toString () const
 }
 
 /* public static */
-const Color& Color::byName ( const std::string& color )
+const Color& Color::byName ( const std::string & color )
 {
         if ( color == "white" ) return theWhite ;
         if ( color == "black" ) return theBlack ;
@@ -105,14 +105,36 @@ const Color& Color::byName ( const std::string& color )
 }
 
 /* public static */
-void Color::replaceColor( Picture& picture, const Color& from, const Color& to )
+void Color::replaceColor( Picture & picture, const Color & from, const Color & to )
 {
         if ( to == from ) return ;
 
         picture.getAllegroPict().lock( true, true );
 
-        for ( unsigned int y = 0 ; y < picture.getHeight() ; y ++ )
-        {
+        for ( unsigned int y = 0 ; y < picture.getHeight() ; y ++ ) {
+                for ( unsigned int x = 0 ; x < picture.getWidth() ; x ++ )
+                {
+                        AllegroColor pixel = picture.getPixelAt( x, y );
+
+                        if ( pixel.getRed() == from.getRed() && pixel.getGreen() == from.getGreen() && pixel.getBlue() == from.getBlue()
+                                        && pixel.getAlpha() == from.getAlpha() )
+                        {
+                                picture.putPixelAt( x, y, to );
+                        }
+                }
+        }
+
+        picture.getAllegroPict().unlock();
+}
+
+/* public static */
+void Color::replaceColorAnyAlpha( Picture & picture, const Color & from, const Color & to )
+{
+        if ( to == from ) return ;
+
+        picture.getAllegroPict().lock( true, true );
+
+        for ( unsigned int y = 0 ; y < picture.getHeight() ; y ++ ) {
                 for ( unsigned int x = 0 ; x < picture.getWidth() ; x ++ )
                 {
                         AllegroColor pixel = picture.getPixelAt( x, y );
@@ -128,7 +150,7 @@ void Color::replaceColor( Picture& picture, const Color& from, const Color& to )
 }
 
 /* public static */
-void Color::multiplyWithColor( Picture& picture, const Color& color )
+void Color::multiplyWithColor( Picture & picture, const Color & color )
 {
         if ( color == Color::whiteColor() ) return ;
 
@@ -136,7 +158,7 @@ void Color::multiplyWithColor( Picture& picture, const Color& color )
 }
 
 /* private static */
-void Color::multiplyWithColor( Picture& picture, unsigned char red, unsigned char green, unsigned char blue )
+void Color::multiplyWithColor( Picture & picture, unsigned char red, unsigned char green, unsigned char blue )
 {
         picture.getAllegroPict().lock( true, true );
 
@@ -175,12 +197,11 @@ void Color::changeAlpha ( Picture & picture, unsigned char newAlpha )
 }
 
 /* public static */
-void Color::pictureToGrayscale ( Picture& picture )
+void Color::pictureToGrayscale ( Picture & picture )
 {
         picture.getAllegroPict().lock( true, true );
 
-        for ( unsigned int y = 0; y < picture.getHeight(); y++ )
-        {
+        for ( unsigned int y = 0; y < picture.getHeight(); y++ ) {
                 for ( unsigned int x = 0; x < picture.getWidth(); x++ )
                 {
                         AllegroColor color = picture.getPixelAt( x, y );
@@ -211,17 +232,16 @@ void Color::pictureToGrayscale ( Picture& picture )
 }
 
 /* public static */
-void Color::invertColors( Picture& picture )
+void Color::invertColors( Picture & picture )
 {
         picture.getAllegroPict().lock( true, true );
 
-        for ( unsigned int y = 0; y < picture.getHeight(); y++ )
-        {
+        for ( unsigned int y = 0; y < picture.getHeight(); y++ ) {
                 for ( unsigned int x = 0; x < picture.getWidth(); x++ )
                 {
                         AllegroColor color = picture.getPixelAt( x, y );
 
-                        if ( ! color.isKeyColor() ) // don’t change transparent pixels
+                        if ( ! color.isKeyColor() ) // don’t invert the color of transparency
                                 picture.putPixelAt( x, y, Color( 255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue(), color.getAlpha() ) );
                 }
         }

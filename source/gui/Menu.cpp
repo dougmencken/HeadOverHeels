@@ -47,11 +47,12 @@ void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offse
 
                 autouniqueptr< Picture > beforeOptionBlack( new Picture( * optionPict ) );
 
-                // white to transparency
-                Color::replaceColor( * beforeOptionBlack, Color::whiteColor(), Color::keyColor() );
-                // black to white
-                autouniqueptr< Picture > beforeOptionWhite( new Picture( * beforeOptionBlack ) );
-                Color::replaceColor( * beforeOptionWhite, Color::blackColor(), Color::whiteColor() );
+                autouniqueptr< Picture > beforeOptionWhite( new Picture( * optionPict ) );
+                Color::invertColors( * beforeOptionWhite );
+
+                // background white or black to the color of transparency
+                Color::replaceColorAnyAlpha( * beforeOptionBlack, Color::whiteColor(), Color::keyColor() );
+                Color::replaceColorAnyAlpha( * beforeOptionWhite, Color::blackColor(), Color::keyColor() );
 
                 pictureBeforeOption = new Picture( optionPict->getW(), optionPict->getH() );
 
@@ -80,11 +81,12 @@ void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offse
 
                 autouniqueptr< Picture > beforeChosenOptionBlack( new Picture( * chosenOptionSinglePict ) );
 
-                // white to transparency
-                Color::replaceColor( * beforeChosenOptionBlack, Color::whiteColor(), Color::keyColor() );
-                // black to white
-                autouniqueptr< Picture > beforeChosenOptionWhite( new Picture( * beforeChosenOptionBlack ) );
-                Color::replaceColor( * beforeChosenOptionWhite, Color::blackColor(), Color::whiteColor() );
+                autouniqueptr< Picture > beforeChosenOptionWhite( new Picture( * chosenOptionSinglePict ) );
+                Color::invertColors( * beforeChosenOptionWhite );
+
+                // background white or black to the color of transparency
+                Color::replaceColorAnyAlpha( * beforeChosenOptionBlack, Color::whiteColor(), Color::keyColor() );
+                Color::replaceColorAnyAlpha( * beforeChosenOptionWhite, Color::blackColor(), Color::keyColor() );
 
                 pictureBeforeChosenOptionSingle = new Picture( chosenOptionSinglePict->getW(), chosenOptionSinglePict->getH() );
 
