@@ -15,11 +15,13 @@
 
 #include "GameInfo.hpp"
 #include "Picture.hpp"
-#include "Room.hpp"
 #include "GameSaverAndLoader.hpp"
 #include "Isomot.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"
+
+class Room ;
+class AvatarItem ;
 
 
 /**

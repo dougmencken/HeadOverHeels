@@ -319,8 +319,8 @@ void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement
 
                 const std::string sceneryPrefix = room->getScenery() + "-" ;
 
-                int lastTileX = room->getTilesX() - 1 ;
-                int lastTileY = room->getTilesY() - 1 ;
+                int lastTileX = room->getTilesOnX() - 1 ;
+                int lastTileY = room->getTilesOnY() - 1 ;
 
                 for ( int tileX = 0 ; tileX <= lastTileX ; ++ tileX ) {
                         for ( int tileY = 0 ; tileY <= lastTileY ; ++ tileY )

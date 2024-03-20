@@ -133,6 +133,6 @@ bool GridItem::addToPosition( int x, int y, int z )
 unsigned int GridItem::getColumnOfGrid () const
 {
         assert( mediator != nilPointer );
-        return mediator->getRoom()->getTilesX() * getCellY() + getCellX();
+        return mediator->getRoom()->getTilesOnX() * getCellY() + getCellX();
 }
 

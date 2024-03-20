@@ -230,7 +230,7 @@ Picture* Isomot::updateMe ()
                 // show information about the current room and draw the miniature
 
                 std::ostringstream roomTiles;
-                roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
+                roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY();
 
                 allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), 12, 8, roomColor.toAllegroColor() );
                 allegro::textOut( roomTiles.str(), 12, 20, roomColor.toAllegroColor() );

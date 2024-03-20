@@ -29,8 +29,8 @@ void Miniature::draw ()
         std::string roomToTeleport = connections->getConnectedRoomAt( "via teleport" );
         std::string roomToTeleportToo = connections->getConnectedRoomAt( "via second teleport" );
 
-        const unsigned int tilesX = room.getTilesX ();
-        const unsigned int tilesY = room.getTilesY ();
+        const unsigned int tilesX = room.getTilesOnX ();
+        const unsigned int tilesY = room.getTilesOnY ();
 
         const int deltaX = offset.first ;
         const int deltaY = offset.second + ( roomAbove.empty() ? 4 : ( 3 * sizeOfTile ) );
@@ -866,8 +866,8 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
                 assert( connectedNorthDoor != nilPointer );
 
                 int deltaCellY = southDoor->getCellY() - connectedNorthDoor->getCellY() ;
-                adjacentDifferenceX = ( room.getTilesX () + deltaCellY ) * ( sizeOfTile << 1 ) + gapX ;
-                adjacentDifferenceY = ( room.getTilesX () + deltaCellY ) * sizeOfTile + gapY ;
+                adjacentDifferenceX = ( room.getTilesOnX () + deltaCellY ) * ( sizeOfTile << 1 ) + gapX ;
+                adjacentDifferenceY = ( room.getTilesOnX () + deltaCellY ) * sizeOfTile + gapY ;
         }
         else if ( where == "north" )
         {
@@ -879,8 +879,8 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
                 assert( connectedSouthDoor != nilPointer );
 
                 int deltaCellY = northDoor->getCellY() - connectedSouthDoor->getCellY() ;
-                adjacentDifferenceX = ( - connectedRoom->getTilesX () + deltaCellY ) * ( sizeOfTile << 1 ) - gapX ;
-                adjacentDifferenceY = ( - connectedRoom->getTilesX () + deltaCellY ) * sizeOfTile - gapY ;
+                adjacentDifferenceX = ( - connectedRoom->getTilesOnX () + deltaCellY ) * ( sizeOfTile << 1 ) - gapX ;
+                adjacentDifferenceY = ( - connectedRoom->getTilesOnX () + deltaCellY ) * sizeOfTile - gapY ;
         }
         else if ( where == "east" )
         {
@@ -892,8 +892,8 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
                 assert( connectedWestDoor != nilPointer );
 
                 int deltaCellX = eastDoor->getCellX() - connectedWestDoor->getCellX() ;
-                adjacentDifferenceX = ( room.getTilesY () + deltaCellX ) * ( sizeOfTile << 1 ) + gapX ;
-                adjacentDifferenceY = ( - connectedRoom->getTilesY () + deltaCellX ) * sizeOfTile - gapY ;
+                adjacentDifferenceX = ( room.getTilesOnY () + deltaCellX ) * ( sizeOfTile << 1 ) + gapX ;
+                adjacentDifferenceY = ( - connectedRoom->getTilesOnY () + deltaCellX ) * sizeOfTile - gapY ;
         }
         else if ( where == "west" )
         {
@@ -905,8 +905,8 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
                 assert( connectedEastDoor != nilPointer );
 
                 int deltaCellX = westDoor->getCellX() - connectedEastDoor->getCellX() ;
-                adjacentDifferenceX = ( - connectedRoom->getTilesY () + deltaCellX ) * ( sizeOfTile << 1 ) - gapX ;
-                adjacentDifferenceY = ( room.getTilesY () + deltaCellX ) * sizeOfTile + gapY ;
+                adjacentDifferenceX = ( - connectedRoom->getTilesOnY () + deltaCellX ) * ( sizeOfTile << 1 ) - gapX ;
+                adjacentDifferenceY = ( room.getTilesOnY () + deltaCellX ) * sizeOfTile + gapY ;
         }
 
         return std::pair< int, int >( this->offset.first + adjacentDifferenceX , this->offset.second + adjacentDifferenceY ) ;

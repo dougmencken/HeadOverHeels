@@ -44,22 +44,22 @@ public:
        /**
         * @param roomFile the name of file with data about this room
         * @param scenery the one of jail, blacktooth, market, moon, egyptus, penitentiary, safari, byblos
-        * @param xTiles how many tiles on X
-        * @param yTiles how many tiles on Y
+        * @param xTiles the length along X, in tiles
+        * @param yTiles the length along Y, in tiles
         * @param floorKind the kind of floor
         */
         Room( const std::string & roomFile, const std::string & scenery,
-                        unsigned int xTiles, unsigned int yTiles,
+                        unsigned short xTiles, unsigned short yTiles,
                                 const std::string & floorKind ) ;
 
         virtual ~Room( ) ;
 
-        bool isSingleRoom () const {  return getTilesX() <= maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom ;  }
+        bool isSingleRoom () const {  return getTilesOnX() <= maxTilesOfSingleRoom && getTilesOnY() <= maxTilesOfSingleRoom ;  }
 
-        bool isTripleRoom () const {  return getTilesX() > maxTilesOfSingleRoom && getTilesY() > maxTilesOfSingleRoom ;  }
+        bool isTripleRoom () const {  return getTilesOnX() > maxTilesOfSingleRoom && getTilesOnY() > maxTilesOfSingleRoom ;  }
 
-        bool isDoubleRoomAlongX () const {  return getTilesX() > maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom ;  }
-        bool isDoubleRoomAlongY () const {  return getTilesX() <= maxTilesOfSingleRoom && getTilesY() > maxTilesOfSingleRoom ;  }
+        bool isDoubleRoomAlongX () const {  return getTilesOnX() > maxTilesOfSingleRoom && getTilesOnY() <= maxTilesOfSingleRoom ;  }
+        bool isDoubleRoomAlongY () const {  return getTilesOnX() <= maxTilesOfSingleRoom && getTilesOnY() > maxTilesOfSingleRoom ;  }
 
         bool saveAsXML ( const std::string& file ) ;
 
@@ -177,7 +177,7 @@ public:
         /**
          * the X coordinate of the room’s origin point
          */
-        int getX0 () const {  return getTilesY () * ( getSizeOfOneTile () << 1 ) ;  }
+        int getX0 () const {  return getTilesOnY () * ( getSizeOfOneTile () << 1 ) ;  }
 
         /**
          * the Y coordinate of the room’s origin point
@@ -188,9 +188,9 @@ public:
 
         unsigned int getHeightOfRoomImage () const ;
 
-        unsigned int getTilesX () const {  return howManyTiles.first ;  }
+        unsigned short getTilesOnX () const {  return this->howManyTilesOnX ;  }
 
-        unsigned int getTilesY () const {  return howManyTiles.second ;  }
+        unsigned short getTilesOnY () const {  return this->howManyTilesOnY ;  }
 
         /**
          * The length of the single tile's side, in isometric units
@@ -274,6 +274,18 @@ protected:
 
 private:
 
+        std::string nameOfFileWithDataAboutRoom ;
+
+        std::string scenery ;
+
+        std::string color ;
+
+        // how big is this room in tiles
+        unsigned short howManyTilesOnX ;
+        unsigned short howManyTilesOnY ;
+
+        std::string kindOfFloor ;
+
         // the connections of this room with other rooms on the map
         const ConnectedRooms * connections ;
 
@@ -287,20 +299,10 @@ private:
          */
         std::map < std::string , unsigned int > nextNumbers ;
 
-        std::string nameOfFileWithDataAboutRoom ;
-
-        std::string scenery ;
-
-        std::string color ;
-
-        const std::pair < unsigned int /* tilesX */, unsigned int /* tilesY */ > howManyTiles ;
-
-        std::string kindOfFloor ;
-
         /**
-         * The sequence of drawing columns of grid items
+         * The sequence of drawing for columns of grid items
          */
-        unsigned int * drawSequence ;
+        unsigned int * drawingSequence ;
 
         /**
          * The transparency of shadows

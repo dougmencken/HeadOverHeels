@@ -1,6 +1,7 @@
 
 #include "GameManager.hpp"
 
+#include "Room.hpp"
 #include "Mediator.hpp"
 #include "AvatarItem.hpp"
 #include "PictureWidget.hpp"
