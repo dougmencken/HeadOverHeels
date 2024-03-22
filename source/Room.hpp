@@ -33,7 +33,7 @@ class Camera ;
 
 
 /**
- * A room drawn in isometric perspective. It is composed of the grid on which the most of items are placed
+ * A game room
  */
 
 class Room : public Drawable, public Mediated
@@ -41,16 +41,15 @@ class Room : public Drawable, public Mediated
 
 public:
 
-       /**
-        * @param roomFile the name of file with data about this room
-        * @param scenery the one of jail, blacktooth, market, moon, egyptus, penitentiary, safari, byblos
-        * @param xTiles the length along X, in tiles
-        * @param yTiles the length along Y, in tiles
-        * @param floorKind the kind of floor
-        */
-        Room( const std::string & roomFile, const std::string & scenery,
-                        unsigned short xTiles, unsigned short yTiles,
-                                const std::string & floorKind ) ;
+        /**
+         * @param roomFile the name of file with the description of this room
+         * @param xTiles the length along X, in tiles
+         * @param yTiles the length along Y, in tiles
+         * @param roomScenery the scenery such as moon or safari
+         * @param floorKind the kind of floor
+         */
+        Room( const std::string & roomFile, unsigned short xTiles, unsigned short yTiles,
+                        const std::string & roomScenery, const std::string & floorKind ) ;
 
         virtual ~Room( ) ;
 
@@ -76,13 +75,28 @@ public:
 
         void addGridItem ( const GridItemPtr & gridItem ) ;
 
+        /**
+         * sorts each column of grid items in such a way that
+         * the next item’s Z is greater than the preceding item’s Z
+         */
         void sortGridItems () ;
 
         void sortFreeItems () ;
 
         void addFreeItem ( const FreeItemPtr & freeItem ) ;
 
-        bool addCharacterToRoom ( const AvatarItemPtr & character, bool characterEntersRoom ) ;
+        /**
+         * Places the character in this room
+         * @param justEntered true to copy the character for restoring when the room restarts
+         * @return true if the character is placed in the room or has already been there
+         */
+        bool placeCharacterInRoom ( const std::string & name,
+                                        bool justEntered,
+                                        int x, int y, int z,
+                                        const std::string & heading,
+                                        const std::string & wayOfEntry = "" );
+
+        bool placeCharacterInRoom ( const AvatarItemPtr & character, bool justEntered ) ;
 
         void removeFloorAt ( int tileX, int tileY ) ;
 
@@ -115,11 +129,6 @@ public:
          * Calculate boundaries of room from its size and doors
          */
         void calculateBounds () ;
-
-        /**
-         * @return true if the character with this name is found in the room and activated
-         */
-        bool activateCharacterByName ( const std::string & name ) ;
 
         void activate () ;
 
@@ -163,10 +172,10 @@ public:
 
         bool isAnyCharacterStillInRoom () const ;
 
-        const std::string & getNameOfRoomDescriptionFile () const {  return nameOfFileWithDataAboutRoom ;  }
+        const std::string & getNameOfRoomDescriptionFile () const {  return this->nameOfRoomDescriptionFile ;  }
 
         /**
-         * @return one of jail, blacktooth, market, moon, egyptus, penitentiary, safari, byblos
+         * @return one of blacktooth, jail, market, moon, byblos, egyptus, penitentiary, safari
          */
         const std::string & getScenery () const {  return this->scenery ;  }
 
@@ -201,11 +210,11 @@ public:
         unsigned int getSizeOfOneTile () const {  return Single_Tile_Size ;  }
 
         /**
-         * The kind of floor which may be "plain", "mortal", or "none" if absent
+         * The kind of floor which may be "plain", "mortal", or "absent"
          */
-        const std::string & getKindOfFloor () const {  return kindOfFloor ;  }
+        const std::string & getKindOfFloor () const {  return this->kindOfFloor ;  }
 
-        bool hasFloor () const {  return kindOfFloor != "absent" ;  }
+        bool hasFloor () const {  return this->kindOfFloor != "absent" ;  }
 
         short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
@@ -217,13 +226,13 @@ public:
 
         const std::vector < FreeItemPtr > & getFreeItems () const {  return this->freeItems ;  }
 
-        Door * getDoorAt ( const std::string & way ) const
+        Door * getDoorOn ( const std::string & side ) const
         {
-                std::map< std::string, Door * >::const_iterator it = doors.find( way );
+                std::map< std::string, Door * >::const_iterator it = doors.find( side );
                 return it != doors.end() ? it->second : nilPointer ;
         }
 
-        bool hasDoorAt ( const std::string & way ) const {  return getDoorAt( way ) != nilPointer ;  }
+        bool hasDoorOn ( const std::string & side ) const {  return getDoorOn( side ) != nilPointer ;  }
 
         const std::map < std::string, Door * > & getDoors () const {  return this->doors ;  }
 
@@ -236,6 +245,20 @@ public:
         int getXCenterForItem ( int widthX ) ;
 
         int getYCenterForItem ( int widthY ) ;
+
+private:
+
+        void copyAnotherCharacterAsEntered ( const std::string& name ) ;
+
+        void dumpItemInsideThisRoom ( const Item & item ) ;
+
+protected:
+
+        void addGridItemToContainer ( const GridItemPtr & gridItem ) ;
+
+        void addFreeItemToContainer ( const FreeItemPtr & freeItem ) ;
+
+public:
 
         /**
          * The "z" position of the floor
@@ -262,29 +285,20 @@ public:
         static const unsigned int Sides = 12 ;
         static const std::string Sides_Of_Room [] ;
 
-protected:
-
-        void copyAnotherCharacterAsEntered ( const std::string& name ) ;
-
-        void dumpItemInsideThisRoom ( const Item & item ) ;
-
-        void addGridItemToContainer ( const GridItemPtr & gridItem ) ;
-
-        void addFreeItemToContainer ( const FreeItemPtr & freeItem ) ;
-
 private:
 
-        std::string nameOfFileWithDataAboutRoom ;
-
-        std::string scenery ;
-
-        std::string color ;
+        // in which file is this room described
+        std::string nameOfRoomDescriptionFile ;
 
         // how big is this room in tiles
         unsigned short howManyTilesOnX ;
         unsigned short howManyTilesOnY ;
 
+        std::string scenery ;
+
         std::string kindOfFloor ;
+
+        std::string color ;
 
         // the connections of this room with other rooms on the map
         const ConnectedRooms * connections ;
@@ -316,21 +330,13 @@ private:
 
         std::vector < WallPiece * > wallPieces ;
 
-        /**
-         * The set of grid items that make up the structure of the room. Each column is sorted
-         * in such a way that the next item’s Z is greater than the preceding item’s Z
-         */
+        // the grid items
         std::vector < std::vector < GridItemPtr > > gridItems ;
 
-        /**
-         * The free items in this room
-         */
+        // the free items in this room
         std::vector < FreeItemPtr > freeItems ;
 
-        /**
-         * Las puertas
-         * The doors
-         */
+        // the doors
         std::map < std::string, Door * > doors ;
 
         /**

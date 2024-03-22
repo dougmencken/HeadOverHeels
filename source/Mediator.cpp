@@ -1,7 +1,7 @@
 
 #include "Mediator.hpp"
 
-#include "RoomBuilder.hpp"
+#include "RoomMaker.hpp"
 #include "GameManager.hpp"
 #include "DescriptionOfItem.hpp"
 #include "FloorTile.hpp"
@@ -96,6 +96,11 @@ void Mediator::update()
         }
 
         // let the player play
+
+        if ( this->currentlyActiveCharacter == nilPointer )
+                if ( this->room->isAnyCharacterStillInRoom() )
+                        activateCharacterByName( this->room->getCharactersYetInRoom()[ 0 ]->getOriginalKind() );
+
         if ( this->currentlyActiveCharacter != nilPointer )
                 this->currentlyActiveCharacter->behaveCharacter ();
 
@@ -1026,14 +1031,26 @@ ItemPtr Mediator::collisionWithBadBoy()
         return ItemPtr ();
 }
 
-void Mediator::setActiveCharacter ( const AvatarItemPtr & character )
+bool Mediator::activateCharacterByName( const std::string & name )
 {
-        if ( this->currentlyActiveCharacter != character )
-        {
-                this->currentlyActiveCharacter = character ;
+        if ( getNameOfActiveCharacter() == name ) return true ; // already active
 
-                std::cout << "character \"" << getNameOfActiveCharacter() << "\" is yet active in room \"" << room->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+        std::vector< AvatarItemPtr > charactersInRoom = this->room->getCharactersYetInRoom() ;
+        for ( unsigned int i = 0 ; i < charactersInRoom.size () ; ++ i )
+        {
+                AvatarItemPtr character = charactersInRoom[ i ];
+                if ( character != nilPointer && name == character->getOriginalKind() )
+                {
+                        this->currentlyActiveCharacter = character ;
+
+                        std::cout << "character \"" << getNameOfActiveCharacter() << "\" is yet active"
+                                        << " in \"" << this->room->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+
+                        return true ;
+                }
         }
+
+        return false ;
 }
 
 bool Mediator::pickNextCharacter ()
@@ -1042,16 +1059,14 @@ bool Mediator::pickNextCharacter ()
 
         // look for the next character
         std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
-        AvatarItemPtr nextCharacter ( nilPointer );
         for ( unsigned int i = 0 ; i < charactersInRoom.size () ; ++ i )
         {
                 AvatarItemPtr character = charactersInRoom[ i ];
-                if ( character != nilPointer && character->getOriginalKind() != previousCharacter->getOriginalKind() ) {
-                        nextCharacter = character ;
+                if ( character != nilPointer && character->getOriginalKind() != getNameOfActiveCharacter() ) {
+                        activateCharacterByName( character->getOriginalKind () );
                         break ;
                 }
         }
-        if ( nextCharacter != nilPointer ) setActiveCharacter( nextCharacter );
 
         const AvatarItemPtr & currentCharacter = getActiveCharacter() ;
 
@@ -1084,14 +1099,14 @@ bool Mediator::pickNextCharacter ()
                                 // an item that Heels may have in the handbag
                                 AvatarItemPtr heels = reference;
                                 const DescriptionOfItem* descriptionOfItemInBag = heels->getDescriptionOfTakenItem ();
-                                std::string behaviorOfItemInBag = heels->getBehaviorOfTakenItem( );
+                                const std::string & behaviorOfItemInBag = heels->getBehaviorOfTakenItem( );
 
                                 // remove the simple characters
                                 this->room->removeCharacterFromRoom( *previousCharacter, false );
                                 this->room->removeCharacterFromRoom( *currentCharacter, false );
 
                                 // create the composite character
-                                setActiveCharacter( RoomBuilder::createCharacterInRoom( this->room, "headoverheels", false, x, y, z, heading ) );
+                                this->room->placeCharacterInRoom( "headoverheels", false, x, y, z, heading );
 
                                 // transfer an item in the handbag
                                 if ( descriptionOfItemInBag != nilPointer )
@@ -1103,7 +1118,7 @@ bool Mediator::pickNextCharacter ()
 
                                 unlockFreeItemsMutex ();
 
-                                std::cout << "join both characters into \"" << getActiveCharacter()->getOriginalKind () << "\""
+                                std::cout << "join both characters into Head over Heels"
                                                 << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
                                 return true;
                         }
@@ -1112,7 +1127,7 @@ bool Mediator::pickNextCharacter ()
         // is it composite character
         else if ( currentCharacter->getOriginalKind() == "headoverheels" )
         {
-                std::cout << "split \"" << currentCharacter->getOriginalKind() << "\" in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
+                std::cout << "split Head over Heels in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
 
                 int x = currentCharacter->getX ();
                 int y = currentCharacter->getY ();
@@ -1123,25 +1138,25 @@ bool Mediator::pickNextCharacter ()
 
                 // get the description of item in the handbag
                 const DescriptionOfItem* descriptionOfItemInBag = currentCharacter->getDescriptionOfTakenItem ();
-                std::string behaviorOfItemInBag = currentCharacter->getBehaviorOfTakenItem( );
+                const std::string & behaviorOfItemInBag = currentCharacter->getBehaviorOfTakenItem( );
 
                 // remove the composite character
                 this->room->removeCharacterFromRoom( *currentCharacter, false );
 
                 // create the simple characters
 
-                AvatarItemPtr characterHeels = RoomBuilder::createCharacterInRoom( this->room, "heels", false, x, y, z, heading );
+                this->room->placeCharacterInRoom( "heels", false, x, y, z, heading );
+                // Heels is the active character after that
 
                 if ( descriptionOfItemInBag != nilPointer )
                 {
-                        std::cout << "transfer item \"" << descriptionOfItemInBag->getKind ()
-                                        << "\" to the character \"" << characterHeels->getKind () << "\"" << std::endl ;
-                        characterHeels->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
+                        std::cout << "item \"" << descriptionOfItemInBag->getKind() << "\" goes into the bag of Heels" << std::endl ;
+                        getActiveCharacter()->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                 }
 
-                AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Room::LayerHeight, heading );
+                this->room->placeCharacterInRoom( "head", false, x, y, z + Room::LayerHeight, heading );
 
-                setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? characterHeels : characterHead );
+                activateCharacterByName( ( this->lastActiveCharacterBeforeJoining == "head" ) ? "heels" : "head" );
 
                 unlockFreeItemsMutex ();
         }

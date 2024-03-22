@@ -29,16 +29,16 @@ const std::string Room::Sides_Of_Room[ Room::Sides ] =
                         {  "northeast", "northwest", "north", "southeast", "southwest", "south",
                                 "eastnorth", "eastsouth", "east", "westnorth", "westsouth", "west"  };
 
-Room::Room( const std::string & roomFile, const std::string & scenery,
+Room::Room( const std::string & roomFile,
                 unsigned short xTiles, unsigned short yTiles,
-                const std::string & floorKind )
+                        const std::string & roomScenery, const std::string & floorKind )
         : Mediated( )
-        , nameOfFileWithDataAboutRoom( roomFile )
-        , scenery( scenery )
-        , color( "white" )
+        , nameOfRoomDescriptionFile( roomFile )
         , howManyTilesOnX( xTiles )
         , howManyTilesOnY( yTiles )
+        , scenery( roomScenery )
         , kindOfFloor( floorKind )
+        , color( "white" )
         , connections( nilPointer )
         , drawingSequence( new unsigned int[ xTiles * yTiles ] )
         , camera( new Camera( this ) )
@@ -117,7 +117,7 @@ Room::Room( const std::string & roomFile, const std::string & scenery,
         this->shadingTransparency = GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << "created room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
+        std::cout << "created room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 #endif
 }
 
@@ -201,7 +201,7 @@ bool Room::saveAsXML( const std::string & file )
 
         // write tiles of the floor
 
-        if ( getScenery() == "" )
+        if ( getScenery().empty () )
         {
                 if ( floorTiles.size() > 0 )
                 {
@@ -486,11 +486,11 @@ void Room::convertWallsNearDoors ()
 
         std::vector< WallPiece * > wallsToBin ;
 
-        if ( hasDoorAt( "north" ) || hasDoorAt( "northeast" ) || hasDoorAt( "northwest" ) )
+        if ( hasDoorOn( "north" ) || hasDoorOn( "northeast" ) || hasDoorOn( "northwest" ) )
         {
-                Door* northDoor = getDoorAt( "north" );
-                Door* northeastDoor = getDoorAt( "northeast" );
-                Door* northwestDoor = getDoorAt( "northwest" );
+                Door* northDoor = getDoorOn( "north" );
+                Door* northeastDoor = getDoorOn( "northeast" );
+                Door* northwestDoor = getDoorOn( "northwest" );
 
                 for ( std::vector< WallPiece * >::iterator wy = wallPieces.begin (); wy != wallPieces.end (); ++ wy )
                 {
@@ -513,11 +513,11 @@ void Room::convertWallsNearDoors ()
                         }
                 }
         }
-        if ( hasDoorAt( "east" ) || hasDoorAt( "eastnorth" ) || hasDoorAt( "eastsouth" ) )
+        if ( hasDoorOn( "east" ) || hasDoorOn( "eastnorth" ) || hasDoorOn( "eastsouth" ) )
         {
-                Door* eastDoor = getDoorAt( "east" );
-                Door* eastnorthDoor = getDoorAt( "eastnorth" );
-                Door* eastsouthDoor = getDoorAt( "eastsouth" );
+                Door* eastDoor = getDoorOn( "east" );
+                Door* eastnorthDoor = getDoorOn( "eastnorth" );
+                Door* eastsouthDoor = getDoorOn( "eastsouth" );
 
                 for ( std::vector< WallPiece * >::iterator wx = wallPieces.begin (); wx != wallPieces.end (); ++ wx )
                 {
@@ -728,16 +728,75 @@ void Room::sortFreeItems ()
         mediator->unlockFreeItemsMutex ();
 }
 
-bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEntersRoom )
+bool Room::placeCharacterInRoom( const std::string & name,
+                                        bool justEntered,
+                                        int x, int y, int z,
+                                        const std::string & heading, const std::string & wayOfEntry )
+{
+        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
+
+        std::string nameOfCharacter( "none" );
+
+        if ( gameInfo.getLivesByName( name ) > 0 )
+        {
+                nameOfCharacter = name ;
+        }
+        else
+        if ( name == "headoverheels" )
+        {
+                // when the composite character ran out of lives, check if any of the simple characters survived
+                if ( gameInfo.getLivesByName( "head" ) > 0 )
+                        nameOfCharacter = "head" ;
+                else
+                if ( gameInfo.getLivesByName( "heels" ) > 0 )
+                        nameOfCharacter = "heels" ;
+        }
+        else
+        {
+                if ( gameInfo.getLivesByName( "head" ) == 0 && gameInfo.getLivesByName( "heels" ) == 0 )
+                        nameOfCharacter = "game over" ;
+        }
+
+        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacter );
+
+        if ( ( nameOfCharacter == "headoverheels" || nameOfCharacter == "head" || nameOfCharacter == "heels" )
+                        && itemDescription != nilPointer )
+        {
+                if ( gameInfo.getLivesByName( nameOfCharacter ) > 0 ) {
+                        // there are lives left, create the character
+                        AvatarItemPtr character( new AvatarItem( *itemDescription, x, y, z, heading ) );
+                        assert( character != nilPointer );
+
+                        // automove on entry
+                        if ( wayOfEntry.empty() ) {
+                                // perhaps the character walks through a door
+                                for ( std::map< std::string, Door* >::const_iterator di = this->doors.begin() ; di != this->doors.end() ; ++ di ) {
+                                        Door* door = di->second ;
+                                        if ( door != nilPointer && door->isUnderDoor( *character ) ) {
+                                                character->setWayOfEntry( di->first );
+                                                break ;
+                                        }
+                                }
+                        } else
+                                character->setWayOfEntry( wayOfEntry );
+
+                        return placeCharacterInRoom( character, justEntered );
+                }
+        }
+
+        return false ;
+}
+
+bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEntered )
 {
         for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
                 if ( character == *pi )
                         // this character is already in room
-                        return false;
+                        return true ;
         }
 
-        if ( characterEntersRoom )
+        if ( justEntered )
         {
                 for ( std::vector< AvatarItemPtr >::iterator it = charactersWhoEnteredRoom.begin (); it != charactersWhoEnteredRoom.end (); ++ it )
                 {
@@ -813,7 +872,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
 
         addFreeItemToContainer( character );
 
-        // for item which is placed at some height, look for collisions
+        // if character is placed at the given height, look for collisions
         if ( character->getZ() > Room::FloorZ )
         {
                 mediator->collectCollisionsWith( character->getUniqueName() );
@@ -824,11 +883,8 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
                         mediator->collectCollisionsWith( character->getUniqueName() );
                 }
         }
-        // for item at the top of column
-        else
-        {
+        else    // for character at the top of column
                 character->setZ( mediator->findHighestZ( *character ) );
-        }
 
         // collision is found, so can’t add this item
         if ( mediator->isThereAnyCollision () )
@@ -839,7 +895,7 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         }
 
         if ( mediator->getActiveCharacter() == nilPointer )
-                mediator->setActiveCharacter( character );
+                mediator->activateCharacterByName( character->getOriginalKind() );
 
         mediator->wantShadowFromFreeItem( *character );
         mediator->wantToMaskWithFreeItem( *character );
@@ -847,14 +903,14 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
         // add avatar item to room
         this->charactersYetInRoom.push_back( character );
 
-        if ( characterEntersRoom )
+        if ( justEntered )
         {
                 AvatarItemPtr copyOfCharacter( new AvatarItem( *character ) );
                 copyOfCharacter->setBehaviorOf( character->getBehavior()->getNameOfBehavior() );
                 this->charactersWhoEnteredRoom.push_back( copyOfCharacter );
 
                 std::cout << "copy of character \"" << copyOfCharacter->getOriginalKind() << "\""
-                                << " is created to rebuild this room" << std::endl ;
+                                << " is created to restart this room" << std::endl ;
         }
 
         // perhaps the character appeared in the room by means of teleportation
@@ -869,11 +925,11 @@ bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEn
 
 void Room::dumpItemInsideThisRoom( const Item & item )
 {
-        std::cout << "   " << item.whichItemClass()
+        std::cout << "   " << item.whichItemClass() << " \"" << item.getUniqueName() << "\""
                         << " at " << item.getX() << " " << item.getY() << " " << item.getZ()
                         << " with dimensions " << item.getWidthX() << " x " << item.getWidthY() << " x " << item.getHeight()
                         << std::endl
-                        << "   inside room \"" << this->nameOfFileWithDataAboutRoom << "\""
+                        << "   inside room \"" << getNameOfRoomDescriptionFile() << "\""
                         << " of " << getTilesOnX () << " x " << getTilesOnY () << " tiles"
                         << " each tile of " << getSizeOfOneTile () << " pixels"
                         << std::endl ;
@@ -1014,9 +1070,11 @@ bool Room::removeCharacterFromRoom( const AvatarItem & character, bool character
                         nextNumbers[ "character " + characterName ] -- ;
 
                         if ( wasActive ) {
-                                // activate the waiting character
-                                // it is nil when there’s no other character in this room
-                                mediator->setActiveCharacter( mediator->getWaitingCharacter() );
+                                if ( mediator->getWaitingCharacter() != nilPointer )
+                                        // activate the waiting character
+                                        mediator->activateCharacterByName( mediator->getWaitingCharacter()->getOriginalKind() );
+                                else
+                                        mediator->deactivateAnyCharacter() ;
                         }
 
                         charactersYetInRoom.erase( pi );
@@ -1029,11 +1087,10 @@ bool Room::removeCharacterFromRoom( const AvatarItem & character, bool character
                                 {
                                         if ( ( *it )->getOriginalKind() == characterName )
                                         {
-                                                std::cout << "and removing copy of character \"" << characterName << "\" created on entry to this room" << std::endl ;
+                                                std::cout << "and removing the copy of character \"" << characterName << "\" created on entry to this room" << std::endl ;
 
                                                 charactersWhoEnteredRoom.erase( it );
-                                                /// -- it ; // not needed because of "break"
-
+                                                /// -- it ; // not needed due to break
                                                 break;
                                         }
                                 }
@@ -1162,13 +1219,13 @@ unsigned int Room::getWidthOfRoomImage () const
 {
         unsigned int roomW = ( getTilesOnX () + getTilesOnY () ) * ( getSizeOfOneTile () << 1 ) ;
 
-        if ( ( ! hasFloor() || ( ! hasDoorAt( "north" ) && ! hasDoorAt( "northeast" ) && ! hasDoorAt( "northwest" ) ) )
-                && ! hasDoorAt( "west" ) && ! hasDoorAt( "westnorth" ) && ! hasDoorAt( "westsouth" ) )
+        if ( ( ! hasFloor() || ( ! hasDoorOn( "north" ) && ! hasDoorOn( "northeast" ) && ! hasDoorOn( "northwest" ) ) )
+                && ! hasDoorOn( "west" ) && ! hasDoorOn( "westnorth" ) && ! hasDoorOn( "westsouth" ) )
         {
                 roomW += getSizeOfOneTile () ;
         }
-        if ( ( ! hasFloor() || ( ! hasDoorAt( "east" ) && ! hasDoorAt( "eastnorth" ) && ! hasDoorAt( "eastsouth" ) ) )
-                && ! hasDoorAt( "south" ) && ! hasDoorAt( "southeast" ) && ! hasDoorAt( "southwest" ) )
+        if ( ( ! hasFloor() || ( ! hasDoorOn( "east" ) && ! hasDoorOn( "eastnorth" ) && ! hasDoorOn( "eastsouth" ) ) )
+                && ! hasDoorOn( "south" ) && ! hasDoorOn( "southeast" ) && ! hasDoorOn( "southwest" ) )
         {
                 roomW += getSizeOfOneTile () ;
         }
@@ -1183,8 +1240,8 @@ unsigned int Room::getHeightOfRoomImage () const
         roomH += /* room’s height in 3D */ ( Room::MaxLayers + 2 ) * Room::LayerHeight ;
         roomH += /* height of floor */ 8 ;
 
-        if ( ! hasDoorAt( "south" ) && ! hasDoorAt( "southwest" ) && ! hasDoorAt( "southeast" ) &&
-                ! hasDoorAt( "west" ) && ! hasDoorAt( "westsouth" ) && ! hasDoorAt( "westnorth" ) )
+        if ( ! hasDoorOn( "south" ) && ! hasDoorOn( "southwest" ) && ! hasDoorOn( "southeast" ) &&
+                ! hasDoorOn( "west" ) && ! hasDoorOn( "westsouth" ) && ! hasDoorOn( "westnorth" ) )
         {
                 roomH += ( getSizeOfOneTile () >> 1 ) ;
         }
@@ -1304,37 +1361,22 @@ void Room::calculateBounds()
 {
         unsigned int oneTileLong = getSizeOfOneTile () ;
 
-        bounds[ "north" ] = hasDoorAt( "north" ) || hasDoorAt( "northeast" ) || hasDoorAt( "northwest" ) || ! hasFloor() ? oneTileLong : 0 ;
-        bounds[ "east" ] = hasDoorAt( "east" ) || hasDoorAt( "eastnorth" ) || hasDoorAt( "eastsouth" ) || ! hasFloor() ? oneTileLong : 0 ;
-        bounds[ "south" ] = oneTileLong * getTilesOnX() - ( hasDoorAt( "south" ) || hasDoorAt( "southeast" ) || hasDoorAt( "southwest" )  ? oneTileLong : 0 );
-        bounds[ "west" ] = oneTileLong * getTilesOnY() - ( hasDoorAt( "west" ) || hasDoorAt( "westnorth" ) || hasDoorAt( "westsouth" )  ? oneTileLong : 0 );
+        bounds[ "north" ] = hasDoorOn( "north" ) || hasDoorOn( "northeast" ) || hasDoorOn( "northwest" ) || ! hasFloor() ? oneTileLong : 0 ;
+        bounds[ "east" ] = hasDoorOn( "east" ) || hasDoorOn( "eastnorth" ) || hasDoorOn( "eastsouth" ) || ! hasFloor() ? oneTileLong : 0 ;
+        bounds[ "south" ] = oneTileLong * getTilesOnX() - ( hasDoorOn( "south" ) || hasDoorOn( "southeast" ) || hasDoorOn( "southwest" )  ? oneTileLong : 0 );
+        bounds[ "west" ] = oneTileLong * getTilesOnY() - ( hasDoorOn( "west" ) || hasDoorOn( "westnorth" ) || hasDoorOn( "westsouth" )  ? oneTileLong : 0 );
 
         if ( this->isTripleRoom () ) {
                 // limits for a triple room
-                bounds[ "northeast" ] = hasDoorAt( "northeast" ) ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
-                bounds[ "northwest" ] = hasDoorAt( "northwest" ) ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
-                bounds[ "southeast" ] = hasDoorAt( "southeast" ) ? doors[ "southeast" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
-                bounds[ "southwest" ] = hasDoorAt( "southwest" ) ? doors[ "southwest" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
-                bounds[ "eastnorth" ] = hasDoorAt( "eastnorth" ) ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
-                bounds[ "eastsouth" ] = hasDoorAt( "eastsouth" ) ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
-                bounds[ "westnorth" ] = hasDoorAt( "westnorth" ) ? doors[ "westnorth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
-                bounds[ "westsouth" ] = hasDoorAt( "westsouth" ) ? doors[ "westsouth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
+                bounds[ "northeast" ] = hasDoorOn( "northeast" ) ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
+                bounds[ "northwest" ] = hasDoorOn( "northwest" ) ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - oneTileLong : bounds[ "north" ];
+                bounds[ "southeast" ] = hasDoorOn( "southeast" ) ? doors[ "southeast" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
+                bounds[ "southwest" ] = hasDoorOn( "southwest" ) ? doors[ "southwest" ]->getLintel()->getX() + oneTileLong : bounds[ "south" ];
+                bounds[ "eastnorth" ] = hasDoorOn( "eastnorth" ) ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
+                bounds[ "eastsouth" ] = hasDoorOn( "eastsouth" ) ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - oneTileLong : bounds[ "east" ];
+                bounds[ "westnorth" ] = hasDoorOn( "westnorth" ) ? doors[ "westnorth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
+                bounds[ "westsouth" ] = hasDoorOn( "westsouth" ) ? doors[ "westsouth" ]->getLintel()->getY() + oneTileLong : bounds[ "west" ];
         }
-}
-
-bool Room::activateCharacterByName( const std::string & name )
-{
-        for ( unsigned int i = 0 ; i < charactersYetInRoom.size () ; ++ i )
-        {
-                AvatarItemPtr character = charactersYetInRoom[ i ];
-                if ( name == character->getOriginalKind () )
-                {
-                        mediator->setActiveCharacter( character );
-                        return true ;
-                }
-        }
-
-        return false ;
 }
 
 void Room::activate()
@@ -1369,7 +1411,7 @@ bool Room::continueWithAliveCharacter ()
         for ( unsigned int i = 0 ; i < charactersYetInRoom.size () ; ++ i )
         {
                 AvatarItemPtr character = charactersYetInRoom[ i ];
-                if ( character != nilPointer && character->getKind() != previouslyAliveCharacter->getKind() ) {
+                if ( character != nilPointer && character->getOriginalKind() != previouslyAliveCharacter->getOriginalKind() ) {
                         nextCharacter = character ;
                         break ;
                 }
@@ -1377,7 +1419,7 @@ bool Room::continueWithAliveCharacter ()
 
         if ( nextCharacter != nilPointer && nextCharacter->getLives() > 0 )
         {
-                mediator->setActiveCharacter( nextCharacter );
+                mediator->activateCharacterByName( nextCharacter->getOriginalKind() );
 
                 removeCharacterFromRoom( *previouslyAliveCharacter, /* leaving room */ true );
 
@@ -1425,7 +1467,7 @@ bool Room::calculateEntryCoordinates( const std::string & way,
                 }
         }
 
-        const FreeItemPtr & leftJamb = hasDoorAt( way ) ? doors[ way ]->getLeftJamb() : FreeItemPtr () ;
+        const FreeItemPtr & leftJamb = hasDoorOn( way ) ? doors[ way ]->getLeftJamb() : FreeItemPtr () ;
 
         if ( leftJamb != nilPointer ) *z = leftJamb->getZ ();
         else if ( way == "above" ) *z = Room::MaxLayers * Room::LayerHeight ;
@@ -1545,15 +1587,15 @@ int Room::getXCenterForItem( int widthX )
 {
         return
                 ( ( getLimitAt( "south" ) - getLimitAt( "north" ) + widthX ) >> 1 )
-                        + ( hasDoorAt( "north" ) ? getSizeOfOneTile() >> 1 : 0 )
-                                - ( hasDoorAt( "south" ) ? getSizeOfOneTile() >> 1 : 0 ) ;
+                        + ( hasDoorOn( "north" ) ? getSizeOfOneTile() >> 1 : 0 )
+                                - ( hasDoorOn( "south" ) ? getSizeOfOneTile() >> 1 : 0 ) ;
 }
 
 int Room::getYCenterForItem( int widthY )
 {
         return
                 ( ( getLimitAt( "west" ) - getLimitAt( "east" ) + widthY ) >> 1 )
-                        + ( hasDoorAt( "east" ) ? getSizeOfOneTile() >> 1 : 0 )
-                                - ( hasDoorAt( "west" ) ? getSizeOfOneTile() >> 1 : 0 )
+                        + ( hasDoorOn( "east" ) ? getSizeOfOneTile() >> 1 : 0 )
+                                - ( hasDoorOn( "west" ) ? getSizeOfOneTile() >> 1 : 0 )
                                         - 1 ;
 }

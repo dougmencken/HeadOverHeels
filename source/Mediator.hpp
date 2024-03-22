@@ -43,7 +43,7 @@ public:
 
         virtual ~Mediator( ) ;
 
-        static void * updateThread ( void * mediatorAsVoid ) ;
+        Room * getRoom () const {  return room ;  }
 
         /**
          * Update every item’s behavior
@@ -156,6 +156,33 @@ public:
 
         void markToSortFreeItems () {  this->needToSortFreeItems = true ;  }
 
+        bool isThreadRunning () const {  return threadRunning ;  }
+
+        const AvatarItemPtr & getActiveCharacter () const {  return this->currentlyActiveCharacter ;  }
+
+        std::string getNameOfActiveCharacter () const
+        {
+                return ( this->currentlyActiveCharacter != nilPointer )
+                                ? this->currentlyActiveCharacter->getOriginalKind ()
+                                : "" ;
+        }
+
+        /**
+         * @return true if the character with the given name is found in the room
+         *              and activated there or was already active
+         */
+        bool activateCharacterByName ( const std::string & name ) ;
+
+        void deactivateAnyCharacter () {  this->currentlyActiveCharacter = AvatarItemPtr() ;  }
+
+        /**
+         * The waiting, or inactive, character
+         * @return avatar item or nil if there’s no more character in this room
+         */
+        AvatarItemPtr getWaitingCharacter () const ;
+
+        const std::string & getLastActiveCharacterBeforeJoining () const {  return lastActiveCharacterBeforeJoining ;  }
+
         void lockGridItemsMutex () {  pthread_mutex_lock( &gridItemsMutex ) ;  }
         void unlockGridItemsMutex () {  pthread_mutex_unlock( &gridItemsMutex ) ;  }
 
@@ -206,30 +233,7 @@ private:
 
         std::deque < std::string > collisions ;
 
-public:
-
-        bool isThreadRunning () const {  return threadRunning ;  }
-
-        const std::string & getLastActiveCharacterBeforeJoining () const {  return lastActiveCharacterBeforeJoining ;  }
-
-        Room * getRoom () const {  return room ;  }
-
-        const AvatarItemPtr & getActiveCharacter () const {  return this->currentlyActiveCharacter ;  }
-
-        std::string getNameOfActiveCharacter () const
-        {
-                return ( this->currentlyActiveCharacter != nilPointer )
-                                ? this->currentlyActiveCharacter->getOriginalKind ()
-                                : "" ;
-        }
-
-        void setActiveCharacter ( const AvatarItemPtr & character ) ;
-
-        /**
-         * The waiting, or inactive, character
-         * @return avatar item or nil if there’s no more character in this room
-         */
-        AvatarItemPtr getWaitingCharacter () const ;
+        static void * updateThread ( void * mediatorAsVoid ) ;
 
 };
 

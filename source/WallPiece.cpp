@@ -37,16 +37,16 @@ void WallPiece::calculateOffset()
 
         this->offset.second += ( this->position + 1 ) * tileSize - this->image->getHeight() - 1 ;
 
-        if ( isAlongX() && ( room->hasDoorAt( "east" ) ||
-                                room->hasDoorAt( "eastnorth" ) || room->hasDoorAt( "eastsouth" )
+        if ( isAlongX() && ( room->hasDoorOn( "east" ) ||
+                                room->hasDoorOn( "eastnorth" ) || room->hasDoorOn( "eastsouth" )
                                         || ! room->hasFloor() ) )
         {
                 this->offset.first -= ( tileSize << 1 );
                 this->offset.second += tileSize ;
         }
 
-        if ( isAlongY() && ( room->hasDoorAt( "north" ) ||
-                                room->hasDoorAt( "northeast" ) || room->hasDoorAt( "northwest" )
+        if ( isAlongY() && ( room->hasDoorOn( "north" ) ||
+                                room->hasDoorOn( "northeast" ) || room->hasDoorOn( "northwest" )
                                         || ! room->hasFloor() ) )
         {
                 this->offset.first += ( tileSize << 1 );

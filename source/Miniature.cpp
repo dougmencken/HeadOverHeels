@@ -43,19 +43,19 @@ void Miniature::draw ()
         unsigned int lastTileX = tilesX - 1;
         unsigned int lastTileY = tilesY - 1;
 
-        Door* eastDoor = room.getDoorAt( "east" );
-        Door* southDoor = room.getDoorAt( "south" );
-        Door* northDoor = room.getDoorAt( "north" );
-        Door* westDoor = room.getDoorAt( "west" );
+        Door* eastDoor = room.getDoorOn( "east" );
+        Door* southDoor = room.getDoorOn( "south" );
+        Door* northDoor = room.getDoorOn( "north" );
+        Door* westDoor = room.getDoorOn( "west" );
 
-        Door* eastnorthDoor = room.getDoorAt( "eastnorth" );
-        Door* eastsouthDoor = room.getDoorAt( "eastsouth" );
-        Door* southeastDoor = room.getDoorAt( "southeast" );
-        Door* southwestDoor = room.getDoorAt( "southwest" );
-        Door* northeastDoor = room.getDoorAt( "northeast" );
-        Door* northwestDoor = room.getDoorAt( "northwest" );
-        Door* westnorthDoor = room.getDoorAt( "westnorth" );
-        Door* westsouthDoor = room.getDoorAt( "westsouth" );
+        Door* eastnorthDoor = room.getDoorOn( "eastnorth" );
+        Door* eastsouthDoor = room.getDoorOn( "eastsouth" );
+        Door* southeastDoor = room.getDoorOn( "southeast" );
+        Door* southwestDoor = room.getDoorOn( "southwest" );
+        Door* northeastDoor = room.getDoorOn( "northeast" );
+        Door* northwestDoor = room.getDoorOn( "northwest" );
+        Door* westnorthDoor = room.getDoorOn( "westnorth" );
+        Door* westsouthDoor = room.getDoorOn( "westsouth" );
 
         if ( northDoor != nilPointer || northeastDoor != nilPointer || northwestDoor != nilPointer )
                 firstTileX++ ;
@@ -858,11 +858,11 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
 
         if ( where == "south" )
         {
-                Door* southDoor = room.getDoorAt( "south" );
+                Door* southDoor = room.getDoorOn( "south" );
                 assert( southDoor != nilPointer );
-                Door* connectedNorthDoor = connectedRoom->getDoorAt( "north" );
-                if ( connectedNorthDoor == nilPointer ) connectedNorthDoor = connectedRoom->getDoorAt( "northeast" );
-                if ( connectedNorthDoor == nilPointer ) connectedNorthDoor = connectedRoom->getDoorAt( "northwest" );
+                Door* connectedNorthDoor = connectedRoom->getDoorOn( "north" );
+                if ( connectedNorthDoor == nilPointer ) connectedNorthDoor = connectedRoom->getDoorOn( "northeast" );
+                if ( connectedNorthDoor == nilPointer ) connectedNorthDoor = connectedRoom->getDoorOn( "northwest" );
                 assert( connectedNorthDoor != nilPointer );
 
                 int deltaCellY = southDoor->getCellY() - connectedNorthDoor->getCellY() ;
@@ -871,11 +871,11 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
         }
         else if ( where == "north" )
         {
-                Door* northDoor = room.getDoorAt( "north" );
+                Door* northDoor = room.getDoorOn( "north" );
                 assert( northDoor != nilPointer );
-                Door* connectedSouthDoor = connectedRoom->getDoorAt( "south" );
-                if ( connectedSouthDoor == nilPointer ) connectedSouthDoor = connectedRoom->getDoorAt( "southeast" );
-                if ( connectedSouthDoor == nilPointer ) connectedSouthDoor = connectedRoom->getDoorAt( "southwest" );
+                Door* connectedSouthDoor = connectedRoom->getDoorOn( "south" );
+                if ( connectedSouthDoor == nilPointer ) connectedSouthDoor = connectedRoom->getDoorOn( "southeast" );
+                if ( connectedSouthDoor == nilPointer ) connectedSouthDoor = connectedRoom->getDoorOn( "southwest" );
                 assert( connectedSouthDoor != nilPointer );
 
                 int deltaCellY = northDoor->getCellY() - connectedSouthDoor->getCellY() ;
@@ -884,11 +884,11 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
         }
         else if ( where == "east" )
         {
-                Door* eastDoor = room.getDoorAt( "east" );
+                Door* eastDoor = room.getDoorOn( "east" );
                 assert( eastDoor != nilPointer );
-                Door* connectedWestDoor = connectedRoom->getDoorAt( "west" );
-                if ( connectedWestDoor == nilPointer ) connectedWestDoor = connectedRoom->getDoorAt( "westnorth" );
-                if ( connectedWestDoor == nilPointer ) connectedWestDoor = connectedRoom->getDoorAt( "westsouth" );
+                Door* connectedWestDoor = connectedRoom->getDoorOn( "west" );
+                if ( connectedWestDoor == nilPointer ) connectedWestDoor = connectedRoom->getDoorOn( "westnorth" );
+                if ( connectedWestDoor == nilPointer ) connectedWestDoor = connectedRoom->getDoorOn( "westsouth" );
                 assert( connectedWestDoor != nilPointer );
 
                 int deltaCellX = eastDoor->getCellX() - connectedWestDoor->getCellX() ;
@@ -897,11 +897,11 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
         }
         else if ( where == "west" )
         {
-                Door* westDoor = room.getDoorAt( "west" );
+                Door* westDoor = room.getDoorOn( "west" );
                 assert( westDoor != nilPointer );
-                Door* connectedEastDoor = connectedRoom->getDoorAt( "east" );
-                if ( connectedEastDoor == nilPointer ) connectedEastDoor = connectedRoom->getDoorAt( "eastnorth" );
-                if ( connectedEastDoor == nilPointer ) connectedEastDoor = connectedRoom->getDoorAt( "eastsouth" );
+                Door* connectedEastDoor = connectedRoom->getDoorOn( "east" );
+                if ( connectedEastDoor == nilPointer ) connectedEastDoor = connectedRoom->getDoorOn( "eastnorth" );
+                if ( connectedEastDoor == nilPointer ) connectedEastDoor = connectedRoom->getDoorOn( "eastsouth" );
                 assert( connectedEastDoor != nilPointer );
 
                 int deltaCellX = westDoor->getCellX() - connectedEastDoor->getCellX() ;

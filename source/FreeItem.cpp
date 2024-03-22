@@ -224,7 +224,7 @@ bool FreeItem::addToPosition( int x, int y, int z )
 
 bool FreeItem::isCollidingWithJamb( const std::string & at, const std::string & collision, const int previousX, const int previousY )
 {
-        Door* door = mediator->getRoom()->getDoorAt( at );
+        Door* door = mediator->getRoom()->getDoorOn( at );
         if ( door == nilPointer ) return false ;
 
         // proceed only when colliding with a door’s jamb

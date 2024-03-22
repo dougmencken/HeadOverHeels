@@ -312,7 +312,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
 
 bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 {
-        Door* door = mediator->getRoom()->getDoorAt( where );
+        Door* door = mediator->getRoom()->getDoorOn( where );
         if ( door == nilPointer ) return false ;
 
         bool walksThruDoor = false ;
@@ -391,7 +391,8 @@ void AvatarItem::wait ()
 
 bool AvatarItem::isActiveCharacter () const
 {
-        return mediator->getActiveCharacter()->getUniqueName() == this->getUniqueName() ;
+        if ( getMediator()->getActiveCharacter() == nilPointer ) return false ;
+        return getMediator()->getActiveCharacter()->getUniqueName() == this->getUniqueName() ;
 }
 
 unsigned char AvatarItem::getLives() const
@@ -595,7 +596,7 @@ bool AvatarItem::hasShield () const
 
 bool AvatarItem::isNotUnderDoorAt( const std::string & where )
 {
-        Door* door = mediator->getRoom()->getDoorAt( where );
+        Door* door = mediator->getRoom()->getDoorOn( where );
 
         return ( door == nilPointer || ! door->isUnderDoor( *this ) );
 }

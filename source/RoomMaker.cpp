@@ -1,5 +1,5 @@
 
-#include "RoomBuilder.hpp"
+#include "RoomMaker.hpp"
 
 #include "MapManager.hpp"
 #include "Room.hpp"
@@ -17,7 +17,7 @@
 
 
 /* static */
-Room* RoomBuilder::buildRoom ( const std::string& roomFile )
+Room* RoomMaker::makeRoom ( const std::string & roomFile )
 {
         tinyxml2::XMLDocument roomXml ;
         tinyxml2::XMLError result = roomXml.LoadFile( roomFile.c_str () );
@@ -45,7 +45,6 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         tinyxml2::XMLElement* floorKind = xmlRoot->FirstChildElement( "floorKind" ) ;
         if ( floorKind == nilPointer ) floorKind = xmlRoot->FirstChildElement( "floorType" ) ;
         std::string kindOfFloor = floorKind->FirstChild()->ToText()->Value() ;
-        if ( kindOfFloor == "none" ) kindOfFloor = "absent" ;
 
         std::string roomName = roomFile;
         const char* fromLastSlash = std::strrchr( roomFile.c_str (), ospaths::pathSeparator()[ 0 ] );
@@ -61,19 +60,18 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
         Room * theRoom = new Room (
                 roomName,
-                scenery,
                 xTiles, yTiles,
+                scenery,
                 kindOfFloor
         );
 
-        if ( theRoom == nilPointer )
-        {
-                std::cerr << "can’t create room \"" << roomFile << "\"" << std::endl ;
+        if ( theRoom == nilPointer ) {
+                std::cerr << "can’t make room \"" << roomFile << "\"" << std::endl ;
                 return nilPointer;
         }
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << "the color of room is " << Color::byName( roomColor ).toString () << std::endl ;
+        std::cout << "the room’s color is " << Color::byName( roomColor ).toString () << std::endl ;
 #endif
         theRoom->setColor( roomColor );
 
@@ -97,12 +95,12 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                 if ( whichClass == "door" ) // is it a door
                 {
-                        Door* door = buildDoor( item );
+                        Door* door = makeDoor( item );
 
                         if ( door != nilPointer )
                                 theRoom->addDoor( door );
                         else
-                                std::cout << "oops, can’t build a door at cell " << gridCellX << ", " << gridCellY << ", " << gridCellZ << std::endl ;
+                                std::cout << "oops, can’t make a door at cell " << gridCellX << ", " << gridCellY << ", " << gridCellZ << std::endl ;
                 }
                 else if ( whichClass == "griditem" ) // is it a grid item
                 {
@@ -144,7 +142,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         }
                         else
                         {
-                                GridItemPtr gridItem = buildGridItem( item, theRoom );
+                                GridItemPtr gridItem = makeGridItem( item, theRoom );
 
                                 if ( gridItem != nilPointer )
                                 {
@@ -154,13 +152,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 wallsXY.insert( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
                                 }
                                 else
-                                        std::cout << "oops, can’t build a grid item at cell "
+                                        std::cout << "oops, can’t make a grid item at cell "
                                                         << gridCellX << ", " << gridCellY << ", " << gridCellZ << std::endl ;
                         }
                 }
                 else if ( whichClass == "freeitem" ) // is it a free item
                 {
-                        FreeItemPtr freeItem = buildFreeItem( item, theRoom );
+                        FreeItemPtr freeItem = makeFreeItem( item, theRoom );
 
                         if ( freeItem != nilPointer )
                                 theRoom->addFreeItem( freeItem );
@@ -169,8 +167,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 }
         }
 
-        // build the floor
-        buildFloor( theRoom, xmlRoot );
+        // the floor
+        makeFloor( theRoom, xmlRoot );
 
         // add walls
 
@@ -181,7 +179,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 wall != nilPointer ;
                                 wall = wall->NextSiblingElement( "wall" ) )
                 {
-                        WallPiece* wallSegment = buildWallPiece( wall );
+                        WallPiece* wallSegment = makeWallPiece( wall );
 
                         if ( wallSegment != nilPointer )
                         {
@@ -204,90 +202,24 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 }
 
 /* static */
-AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
-                                                  const std::string & nameOfCharacter,
-                                                  bool justEntered,
-                                                  int x, int y, int z,
-                                                  const std::string & heading, const std::string & wayOfEntry )
-{
-        if ( room == nilPointer ) return AvatarItemPtr () ;
-
-        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-
-        std::string nameOfCharacterToCreate( "none" );
-
-        if ( gameInfo.getLivesByName( nameOfCharacter ) > 0 )
-        {
-                nameOfCharacterToCreate = nameOfCharacter ;
-        }
-        else
-        if ( nameOfCharacter == "headoverheels" )
-        {
-                // when the composite character ran out of lives, check if any of the simple characters survived
-                if ( gameInfo.getLivesByName( "head" ) > 0 )
-                        nameOfCharacterToCreate = "head" ;
-                else
-                if ( gameInfo.getLivesByName( "heels" ) > 0 )
-                        nameOfCharacterToCreate = "heels" ;
-        }
-        else
-        {
-                if ( gameInfo.getLivesByName( "head" ) == 0 && gameInfo.getLivesByName( "heels" ) == 0 )
-                        nameOfCharacterToCreate = "game over" ;
-        }
-
-        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions().getDescriptionByKind( nameOfCharacterToCreate );
-
-        if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
-                        && itemDescription != nilPointer )
-        {
-                if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 ) {
-                        // there are lives left, create the character
-                        AvatarItemPtr character( new AvatarItem( *itemDescription, x, y, z, heading ) );
-                        assert( character != nilPointer );
-
-                        // automove on entry
-                        if ( wayOfEntry.empty() ) {
-                                // perhaps the character walks through a door
-                                const std::map< std::string, Door* > & doors = room->getDoors() ;
-                                for ( std::map< std::string, Door* >::const_iterator di = doors.begin() ; di != doors.end() ; ++ di ) {
-                                        Door* door = di->second ;
-                                        if ( door != nilPointer && door->isUnderDoor( *character ) ) {
-                                                character->setWayOfEntry( di->first );
-                                                break ;
-                                        }
-                                }
-                        } else
-                                character->setWayOfEntry( wayOfEntry );
-
-                        room->addCharacterToRoom( character, justEntered );
-
-                        return character ;
-                }
-        }
-
-        return AvatarItemPtr() ;
-}
-
-/* static */
-void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
+void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
 {
         assert( room != nilPointer );
         assert( xmlRootElement != nilPointer );
 
-        Door* eastDoor = room->getDoorAt( "east" );
-        Door* southDoor = room->getDoorAt( "south" );
-        Door* northDoor = room->getDoorAt( "north" );
-        Door* westDoor = room->getDoorAt( "west" );
+        Door* eastDoor = room->getDoorOn( "east" );
+        Door* southDoor = room->getDoorOn( "south" );
+        Door* northDoor = room->getDoorOn( "north" );
+        Door* westDoor = room->getDoorOn( "west" );
 
-        Door* eastnorthDoor = room->getDoorAt( "eastnorth" );
-        Door* eastsouthDoor = room->getDoorAt( "eastsouth" );
-        Door* southeastDoor = room->getDoorAt( "southeast" );
-        Door* southwestDoor = room->getDoorAt( "southwest" );
-        Door* northeastDoor = room->getDoorAt( "northeast" );
-        Door* northwestDoor = room->getDoorAt( "northwest" );
-        Door* westnorthDoor = room->getDoorAt( "westnorth" );
-        Door* westsouthDoor = room->getDoorAt( "westsouth" );
+        Door* eastnorthDoor = room->getDoorOn( "eastnorth" );
+        Door* eastsouthDoor = room->getDoorOn( "eastsouth" );
+        Door* southeastDoor = room->getDoorOn( "southeast" );
+        Door* southwestDoor = room->getDoorOn( "southwest" );
+        Door* northeastDoor = room->getDoorOn( "northeast" );
+        Door* northwestDoor = room->getDoorOn( "northwest" );
+        Door* westnorthDoor = room->getDoorOn( "westnorth" );
+        Door* westsouthDoor = room->getDoorOn( "westsouth" );
 
         // read about tiles with no floor in a triple room
 
@@ -307,15 +239,11 @@ void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement
         if ( ! tilesWithoutFloor.empty () )
                 room->setTilesWithoutFloor( tilesWithoutFloor );
 
-#if defined( DEBUG ) && DEBUG
-        std::cout << "building floor in room \"" << room->getNameOfRoomDescriptionFile() << "\"" ;
-#endif
-
         PoolOfPictures floorImages ;
 
-        if ( room->getScenery() != "" )
+        if ( ! room->getScenery ().empty() )
         {
-                // build the floor automatically
+                // make the floor in the room just by its kind, without listing every tile
 
                 const std::string sceneryPrefix = room->getScenery() + "-" ;
 
@@ -584,7 +512,7 @@ void RoomBuilder::buildFloor( Room * room, tinyxml2::XMLElement * xmlRootElement
 }
 
 /* static */
-WallPiece * RoomBuilder::buildWallPiece( tinyxml2::XMLElement* wall )
+WallPiece * RoomMaker::makeWallPiece( tinyxml2::XMLElement* wall )
 {
         std::string xy;
         if ( wall->Attribute( "on" ) != nilPointer )
@@ -622,7 +550,7 @@ WallPiece * RoomBuilder::buildWallPiece( tinyxml2::XMLElement* wall )
 }
 
 /* static */
-GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
+GridItemPtr RoomMaker::makeGridItem( tinyxml2::XMLElement* item, Room* room )
 {
         ( void ) room ;
 
@@ -660,7 +588,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 }
 
 /* static */
-FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
+FreeItemPtr RoomMaker::makeFreeItem( tinyxml2::XMLElement* item, Room* room )
 {
         std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
         const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions ().getDescriptionByKind( kind );
@@ -744,7 +672,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 }
 
 /* static */
-Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
+Door* RoomMaker::makeDoor( tinyxml2::XMLElement* item )
 {
         std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
 

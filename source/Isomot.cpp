@@ -155,13 +155,12 @@ Picture* Isomot::updateMe ()
         {
                 updateFinalRoom();
         }
-        else
+        else if ( activeRoom->getMediator()->getActiveCharacter() != nilPointer )
         {
-                assert( activeRoom->getMediator()->getActiveCharacter() != nilPointer );
                 AvatarItem & activeCharacter = * activeRoom->getMediator()->getActiveCharacter() ;
                 Room* previousRoom = activeRoom ;
 
-                // swap key changes character and possibly room
+                // the swap key changes character and possibly room
                 if ( InputManager::getInstance().swapTyped() )
                 {
                         activeCharacter.wait(); // stop the active character
@@ -463,7 +462,7 @@ void Isomot::handleMagicKeys ()
                                         characterX, characterY, characterZ, heading
                                 ) );
 
-                                activeRoom->addCharacterToRoom( joinedCharacter, true );
+                                activeRoom->placeCharacterInRoom( joinedCharacter, true );
                                 joinedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
@@ -531,7 +530,7 @@ void Isomot::handleMagicKeys ()
 
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
-                                roomWithTeleportToFinalScene->addCharacterToRoom( teleportedCharacter, true );
+                                roomWithTeleportToFinalScene->placeCharacterInRoom( teleportedCharacter, true );
                                 teleportedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );

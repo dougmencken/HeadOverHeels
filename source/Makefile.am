@@ -77,16 +77,20 @@ headoverheels_SOURCES = main.cpp \
 			FreeItem.hpp \
 			AvatarItem.cpp \
 			AvatarItem.hpp \
-			Mediator.cpp \
-			Mediator.hpp \
 			ShadowCaster.cpp \
 			ShadowCaster.hpp \
 			Masker.cpp \
 			Masker.hpp \
-			GameSaverAndLoader.cpp \
-			GameSaverAndLoader.hpp \
+			Mediator.cpp \
+			Mediator.hpp \
+			Room.cpp \
+			Room.hpp \
+			RoomMaker.cpp \
+			RoomMaker.hpp \
 			GameManager.cpp \
 			GameManager.hpp \
+			GameSaverAndLoader.cpp \
+			GameSaverAndLoader.hpp \
 			GameInfo.cpp \
 			GameInfo.hpp \
 			GamePreferences.cpp \
@@ -107,10 +111,6 @@ headoverheels_SOURCES = main.cpp \
 			MapManager.hpp \
 			ConnectedRooms.cpp \
 			ConnectedRooms.hpp \
-			RoomBuilder.cpp \
-			RoomBuilder.hpp \
-			Room.cpp \
-			Room.hpp \
 			BonusManager.cpp \
 			BonusManager.hpp \
 			SoundManager.cpp \

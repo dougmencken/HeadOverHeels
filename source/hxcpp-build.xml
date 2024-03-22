@@ -50,7 +50,7 @@
         <file name="Room.cpp" />
         <file name="ConnectedRooms.cpp" />
         <file name="MapManager.cpp" />
-        <file name="RoomBuilder.cpp" />
+        <file name="RoomMaker.cpp" />
         <file name="BonusManager.cpp" />
         <file name="SoundManager.cpp" />
         <file name="activities/PropagateActivity.cpp" />
