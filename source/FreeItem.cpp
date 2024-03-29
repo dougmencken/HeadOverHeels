@@ -59,15 +59,15 @@ void FreeItem::draw ()
         if ( getTransparency() == 0 ) {
                 allegro::drawSprite(
                         getProcessedImage().getAllegroPict(),
-                        mediator->getRoom()->getX0 () + getImageOffsetX (),
-                        mediator->getRoom()->getY0 () + getImageOffsetY ()
+                        getMediator()->getRoom()->getX0 () + getImageOffsetX (),
+                        getMediator()->getRoom()->getY0 () + getImageOffsetY ()
                 ) ;
         }
         else {
                 allegro::drawSpriteWithTransparency(
                         getProcessedImage().getAllegroPict(),
-                        mediator->getRoom()->getX0 () + getImageOffsetX (),
-                        mediator->getRoom()->getY0 () + getImageOffsetY (),
+                        getMediator()->getRoom()->getX0 () + getImageOffsetX (),
+                        getMediator()->getRoom()->getY0 () + getImageOffsetY (),
                         static_cast < unsigned char > ( 255 - 2.55 * getTransparency() )
                 ) ;
         }
@@ -111,8 +111,8 @@ void FreeItem::updateImage ()
         setWantMaskTrue();
 
         // remask
-        mediator->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
-        mediator->wantToMaskWithFreeItem( *this );
+        getMediator()->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
+        getMediator()->wantToMaskWithFreeItem( *this );
 }
 
 void FreeItem::updateShadow ()
@@ -120,14 +120,14 @@ void FreeItem::updateShadow ()
         Item::updateShadow ();
 
         // reshade items
-        mediator->wantShadowFromFreeItem( *this );
+        getMediator()->wantShadowFromFreeItem( *this );
 }
 
 void FreeItem::requestShadow()
 {
         if ( getWantShadow() )
         {
-                mediator->castShadowOnFreeItem( *this );
+                getMediator()->castShadowOnFreeItem( *this );
 
                 if ( ! getWantShadow() )
                 {
@@ -138,7 +138,7 @@ void FreeItem::requestShadow()
 
 void FreeItem::requestMask()
 {
-        mediator->maskFreeItem( *this );
+        getMediator()->maskFreeItem( *this );
 
         if ( getWantMask().isTrue() )
                 freshProcessedImage ();
@@ -148,7 +148,7 @@ void FreeItem::requestMask()
 
 bool FreeItem::addToPosition( int x, int y, int z )
 {
-        mediator->clearCollisions ();
+        getMediator()->clearCollisions ();
 
         bool collisionFound = false;
 
@@ -164,34 +164,34 @@ bool FreeItem::addToPosition( int x, int y, int z )
         setZ( zBefore + z );
 
         // look for a collision with a wall
-        if ( getX() < mediator->getRoom()->getLimitAt( "north" ) )
+        if ( getX() < getMediator()->getRoom()->getLimitAt( "north" ) )
         {
-                mediator->addCollisionWith( "some segment of the north wall" );
+                getMediator()->addCollisionWith( "some segment of the north wall" );
         }
-        else if ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( "south" ) )
+        else if ( getX() + getWidthX() > getMediator()->getRoom()->getLimitAt( "south" ) )
         {
-                mediator->addCollisionWith( "some segment of the south wall" );
+                getMediator()->addCollisionWith( "some segment of the south wall" );
         }
-        if ( getY() >= mediator->getRoom()->getLimitAt( "west" ) )
+        if ( getY() >= getMediator()->getRoom()->getLimitAt( "west" ) )
         {
-                mediator->addCollisionWith( "some segment of the east wall" );
+                getMediator()->addCollisionWith( "some segment of the east wall" );
         }
-        else if ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) )
+        else if ( getY() - getWidthY() + 1 < getMediator()->getRoom()->getLimitAt( "east" ) )
         {
-                mediator->addCollisionWith( "some segment of the west wall" );
+                getMediator()->addCollisionWith( "some segment of the west wall" );
         }
 
         // collision with the floor
         if ( getZ() < 0 )
         {
-                mediator->addCollisionWith( "some tile of floor" );
+                getMediator()->addCollisionWith( "some tile of floor" );
         }
 
-        collisionFound = mediator->isThereAnyCollision ();
+        collisionFound = getMediator()->isThereAnyCollision ();
         if ( ! collisionFound )
         {
                 // look for collision with other items in room
-                collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
+                collisionFound = getMediator()->collectCollisionsWith( this->getUniqueName() );
                 if ( ! collisionFound ) // is it okay to move
                 {
                         // reshade and remask
@@ -200,14 +200,14 @@ bool FreeItem::addToPosition( int x, int y, int z )
                         setWantMaskTrue();
 
                         // mark to remask
-                        mediator->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
-                        mediator->wantToMaskWithFreeItem( *this );
+                        getMediator()->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
+                        getMediator()->wantToMaskWithFreeItem( *this );
 
                         // reshade items
-                        mediator->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
-                        mediator->wantShadowFromFreeItem( *this );
+                        getMediator()->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
+                        getMediator()->wantShadowFromFreeItem( *this );
 
-                        mediator->markToSortFreeItems ();
+                        getMediator()->markToSortFreeItems ();
                 }
         }
 
@@ -224,7 +224,7 @@ bool FreeItem::addToPosition( int x, int y, int z )
 
 bool FreeItem::isCollidingWithJamb( const std::string & at, const std::string & collision, const int previousX, const int previousY )
 {
-        Door* door = mediator->getRoom()->getDoorOn( at );
+        Door* door = getMediator()->getRoom()->getDoorOn( at );
         if ( door == nilPointer ) return false ;
 
         // proceed only when colliding with a door’s jamb

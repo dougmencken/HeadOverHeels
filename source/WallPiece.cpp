@@ -21,9 +21,9 @@ WallPiece::~WallPiece()
 
 void WallPiece::calculateOffset()
 {
-        assert( mediator != nilPointer );
+        assert( getMediator() != nilPointer );
 
-        Room * room = mediator->getRoom() ;
+        Room * room = getMediator()->getRoom() ;
 
         this->offset.first  = room->getX0 ();
         this->offset.second = room->getY0 ();

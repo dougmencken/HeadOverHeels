@@ -51,11 +51,11 @@ public:
         void update () ;
 
         /**
-         * Begin updating items in a separate thread
+         * Begin updating items in a distinct thread
          */
-        void beginUpdate () ;
+        void beginUpdating () ;
 
-        void endUpdate () ;
+        void endUpdating () ;
 
         void wantToMaskWithFreeItemImageAt ( const FreeItem & item, int x, int y ) ;
 

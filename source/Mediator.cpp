@@ -149,11 +149,9 @@ void Mediator::update()
         }
 }
 
-void Mediator::beginUpdate ()
+void Mediator::beginUpdating ()
 {
         if ( this->threadRunning ) return ;
-
-        IF_DEBUG( fprintf ( stdout, "Mediator::beginUpdate ()\n" ) )
 
         pthread_attr_t attr;
 
@@ -167,11 +165,9 @@ void Mediator::beginUpdate ()
         pthread_attr_destroy( &attr );
 }
 
-void Mediator::endUpdate ()
+void Mediator::endUpdating ()
 {
         if ( ! this->threadRunning ) return ;
-
-        IF_DEBUG( fprintf ( stdout, "Mediator::endUpdate ()\n" ) )
 
         this->threadRunning = false;
 

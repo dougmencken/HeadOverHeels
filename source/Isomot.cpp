@@ -147,7 +147,7 @@ Picture* Isomot::updateMe ()
 
         MapManager & mapManager = MapManager::getInstance () ;
 
-        Room* activeRoom = mapManager.getActiveRoom();
+        Room* activeRoom = mapManager.getActiveRoom() ;
         if ( activeRoom == nilPointer ) return view ;
 
         // la sala final es muy especial
@@ -175,16 +175,7 @@ Picture* Isomot::updateMe ()
                         InputManager::getInstance().releaseKeyFor( "swap" );
                 }
 
-                if ( activeCharacter.getWayOfExit() == "rebuild room" )
-                {
-                        // the active character lost one life
-
-                        if ( activeCharacter.getLives () > 0 || activeCharacter.getKind () == "headoverheels" )
-                                activeRoom = mapManager.rebuildRoom ();
-                        else if ( ! activeRoom->continueWithAliveCharacter () )
-                                activeRoom = mapManager.noLivesSwap ();
-                }
-                else if ( ! activeCharacter.getWayOfExit().empty() )
+                if ( ! activeCharacter.getWayOfExit().empty() )
                 {
                         // move to the next room
                         Room* newRoom = mapManager.changeRoom() ;
@@ -429,7 +420,8 @@ void Isomot::handleMagicKeys ()
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
         {
                 playTuneForScenery( activeRoom->getScenery () );
-                activeRoom = mapManager.rebuildRoom() ;
+                mapManager.rebuildRoom() ;
+                activeRoom = mapManager.getActiveRoom() ;
 
                 allegro::releaseKey( "r" );
         }
@@ -612,7 +604,7 @@ void Isomot::updateFinalRoom()
 
         if ( ! this->finalRoomBuilt )
         {
-                mediator->endUpdate();
+                mediator->endUpdating ();
 
                 std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalKind();
 
@@ -672,7 +664,7 @@ void Isomot::updateFinalRoom()
                         ++ crowns ;
                 }
 
-                mediator->beginUpdate();
+                mediator->beginUpdating ();
 
                 // it's time to count the crowns
                 gameManager.inFreedomWithSoManyCrowns( crowns );

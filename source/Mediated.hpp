@@ -19,11 +19,11 @@ class Mediated
 
 public:
 
-        Mediated( ) {  this->mediator = 0 ;  }
+        Mediated( ) : mediator( 0 ) {}
 
         virtual ~Mediated( ) { }
 
-protected:
+private:
 
        /**
         * Intermediary between the elements of a single room

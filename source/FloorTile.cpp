@@ -23,9 +23,9 @@ FloorTile::FloorTile( int cellX, int cellY, const Picture & graphicsOfTile )
 
 void FloorTile::calculateOffset ()
 {
-        assert( mediator != nilPointer );
+        assert( getMediator() != nilPointer );
 
-        Room* room = mediator->getRoom();
+        Room* room = getMediator()->getRoom();
         this->offset.first = room->getX0() + ( ( room->getSizeOfOneTile() * ( getCellX() - getCellY() - 1 ) ) << 1 ) + 1;
         this->offset.second = room->getY0() + room->getSizeOfOneTile() * ( getCellX() + getCellY() );
 }
@@ -61,8 +61,8 @@ void FloorTile::freshShadyImage ()
 
 unsigned int FloorTile::getIndexOfColumn () const
 {
-        assert( mediator != nilPointer );
-        return mediator->getRoom()->getTilesOnX() * getCellY() + getCellX();
+        assert( getMediator() != nilPointer );
+        return getMediator()->getRoom()->getTilesOnX() * getCellY() + getCellX() ;
 }
 
 /* static */

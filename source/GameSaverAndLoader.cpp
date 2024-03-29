@@ -135,7 +135,7 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
                                 BonusManager::getInstance().markAsAbsent( BonusInRoom( /* which bonus */ kind, /* in which room */ room ) );
 
                                 std::cout << "rebuilding room \"" << room << "\" without bonus \"" << kind << "\"" << std::endl ;
-                                MapManager::getInstance().rebuildRoom( MapManager::getInstance().findRoomByFile( room ) );
+                                MapManager::getInstance().rebuildRoom( room );
                         }
                 }
         }

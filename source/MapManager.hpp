@@ -46,7 +46,9 @@ public:
 
         Room * rebuildRoom ( Room * room ) ;
 
-        Room * rebuildRoom () {  return rebuildRoom( activeRoom ) ;  }
+        Room * rebuildRoom () {  return rebuildRoom( this->activeRoom ) ;  }
+
+        Room * rebuildRoom ( const std::string & roomFile ) {  return rebuildRoom( findRoomByFile( roomFile ) ) ;  }
 
         Room * getRoomThenAddItToRoomsInPlay ( const std::string& roomFile, bool markVisited ) ;
 
@@ -88,6 +90,8 @@ public:
         Room * findRoomByFile ( const std::string& roomFile ) const ;
 
         Room * getOrBuildRoomByFile ( const std::string& roomFile ) ;
+
+        void replaceRoomForFile( const std::string & roomFile, Room * room );
 
         const std::set< std::string > & listAllVisitedRooms () const {  return visitedRooms ;  }
 

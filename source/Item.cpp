@@ -220,8 +220,8 @@ bool Item::canAdvanceTo( int x, int y, int z )
         int originalY = yYet ;
         int originalZ = zYet ;
 
-        assert( mediator != nilPointer );
-        mediator->clearCollisions ();
+        assert( getMediator() != nilPointer );
+        getMediator()->clearCollisions ();
 
         bool collisionFound = false;
 
@@ -231,28 +231,28 @@ bool Item::canAdvanceTo( int x, int y, int z )
         zYet += z ;
 
         // look for collisions with walls
-        if ( this->getX() < mediator->getRoom()->getLimitAt( "north" ) ) {
-                mediator->addCollisionWith( "some segment of the north wall" );
+        if ( this->getX() < getMediator()->getRoom()->getLimitAt( "north" ) ) {
+                getMediator()->addCollisionWith( "some segment of the north wall" );
         }
-        else if ( this->getX() + this->getWidthX() > mediator->getRoom()->getLimitAt( "south" ) ) {
-                mediator->addCollisionWith( "some segment of the south wall" );
+        else if ( this->getX() + this->getWidthX() > getMediator()->getRoom()->getLimitAt( "south" ) ) {
+                getMediator()->addCollisionWith( "some segment of the south wall" );
         }
-        if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" ) ) {
-                mediator->addCollisionWith( "some segment of the west wall" );
+        if ( this->getY() >= getMediator()->getRoom()->getLimitAt( "west" ) ) {
+                getMediator()->addCollisionWith( "some segment of the west wall" );
         }
-        else if ( this->getY() - this->getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" ) ) {
-                mediator->addCollisionWith( "some segment of the east wall" );
+        else if ( this->getY() - this->getWidthY() + 1 < getMediator()->getRoom()->getLimitAt( "east" ) ) {
+                getMediator()->addCollisionWith( "some segment of the east wall" );
         }
 
         // look for a collision with floor
-        if ( this->getZ() < 0 && mediator->getRoom()->hasFloor() ) {
-                mediator->addCollisionWith( "some tile of floor" );
+        if ( this->getZ() < 0 && getMediator()->getRoom()->hasFloor() ) {
+                getMediator()->addCollisionWith( "some tile of floor" );
         }
 
-        collisionFound = mediator->isThereAnyCollision ();
+        collisionFound = getMediator()->isThereAnyCollision ();
         if ( ! collisionFound ) {
                 // look for collisions with other items in the room
-                collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
+                collisionFound = getMediator()->collectCollisionsWith( this->getUniqueName() );
         }
 
         // restore the original coordinates

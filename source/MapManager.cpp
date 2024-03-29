@@ -356,12 +356,11 @@ Room* MapManager::rebuildRoom( Room* room )
 {
         if ( room == nilPointer ) return nilPointer ;
 
-        bool isActive = room->isActive();
-        room->deactivate();
+        bool wasActive = room->isActive ();
+        room->deactivate() ;
 
         std::string fileOfRoom = room->getNameOfRoomDescriptionFile() ;
 
-        // rebuild room
         Room* newRoom = RoomMaker::makeRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + fileOfRoom );
         if ( newRoom == nilPointer ) return nilPointer ;
         newRoom->setConnections( room->getConnections() );
@@ -461,15 +460,14 @@ Room* MapManager::rebuildRoom( Room* room )
                 }
         }
 
-        if ( isActive ) {
-                activeRoom = newRoom ;
-                if ( activeRoom != nilPointer ) activeRoom->activate() ;
+        if ( wasActive ) {
+                setActiveRoom( newRoom );
+                if ( this->activeRoom != nilPointer ) this->activeRoom->activate () ;
         }
 
-        gameRooms[ fileOfRoom ] = newRoom ;
-        delete room ;
+        replaceRoomForFile( fileOfRoom, newRoom );
 
-        return newRoom;
+        return newRoom ;
 }
 
 Room* MapManager::changeRoom ()
@@ -648,17 +646,11 @@ Room* MapManager::noLivesSwap ()
         activeRoom = ( ri != roomsInPlay.end () ? *ri : *roomsInPlay.begin () );
 
         // no more rooms, game over
-        if ( inactiveRoom == activeRoom )
-        {
-                activeRoom = nilPointer;
-        }
+        if ( inactiveRoom == activeRoom ) activeRoom = nilPointer;
 
         removeRoomInPlay( inactiveRoom );
 
-        if ( activeRoom != nilPointer )
-        {
-                activeRoom->activate();
-        }
+        if ( activeRoom != nilPointer ) activeRoom->activate() ;
 
         return activeRoom;
 }
@@ -726,9 +718,7 @@ Room* MapManager::findRoomInPlayByFile( const std::string& roomFile ) const
         for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {
                 if ( *ri != nilPointer && ( *ri )->getNameOfRoomDescriptionFile() == roomFile )
-                {
                         return *ri ;
-                }
         }
 
         return nilPointer ;
@@ -765,6 +755,16 @@ Room* MapManager::getOrBuildRoomByFile( const std::string & roomFile )
         }
 
         return nilPointer ;
+}
+
+void MapManager::replaceRoomForFile( const std::string & roomFile, Room * room )
+{
+        Room * previousRoom = findRoomByFile( roomFile );
+        if ( previousRoom != nilPointer ) previousRoom->deactivate() ;
+
+        gameRooms[ roomFile ] = room ;
+
+        /////////////////////////////////////////////delete previousRoom ; //////// yet it is not deleted!!
 }
 
 void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRooms )

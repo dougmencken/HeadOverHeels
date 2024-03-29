@@ -44,7 +44,7 @@ Room::Room( const std::string & roomFile,
         , camera( new Camera( this ) )
         , whereToDraw( )
 {
-        this->mediator = new Mediator( this );
+        setMediator( new Mediator( this ) );
 
         for ( unsigned int i = 0 ; i < Room::Sides ; ++ i ) {
                 bounds[ Room::Sides_Of_Room[ i ] ] = -1 ;
@@ -123,6 +123,8 @@ Room::Room( const std::string & roomFile,
 
 Room::~Room()
 {
+        deactivate() ;
+
         // bin doors
         for ( std::map< std::string, Door * >::const_iterator mi = doors.begin (); mi != doors.end (); ++mi )
         {
@@ -138,9 +140,9 @@ Room::~Room()
         // bin the sequence of drawing
         delete [] drawingSequence ;
 
-        delete camera;
+        delete this->camera ;
 
-        delete mediator;
+        delete getMediator() ;
 
         // bin items
 
@@ -440,7 +442,7 @@ void Room::addFloorTile( FloorTile * floorTile )
 {
         if ( floorTile == nilPointer ) return ;
 
-        floorTile->setMediator( mediator );
+        floorTile->setMediator( getMediator() );
 
         // bin old tile, if any
         removeFloorAt( floorTile->getCellX(), floorTile->getCellY() );
@@ -452,7 +454,7 @@ void Room::addWallPiece( WallPiece * segment )
 {
         if ( segment == nilPointer ) return ;
 
-        segment->setMediator( mediator );
+        segment->setMediator( getMediator() );
         this->wallPieces.push_back( segment );
 }
 
@@ -460,7 +462,7 @@ void Room::addDoor( Door * door )
 {
         if ( door == nilPointer ) return ;
 
-        door->setMediator( mediator );
+        door->setMediator( getMediator() );
 
         this->doors[ door->getWhereIsDoor() ] = door;
 
@@ -578,9 +580,9 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 return;
         }
 
-        gridItem->setMediator( mediator );
+        gridItem->setMediator( getMediator() );
 
-        mediator->clearCollisions ();
+        getMediator()->clearCollisions ();
 
         const std::string & kindOfItem = gridItem->getKind () ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
@@ -600,16 +602,16 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         if ( gridItem->getZ() != Room::FloorZ ) {
                 // when the position on Z is set, look for collisions there
-                mediator->collectCollisionsWith( gridItem->getUniqueName() );
+                getMediator()->collectCollisionsWith( gridItem->getUniqueName() );
         } else
         {       // an item with z = FloorZ goes above the previously added ones in the column with the same x and y
                 // and its position on Z is calculated
-                gridItem->setZ( mediator->findHighestZ( *gridItem ) );
+                gridItem->setZ( getMediator()->findHighestZ( *gridItem ) );
                 std::cout << "for " << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName()
                                         << "\" the calculated “Z above others” is " << gridItem->getZ() << std::endl ;
         }
 
-        if ( mediator->isThereAnyCollision () )
+        if ( getMediator()->isThereAnyCollision () )
         {
                 // can’t add item when there’s some collision
                 std::cerr << "there’s collision with " << gridItem->whichItemClass() << std::endl ;
@@ -619,8 +621,8 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         // update the offset of the item’s image from the room’s origin
         gridItem->updateImageOffset() ;
 
-        mediator->wantShadowFromGridItem( *gridItem );
-        mediator->wantToMaskWithGridItem( *gridItem );
+        getMediator()->wantShadowFromGridItem( *gridItem );
+        getMediator()->wantToMaskWithGridItem( *gridItem );
 
 #if defined( DEBUG ) && DEBUG
         std::cout << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
@@ -629,7 +631,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
 void Room::sortGridItems ()
 {
-        mediator->lockGridItemsMutex ();
+        getMediator()->lockGridItemsMutex ();
 
         for ( unsigned int column = 0; column < this->gridItems.size(); ++ column )
         {
@@ -637,7 +639,7 @@ void Room::sortGridItems ()
                         std::sort( this->gridItems[ column ].begin (), this->gridItems[ column ].end () );
         }
 
-        mediator->unlockGridItemsMutex ();
+        getMediator()->unlockGridItemsMutex ();
 }
 
 void Room::addFreeItemToContainer( const FreeItemPtr& freeItem )
@@ -672,9 +674,9 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 return;
         }
 
-        freeItem->setMediator( mediator );
+        freeItem->setMediator( getMediator() );
 
-        mediator->clearCollisions ();
+        getMediator()->clearCollisions ();
 
         const std::string & kindOfItem = freeItem->getKind () ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
@@ -691,24 +693,24 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         // for item which is placed at some height, look for collisions
         if ( freeItem->getZ() > Room::FloorZ )
         {
-                mediator->collectCollisionsWith( freeItem->getUniqueName() );
+                getMediator()->collectCollisionsWith( freeItem->getUniqueName() );
         }
         // for item at the top of column
         else
         {
-                freeItem->setZ( mediator->findHighestZ( *freeItem ) );
+                freeItem->setZ( getMediator()->findHighestZ( *freeItem ) );
         }
 
         // collision is found, so can’t add this item
-        if ( mediator->isThereAnyCollision () )
+        if ( getMediator()->isThereAnyCollision () )
         {
                 std::cerr << "there’s collision with " << freeItem->whichItemClass() << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
                 return;
         }
 
-        mediator->wantShadowFromFreeItem( *freeItem );
-        mediator->wantToMaskWithFreeItem( *freeItem );
+        getMediator()->wantShadowFromFreeItem( *freeItem );
+        getMediator()->wantToMaskWithFreeItem( *freeItem );
 
 #if defined( DEBUG ) && DEBUG
         std::cout << freeItem->whichItemClass() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
@@ -717,7 +719,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 
 void Room::sortFreeItems ()
 {
-        mediator->lockFreeItemsMutex ();
+        getMediator()->lockFreeItemsMutex ();
 
         std::sort( this->freeItems.begin (), this->freeItems.end () );
 
@@ -725,7 +727,7 @@ void Room::sortFreeItems ()
         for ( std::vector< FreeItemPtr >::iterator f = this->freeItems.begin (); f != this->freeItems.end (); ++ f )
                 ( *f )->setWantMaskTrue ();
 
-        mediator->unlockFreeItemsMutex ();
+        getMediator()->unlockFreeItemsMutex ();
 }
 
 bool Room::placeCharacterInRoom( const std::string & name,
@@ -853,9 +855,9 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
                 return false;
         }
 
-        character->setMediator( mediator );
+        character->setMediator( getMediator() );
 
-        mediator->clearCollisions ();
+        getMediator()->clearCollisions ();
 
         std::string kindOfItem = "character " + character->getOriginalKind() ;
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
@@ -875,30 +877,30 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
         // if character is placed at the given height, look for collisions
         if ( character->getZ() > Room::FloorZ )
         {
-                mediator->collectCollisionsWith( character->getUniqueName() );
-                while ( mediator->isThereAnyCollision () )
+                getMediator()->collectCollisionsWith( character->getUniqueName() );
+                while ( getMediator()->isThereAnyCollision () )
                 {
                         character->setZ( character->getZ() + Room::LayerHeight );
-                        mediator->clearCollisions ();
-                        mediator->collectCollisionsWith( character->getUniqueName() );
+                        getMediator()->clearCollisions ();
+                        getMediator()->collectCollisionsWith( character->getUniqueName() );
                 }
         }
         else    // for character at the top of column
-                character->setZ( mediator->findHighestZ( *character ) );
+                character->setZ( getMediator()->findHighestZ( *character ) );
 
         // collision is found, so can’t add this item
-        if ( mediator->isThereAnyCollision () )
+        if ( getMediator()->isThereAnyCollision () )
         {
                 std::cerr << "there’s collision with " << character->whichItemClass() << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
         }
 
-        if ( mediator->getActiveCharacter() == nilPointer )
-                mediator->activateCharacterByName( character->getOriginalKind() );
+        if ( getMediator()->getActiveCharacter() == nilPointer )
+                getMediator()->activateCharacterByName( character->getOriginalKind() );
 
-        mediator->wantShadowFromFreeItem( *character );
-        mediator->wantToMaskWithFreeItem( *character );
+        getMediator()->wantShadowFromFreeItem( *character );
+        getMediator()->wantToMaskWithFreeItem( *character );
 
         // add avatar item to room
         this->charactersYetInRoom.push_back( character );
@@ -916,7 +918,7 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
         // perhaps the character appeared in the room by means of teleportation
         if ( character->getWayOfEntry().empty () ) {
                 character->canAdvanceTo( 0, 0, -1 ); // is there a teletransportation device under the character
-                if ( mediator->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer )
+                if ( getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer )
                         character->setWayOfEntry( "via teleport" );
         }
 
@@ -1026,8 +1028,8 @@ void Room::removeGridItemByUniqueName( const std::string & uniqueName )
         }
 
         if ( foundGridItem != nilPointer ) {
-                mediator->wantShadowFromGridItem( * foundGridItem );
-                mediator->wantToMaskWithGridItem( * foundGridItem );
+                getMediator()->wantShadowFromGridItem( * foundGridItem );
+                getMediator()->wantToMaskWithGridItem( * foundGridItem );
         }
 }
 
@@ -1051,8 +1053,8 @@ void Room::removeFreeItemByUniqueName( const std::string & uniqueName )
         }
 
         if ( foundFreeItem != nilPointer ) {
-                mediator->wantShadowFromFreeItem( * foundFreeItem );
-                mediator->wantToMaskWithFreeItem( * foundFreeItem );
+                getMediator()->wantShadowFromFreeItem( * foundFreeItem );
+                getMediator()->wantToMaskWithFreeItem( * foundFreeItem );
         }
 }
 
@@ -1070,11 +1072,11 @@ bool Room::removeCharacterFromRoom( const AvatarItem & character, bool character
                         nextNumbers[ "character " + characterName ] -- ;
 
                         if ( wasActive ) {
-                                if ( mediator->getWaitingCharacter() != nilPointer )
+                                if ( getMediator()->getWaitingCharacter() != nilPointer )
                                         // activate the waiting character
-                                        mediator->activateCharacterByName( mediator->getWaitingCharacter()->getOriginalKind() );
+                                        getMediator()->activateCharacterByName( getMediator()->getWaitingCharacter()->getOriginalKind() );
                                 else
-                                        mediator->deactivateAnyCharacter() ;
+                                        getMediator()->deactivateAnyCharacter() ;
                         }
 
                         charactersYetInRoom.erase( pi );
@@ -1112,7 +1114,7 @@ unsigned int Room::removeItemsOfKind ( const std::string & kind )
 {
         unsigned int howManyItemsWereRemoved = 0 ;
 
-        mediator->lockGridItemsMutex();
+        getMediator()->lockGridItemsMutex();
 
         std::vector< std::string > gridItemsToRemove ;
 
@@ -1134,8 +1136,8 @@ unsigned int Room::removeItemsOfKind ( const std::string & kind )
                 howManyItemsWereRemoved ++ ;
         }
 
-        mediator->unlockGridItemsMutex();
-        mediator->lockFreeItemsMutex();
+        getMediator()->unlockGridItemsMutex();
+        getMediator()->lockFreeItemsMutex();
 
         std::vector< std::string > freeItemsToRemove ;
 
@@ -1154,7 +1156,7 @@ unsigned int Room::removeItemsOfKind ( const std::string & kind )
                 howManyItemsWereRemoved ++ ;
         }
 
-        mediator->unlockFreeItemsMutex();
+        getMediator()->unlockFreeItemsMutex();
 
         return howManyItemsWereRemoved ;
 }
@@ -1279,7 +1281,7 @@ void Room::draw ()
                         {
                                 if ( shadingTransparency < 256 ) // visible shadows
                                         if ( tile->getWantShadow() )
-                                                mediator->castShadowOnFloor( *tile );
+                                                getMediator()->castShadowOnFloor( *tile );
 
                                 tile->draw ();
                         }
@@ -1293,8 +1295,8 @@ void Room::draw ()
                         ( *wi )->draw ();
         }
 
-        mediator->lockGridItemsMutex();
-        mediator->lockFreeItemsMutex();
+        getMediator()->lockGridItemsMutex();
+        getMediator()->lockFreeItemsMutex();
 
         // draw grid items
 
@@ -1314,7 +1316,7 @@ void Room::draw ()
                         if ( shadingTransparency < 256 ) {
                                 // cast shadow
                                 if ( gridItem.getWantShadow() )
-                                        mediator->castShadowOnGridItem( gridItem );
+                                        getMediator()->castShadowOnGridItem( gridItem );
                         }
 
                         gridItem.draw ();
@@ -1341,8 +1343,8 @@ void Room::draw ()
                 freeItem.draw ();
         }
 
-        mediator->unlockGridItemsMutex();
-        mediator->unlockFreeItemsMutex();
+        getMediator()->unlockGridItemsMutex();
+        getMediator()->unlockFreeItemsMutex();
 
 
 #if defined( SHOW_ORIGIN_OF_ROOM ) && SHOW_ORIGIN_OF_ROOM
@@ -1381,27 +1383,27 @@ void Room::calculateBounds()
 
 void Room::activate()
 {
-        mediator->beginUpdate();
+        getMediator()->beginUpdating ();
 }
 
 void Room::deactivate()
 {
-        mediator->endUpdate();
+        getMediator()->endUpdating ();
 }
 
 bool Room::isActive() const
 {
-        return mediator->isThreadRunning() ;
+        return getMediator()->isThreadRunning() ;
 }
 
 bool Room::swapCharactersInRoom ()
 {
-        return mediator->pickNextCharacter () ;
+        return getMediator()->pickNextCharacter () ;
 }
 
 bool Room::continueWithAliveCharacter ()
 {
-        AvatarItemPtr previouslyAliveCharacter = mediator->getActiveCharacter() ;
+        AvatarItemPtr previouslyAliveCharacter = getMediator()->getActiveCharacter() ;
         assert( previouslyAliveCharacter != nilPointer );
 
         if ( previouslyAliveCharacter->getLives() > 0 ) return true ;
@@ -1419,7 +1421,7 @@ bool Room::continueWithAliveCharacter ()
 
         if ( nextCharacter != nilPointer && nextCharacter->getLives() > 0 )
         {
-                mediator->activateCharacterByName( nextCharacter->getOriginalKind() );
+                getMediator()->activateCharacterByName( nextCharacter->getOriginalKind() );
 
                 removeCharacterFromRoom( *previouslyAliveCharacter, /* leaving room */ true );
 

@@ -58,8 +58,6 @@ public:
         static const unsigned int ByTeleport = 33 ;     // to another room via teleport
         static const unsigned int ByTeleportToo = 34 ;  // to another room via second teleport
 
-        static const unsigned int RestartRoom = 55 ;    // restart the room, for example when a character loses one life
-
         static std::string exitToEntry ( const std::string & wayOfExit ) ;
 
 private:

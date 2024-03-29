@@ -5,6 +5,7 @@
 #include "Door.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
+#include "MapManager.hpp"
 #include "GameManager.hpp"
 #include "GameInfo.hpp"
 #include "PlayerControlled.hpp"
@@ -152,7 +153,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         if ( ! this->isActiveCharacter() && ! autowalksThruDoor /* && ! fallsUnderDoor */ )
                 return FreeItem::addToPosition( x, y, z );
 
-        mediator->clearCollisions ();
+        getMediator()->clearCollisions ();
 
         const int xBefore = getX() ;
         const int yBefore = getY() ;
@@ -169,12 +170,12 @@ bool AvatarItem::addToPosition( int x, int y, int z )
 
         bool jambCollision = false;
 
-        bool collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
+        bool collisionFound = getMediator()->collectCollisionsWith( this->getUniqueName() );
         if ( collisionFound )
         {
-                while ( mediator->isThereAnyCollision () )
+                while ( getMediator()->isThereAnyCollision () )
                 {
-                        std::string collision = mediator->popCollision() ;
+                        std::string collision = getMediator()->popCollision() ;
 
                         if ( x < 0 ) // moving north
                         {
@@ -233,53 +234,53 @@ bool AvatarItem::addToPosition( int x, int y, int z )
 
         // look for a collision with a wall
 
-        if ( getX() < mediator->getRoom()->getLimitAt( "north" )
+        if ( getX() < getMediator()->getRoom()->getLimitAt( "north" )
                         && isNotUnderDoorAt( "north" ) && isNotUnderDoorAt( "northeast" ) && isNotUnderDoorAt( "northwest" ) )
         {
-                mediator->addCollisionWith( "some segment of the north wall" );
+                getMediator()->addCollisionWith( "some segment of the north wall" );
         }
-        else if ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( "south" )
+        else if ( getX() + getWidthX() > getMediator()->getRoom()->getLimitAt( "south" )
                         && isNotUnderDoorAt( "south" ) && isNotUnderDoorAt( "southeast" ) && isNotUnderDoorAt( "southwest" ) )
         {
-                mediator->addCollisionWith( "some segment of the south wall" );
+                getMediator()->addCollisionWith( "some segment of the south wall" );
         }
 
-        if ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( "east" )
+        if ( getY() - getWidthY() + 1 < getMediator()->getRoom()->getLimitAt( "east" )
                         && isNotUnderDoorAt( "east" ) && isNotUnderDoorAt( "eastnorth" ) && isNotUnderDoorAt( "eastsouth" ) )
         {
-                mediator->addCollisionWith( "some segment of the east wall" );
+                getMediator()->addCollisionWith( "some segment of the east wall" );
         }
-        else if ( getY() >= mediator->getRoom()->getLimitAt( "west" )
+        else if ( getY() >= getMediator()->getRoom()->getLimitAt( "west" )
                         && isNotUnderDoorAt( "west" ) && isNotUnderDoorAt( "westnorth" ) && isNotUnderDoorAt( "westsouth" ) )
         {
-                mediator->addCollisionWith( "some segment of the west wall" );
+                getMediator()->addCollisionWith( "some segment of the west wall" );
         }
 
-        collisionFound = mediator->isThereAnyCollision ();
+        collisionFound = getMediator()->isThereAnyCollision ();
         if ( ! collisionFound )
         {
                 // the character may go thru a door
                 for ( unsigned int i = 0 ; i < Room::Sides ; ++ i ) {
                         if ( isWalkingThroughDoorAt( Room::Sides_Of_Room[ i ] ) ) {
-                                mediator->addCollisionWith( Room::Sides_Of_Room[ i ] + " door" );
+                                getMediator()->addCollisionWith( Room::Sides_Of_Room[ i ] + " door" );
                                 break;
                         }
                 }
 
                 // collision with the floor
                 if ( this->getZ() < 0 ) {
-                        mediator->addCollisionWith( "some tile of floor" );
+                        getMediator()->addCollisionWith( "some tile of floor" );
                 }
 
                 // collision with the ceiling
                 if ( z >= 0 && this->getZ() > ( Room::MaxLayers - 1 ) * Room::LayerHeight + ( Room::LayerHeight >> 1 ) ) {
-                        mediator->addCollisionWith( "ceiling" );
+                        getMediator()->addCollisionWith( "ceiling" );
                 }
 
-                collisionFound = mediator->isThereAnyCollision ();
+                collisionFound = getMediator()->isThereAnyCollision ();
                 if ( ! collisionFound ) {
                         // look for collisions with other items in the room
-                        collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
+                        collisionFound = getMediator()->collectCollisionsWith( this->getUniqueName() );
                         if ( ! collisionFound ) {
                                 // reshade and remask
                                 freshBothProcessedImages();
@@ -287,15 +288,15 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                                 setWantMaskTrue();
 
                                 // mark to mask the free items whose images overlap with the character’s image
-                                mediator->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
-                                mediator->wantToMaskWithFreeItem( *this );
+                                getMediator()->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
+                                getMediator()->wantToMaskWithFreeItem( *this );
 
                                 // reshade other items
-                                mediator->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
-                                mediator->wantShadowFromFreeItem( *this );
+                                getMediator()->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
+                                getMediator()->wantShadowFromFreeItem( *this );
 
                                 // re~sort
-                                mediator->markToSortFreeItems ();
+                                getMediator()->markToSortFreeItems ();
                         }
                 }
         }
@@ -312,12 +313,12 @@ bool AvatarItem::addToPosition( int x, int y, int z )
 
 bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 {
-        Door* door = mediator->getRoom()->getDoorOn( where );
+        Door* door = getMediator()->getRoom()->getDoorOn( where );
         if ( door == nilPointer ) return false ;
 
         bool walksThruDoor = false ;
 
-        const unsigned int oneTile = mediator->getRoom()->getSizeOfOneTile() ;
+        const unsigned int oneTile = getMediator()->getRoom()->getSizeOfOneTile() ;
 
         switch ( Way( where ).getIntegerOfWay () )
         {
@@ -327,17 +328,17 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 
                 case Way::Northeast:
                 case Way::Northwest:
-                        walksThruDoor = ( getX() < mediator->getRoom()->getLimitAt( where )
+                        walksThruDoor = ( getX() < getMediator()->getRoom()->getLimitAt( where )
                                                 && door->isUnderDoor( *this ) );
                         break;
 
                 case Way::South:
-                        walksThruDoor = ( getX() + getWidthX() > static_cast< int >( mediator->getRoom()->getTilesOnX() * oneTile ) );
+                        walksThruDoor = ( getX() + getWidthX() > static_cast< int >( getMediator()->getRoom()->getTilesOnX() * oneTile ) );
                         break;
 
                 case Way::Southeast:
                 case Way::Southwest:
-                        walksThruDoor = ( getX() + getWidthX() > mediator->getRoom()->getLimitAt( where )
+                        walksThruDoor = ( getX() + getWidthX() > getMediator()->getRoom()->getLimitAt( where )
                                                 && door->isUnderDoor( *this ) );
                         break;
 
@@ -347,17 +348,17 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        walksThruDoor = ( getY() - getWidthY() + 1 < mediator->getRoom()->getLimitAt( where )
+                        walksThruDoor = ( getY() - getWidthY() + 1 < getMediator()->getRoom()->getLimitAt( where )
                                                 && door->isUnderDoor( *this ) );
                         break;
 
                 case Way::West:
-                        walksThruDoor = ( getY() >= static_cast< int >( mediator->getRoom()->getTilesOnY() * oneTile ) );
+                        walksThruDoor = ( getY() >= static_cast< int >( getMediator()->getRoom()->getTilesOnY() * oneTile ) );
                         break;
 
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        walksThruDoor = ( getY() + getWidthY() > mediator->getRoom()->getLimitAt( where )
+                        walksThruDoor = ( getY() + getWidthY() > getMediator()->getRoom()->getLimitAt( where )
                                                 && door->isUnderDoor( *this ) );
                         break;
 
@@ -411,8 +412,6 @@ void AvatarItem::addLives( unsigned char lives )
 
 void AvatarItem::loseLife ()
 {
-        setWayOfExit( "rebuild room" );
-
         const std::string & character = this->getOriginalKind() ;
         GameManager & gameManager = GameManager::getInstance () ;
         GameInfo & gameInfo = gameManager.getGameInfo () ;
@@ -422,6 +421,17 @@ void AvatarItem::loseLife ()
                 gameInfo.loseLifeByName( getOriginalKind () /* the current kind is "bubbles" */ );
 
         gameManager.emptyHandbag () ;
+
+        Room * room = getMediator()->getRoom() ;
+        if ( room == nilPointer ) return ;
+
+        MapManager & mapManager = MapManager::getInstance () ;
+        if ( mapManager.getActiveRoom() == room ) {
+                if ( getLives() > 0 || getKind() == "headoverheels" )
+                        mapManager.rebuildRoom() ;
+                else if ( ! room->continueWithAliveCharacter () )
+                        mapManager.setActiveRoom( mapManager.noLivesSwap () );
+        }
 }
 
 void AvatarItem::takeMagicTool( const std::string & tool )
@@ -524,7 +534,7 @@ void AvatarItem::decrementShieldOverTime ()
 
 void AvatarItem::liberateCurrentPlanet ()
 {
-        const std::string & scenery = this->mediator->getRoom()->getScenery ();
+        const std::string & scenery = getMediator()->getRoom()->getScenery ();
 
         if ( scenery == "jail" || scenery == "blacktooth" || scenery == "market" )
         {
@@ -562,7 +572,7 @@ void AvatarItem::emptyBag ()
 
 void AvatarItem::saveGame ()
 {
-        GameManager::getInstance().eatFish( *this, this->mediator->getRoom() );
+        GameManager::getInstance().eatFish( *this, getMediator()->getRoom() );
 }
 
 void AvatarItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
@@ -596,14 +606,14 @@ bool AvatarItem::hasShield () const
 
 bool AvatarItem::isNotUnderDoorAt( const std::string & where )
 {
-        Door* door = mediator->getRoom()->getDoorOn( where );
+        Door* door = getMediator()->getRoom()->getDoorOn( where );
 
         return ( door == nilPointer || ! door->isUnderDoor( *this ) );
 }
 
 /*** bool AvatarItem::isUnderSomeDoor ()
 {
-        const std::map < std::string, Door* > & doors = mediator->getRoom()->getDoors();
+        const std::map < std::string, Door* > & doors = getMediator()->getRoom()->getDoors();
 
         for ( std::map < std::string, Door* >::const_iterator iter = doors.begin () ; iter != doors.end (); ++ iter )
         {

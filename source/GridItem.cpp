@@ -25,7 +25,7 @@ GridItem::~GridItem( )
 
 void GridItem::updateImageOffset ()
 {
-        int oneTileLong = ( mediator != nilPointer ) ? mediator->getRoom()->getSizeOfOneTile() : Room::Single_Tile_Size ;
+        int oneTileLong = ( getMediator() != nilPointer ) ? getMediator()->getRoom()->getSizeOfOneTile() : Room::Single_Tile_Size ;
 
         int offsetX = ( ( oneTileLong * ( cell.first - cell.second ) ) << 1 ) - ( getRawImage().getWidth() >> 1 ) + 1 ;
         int offsetY = oneTileLong * ( cell.first + cell.second + 2 ) - getRawImage().getHeight() - this->getZ() - 1 ;
@@ -39,12 +39,12 @@ void GridItem::draw ()
 
         if ( getTransparency() == 0 ) {
                 allegro::drawSprite( getProcessedImage().getAllegroPict(),
-                                        mediator->getRoom()->getX0() + getImageOffsetX(),
-                                        mediator->getRoom()->getY0() + getImageOffsetY() );
+                                        getMediator()->getRoom()->getX0() + getImageOffsetX(),
+                                        getMediator()->getRoom()->getY0() + getImageOffsetY() );
         } else {
                 allegro::drawSpriteWithTransparency( getProcessedImage().getAllegroPict(),
-                                        mediator->getRoom()->getX0 () + getImageOffsetX (),
-                                        mediator->getRoom()->getY0 () + getImageOffsetY (),
+                                        getMediator()->getRoom()->getX0 () + getImageOffsetX (),
+                                        getMediator()->getRoom()->getY0 () + getImageOffsetY (),
                                         static_cast < unsigned char > ( 255 - 2.55 * getTransparency() ) );
         }
 }
@@ -64,8 +64,8 @@ void GridItem::updateImage ()
         updateImageOffset ();
 
         // remask items
-        mediator->wantToMaskWithGridItemAt( *this, xBefore, yBefore, zBefore, imageOffsetBefore );
-        mediator->wantToMaskWithGridItem( *this );
+        getMediator()->wantToMaskWithGridItemAt( *this, xBefore, yBefore, zBefore, imageOffsetBefore );
+        getMediator()->wantToMaskWithGridItem( *this );
 }
 
 void GridItem::updateShadow ()
@@ -73,12 +73,12 @@ void GridItem::updateShadow ()
         Item::updateShadow ();
 
         // reshade items
-        mediator->wantShadowFromGridItem( *this );
+        getMediator()->wantShadowFromGridItem( *this );
 }
 
 bool GridItem::addToPosition( int x, int y, int z )
 {
-        mediator->clearCollisions() ;
+        getMediator()->clearCollisions() ;
 
         bool collisionFound = false;
 
@@ -96,27 +96,27 @@ bool GridItem::addToPosition( int x, int y, int z )
         // is there collision with floor
         if ( this->getZ() < 0 )
         {
-                mediator->addCollisionWith( "some tile of floor" );
+                getMediator()->addCollisionWith( "some tile of floor" );
                 collisionFound = true;
         }
         // or maybe with other items in room
         else
         {
-                collisionFound = mediator->collectCollisionsWith( this->getUniqueName() );
+                collisionFound = getMediator()->collectCollisionsWith( this->getUniqueName() );
                 if ( ! collisionFound )
                 {
                         // change only the offset on Y because it depends on the 3D Z coordinate
-                        int newOffsetY = mediator->getRoom()->getSizeOfOneTile() * ( cell.first + cell.second + 2 ) - getRawImage().getHeight() - this->getZ() - 1 ;
+                        int newOffsetY = getMediator()->getRoom()->getSizeOfOneTile() * ( cell.first + cell.second + 2 ) - getRawImage().getHeight() - this->getZ() - 1 ;
                         this->imageOffset = std::pair< int, int >( getImageOffsetX(), newOffsetY );
 
                         // mark to mask overlapping free items
-                        mediator->wantToMaskWithGridItemAt( *this, getX(), getY(), zBefore, imageOffsetBefore );
-                        mediator->wantToMaskWithGridItem( *this );
+                        getMediator()->wantToMaskWithGridItemAt( *this, getX(), getY(), zBefore, imageOffsetBefore );
+                        getMediator()->wantToMaskWithGridItem( *this );
 
                         // reshade items
-                        mediator->wantShadowFromGridItem( *this );
+                        getMediator()->wantShadowFromGridItem( *this );
 
-                        mediator->markToSortGridItems ();
+                        getMediator()->markToSortGridItems ();
                 }
         }
 
@@ -132,7 +132,7 @@ bool GridItem::addToPosition( int x, int y, int z )
 
 unsigned int GridItem::getColumnOfGrid () const
 {
-        assert( mediator != nilPointer );
-        return mediator->getRoom()->getTilesOnX() * getCellY() + getCellX();
+        assert( getMediator() != nilPointer );
+        return getMediator()->getRoom()->getTilesOnX() * getCellY() + getCellX();
 }
 
