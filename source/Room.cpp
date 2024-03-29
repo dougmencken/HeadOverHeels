@@ -123,7 +123,7 @@ Room::Room( const std::string & roomFile,
 
 Room::~Room()
 {
-        deactivate() ;
+        delete getMediator() ;
 
         // bin doors
         for ( std::map< std::string, Door * >::const_iterator mi = doors.begin (); mi != doors.end (); ++mi )
@@ -141,8 +141,6 @@ Room::~Room()
         delete [] drawingSequence ;
 
         delete this->camera ;
-
-        delete getMediator() ;
 
         // bin items
 

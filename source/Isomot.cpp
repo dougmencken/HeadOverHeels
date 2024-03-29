@@ -148,7 +148,7 @@ Picture* Isomot::updateMe ()
         MapManager & mapManager = MapManager::getInstance () ;
 
         Room* activeRoom = mapManager.getActiveRoom() ;
-        if ( activeRoom == nilPointer ) return view ;
+        if ( activeRoom == nilPointer ) return this->view ;
 
         // la sala final es muy especial
         if ( activeRoom->getNameOfRoomDescriptionFile() == "finalroom.xml" )
@@ -195,7 +195,10 @@ Picture* Isomot::updateMe ()
 
         // draw the active room
 
-        activeRoom->drawRoom();
+        activeRoom = mapManager.getActiveRoom() ;
+        if ( activeRoom == nilPointer ) return this->view ;
+
+        activeRoom->drawRoom () ;
 
         if ( cameraFollowsCharacter && activeRoom->getMediator()->getActiveCharacter() != nilPointer )
                 activeRoom->getCamera()->centerOnItem( * activeRoom->getMediator()->getActiveCharacter() );
@@ -286,13 +289,11 @@ Picture* Isomot::updateMe ()
         }
 
         if ( paused )
-        {
                 Color::multiplyWithColor( * view, Color::byName( "gray" ) );
-        }
 
         allegro::Pict::setWhereToDraw( previousWhere );
 
-        return this->view;
+        return this->view ;
 }
 
 void Isomot::handleMagicKeys ()

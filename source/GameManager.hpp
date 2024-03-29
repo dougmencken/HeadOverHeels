@@ -160,7 +160,9 @@ public:
          */
         void resume () ;
 
-        GameInfo& getGameInfo() {  return theInfo ;  }
+        void loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom );
+
+        GameInfo & getGameInfo() {  return theInfo ;  }
 
         const std::string & getHeadRoom () const {  return headRoom ;  }
 
@@ -286,6 +288,8 @@ private:
         static GameManager instance ;
 
         GameInfo theInfo ;
+
+        Room * roomWhereLifeWasLost ;
 
         std::string headRoom ;
 

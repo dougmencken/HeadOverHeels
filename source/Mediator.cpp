@@ -46,6 +46,8 @@ Mediator::Mediator( Room* whichRoom )
 
 Mediator::~Mediator()
 {
+        endUpdating ();
+
         pthread_mutex_destroy( &gridItemsMutex );
         pthread_mutex_destroy( &freeItemsMutex );
         pthread_mutex_destroy( &collisionsMutex );
@@ -132,20 +134,6 @@ void Mediator::update()
         if ( this->needToSortFreeItems ) {
                 this->room->sortFreeItems() ;
                 this->needToSortFreeItems = false ;
-        }
-
-        ///// here??
-        AvatarItemPtr waitingOne = getWaitingCharacter() ;
-        if ( waitingOne != nilPointer ) {
-                // only the active character can change rooms,
-                // and falling in a floor-less room down into the room below
-                // couldn’t happen without activating the character who falls
-                if ( waitingOne->getWayOfExit() == "below" )
-                {
-                        this->currentlyActiveCharacter->setWayOfExit( "" );
-                        std::cout << "inactive character \"" << waitingOne->getKind() << "\" falls down into another room, swapping the characters will activate the falling one" << std::endl ;
-                        this->pickNextCharacter () ;
-                }
         }
 }
 

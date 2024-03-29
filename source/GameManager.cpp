@@ -31,6 +31,7 @@ GameManager GameManager::instance ;
 
 GameManager::GameManager( )
         : theInfo( )
+        , roomWhereLifeWasLost( nilPointer )
         , headRoom( "blacktooth1head.xml" )
         , heelsRoom( "blacktooth23heels.xml" )
         , freedomLabel( nilPointer )
@@ -122,8 +123,6 @@ void GameManager::begin ()
 
 void GameManager::update ()
 {
-        IF_DEBUG( fprintf ( stdout, "GameManager::update ()\n" ) )
-
         gui::GuiManager::getInstance().resetWhyTheGameIsPaused() ;
 
         while ( ! gui::GuiManager::getInstance().getWhyTheGameIsPaused().isPaused () )
@@ -137,7 +136,22 @@ void GameManager::update ()
                 {
                         if ( theInfo.getHeadLives () > 0 || theInfo.getHeelsLives () > 0 )
                         {
-                                if ( MapManager::getInstance().getActiveRoom() != nilPointer )
+                                MapManager & mapManager = MapManager::getInstance() ;
+
+                                if ( this->roomWhereLifeWasLost != nilPointer )
+                                {
+                                        if ( mapManager.getActiveRoom() == this->roomWhereLifeWasLost ) {
+                                                const std::string & character = this->roomWhereLifeWasLost->getMediator()->getNameOfActiveCharacter ();
+                                                if ( getGameInfo().getLivesByName( character ) > 0 )
+                                                        mapManager.rebuildRoom() ;
+                                                else if ( ! this->roomWhereLifeWasLost->continueWithAliveCharacter () )
+                                                        mapManager.noLivesSwap() ;
+                                        }
+
+                                        this->roomWhereLifeWasLost = nilPointer ;
+                                }
+
+                                if ( mapManager.getActiveRoom() != nilPointer )
                                 {
                                         // update the isometric view
                                         Picture* view = isomot.updateMe ();
@@ -149,14 +163,9 @@ void GameManager::update ()
                                         }
                                         else
                                                 throw new MayNotBePossible( "GameManager::update doesn’t get a canvas to draw on" ) ;
+                                }
 
-                                        somn::milliSleep( 1000 / Isomot::updatesPerSecond );
-                                }
-                                else
-                                {
-                                        std::cout << "there’s no active room, game over" << std::endl ;
-                                        keyMoments.gameOver() ;
-                                }
+                                somn::milliSleep( 1000 / Isomot::updatesPerSecond );
                         }
                         else // no lives left
                         {
@@ -342,8 +351,6 @@ void GameManager::pause ()
 
 void GameManager::resume ()
 {
-        IF_DEBUG( fprintf ( stdout, "GameManager::resume ()\n" ) )
-
         refreshAmbianceImages ();
         refreshSceneryBackgrounds ();
 
@@ -351,6 +358,16 @@ void GameManager::resume ()
         isomot.resume ();
 
         this->update ();
+}
+
+void GameManager::loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom )
+{
+        if ( ! areLivesInexhaustible () )
+                getGameInfo().loseLifeByName( nameOfCharacter );
+
+        emptyHandbag () ;
+
+        this->roomWhereLifeWasLost = inRoom ;
 }
 
 void GameManager::refreshSceneryBackgrounds ()

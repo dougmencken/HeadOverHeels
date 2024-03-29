@@ -5,7 +5,6 @@
 #include "Door.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
-#include "MapManager.hpp"
 #include "GameManager.hpp"
 #include "GameInfo.hpp"
 #include "PlayerControlled.hpp"
@@ -412,26 +411,8 @@ void AvatarItem::addLives( unsigned char lives )
 
 void AvatarItem::loseLife ()
 {
-        const std::string & character = this->getOriginalKind() ;
-        GameManager & gameManager = GameManager::getInstance () ;
-        GameInfo & gameInfo = gameManager.getGameInfo () ;
-        unsigned char lives = gameInfo.getLivesByName( character ) ;
-
-        if ( ! gameManager.areLivesInexhaustible () && lives > 0 )
-                gameInfo.loseLifeByName( getOriginalKind () /* the current kind is "bubbles" */ );
-
-        gameManager.emptyHandbag () ;
-
-        Room * room = getMediator()->getRoom() ;
-        if ( room == nilPointer ) return ;
-
-        MapManager & mapManager = MapManager::getInstance () ;
-        if ( mapManager.getActiveRoom() == room ) {
-                if ( getLives() > 0 || getKind() == "headoverheels" )
-                        mapManager.rebuildRoom() ;
-                else if ( ! room->continueWithAliveCharacter () )
-                        mapManager.setActiveRoom( mapManager.noLivesSwap () );
-        }
+        GameManager::getInstance().loseLifeAndContinue( getOriginalKind() // the current kind is "bubbles"
+                                                        , getMediator()->getRoom() );
 }
 
 void AvatarItem::takeMagicTool( const std::string & tool )

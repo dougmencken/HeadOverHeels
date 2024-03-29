@@ -44,11 +44,11 @@ public:
 
         Room * changeRoom ( const std::string & wayOfExit ) ;
 
-        Room * rebuildRoom ( Room * room ) ;
+        void rebuildRoom ( Room * room ) ;
 
-        Room * rebuildRoom () {  return rebuildRoom( this->activeRoom ) ;  }
+        void rebuildRoom () {  rebuildRoom( this->activeRoom ) ;  }
 
-        Room * rebuildRoom ( const std::string & roomFile ) {  return rebuildRoom( findRoomByFile( roomFile ) ) ;  }
+        void rebuildRoom ( const std::string & roomFile ) {  rebuildRoom( findRoomByFile( roomFile ) ) ;  }
 
         Room * getRoomThenAddItToRoomsInPlay ( const std::string& roomFile, bool markVisited ) ;
 
@@ -58,10 +58,10 @@ public:
         Room * swapRoom () ;
 
         /**
-         * Remove the active room and activate the room where the other character is.
-         * Used when a character loses all its lives
+         * Remove the current room and activate the room where the other character is.
+         * Used when a character loses all lives
          */
-        Room * noLivesSwap () ;
+        void noLivesSwap () ;
 
         void addRoomInPlay ( Room * whichRoom ) ;
 
@@ -74,7 +74,11 @@ public:
          */
         Room * getActiveRoom () const {  return this->activeRoom ;  }
 
-        void setActiveRoom ( Room * newRoom ) {  this->activeRoom = newRoom ;  }
+        void setActiveRoom ( Room * newRoom )
+        {
+                this->activeRoom = newRoom ;
+                if ( this->activeRoom != nilPointer ) this->activeRoom->activate () ;
+        }
 
         /**
          * @return the room in which the inactive character is,
@@ -91,6 +95,9 @@ public:
 
         Room * getOrBuildRoomByFile ( const std::string& roomFile ) ;
 
+        /**
+         * useful after rebuilding a room, also deletes the previous room
+         */
         void replaceRoomForFile( const std::string & roomFile, Room * room );
 
         const std::set< std::string > & listAllVisitedRooms () const {  return visitedRooms ;  }

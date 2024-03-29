@@ -339,8 +339,6 @@ void MapManager::beginOldGameWithCharacter( const std::string & roomFile, const 
 
                 addRoomAsVisited( room->getNameOfRoomDescriptionFile () ) ;
 
-                /////////room->getMediator()->activateCharacterByName( characterName );
-
                 if ( activeCharacter ) {
                         // show bubbles only for the active character when resuming a saved game
                         /////// don’t show bubbles for whosoever, they are unseen due to the planets screen anyway
@@ -352,17 +350,19 @@ void MapManager::beginOldGameWithCharacter( const std::string & roomFile, const 
         }
 }
 
-Room* MapManager::rebuildRoom( Room* room )
+void MapManager::rebuildRoom( Room* room )
 {
-        if ( room == nilPointer ) return nilPointer ;
+        if ( room == nilPointer ) return ;
 
         bool wasActive = room->isActive ();
         room->deactivate() ;
+        this->activeRoom = nilPointer ;
 
         std::string fileOfRoom = room->getNameOfRoomDescriptionFile() ;
 
         Room* newRoom = RoomMaker::makeRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + fileOfRoom );
-        if ( newRoom == nilPointer ) return nilPointer ;
+        assert( newRoom != nilPointer );
+
         newRoom->setConnections( room->getConnections() );
 
         if ( isRoomInPlay( room ) )
@@ -432,7 +432,7 @@ Room* MapManager::rebuildRoom( Room* room )
                         ++ i ; // next character
                 }
 
-                roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), room ), roomsInPlay.end() );
+                removeRoomInPlay( room );
 
                 if ( characterInTheNewRoom )
                 {
@@ -440,16 +440,10 @@ Room* MapManager::rebuildRoom( Room* room )
 
                         bool characterIsHere = newRoom->getMediator()->activateCharacterByName( nameOfActiveCharacter );
 
-                        if ( ! characterIsHere )
-                        {
+                        if ( ! characterIsHere ) {
                                 // the case when the composite character was merged in this room
                                 // and then loses a life and splits back into the two simple characters
-                                characterIsHere = newRoom->getMediator()->activateCharacterByName( nameOfActiveCharacterBeforeJoining );
-
-                                /*****if ( ! characterIsHere ) // unlikely to happen
-                                        if ( newRoom->isAnyCharacterStillInRoom() )
-                                                newRoom->getMediator()->activateCharacterByName(
-                                                        newRoom->getCharactersYetInRoom()[ 0 ]->getOriginalKind() );********/////////
+                                newRoom->getMediator()->activateCharacterByName( nameOfActiveCharacterBeforeJoining );
                         }
                 }
                 // can’t create character, game over
@@ -460,14 +454,10 @@ Room* MapManager::rebuildRoom( Room* room )
                 }
         }
 
-        if ( wasActive ) {
+        if ( wasActive )
                 setActiveRoom( newRoom );
-                if ( this->activeRoom != nilPointer ) this->activeRoom->activate () ;
-        }
 
         replaceRoomForFile( fileOfRoom, newRoom );
-
-        return newRoom ;
 }
 
 Room* MapManager::changeRoom ()
@@ -627,7 +617,7 @@ Room* MapManager::swapRoom ()
         return activeRoom;
 }
 
-Room* MapManager::noLivesSwap ()
+void MapManager::noLivesSwap ()
 {
         activeRoom->deactivate();
 
@@ -640,19 +630,17 @@ Room* MapManager::noLivesSwap ()
                 ++ ri;
         }
 
-        // get next room to swap with
-        ++ ri;
-        // when it’s last one swap with first one
+        // get the next room to swap with
+        ++ ri ;
+        // the last one is swapped with the first one
         activeRoom = ( ri != roomsInPlay.end () ? *ri : *roomsInPlay.begin () );
 
-        // no more rooms, game over
+        // no more rooms
         if ( inactiveRoom == activeRoom ) activeRoom = nilPointer;
 
         removeRoomInPlay( inactiveRoom );
 
         if ( activeRoom != nilPointer ) activeRoom->activate() ;
-
-        return activeRoom;
 }
 
 void MapManager::addRoomInPlay( Room* whichRoom )
@@ -681,8 +669,7 @@ void MapManager::removeRoomInPlay( Room* whichRoom )
 
         roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), whichRoom ), roomsInPlay.end() );
 
-        gameRooms[ whichRoom->getNameOfRoomDescriptionFile() ] = nilPointer ;
-        delete whichRoom ;
+        replaceRoomForFile( whichRoom->getNameOfRoomDescriptionFile(), nilPointer );
 }
 
 void MapManager::binRoomsInPlay()
@@ -764,7 +751,7 @@ void MapManager::replaceRoomForFile( const std::string & roomFile, Room * room )
 
         gameRooms[ roomFile ] = room ;
 
-        /////////////////////////////////////////////delete previousRoom ; //////// yet it is not deleted!!
+        delete previousRoom ;
 }
 
 void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRooms )

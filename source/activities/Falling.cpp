@@ -45,12 +45,12 @@ bool Falling::fall( behaviors::Behavior & behavior )
         // when there’s something below
         if ( ! mayFall )
         {
-                Mediator* mediator = whatFalls.getMediator() ;
+                Mediator & mediator = * whatFalls.getMediator() ;
 
                 // collect the collisions
                 std::vector< std::string > itemsBelow ;
-                while ( mediator->isThereAnyCollision() )
-                        itemsBelow.push_back( mediator->popCollision() );
+                while ( mediator.isThereAnyCollision() )
+                        itemsBelow.push_back( mediator.popCollision() );
 
                 if ( whatFalls.whichItemClass() == "free item" || whatFalls.whichItemClass() == "avatar item" )
                 {
@@ -62,7 +62,7 @@ bool Falling::fall( behaviors::Behavior & behavior )
                         std::string nameOfItemBelow = itemsBelow.back();
                         itemsBelow.pop_back();
 
-                        ItemPtr itemBelow = mediator->findItemByUniqueName( nameOfItemBelow );
+                        ItemPtr itemBelow = mediator.findItemByUniqueName( nameOfItemBelow );
 
                         if ( itemBelow != nilPointer )
                         {
@@ -89,8 +89,8 @@ bool Falling::fall( behaviors::Behavior & behavior )
                                                         bool onlyMortal = true;
 
                                                         // look if some item underneath the character is not mortal
-                                                        while ( mediator->isThereAnyCollision() )
-                                                                if ( ! mediator->findCollisionPop()->isMortal() )
+                                                        while ( mediator.isThereAnyCollision() )
+                                                                if ( ! mediator.findCollisionPop()->isMortal() )
                                                                 {
                                                                         onlyMortal = false ;
                                                                         break ;
@@ -103,17 +103,27 @@ bool Falling::fall( behaviors::Behavior & behavior )
                                         }
                                 }
                         }
-                        // the character reaches floor
+                        // the character reaches the floor
                         else if ( whatFalls.whichItemClass() == "avatar item" && nameOfItemBelow == "some tile of floor" )
                         {
                                 AvatarItem & characterItem = dynamic_cast< AvatarItem & >( whatFalls );
 
-                                if ( ! mediator->getRoom()->hasFloor() )
+                                if ( ! mediator.getRoom()->hasFloor() )
                                 {
                                         characterItem.setWayOfExit( "below" );
+
+                                        AvatarItemPtr waitingOne = mediator.getWaitingCharacter() ;
+                                        if ( waitingOne != nilPointer && waitingOne->getUniqueName() == characterItem.getUniqueName() ) {
+                                                // only the active character can change rooms,
+                                                // and falling in a floor-less room down into the room below
+                                                // couldn’t happen without activating the character who falls
+                                                std::cout << "inactive character \"" << waitingOne->getKind() << "\" falls down into another room,"
+                                                                << " swapping the characters will activate the falling one" << std::endl ;
+                                                mediator.pickNextCharacter () ;
+                                        }
                                 }
                                 else
-                                if ( mediator->getRoom()->getKindOfFloor() == "mortal" )
+                                if ( mediator.getRoom()->getKindOfFloor() == "mortal" )
                                 {
                                         characterItem.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
                                 }
