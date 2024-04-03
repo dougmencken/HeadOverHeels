@@ -9,7 +9,7 @@
         <compilerflag value="-Igui" />
         <compilerflag value="-Iguiactions" />
         <compilerflag value="-I/opt/zlib-1.3.1/include" />
-        <compilerflag value="-I/opt/libpng-1.6.35/include" />
+        <compilerflag value="-I/opt/libpng-1.6.43/include" />
         <compilerflag value="-I/opt/ogg-vorbis/include" />
         <compilerflag value="-I/opt/tinyxml2-6.2.0/include" />
         <compilerflag value="-I/opt/allegro-4.4.2/include" />
@@ -125,7 +125,7 @@
         <flag value="-L/opt/allegro-4.4.2/lib" />
         <flag value="-L/opt/tinyxml2-6.2.0/lib" />
         <flag value="-L/opt/ogg-vorbis/lib" />
-        <flag value="-L/opt/libpng-1.6.35/lib" />
+        <flag value="-L/opt/libpng-1.6.43/lib" />
         <flag value="-L/opt/zlib-1.3.1/lib" />
         <flag value="-lvorbisfile" />
         <flag value="-lvorbisenc" />

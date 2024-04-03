@@ -42,7 +42,7 @@ echo "    libpng"
 echo "    Portable Network Graphics reference library which supports almost all PNG features"
 echo
 
-libpng_version="1.6.35"
+libpng_version="1.6.43"
 
 cd "${pathToExternal}"/libpng
 if [ ! -d libpng-"$libpng_version" ]; then

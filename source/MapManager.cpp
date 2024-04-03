@@ -356,7 +356,7 @@ void MapManager::rebuildRoom( Room* room )
 
         bool wasActive = room->isActive ();
         room->deactivate() ;
-        this->activeRoom = nilPointer ;
+        if ( room == this->activeRoom ) this->activeRoom = nilPointer ;
 
         std::string fileOfRoom = room->getNameOfRoomDescriptionFile() ;
 

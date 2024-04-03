@@ -61,10 +61,18 @@ And yep, don’t forget ``libx11-dev`` for the “allegro” library (https://gi
 sudo apt install libx11-dev
 ```
 
-Then building the “Head over Heels” game on GNU/Linux is pretty easy with the ``linux-build.sh`` script I provided, which also builds all the used dependencies as well
+Then building the “Head over Heels” game on GNU/Linux is pretty easy with the build scripts I provided. All used dependencies will be built too.
+The first script is
 
 ```
 ./linux-build.sh
+```
+
+It produces a binary that works through the allegro **version 4** library (which is quite outdated).
+To get a binary running over the newer allegro **version 5** (however, it is currently slower than over allegro4), use
+
+```
+./extras/linux-allegro5-build.sh
 ```
 
 Unedited ``linux-build.sh`` script installs the game inside your build directory at *where-the-build-dir-is/_rootdir*, thus type
