@@ -424,7 +424,10 @@ void Screen::scrollHorizontally( const Screen& oldScreen, const Screen& newScree
         if ( &oldScreen == &newScreen ||
                 oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
 
-        Picture oldPicture( * oldScreen.imageOfScreen );
+        Picture buffer( * oldScreen.imageOfScreen );
+
+        autouniqueptr < Timer > drawTimer( new Timer() );
+        drawTimer->go ();
 
         newScreen.refresh ();
         Picture& newPicture = * newScreen.imageOfScreen ;
@@ -436,17 +439,19 @@ void Screen::scrollHorizontally( const Screen& oldScreen, const Screen& newScree
                 /* bitBlit( from, to, fromX, fromY, toX, toY, width, height ) */
 
                 if ( rightToLeft )
-                {
-                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), x, 0, 0, 0, oldPicture.getWidth() - x, GamePreferences::getScreenHeight() );
-                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, oldPicture.getWidth() - x, 0, x, GamePreferences::getScreenHeight() );
-                }
+                        allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
+                                                0, 0, oldScreen.imageOfScreen->getWidth() - x, 0, x, GamePreferences::getScreenHeight() );
                 else
+                        allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
+                                                newPicture.getWidth() - x, 0, 0, 0, x, GamePreferences::getScreenHeight() );
+
+                if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
                 {
-                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), newPicture.getWidth() - x, 0, 0, 0, x, GamePreferences::getScreenHeight() );
-                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, x, 0, newPicture.getWidth() - x, GamePreferences::getScreenHeight() );
+                        allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
+                        allegro::update ();
+                        drawTimer->reset ();
                 }
 
-                allegro::update ();
                 somn::milliSleep( 1 );
         }
 }
@@ -457,6 +462,11 @@ void Screen::wipeHorizontally( const Screen& oldScreen, const Screen& newScreen,
         if ( &oldScreen == &newScreen ||
                 oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
 
+        Picture buffer( * oldScreen.imageOfScreen );
+
+        autouniqueptr < Timer > drawTimer( new Timer() );
+        drawTimer->go ();
+
         newScreen.refresh ();
         Picture& newPicture = * newScreen.imageOfScreen ;
 
@@ -465,15 +475,19 @@ void Screen::wipeHorizontally( const Screen& oldScreen, const Screen& newScreen,
         for ( unsigned int x = step ; x < GamePreferences::getScreenWidth() ; x += step )
         {
                 if ( rightToLeft )
-                {
-                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), newPicture.getWidth() - x, 0, newPicture.getWidth() - x, 0, x, GamePreferences::getScreenHeight() );
-                }
+                        allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
+                                                newPicture.getWidth() - x, 0, newPicture.getWidth() - x, 0, x, GamePreferences::getScreenHeight() );
                 else
+                        allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
+                                                0, 0, 0, 0, x, GamePreferences::getScreenHeight() );
+
+                if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
                 {
-                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, 0, 0, x, GamePreferences::getScreenHeight() );
+                        allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
+                        allegro::update ();
+                        drawTimer->reset ();
                 }
 
-                allegro::update ();
                 somn::milliSleep( 1 );
         }
 }
@@ -485,6 +499,9 @@ void Screen::barWipeHorizontally( const Screen& oldScreen, const Screen& newScre
                 oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
 
         Picture buffer( * oldScreen.imageOfScreen );
+
+        autouniqueptr < Timer > drawTimer( new Timer() );
+        drawTimer->go ();
 
         newScreen.refresh ();
         Picture& newPicture = * newScreen.imageOfScreen ;
@@ -506,8 +523,12 @@ void Screen::barWipeHorizontally( const Screen& oldScreen, const Screen& newScre
                                                         pieceX, 0, pieceX, 0, x, GamePreferences::getScreenHeight() );
                 }
 
-                allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
-                allegro::update ();
+                if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
+                {
+                        allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
+                        allegro::update ();
+                        drawTimer->reset ();
+                }
 
                 somn::milliSleep( 2 );
         }
@@ -532,14 +553,15 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
         const unsigned int screenWidth = slide.imageOfScreen->getWidth() ;
         const unsigned int screenHeight = slide.imageOfScreen->getHeight() ;
 
-        const size_t howManyPixels = screenWidth * screenHeight;
+        const unsigned int howManyPixels = screenWidth * screenHeight ;
+        const unsigned int chunk = ( howManyPixels >> 9 ) - 1 ;
 
         /*
          * the bit map of screenWidth x screenHeight bits
          *
          * if someone thinks that bits the bitmap is redundant here since pixels are copied off screen,
          * so copying a pixel one more time is better than looking for was it already copied or not,
-         * don't bother removing it, the counting of pixels with the bit map is here for ending the loop
+         * don’t bother removing it, the counting of pixels with the bit map is here for ending the loop
          */
         std::vector< bool > bits( howManyPixels, false );
 
@@ -548,10 +570,10 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
         autouniqueptr < Timer > drawTimer( new Timer() );
         drawTimer->go ();
 
-        for ( size_t yet = 0 ; yet < howManyPixels ; )
+        for ( unsigned int yet = 0 ; yet < howManyPixels ; )
         {
                 int x = rand() % screenWidth ;  /* random between 0 and screenWidth - 1 */
-                int y =  rand() % screenHeight ; /* random between 0 and screenHeight - 1 */
+                int y = rand() % screenHeight ; /* random between 0 and screenHeight - 1 */
 
                 if ( ! bits[ x + y * screenWidth ] )
                 {
@@ -560,7 +582,10 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
                         else
                                 buffer.getAllegroPict().drawPixelAt( x, y, aColor );
 
-                        if ( drawTimer->getValue() > 0.003 ) // every 3 milliseconds, that is 3/1000 (three thousandth) of a second
+                        if ( yet % chunk == 0 ) // after painting a chunk
+                                somn::milliSleep( 1 ); // wait a millisecond
+
+                        if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
                         {
                                 allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                                 allegro::update ();

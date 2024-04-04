@@ -61,6 +61,10 @@ GuiManager::GuiManager( ) :
 
         allegro::setTitleOfAllegroWindow ( nameOfWindow );
 
+        autouniqueptr< allegro::Pict > icon( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath(), "head48.icon.png" ) ) );
+        if ( icon->isNotNil() )
+                allegro::setAllegroIcon ( *icon );
+
         // initialize the sound manager
         SoundManager::getInstance().readSounds( "sounds.xml" );
 }

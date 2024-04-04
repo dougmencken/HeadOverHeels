@@ -1536,6 +1536,21 @@ void setTitleOfAllegroWindow( const std::string& title )
 #endif
 }
 
+void setAllegroIcon( const Pict & icon )
+{
+        if ( ! icon.isNotNil() ) return ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_set_display_icon( allegroDisplay, icon.ptr () );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        // do nothing for allegro 4
+
+#endif
+}
+
 void drawLine( int xFrom, int yFrom, int xTo, int yTo, AllegroColor color )
 {
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5

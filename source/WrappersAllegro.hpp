@@ -313,6 +313,11 @@ bool switchToWindowedVideo () ;
 void setTitleOfAllegroWindow ( const std::string& title ) ;
 
 
+/* Changes the icon associated with the window */
+
+void setAllegroIcon( const Pict & icon ) ;
+
+
 /* void line( BITMAP* bmp, int x1, int y1, int x2, int y2, int color )
  *
  * Draws a line onto the bitmap, from point (x1, y1) to (x2, y2)
