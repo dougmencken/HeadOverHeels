@@ -93,82 +93,26 @@ void MapManager::readMap ( const std::string& fileName )
         {
                 ++ roomNth ;
 
-                tinyxml2::XMLElement* north = room->FirstChildElement( "north" ) ;
-                tinyxml2::XMLElement* south = room->FirstChildElement( "south" ) ;
-                tinyxml2::XMLElement* east = room->FirstChildElement( "east" ) ;
-                tinyxml2::XMLElement* west = room->FirstChildElement( "west" ) ;
-
-                tinyxml2::XMLElement* below = room->FirstChildElement( "below" ) ;
-                tinyxml2::XMLElement* above = room->FirstChildElement( "above" ) ;
-                tinyxml2::XMLElement* teleport = room->FirstChildElement( "teleport" ) ;
-                tinyxml2::XMLElement* teleport2 = room->FirstChildElement( "teleport2" ) ;
-
-                tinyxml2::XMLElement* northeast = room->FirstChildElement( "northeast" ) ;
-                tinyxml2::XMLElement* northwest = room->FirstChildElement( "northwest" ) ;
-                tinyxml2::XMLElement* southeast = room->FirstChildElement( "southeast" ) ;
-                tinyxml2::XMLElement* southwest = room->FirstChildElement( "southwest" ) ;
-                tinyxml2::XMLElement* eastnorth = room->FirstChildElement( "eastnorth" ) ;
-                tinyxml2::XMLElement* eastsouth = room->FirstChildElement( "eastsouth" ) ;
-                tinyxml2::XMLElement* westnorth = room->FirstChildElement( "westnorth" ) ;
-                tinyxml2::XMLElement* westsouth = room->FirstChildElement( "westsouth" ) ;
+                std::string fileOfRoom = room->Attribute( "file" );
 
                 ConnectedRooms * connections = new ConnectedRooms() ;
 
-                if ( north != nilPointer )
-                        connections->setRoomAtNorth( north->FirstChild()->ToText()->Value () );
+                static const std::string howLinked[ 16 ] = { "north", "east", "south", "west",
+                                                                "above", "below", "teleport", "teleport2",
+                                                                "northeast", "northwest", "southeast", "southwest",
+                                                                "eastnorth", "eastsouth", "westnorth", "westsouth" } ;
 
-                if ( south != nilPointer )
-                        connections->setRoomAtSouth( south->FirstChild()->ToText()->Value () );
+                for ( unsigned int h = 0; h < 16; ++ h ) {
+                        tinyxml2::XMLElement* linkedRoom = room->FirstChildElement( howLinked[ h ].c_str () ) ;
+                        if ( linkedRoom != nilPointer )
+                                connections->setConnectedRoomAt( howLinked[ h ], linkedRoom->FirstChild()->ToText()->Value() );
+                }
 
-                if ( east != nilPointer )
-                        connections->setRoomAtEast( east->FirstChild()->ToText()->Value () );
-
-                if ( west != nilPointer )
-                        connections->setRoomAtWest( west->FirstChild()->ToText()->Value () );
-
-                if ( below != nilPointer )
-                        connections->setRoomBelow( below->FirstChild()->ToText()->Value () );
-
-                if ( above != nilPointer )
-                        connections->setRoomAbove( above->FirstChild()->ToText()->Value () );
-
-                if ( teleport != nilPointer )
-                        connections->setRoomToTeleport( teleport->FirstChild()->ToText()->Value () );
-
-                if ( teleport2 != nilPointer )
-                        connections->setRoomToTeleportToo( teleport2->FirstChild()->ToText()->Value () );
-
-                if ( northeast != nilPointer )
-                        connections->setRoomAtNorthEast( northeast->FirstChild()->ToText()->Value () );
-
-                if ( northwest != nilPointer )
-                        connections->setRoomAtNorthWest( northwest->FirstChild()->ToText()->Value () );
-
-                if ( southeast != nilPointer )
-                        connections->setRoomAtSouthEast( southeast->FirstChild()->ToText()->Value () );
-
-                if ( southwest != nilPointer )
-                        connections->setRoomAtSouthWest( southwest->FirstChild()->ToText()->Value () );
-
-                if ( eastnorth != nilPointer )
-                        connections->setRoomAtEastNorth( eastnorth->FirstChild()->ToText()->Value () );
-
-                if ( eastsouth != nilPointer )
-                        connections->setRoomAtEastSouth( eastsouth->FirstChild()->ToText()->Value () );
-
-                if ( westnorth != nilPointer )
-                        connections->setRoomAtWestNorth( westnorth->FirstChild()->ToText()->Value () );
-
-                if ( westsouth != nilPointer )
-                        connections->setRoomAtWestSouth( westsouth->FirstChild()->ToText()->Value () );
-
-                std::string roomFile = room->Attribute( "file" );
-
-                linksBetweenRooms[ roomFile ] = connections ;
+                linksBetweenRooms[ fileOfRoom ] = connections ;
 
                 if ( MapManager::buildEveryRoomAtOnce )
                 {
-                        // letters of allegro’s font are 8 x 7
+                        // the letters of allegro’s font are 8 x 7
                         const unsigned short widthOfChar = 8 ;
                         const unsigned short heightOfChar = 7 ;
                         const unsigned short interligne = 8 ;
@@ -193,9 +137,9 @@ void MapManager::readMap ( const std::string& fileName )
                         allegro::textOut( roomInRooms, textX, ( interligne >> 1 ) + 1, Color::byName( "yellow" ).toAllegroColor() );
                         allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY );
 
-                        textX = ( GamePreferences::getScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
+                        textX = ( GamePreferences::getScreenWidth() - fileOfRoom.length() * widthOfChar ) >> 1 ;
                         stripe->clearToColor( Color::byName( "blue" ).toAllegroColor() );
-                        allegro::textOut( roomFile, textX, ( interligne >> 1 ) - 1, Color::byName( "green" ).toAllegroColor() );
+                        allegro::textOut( fileOfRoom, textX, ( interligne >> 1 ) - 1, Color::byName( "green" ).toAllegroColor() );
                         allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY + ( heightOfChar + interligne ) );
 
                         allegro::Pict::resetWhereToDraw() ;
@@ -206,9 +150,9 @@ void MapManager::readMap ( const std::string& fileName )
 
                         allegro::update();
 
-                        Room* theRoom = RoomMaker::makeRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + roomFile );
+                        Room* theRoom = RoomMaker::makeRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + fileOfRoom );
                         theRoom->setConnections( connections );
-                        gameRooms[ roomFile ] = theRoom ;
+                        gameRooms[ fileOfRoom ] = theRoom ;
 
                 # if defined( GENERATE_ROOM_DESCRIPTIONS ) && GENERATE_ROOM_DESCRIPTIONS
                         // write the description of room
@@ -219,7 +163,7 @@ void MapManager::readMap ( const std::string& fileName )
                 }
                 else
                 {
-                        gameRooms[ roomFile ] = nilPointer ;
+                        gameRooms[ fileOfRoom ] = nilPointer ;
                 }
         }
 
@@ -259,13 +203,11 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
                         {
                                 // create character Head
                                 firstRoom->placeCharacterInRoom( "head", true, centerX, centerY, 0, "west" );
-                                ////////firstRoom->getMediator()->activateCharacterByName( "head" );
                         }
                         else
                         {
                                 // create character Head over Heels
                                 firstRoom->placeCharacterInRoom( "headoverheels", true, centerX, centerY, 0, "west" );
-                                ////////firstRoom->getMediator()->activateCharacterByName( "headoverheels" );
                         }
 
                         addRoomAsVisited( firstRoom->getNameOfRoomDescriptionFile () ) ;

@@ -39,41 +39,18 @@ public:
          */
         std::string getConnectedRoomAt ( const std::string & where ) const
         {
-                std::map< std::string, std::string >::const_iterator found = connections.find( where );
-                return ( found != connections.end () ) ? found->second : "" ;
+                std::map< std::string, std::string >::const_iterator found = this->connections.find( where );
+                return ( found != this->connections.end () ) ? found->second : "" ;
         }
 
-        void setRoomAtNorth ( const std::string & room ) {  connections[ "north" ] = room ;  }
+        void setConnectedRoomAt ( const std::string & where, const std::string & room )
+        {
+                std::string at( where );
+                     if ( where ==  "teleport" ) at = "via teleport" ;
+                else if ( where == "teleport2" ) at = "via second teleport" ;
 
-        void setRoomAtSouth ( const std::string & room ) {  connections[ "south" ] = room ;  }
-
-        void setRoomAtEast ( const std::string & room ) {  connections[ "east" ] = room ;  }
-
-        void setRoomAtWest ( const std::string & room ) {  connections[ "west" ] = room ;  }
-
-        void setRoomBelow ( const std::string & room ) {  connections[ "below" ] = room ;  }
-
-        void setRoomAbove ( const std::string & room ) {  connections[ "above" ] = room ;  }
-
-        void setRoomToTeleport ( const std::string & room ) {  connections[ "via teleport" ] = room ;  }
-
-        void setRoomToTeleportToo ( const std::string & room ) {  connections[ "via second teleport" ] = room ;  }
-
-        void setRoomAtNorthEast ( const std::string & room ) {  connections[ "northeast" ] = room ;  }
-
-        void setRoomAtNorthWest ( const std::string & room ) {  connections[ "northwest" ] = room ;  }
-
-        void setRoomAtSouthEast ( const std::string & room ) {  connections[ "southeast" ] = room ;  }
-
-        void setRoomAtSouthWest ( const std::string & room ) {  connections[ "southwest" ] = room ;  }
-
-        void setRoomAtEastNorth ( const std::string & room ) {  connections[ "eastnorth" ] = room ;  }
-
-        void setRoomAtEastSouth ( const std::string & room ) {  connections[ "eastsouth" ] = room ;  }
-
-        void setRoomAtWestNorth ( const std::string & room ) {  connections[ "westnorth" ] = room ;  }
-
-        void setRoomAtWestSouth ( const std::string & room ) {  connections[ "westsouth" ] = room ;  }
+                this->connections[ at ] = room ;
+        }
 
 private:
 
