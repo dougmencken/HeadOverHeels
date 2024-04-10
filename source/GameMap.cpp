@@ -1,5 +1,5 @@
 
-#include "MapManager.hpp"
+#include "GameMap.hpp"
 
 #include "RoomMaker.hpp"
 #include "AvatarItem.hpp"
@@ -19,23 +19,23 @@
 #define GENERATE_ROOM_DESCRIPTIONS      0
 
 
-/* static */ MapManager MapManager::instance ;
+/* static */ GameMap GameMap::instance ;
 
-bool MapManager::buildEveryRoomAtOnce = false ;
+bool GameMap::buildEveryRoomAtOnce = false ;
 
 
 /* static */
-MapManager & MapManager::getInstance ()
+GameMap & GameMap::getInstance ()
 {
-        return MapManager::instance ;
+        return GameMap::instance ;
 }
 
-MapManager::~MapManager( )
+GameMap::~GameMap( )
 {
         clear() ;
 }
 
-/* private */ void MapManager::clear ()
+/* private */ void GameMap::clear ()
 {
         forgetVisitedRooms () ;
 
@@ -54,7 +54,7 @@ MapManager::~MapManager( )
         linksBetweenRooms.clear() ;
 }
 
-void MapManager::readMap ( const std::string& fileName )
+void GameMap::readMap ( const std::string& fileName )
 {
         clear();
 
@@ -110,7 +110,7 @@ void MapManager::readMap ( const std::string& fileName )
 
                 linksBetweenRooms[ fileOfRoom ] = connections ;
 
-                if ( MapManager::buildEveryRoomAtOnce )
+                if ( GameMap::buildEveryRoomAtOnce )
                 {
                         // the letters of allegro’s font are 8 x 7
                         const unsigned short widthOfChar = 8 ;
@@ -170,9 +170,9 @@ void MapManager::readMap ( const std::string& fileName )
         std::cout << "read map of rooms from " << fileName << std::endl ;
 }
 
-void MapManager::beginNewGame( const std::string & headRoom, const std::string & heelsRoom )
+void GameMap::beginNewGame( const std::string & headRoom, const std::string & heelsRoom )
 {
-        std::cout << "MapManager::beginNewGame( \"" << headRoom << "\", \"" << heelsRoom << "\" )" << std::endl ;
+        std::cout << "GameMap::beginNewGame( \"" << headRoom << "\", \"" << heelsRoom << "\" )" << std::endl ;
 
         clear () ;
 
@@ -253,11 +253,11 @@ void MapManager::beginNewGame( const std::string & headRoom, const std::string &
         if ( activeRoom != nilPointer ) activeRoom->activate();
 }
 
-void MapManager::beginOldGameWithCharacter( const std::string & roomFile, const std::string & characterName,
+void GameMap::beginOldGameWithCharacter( const std::string & roomFile, const std::string & characterName,
                                             int x, int y, int z, const std::string & heading,
                                             bool activeCharacter )
 {
-        std::cout << "MapManager::beginOldGameWithCharacter( \""
+        std::cout << "GameMap::beginOldGameWithCharacter( \""
                         << roomFile << "\", \"" << characterName << "\", "
                         << x << ", " << y << ", " << z << ", \"" << heading << "\", "
                         << ( activeCharacter ? "true" : "false" ) << " )"
@@ -292,7 +292,7 @@ void MapManager::beginOldGameWithCharacter( const std::string & roomFile, const 
         }
 }
 
-void MapManager::rebuildRoom( Room* room )
+void GameMap::rebuildRoom( Room* room )
 {
         if ( room == nilPointer ) return ;
 
@@ -333,14 +333,14 @@ void MapManager::rebuildRoom( Room* room )
                         assert( character != nilPointer );
                         /** std::cerr << "**nil** " << util::toStringWithOrdinalSuffix( i ) << " character"
                                                 << " among those who entered room \"" << fileOfRoom << "\""
-                                                << " @ MapManager::rebuildRoom" << std::endl ;
+                                                << " @ GameMap::rebuildRoom" << std::endl ;
                         continue ; **/
 
                         if ( character->getKind() == "headoverheels" || character->getLives() > 0 )
                         {
                         //#ifdef DEBUG
                                 std::cout << "got character \"" << character->getKind() << "\" who entered room \"" << fileOfRoom << "\""
-                                                << " @ MapManager::rebuildRoom" << std::endl ;
+                                                << " @ GameMap::rebuildRoom" << std::endl ;
                         //#endif
 
                                 // when the joined character splits, and then some simple character migrates to another room
@@ -402,13 +402,13 @@ void MapManager::rebuildRoom( Room* room )
         replaceRoomForFile( fileOfRoom, newRoom );
 }
 
-Room* MapManager::changeRoom ()
+Room* GameMap::changeRoom ()
 {
         assert( activeRoom->getMediator()->getActiveCharacter() != nilPointer );
         return changeRoom( activeRoom->getMediator()->getActiveCharacter()->getWayOfExit() );
 }
 
-Room* MapManager::changeRoom( const std::string & wayOfExit )
+Room* GameMap::changeRoom( const std::string & wayOfExit )
 {
         Room* previousRoom = this->activeRoom ;
 
@@ -513,7 +513,7 @@ Room* MapManager::changeRoom( const std::string & wayOfExit )
         return newRoom;
 }
 
-Room* MapManager::getRoomThenAddItToRoomsInPlay( const std::string& roomFile, bool markVisited )
+Room* GameMap::getRoomThenAddItToRoomsInPlay( const std::string& roomFile, bool markVisited )
 {
         Room* room = getOrBuildRoomByFile( roomFile );
 
@@ -528,7 +528,7 @@ Room* MapManager::getRoomThenAddItToRoomsInPlay( const std::string& roomFile, bo
         return room;
 }
 
-Room* MapManager::swapRoom ()
+Room* GameMap::swapRoom ()
 {
         // swap is possible when there are more than one room
         if ( roomsInPlay.size() > 1 )
@@ -559,7 +559,7 @@ Room* MapManager::swapRoom ()
         return activeRoom;
 }
 
-void MapManager::noLivesSwap ()
+void GameMap::noLivesSwap ()
 {
         activeRoom->deactivate();
 
@@ -585,7 +585,7 @@ void MapManager::noLivesSwap ()
         if ( activeRoom != nilPointer ) activeRoom->activate() ;
 }
 
-void MapManager::addRoomInPlay( Room* whichRoom )
+void GameMap::addRoomInPlay( Room* whichRoom )
 {
         if ( whichRoom == nilPointer ) return ;
 
@@ -600,7 +600,7 @@ void MapManager::addRoomInPlay( Room* whichRoom )
         roomsInPlay.push_back( whichRoom );
 }
 
-void MapManager::removeRoomInPlay( Room* whichRoom )
+void GameMap::removeRoomInPlay( Room* whichRoom )
 {
         if ( whichRoom == nilPointer ) return ;
 
@@ -614,7 +614,7 @@ void MapManager::removeRoomInPlay( Room* whichRoom )
         replaceRoomForFile( whichRoom->getNameOfRoomDescriptionFile(), nilPointer );
 }
 
-void MapManager::binRoomsInPlay()
+void GameMap::binRoomsInPlay()
 {
         while ( ! roomsInPlay.empty () )
                 removeRoomInPlay( roomsInPlay.back () ) ;
@@ -622,7 +622,7 @@ void MapManager::binRoomsInPlay()
         this->activeRoom = nilPointer ;
 }
 
-Room* MapManager::getRoomOfInactiveCharacter () const
+Room* GameMap::getRoomOfInactiveCharacter () const
 {
         for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {
@@ -632,7 +632,7 @@ Room* MapManager::getRoomOfInactiveCharacter () const
         return nilPointer ;
 }
 
-bool MapManager::isRoomInPlay( const Room* room ) const
+bool GameMap::isRoomInPlay( const Room* room ) const
 {
         for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {
@@ -642,7 +642,7 @@ bool MapManager::isRoomInPlay( const Room* room ) const
         return false ;
 }
 
-Room* MapManager::findRoomInPlayByFile( const std::string& roomFile ) const
+Room* GameMap::findRoomInPlayByFile( const std::string& roomFile ) const
 {
         for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {
@@ -653,7 +653,7 @@ Room* MapManager::findRoomInPlayByFile( const std::string& roomFile ) const
         return nilPointer ;
 }
 
-Room* MapManager::findRoomByFile( const std::string& roomFile ) const
+Room* GameMap::findRoomByFile( const std::string& roomFile ) const
 {
         for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
         {
@@ -663,7 +663,7 @@ Room* MapManager::findRoomByFile( const std::string& roomFile ) const
         return nilPointer ;
 }
 
-Room* MapManager::getOrBuildRoomByFile( const std::string & roomFile )
+Room* GameMap::getOrBuildRoomByFile( const std::string & roomFile )
 {
         if ( gameRooms.empty() || linksBetweenRooms.empty() )
                 readMap( ospaths::sharePath() + "map" + ospaths::pathSeparator() + "map.xml" );
@@ -686,7 +686,7 @@ Room* MapManager::getOrBuildRoomByFile( const std::string & roomFile )
         return nilPointer ;
 }
 
-void MapManager::replaceRoomForFile( const std::string & roomFile, Room * room )
+void GameMap::replaceRoomForFile( const std::string & roomFile, Room * room )
 {
         Room * previousRoom = findRoomByFile( roomFile );
         if ( previousRoom != nilPointer ) previousRoom->deactivate() ;
@@ -696,7 +696,7 @@ void MapManager::replaceRoomForFile( const std::string & roomFile, Room * room )
         delete previousRoom ;
 }
 
-void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRooms )
+void GameMap::parseVisitedRooms( const std::vector< std::string >& visitedRooms )
 {
         forgetVisitedRooms () ;
 
@@ -709,7 +709,7 @@ void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRoo
         }
 }
 
-void MapManager::getAllRoomFiles ( std::vector< std::string > & whereToCollect )
+void GameMap::getAllRoomFiles ( std::vector< std::string > & whereToCollect )
 {
         whereToCollect.reserve( this->gameRooms.size() );
 

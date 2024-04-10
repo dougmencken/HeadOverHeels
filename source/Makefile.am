@@ -107,8 +107,8 @@ headoverheels_SOURCES = main.cpp \
 			DescriptionOfDoor.hpp \
 			ItemDescriptions.cpp \
 			ItemDescriptions.hpp \
-			MapManager.cpp \
-			MapManager.hpp \
+			GameMap.cpp \
+			GameMap.hpp \
 			ConnectedRooms.cpp \
 			ConnectedRooms.hpp \
 			BonusManager.cpp \

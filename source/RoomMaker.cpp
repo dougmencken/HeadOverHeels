@@ -1,7 +1,7 @@
 
 #include "RoomMaker.hpp"
 
-#include "MapManager.hpp"
+#include "GameMap.hpp"
 #include "Room.hpp"
 #include "Behavior.hpp"
 #include "Elevator.hpp"
@@ -51,7 +51,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomFile )
         if ( fromLastSlash != nilPointer )
                 roomName = std::string( fromLastSlash + 1 );
 
-        if ( MapManager::getInstance().findRoomByFile( roomName ) == nilPointer )
+        if ( GameMap::getInstance().findRoomByFile( roomName ) == nilPointer )
                 std::cout << "building new" ;
         else
                 std::cout << "rebuilding" ;

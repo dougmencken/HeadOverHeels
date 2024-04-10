@@ -4,11 +4,11 @@
 #include "Color.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
-#include "MapManager.hpp"
 #include "BonusManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 #include "GamePreferences.hpp"
+#include "GameMap.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
@@ -60,7 +60,7 @@ void Isomot::prepare ()
         else
                 view->fillWithColor( Color::byName( "orange" ) );
 
-        MapManager::getInstance().binRoomsInPlay();
+        GameMap::getInstance().binRoomsInPlay();
 }
 
 void Isomot::beginNewGame ()
@@ -70,7 +70,7 @@ void Isomot::beginNewGame ()
         // bin taken bonuses
         BonusManager::getInstance().clearAbsentBonuses () ;
 
-        MapManager::getInstance().beginNewGame( GameManager::getInstance().getHeadRoom(), GameManager::getInstance().getHeelsRoom() );
+        GameMap::getInstance().beginNewGame( GameManager::getInstance().getHeadRoom(), GameManager::getInstance().getHeelsRoom() );
 
         std::cout << "play new game" << std::endl ;
         SoundManager::getInstance().playOgg ( "music/begin.ogg", /* loop */ false );
@@ -102,7 +102,7 @@ void Isomot::offInviolability ()
 
 void Isomot::pause ()
 {
-        Room * activeRoom = MapManager::getInstance().getActiveRoom() ;
+        Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
         if ( activeRoom != nilPointer )
                 activeRoom->deactivate() ;
 
@@ -111,7 +111,7 @@ void Isomot::pause ()
 
 void Isomot::resume ()
 {
-        Room * activeRoom = MapManager::getInstance().getActiveRoom() ;
+        Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
         if ( activeRoom != nilPointer )
                 activeRoom->activate() ;
 
@@ -145,9 +145,9 @@ Picture* Isomot::updateMe ()
 
         handleMagicKeys ();
 
-        MapManager & mapManager = MapManager::getInstance () ;
+        GameMap & map = GameMap::getInstance () ;
 
-        Room* activeRoom = mapManager.getActiveRoom() ;
+        Room* activeRoom = map.getActiveRoom() ;
         if ( activeRoom == nilPointer ) return this->view ;
 
         // la sala final es muy especial
@@ -169,7 +169,7 @@ Picture* Isomot::updateMe ()
                         {
                                 // swap in the same room or between different rooms
                                 if ( ! activeRoom->swapCharactersInRoom() )
-                                        activeRoom = mapManager.swapRoom() ;
+                                        activeRoom = map.swapRoom() ;
                         }
 
                         InputManager::getInstance().releaseKeyFor( "swap" );
@@ -178,7 +178,7 @@ Picture* Isomot::updateMe ()
                 if ( ! activeCharacter.getWayOfExit().empty() )
                 {
                         // move to the next room
-                        Room* newRoom = mapManager.changeRoom() ;
+                        Room* newRoom = map.changeRoom() ;
 
                         if ( newRoom != nilPointer && newRoom != activeRoom )
                                 playTuneForScenery( newRoom->getScenery () );
@@ -195,7 +195,7 @@ Picture* Isomot::updateMe ()
 
         // draw the active room
 
-        activeRoom = mapManager.getActiveRoom() ;
+        activeRoom = map.getActiveRoom() ;
         if ( activeRoom == nilPointer ) return this->view ;
 
         activeRoom->drawRoom () ;
@@ -238,7 +238,7 @@ Picture* Isomot::updateMe ()
                 if ( ! roomAtSouth.empty () )
                 {
                         std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "south", 0 );
-                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtSouth ),
+                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtSouth ),
                                                                 secondRoomOffset.first, secondRoomOffset.second,
                                                                 sizeOfTileForMiniature );
                         miniatureOfConnectedRoom.draw ();
@@ -247,7 +247,7 @@ Picture* Isomot::updateMe ()
                 if ( ! roomAtNorth.empty() )
                 {
                         std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "north", 0 );
-                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtNorth ),
+                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtNorth ),
                                                                 secondRoomOffset.first, secondRoomOffset.second,
                                                                 sizeOfTileForMiniature );
                         miniatureOfConnectedRoom.draw ();
@@ -256,7 +256,7 @@ Picture* Isomot::updateMe ()
                 if ( ! roomAtEast.empty() )
                 {
                         std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "east", 0 );
-                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtEast ),
+                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtEast ),
                                                                 secondRoomOffset.first, secondRoomOffset.second,
                                                                 sizeOfTileForMiniature );
                         miniatureOfConnectedRoom.draw ();
@@ -265,7 +265,7 @@ Picture* Isomot::updateMe ()
                 if ( ! roomAtWest.empty() )
                 {
                         std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "west", 0 );
-                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtWest ),
+                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtWest ),
                                                                 secondRoomOffset.first, secondRoomOffset.second,
                                                                 sizeOfTileForMiniature );
                         miniatureOfConnectedRoom.draw ();
@@ -299,9 +299,9 @@ Picture* Isomot::updateMe ()
 void Isomot::handleMagicKeys ()
 {
         GameManager & gameManager = GameManager::getInstance() ;
-        MapManager & mapManager = MapManager::getInstance() ;
+        GameMap & map = GameMap::getInstance() ;
 
-        Room * activeRoom = mapManager.getActiveRoom() ;
+        Room * activeRoom = map.getActiveRoom() ;
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "v" ) )
         {
@@ -421,8 +421,8 @@ void Isomot::handleMagicKeys ()
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
         {
                 playTuneForScenery( activeRoom->getScenery () );
-                mapManager.rebuildRoom() ;
-                activeRoom = mapManager.getActiveRoom() ;
+                map.rebuildRoom() ;
+                activeRoom = map.getActiveRoom() ;
 
                 allegro::releaseKey( "r" );
         }
@@ -433,7 +433,7 @@ void Isomot::handleMagicKeys ()
                 AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter ();
                 if ( activeCharacter != nilPointer )
                 {
-                        Room* roomWithInactiveCharacter = mapManager.getRoomOfInactiveCharacter() ;
+                        Room* roomWithInactiveCharacter = map.getRoomOfInactiveCharacter() ;
                         AvatarItemPtr otherCharacter = ( roomWithInactiveCharacter != nilPointer )
                                                                 ? roomWithInactiveCharacter->getMediator()->getActiveCharacter()
                                                                 : AvatarItemPtr() ;
@@ -459,7 +459,7 @@ void Isomot::handleMagicKeys ()
                                 joinedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
-                                mapManager.removeRoomInPlay( roomWithInactiveCharacter );
+                                map.removeRoomInPlay( roomWithInactiveCharacter );
                         }
                 }
 
@@ -471,7 +471,7 @@ void Isomot::handleMagicKeys ()
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "h" ) )
         {
                 std::vector< std::string > allRooms ;
-                mapManager.getAllRoomFiles( allRooms );
+                map.getAllRoomFiles( allRooms );
 
                 const std::string & randomRoom = allRooms[ rand() % allRooms.size() ] ;
                 std::cout << "hyper-jumping to the lucky map \"" << randomRoom << "\"" << std::endl ;
@@ -522,14 +522,14 @@ void Isomot::handleMagicKeys ()
                                 ) ) ;
 
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
-                                Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
+                                Room* roomWithTeleportToFinalScene = map.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
                                 roomWithTeleportToFinalScene->placeCharacterInRoom( teleportedCharacter, true );
                                 teleportedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 
-                                mapManager.setActiveRoom( roomWithTeleportToFinalScene );
-                                mapManager.removeRoomInPlay( activeRoom );
+                                map.setActiveRoom( roomWithTeleportToFinalScene );
+                                map.removeRoomInPlay( activeRoom );
 
                                 roomWithTeleportToFinalScene->activate();
                                 activeRoom = roomWithTeleportToFinalScene;
@@ -598,7 +598,7 @@ void Isomot::playTuneForScenery ( const std::string& scenery )
 
 void Isomot::updateFinalRoom()
 {
-        Room* activeRoom = MapManager::getInstance().getActiveRoom();
+        Room* activeRoom = GameMap::getInstance().getActiveRoom();
         assert( activeRoom != nilPointer );
         Mediator* mediator = activeRoom->getMediator();
         assert( mediator != nilPointer );

@@ -4,7 +4,7 @@
 #include "Color.hpp"
 #include "FlickeringColor.hpp"
 #include "GameManager.hpp"
-#include "MapManager.hpp"
+#include "GameMap.hpp"
 #include "Room.hpp"
 #include "ConnectedRooms.hpp"
 #include "Mediator.hpp"
@@ -847,7 +847,7 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
 
         if ( fileOfConnectedRoom.empty () ) return this->offset ;
 
-        const Room* connectedRoom = MapManager::getInstance().getOrBuildRoomByFile( fileOfConnectedRoom );
+        const Room* connectedRoom = GameMap::getInstance().getOrBuildRoomByFile( fileOfConnectedRoom );
         assert( connectedRoom != nilPointer );
 
         int adjacentDifferenceX = 0 ;

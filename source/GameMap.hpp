@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef MapManager_hpp_
-#define MapManager_hpp_
+#ifndef GameMap_hpp_
+#define GameMap_hpp_
 
 #include <string>
 #include <vector>
@@ -19,18 +19,18 @@
 #include "Room.hpp"
 
 
-class MapManager
+class GameMap
 {
 
 private:
 
-        MapManager( ) : activeRoom( nilPointer ) { }
+        GameMap( ) : activeRoom( nilPointer ) { }
 
 public:
 
-        static MapManager & getInstance () ;
+        static GameMap & getInstance () ;
 
-        virtual ~MapManager( ) ;
+        virtual ~GameMap( ) ;
 
         void clear () ;
 
@@ -112,7 +112,7 @@ public:
 
 private:
 
-        static MapManager instance ;
+        static GameMap instance ;
 
         static bool buildEveryRoomAtOnce ;
 

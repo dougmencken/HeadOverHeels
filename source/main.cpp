@@ -17,7 +17,7 @@
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
 #include "GuiManager.hpp"
-#include "MapManager.hpp"
+#include "GameMap.hpp"
 
 #if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 #include "SoundManager.hpp"
@@ -198,7 +198,7 @@ int main( int argc, char** argv )
                         GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
 
                 if ( options.count( "build-all-rooms" ) > 0 )
-                        MapManager::setBuildEveryRoomAtOnce( true );
+                        GameMap::setBuildEveryRoomAtOnce( true );
 
                 if ( options.count( "begin-game" ) > 0 )
                         newGameNoGui = true ;

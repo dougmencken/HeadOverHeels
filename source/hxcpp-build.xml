@@ -49,7 +49,7 @@
         <file name="TimerWindows.cpp" />
         <file name="Room.cpp" />
         <file name="ConnectedRooms.cpp" />
-        <file name="MapManager.cpp" />
+        <file name="GameMap.cpp" />
         <file name="RoomMaker.cpp" />
         <file name="BonusManager.cpp" />
         <file name="SoundManager.cpp" />

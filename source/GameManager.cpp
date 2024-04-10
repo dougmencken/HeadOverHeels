@@ -11,7 +11,7 @@
 #include "Camera.hpp"
 #include "GamePreferences.hpp"
 #include "GuiManager.hpp"
-#include "MapManager.hpp"
+#include "GameMap.hpp"
 #include "InputManager.hpp"
 #include "BonusManager.hpp"
 #include "SoundManager.hpp"
@@ -71,7 +71,7 @@ void GameManager::cleanUp ()
         ambiancePictures.clear ();
 
         isomot.binView ();
-        MapManager::getInstance().clear ();
+        GameMap::getInstance().clear ();
 
         Item::getPoolOfPictures().clear ();
 
@@ -136,22 +136,22 @@ void GameManager::update ()
                 {
                         if ( theInfo.getHeadLives () > 0 || theInfo.getHeelsLives () > 0 )
                         {
-                                MapManager & mapManager = MapManager::getInstance() ;
+                                GameMap & map = GameMap::getInstance() ;
 
                                 if ( this->roomWhereLifeWasLost != nilPointer )
                                 {
-                                        if ( mapManager.getActiveRoom() == this->roomWhereLifeWasLost ) {
+                                        if ( map.getActiveRoom() == this->roomWhereLifeWasLost ) {
                                                 const std::string & character = this->roomWhereLifeWasLost->getMediator()->getNameOfActiveCharacter ();
                                                 if ( getGameInfo().getLivesByName( character ) > 0 )
-                                                        mapManager.rebuildRoom() ;
+                                                        map.rebuildRoom() ;
                                                 else if ( ! this->roomWhereLifeWasLost->continueWithAliveCharacter () )
-                                                        mapManager.noLivesSwap() ;
+                                                        map.noLivesSwap() ;
                                         }
 
                                         this->roomWhereLifeWasLost = nilPointer ;
                                 }
 
-                                if ( mapManager.getActiveRoom() != nilPointer )
+                                if ( map.getActiveRoom() != nilPointer )
                                 {
                                         // update the isometric view
                                         Picture* view = isomot.updateMe ();
@@ -459,7 +459,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
         allegro::Pict::setWhereToDraw( where );
 
         // the scenery of this room
-        const std::string & scenery = MapManager::getInstance().getActiveRoom()->getScenery() ;
+        const std::string & scenery = GameMap::getInstance().getActiveRoom()->getScenery() ;
 
         // empty scenery means that it is the final room
         if ( scenery != "" )
@@ -489,7 +489,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int leftTooAmbianceX = 33 + dx ;
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
-                const std::string & character = MapManager::getInstance().getActiveRoom()->getMediator()->getNameOfActiveCharacter();
+                const std::string & character = GameMap::getInstance().getActiveRoom()->getMediator()->getNameOfActiveCharacter();
                 allegro::drawSprite (
                         ( (  character == "head" || character == "headoverheels" ) ? ambiancePictures[ "head" ] : ambiancePictures[ "gray head" ] )->getAllegroPict(),
                         161 + dx, headHeelsAmbianceY );
@@ -612,7 +612,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned short widthOfChar = 8 ; // letters of allegro’s font are 8 x 7
                 const unsigned short deltaYtext = 36 ;
 
-                Room * activeRoom = MapManager::getInstance().getActiveRoom () ;
+                Room * activeRoom = GameMap::getInstance().getActiveRoom () ;
 
                 if ( activeRoom != nilPointer &&
                         ( isomot.doesCameraFollowCharacter ()
