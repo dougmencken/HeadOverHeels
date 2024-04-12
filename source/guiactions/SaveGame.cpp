@@ -16,7 +16,7 @@ SaveGame::SaveGame( unsigned int slot )
 {
 }
 
-void SaveGame::doAction ()
+void SaveGame::act ()
 {
         allegro::emptyKeyboardBuffer();
 

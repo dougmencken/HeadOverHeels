@@ -3,7 +3,7 @@
 
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
 #include "LanguageText.hpp"
 #include "Screen.hpp"
@@ -26,7 +26,7 @@ CreateMainMenu::CreateMainMenu( ) : Action( )
 
 }
 
-void CreateMainMenu::doAction ()
+void CreateMainMenu::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
@@ -35,17 +35,17 @@ void CreateMainMenu::doAction ()
         {
                 screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
-                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
+                LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
                 // Las opciones del menú
 
-                Label* newGame = new Label( languageManager->findLanguageStringForAlias( "new-game" )->getText() );
-                Label* loadGame = new Label( languageManager->findLanguageStringForAlias( "load-game" )->getText() );
-                Label* defineKeys = new Label( languageManager->findLanguageStringForAlias( "keys-menu" )->getText() );
-                Label* adjustAudio = new Label( languageManager->findLanguageStringForAlias( "audio-menu" )->getText() );
-                Label* adjustVideo = new Label( languageManager->findLanguageStringForAlias( "video-menu" )->getText() );
-                Label* showCredits = new Label( languageManager->findLanguageStringForAlias( "show-credits" )->getText() );
-                Label* quitGame = new Label( languageManager->findLanguageStringForAlias( "exit-game" )->getText() );
+                Label* newGame = new Label( languageStrings->findLanguageStringForAlias( "new-game" )->getText() );
+                Label* loadGame = new Label( languageStrings->findLanguageStringForAlias( "load-game" )->getText() );
+                Label* defineKeys = new Label( languageStrings->findLanguageStringForAlias( "keys-menu" )->getText() );
+                Label* adjustAudio = new Label( languageStrings->findLanguageStringForAlias( "audio-menu" )->getText() );
+                Label* adjustVideo = new Label( languageStrings->findLanguageStringForAlias( "video-menu" )->getText() );
+                Label* showCredits = new Label( languageStrings->findLanguageStringForAlias( "show-credits" )->getText() );
+                Label* quitGame = new Label( languageStrings->findLanguageStringForAlias( "exit-game" )->getText() );
 
                 newGame->setAction( new CreatePlanetsScreen( false ) );
                 loadGame->setAction( new CreateListOfSavedGames( true ) );

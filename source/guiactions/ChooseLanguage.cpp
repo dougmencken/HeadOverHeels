@@ -1,22 +1,26 @@
 
-#include "SelectLanguage.hpp"
+#include "ChooseLanguage.hpp"
+
 #include "CreateMainMenu.hpp"
 #include "GuiManager.hpp"
 
-using gui::SelectLanguage ;
 
+namespace gui
+{
 
-SelectLanguage::SelectLanguage( const std::string& language )
+ChooseLanguage::ChooseLanguage( const std::string & laLangueChoisie )
         : Action( )
-        , language( language )
+        , language( laLangueChoisie )
 {
 
 }
 
-void SelectLanguage::doAction ()
+void ChooseLanguage::act ()
 {
         GuiManager::getInstance().setLanguage( language );
 
         CreateMainMenu * mainMenu = new CreateMainMenu();
         mainMenu->doIt ();
+}
+
 }

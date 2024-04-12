@@ -37,7 +37,7 @@ protected:
         /**
          * Show the keys menu
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

@@ -2,7 +2,7 @@
 #include "CreateKeyboardMenu.hpp"
 
 #include "GuiManager.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "LanguageText.hpp"
 #include "InputManager.hpp"
 #include "Font.hpp"
@@ -15,7 +15,7 @@
 using gui::CreateKeyboardMenu ;
 
 
-void CreateKeyboardMenu::doAction ()
+void CreateKeyboardMenu::act ()
 {
         Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() == 0 )
@@ -24,10 +24,10 @@ void CreateKeyboardMenu::doAction ()
 
                 screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
-
                 this->menuOfKeys = new MenuWithValues( '.', 5 );
                 menuOfKeys->setVerticalOffset( 64 );
+
+                LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings();
 
                 // add menu option for each key
                 std::vector< std::string > userActions ;
@@ -37,7 +37,7 @@ void CreateKeyboardMenu::doAction ()
                         const std::string & theAction = userActions[ i ];
                         std::string xmlAction = ( theAction == "take&jump" ) ? "takeandjump" : theAction ;
 
-                        Label* label = new Label( languageManager->findLanguageStringForAlias( xmlAction )->getText() );
+                        Label* label = new Label( languageStrings->findLanguageStringForAlias( xmlAction )->getText() );
 
                         std::string theKey = InputManager::getInstance().getUserKeyFor( theAction );
                         if ( theKey == "none" ) label->changeColor( "cyan" );

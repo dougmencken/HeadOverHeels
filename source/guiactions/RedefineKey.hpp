@@ -37,7 +37,7 @@ public:
 
 protected:
 
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

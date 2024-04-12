@@ -1,7 +1,7 @@
 
 #include "GuiManager.hpp"
 
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 #include "GameManager.hpp"
@@ -30,8 +30,8 @@ GuiManager * GuiManager::instance = nilPointer ;
 
 GuiManager::GuiManager( ) :
         activeScreen( nilPointer ),
-        language( "" ),
-        languageManager( nilPointer ),
+        chosenLanguage( "" ),
+        languageStrings( nilPointer ),
         active( true ),
         atFullScreen( false )
 {
@@ -73,7 +73,7 @@ GuiManager::~GuiManager( )
 {
         freeScreens () ;
 
-        delete this->languageManager ;
+        delete this->languageStrings ;
 }
 
 GuiManager& GuiManager::getInstance ()
@@ -207,19 +207,12 @@ void GuiManager::refreshScreens ()
 void GuiManager::redraw()
 {
         if ( this->active && ( this->activeScreen != nilPointer ) )
-        {
                 activeScreen->draw ();
-        }
 }
 
 std::string GuiManager::getPathToThesePictures () const
 {
         return ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
-}
-
-bool GuiManager::isAtFullScreen ()
-{
-        return this->atFullScreen;
 }
 
 void GuiManager::toggleFullScreenVideo ()
@@ -251,17 +244,17 @@ void GuiManager::toggleFullScreenVideo ()
         }
 }
 
-void GuiManager::assignLanguage( const std::string& language )
+void GuiManager::useLanguage( const std::string & language )
 {
-        if ( this->languageManager != nilPointer )
-        {
-                delete this->languageManager;
-                this->languageManager = nilPointer;
+        if ( this->languageStrings != nilPointer ) {
+                delete this->languageStrings ;
+                this->languageStrings = nilPointer ;
         }
 
-        fprintf( stdout, "language \"%s\"\n", language.c_str () );
+        fprintf( stdout, "using language \"%s\"\n", language.c_str () );
+
         std::string pathToText = ospaths::sharePath () + "text" + ospaths::pathSeparator () ;
-        this->languageManager = new LanguageManager( pathToText + language + ".xml", pathToText + "en_US.xml" );
+        this->languageStrings = new LanguageStrings( pathToText + language + ".xml", pathToText + "en_US.xml" );
 }
 
 }

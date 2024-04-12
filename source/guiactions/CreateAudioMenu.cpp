@@ -3,7 +3,7 @@
 
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "Screen.hpp"
@@ -29,17 +29,17 @@ CreateAudioMenu::CreateAudioMenu( ) :
 
 }
 
-void CreateAudioMenu::doAction ()
+void CreateAudioMenu::act ()
 {
-        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
+        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
-        LanguageText* langStringEffects = languageManager->findLanguageStringForAlias( "soundfx" );
-        LanguageText* langStringMusic = languageManager->findLanguageStringForAlias( "music" );
+        LanguageText* langStringEffects = languageStrings->findLanguageStringForAlias( "soundfx" );
+        LanguageText* langStringMusic = languageStrings->findLanguageStringForAlias( "music" );
 
-        LanguageText* langStringRoomTunes = languageManager->findLanguageStringForAlias( "play-room-melodies" );
+        LanguageText* langStringRoomTunes = languageStrings->findLanguageStringForAlias( "play-room-melodies" );
 
-        std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
-        std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
+        std::string yeah = languageStrings->findLanguageStringForAlias( "yep" )-> getText ();
+        std::string nope = languageStrings->findLanguageStringForAlias( "nope" )->getText ();
 
         std::stringstream ss;
 

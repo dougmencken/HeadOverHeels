@@ -39,7 +39,7 @@ protected:
         /**
          * Show this menu
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

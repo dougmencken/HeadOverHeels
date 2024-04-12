@@ -5,7 +5,7 @@
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
@@ -24,7 +24,7 @@ CreateEndScreen::CreateEndScreen( unsigned int rooms, unsigned short planets )
 {
 }
 
-void CreateEndScreen::doAction ()
+void CreateEndScreen::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
@@ -50,24 +50,24 @@ void CreateEndScreen::doAction ()
         const unsigned int labelsY = screenHeight - ( leading * 3 ) - ( space << 1 ) ;
         const unsigned int resultY = ( screenHeight >> 1 ) - ( screenHeight >> 4 ) - 20 ;
 
-        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
+        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
         // the score reached by the player
         unsigned int score = this->visitedRooms * 160 + this->liberatedPlanets * 10000 ;
-        Label* scoreLabel = new Label ( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + util::number2string( score ),
+        Label* scoreLabel = new Label ( languageStrings->findLanguageStringForAlias( "score" )->getText() + " " + util::number2string( score ),
                                         Font::fontWithColor( "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         screen.addWidget( scoreLabel );
 
         // the number of the rooms visited
-        std::string exploredRooms = languageManager->findLanguageStringForAlias( "explored-rooms" )->getText();
+        std::string exploredRooms = languageStrings->findLanguageStringForAlias( "explored-rooms" )->getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
         Label* rooms = new Label( exploredRooms, Font::fontWithColor( "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         screen.addWidget( rooms );
 
         // the number of the planets liberated
-        std::string liberatedPlanets = languageManager->findLanguageStringForAlias( "liberated-planets" )->getText();
+        std::string liberatedPlanets = languageStrings->findLanguageStringForAlias( "liberated-planets" )->getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
         Label* planets = new Label( liberatedPlanets, Font::fontWithColor( "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
@@ -91,7 +91,7 @@ void CreateEndScreen::doAction ()
                         if ( score > bounds[ i ] )
                         {
                                 TextField* result = new TextField( screenWidth, "center" );
-                                result->appendText( languageManager->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
+                                result->appendText( languageStrings->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
                                 result->moveTo( 0, resultY );
                                 screen.addWidget( result );
 

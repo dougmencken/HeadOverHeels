@@ -30,7 +30,7 @@ public:
 
 protected:
 
-        virtual void doAction ()
+        virtual void act ()
         {
                 SoundManager::getInstance().stopEverySound (); //stop ( "menus", soundOf );
                 SoundManager::getInstance().play ( "menus", soundOf, /* loop */ false );

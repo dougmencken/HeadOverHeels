@@ -5,7 +5,7 @@
 
 #include "InputManager.hpp"
 #include "GuiManager.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "LanguageText.hpp"
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
@@ -21,7 +21,7 @@ RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& keyAction )
 
 }
 
-void RedefineKey::doAction ()
+void RedefineKey::act ()
 {
         Label * choice = menu->getActiveOption ();
         choice->changeColor( "yellow" );
@@ -66,7 +66,7 @@ void RedefineKey::doAction ()
 
                                                 // update menu
                                                 std::string toLook = ( previousAction == "take&jump" ) ? "takeandjump" : previousAction ;
-                                                std::string textOfThatKey = GuiManager::getInstance().getLanguageManager()->findLanguageStringForAlias( toLook )->getText();
+                                                std::string textOfThatKey = GuiManager::getInstance().getLanguageStrings()->findLanguageStringForAlias( toLook )->getText();
 
                                                 const std::vector < Label * > & allOptions = menu->getEveryOption ();
                                                 for ( unsigned int o = 0 ; o < allOptions.size() ; ++ o )

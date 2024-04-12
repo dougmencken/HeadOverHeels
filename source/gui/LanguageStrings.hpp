@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef LanguageManager_hpp_
-#define LanguageManager_hpp_
+#ifndef LanguageStrings_hpp_
+#define LanguageStrings_hpp_
 
 #include <string>
 #include <vector>
@@ -21,25 +21,23 @@ namespace gui
 class LanguageText ;
 
 /**
- * Read strings of text from XML file and store them in data structure
+ * Reads the strings of text from a language XML file
  */
 
-class LanguageManager
+class LanguageStrings
 {
 
 public:
 
-        LanguageManager( const std::string & file, const std::string& fileWithGuaranteedStrings ) ;
+        // the backup "fileWithGuaranteedStrings" may have more strings than the "file"
+        LanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings ) ;
 
-        ~LanguageManager( );
+        ~LanguageStrings( );
 
         LanguageText * findLanguageStringForAlias ( const std::string & alias ) ;
 
 private:
 
-       /**
-        * Parse the XML file so each string pairs with its alias
-        */
         void parse ( const std::string & file, const std::string& fileWithGuaranteedStrings ) ;
 
         void parseFile ( const std::string & fileName, std::vector < LanguageText * > & strings ) ;

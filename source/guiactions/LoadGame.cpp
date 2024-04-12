@@ -18,7 +18,7 @@ LoadGame::LoadGame( unsigned int slot )
 {
 }
 
-void LoadGame::doAction ()
+void LoadGame::act ()
 {
         GameManager & gameManager = GameManager::getInstance () ;
         gameManager.resetPlanets() ;

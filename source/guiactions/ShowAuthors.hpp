@@ -42,7 +42,7 @@ protected:
 
         void readCreditsText( const std::string & fileName ) ;
 
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

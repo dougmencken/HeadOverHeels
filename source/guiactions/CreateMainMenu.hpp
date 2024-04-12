@@ -37,7 +37,7 @@ protected:
         /**
          * Show the main menu of the game
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 };
 

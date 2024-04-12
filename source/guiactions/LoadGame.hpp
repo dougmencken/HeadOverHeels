@@ -34,7 +34,7 @@ protected:
         /**
          * Load the game and begin it
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

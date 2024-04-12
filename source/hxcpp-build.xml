@@ -88,12 +88,13 @@
         <file name="gui/AnimatedPictureWidget.cpp" />
         <file name="gui/Label.cpp" />
         <file name="gui/ColorCyclingLabel.cpp" />
-        <file name="gui/LanguageManager.cpp" />
+        <file name="gui/LanguageStrings.cpp" />
         <file name="gui/Menu.cpp" />
         <file name="gui/MenuWithValues.cpp" />
         <file name="gui/MenuWithTwoColumns.cpp" />
         <file name="gui/Screen.cpp" />
         <file name="gui/TextField.cpp" />
+        <file name="guiactions/ChooseLanguage.cpp" />
         <file name="guiactions/ContinueGame.cpp" />
         <file name="guiactions/CreateAudioMenu.cpp" />
         <file name="guiactions/CreateVideoMenu.cpp" />
@@ -109,7 +110,6 @@
         <file name="guiactions/LoadGame.cpp" />
         <file name="guiactions/RedefineKey.cpp" />
         <file name="guiactions/SaveGame.cpp" />
-        <file name="guiactions/SelectLanguage.cpp" />
         <file name="guiactions/ShowAuthors.cpp" />
         <file name="loadpng/loadpng.c" />
         <file name="loadpng/savepng.c" />

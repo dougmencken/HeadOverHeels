@@ -38,7 +38,7 @@ protected:
         /**
          * Show the audio menu
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

@@ -41,7 +41,7 @@ protected:
         /**
          * Crea la pantalla con el texto
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

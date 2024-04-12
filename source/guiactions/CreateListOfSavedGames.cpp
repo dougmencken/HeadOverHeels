@@ -3,7 +3,7 @@
 
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
@@ -24,7 +24,7 @@
 namespace gui
 {
 
-void CreateListOfSavedGames::doAction ()
+void CreateListOfSavedGames::act ()
 {
         Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() > 0 )
@@ -45,7 +45,7 @@ void CreateListOfSavedGames::doAction ()
 
         screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
+        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
         // list of games
         Menu* menu = new Menu( );
@@ -58,8 +58,8 @@ void CreateListOfSavedGames::doAction ()
                 if ( gameInfo.howManyRoomsVisited () >= 2 ) // less than 2 rooms means "couldn't read"
                 {
                         std::ostringstream ss;
-                        ss << gameInfo.howManyRoomsVisited () << " " << languageManager->findLanguageStringForAlias( "rooms" )->getText() << " "
-                                << gameInfo.howManyPlanetsLiberated () << " " << languageManager->findLanguageStringForAlias( "planets" )->getText() ;
+                        ss << gameInfo.howManyRoomsVisited () << " " << languageStrings->findLanguageStringForAlias( "rooms" )->getText() << " "
+                                << gameInfo.howManyPlanetsLiberated () << " " << languageStrings->findLanguageStringForAlias( "planets" )->getText() ;
                         Label* label = new Label( ss.str() );
 
                         if ( isLoadMenu() )
@@ -77,15 +77,13 @@ void CreateListOfSavedGames::doAction ()
                 # endif
 
                         std::ostringstream ss;
-                        ss << languageManager->findLanguageStringForAlias( "free-slot" )->getText();
+                        ss << languageStrings->findLanguageStringForAlias( "free-slot" )->getText ();
                         Label* freeLine = new Label( ss.str() );
-                        if ( isLoadMenu() )
-                        {
+                        if ( isLoadMenu() ) {
                                 freeLine->changeColor( "cyan" );
                                 freeLine->setAction( new PlaySound( "mistake" ) );
                         }
-                        else
-                        {
+                        else {
                                 freeLine->changeColor( "orange" );
                                 freeLine->setAction( new SaveGame( slot ) );
                         }

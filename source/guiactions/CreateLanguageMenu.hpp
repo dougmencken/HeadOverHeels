@@ -38,15 +38,14 @@ protected:
         /**
          * Show the language menu
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 
         /**
-         * Read list of languages for this game
-         * @param fileName XML file with list of languages
+         * Read the list of languages from the XML file
          */
-        void parse ( const std::string& fileName ) ;
+        void readListOfLanguages ( const std::string & nameOfXMLFile ) ;
 
         std::map < std::string /* iso */, std::string /* text */ > languages ;
 

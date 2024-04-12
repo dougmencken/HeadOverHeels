@@ -21,7 +21,7 @@ namespace gui
 {
 
 class Action ;
-class LanguageManager ;
+class LanguageStrings ;
 
 
 /**
@@ -106,7 +106,7 @@ public:
 
         void suspend () {  this->active = false ;  }
 
-        bool isAtFullScreen () ;
+        bool isAtFullScreen () const {  return this->atFullScreen ;  }
 
        /**
         * Use it to toggle video at full screen & video in window
@@ -118,19 +118,19 @@ public:
         *         where LLL is a language code according to ISO 639
         *         and CC is a country code according to ISO 3166
         */
-        std::string getLanguage () const {  return this->language ;  }
+        const std::string & getLanguage () const {  return this->chosenLanguage ;  }
 
-        void setLanguage ( const std::string& language )
+        void setLanguage ( const std::string & language )
         {
-                this->language = language ;
-                assignLanguage( language );
+                useLanguage( language );
+                this->chosenLanguage = language ;
         }
 
-        LanguageManager* getLanguageManager () const {  return languageManager ;  }
+        LanguageStrings* getLanguageStrings () const {  return this->languageStrings ;  }
 
-        const ScreenPtr & getActiveScreen () const {  return activeScreen ;  }
+        const ScreenPtr & getActiveScreen () const {  return this->activeScreen ;  }
 
-        void setActiveScreen ( const ScreenPtr newScreen ) {  activeScreen = newScreen ;  }
+        void setActiveScreen ( const ScreenPtr newScreen ) {  this->activeScreen = newScreen ;  }
 
         const WhyPaused & getWhyTheGameIsPaused () const {  return whyTheGameIsPaused ;  }
         WhyPaused & getWhyTheGameIsPausedToAlter () {  return whyTheGameIsPaused ;  }
@@ -150,9 +150,9 @@ private:
         std::map < std::string, ScreenPtr > listOfScreens;
 
         // a language of the user interface in the LLL_CC format
-        std::string language ;
+        std::string chosenLanguage ;
 
-        LanguageManager * languageManager ;
+        LanguageStrings * languageStrings ;
 
         // when true draw the user interface and handle the keyboard
         bool active ;
@@ -165,7 +165,7 @@ private:
          */
         bool atFullScreen ;
 
-        void assignLanguage ( const std::string & language ) ;
+        void useLanguage ( const std::string & language ) ;
 
 };
 

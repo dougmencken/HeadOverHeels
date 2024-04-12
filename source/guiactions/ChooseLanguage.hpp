@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef SelectLanguage_hpp_
-#define SelectLanguage_hpp_
+#ifndef ChooseLanguage_hpp_
+#define ChooseLanguage_hpp_
 
 #include "Action.hpp"
 
@@ -17,21 +17,21 @@
 namespace gui
 {
 
-class SelectLanguage: public Action
+class ChooseLanguage : public Action
 {
 
 public:
 
-        explicit SelectLanguage( const std::string& language ) ;
+        explicit ChooseLanguage( const std::string & laLangueChoisie ) ;
 
-        virtual std::string getNameOfAction () const {  return "SelectLanguage" ;  }
+        virtual std::string getNameOfAction () const {  return "ChooseLanguage" ;  }
 
 protected:
 
         /**
          * Set the language of the game
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

@@ -86,7 +86,7 @@ void ShowAuthors::readCreditsText( const std::string & fileName )
         }
 }
 
-void ShowAuthors::doAction ()
+void ShowAuthors::act ()
 {
         SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 

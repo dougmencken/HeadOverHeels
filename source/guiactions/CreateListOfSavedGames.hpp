@@ -76,7 +76,7 @@ protected:
         /**
          * Show the saved games
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

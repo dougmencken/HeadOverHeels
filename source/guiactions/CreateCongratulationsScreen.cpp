@@ -3,7 +3,7 @@
 
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "LanguageText.hpp"
 #include "GamePreferences.hpp"
 #include "Screen.hpp"
@@ -27,21 +27,14 @@ CreateCongratulationsScreen::~CreateCongratulationsScreen( )
 
 }
 
-void CreateCongratulationsScreen::doAction ()
+void CreateCongratulationsScreen::act ()
 {
-        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
-        LanguageText* langString = 0;
-
         Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
 
         if ( screen.countWidgets() == 0 )
-        {
                 screen.setEscapeAction( new CreateEndScreen( rooms, planets ) );
-        }
         else
-        {
                 screen.freeWidgets() ;
-        }
 
         // Head coronado
         screen.addWidget( new PictureWidget( 192, 50, PicturePtr( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
@@ -52,13 +45,14 @@ void CreateCongratulationsScreen::doAction ()
         screen.addPictureOfHeelsAt( 400, 100 );
 
         // texto final
-        langString = languageManager->findLanguageStringForAlias( "final-text" );
+        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
+        LanguageText* finalText = languageStrings->findLanguageStringForAlias( "final-text" );
         TextField* textField = new TextField( GamePreferences::getScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 
-        for ( size_t i = 0; i < langString->howManyLinesOfText(); i ++ )
+        for ( size_t i = 0; i < finalText->howManyLinesOfText(); i ++ )
         {
-                const LanguageLine & line = langString->getNthLine( i );
+                const LanguageLine & line = finalText->getNthLine( i );
                 textField->appendText( line.getText(), line.isBigHeight(), line.getColor() );
         }
 

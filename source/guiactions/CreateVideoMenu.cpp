@@ -6,7 +6,7 @@
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
 #include "LanguageText.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "Screen.hpp"
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
@@ -47,21 +47,21 @@ CreateVideoMenu::CreateVideoMenu( )
         }
 }
 
-void CreateVideoMenu::doAction ()
+void CreateVideoMenu::act ()
 {
         Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() == 0 )
         {
                 screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                LanguageManager* languageManager = gui::GuiManager::getInstance().getLanguageManager();
+                LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
 
-                LanguageText* textScreenSize = languageManager->findLanguageStringForAlias( "screen-size" );
-                LanguageText* textFullscreen = languageManager->findLanguageStringForAlias( "full-screen" );
-                LanguageText* textDrawShadows = languageManager->findLanguageStringForAlias( "draw-shadows" );
-                LanguageText* textDrawSceneryDecor = languageManager->findLanguageStringForAlias( "draw-decor" );
-                LanguageText* textDrawRoomMiniatures = languageManager->findLanguageStringForAlias( "draw-miniatures" );
-                LanguageText* textCenterCameraOn = languageManager->findLanguageStringForAlias( "center-camera-on" );
+                LanguageText* textScreenSize = languageStrings->findLanguageStringForAlias( "screen-size" );
+                LanguageText* textFullscreen = languageStrings->findLanguageStringForAlias( "full-screen" );
+                LanguageText* textDrawShadows = languageStrings->findLanguageStringForAlias( "draw-shadows" );
+                LanguageText* textDrawSceneryDecor = languageStrings->findLanguageStringForAlias( "draw-decor" );
+                LanguageText* textDrawRoomMiniatures = languageStrings->findLanguageStringForAlias( "draw-miniatures" );
+                LanguageText* textCenterCameraOn = languageStrings->findLanguageStringForAlias( "center-camera-on" );
 
                 this->screenSize = new Label( textScreenSize->getText() );
                 this->fullScreen = new Label( textFullscreen->getText() );
@@ -70,7 +70,7 @@ void CreateVideoMenu::doAction ()
                 this->drawRoomMiniatures = new Label( textDrawRoomMiniatures->getText() );
                 this->centerCameraOn = new Label( textCenterCameraOn->getText() );
 
-                LanguageText* textChooseGraphics = languageManager->findLanguageStringForAlias( "graphic-set" );
+                LanguageText* textChooseGraphics = languageStrings->findLanguageStringForAlias( "graphic-set" );
                 this->chooseGraphics = new Label( textChooseGraphics->getText(), Font::fontWithColor( "yellow" ) );
                 this->chooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
@@ -174,18 +174,18 @@ void CreateVideoMenu::doAction ()
 
 void CreateVideoMenu::updateLabels ()
 {
-        LanguageManager* languageManager = gui::GuiManager::getInstance().getLanguageManager();
+        LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
 
-        std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
-        std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
+        std::string yeah = languageStrings->findLanguageStringForAlias( "yep" )-> getText ();
+        std::string nope = languageStrings->findLanguageStringForAlias( "nope" )->getText ();
 
         listOfOptions->setValueOf( drawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
         listOfOptions->setValueOf( drawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
         listOfOptions->setValueOf( drawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
         listOfOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
 
-        std::string room = languageManager->findLanguageStringForAlias( "room" )-> getText ();
-        std::string character = languageManager->findLanguageStringForAlias( "character" )-> getText ();
+        std::string room = languageStrings->findLanguageStringForAlias( "room" )-> getText ();
+        std::string character = languageStrings->findLanguageStringForAlias( "character" )-> getText ();
 
         listOfOptions->setValueOf( centerCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
 

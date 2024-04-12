@@ -35,7 +35,7 @@ protected:
         /**
          * Save the game and back to play
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 

@@ -16,7 +16,7 @@
 #include "BonusManager.hpp"
 #include "SoundManager.hpp"
 #include "LanguageText.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "Color.hpp"
 
 #include "util.hpp"
@@ -204,8 +204,8 @@ void GameManager::pause ()
         // the user just ate a reincarnation fish
         else if ( keyMoments.wasFishEaten( true ) )
         {
-                gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager() ;
-                gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
+                gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
+                gui::LanguageText* text = languageStrings->findLanguageStringForAlias( "save-game" );
                 int textAtY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
 
                 gui::TextField ateFishText( GamePreferences::getScreenWidth(), "center" );
@@ -217,7 +217,7 @@ void GameManager::pause ()
                         ateFishText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
-                text = language->findLanguageStringForAlias( "confirm-resume" );
+                text = languageStrings->findLanguageStringForAlias( "confirm-resume" );
                 textAtY += ateFishText.getHeightOfField () + 20 ;
 
                 gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
@@ -292,8 +292,8 @@ void GameManager::pause ()
         {
                 SoundManager::getInstance().stopEverySound ();
 
-                gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
-                gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
+                gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings();
+                gui::LanguageText* text = languageStrings->findLanguageStringForAlias( "confirm-quit" );
                 int textAtY = ( GamePreferences::getScreenHeight() >> 2 );
 
                 gui::TextField quitText( GamePreferences::getScreenWidth(), "center" );
@@ -305,7 +305,7 @@ void GameManager::pause ()
                         quitText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
-                text = language->findLanguageStringForAlias( "confirm-resume" );
+                text = languageStrings->findLanguageStringForAlias( "confirm-resume" );
                 textAtY += quitText.getHeightOfField () + 20 ;
 
                 gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );

@@ -193,8 +193,8 @@ headoverheels_SOURCES = main.cpp \
 			gui/ColorCyclingLabel.cpp \
 			gui/ColorCyclingLabel.hpp \
 			gui/LanguageText.hpp \
-			gui/LanguageManager.cpp \
-			gui/LanguageManager.hpp \
+			gui/LanguageStrings.cpp \
+			gui/LanguageStrings.hpp \
 			gui/Menu.cpp \
 			gui/Menu.hpp \
 			gui/MenuWithValues.cpp \
@@ -208,6 +208,8 @@ headoverheels_SOURCES = main.cpp \
 			gui/Widget.hpp \
 			guiactions/Action.hpp \
 			guiactions/PlaySound.hpp \
+			guiactions/ChooseLanguage.cpp \
+			guiactions/ChooseLanguage.hpp \
 			guiactions/ContinueGame.cpp \
 			guiactions/ContinueGame.hpp \
 			guiactions/CreateAudioMenu.cpp \
@@ -238,8 +240,6 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/RedefineKey.hpp \
 			guiactions/SaveGame.cpp \
 			guiactions/SaveGame.hpp \
-			guiactions/SelectLanguage.cpp \
-			guiactions/SelectLanguage.hpp \
 			guiactions/ShowAuthors.cpp \
 			guiactions/ShowAuthors.hpp
 

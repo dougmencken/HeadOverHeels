@@ -1,27 +1,31 @@
 
-#include "LanguageText.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 
-#include "util.hpp"
+#include "LanguageText.hpp"
 
 #include <iostream>
 #include <algorithm> // std::for_each
+
 #include <tinyxml2.h>
 
-#if defined( DEBUG ) && DEBUG
-    # define DEBUG_XML          0
-#endif
+#include "util.hpp"
+
+#define DUMP_XML        0
 
 
 namespace gui
 {
 
-LanguageManager::LanguageManager( const std::string& file, const std::string& fileWithGuaranteedStrings )
+LanguageStrings::LanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings )
 {
-        this->parse( file, fileWithGuaranteedStrings );
+        parseFile( file, this->strings );
+
+        if ( file != fileWithGuaranteedStrings ) // file is not the same as
+        // 
+                parseFile( fileWithGuaranteedStrings, this->backupStrings );
 }
 
-LanguageManager::~LanguageManager()
+LanguageStrings::~LanguageStrings()
 {
         std::for_each( strings.begin(), strings.end(), DeleteIt() );
         strings.clear();
@@ -30,7 +34,7 @@ LanguageManager::~LanguageManager()
         backupStrings.clear();
 }
 
-LanguageText* LanguageManager::findLanguageStringForAlias( const std::string& alias )
+LanguageText* LanguageStrings::findLanguageStringForAlias( const std::string & alias )
 {
         for ( size_t i = 0 ; i < strings.size () ; i ++ )
         {
@@ -47,17 +51,7 @@ LanguageText* LanguageManager::findLanguageStringForAlias( const std::string& al
         return translated ;
 }
 
-void LanguageManager::parse( const std::string& file, const std::string& fileWithGuaranteedStrings )
-{
-        parseFile( file, this->strings );
-
-        if ( file != fileWithGuaranteedStrings ) // file is not the same as backup file with more strings
-        {
-                parseFile( fileWithGuaranteedStrings, this->backupStrings );
-        }
-}
-
-void LanguageManager::parseFile( const std::string& fileName, std::vector< LanguageText * >& strings )
+void LanguageStrings::parseFile( const std::string & fileName, std::vector< LanguageText * > & strings )
 {
         std::cout << "parsing \"" << fileName << "\"" << std::endl ;
 
@@ -69,7 +63,7 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
         }
 
         tinyxml2::XMLElement* root = languageXml.FirstChildElement( "language" );
-        #if defined( DEBUG_XML ) && DEBUG_XML
+        #if defined( DUMP_XML ) && DUMP_XML
                 std::cout << "   <language>" << std::endl ;
         #endif
 
@@ -80,7 +74,7 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
                 std::string alias = text->Attribute( "alias" );
                 LanguageText* langText = new LanguageText( alias );
 
-                #if defined( DEBUG_XML ) && DEBUG_XML
+                #if defined( DUMP_XML ) && DUMP_XML
                         std::cout << "     <text alias=\"" << alias << "\">" << std::endl ;
                 #endif
 
@@ -91,7 +85,7 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
                         const char * font = properties->Attribute( "font" );
                         const char * color = properties->Attribute( "color" );
 
-                        #if defined( DEBUG_XML ) && DEBUG_XML
+                        #if defined( DUMP_XML ) && DUMP_XML
                                 std::cout << "       <properties" <<
                                                 ( font != nilPointer ? std::string( " font=\"" ) + font + "\"" : "" ) <<
                                                 ( color != nilPointer ? std::string( " color=\"" ) + color + "\"" : "" ) <<
@@ -104,7 +98,7 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
                         {
                                 if ( string->FirstChild() != nilPointer )
                                 {
-                                #if defined( DEBUG_XML ) && DEBUG_XML
+                                #if defined( DUMP_XML ) && DUMP_XML
                                         std::cout << "         <string>" << string->FirstChild()->ToText()->Value() << "</string>" << std::endl ;
                                 #endif
                                         langText->addLine( LanguageLine( string->FirstChild()->ToText()->Value(),
@@ -112,23 +106,23 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
                                 }
                                 else
                                 {
-                                #if defined( DEBUG_XML ) && DEBUG_XML
+                                #if defined( DUMP_XML ) && DUMP_XML
                                         std::cout << "         <string></string>" << std::endl ;
                                 #endif
                                         langText->addEmptyLine() ;
                                 }
                         }
-                        #if defined( DEBUG_XML ) && DEBUG_XML
+                        #if defined( DUMP_XML ) && DUMP_XML
                                 std::cout << "       </properties>" << std::endl ;
                         #endif
                 }
-                #if defined( DEBUG_XML ) && DEBUG_XML
+                #if defined( DUMP_XML ) && DUMP_XML
                         std::cout << "     </text>" << std::endl ;
                 #endif
 
                 strings.push_back( langText );
         }
-        #if defined( DEBUG_XML ) && DEBUG_XML
+        #if defined( DUMP_XML ) && DUMP_XML
                 std::cout << "   </language>" << std::endl ;
         #endif
 }

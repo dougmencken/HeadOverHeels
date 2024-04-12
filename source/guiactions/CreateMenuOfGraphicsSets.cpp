@@ -33,7 +33,7 @@ CreateMenuOfGraphicsSets::~CreateMenuOfGraphicsSets( )
         delete menuOfGraphicsSets ;
 }
 
-void CreateMenuOfGraphicsSets::doAction ()
+void CreateMenuOfGraphicsSets::act ()
 {
         const size_t positionOfSecondColumn = 18;
 

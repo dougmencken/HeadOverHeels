@@ -2,12 +2,12 @@
 #include "CreateLanguageMenu.hpp"
 
 #include "GuiManager.hpp"
-#include "LanguageManager.hpp"
+#include "LanguageStrings.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "MenuWithTwoColumns.hpp"
 #include "Label.hpp"
-#include "SelectLanguage.hpp"
+#include "ChooseLanguage.hpp"
 #include "CreateMainMenu.hpp"
 #include "GamePreferences.hpp"
 
@@ -15,16 +15,12 @@
 
 #include <tinyxml2.h>
 
-using gui::CreateLanguageMenu;
-using gui::GuiManager;
-using gui::LanguageManager;
-using gui::SelectLanguage;
 
+namespace gui {
 
 CreateLanguageMenu::CreateLanguageMenu( ) : Action( )
 {
-        // read list of languages available for this game
-        parse( ospaths::sharePath() + "text" + ospaths::pathSeparator() + "language.xml" );
+        readListOfLanguages( ospaths::sharePath() + "text" + ospaths::pathSeparator() + "language.xml" );
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )
@@ -32,7 +28,7 @@ CreateLanguageMenu::~CreateLanguageMenu( )
         languages.clear();
 }
 
-void CreateLanguageMenu::doAction ()
+void CreateLanguageMenu::act ()
 {
         ScreenPtr screenptr = GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screenptr == nilPointer ) {
@@ -71,26 +67,22 @@ void CreateLanguageMenu::doAction ()
         screen.addPictureOfHeadAt( Head->getX() - ( headHeelsWidth << 1 ) - space, space + 5 );
         screen.addPictureOfHeelsAt( Heels->getX() + Heels->getWidth() + headHeelsWidth + space, space + 5 );
 
-        // presenta los idiomas disponibles
+        // present the language menu
 
-        std::string language = GuiManager::getInstance().getLanguage();
+        std::string chosenLanguage = GuiManager::getInstance().getLanguage() ;
 
         MenuWithTwoColumns * menu = new MenuWithTwoColumns( /* space between columns */ ( screenWidth >> 3 ) - 20 );
         menu->setVerticalOffset( 50 ); // adjust for header over heelser
 
         for ( std::map< std::string, std::string >::const_iterator it = languages.begin () ; it != languages.end () ; ++ it )
         {
-                {
-                        Label* tongue = new Label( ( *it ).second );
-                        tongue->setAction( new SelectLanguage( ( *it ).first ) );
+                Label* tongue = new Label( ( *it ).second );
+                tongue->setAction( new ChooseLanguage( ( *it ).first ) );
 
-                        menu->addOption( tongue );
-                }
+                menu->addOption( tongue );
 
-                if ( language == ( *it ).first || ( language.empty() && it == languages.begin() ) )
-                {
+                if ( chosenLanguage == ( *it ).first || ( chosenLanguage.empty() && it == languages.begin() ) )
                         menu->setActiveOption( ( *it ).second );
-                }
         }
 
         screen.addWidget( menu );
@@ -100,15 +92,11 @@ void CreateLanguageMenu::doAction ()
         GuiManager::getInstance().changeScreen( screen, true );
 }
 
-void CreateLanguageMenu::parse( const std::string& fileName )
+void CreateLanguageMenu::readListOfLanguages( const std::string & nameOfXMLFile )
 {
-        // read from XML file
-        tinyxml2::XMLDocument languages;
-        tinyxml2::XMLError result = languages.LoadFile( fileName.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
-                return;
-        }
+        tinyxml2::XMLDocument languages ;
+        tinyxml2::XMLError result = languages.LoadFile( nameOfXMLFile.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS ) return ;
 
         tinyxml2::XMLElement* root = languages.FirstChildElement( "languages" );
 
@@ -120,4 +108,6 @@ void CreateLanguageMenu::parse( const std::string& fileName )
                 std::string text = language->FirstChildElement( "text" )->FirstChild()->ToText()->Value() ;
                 this->languages[ iso ] = text;
         }
+}
+
 }

@@ -19,7 +19,7 @@ ContinueGame::ContinueGame( bool inProgress )
 {
 }
 
-void ContinueGame::doAction ()
+void ContinueGame::act ()
 {
         SoundManager::getInstance().stopOgg (); // or else hear the planets screen's music when resuming an old (saved) game
 

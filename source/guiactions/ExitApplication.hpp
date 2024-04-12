@@ -28,7 +28,7 @@ public:
 
 protected:
 
-        virtual void doAction () {  bye () ;  }
+        virtual void act () {  bye () ;  }
 
 private:
 

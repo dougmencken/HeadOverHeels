@@ -26,25 +26,25 @@ class Action
 
 public:
 
-        Action() : begin( false ), done( false ) { }
+        Action() : doing( false ), done( false ) { }
 
         virtual ~Action( ) { }
 
-        void doIt () {  begin = true ;  doAction() ;  done = true ;  }
+        void doIt () {  doing = true ;  act() ;  done = true ;  }
 
         virtual std::string getNameOfAction () const = 0 ;
 
-        bool hasBegun() {  return begin ;  }
+        bool hasBegun() {  return doing ;  }
 
         bool isDone() {  return done ;  }
 
 protected:
 
-        virtual void doAction () = 0 ;
+        virtual void act () = 0 ;
 
 private:
 
-        bool begin ;
+        bool doing ;
 
         bool done ;
 
@@ -59,7 +59,7 @@ public:
 
 protected:
 
-        virtual void doAction () {  }
+        virtual void act () {  }
 
 };
 

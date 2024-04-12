@@ -40,7 +40,7 @@ protected:
         /**
          * show the summary screen
          */
-        virtual void doAction () ;
+        virtual void act () ;
 
 private:
 
