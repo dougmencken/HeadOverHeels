@@ -36,8 +36,6 @@ public:
 
 	virtual ~ShowAuthors( ) ;
 
-        virtual std::string getNameOfAction () const {  return "ShowAuthors" ;  }
-
 protected:
 
         void readCreditsText( const std::string & fileName ) ;

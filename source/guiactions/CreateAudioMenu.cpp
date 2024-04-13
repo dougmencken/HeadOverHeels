@@ -33,17 +33,17 @@ void CreateAudioMenu::act ()
 {
         LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
-        LanguageText* langStringEffects = languageStrings->findLanguageStringForAlias( "soundfx" );
-        LanguageText* langStringMusic = languageStrings->findLanguageStringForAlias( "music" );
+        LanguageText* langStringEffects = languageStrings->getTranslatedStringByAlias( "soundfx" );
+        LanguageText* langStringMusic = languageStrings->getTranslatedStringByAlias( "music" );
 
-        LanguageText* langStringRoomTunes = languageStrings->findLanguageStringForAlias( "play-room-melodies" );
+        LanguageText* langStringRoomTunes = languageStrings->getTranslatedStringByAlias( "play-room-melodies" );
 
-        std::string yeah = languageStrings->findLanguageStringForAlias( "yep" )-> getText ();
-        std::string nope = languageStrings->findLanguageStringForAlias( "nope" )->getText ();
+        std::string yeah = languageStrings->getTranslatedStringByAlias( "yep" )-> getText ();
+        std::string nope = languageStrings->getTranslatedStringByAlias( "nope" )->getText ();
 
         std::stringstream ss;
 
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
         if ( screen.countWidgets() == 0 )
         {
                 screen.setEscapeAction( new CreateMainMenu() );
@@ -56,10 +56,10 @@ void CreateAudioMenu::act ()
                 // música
                 this->labelMusic = new Label( langStringMusic->getText() );
 
-                // play melody of scenery on entry to room or don’t
+                // play the melody of scenery on entry to a room or don’t
                 this->playRoomTunes = new Label( langStringRoomTunes->getText() );
 
-                // create menu
+                // create the menu
 
                 this->listOfOptions = new MenuWithValues( );
 
@@ -78,7 +78,7 @@ void CreateAudioMenu::act ()
 
                 listOfOptions->setVerticalOffset( 35 );
 
-                // add menu to screen
+                // add this menu to the screen
 
                 screen.addWidget( listOfOptions );
         }
@@ -88,10 +88,8 @@ void CreateAudioMenu::act ()
                 listOfOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
         }
 
-        if ( screen.getKeyHandler() == nilPointer )
-        {
-                screen.setKeyHandler( listOfOptions );
-        }
+        if ( screen.getNextKeyHandler() == nilPointer )
+                screen.setNextKeyHandler( listOfOptions );
 
         GuiManager::getInstance().changeScreen( screen, true );
 
@@ -163,9 +161,7 @@ void CreateAudioMenu::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                {
-                                        screen.getKeyHandler()->handleKey ( theKey );
-                                }
+                                        screen.getNextKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
                                 listOfOptions->redraw ();

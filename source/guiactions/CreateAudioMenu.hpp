@@ -31,8 +31,6 @@ public:
 
         CreateAudioMenu( ) ;
 
-        virtual std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
-
 protected:
 
         /**

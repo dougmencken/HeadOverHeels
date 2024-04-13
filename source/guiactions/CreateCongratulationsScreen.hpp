@@ -18,7 +18,7 @@ namespace gui
 {
 
 /**
- * Presenta el texto final de felicitación cuando se termina con éxito el juego
+ * Presenta el texto final de felicitación cuando el juego se completa con éxito
  */
 
 class CreateCongratulationsScreen : public Action
@@ -32,27 +32,16 @@ public:
          */
         CreateCongratulationsScreen( unsigned short rooms, unsigned short planets ) ;
 
-        virtual ~CreateCongratulationsScreen( ) ;
-
-        virtual std::string getNameOfAction () const {  return "CreateCongratulationsScreen" ;  }
+        virtual ~CreateCongratulationsScreen( ) {}
 
 protected:
 
-        /**
-         * Crea la pantalla con el texto
-         */
         virtual void act () ;
 
 private:
 
-        /**
-         * Número de salas visitadas
-         */
         unsigned short rooms ;
 
-        /**
-         * Número de planetas liberados
-         */
         unsigned short planets ;
 
 };

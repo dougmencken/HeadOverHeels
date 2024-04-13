@@ -45,12 +45,9 @@ void CreatePlanetsScreen::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::toBlackBackground () ; // change the background from red to black
 
-        Screen & planets = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & planets = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( planets.countWidgets() > 0 )
-        {
-                planets.freeWidgets() ;
-        }
+        if ( planets.countWidgets() > 0 ) planets.freeWidgets() ;
 
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int screenHeight = GamePreferences::getScreenHeight();
@@ -58,13 +55,13 @@ void CreatePlanetsScreen::act ()
         // “ El Imperio Blacktooth ”
         std::string colorOfLabel = "yellow" ;
         if ( GameManager::getInstance().isSimpleGraphicsSet () ) colorOfLabel = "red" ;
-        Label* empire = new Label( languageStrings->findLanguageStringForAlias( "blacktooth-empire" )->getText(),
+        Label* empire = new Label( languageStrings->getTranslatedStringByAlias( "blacktooth-empire" )->getText(),
                                         Font::fontWith2xHeightAndColor( colorOfLabel ) );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
         empire->setAction( new ContinueGame( gameInProgress ) );
 
         planets.addWidget( empire );
-        planets.setKeyHandler( empire );
+        planets.setNextKeyHandler( empire );
 
         PicturePtr chapeau( Screen::loadPicture( "crown.png" ) );
         PicturePtr chapeauTriste( new Picture( *chapeau ) );
@@ -102,7 +99,7 @@ void CreatePlanetsScreen::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->findLanguageStringForAlias( "blacktooth" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings->getTranslatedStringByAlias( "blacktooth" )->getText() );
                 nameOfPlanet->moveTo( blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), blacktoothY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -126,7 +123,7 @@ void CreatePlanetsScreen::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->findLanguageStringForAlias( "egyptus" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings->getTranslatedStringByAlias( "egyptus" )->getText() );
                 nameOfPlanet->moveTo( egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), egyptusY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -150,7 +147,7 @@ void CreatePlanetsScreen::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->findLanguageStringForAlias( "penitentiary" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings->getTranslatedStringByAlias( "penitentiary" )->getText() );
                 nameOfPlanet->moveTo( penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), penitentiaryY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -174,7 +171,7 @@ void CreatePlanetsScreen::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->findLanguageStringForAlias( "byblos" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings->getTranslatedStringByAlias( "byblos" )->getText() );
                 nameOfPlanet->moveTo( byblosX + ( imageOfByblos->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), byblosY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -198,7 +195,7 @@ void CreatePlanetsScreen::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->findLanguageStringForAlias( "safari" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings->getTranslatedStringByAlias( "safari" )->getText() );
                 nameOfPlanet->moveTo( safariX + ( imageOfSafari->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), safariY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }

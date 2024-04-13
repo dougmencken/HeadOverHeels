@@ -33,8 +33,6 @@ public:
         */
         RedefineKey( MenuWithValues * menu, const std::string & keyAction ) ;
 
-        virtual std::string getNameOfAction () const {  return "RedefineKey" ;  }
-
 protected:
 
         virtual void act () ;

@@ -26,22 +26,13 @@ namespace gui
 
 void CreateListOfSavedGames::act ()
 {
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
-        if ( screen.countWidgets() > 0 )
-        {
-                screen.freeWidgets() ;
-        }
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( isLoadMenu() )
-        {
-                // return to main menu
-                screen.setEscapeAction( new CreateMainMenu() );
-        }
-        else
-        {
-                // return to play
-                screen.setEscapeAction( new ContinueGame( true ) );
-        }
+        if ( screen.countWidgets() > 0 )
+                screen.freeWidgets() ;
+
+        screen.setEscapeAction( isLoadMenu() ? static_cast< Action * >( /* to the main menu */ new CreateMainMenu() )
+                                             : static_cast< Action * >( /* back to the game */ new ContinueGame( true ) ) );
 
         screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
@@ -58,8 +49,8 @@ void CreateListOfSavedGames::act ()
                 if ( gameInfo.howManyRoomsVisited () >= 2 ) // less than 2 rooms means "couldn't read"
                 {
                         std::ostringstream ss;
-                        ss << gameInfo.howManyRoomsVisited () << " " << languageStrings->findLanguageStringForAlias( "rooms" )->getText() << " "
-                                << gameInfo.howManyPlanetsLiberated () << " " << languageStrings->findLanguageStringForAlias( "planets" )->getText() ;
+                        ss << gameInfo.howManyRoomsVisited () << " " << languageStrings->getTranslatedStringByAlias( "rooms" )->getText() << " "
+                                << gameInfo.howManyPlanetsLiberated () << " " << languageStrings->getTranslatedStringByAlias( "planets" )->getText() ;
                         Label* label = new Label( ss.str() );
 
                         if ( isLoadMenu() )
@@ -77,7 +68,7 @@ void CreateListOfSavedGames::act ()
                 # endif
 
                         std::ostringstream ss;
-                        ss << languageStrings->findLanguageStringForAlias( "free-slot" )->getText ();
+                        ss << languageStrings->getTranslatedStringByAlias( "free-slot" )->getText ();
                         Label* freeLine = new Label( ss.str() );
                         if ( isLoadMenu() ) {
                                 freeLine->changeColor( "cyan" );
@@ -93,7 +84,7 @@ void CreateListOfSavedGames::act ()
         }
 
         screen.addWidget( menu );
-        screen.setKeyHandler( menu );
+        screen.setNextKeyHandler( menu );
 
         GuiManager::getInstance().changeScreen( screen, true );
 }

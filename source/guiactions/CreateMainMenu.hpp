@@ -17,20 +17,12 @@
 namespace gui
 {
 
-class Screen ;
-
-/**
- * Crea el menú principal del juego
- */
-
 class CreateMainMenu : public Action
 {
 
 public:
 
         CreateMainMenu( ) ;
-
-        virtual std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
 
 protected:
 

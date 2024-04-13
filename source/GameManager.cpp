@@ -162,7 +162,7 @@ void GameManager::update ()
                                                 drawOnScreen( view->getAllegroPict() );
                                         }
                                         else
-                                                throw new MayNotBePossible( "GameManager::update doesn’t get a canvas to draw on" ) ;
+                                                throw MayNotBePossible( "GameManager::update doesn’t get a canvas to draw on" ) ;
                                 }
 
                                 somn::milliSleep( 1000 / Isomot::updatesPerSecond );
@@ -205,7 +205,7 @@ void GameManager::pause ()
         else if ( keyMoments.wasFishEaten( true ) )
         {
                 gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
-                gui::LanguageText* text = languageStrings->findLanguageStringForAlias( "save-game" );
+                gui::LanguageText* text = languageStrings->getTranslatedStringByAlias( "save-game" );
                 int textAtY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
 
                 gui::TextField ateFishText( GamePreferences::getScreenWidth(), "center" );
@@ -217,7 +217,7 @@ void GameManager::pause ()
                         ateFishText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
-                text = languageStrings->findLanguageStringForAlias( "confirm-resume" );
+                text = languageStrings->getTranslatedStringByAlias( "confirm-resume" );
                 textAtY += ateFishText.getHeightOfField () + 20 ;
 
                 gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
@@ -293,7 +293,7 @@ void GameManager::pause ()
                 SoundManager::getInstance().stopEverySound ();
 
                 gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings();
-                gui::LanguageText* text = languageStrings->findLanguageStringForAlias( "confirm-quit" );
+                gui::LanguageText* text = languageStrings->getTranslatedStringByAlias( "confirm-quit" );
                 int textAtY = ( GamePreferences::getScreenHeight() >> 2 );
 
                 gui::TextField quitText( GamePreferences::getScreenWidth(), "center" );
@@ -305,7 +305,7 @@ void GameManager::pause ()
                         quitText.appendText( line.getText(), line.isBigHeight(), line.getColor() );
                 }
 
-                text = languageStrings->findLanguageStringForAlias( "confirm-resume" );
+                text = languageStrings->getTranslatedStringByAlias( "confirm-resume" );
                 textAtY += quitText.getHeightOfField () + 20 ;
 
                 gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );

@@ -30,8 +30,6 @@ public:
 
         CreateKeyboardMenu( ) : Action( ), menuOfKeys( nilPointer ) { }
 
-        virtual std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
-
 protected:
 
         /**

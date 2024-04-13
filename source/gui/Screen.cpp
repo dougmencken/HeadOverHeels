@@ -5,7 +5,6 @@
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
-#include "Action.hpp"
 #include "Label.hpp"
 #include "TextField.hpp"
 #include "PictureWidget.hpp"
@@ -52,17 +51,17 @@ namespace gui
         Screen::backgroundPicture->setName( "the black background for user interface slides" );
 }
 
-Screen::Screen( Action* action ) :
+Screen::Screen( Action & action ) :
         Widget( 0, 0 ),
         imageOfScreen( new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) ),
         drawSpectrumColors( false ),
         actionOfScreen( action ),
         escapeAction( nilPointer ),
-        keyHandler( nilPointer ),
+        nextKeyHandler( nilPointer ),
         pictureOfHead( nilPointer ),
         pictureOfHeels( nilPointer )
 {
-        imageOfScreen->setName( "image of screen for action " + action->getNameOfAction() );
+        this->imageOfScreen->setName( "image of screen for action " + getNameOfAction() );
 
         if ( Screen::backgroundPicture == nilPointer ) Screen::refreshBackground () ;
 
@@ -72,12 +71,6 @@ Screen::Screen( Action* action ) :
 Screen::~Screen( )
 {
         freeWidgets() ;
-}
-
-void Screen::setEscapeAction ( Action * action )
-{
-        delete escapeAction ;
-        escapeAction = action ;
 }
 
 void Screen::refreshPicturesOfHeadAndHeels ()
@@ -150,7 +143,7 @@ void Screen::refresh () const
         }
         if ( Screen::backgroundPicture == nilPointer )
         {       // it's impossible
-                throw new MayNotBePossible( "Screen::backgroundPicture is nil after Screen::refreshBackground()" ) ;
+                throw MayNotBePossible( "Screen::backgroundPicture is nil after Screen::refreshBackground()" ) ;
         }
 
         unsigned int backgroundWidth = backgroundPicture->getWidth();
@@ -256,12 +249,9 @@ void Screen::handleKey( const std::string& key )
                 this->escapeAction->doIt ();
                 fprintf( stdout, "~~ done with action %s\n", ( escapeAction != nilPointer ? escapeAction->getNameOfAction().c_str () : "nope" ) );
         }
-        else
-        {
-                if ( this->keyHandler != nilPointer )
-                {
-                        this->keyHandler->handleKey( key );
-                }
+        else {
+                if ( this->nextKeyHandler != nilPointer )
+                        this->nextKeyHandler->handleKey( key );
         }
 }
 

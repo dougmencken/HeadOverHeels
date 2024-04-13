@@ -19,17 +19,11 @@ CreateCongratulationsScreen::CreateCongratulationsScreen( unsigned short rooms, 
         , rooms( rooms )
         , planets( planets )
 {
-
-}
-
-CreateCongratulationsScreen::~CreateCongratulationsScreen( )
-{
-
 }
 
 void CreateCongratulationsScreen::act ()
 {
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
         if ( screen.countWidgets() == 0 )
                 screen.setEscapeAction( new CreateEndScreen( rooms, planets ) );
@@ -46,7 +40,7 @@ void CreateCongratulationsScreen::act ()
 
         // texto final
         LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
-        LanguageText* finalText = languageStrings->findLanguageStringForAlias( "final-text" );
+        LanguageText* finalText = languageStrings->getTranslatedStringByAlias( "final-text" );
         TextField* textField = new TextField( GamePreferences::getScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 

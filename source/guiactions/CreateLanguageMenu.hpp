@@ -12,6 +12,7 @@
 #define CreateLanguageMenu_hpp_
 
 #include <map>
+
 #include "Action.hpp"
 
 
@@ -30,8 +31,6 @@ public:
         CreateLanguageMenu( ) ;
 
         ~CreateLanguageMenu( ) ;
-
-        virtual std::string getNameOfAction () const {  return "CreateLanguageMenu" ;  }
 
 protected:
 

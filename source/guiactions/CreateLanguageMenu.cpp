@@ -30,19 +30,11 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::act ()
 {
-        ScreenPtr screenptr = GuiManager::getInstance().findOrCreateScreenForAction( this );
-        if ( screenptr == nilPointer ) {
-                std::cout << "nil screen for " << this->getNameOfAction() ;
-                return ;
-        }
-        Screen & screen = *screenptr ;
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() > 0 )
-        {
-                screen.freeWidgets();
-        }
+        if ( screen.countWidgets() > 0 ) screen.freeWidgets ();
 
-        screen.setEscapeAction( new gui::CreateMainMenu() );
+        screen.setEscapeAction( new CreateMainMenu() );
 
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
@@ -71,7 +63,7 @@ void CreateLanguageMenu::act ()
 
         std::string chosenLanguage = GuiManager::getInstance().getLanguage() ;
 
-        MenuWithTwoColumns * menu = new MenuWithTwoColumns( /* space between columns */ ( screenWidth >> 3 ) - 20 );
+        MenuWithTwoColumns * menu = new MenuWithTwoColumns( /* between columns */ ( screenWidth >> 3 ) - 20 );
         menu->setVerticalOffset( 50 ); // adjust for header over heelser
 
         for ( std::map< std::string, std::string >::const_iterator it = languages.begin () ; it != languages.end () ; ++ it )
@@ -86,9 +78,8 @@ void CreateLanguageMenu::act ()
         }
 
         screen.addWidget( menu );
-        screen.setKeyHandler( menu );
+        screen.setNextKeyHandler( menu );
 
-        Screen::randomPixelFadeIn( Color::blackColor(), screen );
         GuiManager::getInstance().changeScreen( screen, true );
 }
 

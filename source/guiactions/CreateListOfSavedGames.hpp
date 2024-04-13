@@ -67,8 +67,6 @@ public:
                 , isMenuForLoad( isLoadMenu )
         {}
 
-        virtual std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
-
         bool isLoadMenu () {  return this->isMenuForLoad ;  }
 
 protected:

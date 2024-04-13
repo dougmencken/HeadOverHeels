@@ -52,12 +52,8 @@ bool GamePreferences::readPreferences( const std::string & fileName )
         // the chosen language
 
         tinyxml2::XMLElement* language = root->FirstChildElement( "language" ) ;
-        std::string languageString = "en_US";
-        if ( language != nilPointer )
-        {
-                languageString = language->FirstChild()->ToText()->Value();
-        }
-        gui::GuiManager::getInstance().setLanguage( languageString );
+        if ( language != nilPointer && language->FirstChild() != nilPointer )
+                gui::GuiManager::getInstance().setLanguage( language->FirstChild()->ToText()->Value() );
 
         // chosen keys
 

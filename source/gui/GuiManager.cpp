@@ -10,8 +10,9 @@
 #include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "CreateLanguageMenu.hpp"
+#include "CreateMainMenu.hpp"
 
-#include "WrappersAllegro.hpp"
+#include "MayNotBePossible.hpp"
 
 #include "ospaths.hpp"
 #include "sleep.hpp"
@@ -84,14 +85,36 @@ GuiManager& GuiManager::getInstance ()
         return *instance ;
 }
 
+void GuiManager::dumpScreenz () const
+{
+# if  defined( DEBUG_GUI_SCREENS )  &&  DEBUG_GUI_SCREENS
+        if ( this->screens.size () > 0 )
+        {
+                fprintf ( stdout, " + +  s c r e e n z \n" ) ;
+                for ( std::map< std::string, ScreenPtr >::const_iterator i = this->screens.begin (); i != this->screens.end (); ++ i )
+                {
+                        if ( i->second != nilPointer ) {
+                                std::cout << "   screen @ " << i->second.tostring() ;
+                                const Screen & screen = * i->second ;
+                                /* const Picture & pict = screen.getImageOfScreen () ;
+                                 * std::cout << " with picture \" " << pict.getName() << " \"" << std::endl ; */
+                                std::cout << " for action \" " << screen.getNameOfAction() << " \"" << std::endl ;
+                        }
+                }
+                fprintf ( stdout, " - -  s c r e e n z \n" ) ;
+        }
+# endif
+}
+
 void GuiManager::begin ()
 {
-        // show the list of languages
-        autouniqueptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu() );
-        if ( languageMenu != nilPointer )
-                languageMenu->doIt ();
+        // if the language isn’t set, show the menu of languages, otherwise show the main menu
+        Action * firstMenu = this->chosenLanguage.empty() ? static_cast< Action * >( new CreateLanguageMenu() )
+                                                          : static_cast< Action * >( new CreateMainMenu() ) ;
+        if ( firstMenu != nilPointer )
+                firstMenu->doIt ();
         else
-                std::cerr << "can't create the language menu, the first screen of the user interface" << std::endl ;
+                throw MayNotBePossible( "can't create the first menu" );
 
         // draw the user interface and handle keys
         while ( this->active )
@@ -99,106 +122,80 @@ void GuiManager::begin ()
                 activeScreen->draw ();
 
                 if ( allegro::areKeypushesWaiting() )
-                {
                         activeScreen->handleKey( allegro::nextKey() );
-                }
 
                 somn::milliSleep( 30 );
         }
 }
 
-void GuiManager::changeScreen( const Screen& newScreen, bool dive )
+void GuiManager::changeScreen( Screen & newScreen, bool dive )
 {
+        const std::string & newScreenAction = newScreen.getNameOfAction () ;
+
 # if  defined( DEBUG_GUI_SCREENS )  &&  DEBUG_GUI_SCREENS
+        fprintf( stdout, ">< changing screen" );
 
-        if ( listOfScreens.size () > 0 )
-        {
-                fprintf ( stdout, " + +  s c r e e n z \n" ) ;
-                for (  std::map< std::string, ScreenPtr >::const_iterator i = listOfScreens.begin (); i != listOfScreens.end (); ++i )
-                {
-                        if ( i->second != nilPointer )
-                        {
-                                Action * action = i->second->getActionOfScreen () ;
-                                std::cout << "   screen @ " << i->second.tostring() ;
-                                std::cout << " for action @ " << util::pointer2string( action ) ;
-                                std::cout << " \" " << action->getNameOfAction() << " \"" << std::endl ;
-                        }
-                }
-                fprintf ( stdout, " - -  s c r e e n z \n" ) ;
-        }
+        if ( this->activeScreen != nilPointer )
+                fprintf( stdout, " from the one for action \" %s \"", this->activeScreen->getNameOfAction().c_str () );
+        else
+                fprintf( stdout, " from the void" );
 
-        if ( activeScreen != nilPointer )
-        {
-                Action* escape = activeScreen->getEscapeAction () ;
-                fprintf( stdout, ". previous screen was for action \" %s \" with escape action \" %s \"\n",
-                                 activeScreen->getActionOfScreen ()->getNameOfAction().c_str (),
-                                 ( escape != nilPointer ? escape->getNameOfAction().c_str () : "none" ) );
-        }
-
-        Action* escapeOfNewScreen = newScreen.getEscapeAction () ;
-        fprintf( stdout, ". screen to change to is for action \" %s \" with escape action \" %s \"\n",
-                         newScreen.getActionOfScreen ()->getNameOfAction().c_str (),
-                         ( escapeOfNewScreen != nilPointer ? escapeOfNewScreen->getNameOfAction().c_str () : "none" )
-        ) ;
-
+        fprintf( stdout, " to the one for action \" %s \"\n", newScreenAction.c_str () ) ;
 # endif
 
-        if ( listOfScreens.find( newScreen.getActionOfScreen()->getNameOfAction() ) != listOfScreens.end () )
-        {
-                if ( activeScreen != nilPointer &&
-                        ( activeScreen->getActionOfScreen() == nilPointer ||
-                                activeScreen->getActionOfScreen()->getNameOfAction() != "CreatePlanetsScreen" ) )
-                {
-                        Screen::barWipeHorizontally( *activeScreen, newScreen, dive );
-                }
+        std::map< std::string, ScreenPtr >::const_iterator iscreen = this->screens.find( newScreenAction );
+        if ( iscreen != this->screens.end () ) {
+                if ( this->activeScreen != nilPointer ) {
+                        if ( this->activeScreen->getNameOfAction() != "CreatePlanetsScreen" )
+                                Screen::barWipeHorizontally( * this->activeScreen, newScreen, dive );
+                } else
+                        // this is the first screen ever shown
+                        Screen::randomPixelFadeIn( Color::blackColor(), newScreen );
 
-                setActiveScreen( ScreenPtr( & const_cast< Screen& >( newScreen ) ) );
+                setActiveScreen( iscreen->second );
                 redraw() ;
         }
-        else
-        {
-                fprintf( stderr, "there’s no screen for action \" %s \", please create it before use\n",
-                                 newScreen.getActionOfScreen()->getNameOfAction().c_str () );
+        else {
+                fprintf( stderr, "there’s no screen for action \" %s \", please create it before use\n", newScreenAction.c_str () );
+                throw MayNotBePossible( "the screen for action \" " + newScreenAction + " \" is absent" ) ;
         }
 }
 
-ScreenPtr GuiManager::findOrCreateScreenForAction ( Action* action )
+ScreenPtr GuiManager::findOrCreateScreenForAction ( Action & action )
 {
-        if ( action == nilPointer )
-        {
+        /* if ( action == nilPointer ) {
                 std::cerr << "screen for nil action is nil screen" << std::endl ;
                 return ScreenPtr () ;
-        }
+        } */
 
-        std::string nameOfAction = action->getNameOfAction() ;
+        const std::string & nameOfAction = action.getNameOfAction() ;
 
-        if ( listOfScreens.find( nameOfAction ) != listOfScreens.end () )
-        {
-                ScreenPtr theScreen = listOfScreens[ nameOfAction ];
-                std::cout << "here’s existing screen for action \" " << nameOfAction << " \"" << std::endl ;
-                return theScreen;
-        }
+        if ( this->screens.find( nameOfAction ) == this->screens.end () ) {
+                std::cout << "making new screen for action \" " << nameOfAction << " \"" << std::endl ;
 
-        std::cout << "going to create new screen for action \" " << nameOfAction << " \"" << std::endl ;
-        ScreenPtr newScreen( new Screen( action ) );
-        listOfScreens[ nameOfAction ] = newScreen ;
-        return newScreen;
+                this->screens[ nameOfAction ] = ScreenPtr( new Screen( action ) );
+
+                if ( this->screens[ nameOfAction ] == nilPointer )
+                        throw MayNotBePossible( "can't make the screen for action \" " + nameOfAction + " \"" ) ;
+        } else
+                std::cout << "there’s existing screen for action \" " << nameOfAction << " \"" << std::endl ;
+
+        dumpScreenz() ;
+
+        return this->screens[ nameOfAction ];
 }
 
 void GuiManager::freeScreens ()
 {
-        listOfScreens.clear() ;
+        this->screens.clear() ;
         setActiveScreen( ScreenPtr () );
 }
 
 void GuiManager::refreshScreens ()
 {
-        for (  std::map< std::string, ScreenPtr >::iterator i = listOfScreens.begin (); i != listOfScreens.end (); ++i )
-        {
+        for (  std::map< std::string, ScreenPtr >::iterator i = this->screens.begin (); i != this->screens.end (); ++ i ) {
                 if ( i->second != nilPointer )
-                {
                         i->second->refreshPicturesOfHeadAndHeels () ;
-                }
         }
 
         Screen::refreshBackground () ;
@@ -207,7 +204,7 @@ void GuiManager::refreshScreens ()
 void GuiManager::redraw()
 {
         if ( this->active && ( this->activeScreen != nilPointer ) )
-                activeScreen->draw ();
+                this->activeScreen->draw ();
 }
 
 std::string GuiManager::getPathToThesePictures () const

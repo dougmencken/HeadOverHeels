@@ -37,7 +37,7 @@ void CreateMenuOfGraphicsSets::act ()
 {
         const size_t positionOfSecondColumn = 18;
 
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
         if ( screen.countWidgets() == 0 )
         {
@@ -55,20 +55,13 @@ void CreateMenuOfGraphicsSets::act ()
                         }
 
                         Label * theLabel = new Label( nameOfSetSpaced + i->first );
-                        if ( i->first != GameManager::getInstance().getChosenGraphicsSet() )
-                        {
-                                theLabel->changeColor( "cyan" );
-                        }
-                        else
-                        {
-                                theLabel->changeColor( "yellow" );
-                        }
+                        theLabel->changeColor( i->first == GameManager::getInstance().getChosenGraphicsSet() ? "yellow" : "cyan" );
 
                         menuOfGraphicsSets->addOption( theLabel );
                 }
 
                 screen.addWidget( menuOfGraphicsSets );
-                screen.setKeyHandler( menuOfGraphicsSets );
+                screen.setNextKeyHandler( menuOfGraphicsSets );
         }
 
         const std::vector< Label* > & sets = menuOfGraphicsSets->getEveryOption ();
@@ -121,9 +114,7 @@ void CreateMenuOfGraphicsSets::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                {
-                                        screen.getKeyHandler()->handleKey ( theKey );
-                                }
+                                        screen.getNextKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
                                 menuOfGraphicsSets->redraw ();

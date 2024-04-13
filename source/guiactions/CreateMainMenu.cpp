@@ -30,22 +30,21 @@ void CreateMainMenu::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+
         if ( screen.countWidgets() == 0 )
         {
                 screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
                 LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
-                // Las opciones del menú
-
-                Label* newGame = new Label( languageStrings->findLanguageStringForAlias( "new-game" )->getText() );
-                Label* loadGame = new Label( languageStrings->findLanguageStringForAlias( "load-game" )->getText() );
-                Label* defineKeys = new Label( languageStrings->findLanguageStringForAlias( "keys-menu" )->getText() );
-                Label* adjustAudio = new Label( languageStrings->findLanguageStringForAlias( "audio-menu" )->getText() );
-                Label* adjustVideo = new Label( languageStrings->findLanguageStringForAlias( "video-menu" )->getText() );
-                Label* showCredits = new Label( languageStrings->findLanguageStringForAlias( "show-credits" )->getText() );
-                Label* quitGame = new Label( languageStrings->findLanguageStringForAlias( "exit-game" )->getText() );
+                Label* newGame = new Label( languageStrings->getTranslatedStringByAlias( "new-game" )->getText() );
+                Label* loadGame = new Label( languageStrings->getTranslatedStringByAlias( "load-game" )->getText() );
+                Label* defineKeys = new Label( languageStrings->getTranslatedStringByAlias( "keys-menu" )->getText() );
+                Label* adjustAudio = new Label( languageStrings->getTranslatedStringByAlias( "audio-menu" )->getText() );
+                Label* adjustVideo = new Label( languageStrings->getTranslatedStringByAlias( "video-menu" )->getText() );
+                Label* showCredits = new Label( languageStrings->getTranslatedStringByAlias( "show-credits" )->getText() );
+                Label* quitGame = new Label( languageStrings->getTranslatedStringByAlias( "exit-game" )->getText() );
 
                 newGame->setAction( new CreatePlanetsScreen( false ) );
                 loadGame->setAction( new CreateListOfSavedGames( true ) );
@@ -67,7 +66,7 @@ void CreateMainMenu::act ()
                 menu->addOption( quitGame );
 
                 screen.addWidget( menu );
-                screen.setKeyHandler( menu );
+                screen.setNextKeyHandler( menu );
         }
 
         GuiManager::getInstance().changeScreen( screen, false );

@@ -32,8 +32,6 @@ public:
 
         CreateVideoMenu( ) ;
 
-        virtual std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
-
 protected:
 
         /**

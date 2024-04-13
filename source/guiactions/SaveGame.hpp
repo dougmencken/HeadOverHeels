@@ -28,8 +28,6 @@ public:
          */
         explicit SaveGame( unsigned int slot ) ;
 
-        virtual std::string getNameOfAction () const {  return "SaveGame" ;  }
-
 protected:
 
         /**

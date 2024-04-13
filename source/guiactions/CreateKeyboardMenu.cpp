@@ -12,12 +12,14 @@
 #include "CreateMainMenu.hpp"
 #include "RedefineKey.hpp"
 
-using gui::CreateKeyboardMenu ;
 
+namespace gui
+{
 
 void CreateKeyboardMenu::act ()
 {
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+
         if ( screen.countWidgets() == 0 )
         {
                 screen.setEscapeAction( new CreateMainMenu() );
@@ -37,7 +39,7 @@ void CreateKeyboardMenu::act ()
                         const std::string & theAction = userActions[ i ];
                         std::string xmlAction = ( theAction == "take&jump" ) ? "takeandjump" : theAction ;
 
-                        Label* label = new Label( languageStrings->findLanguageStringForAlias( xmlAction )->getText() );
+                        Label* label = new Label( languageStrings->getTranslatedStringByAlias( xmlAction )->getText() );
 
                         std::string theKey = InputManager::getInstance().getUserKeyFor( theAction );
                         if ( theKey == "none" ) label->changeColor( "cyan" );
@@ -49,13 +51,14 @@ void CreateKeyboardMenu::act ()
                 }
 
                 screen.addWidget( menuOfKeys );
-                screen.setKeyHandler( menuOfKeys );
+                screen.setNextKeyHandler( menuOfKeys );
         }
-        else
-        {
-                // select first option of menu
+        else {
+                // select the first menu option
                 menuOfKeys->resetActiveOption();
         }
 
         GuiManager::getInstance().changeScreen( screen, true );
+}
+
 }

@@ -90,7 +90,8 @@ void ShowAuthors::act ()
 {
         SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+
         if ( screen.countWidgets() == 0 )
         {
                 if ( this->linesOfCredits != nilPointer ) delete this->linesOfCredits ;

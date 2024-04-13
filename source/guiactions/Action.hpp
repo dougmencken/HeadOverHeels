@@ -12,6 +12,7 @@
 #define Action_hpp_
 
 #include <string>
+#include <typeinfo>
 
 #include "WrappersAllegro.hpp"
 
@@ -32,11 +33,11 @@ public:
 
         void doIt () {  doing = true ;  act() ;  done = true ;  }
 
-        virtual std::string getNameOfAction () const = 0 ;
-
         bool hasBegun() {  return doing ;  }
 
         bool isDone() {  return done ;  }
+
+        virtual std::string getNameOfAction () const {  return typeid( *this ).name () ;  }
 
 protected:
 
@@ -52,10 +53,6 @@ private:
 
 class DoNothing : public Action
 {
-
-public:
-
-        std::string getNameOfAction () const {  return "DoNothing" ;  }
 
 protected:
 

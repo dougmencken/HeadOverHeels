@@ -49,19 +49,19 @@ CreateVideoMenu::CreateVideoMenu( )
 
 void CreateVideoMenu::act ()
 {
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
         if ( screen.countWidgets() == 0 )
         {
                 screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
 
-                LanguageText* textScreenSize = languageStrings->findLanguageStringForAlias( "screen-size" );
-                LanguageText* textFullscreen = languageStrings->findLanguageStringForAlias( "full-screen" );
-                LanguageText* textDrawShadows = languageStrings->findLanguageStringForAlias( "draw-shadows" );
-                LanguageText* textDrawSceneryDecor = languageStrings->findLanguageStringForAlias( "draw-decor" );
-                LanguageText* textDrawRoomMiniatures = languageStrings->findLanguageStringForAlias( "draw-miniatures" );
-                LanguageText* textCenterCameraOn = languageStrings->findLanguageStringForAlias( "center-camera-on" );
+                LanguageText* textScreenSize = languageStrings->getTranslatedStringByAlias( "screen-size" );
+                LanguageText* textFullscreen = languageStrings->getTranslatedStringByAlias( "full-screen" );
+                LanguageText* textDrawShadows = languageStrings->getTranslatedStringByAlias( "draw-shadows" );
+                LanguageText* textDrawSceneryDecor = languageStrings->getTranslatedStringByAlias( "draw-decor" );
+                LanguageText* textDrawRoomMiniatures = languageStrings->getTranslatedStringByAlias( "draw-miniatures" );
+                LanguageText* textCenterCameraOn = languageStrings->getTranslatedStringByAlias( "center-camera-on" );
 
                 this->screenSize = new Label( textScreenSize->getText() );
                 this->fullScreen = new Label( textFullscreen->getText() );
@@ -70,7 +70,7 @@ void CreateVideoMenu::act ()
                 this->drawRoomMiniatures = new Label( textDrawRoomMiniatures->getText() );
                 this->centerCameraOn = new Label( textCenterCameraOn->getText() );
 
-                LanguageText* textChooseGraphics = languageStrings->findLanguageStringForAlias( "graphic-set" );
+                LanguageText* textChooseGraphics = languageStrings->getTranslatedStringByAlias( "graphic-set" );
                 this->chooseGraphics = new Label( textChooseGraphics->getText(), Font::fontWithColor( "yellow" ) );
                 this->chooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
@@ -97,10 +97,8 @@ void CreateVideoMenu::act ()
 
         screen.setEscapeAction( new CreateMainMenu() );
 
-        if ( screen.getKeyHandler() == nilPointer )
-        {
-                screen.setKeyHandler( listOfOptions );
-        }
+        if ( screen.getNextKeyHandler() == nilPointer )
+                screen.setNextKeyHandler( listOfOptions );
 
         screen.drawSpectrumColorBoxes( true );
 
@@ -155,9 +153,7 @@ void CreateVideoMenu::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                {
-                                        screen.getKeyHandler()->handleKey ( theKey );
-                                }
+                                        screen.getNextKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
 
@@ -176,16 +172,16 @@ void CreateVideoMenu::updateLabels ()
 {
         LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
 
-        std::string yeah = languageStrings->findLanguageStringForAlias( "yep" )-> getText ();
-        std::string nope = languageStrings->findLanguageStringForAlias( "nope" )->getText ();
+        std::string yeah = languageStrings->getTranslatedStringByAlias( "yep" )-> getText ();
+        std::string nope = languageStrings->getTranslatedStringByAlias( "nope" )->getText ();
 
         listOfOptions->setValueOf( drawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
         listOfOptions->setValueOf( drawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
         listOfOptions->setValueOf( drawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
         listOfOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
 
-        std::string room = languageStrings->findLanguageStringForAlias( "room" )-> getText ();
-        std::string character = languageStrings->findLanguageStringForAlias( "character" )-> getText ();
+        std::string room = languageStrings->getTranslatedStringByAlias( "room" )-> getText ();
+        std::string character = languageStrings->getTranslatedStringByAlias( "character" )-> getText ();
 
         listOfOptions->setValueOf( centerCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
 

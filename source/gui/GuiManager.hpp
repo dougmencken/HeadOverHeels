@@ -88,13 +88,13 @@ public:
 
         void begin () ;
 
-        void changeScreen ( const Screen & newScreen, bool dive /* it becomes rightToLeft for barWipeHorizontally */ ) ;
+        void changeScreen ( Screen & newScreen, bool dive /* it becomes rightToLeft for barWipeHorizontally */ ) ;
 
        /*
         * Search in the list of screens for the one associated with this action
-        * When there’s no such screen found, create a new one
+        * And if there’s no such screen found, create the new one
         */
-        ScreenPtr findOrCreateScreenForAction ( Action * action ) ;
+        ScreenPtr findOrCreateScreenForAction ( Action & action ) ;
 
         void freeScreens () ;
 
@@ -130,7 +130,7 @@ public:
 
         const ScreenPtr & getActiveScreen () const {  return this->activeScreen ;  }
 
-        void setActiveScreen ( const ScreenPtr newScreen ) {  this->activeScreen = newScreen ;  }
+        void setActiveScreen ( ScreenPtr newScreen ) {  this->activeScreen = newScreen ;  }
 
         const WhyPaused & getWhyTheGameIsPaused () const {  return whyTheGameIsPaused ;  }
         WhyPaused & getWhyTheGameIsPausedToAlter () {  return whyTheGameIsPaused ;  }
@@ -138,6 +138,8 @@ public:
         void resetWhyTheGameIsPaused () {  whyTheGameIsPaused.nevermind () ;  }
 
 private:
+
+        void dumpScreenz () const ;
 
         /**
          * Unique object of this class for the whole game
@@ -147,7 +149,7 @@ private:
         // the screen to draw by the user interface
         ScreenPtr activeScreen ;
 
-        std::map < std::string, ScreenPtr > listOfScreens;
+        std::map < /* name of action */ std::string, ScreenPtr > screens ;
 
         // a language of the user interface in the LLL_CC format
         std::string chosenLanguage ;

@@ -24,8 +24,6 @@ public:
 
         ExitApplication( ) : Action( ) { }
 
-        virtual std::string getNameOfAction () const {  return "ExitApplication" ;  }
-
 protected:
 
         virtual void act () {  bye () ;  }

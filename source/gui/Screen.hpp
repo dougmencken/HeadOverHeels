@@ -11,14 +11,17 @@
 #ifndef Screen_hpp_
 #define Screen_hpp_
 
-#include <vector>
-
 #include "pointers.hpp"
 
 #include "WrappersAllegro.hpp"
 
 #include "Widget.hpp"
 #include "Picture.hpp"
+#include "Action.hpp"
+
+#include <vector>
+
+#include <typeinfo>
 
 class Color ;
 
@@ -26,11 +29,10 @@ class Color ;
 namespace gui
 {
 
-class Action ;
 class AnimatedPictureWidget ;
 
 /**
- * Container for the user interface elements
+ * A container for user interface elements with associated action
  */
 
 class Screen : public Widget
@@ -39,9 +41,9 @@ class Screen : public Widget
 public:
 
         /**
-         * @param action Action for which this screen is created
+         * @param action The associated action
          */
-        Screen( Action * action ) ;
+        Screen( Action & action ) ;
 
         virtual ~Screen( ) ;
 
@@ -76,22 +78,28 @@ public:
 
         void refreshPicturesOfHeadAndHeels () ;
 
-        const Picture & getImageOfScreen () const {  return *imageOfScreen ;  }
+        const Picture & getImageOfScreen () const {  return * this->imageOfScreen ;  }
 
-        void drawSpectrumColorBoxes( bool draw ) {  drawSpectrumColors = draw ;  }
+        void drawSpectrumColorBoxes( bool draw ) {  this->drawSpectrumColors = draw ;  }
 
-        Action * getActionOfScreen () const {  return actionOfScreen ;  }
+        /* ////// Action & getActionOfScreen () const {  return this->actionOfScreen ;  } */
 
-        void setEscapeAction ( Action * action ) ;
+        std::string getNameOfAction () const {  return typeid( this->actionOfScreen ).name () ;  }
 
-        Action * getEscapeAction () const {  return escapeAction ;  }
+        void setEscapeAction ( Action * action )
+        {
+                delete this->escapeAction ;
+                this->escapeAction = action ;
+        }
+
+        Action * getEscapeAction () const {  return this->escapeAction ;  }
 
         /**
-         * Assign successor of this component in chain to handle typing of key
+         * the next widget in the chain of handling typed keys
          */
-        void setKeyHandler ( Widget* widget ) {  keyHandler = widget ;  }
+        void setNextKeyHandler ( Widget* widget ) {  this->nextKeyHandler = widget ;  }
 
-        Widget * getKeyHandler () const {  return keyHandler ;  }
+        Widget * getNextKeyHandler () const {  return this->nextKeyHandler ;  }
 
         static Picture * loadPicture ( const std::string& nameOfPicture ) ;
 
@@ -123,11 +131,11 @@ private:
 
         bool drawSpectrumColors ;
 
-        Action * actionOfScreen ;
+        Action & actionOfScreen ;
 
         Action * escapeAction ;
 
-        Widget * keyHandler ;
+        Widget * nextKeyHandler ;
 
         AnimatedPictureWidget * pictureOfHead ;
 

@@ -31,15 +31,11 @@ void CreateEndScreen::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::refreshBackground () ; // get the background back
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
         if ( screen.countWidgets() > 0 )
-        {
                 screen.freeWidgets();
-        }
         else
-        {
                 screen.setEscapeAction( new CreateMainMenu() );
-        }
 
         screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
@@ -54,34 +50,32 @@ void CreateEndScreen::act ()
 
         // the score reached by the player
         unsigned int score = this->visitedRooms * 160 + this->liberatedPlanets * 10000 ;
-        Label* scoreLabel = new Label ( languageStrings->findLanguageStringForAlias( "score" )->getText() + " " + util::number2string( score ),
+        Label* scoreLabel = new Label ( languageStrings->getTranslatedStringByAlias( "score" )->getText() + " " + util::number2string( score ),
                                         Font::fontWithColor( "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         screen.addWidget( scoreLabel );
 
         // the number of the rooms visited
-        std::string exploredRooms = languageStrings->findLanguageStringForAlias( "explored-rooms" )->getText();
+        std::string exploredRooms = languageStrings->getTranslatedStringByAlias( "explored-rooms" )->getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
         Label* rooms = new Label( exploredRooms, Font::fontWithColor( "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         screen.addWidget( rooms );
 
         // the number of the planets liberated
-        std::string liberatedPlanets = languageStrings->findLanguageStringForAlias( "liberated-planets" )->getText();
+        std::string liberatedPlanets = languageStrings->getTranslatedStringByAlias( "liberated-planets" )->getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
         Label* planets = new Label( liberatedPlanets, Font::fontWithColor( "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
         screen.addWidget( planets );
 
-        if ( score == 0 )
-        {
+        if ( score == 0 ) {
                 TextField* result = new TextField( screenWidth, "center" );
                 result->appendText( "fix the game please", "big", "orange" );
                 result->moveTo( 0, resultY );
                 screen.addWidget( result );
         }
-        else
-        {
+        else {
                 // the range reached by the player
                 unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000  };
                 std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "emperor"  };
@@ -91,7 +85,7 @@ void CreateEndScreen::act ()
                         if ( score > bounds[ i ] )
                         {
                                 TextField* result = new TextField( screenWidth, "center" );
-                                result->appendText( languageStrings->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
+                                result->appendText( languageStrings->getTranslatedStringByAlias( ranges[ i ] )->getText(), "big", "multicolor" );
                                 result->moveTo( 0, resultY );
                                 screen.addWidget( result );
 
@@ -101,7 +95,7 @@ void CreateEndScreen::act ()
         }
 
         scoreLabel->setAction( screen.getEscapeAction () );
-        screen.setKeyHandler( scoreLabel );
+        screen.setNextKeyHandler( scoreLabel );
 
         GuiManager::getInstance().changeScreen( screen, false );
 }

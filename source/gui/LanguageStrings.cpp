@@ -20,8 +20,7 @@ LanguageStrings::LanguageStrings( const std::string & file, const std::string & 
 {
         parseFile( file, this->strings );
 
-        if ( file != fileWithGuaranteedStrings ) // file is not the same as
-        // 
+        if ( file != fileWithGuaranteedStrings )
                 parseFile( fileWithGuaranteedStrings, this->backupStrings );
 }
 
@@ -34,21 +33,17 @@ LanguageStrings::~LanguageStrings()
         backupStrings.clear();
 }
 
-LanguageText* LanguageStrings::findLanguageStringForAlias( const std::string & alias )
+LanguageText* LanguageStrings::getTranslatedStringByAlias( const std::string & alias )
 {
         for ( size_t i = 0 ; i < strings.size () ; i ++ )
-        {
                 if ( strings[ i ]->getAlias() == alias ) return strings[ i ];
-        }
 
         for ( size_t i = 0 ; i < backupStrings.size () ; i ++ )
-        {
                 if ( backupStrings[ i ]->getAlias() == alias ) return backupStrings[ i ];
-        }
 
-        LanguageText* translated = new LanguageText( alias ) ;
-        translated->addLine( "(" + alias + ")" );
-        return translated ;
+        LanguageText* untranslated = new LanguageText( alias ) ;
+        untranslated->addLine( "(" + alias + ")" );
+        return untranslated ;
 }
 
 void LanguageStrings::parseFile( const std::string & fileName, std::vector< LanguageText * > & strings )
