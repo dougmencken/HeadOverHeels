@@ -17,6 +17,7 @@ ChooseLanguage::ChooseLanguage( const std::string & laLangueChoisie )
 
 void ChooseLanguage::act ()
 {
+        GuiManager::getInstance().freeScreens() ;
         GuiManager::getInstance().setLanguage( language );
 
         CreateMainMenu * mainMenu = new CreateMainMenu();

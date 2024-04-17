@@ -2,7 +2,6 @@
 #include "CreateListOfSavedGames.hpp"
 
 #include "GuiManager.hpp"
-#include "LanguageText.hpp"
 #include "LanguageStrings.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
@@ -28,8 +27,7 @@ void CreateListOfSavedGames::act ()
 {
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() > 0 )
-                screen.freeWidgets() ;
+        if ( ! screen.isNewAndEmpty () ) screen.freeWidgets() ;
 
         screen.setEscapeAction( isLoadMenu() ? static_cast< Action * >( /* to the main menu */ new CreateMainMenu() )
                                              : static_cast< Action * >( /* back to the game */ new ContinueGame( true ) ) );

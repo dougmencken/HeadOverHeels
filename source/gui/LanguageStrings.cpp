@@ -1,8 +1,6 @@
 
 #include "LanguageStrings.hpp"
 
-#include "LanguageText.hpp"
-
 #include <iostream>
 #include <algorithm> // std::for_each
 

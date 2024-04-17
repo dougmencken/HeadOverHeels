@@ -93,28 +93,20 @@ public:
 
         static std::string toStringWithOrdinalSuffix( unsigned int number )
         {
-                unsigned int mod10 = number % 10;
-                unsigned int mod100 = number % 100;
+                unsigned int mod10 = number % 10 ;
+                unsigned int mod100 = number % 100 ;
 
                 std::ostringstream result ;
                 result << number ;
 
                 if ( mod10 == 1 && mod100 != 11 )
-                {
-                        result << "st";
-                }
+                        result << "st" ;
                 else if ( mod10 == 2 && mod100 != 12 )
-                {
-                        result << "nd";
-                }
+                        result << "nd" ;
                 else if ( mod10 == 3 && mod100 != 13 )
-                {
-                        result << "rd";
-                }
+                        result << "rd" ;
                 else
-                {
-                        result << "th";
-                }
+                        result << "th" ;
 
                 return result.str() ;
         }
@@ -151,7 +143,7 @@ public:
                 return mangled ;
         }
 
-        /** print backtrace of caller */
+        /** print the backtrace of a caller */
         static void printBacktrace ( FILE * out = stdout, unsigned int howDeep = 80 )
         {
 #if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H

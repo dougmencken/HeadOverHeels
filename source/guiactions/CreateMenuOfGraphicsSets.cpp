@@ -39,7 +39,7 @@ void CreateMenuOfGraphicsSets::act ()
 
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() == 0 )
+        if ( screen.isNewAndEmpty() )
         {
                 screen.setEscapeAction( this->actionOnEscape );
 

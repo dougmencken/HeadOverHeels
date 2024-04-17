@@ -126,6 +126,8 @@ void GuiManager::begin ()
 
                 somn::milliSleep( 30 );
         }
+
+        delete firstMenu ;
 }
 
 void GuiManager::changeScreen( Screen & newScreen, bool dive )

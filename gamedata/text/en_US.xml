@@ -62,9 +62,15 @@
     </properties>
   </text>
 
+  <text alias="options-menu">
+    <properties>
+      <string>Options</string>
+    </properties>
+  </text>
+
   <text alias="keys-menu">
     <properties>
-      <string>Keys</string>
+      <string>Select keys</string>
     </properties>
   </text>
 
@@ -148,7 +154,7 @@
 
   <text alias="video-menu">
     <properties>
-      <string>Video</string>
+      <string>Adjust graphics</string>
     </properties>
   </text>
 
@@ -208,7 +214,7 @@
 
   <text alias="audio-menu">
     <properties>
-      <string>Audio</string>
+      <string>Adjust sound</string>
     </properties>
   </text>
 
@@ -227,6 +233,12 @@
   <text alias="play-room-melodies">
   <properties>
       <string>Play room tunes</string>
+    </properties>
+  </text>
+
+  <text alias="language-menu">
+    <properties>
+      <string>Choose language</string>
     </properties>
   </text>
 

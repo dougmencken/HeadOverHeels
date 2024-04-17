@@ -4,7 +4,6 @@
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
-#include "LanguageText.hpp"
 #include "GamePreferences.hpp"
 #include "Screen.hpp"
 #include "PictureWidget.hpp"
@@ -25,7 +24,7 @@ void CreateCongratulationsScreen::act ()
 {
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() == 0 )
+        if ( screen.isNewAndEmpty() )
                 screen.setEscapeAction( new CreateEndScreen( rooms, planets ) );
         else
                 screen.freeWidgets() ;

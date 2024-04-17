@@ -4,7 +4,6 @@
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "LanguageStrings.hpp"
-#include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "Screen.hpp"
 #include "MenuWithValues.hpp"
@@ -44,7 +43,7 @@ void CreateAudioMenu::act ()
         std::stringstream ss;
 
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
-        if ( screen.countWidgets() == 0 )
+        if ( screen.isNewAndEmpty() )
         {
                 screen.setEscapeAction( new CreateMainMenu() );
 

@@ -4,7 +4,6 @@
 #include "GamePreferences.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
-#include "LanguageText.hpp"
 #include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
 #include "Font.hpp"
@@ -32,7 +31,7 @@ void CreateEndScreen::act ()
                 Screen::refreshBackground () ; // get the background back
 
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
-        if ( screen.countWidgets() > 0 )
+        if ( ! screen.isNewAndEmpty() )
                 screen.freeWidgets();
         else
                 screen.setEscapeAction( new CreateMainMenu() );

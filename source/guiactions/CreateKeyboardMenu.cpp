@@ -3,7 +3,6 @@
 
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
-#include "LanguageText.hpp"
 #include "InputManager.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
@@ -20,7 +19,7 @@ void CreateKeyboardMenu::act ()
 {
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() == 0 )
+        if ( screen.isNewAndEmpty() )
         {
                 screen.setEscapeAction( new CreateMainMenu() );
 
@@ -53,10 +52,8 @@ void CreateKeyboardMenu::act ()
                 screen.addWidget( menuOfKeys );
                 screen.setNextKeyHandler( menuOfKeys );
         }
-        else {
-                // select the first menu option
+        else    // select the first menu option
                 menuOfKeys->resetActiveOption();
-        }
 
         GuiManager::getInstance().changeScreen( screen, true );
 }

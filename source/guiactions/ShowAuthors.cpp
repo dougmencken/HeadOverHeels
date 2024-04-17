@@ -6,13 +6,13 @@
 
 #include "GamePreferences.hpp"
 #include "GuiManager.hpp"
-#include "LanguageText.hpp"
 #include "SoundManager.hpp"
 
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Label.hpp"
 #include "PictureWidget.hpp"
+#include "LanguageText.hpp"
 #include "TextField.hpp"
 #include "CreateMainMenu.hpp"
 
@@ -92,7 +92,7 @@ void ShowAuthors::act ()
 
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() == 0 )
+        if ( screen.isNewAndEmpty() )
         {
                 if ( this->linesOfCredits != nilPointer ) delete this->linesOfCredits ;
                 this->linesOfCredits = new TextField( GamePreferences::getScreenWidth(), "center" );
@@ -110,10 +110,9 @@ void ShowAuthors::act ()
 
                 screen.addWidget( this->linesOfCredits );
         }
-        else {
+        else
                 // restore the initial position
                 this->linesOfCredits->moveTo( this->linesOfCredits->getX(), initialY );
-        }
 
         screen.setEscapeAction( new CreateMainMenu() );
 

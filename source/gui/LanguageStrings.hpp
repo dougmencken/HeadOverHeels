@@ -11,14 +11,14 @@
 #ifndef LanguageStrings_hpp_
 #define LanguageStrings_hpp_
 
+#include "LanguageText.hpp"
+
 #include <string>
 #include <vector>
 
 
 namespace gui
 {
-
-class LanguageText ;
 
 /**
  * Reads the strings of text from a language XML file

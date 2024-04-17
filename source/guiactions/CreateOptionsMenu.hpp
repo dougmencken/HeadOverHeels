@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef CreateMainMenu_hpp_
-#define CreateMainMenu_hpp_
+#ifndef CreateOptionsMenu_hpp_
+#define CreateOptionsMenu_hpp_
 
 #include "Action.hpp"
 
@@ -17,18 +17,15 @@
 namespace gui
 {
 
-class CreateMainMenu : public Action
+class CreateOptionsMenu : public Action
 {
 
 public:
 
-        CreateMainMenu( ) : Action() {}
+        CreateOptionsMenu( ) : Action() {}
 
 protected:
 
-        /**
-         * Show the main menu of the game
-         */
         virtual void act () ;
 
 };

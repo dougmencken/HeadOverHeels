@@ -24,7 +24,9 @@ https://osgameclones.com/ was perhaps the only lone site on which a link to this
 In the spring of 2019, I’ve lost all my interest and almost forgot about this project for 4.5 years...
 
 ...Until the fall of 2023, when François @kiwifb Bissy’s contribution awakened my care.
-And then, *finalmente*, https://github.com/dougmencken/HeadOverHeels/commit/1f5cbbc4723150ccf5b74a1387330a126d0efeb9#commitcomment-131827424 Jorge came to this project. At the end of 2023 we were sharing various stories via email
+And then, *finalmente*, Jorge came to this project.
+At the end of 2023 we were sharing various stories via email.
+His new site features [the article about this project](https://hoh.helmantika.com/2024/04/02/el-remake-de-douglas/)
 
 ## The Present & The Future
 
@@ -61,7 +63,7 @@ And yep, don’t forget ``libx11-dev`` for the “allegro” library (https://gi
 sudo apt install libx11-dev
 ```
 
-Then building the “Head over Heels” game on GNU/Linux is pretty easy with the build scripts I provided. All used dependencies will be built too.
+Then building the “Head over Heels” game on GNU/Linux is pretty easy with the build scripts I provided. All the used dependencies will be built too.
 The first script is
 
 ```

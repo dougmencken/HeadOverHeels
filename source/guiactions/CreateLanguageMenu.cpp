@@ -32,7 +32,7 @@ void CreateLanguageMenu::act ()
 {
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() > 0 ) screen.freeWidgets ();
+        if ( ! screen.isNewAndEmpty() ) screen.freeWidgets ();
 
         screen.setEscapeAction( new CreateMainMenu() );
 

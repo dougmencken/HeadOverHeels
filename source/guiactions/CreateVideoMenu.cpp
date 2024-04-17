@@ -5,7 +5,6 @@
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
-#include "LanguageText.hpp"
 #include "LanguageStrings.hpp"
 #include "Screen.hpp"
 #include "MenuWithValues.hpp"
@@ -50,7 +49,8 @@ CreateVideoMenu::CreateVideoMenu( )
 void CreateVideoMenu::act ()
 {
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
-        if ( screen.countWidgets() == 0 )
+
+        if ( screen.isNewAndEmpty() )
         {
                 screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
@@ -91,9 +91,7 @@ void CreateVideoMenu::act ()
                 screen.addWidget( listOfOptions );
         }
         else
-        {
                 updateLabels();
-        }
 
         screen.setEscapeAction( new CreateMainMenu() );
 

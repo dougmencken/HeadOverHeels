@@ -3,7 +3,6 @@
 
 #include "GameManager.hpp"
 #include "LanguageStrings.hpp"
-#include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "GuiManager.hpp"
 #include "Color.hpp"
@@ -47,7 +46,7 @@ void CreatePlanetsScreen::act ()
 
         Screen & planets = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( planets.countWidgets() > 0 ) planets.freeWidgets() ;
+        if ( ! planets.isNewAndEmpty() ) planets.freeWidgets() ;
 
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int screenHeight = GamePreferences::getScreenHeight();

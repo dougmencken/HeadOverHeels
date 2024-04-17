@@ -6,7 +6,6 @@
 #include "InputManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
-#include "LanguageText.hpp"
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
 

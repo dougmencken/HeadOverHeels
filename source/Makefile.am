@@ -230,6 +230,8 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/CreateLanguageMenu.hpp \
 			guiactions/CreateMainMenu.cpp \
 			guiactions/CreateMainMenu.hpp \
+			guiactions/CreateOptionsMenu.cpp \
+			guiactions/CreateOptionsMenu.hpp \
 			guiactions/CreatePlanetsScreen.cpp \
 			guiactions/CreatePlanetsScreen.hpp \
 			guiactions/ExitApplication.cpp \

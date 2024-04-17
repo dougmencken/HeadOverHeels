@@ -105,6 +105,7 @@
         <file name="guiactions/CreateKeyboardMenu.cpp" />
         <file name="guiactions/CreateLanguageMenu.cpp" />
         <file name="guiactions/CreateMainMenu.cpp" />
+        <file name="guiactions/CreateOptionsMenu.cpp" />
         <file name="guiactions/CreatePlanetsScreen.cpp" />
         <file name="guiactions/ExitApplication.cpp" />
         <file name="guiactions/LoadGame.cpp" />

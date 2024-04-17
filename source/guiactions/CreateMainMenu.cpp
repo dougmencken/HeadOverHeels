@@ -2,29 +2,21 @@
 #include "CreateMainMenu.hpp"
 
 #include "GuiManager.hpp"
-#include "GameManager.hpp"
-#include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
-#include "LanguageText.hpp"
-#include "Screen.hpp"
-#include "Menu.hpp"
-
+#include "LanguageStrings.hpp"
 #include "Label.hpp"
+#include "Menu.hpp"
+#include "Screen.hpp"
+
 #include "CreatePlanetsScreen.hpp"
-#include "CreateKeyboardMenu.hpp"
-#include "CreateAudioMenu.hpp"
-#include "CreateVideoMenu.hpp"
 #include "CreateListOfSavedGames.hpp"
+#include "CreateOptionsMenu.hpp"
 #include "ShowAuthors.hpp"
 #include "ExitApplication.hpp"
 
-using gui::CreateMainMenu;
 
-
-CreateMainMenu::CreateMainMenu( ) : Action( )
+namespace gui
 {
-
-}
 
 void CreateMainMenu::act ()
 {
@@ -32,7 +24,7 @@ void CreateMainMenu::act ()
 
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
-        if ( screen.countWidgets() == 0 )
+        if ( screen.isNewAndEmpty() )
         {
                 screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
@@ -40,17 +32,13 @@ void CreateMainMenu::act ()
 
                 Label* newGame = new Label( languageStrings->getTranslatedStringByAlias( "new-game" )->getText() );
                 Label* loadGame = new Label( languageStrings->getTranslatedStringByAlias( "load-game" )->getText() );
-                Label* defineKeys = new Label( languageStrings->getTranslatedStringByAlias( "keys-menu" )->getText() );
-                Label* adjustAudio = new Label( languageStrings->getTranslatedStringByAlias( "audio-menu" )->getText() );
-                Label* adjustVideo = new Label( languageStrings->getTranslatedStringByAlias( "video-menu" )->getText() );
+                Label* optionsMenu = new Label( languageStrings->getTranslatedStringByAlias( "options-menu" )->getText() );
                 Label* showCredits = new Label( languageStrings->getTranslatedStringByAlias( "show-credits" )->getText() );
                 Label* quitGame = new Label( languageStrings->getTranslatedStringByAlias( "exit-game" )->getText() );
 
                 newGame->setAction( new CreatePlanetsScreen( false ) );
                 loadGame->setAction( new CreateListOfSavedGames( true ) );
-                defineKeys->setAction( new CreateKeyboardMenu() );
-                adjustAudio->setAction( new CreateAudioMenu() );
-                adjustVideo->setAction( new CreateVideoMenu() );
+                optionsMenu->setAction( new CreateOptionsMenu() );
                 showCredits->setAction( new ShowAuthors() );
                 quitGame->setAction( new ExitApplication() );
 
@@ -59,9 +47,7 @@ void CreateMainMenu::act ()
 
                 menu->addOption( newGame );
                 menu->addOption( loadGame );
-                menu->addOption( defineKeys );
-                menu->addOption( adjustAudio );
-                menu->addOption( adjustVideo );
+                menu->addOption( optionsMenu );
                 menu->addOption( showCredits );
                 menu->addOption( quitGame );
 
@@ -70,4 +56,6 @@ void CreateMainMenu::act ()
         }
 
         GuiManager::getInstance().changeScreen( screen, false );
+}
+
 }

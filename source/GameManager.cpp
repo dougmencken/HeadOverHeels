@@ -15,7 +15,6 @@
 #include "InputManager.hpp"
 #include "BonusManager.hpp"
 #include "SoundManager.hpp"
-#include "LanguageText.hpp"
 #include "LanguageStrings.hpp"
 #include "Color.hpp"
 

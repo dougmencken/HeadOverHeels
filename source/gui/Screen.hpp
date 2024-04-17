@@ -62,7 +62,9 @@ public:
          */
         bool removeWidget ( Widget* widget ) ;
 
-        size_t countWidgets () {  return widgets.size () ;  }
+        /* ////// size_t countWidgets () {  return this->widgets.size () ;  } */
+
+        bool isNewAndEmpty () {  return this->widgets.size() == 0 ;  }
 
         void freeWidgets () ;
 
