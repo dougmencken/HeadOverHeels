@@ -20,7 +20,7 @@ namespace gui {
 
 CreateLanguageMenu::CreateLanguageMenu( ) : Action( )
 {
-        readListOfLanguages( ospaths::sharePath() + "text" + ospaths::pathSeparator() + "language.xml" );
+        readListOfLanguages( ospaths::pathToFile( ospaths::sharePath() + "text", "language.xml" ) );
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )
@@ -87,7 +87,10 @@ void CreateLanguageMenu::readListOfLanguages( const std::string & nameOfXMLFile 
 {
         tinyxml2::XMLDocument languages ;
         tinyxml2::XMLError result = languages.LoadFile( nameOfXMLFile.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS ) return ;
+        if ( result != tinyxml2::XML_SUCCESS ) {
+                std::cerr << "can’t read file \"" << nameOfXMLFile << "\" with the list of languages" << std::endl ;
+                return ;
+        }
 
         tinyxml2::XMLElement* root = languages.FirstChildElement( "languages" );
 

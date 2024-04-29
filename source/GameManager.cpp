@@ -665,10 +665,9 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
                 {
                         numberOfCapture++ ;
 
-                        allegro::savePictAsPCX(
-                                        capturePath + ospaths::pathSeparator()
-                                                + prefixOfCaptures + util::number2string( numberOfCapture )
-                                        , view );
+                        allegro::savePictAsPCX (
+                                ospaths::pathToFile( capturePath, prefixOfCaptures + util::number2string( numberOfCapture ) )
+                                , view );
 
                         recordingTimer->reset ();
                 }

@@ -28,8 +28,7 @@ ShowAuthors::ShowAuthors( )
         , initialY( 0 )
         , loadingScreen( )
 {
-        std::string pathToText = ospaths::sharePath() + "text" + ospaths::pathSeparator() ;
-        this->readCreditsText( pathToText + "credits.xml" );
+        readCreditsText( ospaths::pathToFile( ospaths::sharePath() + "text", "credits.xml" ) );
 }
 
 ShowAuthors::~ShowAuthors( )

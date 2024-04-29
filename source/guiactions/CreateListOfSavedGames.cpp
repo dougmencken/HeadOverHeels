@@ -41,7 +41,7 @@ void CreateListOfSavedGames::act ()
         menu->setVerticalOffset( 112 );
         for ( unsigned int slot = 1 ; slot <= howManySaves ; ++ slot )
         {
-                std::string file = ospaths::homePath() + "savegame" + ospaths::pathSeparator() + "saved." + util::number2string( slot ) ;
+                std::string file = ospaths::pathToFile( ospaths::homePath() + "savegame", "saved." + util::number2string( slot ) );
                 SavedGameInfo gameInfo = readSomeInfoFromTheSavedGame( file );
 
                 if ( gameInfo.howManyRoomsVisited () >= 2 ) // less than 2 rooms means "couldn't read"

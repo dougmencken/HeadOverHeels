@@ -385,15 +385,13 @@ Picture * Screen::loadPicture ( const std::string & nameOfPicture )
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
         const std::string & pathToPictures = GuiManager::getInstance().getPathToThesePictures() ;
-        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                ospaths::pathToFile( pathToPictures, nameOfPicture )
-        ) );
+        std::string pictureFile = ospaths::pathToFile( pathToPictures, nameOfPicture );
+        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile( pictureFile ) );
 
-        if ( pict != nilPointer && pict->isNotNil () ) {
+        if ( pict != nilPointer && pict->isNotNil () )
                 return new Picture( *pict ) ;
-        }
 
-        std::cout << "can't load picture \"" << pathToPictures << ospaths::pathSeparator() << nameOfPicture << "\"" << std::endl ;
+        std::cout << "can't load picture \"" << pictureFile << "\"" << std::endl ;
         return nilPointer ;
 }
 

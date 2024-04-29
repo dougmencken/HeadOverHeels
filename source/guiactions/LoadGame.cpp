@@ -23,7 +23,7 @@ void LoadGame::act ()
         GameManager & gameManager = GameManager::getInstance () ;
         gameManager.resetPlanets() ;
 
-        bool loaded = gameManager.loadGame( ospaths::homePath () + "savegame" + ospaths::pathSeparator () + "saved." + util::number2string( slot ) );
+        bool loaded = gameManager.loadGame( ospaths::pathToFile( ospaths::homePath() + "savegame", "saved." + util::number2string( slot ) ) );
 
         if ( ! loaded ) {
                 SoundManager::getInstance().stopEverySound ();

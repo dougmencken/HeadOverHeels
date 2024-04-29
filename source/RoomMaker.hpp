@@ -38,7 +38,7 @@ public:
         /**
          * Construct the room by the description from file
          */
-        static Room * makeRoom ( const std::string & roomFile ) ;
+        static Room * makeRoom ( const std::string & roomName ) ;
 
 private:
 

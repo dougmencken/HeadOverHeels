@@ -226,8 +226,9 @@ elif test x"$with_allegro" = x"no" ; then
 fi
 
 AC_SUBST([CPPFLAGS], ["$allegro_HEADERS $preprocessor_options_before"])
-AC_CHECK_HEADERS([allegro5/allegro.h], [HAVE_ALLEGRO5=1], [HAVE_ALLEGRO5=0], [])
-AC_CHECK_HEADERS([allegro.h], [HAVE_ALLEGRO4=1], [HAVE_ALLEGRO4=0], [])
+AC_MSG_NOTICE([looking for allegro headers with CPPFLAGS="$CPPFLAGS"])
+AC_CHECK_HEADER([allegro5/allegro.h], [HAVE_ALLEGRO5=1], [HAVE_ALLEGRO5=0])
+AC_CHECK_HEADER([allegro.h], [HAVE_ALLEGRO4=1], [HAVE_ALLEGRO4=0])
 AC_SUBST([CPPFLAGS], ["$preprocessor_options_before"])
 
 AM_CONDITIONAL([USE_ALLEGRO5], [test "$with_allegro5" != no -a "$with_allegro4" != yes -a "$HAVE_ALLEGRO5" -eq 1])

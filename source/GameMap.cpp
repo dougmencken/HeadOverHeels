@@ -58,10 +58,9 @@ void GameMap::readMap ( const std::string& fileName )
 {
         clear();
 
-        tinyxml2::XMLDocument mapXml;
+        tinyxml2::XMLDocument mapXml ;
         tinyxml2::XMLError result = mapXml.LoadFile( fileName.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
+        if ( result != tinyxml2::XML_SUCCESS ) {
                 std::cerr << "can’t load file \"" << fileName << "\" with the map of the game" << std::endl ;
                 return;
         }
@@ -150,7 +149,7 @@ void GameMap::readMap ( const std::string& fileName )
 
                         allegro::update();
 
-                        Room* theRoom = RoomMaker::makeRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + fileOfRoom );
+                        Room* theRoom = RoomMaker::makeRoom( fileOfRoom );
                         theRoom->setConnections( connections );
                         gameRooms[ fileOfRoom ] = theRoom ;
 
@@ -167,7 +166,7 @@ void GameMap::readMap ( const std::string& fileName )
                 }
         }
 
-        std::cout << "read map of rooms from " << fileName << std::endl ;
+        std::cout << "read the map from " << fileName << std::endl ;
 }
 
 void GameMap::beginNewGame( const std::string & headRoom, const std::string & heelsRoom )
@@ -182,7 +181,7 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
         gameManager.getGameInfo().resetForANewGame () ;
 
         if ( linksBetweenRooms.empty() )
-                readMap( ospaths::sharePath() + "map" + ospaths::pathSeparator() + "map.xml" );
+                readMap( ospaths::pathToFile( ospaths::sharePath() + "map", "map.xml" ) );
 
         // head’s room
 
@@ -302,7 +301,7 @@ void GameMap::rebuildRoom( Room* room )
 
         std::string fileOfRoom = room->getNameOfRoomDescriptionFile() ;
 
-        Room* newRoom = RoomMaker::makeRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + fileOfRoom );
+        Room* newRoom = RoomMaker::makeRoom( fileOfRoom );
         assert( newRoom != nilPointer );
 
         newRoom->setConnections( room->getConnections() );
@@ -666,15 +665,14 @@ Room* GameMap::findRoomByFile( const std::string& roomFile ) const
 Room* GameMap::getOrBuildRoomByFile( const std::string & roomFile )
 {
         if ( gameRooms.empty() || linksBetweenRooms.empty() )
-                readMap( ospaths::sharePath() + "map" + ospaths::pathSeparator() + "map.xml" );
+                readMap( ospaths::pathToFile( ospaths::sharePath() + "map", "map.xml" ) );
 
         if ( gameRooms.find( roomFile ) != gameRooms.end () )
         {
                 if ( gameRooms[ roomFile ] == nilPointer )
                 {
-                        Room* theRoom = RoomMaker::makeRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + roomFile );
-                        if ( theRoom != nilPointer )
-                        {
+                        Room* theRoom = RoomMaker::makeRoom( roomFile );
+                        if ( theRoom != nilPointer ) {
                                 theRoom->setConnections( linksBetweenRooms[ roomFile ] );
                                 gameRooms[ roomFile ] = theRoom ;
                         }

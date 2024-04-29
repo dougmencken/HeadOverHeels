@@ -35,7 +35,7 @@ bool GamePreferences::allegroWindowSizeToScreenSize ()
 /* static */
 bool GamePreferences::readPreferences( const std::string & fileName )
 {
-        std::cout << "readPreferences( " << fileName << " )" << std::endl ;
+        std::cout << "readPreferences( \"" << fileName << "\" )" << std::endl ;
 
         tinyxml2::XMLDocument preferences;
         tinyxml2::XMLError result = preferences.LoadFile( fileName.c_str () );

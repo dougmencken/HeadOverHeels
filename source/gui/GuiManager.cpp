@@ -252,8 +252,7 @@ void GuiManager::useLanguage( const std::string & language )
 
         fprintf( stdout, "using language \"%s\"\n", language.c_str () );
 
-        std::string pathToText = ospaths::sharePath () + "text" + ospaths::pathSeparator () ;
-        this->languageStrings = new LanguageStrings( pathToText + language + ".xml", pathToText + "en_US.xml" );
+        this->languageStrings = new LanguageStrings( language + ".xml", "en_US.xml" );
 }
 
 }

@@ -207,18 +207,10 @@ int main( int argc, char** argv )
         initAllegro ();
         readPreferences ();
 
-#ifdef __WIN32
-        timeBeginPeriod( 1 );
-#endif
-
         if ( newGameNoGui )
                 GameManager::getInstance().begin () ;
         else
                 gui::GuiManager::getInstance().begin () ;
-
-#ifdef __WIN32
-        timeEndPeriod( 1 );
-#endif
 
         GameManager::getInstance().cleanUp () ;
         gui::GuiManager::getInstance().freeScreens () ;

@@ -45,9 +45,9 @@ void ItemDescriptions::readDescriptionsFromFile( const std::string & nameOfXMLFi
 
         tinyxml2::XMLDocument itemsXml;
         tinyxml2::XMLError result = itemsXml.LoadFile( ( ospaths::sharePath() + nameOfXMLFile ).c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
-                return;
+        if ( result != tinyxml2::XML_SUCCESS ) {
+                std::cerr << "can’t read file \"" << nameOfXMLFile << "\" with the descriptions of items" << std::endl ;
+                return ;
         }
 
         tinyxml2::XMLElement* root = itemsXml.FirstChildElement( "items" );

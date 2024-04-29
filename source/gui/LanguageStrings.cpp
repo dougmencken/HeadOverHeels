@@ -7,6 +7,7 @@
 #include <tinyxml2.h>
 
 #include "util.hpp"
+#include "ospaths.hpp"
 
 #define DUMP_XML        0
 
@@ -16,10 +17,10 @@ namespace gui
 
 LanguageStrings::LanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings )
 {
-        parseFile( file, this->strings );
+        parseFile( ospaths::pathToFile( ospaths::sharePath() + "text", file ), this->strings );
 
         if ( file != fileWithGuaranteedStrings )
-                parseFile( fileWithGuaranteedStrings, this->backupStrings );
+                parseFile( ospaths::pathToFile( ospaths::sharePath() + "text", fileWithGuaranteedStrings ), this->backupStrings );
 }
 
 LanguageStrings::~LanguageStrings()

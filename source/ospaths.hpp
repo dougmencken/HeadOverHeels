@@ -43,15 +43,6 @@ namespace ospaths
         # endif
         } ;
 
-        inline static std::string pathSeparator()
-        {
-        # if defined ( __WIN32 ) && ! defined ( __CYGWIN__ )
-                return "\\" ;
-        # else
-                return "/" ;
-        # endif
-        }
-
 }
 
 #endif

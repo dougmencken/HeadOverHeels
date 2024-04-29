@@ -17,14 +17,17 @@
 
 
 /* static */
-Room* RoomMaker::makeRoom ( const std::string & roomFile )
+Room* RoomMaker::makeRoom ( const std::string & roomName )
 {
         tinyxml2::XMLDocument roomXml ;
-        tinyxml2::XMLError result = roomXml.LoadFile( roomFile.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
+
         {
-                std::cerr << "can’t read the room file " << roomFile.c_str () << std::endl ;
-                return nilPointer;
+                std::string roomFile = ospaths::pathToFile( ospaths::sharePath() + "map", roomName ) ;
+                tinyxml2::XMLError result = roomXml.LoadFile( roomFile.c_str () );
+                if ( result != tinyxml2::XML_SUCCESS ) {
+                        std::cerr << "can’t read the room file " << roomFile.c_str () << std::endl ;
+                        return nilPointer ;
+                }
         }
 
         tinyxml2::XMLElement* xmlRoot = roomXml.FirstChildElement( "room" );
@@ -46,11 +49,6 @@ Room* RoomMaker::makeRoom ( const std::string & roomFile )
         if ( floorKind == nilPointer ) floorKind = xmlRoot->FirstChildElement( "floorType" ) ;
         std::string kindOfFloor = floorKind->FirstChild()->ToText()->Value() ;
 
-        std::string roomName = roomFile;
-        const char* fromLastSlash = std::strrchr( roomFile.c_str (), ospaths::pathSeparator()[ 0 ] );
-        if ( fromLastSlash != nilPointer )
-                roomName = std::string( fromLastSlash + 1 );
-
         if ( GameMap::getInstance().findRoomByFile( roomName ) == nilPointer )
                 std::cout << "building new" ;
         else
@@ -66,7 +64,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomFile )
         );
 
         if ( theRoom == nilPointer ) {
-                std::cerr << "can’t make room \"" << roomFile << "\"" << std::endl ;
+                std::cerr << "can’t make room \"" << roomName << "\"" << std::endl ;
                 return nilPointer;
         }
 
