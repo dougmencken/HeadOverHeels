@@ -27,21 +27,21 @@ class CreatePlanetsScreen : public Action
 public:
 
         /**
-         * @param notNewGame Indica si hay una partida en curso o comienza una nueva
+         * @param notNewGame true for a game in progress or false when a new game begins
          */
         explicit CreatePlanetsScreen( bool notNewGame );
 
-        virtual ~CreatePlanetsScreen( ) ;
+        virtual ~CreatePlanetsScreen( ) {}
 
-        void liberateBlacktooth() {  blacktoothFree = true ;  }
+        void liberateBlacktooth() {  this->blacktoothFree = true ;  }
 
-        void liberateEgyptus() {  egyptusFree = true ;  }
+        void liberateEgyptus() {  this->egyptusFree = true ;  }
 
-        void liberatePenitentiary() {  penitentiaryFree = true ;  }
+        void liberatePenitentiary() {  this->penitentiaryFree = true ;  }
 
-        void liberateByblos() {  byblosFree = true ;  }
+        void liberateByblos() {  this->byblosFree = true ;  }
 
-        void liberateSafari() {  safariFree = true ;  }
+        void liberateSafari() {  this->safariFree = true ;  }
 
 protected:
 
@@ -50,36 +50,26 @@ protected:
 private:
 
         /**
-         * Indica si hay una partida en curso o comienza una nueva
+         * false if a new game begins, true for a game already in progress
          */
         bool gameInProgress ;
 
-        /**
-         * Indica si Blacktooth ha sido liberado
-         */
+        // was the planet Blacktooth liberated
         bool blacktoothFree ;
 
-        /**
-         * Indica si Egyptus ha sido liberado
-         */
+        // was the planet Egyptus liberated
         bool egyptusFree ;
 
-        /**
-         * Indica si Penitentiary ha sido liberado
-         */
+        // was the planet Penitentiary liberated
         bool penitentiaryFree ;
 
-        /**
-         * Indica si Byblos ha sido liberado
-         */
+        // was the planet Byblos liberated
         bool byblosFree ;
 
-        /**
-         * Indica si Safari ha sido liberado
-         */
+        // was the planet Safari liberated
         bool safariFree ;
 
-};
+} ;
 
 }
 

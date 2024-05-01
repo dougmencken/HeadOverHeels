@@ -18,7 +18,7 @@ namespace ospaths
 
         std::string nameFromPath ( std::string const& path ) ;
 
-        std::string pathToFile ( const std::string& folder, const std::string& file = std::string() ) ;
+        std::string pathToFile ( const std::string & folder, const std::string & file ) ;
 
         void setPathToGame ( const char * pathToGame ) ;
 
@@ -32,7 +32,12 @@ namespace ospaths
          */
         std::string sharePath () ;
 
-        bool folderExists( const std::string& path ) ;
+        bool folderExists( const std::string & path ) ;
+
+        /**
+         * Makes the new folder for the given path if a folder doesn’t exist there already
+         */
+        bool makeFolder( const std::string & path ) ;
 
         struct IsPathSeparator
         {

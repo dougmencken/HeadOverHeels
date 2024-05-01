@@ -22,12 +22,13 @@ void SaveGame::act ()
 
         if ( slot > 0 )
         {
-                GameManager & gameManager = GameManager::getInstance() ;
-                bool saved = gameManager.saveGame( ospaths::pathToFile(
-                                                        ospaths::homePath () + "savegame"
-                                                        , "saved." + util::number2string( slot ) ) );
+                std::string where = ospaths::homePath () + "savegame" ;
+                ospaths::makeFolder( where );
+                bool saved = GameManager::getInstance().saveGame (
+                                ospaths::pathToFile( where, "saved." + util::number2string( slot ) )
+                );
                 if ( ! saved )
-                        std::cout << "can't save the game as \"" << "saved." << slot << "\"" << std::endl ;
+                        std::cout << "can’t save the game as \"" << "saved." << slot << "\"" << std::endl ;
         }
 
         ContinueGame * game = new ContinueGame( true );

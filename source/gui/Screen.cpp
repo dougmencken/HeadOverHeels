@@ -33,12 +33,13 @@ namespace gui
 
         delete Screen::backgroundPicture ;
 
-        Screen::backgroundPicture = Screen::loadPicture( "background.png" );
+        const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
+        Screen::backgroundPicture = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background.png" ) );
 
         if ( Screen::backgroundPicture == nilPointer ) // not found
         {       // don't crash, just present the red one like in the original game
                 Screen::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::byName( "red" ) ) ;
-                std::cout << "there's no background.png but I made the red background for you dear" << std::endl ;
+                std::cout << "there’s no \"background.png\" but I made the red background for you dear" << std::endl ;
         }
 
         Screen::backgroundPicture->setName( "the background for user interface slides" );
@@ -73,50 +74,64 @@ Screen::~Screen( )
         freeWidgets() ;
 }
 
+void Screen::addPictureOfHeadAt ( int x, int y )
+{
+        if ( this->pictureOfHead == nilPointer ) {
+                const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
+                this->pictureOfHead = new AnimatedPictureWidget(
+                                                x, y,
+                                                Picture::loadAnimation( ospaths::pathToFile( pathToPictures, "head.gif" ) ),
+                                                delayBetweenFrames,
+                                                "animated Head" );
+        } else
+                this->pictureOfHead->moveTo( x, y );
+
+        addWidget( this->pictureOfHead );
+}
+
+void Screen::addPictureOfHeelsAt ( int x, int y )
+{
+        if ( this->pictureOfHeels == nilPointer ) {
+                const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
+                this->pictureOfHeels = new AnimatedPictureWidget(
+                                                x, y,
+                                                Picture::loadAnimation( ospaths::pathToFile( pathToPictures, "heels.gif" ) ),
+                                                delayBetweenFrames,
+                                                "animated Heels" );
+        } else
+                this->pictureOfHeels->moveTo( x, y );
+
+        addWidget( this->pictureOfHeels );
+}
+
 void Screen::refreshPicturesOfHeadAndHeels ()
 {
-        bool headOnScreen = false;
-
-        if ( pictureOfHead != nilPointer )
+        if ( this->pictureOfHead != nilPointer )
         {
-                int xHead = pictureOfHead->getX ();
-                int yHead = pictureOfHead->getY ();
+                int xHead = this->pictureOfHead->getX ();
+                int yHead = this->pictureOfHead->getY ();
 
-                if ( pictureOfHead->isOnScreen() )
-                {
-                        headOnScreen = true;
-                        removeWidget( pictureOfHead );
-                }
+                if ( this->pictureOfHead->isOnScreen() )
+                        removeWidget( this->pictureOfHead );
                 else
-                        delete pictureOfHead ;
+                        delete this->pictureOfHead ;
 
-                pictureOfHead = new AnimatedPictureWidget( xHead, yHead, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
+                this->pictureOfHead = nilPointer ;
+                addPictureOfHeadAt( xHead, yHead );
         }
 
-        if ( headOnScreen && pictureOfHead != nilPointer )
-                addWidget( pictureOfHead );
-
-        bool heelsOnScreen = false;
-
-        if ( pictureOfHeels != nilPointer )
+        if ( this->pictureOfHeels != nilPointer )
         {
-                int xHeels = pictureOfHeels->getX ();
-                int yHeels = pictureOfHeels->getY ();
+                int xHeels = this->pictureOfHeels->getX ();
+                int yHeels = this->pictureOfHeels->getY ();
 
-                if ( pictureOfHeels->isOnScreen() )
-                {
-                        heelsOnScreen = true;
-                        removeWidget( pictureOfHeels );
-                }
+                if ( this->pictureOfHeels->isOnScreen() )
+                        removeWidget( this->pictureOfHeels );
                 else
-                        delete pictureOfHeels ;
+                        delete this->pictureOfHeels ;
 
-                pictureOfHeels = new AnimatedPictureWidget( xHeels, yHeels, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
-        }
-
-        if ( heelsOnScreen && pictureOfHeels != nilPointer )
-        {
-                addWidget( pictureOfHeels );
+                this->pictureOfHeels = nilPointer ;
+                addPictureOfHeelsAt( xHeels, yHeels );
         }
 }
 
@@ -294,28 +309,8 @@ void Screen::freeWidgets ()
                 delete w ;
         }
 
-        pictureOfHead = nilPointer;
-        pictureOfHeels = nilPointer;
-}
-
-void Screen::addPictureOfHeadAt ( int x, int y )
-{
-        if ( pictureOfHead == nilPointer )
-                pictureOfHead = new AnimatedPictureWidget( x, y, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
-        else
-                pictureOfHead->moveTo( x, y );
-
-        addWidget( pictureOfHead );
-}
-
-void Screen::addPictureOfHeelsAt ( int x, int y )
-{
-        if ( pictureOfHeels == nilPointer )
-                pictureOfHeels = new AnimatedPictureWidget( x, y, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
-        else
-                pictureOfHeels->moveTo( x, y );
-
-        addWidget( pictureOfHeels );
+        this->pictureOfHead = nilPointer ;
+        this->pictureOfHeels = nilPointer ;
 }
 
 void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
@@ -376,34 +371,6 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
                 Douglas->moveTo( whereX, whereY - leading );
                 addWidget( Douglas );
         }
-}
-
-/* static */
-Picture * Screen::loadPicture ( const std::string & nameOfPicture )
-{
-#if defined( DEBUG ) && DEBUG
-        std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
-#endif
-        const std::string & pathToPictures = GuiManager::getInstance().getPathToThesePictures() ;
-        std::string pictureFile = ospaths::pathToFile( pathToPictures, nameOfPicture );
-        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile( pictureFile ) );
-
-        if ( pict != nilPointer && pict->isNotNil () )
-                return new Picture( *pict ) ;
-
-        std::cout << "can't load picture \"" << pictureFile << "\"" << std::endl ;
-        return nilPointer ;
-}
-
-/* static */
-std::vector< allegro::Pict * > Screen::loadAnimation ( const char * nameOfGif )
-{
-        std::vector< allegro::Pict * > animation;
-        std::vector< int > durations;
-
-        allegro::loadGIFAnimation( ospaths::pathToFile( GuiManager::getInstance().getPathToThesePictures(), nameOfGif ), animation, durations );
-
-        return animation;
 }
 
 /* static */

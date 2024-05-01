@@ -3,6 +3,7 @@
 #include "Color.hpp"
 
 #include "util.hpp"
+#include "ospaths.hpp"
 
 #ifdef DEBUG
 #  define DEBUG_PICTURES        0
@@ -229,12 +230,34 @@ void Picture::rotate270 ()
         picture = multiptr< allegro::Pict >( rotated );
 }
 
-void Picture::saveAsPCX( const std::string& path )
+void Picture::saveAsPCX( const std::string & path )
 {
-        allegro::savePictAsPCX( path + getName(), getAllegroPict() );
+        allegro::savePictAsPCX( ospaths::pathToFile( path, getName() ), getAllegroPict() );
 }
 
-void Picture::saveAsPNG( const std::string& path )
+void Picture::saveAsPNG( const std::string & path )
 {
-        allegro::savePictAsPNG( path + getName(), getAllegroPict() );
+        allegro::savePictAsPNG( ospaths::pathToFile( path, getName() ), getAllegroPict() );
+}
+
+/* static */
+Picture * Picture::loadPicture ( const std::string & pathToPicture )
+{
+        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile( pathToPicture ) );
+
+        if ( pict != nilPointer && pict->isNotNil () )
+                return new Picture( *pict ) ;
+
+        IF_DEBUG( std::cout << "can’t load picture \"" << pictureFile << "\"" << std::endl )
+        return nilPointer ;
+}
+
+/* static */
+std::vector< allegro::Pict * > Picture::loadAnimation ( const std::string & pathToGif )
+{
+        std::vector< allegro::Pict * > animation ;
+        std::vector< int > durations ;
+        allegro::loadGIFAnimation( pathToGif, animation, durations );
+
+        return animation ;
 }

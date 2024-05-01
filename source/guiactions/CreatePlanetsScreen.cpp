@@ -13,6 +13,8 @@
 #include "ContinueGame.hpp"
 #include "GamePreferences.hpp"
 
+#include "ospaths.hpp"
+
 using gui::CreatePlanetsScreen ;
 using gui::ContinueGame ;
 using gui::GuiManager ;
@@ -27,12 +29,6 @@ CreatePlanetsScreen::CreatePlanetsScreen( bool notNewGame )
         , byblosFree( false )
         , safariFree( false )
 {
-
-}
-
-CreatePlanetsScreen::~CreatePlanetsScreen( )
-{
-
 }
 
 void CreatePlanetsScreen::act ()
@@ -57,18 +53,18 @@ void CreatePlanetsScreen::act ()
         Label* empire = new Label( languageStrings->getTranslatedStringByAlias( "blacktooth-empire" )->getText(),
                                         Font::fontWith2xHeightAndColor( colorOfLabel ) );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
-        empire->setAction( new ContinueGame( gameInProgress ) );
+        empire->setAction( new ContinueGame( this->gameInProgress ) );
 
         planets.addWidget( empire );
         planets.setNextKeyHandler( empire );
 
-        PicturePtr chapeau( Screen::loadPicture( "crown.png" ) );
+        const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
+
+        PicturePtr chapeau( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
         PicturePtr chapeauTriste( new Picture( *chapeau ) );
 
         if ( ! GameManager::getInstance().isSimpleGraphicsSet () )
-        {
                 chapeauTriste->toGrayscale ();
-        }
         else {
                 chapeauTriste->colorizeWhite( Color::byName( "gray" ) );
                 chapeau->colorizeWhite( Color::byName( "yellow" ) );
@@ -81,7 +77,7 @@ void CreatePlanetsScreen::act ()
 
         // Blacktooth
 
-        PicturePtr planetBlacktooth( Screen::loadPicture( "blacktooth.png" ) );
+        PicturePtr planetBlacktooth( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "blacktooth.png" ) ) );
         if ( planetBlacktooth->getAllegroPict().isNotNil() )
         {
                 const int blacktoothX = ( screenWidth - planetBlacktooth->getWidth() ) >> 1 ;
@@ -105,7 +101,7 @@ void CreatePlanetsScreen::act ()
 
         // Egyptus
 
-        PicturePtr planetEgyptus( Screen::loadPicture( "egyptus.png" ) );
+        PicturePtr planetEgyptus( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "egyptus.png" ) ) );
         if ( planetEgyptus->getAllegroPict().isNotNil() )
         {
                 const int egyptusX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetEgyptus->getWidth() >> 1 ) ;
@@ -129,7 +125,7 @@ void CreatePlanetsScreen::act ()
 
         // Penitentiary
 
-        PicturePtr planetPenitentiary( Screen::loadPicture( "penitentiary.png" ) );
+        PicturePtr planetPenitentiary( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "penitentiary.png" ) ) );
         if ( planetPenitentiary->getAllegroPict().isNotNil() )
         {
                 const int penitentiaryX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetPenitentiary->getWidth() >> 1 );
@@ -153,7 +149,7 @@ void CreatePlanetsScreen::act ()
 
         // Byblos
 
-        PicturePtr planetByblos( Screen::loadPicture( "byblos.png" ) );
+        PicturePtr planetByblos( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "byblos.png" ) ) );
         if ( planetByblos->getAllegroPict().isNotNil() )
         {
                 const int byblosX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetByblos->getWidth() >> 1 ) ;
@@ -177,7 +173,7 @@ void CreatePlanetsScreen::act ()
 
         // Safari
 
-        PicturePtr planetSafari( Screen::loadPicture( "safari.png" ) );
+        PicturePtr planetSafari( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "safari.png" ) ) );
         if ( planetSafari->getAllegroPict().isNotNil() )
         {
                 const int safariX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetSafari->getWidth() >> 1 );

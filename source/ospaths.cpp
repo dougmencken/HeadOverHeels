@@ -6,10 +6,11 @@
 #include <algorithm>
 
 #include <unistd.h> // getcwd
+#include <sys/stat.h> // mkdir, stat
 
 #if defined ( __CYGWIN__ )
     #include <sys/cygwin.h>
-    #define DEBUG_CYGWIN_CONVERT_PATH   1
+    #define DEBUG_CYGWIN_CONVERT_PATH   0
 #endif
 
 #ifndef PATH_MAX
@@ -52,7 +53,7 @@ static std::string convertPath( const std::string& path )
 #endif
 }
 
-std::string pathToFile( const std::string& folder, const std::string& file )
+std::string pathToFile( const std::string & folder, const std::string & file )
 {
         std::string path = folder ;
 
@@ -121,17 +122,13 @@ std::string homePath ()
                 char* home = getenv( "HOME" );
                 if ( home != nilPointer ) {
                         HomePath = std::string( home ) + "/.headoverheels/";
-                        if ( ! ospaths::folderExists( HomePath ) )
-                        {
-                                mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
-                                mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
-                        }
+                        makeFolder( HomePath );
                 }
                 else
                         HomePath = sharePath() ;
         }
 
-        return HomePath;
+        return HomePath ;
 }
 
 std::string sharePath ()
@@ -162,19 +159,31 @@ std::string sharePath ()
                 fprintf ( stdout, "SharePath is \"%s\"\n", SharePath.c_str () );
         }
 
-        return SharePath;
+        return SharePath ;
 }
 
 bool folderExists( const std::string & path )
 {
         struct stat info ;
 
-        if ( stat( path.c_str (), &info ) < 0 )
+        if ( stat( convertPath( path ).c_str (), &info ) < 0 )
                 return false ;
         else if ( ( info.st_mode & S_IFDIR ) != 0 )
                 return true ;
 
         return false ;
+}
+
+bool makeFolder ( const std::string & path )
+{
+        bool made = false ;
+
+        if ( ! folderExists( path ) ) {
+                mkdir( convertPath( path ).c_str(), /* rwxr-xr-x */ S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+                made = folderExists( path );
+        }
+
+        return made ;
 }
 
 }

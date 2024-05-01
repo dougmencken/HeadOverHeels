@@ -9,7 +9,7 @@
 #include "Screen.hpp"
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
-#include "CreateMainMenu.hpp"
+#include "CreateOptionsMenu.hpp"
 
 #include "sleep.hpp"
 
@@ -93,7 +93,7 @@ void CreateVideoMenu::act ()
         else
                 updateLabels();
 
-        screen.setEscapeAction( new CreateMainMenu() );
+        screen.setEscapeAction( new CreateOptionsMenu() );
 
         if ( screen.getNextKeyHandler() == nilPointer )
                 screen.setNextKeyHandler( listOfOptions );

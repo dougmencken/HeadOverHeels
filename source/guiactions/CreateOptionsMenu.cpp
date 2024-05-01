@@ -7,7 +7,7 @@
 #include "Menu.hpp"
 #include "Screen.hpp"
 
-#include "CreateKeyboardMenu.hpp"
+#include "CreateKeysMenu.hpp"
 #include "CreateAudioMenu.hpp"
 #include "CreateVideoMenu.hpp"
 #include "CreateLanguageMenu.hpp"
@@ -32,7 +32,7 @@ void CreateOptionsMenu::act ()
                 Label* adjustVideo = new Label( languageStrings->getTranslatedStringByAlias( "video-menu" )->getText() );
                 Label* chooseLanguage = new Label( languageStrings->getTranslatedStringByAlias( "language-menu" )->getText() );
 
-                defineKeys->setAction( new CreateKeyboardMenu() );
+                defineKeys->setAction( new CreateKeysMenu() );
                 adjustAudio->setAction( new CreateAudioMenu() );
                 adjustVideo->setAction( new CreateVideoMenu() );
                 chooseLanguage->setAction( new CreateLanguageMenu() );

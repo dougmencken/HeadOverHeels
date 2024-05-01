@@ -224,8 +224,8 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/CreateEndScreen.hpp \
 			guiactions/CreateListOfSavedGames.cpp \
 			guiactions/CreateListOfSavedGames.hpp \
-			guiactions/CreateKeyboardMenu.cpp \
-			guiactions/CreateKeyboardMenu.hpp \
+			guiactions/CreateKeysMenu.cpp \
+			guiactions/CreateKeysMenu.hpp \
 			guiactions/CreateLanguageMenu.cpp \
 			guiactions/CreateLanguageMenu.hpp \
 			guiactions/CreateMainMenu.cpp \

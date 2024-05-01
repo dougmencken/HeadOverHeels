@@ -1,27 +1,27 @@
 
-#include "CreateKeyboardMenu.hpp"
+#include "CreateKeysMenu.hpp"
 
 #include "GuiManager.hpp"
-#include "LanguageStrings.hpp"
 #include "InputManager.hpp"
+#include "RedefineKey.hpp"
 #include "Font.hpp"
+#include "Label.hpp"
 #include "Screen.hpp"
 #include "MenuWithValues.hpp"
-#include "Label.hpp"
-#include "CreateMainMenu.hpp"
-#include "RedefineKey.hpp"
+#include "CreateOptionsMenu.hpp"
+#include "LanguageStrings.hpp"
 
 
 namespace gui
 {
 
-void CreateKeyboardMenu::act ()
+void CreateKeysMenu::act ()
 {
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
         if ( screen.isNewAndEmpty() )
         {
-                screen.setEscapeAction( new CreateMainMenu() );
+                screen.setEscapeAction( new CreateOptionsMenu() );
 
                 screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 

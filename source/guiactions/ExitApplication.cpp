@@ -14,8 +14,8 @@ namespace gui
 
 void ExitApplication::bye ()
 {
-        GamePreferences::writePreferences( ospaths::homePath() + "preferences.xml" );
-        GuiManager::getInstance().suspend();
+        GamePreferences::writePreferences( ospaths::pathToFile( ospaths::homePath(), "preferences.xml" ) );
+        GuiManager::getInstance().suspend() ;
 
         Screen::randomPixelFadeOut( * GuiManager::getInstance().getActiveScreen(), Color::blackColor() );
 }

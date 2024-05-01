@@ -37,15 +37,14 @@ bool GamePreferences::readPreferences( const std::string & fileName )
 {
         std::cout << "readPreferences( \"" << fileName << "\" )" << std::endl ;
 
-        tinyxml2::XMLDocument preferences;
+        tinyxml2::XMLDocument preferences ;
         tinyxml2::XMLError result = preferences.LoadFile( fileName.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
-                std::cerr << "can’t read game’s preferences from \"" << fileName << "\"" << std::endl ;
+        if ( result != tinyxml2::XML_SUCCESS ) {
+                std::cerr << "can’t read the game’s preferences from \"" << fileName << "\"" << std::endl ;
                 return false;
         }
 
-        std::cout << "read game’s preferences" << std::endl ;
+        std::cout << "reading the game’s preferences" << std::endl ;
 
         tinyxml2::XMLElement* root = preferences.FirstChildElement( "preferences" );
 
@@ -55,7 +54,7 @@ bool GamePreferences::readPreferences( const std::string & fileName )
         if ( language != nilPointer && language->FirstChild() != nilPointer )
                 gui::GuiManager::getInstance().setLanguage( language->FirstChild()->ToText()->Value() );
 
-        // chosen keys
+        // the chosen keys
 
         tinyxml2::XMLElement* keys = root->FirstChildElement( "keys" ) ;
         if ( keys != nilPointer )
@@ -73,7 +72,7 @@ bool GamePreferences::readPreferences( const std::string & fileName )
                 }
         }
 
-        // preferences for audio
+        // the preferences for audio
 
         tinyxml2::XMLElement* audio = root->FirstChildElement( "audio" ) ;
         if ( audio != nilPointer )
@@ -100,7 +99,7 @@ bool GamePreferences::readPreferences( const std::string & fileName )
                 }
         }
 
-        // preferences for video
+        // the preferences for video
 
         tinyxml2::XMLElement* video = root->FirstChildElement( "video" ) ;
         if ( video != nilPointer )
@@ -186,7 +185,7 @@ bool GamePreferences::readPreferences( const std::string & fileName )
 /* static */
 bool GamePreferences::writePreferences( const std::string & fileName )
 {
-        std::cout << "writePreferences( " << fileName << " )" << std::endl ;
+        std::cout << "writePreferences( \"" << fileName << "\" )" << std::endl ;
 
         tinyxml2::XMLDocument preferences ;
 
@@ -276,12 +275,11 @@ bool GamePreferences::writePreferences( const std::string & fileName )
         }
 
         tinyxml2::XMLError result = preferences.SaveFile( fileName.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
-                std::cerr << "can’t write game’s preferences to \"" << fileName << "\"" << std::endl ;
+        if ( result != tinyxml2::XML_SUCCESS ) {
+                std::cerr << "can’t write the game’s preferences to \"" << fileName << "\"" << std::endl ;
                 return false;
         }
 
-        std::cout << "wrote game’s preferences" << std::endl ;
+        std::cout << "wrote the game’s preferences" << std::endl ;
         return true;
 }

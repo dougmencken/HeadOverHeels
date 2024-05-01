@@ -102,8 +102,6 @@ public:
 
         void redraw () ;
 
-        std::string getPathToThesePictures () const ;
-
         void suspend () {  this->active = false ;  }
 
         bool isAtFullScreen () const {  return this->atFullScreen ;  }

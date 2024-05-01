@@ -43,10 +43,9 @@ SoundManager& SoundManager::getInstance()
 void SoundManager::readSounds( const std::string& xmlFile )
 {
         // read the list of sounds from an XML file
-        tinyxml2::XMLDocument sounds;
-        tinyxml2::XMLError result = sounds.LoadFile( ( ospaths::sharePath() + xmlFile ).c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
+        tinyxml2::XMLDocument sounds ;
+        tinyxml2::XMLError result = sounds.LoadFile( ospaths::pathToFile( ospaths::sharePath(), xmlFile ).c_str () );
+        if ( result != tinyxml2::XML_SUCCESS ) {
                 std::cerr << "can’t read the list of sounds from \"" << xmlFile << "\"" << std::endl ;
                 return;
         }

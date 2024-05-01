@@ -4,7 +4,6 @@
 #include "LanguageStrings.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
-#include "GameManager.hpp"
 #include "Color.hpp"
 #include "Menu.hpp"
 #include "PictureWidget.hpp"
@@ -207,11 +206,6 @@ void GuiManager::redraw()
 {
         if ( this->active && ( this->activeScreen != nilPointer ) )
                 this->activeScreen->draw ();
-}
-
-std::string GuiManager::getPathToThesePictures () const
-{
-        return ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
 }
 
 void GuiManager::toggleFullScreenVideo ()

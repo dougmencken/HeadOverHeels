@@ -52,8 +52,7 @@ GameManager::GameManager( )
         , saverAndLoader( )
         , keyMoments( )
 {
-        if ( ! ospaths::folderExists( capturePath ) )
-                mkdir( capturePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+        ospaths::makeFolder( capturePath );
 
         recordingTimer->go ();
 }
@@ -89,7 +88,7 @@ PicturePtr GameManager::refreshPicture ( const std::string& nameOfPicture )
         IF_DEBUG( std::cout << "refreshing picture \"" << nameOfPicture << "\"" << std::endl )
 
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                ospaths::pathToFile( gui::GuiManager::getInstance().getPathToThesePictures(), nameOfPicture )
+                ospaths::pathToFile( ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), nameOfPicture )
         ) ) ;
 
         PicturePtr newPicture( new Picture( *pict ) );
@@ -663,7 +662,7 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
                 // record game’s screen
                 if ( recordingTimer->getValue() >= 0.08 /* 12.5 captures per one second */ )
                 {
-                        numberOfCapture++ ;
+                        numberOfCapture ++ ;
 
                         allegro::savePictAsPCX (
                                 ospaths::pathToFile( capturePath, prefixOfCaptures + util::number2string( numberOfCapture ) )

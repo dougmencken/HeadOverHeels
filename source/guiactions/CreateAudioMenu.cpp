@@ -8,7 +8,7 @@
 #include "Screen.hpp"
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
-#include "CreateMainMenu.hpp"
+#include "CreateOptionsMenu.hpp"
 
 #include "sleep.hpp"
 
@@ -45,7 +45,7 @@ void CreateAudioMenu::act ()
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
         if ( screen.isNewAndEmpty() )
         {
-                screen.setEscapeAction( new CreateMainMenu() );
+                screen.setEscapeAction( new CreateOptionsMenu() );
 
                 screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 

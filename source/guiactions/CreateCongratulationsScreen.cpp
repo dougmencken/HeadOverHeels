@@ -10,8 +10,10 @@
 #include "TextField.hpp"
 #include "CreateEndScreen.hpp"
 
-using gui::CreateCongratulationsScreen ;
+#include "ospaths.hpp"
 
+
+namespace gui {
 
 CreateCongratulationsScreen::CreateCongratulationsScreen( unsigned short rooms, unsigned short planets )
         : Action( )
@@ -29,13 +31,18 @@ void CreateCongratulationsScreen::act ()
         else
                 screen.freeWidgets() ;
 
-        // Head coronado
-        screen.addWidget( new PictureWidget( 192, 50, PicturePtr( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
-        screen.addPictureOfHeadAt( 192, 100 );
+        {
+                const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
+                autouniqueptr< Picture > imageDuChapeau( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
 
-        // Heels coronado
-        screen.addWidget( new PictureWidget( 400, 50, PicturePtr( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
-        screen.addPictureOfHeelsAt( 400, 100 );
+                // Head coronado
+                screen.addWidget( new PictureWidget( 192, 50, PicturePtr( new Picture( *imageDuChapeau ) ), "image du chapeau de Head" ) );
+                screen.addPictureOfHeadAt( 192, 100 );
+
+                // Heels coronado
+                screen.addWidget( new PictureWidget( 400, 50, PicturePtr( new Picture( *imageDuChapeau ) ), "image du chapeau de Heels" ) );
+                screen.addPictureOfHeelsAt( 400, 100 );
+        }
 
         // texto final
         LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
@@ -52,4 +59,6 @@ void CreateCongratulationsScreen::act ()
         screen.addWidget( textField );
 
         GuiManager::getInstance().changeScreen( screen, true );
+}
+
 }

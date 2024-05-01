@@ -25,11 +25,12 @@ Font::Font( const std::string & color, bool doubleHeightStretching )
 {
         if ( Font::imageOfFont == nilPointer )
         {
-                std::string nameOfFontFile = ospaths::sharePath() + "font.png" ;
-                autouniqueptr< allegro::Pict > fontFromFile( allegro::Pict::fromPNGFile( ospaths::pathToFile( nameOfFontFile ) ) );
-                if ( ! fontFromFile->isNotNil() )
-                {
-                        std::cerr << "oops, can’t get the image of letters from file \"" << nameOfFontFile << "\"" << std::endl ;
+                std::string nameOfFontFile = "font.png" ;
+                autouniqueptr< allegro::Pict > fontFromFile(
+                                        allegro::Pict::fromPNGFile(
+                                                ospaths::pathToFile( ospaths::sharePath(), nameOfFontFile ) ) );
+                if ( ! fontFromFile->isNotNil() ) {
+                        std::cerr << "oops, can’t get the image of letters from \"" << nameOfFontFile << "\"" << std::endl ;
                         return ;
                 }
 
@@ -123,15 +124,15 @@ bool Font::readListOfLetters ()
 {
         Font::howManyLetters = 0 ;
 
-        std::string fileWithLetters = ospaths::sharePath() + "letters.utf8";
-        std::ifstream lettersFile ( ospaths::pathToFile( fileWithLetters ), std::ifstream::binary );
+        std::string fileWithLetters = "letters.utf8" ;
+        std::ifstream lettersFile ( ospaths::pathToFile( ospaths::sharePath(), fileWithLetters ), std::ifstream::binary );
         if ( ! lettersFile )    /* no comparison with nil here, see https://gcc.gnu.org/gcc-6/porting_to.html
                                  “ The change to iostream classes also affects code that tries
                                    to check for stream errors by comparing to NULL or 0.
                                    Such code should be changed to simply test the stream directly,
                                    instead of comparing it to a null pointer ” */
         {
-                std::cerr << "can't read file \"" << fileWithLetters << "\" with the list of letters drawn in the font" << std::endl ;
+                std::cerr << "can’t read file \"" << fileWithLetters << "\" with the list of letters drawn in the font" << std::endl ;
                 return false ;
         }
 

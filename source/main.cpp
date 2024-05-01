@@ -70,7 +70,7 @@ void initAllegro ()
 
 void readPreferences ()
 {
-        bool preferencesOkay = GamePreferences::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
+        bool preferencesOkay = GamePreferences::readPreferences( ospaths::pathToFile( ospaths::homePath(), "preferences.xml" ) );
 
         if ( ! preferencesOkay )
                 gui::GuiManager::getInstance().setLanguage( "en_US" );

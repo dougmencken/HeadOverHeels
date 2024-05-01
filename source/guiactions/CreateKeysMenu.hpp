@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef CreateKeyboardMenu_hpp_
-#define CreateKeyboardMenu_hpp_
+#ifndef CreateKeysMenu_hpp_
+#define CreateKeysMenu_hpp_
 
 #include "Action.hpp"
 
@@ -20,15 +20,15 @@ class MenuWithValues ;
 
 
 /**
- * Create "select the keys" menu
+ * Create “select the keys” menu
  */
 
-class CreateKeyboardMenu : public Action
+class CreateKeysMenu : public Action
 {
 
 public:
 
-        CreateKeyboardMenu( ) : Action( ), menuOfKeys( nilPointer ) { }
+        CreateKeysMenu( ) : Action( ), menuOfKeys( nilPointer ) { }
 
 protected:
 

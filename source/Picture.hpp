@@ -78,9 +78,13 @@ public:
 
         void rotate90clockwise () {  rotate270 () ;  }
 
-        void saveAsPCX ( const std::string& path ) ;
+        void saveAsPCX ( const std::string & path ) ;
 
-        void saveAsPNG ( const std::string& path ) ;
+        void saveAsPNG ( const std::string & path ) ;
+
+        static Picture * loadPicture ( const std::string & pathToPicture ) ;
+
+        static std::vector < allegro::Pict * > loadAnimation ( const std::string & pathToGif ) ;
 
 private:
 

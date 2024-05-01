@@ -68,15 +68,15 @@ public:
 
         void freeWidgets () ;
 
-        void addPictureOfHeadAt ( int x, int y ) ;
-
-        void addPictureOfHeelsAt ( int x, int y ) ;
-
         void placeHeadAndHeels ( bool imagesToo, bool copyrightsToo ) ;
 
         static void refreshBackground () ;
 
         static void toBlackBackground () ;
+
+        void addPictureOfHeadAt ( int x, int y ) ;
+
+        void addPictureOfHeelsAt ( int x, int y ) ;
 
         void refreshPicturesOfHeadAndHeels () ;
 
@@ -102,10 +102,6 @@ public:
         void setNextKeyHandler ( Widget* widget ) {  this->nextKeyHandler = widget ;  }
 
         Widget * getNextKeyHandler () const {  return this->nextKeyHandler ;  }
-
-        static Picture * loadPicture ( const std::string& nameOfPicture ) ;
-
-        static std::vector < allegro::Pict * > loadAnimation ( const char * nameOfGif ) ;
 
         static void scrollHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
 

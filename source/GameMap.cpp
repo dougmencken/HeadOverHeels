@@ -67,10 +67,8 @@ void GameMap::readMap ( const std::string& fileName )
 
 # if defined( GENERATE_ROOM_DESCRIPTIONS ) && GENERATE_ROOM_DESCRIPTIONS
 
-        std::string pathToRooms = ospaths::homePath () + "rooms" + ospaths::pathSeparator () ;
-
-        if ( ! ospaths::folderExists( pathToRooms ) )
-                mkdir( pathToRooms.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+        std::string pathToRooms = ospaths::homePath () + "rooms" ;
+        ospaths::makeFolder( pathToRooms );
 
 #endif
 
@@ -155,15 +153,13 @@ void GameMap::readMap ( const std::string& fileName )
 
                 # if defined( GENERATE_ROOM_DESCRIPTIONS ) && GENERATE_ROOM_DESCRIPTIONS
                         // write the description of room
-                        std::string saveTo = pathToRooms + theRoom->getNameOfRoomDescriptionFile ();
+                        std::string saveTo = ospaths::pathToFile( pathToRooms, theRoom->getNameOfRoomDescriptionFile () );
                         std::cout << "saving the description of room as \"" << saveTo << "\"" << std::endl ;
                         theRoom->saveAsXML( saveTo );
                 # endif
                 }
                 else
-                {
                         gameRooms[ fileOfRoom ] = nilPointer ;
-                }
         }
 
         std::cout << "read the map from " << fileName << std::endl ;
