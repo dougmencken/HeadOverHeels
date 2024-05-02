@@ -1,23 +1,15 @@
 
 #include "sleep.hpp"
 
-#ifndef __WIN32
-#  include <functional> // std::modulus
-#endif
+#include <functional> // std::modulus
 
 
 namespace somn {
 
 void milliSleep( unsigned long milliseconds )
 {
-#if defined ( __WIN32 )
-        Sleep( milliseconds );
-#else
         nanoSleep( milliseconds * 1000000 );
-#endif
 }
-
-#ifndef __WIN32
 
 void microSleep( unsigned long microseconds )
 {
@@ -33,7 +25,5 @@ void nanoSleep ( unsigned long nanoseconds )
         pause.tv_nsec = remainder;
         nanosleep( &pause, NULL );
 }
-
-#endif
 
 }

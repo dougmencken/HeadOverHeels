@@ -1,7 +1,4 @@
-
-#ifndef __WIN32
-
-#include "TimerPOSIX.hpp"
+#include "Timer.hpp"
 
 
 Timer::Timer()
@@ -26,8 +23,8 @@ double Timer::getValue()
 {
         gettimeofday( &tstop, &tz );
 
-        double t1 = double( trestart.tv_sec ) + double( trestart.tv_usec ) / 1000000;
-        double t2 = double( tstop.tv_sec ) + double( tstop.tv_usec ) / 1000000;
+        double t1 = double( trestart.tv_sec ) + double( trestart.tv_usec ) / 1000000 ;
+        double t2 = double( tstop.tv_sec ) + double( tstop.tv_usec ) / 1000000 ;
 
         return t2 - t1;
 }
@@ -46,5 +43,3 @@ void Timer::restart()
 {
         gettimeofday( &tstop, &tz );
 }
-
-#endif

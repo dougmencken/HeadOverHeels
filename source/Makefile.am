@@ -116,10 +116,7 @@ headoverheels_SOURCES = main.cpp \
 			SoundManager.cpp \
 			SoundManager.hpp \
 			Timer.hpp \
-			TimerPOSIX.cpp \
-			TimerPOSIX.hpp \
-			TimerWindows.cpp \
-			TimerWindows.hpp \
+			Timer.cpp \
 			activities/Activity.hpp \
 			activities/PropagateActivity.cpp \
 			activities/PropagateActivity.hpp \

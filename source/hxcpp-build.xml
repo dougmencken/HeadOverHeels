@@ -45,8 +45,7 @@
         <file name="GamePreferences.cpp" />
         <file name="Miniature.cpp" />
         <file name="Isomot.cpp" />
-        <file name="TimerPOSIX.cpp" />
-        <file name="TimerWindows.cpp" />
+        <file name="Timer.cpp" />
         <file name="Room.cpp" />
         <file name="ConnectedRooms.cpp" />
         <file name="GameMap.cpp" />

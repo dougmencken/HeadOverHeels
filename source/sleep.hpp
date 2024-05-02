@@ -11,10 +11,7 @@
 #ifndef sleep_hpp_
 #define sleep_hpp_
 
-#ifndef __WIN32
-    #include <time.h>
-#endif
-
+#include <time.h>
 
 namespace somn {
 
@@ -22,8 +19,6 @@ namespace somn {
  * Pause subprocess for a given period of time in milliseconds
  */
 void milliSleep ( unsigned long miliseconds );
-
-#ifndef __WIN32
 
 /**
  * Pause subprocess for a given period of time in microseconds
@@ -35,8 +30,6 @@ void microSleep ( unsigned long microseconds );
  * But implementation may sleep longer than given period
  */
 void nanoSleep ( unsigned long nanoseconds );
-
-#endif
 
 }
 
