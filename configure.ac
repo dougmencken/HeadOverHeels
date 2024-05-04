@@ -43,29 +43,6 @@ else
 fi
 AM_CONDITIONAL([DARWIN], [test x"$on_darwin" = x"true"])
 
-# configure paths for zlib
-
-AC_ARG_WITH(zlib-prefix,AS_HELP_STRING([--with-zlib-prefix=],[prefix where zlib is installed (optional)]), zlib_prefix="$withval", zlib_prefix="")
-AC_ARG_WITH(zlib-libs,AS_HELP_STRING([--with-zlib-libs=],[where zlib library is installed (optional)]), zlib_libraries="$withval", zlib_libraries="")
-AC_ARG_WITH(zlib-includes,AS_HELP_STRING([--with-zlib-includes=],[where zlib headers are installed (optional)]), zlib_includes="$withval", zlib_includes="")
-
-if test "x$zlib_libraries" != "x" ; then
-    zlib_LIBS="-L$zlib_libraries"
-elif test "x$zlib_prefix" != "x" ; then
-    zlib_LIBS="-L$zlib_prefix/lib"
-fi
-
-zlib_LIBS="$zlib_LIBS -lz"
-
-if test "x$zlib_includes" != "x" ; then
-    zlib_HEADERS="-I $zlib_includes"
-elif test "x$zlib_prefix" != "x" ; then
-    zlib_HEADERS="-I $zlib_prefix/include"
-fi
-
-AC_SUBST([zlib_LIBS])
-AC_SUBST([zlib_HEADERS])
-
 # configure paths for libpng
 
 AC_ARG_WITH(libpng-prefix,AS_HELP_STRING([--with-libpng-prefix=],[prefix where libpng is installed (optional)]), libpng_prefix="$withval", libpng_prefix="")
@@ -182,11 +159,9 @@ AC_SUBST([allegro_HEADERS])
 
 preprocessor_options_before="$CPPFLAGS"
 
+AC_CHECK_HEADER([unistd.h],, [AC_MSG_ERROR([unistd.h is absent])])
 AC_CHECK_HEADER([pthread.h],, [AC_MSG_ERROR([pthread.h is absent])])
 AC_CHECK_HEADER([execinfo.h])
-
-AC_SUBST([CPPFLAGS], ["$zlib_HEADERS $preprocessor_options_before"])
-AC_CHECK_HEADER([zlib.h],, [AC_MSG_ERROR([zlib headers are absent, with CPPFLAGS="$CPPFLAGS"])])
 
 AC_SUBST([CPPFLAGS], ["$libpng_HEADERS $preprocessor_options_before"])
 AC_CHECK_HEADER([png.h],, [AC_MSG_ERROR([libpng headers are absent, with CPPFLAGS="$CPPFLAGS"])])

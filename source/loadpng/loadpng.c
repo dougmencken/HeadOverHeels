@@ -5,7 +5,6 @@
  */
 
 
-#include <zlib.h>
 #include <png.h>
 #include <allegro.h>
 #include <allegro/internal/aintern.h>
@@ -20,7 +19,7 @@
 
 
 double _png_screen_gamma = -1.0;
-int _png_compression_level = Z_BEST_COMPRESSION;
+int _png_compression_level = /* PNG_Z_BEST_COMPRESSION */ 9 ;
 
 
 

@@ -25,13 +25,13 @@ endif
 
 headoverheels_CPPFLAGS =  -Iactivities -Ibehaviors -Igui -Iguiactions
 headoverheels_CPPFLAGS += -DBinDirFromConfigure=\"$(bindir)\" -DDataDirFromConfigure=\"$(datadir)\"
-headoverheels_CPPFLAGS += $(zlib_HEADERS) $(libpng_HEADERS) $(ogg_HEADERS) $(vorbis_HEADERS) $(tinyxml2_HEADERS) $(allegro_HEADERS)
+headoverheels_CPPFLAGS += $(libpng_HEADERS) $(ogg_HEADERS) $(vorbis_HEADERS) $(tinyxml2_HEADERS) $(allegro_HEADERS)
 headoverheels_CPPFLAGS += $(AM_CPPFLAGS)
 
 headoverheels_CFLAGS = -Wall $(AM_CFLAGS)
 headoverheels_CXXFLAGS = -Wall $(AM_CXXFLAGS)
 
-AM_LDFLAGS = -lpthread $(zlib_LIBS) $(libpng_LIBS) $(ogg_LIBS) $(vorbis_LIBS) $(tinyxml2_LIBS) $(allegro_LIBS)
+AM_LDFLAGS = -lpthread $(libpng_LIBS) $(ogg_LIBS) $(vorbis_LIBS) $(tinyxml2_LIBS) $(allegro_LIBS)
 
 bin_PROGRAMS = headoverheels
 
