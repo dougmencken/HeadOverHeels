@@ -107,6 +107,8 @@ void GuiManager::dumpScreenz () const
 
 void GuiManager::begin ()
 {
+        std::cout << "chosenLanguage is \"" << this->chosenLanguage << "\"" << std::endl ;
+
         // if the language isn’t set, show the menu of languages, otherwise show the main menu
         Action * firstMenu = this->chosenLanguage.empty() ? static_cast< Action * >( new CreateLanguageMenu() )
                                                           : static_cast< Action * >( new CreateMainMenu() ) ;
@@ -237,6 +239,7 @@ void GuiManager::toggleFullScreenVideo ()
         }
 }
 
+/* private */
 void GuiManager::useLanguage( const std::string & language )
 {
         if ( this->languageStrings != nilPointer ) {

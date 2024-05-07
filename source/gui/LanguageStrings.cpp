@@ -19,8 +19,11 @@ LanguageStrings::LanguageStrings( const std::string & file, const std::string & 
 {
         parseFile( ospaths::pathToFile( ospaths::sharePath() + "text", file ), this->strings );
 
-        if ( file != fileWithGuaranteedStrings )
+        if ( file != fileWithGuaranteedStrings ) {
                 parseFile( ospaths::pathToFile( ospaths::sharePath() + "text", fileWithGuaranteedStrings ), this->backupStrings );
+                for ( unsigned int i = 0 ; i < backupStrings.size () ; i ++ )
+                        backupStrings[ i ]->prefixWith( "_*" + fileWithGuaranteedStrings.substr( 0, 2 ) + "*_ " );
+        }
 }
 
 LanguageStrings::~LanguageStrings()
@@ -38,7 +41,7 @@ LanguageText* LanguageStrings::getTranslatedStringByAlias( const std::string & a
                 if ( strings[ i ]->getAlias() == alias ) return strings[ i ];
 
         for ( size_t i = 0 ; i < backupStrings.size () ; i ++ )
-                if ( backupStrings[ i ]->getAlias() == alias ) return backupStrings[ i ];
+                if ( backupStrings[ i ]->getAlias() == alias ) return backupStrings[ i ] ;
 
         LanguageText* untranslated = new LanguageText( alias ) ;
         untranslated->addLine( "(" + alias + ")" );
@@ -51,14 +54,20 @@ void LanguageStrings::parseFile( const std::string & fileName, std::vector< Lang
 
         tinyxml2::XMLDocument languageXml ;
         tinyxml2::XMLError result = languageXml.LoadFile( fileName.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
+        if ( result != tinyxml2::XML_SUCCESS ) {
+                std::cerr << "can’t parse language strings file \"" << fileName << "\"" << std::endl ;
                 return ;
         }
 
         tinyxml2::XMLElement* root = languageXml.FirstChildElement( "language" );
+
         #if defined( DUMP_XML ) && DUMP_XML
-                std::cout << "   <language>" << std::endl ;
+                std::cout << "   <language" ;
+                const char * linguonym = root->Attribute( "name" );
+                if ( linguonym != nilPointer ) std::cout << " name=\"" << linguonym << "\"" ;
+                const char * iso = root->Attribute( "iso" );
+                if ( iso != nilPointer ) std::cout << " iso=\"" << iso << "\"" ;
+                std::cout << ">" << std::endl ;
         #endif
 
         for ( tinyxml2::XMLElement* text = root->FirstChildElement( "text" ) ;

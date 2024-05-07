@@ -130,6 +130,8 @@ public:
 
         void setActiveScreen ( ScreenPtr newScreen ) {  this->activeScreen = newScreen ;  }
 
+        unsigned int countScreens () const {  return this->screens.size() ;  }
+
         const WhyPaused & getWhyTheGameIsPaused () const {  return whyTheGameIsPaused ;  }
         WhyPaused & getWhyTheGameIsPausedToAlter () {  return whyTheGameIsPaused ;  }
 

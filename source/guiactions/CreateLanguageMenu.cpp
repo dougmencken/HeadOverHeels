@@ -15,12 +15,14 @@
 
 #include <tinyxml2.h>
 
+#include <dirent.h> // opendir, readdir, closedir
+
 
 namespace gui {
 
 CreateLanguageMenu::CreateLanguageMenu( ) : Action( )
 {
-        readListOfLanguages( ospaths::pathToFile( ospaths::sharePath() + "text", "language.xml" ) );
+        makeListOfLanguages( ospaths::sharePath() + "text" );
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )
@@ -83,25 +85,38 @@ void CreateLanguageMenu::act ()
         GuiManager::getInstance().changeScreen( screen, true );
 }
 
-void CreateLanguageMenu::readListOfLanguages( const std::string & nameOfXMLFile )
+/* private */
+void CreateLanguageMenu::makeListOfLanguages( const std::string & languagesFolder )
 {
-        tinyxml2::XMLDocument languages ;
-        tinyxml2::XMLError result = languages.LoadFile( nameOfXMLFile.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS ) {
-                std::cerr << "can’t read file \"" << nameOfXMLFile << "\" with the list of languages" << std::endl ;
-                return ;
+        DIR * dir = opendir( languagesFolder.c_str () );
+
+        struct dirent * entry ;
+        while ( ( entry = readdir( dir ) ) != nilPointer ) {
+                std::string nameOfEntry = entry->d_name ;
+                if ( util::stringEndsWith( nameOfEntry, ".xml" ) )
+                {
+                        tinyxml2::XMLDocument tongue ;
+                        tinyxml2::XMLError result = tongue.LoadFile( ospaths::pathToFile( languagesFolder, nameOfEntry ).c_str () );
+                        if ( result != tinyxml2::XML_SUCCESS ) continue ;
+
+                        tinyxml2::XMLElement * language = tongue.FirstChildElement( "language" );
+                        if ( language == nilPointer ) continue ;
+
+                        const char * linguonym = language->Attribute( "name" );
+                        const char * iso = language->Attribute( "iso" );
+                        if ( linguonym != nilPointer && iso != nilPointer )
+                                this->languages[ iso ] = linguonym ;
+                        else {
+                                std::string nameWithoutXmlSuffix = nameOfEntry.substr( 0, nameOfEntry.size() - 4 );
+                                if ( linguonym != nilPointer )
+                                        this->languages[ nameWithoutXmlSuffix ] = linguonym ;
+                                else
+                                        this->languages[ nameWithoutXmlSuffix ] = nameWithoutXmlSuffix ;
+                        }
+                }
         }
 
-        tinyxml2::XMLElement* root = languages.FirstChildElement( "languages" );
-
-        for ( tinyxml2::XMLElement* language = root->FirstChildElement( "language" ) ;
-                        language != nilPointer ;
-                        language = language->NextSiblingElement( "language" ) )
-        {
-                std::string iso = language->Attribute( "iso" );
-                std::string text = language->FirstChildElement( "text" )->FirstChild()->ToText()->Value() ;
-                this->languages[ iso ] = text;
-        }
+        closedir( dir );
 }
 
 }

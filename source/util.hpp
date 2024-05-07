@@ -111,6 +111,12 @@ public:
                 return result.str() ;
         }
 
+        static bool stringEndsWith( const std::string & str, const std::string & suffix )
+        {
+                int dl = str.size() - suffix.size() ;
+                return dl >= 0 && str.rfind( suffix ) == static_cast< unsigned >( dl );
+        }
+
         static std::string makeRandomString ( const size_t length )
         {
                 static const char alphanum[] =  "0123456789"

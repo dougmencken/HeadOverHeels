@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="Valencià" iso="val_ES">
 
   <text alias="new-game">
     <properties>
@@ -44,7 +44,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>Carregar joc</string>
     </properties>
@@ -236,12 +236,6 @@
   <text alias="hero">
     <properties>
       <string>Heroi</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>Emperador</string>
     </properties>
   </text>
 

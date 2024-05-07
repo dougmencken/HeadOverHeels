@@ -40,8 +40,8 @@ bool GamePreferences::readPreferences( const std::string & fileName )
         tinyxml2::XMLDocument preferences ;
         tinyxml2::XMLError result = preferences.LoadFile( fileName.c_str () );
         if ( result != tinyxml2::XML_SUCCESS ) {
-                std::cerr << "can’t read the game’s preferences from \"" << fileName << "\"" << std::endl ;
-                return false;
+                std::cerr << "no previously stored preferences in \"" << fileName << "\"" << std::endl ;
+                return false ;
         }
 
         std::cout << "reading the game’s preferences" << std::endl ;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="Bable" iso="ast_ES">
 
   <text alias="new-game">
     <properties>
@@ -44,7 +44,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>Carga un xuegu</string>
     </properties>
@@ -230,12 +230,6 @@
   <text alias="hero">
     <properties>
       <string>Héroe</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>Emperaor</string>
     </properties>
   </text>
 

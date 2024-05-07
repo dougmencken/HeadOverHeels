@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="Euskera" iso="eu_ES">
 
   <text alias="new-game">
     <properties>
@@ -44,7 +44,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>Jolasa leporatzea</string>
     </properties>
@@ -239,12 +239,6 @@
   <text alias="hero">
     <properties>
       <string>Heroi</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>Enperadore</string>
     </properties>
   </text>
 

@@ -20,7 +20,7 @@ namespace gui
 {
 
 /**
- * Crea el menú de selección de idioma
+ * Creates a menu for language selection
  */
 
 class CreateLanguageMenu : public Action
@@ -34,19 +34,14 @@ public:
 
 protected:
 
-        /**
-         * Show the language menu
-         */
+        // show the language menu
         virtual void act () ;
 
 private:
 
-        /**
-         * Read the list of languages from the XML file
-         */
-        void readListOfLanguages ( const std::string & nameOfXMLFile ) ;
+        void makeListOfLanguages ( const std::string & languagesFolder ) ;
 
-        std::map < std::string /* iso */, std::string /* text */ > languages ;
+        std::map < std::string /* iso */, std::string /* linguonym */ > languages ;
 
 };
 

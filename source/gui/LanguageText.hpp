@@ -33,6 +33,8 @@ public:
 
         const std::string & getText() const {  return this->text ;  }
 
+        void setText( const std::string & newText ) {  this->text = newText ;  }
+
         bool isBigHeight() const {  return ( this->fontName == "big" );  }
 
         const std::string & getColor() const {  return this->color ;  }
@@ -85,6 +87,12 @@ public:
         const std::string & getText () const {  return this->getFirstLine().getText() ;  }
 
         unsigned int howManyLinesOfText () {  return this->lines.size() ;  }
+
+        void prefixWith( const std::string & prefix )
+        {
+                for ( unsigned int i = 0 ; i < this->lines.size() ; ++ i )
+                        this->lines[ i ].setText( prefix + this->lines[ i ].getText() );
+        }
 
 };
 

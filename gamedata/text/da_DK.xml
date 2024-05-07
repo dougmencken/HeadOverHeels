@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="Dansk" iso="da_DK">
 
   <text alias="new-game">
     <properties>
@@ -44,7 +44,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>Hent spil</string>
     </properties>
@@ -236,12 +236,6 @@
   <text alias="hero">
     <properties>
       <string>Helt</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>Kejser</string>
     </properties>
   </text>
 

@@ -17,7 +17,9 @@ ChooseLanguage::ChooseLanguage( const std::string & laLangueChoisie )
 
 void ChooseLanguage::act ()
 {
-        GuiManager::getInstance().freeScreens() ;
+        if ( GuiManager::getInstance().countScreens() > 1 ) // not the very first screen
+                GuiManager::getInstance().freeScreens() ;
+
         GuiManager::getInstance().setLanguage( language );
 
         CreateMainMenu * mainMenu = new CreateMainMenu();

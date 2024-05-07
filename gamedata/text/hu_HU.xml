@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language iso="hu_HU" name="Magyar">
 
   <text alias="yep">
     <properties>
@@ -56,7 +56,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>játék betöltése</string>
     </properties>
@@ -281,12 +281,6 @@
   <text alias="hero">
     <properties>
       <string>hös</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>hóditó</string>
     </properties>
   </text>
 

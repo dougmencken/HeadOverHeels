@@ -1,6 +1,5 @@
 gamedatatextdir = $(datadir)/@PACKAGE@/text
 gamedatatext_DATA = credits.xml \
-                    language.xml \
 			af_ZA.xml \
 			ast_ES.xml \
 			ca_ES.xml \

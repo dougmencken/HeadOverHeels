@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="Galego" iso="gl_ES">
 
   <text alias="new-game">
     <properties>
@@ -44,7 +44,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>Cargar xogo</string>
     </properties>
@@ -233,12 +233,6 @@
   <text alias="hero">
     <properties>
       <string>Heroe</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>Emperador</string>
     </properties>
   </text>
 

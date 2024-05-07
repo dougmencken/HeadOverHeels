@@ -31,7 +31,7 @@ void CreateMainMenu::act ()
                 LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
                 Label* newGame = new Label( languageStrings->getTranslatedStringByAlias( "new-game" )->getText() );
-                Label* loadGame = new Label( languageStrings->getTranslatedStringByAlias( "load-game" )->getText() );
+                Label* loadGame = new Label( languageStrings->getTranslatedStringByAlias( "load-old-game" )->getText() );
                 Label* optionsMenu = new Label( languageStrings->getTranslatedStringByAlias( "options-menu" )->getText() );
                 Label* showCredits = new Label( languageStrings->getTranslatedStringByAlias( "show-credits" )->getText() );
                 Label* quitGame = new Label( languageStrings->getTranslatedStringByAlias( "exit-game" )->getText() );

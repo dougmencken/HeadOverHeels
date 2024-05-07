@@ -77,7 +77,7 @@ void CreateEndScreen::act ()
         else {
                 // the range reached by the player
                 unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000  };
-                std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "emperor"  };
+                std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "liberator"  };
 
                 for ( int i = 5; i >= 0; i-- )
                 {

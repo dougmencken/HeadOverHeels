@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="Русский" iso="ru_RU">
 
   <text alias="yep">
     <properties>
@@ -56,7 +56,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>Загрузить игру</string>
     </properties>
@@ -317,12 +317,6 @@
   <text alias="hero">
     <properties>
       <string>герой</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>император</string>
     </properties>
   </text>
 

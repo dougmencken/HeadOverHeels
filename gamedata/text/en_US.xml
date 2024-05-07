@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="English">
 
   <text alias="yep">
     <properties>
@@ -56,9 +56,15 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
-      <string>Old game</string>
+      <string>Previous game</string>
+    </properties>
+  </text>
+
+  <text alias="free-slot">
+    <properties>
+      <string>Free</string>
     </properties>
   </text>
 
@@ -140,57 +146,45 @@
     </properties>
   </text>
 
-  <text alias="confirm-quit">
-    <properties font="big" color="cyan">
-      <string>Use Escape key to quit game</string>
-    </properties>
-  </text>
-
-  <text alias="confirm-resume">
-    <properties font="big" color="yellow">
-      <string>and another key to resume</string>
-    </properties>
-  </text>
-
   <text alias="video-menu">
     <properties>
-      <string>Adjust graphics</string>
+      <string>Adjust the graphics</string>
     </properties>
   </text>
 
   <text alias="screen-size">
     <properties>
-      <string>Size of Screen</string>
+      <string>Size of screen</string>
     </properties>
   </text>
 
   <text alias="full-screen">
     <properties>
-      <string>Full Screen</string>
+      <string>In full screen</string>
     </properties>
   </text>
 
   <text alias="draw-shadows">
     <properties>
-      <string>Draw Shadows</string>
+      <string>Draw shadows</string>
     </properties>
   </text>
 
   <text alias="draw-decor">
     <properties>
-      <string>Draw Scenery Decor</string>
+      <string>Draw scenery decor</string>
     </properties>
   </text>
 
   <text alias="draw-miniatures">
     <properties>
-      <string>Draw Room Miniatures</string>
+      <string>Draw room miniatures</string>
     </properties>
   </text>
 
   <text alias="center-camera-on">
     <properties>
-      <string>Center Camera On</string>
+      <string>Center the camera on</string>
     </properties>
   </text>
 
@@ -202,19 +196,19 @@
 
   <text alias="character">
     <properties>
-      <string>character</string>
+      <string>dude</string>
     </properties>
   </text>
 
   <text alias="graphic-set">
     <properties>
-      <string>Choose Set of Graphics</string>
+      <string>Choose the set of graphics</string>
     </properties>
   </text>
 
   <text alias="audio-menu">
     <properties>
-      <string>Adjust sound</string>
+      <string>Adjust the sound</string>
     </properties>
   </text>
 
@@ -232,13 +226,13 @@
 
   <text alias="play-room-melodies">
   <properties>
-      <string>Play room tunes</string>
+      <string>Play the room tunes</string>
     </properties>
   </text>
 
   <text alias="language-menu">
     <properties>
-      <string>Choose language</string>
+      <string>Choose the language</string>
     </properties>
   </text>
 
@@ -254,21 +248,27 @@
     </properties>
   </text>
 
-  <text alias="save-game">
-    <properties font="big" color="orange">
-      <string>Reincarnation Fish lets you</string>
-    </properties>
-    <properties font="big" color="cycling">
-      <string>save the game</string>
-    </properties>
-    <properties font="big" color="orange">
-      <string>by touching SPACE</string>
+  <text alias="confirm-quit">
+    <properties font="big" color="cyan">
+      <string>Use Escape key to quit the game</string>
     </properties>
   </text>
 
-  <text alias="free-slot">
-    <properties>
-      <string>Free</string>
+  <text alias="confirm-resume">
+    <properties font="big" color="yellow">
+      <string>and another key to resume</string>
+    </properties>
+  </text>
+
+  <text alias="save-game">
+    <properties font="big" color="orange">
+      <string>The Reincarnation Fish gives a chance</string>
+    </properties>
+    <properties font="big" color="cycling">
+      <string>to save the game</string>
+    </properties>
+    <properties font="big" color="orange">
+      <string>by touching SPACE</string>
     </properties>
   </text>
 
@@ -302,23 +302,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="multicolor">
-      <string>The people praise you !</string>
-      <string></string>
-    </properties>
-    <properties font="plain" color="white">
-      <string>This way, my dear friend,</string>
-      <string>our two heroes put an end to</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>the Blacktooth Emperor's tyranny</string>
-    </properties>
-    <properties font="plain" color="yellow">
-      <string>once and for all</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Dummy</string>
@@ -349,9 +332,26 @@
     </properties>
   </text>
 
-  <text alias="emperor">
+  <text alias="liberator">
     <properties>
-      <string>Emperor</string>
+      <string>Liberator</string>
+    </properties>
+  </text>
+
+  <text alias="final-text">
+    <properties font="big" color="multicolor">
+      <string>The people praise you !</string>
+      <string></string>
+    </properties>
+    <properties font="plain" color="white">
+      <string>This way, my dear friend,</string>
+      <string>our two heroes put an end to</string>
+    </properties>
+    <properties font="plain" color="cyan">
+      <string>the Blacktooth Emperor’s tyranny</string>
+    </properties>
+    <properties font="plain" color="yellow">
+      <string>once and for all</string>
     </properties>
   </text>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language>
+<language name="Suomi" iso="fi_FI">
 
   <text alias="new-game">
     <properties>
@@ -44,7 +44,7 @@
     </properties>
   </text>
 
-  <text alias="load-game">
+  <text alias="load-old-game">
     <properties>
       <string>Lataa peli</string>
     </properties>
@@ -236,12 +236,6 @@
   <text alias="hero">
     <properties>
       <string>Sankari</string>
-    </properties>
-  </text>
-
-  <text alias="emperor">
-    <properties>
-      <string>Keisari</string>
     </properties>
   </text>
 

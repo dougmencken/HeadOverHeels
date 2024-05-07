@@ -68,14 +68,6 @@ void initAllegro ()
         allegro::initKeyboardHandler ();
 }
 
-void readPreferences ()
-{
-        bool preferencesOkay = GamePreferences::readPreferences( ospaths::pathToFile( ospaths::homePath(), "preferences.xml" ) );
-
-        if ( ! preferencesOkay )
-                gui::GuiManager::getInstance().setLanguage( "en_US" );
-}
-
 
 int main( int argc, char** argv )
 {
@@ -205,7 +197,8 @@ int main( int argc, char** argv )
         }
 
         initAllegro ();
-        readPreferences ();
+
+        GamePreferences::readPreferences( ospaths::pathToFile( ospaths::homePath(), "preferences.xml" ) );
 
         if ( newGameNoGui )
                 GameManager::getInstance().begin () ;

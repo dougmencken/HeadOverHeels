@@ -63,7 +63,12 @@ void CreateVideoMenu::act ()
                 LanguageText* textDrawRoomMiniatures = languageStrings->getTranslatedStringByAlias( "draw-miniatures" );
                 LanguageText* textCenterCameraOn = languageStrings->getTranslatedStringByAlias( "center-camera-on" );
 
-                this->screenSize = new Label( textScreenSize->getText() );
+                std::string widtHxHeight = util::number2string( GamePreferences::getScreenWidth() )
+                                                        + "×"
+                                                + util::number2string( GamePreferences::getScreenHeight() );
+                this->screenSize = new Label( textScreenSize->getText() + " " + widtHxHeight );
+                this->screenSize->changeColor( "cyan" );
+
                 this->fullScreen = new Label( textFullscreen->getText() );
                 this->drawShadows = new Label( textDrawShadows->getText() );
                 this->drawSceneryDecor = new Label( textDrawSceneryDecor->getText() );
@@ -185,9 +190,5 @@ void CreateVideoMenu::updateLabels ()
 
         // chooseGraphics has no value but action
 
-        screenSize->changeColor( "cyan" );
-        listOfOptions->setValueOf( screenSize, util::number2string( GamePreferences::getScreenWidth() )
-                                                                + " x "
-                                                  + util::number2string( GamePreferences::getScreenHeight() ) );
         listOfOptions->redraw ();
 }
