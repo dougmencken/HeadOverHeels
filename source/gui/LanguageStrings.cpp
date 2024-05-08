@@ -9,7 +9,7 @@
 #include "util.hpp"
 #include "ospaths.hpp"
 
-#define DUMP_XML        0
+#define DUMP_XML        1
 
 
 namespace gui
@@ -62,12 +62,12 @@ void LanguageStrings::parseFile( const std::string & fileName, std::vector< Lang
         tinyxml2::XMLElement* root = languageXml.FirstChildElement( "language" );
 
         #if defined( DUMP_XML ) && DUMP_XML
-                std::cout << "   <language" ;
+                std::cout << "<language" ;
                 const char * linguonym = root->Attribute( "name" );
                 if ( linguonym != nilPointer ) std::cout << " name=\"" << linguonym << "\"" ;
                 const char * iso = root->Attribute( "iso" );
                 if ( iso != nilPointer ) std::cout << " iso=\"" << iso << "\"" ;
-                std::cout << ">" << std::endl ;
+                std::cout << ">" << std::endl << std::endl ;
         #endif
 
         for ( tinyxml2::XMLElement* text = root->FirstChildElement( "text" ) ;
@@ -77,56 +77,53 @@ void LanguageStrings::parseFile( const std::string & fileName, std::vector< Lang
                 std::string alias = text->Attribute( "alias" );
                 LanguageText* langText = new LanguageText( alias );
 
-                #if defined( DUMP_XML ) && DUMP_XML
-                        std::cout << "     <text alias=\"" << alias << "\">" << std::endl ;
-                #endif
+        tinyxml2::XMLElement* properties = text->FirstChildElement( "properties" );
 
-                for ( tinyxml2::XMLElement* properties = text->FirstChildElement( "properties" ) ;
-                                properties != nilPointer ;
-                                        properties = properties->NextSiblingElement( "properties" ) )
+        if ( properties != nilPointer ) // the old and obsolete format
+        {
+                while ( properties != nilPointer )
                 {
                         const char * font = properties->Attribute( "font" );
                         const char * color = properties->Attribute( "color" );
-
-                        #if defined( DUMP_XML ) && DUMP_XML
-                                std::cout << "       <properties" <<
-                                                ( font != nilPointer ? std::string( " font=\"" ) + font + "\"" : "" ) <<
-                                                ( color != nilPointer ? std::string( " color=\"" ) + color + "\"" : "" ) <<
-                                                ">" << std::endl ;
-                        #endif
 
                         for ( tinyxml2::XMLElement* string = properties->FirstChildElement( "string" ) ;
                                         string != nilPointer ;
                                                 string = string->NextSiblingElement( "string" ) )
                         {
                                 if ( string->FirstChild() != nilPointer )
-                                {
-                                #if defined( DUMP_XML ) && DUMP_XML
-                                        std::cout << "         <string>" << string->FirstChild()->ToText()->Value() << "</string>" << std::endl ;
-                                #endif
                                         langText->addLine( LanguageLine( string->FirstChild()->ToText()->Value(),
                                                                            font != nilPointer ? font : "", color != nilPointer ? color : "" ) );
-                                }
                                 else
-                                {
-                                #if defined( DUMP_XML ) && DUMP_XML
-                                        std::cout << "         <string></string>" << std::endl ;
-                                #endif
                                         langText->addEmptyLine() ;
-                                }
                         }
-                        #if defined( DUMP_XML ) && DUMP_XML
-                                std::cout << "       </properties>" << std::endl ;
-                        #endif
+
+                        properties = properties->NextSiblingElement( "properties" );
                 }
+        }
+        else // the new format
+        {
+                for ( tinyxml2::XMLElement* string = text->FirstChildElement( "string" ) ;
+                                string != nilPointer ;
+                                        string = string->NextSiblingElement( "string" ) )
+                {
+                        const char * font = string->Attribute( "font" );
+                        const char * color = string->Attribute( "color" );
+
+                        if ( string->FirstChild() != nilPointer )
+                                langText->addLine( LanguageLine( string->FirstChild()->ToText()->Value(),
+                                                                   font != nilPointer ? font : "", color != nilPointer ? color : "" ) );
+                        else
+                                langText->addEmptyLine() ;
+                }
+        }
                 #if defined( DUMP_XML ) && DUMP_XML
-                        std::cout << "     </text>" << std::endl ;
+                        std::cout << langText->toXml() << std::endl ;
                 #endif
 
                 strings.push_back( langText );
         }
         #if defined( DUMP_XML ) && DUMP_XML
-                std::cout << "   </language>" << std::endl ;
+                std::cout << std::endl << "</language>" << std::endl ;
         #endif
 }
 

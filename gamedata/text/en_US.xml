@@ -2,357 +2,181 @@
 
 <language name="English">
 
-  <text alias="yep">
-    <properties>
-      <string>yes</string>
-    </properties>
-  </text>
-
-  <text alias="nope">
-    <properties>
-      <string>no</string>
-    </properties>
-  </text>
-
-  <text alias="new-game">
-    <properties>
-      <string>New game</string>
-    </properties>
-  </text>
-
-  <text alias="blacktooth-empire">
-    <properties>
-      <string>The Blacktooth Empire</string>
-    </properties>
-  </text>
-
-  <text alias="blacktooth">
-    <properties>
-      <string>Blacktooth</string>
-    </properties>
-  </text>
-
-  <text alias="egyptus">
-    <properties>
-      <string>Egyptus</string>
-    </properties>
-  </text>
-
-  <text alias="penitentiary">
-    <properties>
-      <string>Penitentiary</string>
-    </properties>
-  </text>
-
-  <text alias="byblos">
-    <properties>
-      <string>Byblos</string>
-    </properties>
-  </text>
-
-  <text alias="safari">
-    <properties>
-      <string>Safari</string>
-    </properties>
-  </text>
-
-  <text alias="load-old-game">
-    <properties>
-      <string>Previous game</string>
-    </properties>
-  </text>
-
-  <text alias="free-slot">
-    <properties>
-      <string>Free</string>
-    </properties>
-  </text>
-
-  <text alias="options-menu">
-    <properties>
-      <string>Options</string>
-    </properties>
-  </text>
-
-  <text alias="keys-menu">
-    <properties>
-      <string>Select keys</string>
-    </properties>
-  </text>
-
-  <text alias="movenorth">
-    <properties>
-      <string>Move North</string>
-    </properties>
-  </text>
-
-  <text alias="movesouth">
-    <properties>
-      <string>Move South</string>
-    </properties>
-  </text>
-
-  <text alias="moveeast">
-    <properties>
-      <string>Move East</string>
-    </properties>
-  </text>
-
-  <text alias="movewest">
-    <properties>
-      <string>Move West</string>
-    </properties>
-  </text>
-
-  <text alias="take">
-    <properties>
-      <string>Take or Drop</string>
-    </properties>
-  </text>
-
-  <text alias="jump">
-    <properties>
-      <string>Jump</string>
-    </properties>
-  </text>
-
-  <text alias="doughnut">
-    <properties>
-      <string>Fire Doughnut</string>
-    </properties>
-  </text>
-
-  <text alias="takeandjump">
-    <properties>
-      <string>Take &amp; Jump</string>
-    </properties>
-  </text>
-
-  <text alias="swap">
-    <properties>
-      <string>Swop</string>
-    </properties>
-  </text>
-
-  <text alias="pause">
-    <properties>
-      <string>Pause</string>
-    </properties>
-  </text>
-
-  <text alias="automap">
-    <properties>
-      <string>Show Map</string>
-    </properties>
-  </text>
-
-  <text alias="video-menu">
-    <properties>
-      <string>Adjust the graphics</string>
-    </properties>
-  </text>
-
-  <text alias="screen-size">
-    <properties>
-      <string>Size of screen</string>
-    </properties>
-  </text>
-
-  <text alias="full-screen">
-    <properties>
-      <string>In full screen</string>
-    </properties>
-  </text>
-
-  <text alias="draw-shadows">
-    <properties>
-      <string>Draw shadows</string>
-    </properties>
-  </text>
-
-  <text alias="draw-decor">
-    <properties>
-      <string>Draw scenery decor</string>
-    </properties>
-  </text>
-
-  <text alias="draw-miniatures">
-    <properties>
-      <string>Draw room miniatures</string>
-    </properties>
-  </text>
-
-  <text alias="center-camera-on">
-    <properties>
-      <string>Center the camera on</string>
-    </properties>
-  </text>
-
-  <text alias="room">
-    <properties>
-      <string>room</string>
-    </properties>
-  </text>
-
-  <text alias="character">
-    <properties>
-      <string>dude</string>
-    </properties>
-  </text>
-
-  <text alias="graphic-set">
-    <properties>
-      <string>Choose the set of graphics</string>
-    </properties>
-  </text>
-
-  <text alias="audio-menu">
-    <properties>
-      <string>Adjust the sound</string>
-    </properties>
-  </text>
-
-  <text alias="soundfx">
-    <properties>
-      <string>Volume of effects</string>
-    </properties>
-  </text>
-
-  <text alias="music">
-    <properties>
-      <string>Volume of music</string>
-    </properties>
-  </text>
-
-  <text alias="play-room-melodies">
-  <properties>
-      <string>Play the room tunes</string>
-    </properties>
-  </text>
-
-  <text alias="language-menu">
-    <properties>
-      <string>Choose the language</string>
-    </properties>
-  </text>
-
-  <text alias="show-credits">
-    <properties>
-      <string>Credits</string>
-    </properties>
-  </text>
-
-  <text alias="exit-game">
-    <properties>
-      <string>Exit</string>
-    </properties>
-  </text>
-
-  <text alias="confirm-quit">
-    <properties font="big" color="cyan">
-      <string>Use Escape key to quit the game</string>
-    </properties>
-  </text>
-
-  <text alias="confirm-resume">
-    <properties font="big" color="yellow">
-      <string>and another key to resume</string>
-    </properties>
-  </text>
-
-  <text alias="save-game">
-    <properties font="big" color="orange">
-      <string>The Reincarnation Fish gives a chance</string>
-    </properties>
-    <properties font="big" color="cycling">
-      <string>to save the game</string>
-    </properties>
-    <properties font="big" color="orange">
-      <string>by touching SPACE</string>
-    </properties>
-  </text>
-
-  <text alias="score">
-    <properties>
-      <string>Score</string>
-    </properties>
-  </text>
-
-  <text alias="explored-rooms">
-    <properties>
-      <string>Explored %d rooms</string>
-    </properties>
-  </text>
-
-  <text alias="liberated-planets">
-    <properties>
-      <string>Liberated %d planets</string>
-    </properties>
-  </text>
-
-  <text alias="rooms">
-    <properties>
-      <string>rooms</string>
-    </properties>
-  </text>
-
-  <text alias="planets">
-    <properties>
-      <string>planets</string>
-    </properties>
-  </text>
-
-  <text alias="dummy">
-    <properties>
-      <string>Dummy</string>
-    </properties>
-  </text>
-
-  <text alias="novice">
-    <properties>
-      <string>Novice</string>
-    </properties>
-  </text>
-
-  <text alias="spy">
-    <properties>
-      <string>Spy</string>
-    </properties>
-  </text>
-
-  <text alias="master-spy">
-    <properties>
-      <string>Master Spy</string>
-    </properties>
-  </text>
-
-  <text alias="hero">
-    <properties>
-      <string>Hero</string>
-    </properties>
-  </text>
-
-  <text alias="liberator">
-    <properties>
-      <string>Liberator</string>
-    </properties>
-  </text>
-
-  <text alias="final-text">
-    <properties font="big" color="multicolor">
-      <string>The people praise you !</string>
-      <string></string>
-    </properties>
-    <properties font="plain" color="white">
-      <string>This way, my dear friend,</string>
-      <string>our two heroes put an end to</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>the Blacktooth Emperor’s tyranny</string>
-    </properties>
-    <properties font="plain" color="yellow">
-      <string>once and for all</string>
-    </properties>
-  </text>
+     <text alias="yep">
+        <string>yes</string>
+     </text>
+     <text alias="nope">
+        <string>no</string>
+     </text>
+     <text alias="new-game">
+        <string>New game</string>
+     </text>
+     <text alias="blacktooth-empire">
+        <string>The Blacktooth Empire</string>
+     </text>
+     <text alias="blacktooth">
+        <string>Blacktooth</string>
+     </text>
+     <text alias="egyptus">
+        <string>Egyptus</string>
+     </text>
+     <text alias="penitentiary">
+        <string>Penitentiary</string>
+     </text>
+     <text alias="byblos">
+        <string>Byblos</string>
+     </text>
+     <text alias="safari">
+        <string>Safari</string>
+     </text>
+     <text alias="load-old-game">
+        <string>Old game</string>
+     </text>
+     <text alias="free-slot">
+        <string>Free</string>
+     </text>
+     <text alias="options-menu">
+        <string>Options</string>
+     </text>
+     <text alias="keys-menu">
+        <string>Select keys</string>
+     </text>
+     <text alias="movenorth">
+        <string>Move North</string>
+     </text>
+     <text alias="movesouth">
+        <string>Move South</string>
+     </text>
+     <text alias="moveeast">
+        <string>Move East</string>
+     </text>
+     <text alias="movewest">
+        <string>Move West</string>
+     </text>
+     <text alias="take">
+        <string>Take or Drop</string>
+     </text>
+     <text alias="jump">
+        <string>Jump</string>
+     </text>
+     <text alias="doughnut">
+        <string>Fire Doughnut</string>
+     </text>
+     <text alias="takeandjump">
+        <string>Take & Jump</string>
+     </text>
+     <text alias="swap">
+        <string>Swop</string>
+     </text>
+     <text alias="pause">
+        <string>Pause</string>
+     </text>
+     <text alias="automap">
+        <string>View Map</string>
+     </text>
+     <text alias="video-menu">
+        <string>Adjust the graphics</string>
+     </text>
+     <text alias="screen-size">
+        <string>Size of screen</string>
+     </text>
+     <text alias="full-screen">
+        <string>In full screen</string>
+     </text>
+     <text alias="draw-shadows">
+        <string>Draw shadows</string>
+     </text>
+     <text alias="draw-decor">
+        <string>Draw scenery decor</string>
+     </text>
+     <text alias="show-miniatures">
+        <string>Show miniatures of rooms</string>
+     </text>
+     <text alias="center-camera-on">
+        <string>Center the camera on</string>
+     </text>
+     <text alias="room">
+        <string>room</string>
+     </text>
+     <text alias="character">
+        <string>dude</string>
+     </text>
+     <text alias="graphic-set">
+        <string>Choose the set of graphics</string>
+     </text>
+     <text alias="audio-menu">
+        <string>Adjust the sound</string>
+     </text>
+     <text alias="soundfx">
+        <string>Volume of effects</string>
+     </text>
+     <text alias="music">
+        <string>Volume of music</string>
+     </text>
+     <text alias="play-room-melodies">
+        <string>Play the room tunes</string>
+     </text>
+     <text alias="language-menu">
+        <string>Choose the language</string>
+     </text>
+     <text alias="show-credits">
+        <string>Credits</string>
+     </text>
+     <text alias="exit-game">
+        <string>Exit</string>
+     </text>
+     <text alias="confirm-quit">
+        <string font="big" color="cyan">Use Escape key to quit the game</string>
+     </text>
+     <text alias="confirm-resume">
+        <string font="big" color="yellow">and another key to resume</string>
+     </text>
+     <text alias="save-game">
+        <string font="big" color="cyan">The Reincarnation Fish</string>
+        <string font="big" color="orange">gives a chance</string>
+        <string font="big" color="cycling">to save the game</string>
+        <string font="big" color="orange">by touching SPACE</string>
+     </text>
+     <text alias="score">
+        <string>Score</string>
+     </text>
+     <text alias="explored-rooms">
+        <string>Explored %d rooms</string>
+     </text>
+     <text alias="liberated-planets">
+        <string>Liberated %d planets</string>
+     </text>
+     <text alias="rooms">
+        <string>rooms</string>
+     </text>
+     <text alias="planets">
+        <string>planets</string>
+     </text>
+     <text alias="dummy">
+        <string>Dummy</string>
+     </text>
+     <text alias="novice">
+        <string>Novice</string>
+     </text>
+     <text alias="spy">
+        <string>Spy</string>
+     </text>
+     <text alias="master-spy">
+        <string>Master Spy</string>
+     </text>
+     <text alias="hero">
+        <string>Hero</string>
+     </text>
+     <text alias="liberator">
+        <string>Liberator</string>
+     </text>
+     <text alias="final-text">
+        <string font="big" color="multicolor">The people praise you !</string>
+        <string></string>
+        <string font="plain" color="white">This way, my dear friend,</string>
+        <string font="plain" color="cyan">our two heroes put an end to the</string>
+        <string font="plain" color="orange">Blacktooth Emperor’s tyranny,</string>
+        <string font="plain" color="yellow">once and for all.</string>
+     </text>
 
 </language>

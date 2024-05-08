@@ -31,9 +31,7 @@ cat /ucrt64/include/allegro5/platform/almngw32.h | grep unistd\.h
 # the following fixes " implicit declaration of function '_spawnv'; did you mean 'spawnv'? "
 # which comes from libtool
 
-sed -i 's/_spawnv/spawnv/' ./libtool
 sed -i 's/_spawnv/spawnv/' ./ltmain.sh
-##sed -i 's/_spawnv/spawnv/' `which libtool` ; grep spawnv `which libtool`
 
 export CPPFLAGS="-D_XOPEN_SOURCE=600" ; echo $CPPFLAGS
 
@@ -48,6 +46,8 @@ DEPS_PREFIX=/ucrt64
 ./configure --prefix=${INSTALL_PREFIX} \
      --with-allegro5 --with-allegro-prefix=${DEPS_PREFIX} \
 	 --with-libpng-prefix=${DEPS_PREFIX} --with-ogg-prefix=${DEPS_PREFIX} --with-tinyxml2-prefix=${DEPS_PREFIX}
+
+[ -f ./libtool ] && sed -i 's/_spawnv/spawnv/' ./libtool ; grep spawnv ./libtool
 
 echo
 

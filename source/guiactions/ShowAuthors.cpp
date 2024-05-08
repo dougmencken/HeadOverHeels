@@ -18,6 +18,12 @@
 
 #include <tinyxml2.h>
 
+#define REGENERATE_CREDITS_FILE         1
+
+#if defined( REGENERATE_CREDITS_FILE ) && REGENERATE_CREDITS_FILE
+#  include <fstream>
+#endif
+
 using gui::ShowAuthors ;
 
 
@@ -28,7 +34,7 @@ ShowAuthors::ShowAuthors( )
         , initialY( 0 )
         , loadingScreen( )
 {
-        readCreditsText( ospaths::pathToFile( ospaths::sharePath() + "text", "credits.xml" ) );
+        readCreditsText( "credits.xml" );
 }
 
 ShowAuthors::~ShowAuthors( )
@@ -39,14 +45,15 @@ ShowAuthors::~ShowAuthors( )
 
 void ShowAuthors::readCreditsText( const std::string & fileName )
 {
-        std::cout << "reading the credits from \"" << fileName << "\"" << std::endl ;
+        std::string filePath = ospaths::pathToFile( ospaths::sharePath() + "text", fileName );
+        std::cout << "reading the credits from \"" << fileName << "\" (" << filePath << ")" << std::endl ;
 
         tinyxml2::XMLDocument creditsXml ;
-        tinyxml2::XMLError result = creditsXml.LoadFile( fileName.c_str () );
+        tinyxml2::XMLError result = creditsXml.LoadFile( filePath.c_str () );
         if ( result != tinyxml2::XML_SUCCESS ) {
-                std::cerr << "can't read XML file \"" << fileName << "\"" << std::endl ;
+                std::cout << "can't read XML file " << filePath << std::endl ;
 
-                this->creditsText = new LanguageText( "credits" ) ;
+                this->creditsText = new LanguageText( "absent-credits" ) ;
                 this->creditsText->addLine( LanguageLine( "and where is my credits.xml ?", "big", "white" ) );
                 return ;
         }
@@ -60,28 +67,39 @@ void ShowAuthors::readCreditsText( const std::string & fileName )
                 std::string alias = text->Attribute( "alias" );
                 this->creditsText = new LanguageText( alias );
 
-                for ( tinyxml2::XMLElement* properties = text->FirstChildElement( "properties" ) ;
-                                properties != nilPointer ;
-                                        properties = properties->NextSiblingElement( "properties" ) )
+                for ( tinyxml2::XMLElement* string = text->FirstChildElement( "string" ) ;
+                                string != nilPointer ;
+                                        string = string->NextSiblingElement( "string" ) )
                 {
-                        const char * font = properties->Attribute( "font" );
-                        const char * color = properties->Attribute( "color" );
+                        const char * font = string->Attribute( "font" );
+                        const char * color = string->Attribute( "color" );
 
-                        for ( tinyxml2::XMLElement* string = properties->FirstChildElement( "string" ) ;
-                                        string != nilPointer ;
-                                                string = string->NextSiblingElement( "string" ) )
-                        {
-                                if ( string->FirstChild() != nilPointer )
-                                {
-                                        this->creditsText->addLine( LanguageLine ( string->FirstChild()->ToText()->Value(),
+                        if ( string->FirstChild() != nilPointer )
+                                this->creditsText->addLine( LanguageLine ( string->FirstChild()->ToText()->Value(),
                                                                                         font != nilPointer ? font : "",
                                                                                         color != nilPointer ? color : "" ) );
-                                } else
-                                {
-                                        this->creditsText->addEmptyLine() ;
-                                }
-                        }
+                        else
+                                this->creditsText->addEmptyLine() ;
                 }
+
+        #if defined( REGENERATE_CREDITS_FILE ) && REGENERATE_CREDITS_FILE
+                std::string newFileName = fileName + ".new" ;
+                std::string newFilePath = ospaths::pathToFile( ospaths::homePath(), newFileName );
+                std::ofstream file( newFilePath );
+                if ( file.is_open() ) {
+                        file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl << std::endl ;
+                        std::string rootTag = "credits" ;
+                        file << "<" << rootTag << ">" << std::endl << std::endl ;
+
+                        const std::string & creditsTextXml = this->creditsText->toXml() ;
+                        file << creditsTextXml << std::endl ;
+
+                        file << std::endl << "</" << rootTag << ">" << std::endl ;
+                        file.close() ;
+
+                        std::cout << "wrote \"" << newFileName << "\" (" << newFilePath << ")" << std::endl ;
+                }
+        #endif
         }
 }
 

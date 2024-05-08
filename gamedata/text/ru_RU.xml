@@ -176,7 +176,7 @@
     </properties>
   </text>
 
-  <text alias="draw-miniatures">
+  <text alias="show-miniatures">
     <properties>
       <string>рисовать миниатюры</string>
     </properties>

@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 
+#include <sstream>
+
 
 namespace gui
 {
@@ -49,9 +51,28 @@ public:
                 : text( theText )
                 , fontName( whichFont )
                 , color( whichColor )
-        {}
+        {
+                if ( this->fontName == "plain" ) this->fontName = "" ;
+        }
 
-};
+        std::string toXml( const std::string & tag = "string" ) const
+        {
+                std::ostringstream out ;
+
+                out << "<" << tag ;
+                if ( ! this->fontName.empty() ) out << " font=\"" << this->fontName << "\"" ;
+                if ( ! this->color.empty() ) out << " color=\"" << this->color << "\"" ;
+                out << ">" ;
+
+                if ( ! this->text.empty() ) out << this->text ;
+
+                out << "</" << tag << ">" ;
+
+                return out.str ();
+        }
+
+} ;
+
 
 class LanguageText
 {
@@ -86,7 +107,7 @@ public:
 
         const std::string & getText () const {  return this->getFirstLine().getText() ;  }
 
-        unsigned int howManyLinesOfText () {  return this->lines.size() ;  }
+        unsigned int howManyLinesOfText () const {  return this->lines.size() ;  }
 
         void prefixWith( const std::string & prefix )
         {
@@ -94,7 +115,31 @@ public:
                         this->lines[ i ].setText( prefix + this->lines[ i ].getText() );
         }
 
-};
+        std::string toXml( const std::string & tag = "text" ) const
+        {
+                std::ostringstream out ;
+
+                std::string spacing = "     " ;
+                std::string moreSpacing = "   " ;
+
+                out << spacing << "<" << tag ;
+                if ( ! this->alias.empty() ) out << " alias=\"" << this->alias << "\"" ;
+                out << ">" ;
+
+                unsigned int howManyLines = howManyLinesOfText() ;
+                for ( unsigned int l = 0 ; l < howManyLines ; ++ l ) {
+                        out << std::endl ;
+                        out << spacing << moreSpacing ;
+                        out << getNthLine( l ).toXml() ;
+                }
+                if ( howManyLines > 0 ) out << std::endl ;
+
+                out << spacing << "</" << tag << ">" ;
+
+                return out.str ();
+        }
+
+} ;
 
 }
 

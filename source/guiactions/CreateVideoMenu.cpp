@@ -60,7 +60,7 @@ void CreateVideoMenu::act ()
                 LanguageText* textFullscreen = languageStrings->getTranslatedStringByAlias( "full-screen" );
                 LanguageText* textDrawShadows = languageStrings->getTranslatedStringByAlias( "draw-shadows" );
                 LanguageText* textDrawSceneryDecor = languageStrings->getTranslatedStringByAlias( "draw-decor" );
-                LanguageText* textDrawRoomMiniatures = languageStrings->getTranslatedStringByAlias( "draw-miniatures" );
+                LanguageText* textDrawRoomMiniatures = languageStrings->getTranslatedStringByAlias( "show-miniatures" );
                 LanguageText* textCenterCameraOn = languageStrings->getTranslatedStringByAlias( "center-camera-on" );
 
                 std::string widtHxHeight = util::number2string( GamePreferences::getScreenWidth() )
