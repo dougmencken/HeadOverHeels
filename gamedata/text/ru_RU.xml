@@ -132,8 +132,9 @@
         <string font="big" color="yellow">или другую клавишу для продолжения</string>
      </text>
      <text alias="save-game">
-        <string font="big" color="orange">Рыба Реинкарнации даёт тебе</string>
-        <string font="big" color="orange">шанс сохранить игру</string>
+        <string font="big" color="cyan">Рыба Реинкарнации</string>
+        <string font="big" color="orange">даёт шанс</string>
+        <string font="big" color="cycling">сохранить игру</string>
         <string font="big" color="orange">коснувшись пробела (space)</string>
      </text>
      <text alias="score">
