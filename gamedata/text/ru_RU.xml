@@ -2,322 +2,181 @@
 
 <language name="Русский" iso="ru_RU">
 
-  <text alias="yep">
-    <properties>
-      <string>да</string>
-    </properties>
-  </text>
-
-  <text alias="nope">
-    <properties>
-      <string>нет</string>
-    </properties>
-  </text>
-
-  <text alias="new-game">
-    <properties>
-      <string>Новая игра</string>
-    </properties>
-  </text>
-
-  <text alias="blacktooth-empire">
-    <properties>
-      <string>Империя Блэктут</string>
-    </properties>
-  </text>
-
-  <text alias="blacktooth">
-    <properties>
-      <string>Блэктут</string>
-    </properties>
-  </text>
-
-  <text alias="egyptus">
-    <properties>
-      <string>Египтус</string>
-    </properties>
-  </text>
-
-  <text alias="penitentiary">
-    <properties>
-      <string>Пенитенциари</string>
-    </properties>
-  </text>
-
-  <text alias="byblos">
-    <properties>
-      <string>Библос</string>
-    </properties>
-  </text>
-
-  <text alias="safari">
-    <properties>
-      <string>Сафари</string>
-    </properties>
-  </text>
-
-  <text alias="load-old-game">
-    <properties>
-      <string>Загрузить игру</string>
-    </properties>
-  </text>
-
-  <text alias="keys-menu">
-    <properties>
-      <string>Клавиши</string>
-    </properties>
-  </text>
-
-  <text alias="movenorth">
-    <properties>
-      <string>влево</string>
-    </properties>
-  </text>
-
-  <text alias="movesouth">
-    <properties>
-      <string>вправо</string>
-    </properties>
-  </text>
-
-  <text alias="moveeast">
-    <properties>
-      <string>вверх</string>
-    </properties>
-  </text>
-
-  <text alias="movewest">
-    <properties>
-      <string>вниз</string>
-    </properties>
-  </text>
-
-  <text alias="take">
-    <properties>
-      <string>взять</string>
-    </properties>
-  </text>
-
-  <text alias="jump">
-    <properties>
-      <string>прыгнуть</string>
-    </properties>
-  </text>
-
-  <text alias="doughnut">
-    <properties>
-      <string>выпустить пончик</string>
-    </properties>
-  </text>
-
-  <text alias="takeandjump">
-    <properties>
-      <string>взять и прыгнуть</string>
-    </properties>
-  </text>
-
-  <text alias="swap">
-    <properties>
-      <string>поменять персонажа</string>
-    </properties>
-  </text>
-
-  <text alias="pause">
-    <properties>
-      <string>пауза</string>
-    </properties>
-  </text>
-
-  <text alias="automap">
-    <properties>
-      <string>показать карту</string>
-    </properties>
-  </text>
-
-  <text alias="confirm-quit">
-    <properties font="big" color="cyan">
-      <string>нажмите Escape для выхода из игры</string>
-    </properties>
-  </text>
-
-  <text alias="confirm-resume">
-    <properties font="big" color="yellow">
-      <string>или другую клавишу для продолжения</string>
-    </properties>
-  </text>
-
-  <text alias="video-menu">
-    <properties>
-      <string>видео</string>
-    </properties>
-  </text>
-
-  <text alias="screen-size">
-    <properties>
-      <string>размеры экрана</string>
-    </properties>
-  </text>
-
-  <text alias="full-screen">
-    <properties>
-      <string>во весь экран</string>
-    </properties>
-  </text>
-
-  <text alias="draw-shadows">
-    <properties>
-      <string>рисовать тени</string>
-    </properties>
-  </text>
-
-  <text alias="draw-decor">
-    <properties>
-      <string>рисовать декорации</string>
-    </properties>
-  </text>
-
-  <text alias="show-miniatures">
-    <properties>
-      <string>рисовать миниатюры</string>
-    </properties>
-  </text>
-
-  <text alias="center-camera-on">
-    <properties>
-      <string>центрировать на</string>
-    </properties>
-  </text>
-
-  <text alias="room">
-    <properties>
-      <string>комнате</string>
-    </properties>
-  </text>
-
-  <text alias="character">
-    <properties>
-      <string>персонаже</string>
-    </properties>
-  </text>
-
-  <text alias="graphic-set">
-    <properties>
-      <string>выбрать графику</string>
-    </properties>
-  </text>
-
-  <text alias="audio-menu">
-    <properties>
-      <string>аудио</string>
-    </properties>
-  </text>
-
-  <text alias="soundfx">
-    <properties>
-      <string>громкость эффектов</string>
-    </properties>
-  </text>
-
-  <text alias="music">
-    <properties>
-      <string>громкость музыки</string>
-    </properties>
-  </text>
-
-  <text alias="play-room-melodies">
-  <properties>
-      <string>играть мелодии комнат</string>
-    </properties>
-  </text>
-
-  <text alias="show-credits">
-    <properties>
-      <string>Титры</string>
-    </properties>
-  </text>
-
-  <text alias="exit-game">
-    <properties>
-      <string>Выход</string>
-    </properties>
-  </text>
-
-  <text alias="save-game">
-    <properties font="big" color="orange">
-      <string>Рыба Реинкарнации даёт тебе</string>
-    </properties>
-    <properties font="big" color="orange">
-      <string>возможность сохранить игру</string>
-    </properties>
-    <properties font="big" color="orange">
-      <string>нажав на пробел (space)</string>
-    </properties>
-  </text>
-
-  <text alias="free-slot">
-    <properties>
-      <string>свободно</string>
-    </properties>
-  </text>
-
-  <text alias="score">
-    <properties>
-      <string>счёт</string>
-    </properties>
-  </text>
-
-  <text alias="explored-rooms">
-    <properties>
-      <string>исследованных комнат %d</string>
-    </properties>
-  </text>
-
-  <text alias="liberated-planets">
-    <properties>
-      <string>освобождённых планет %d</string>
-    </properties>
-  </text>
-
-  <text alias="rooms">
-    <properties>
-      <string>комнат</string>
-    </properties>
-  </text>
-
-  <text alias="planets">
-    <properties>
-      <string>планет</string>
-    </properties>
-  </text>
-
-  <text alias="dummy">
-    <properties>
-      <string>глупышка</string>
-    </properties>
-  </text>
-
-  <text alias="novice">
-    <properties>
-      <string>новичок</string>
-    </properties>
-  </text>
-
-  <text alias="spy">
-    <properties>
-      <string>шпион</string>
-    </properties>
-  </text>
-
-  <text alias="master-spy">
-    <properties>
-      <string>мастер шпион</string>
-    </properties>
-  </text>
-
-  <text alias="hero">
-    <properties>
-      <string>герой</string>
-    </properties>
-  </text>
+     <text alias="yep">
+        <string>да</string>
+     </text>
+     <text alias="nope">
+        <string>нет</string>
+     </text>
+     <text alias="new-game">
+        <string>Новая игра</string>
+     </text>
+     <text alias="blacktooth-empire">
+        <string>Империя Блэктут</string>
+     </text>
+     <text alias="blacktooth">
+        <string>Блэктут</string>
+     </text>
+     <text alias="egyptus">
+        <string>Египтус</string>
+     </text>
+     <text alias="penitentiary">
+        <string>Пенитенциари</string>
+     </text>
+     <text alias="byblos">
+        <string>Библос</string>
+     </text>
+     <text alias="safari">
+        <string>Сафари</string>
+     </text>
+     <text alias="load-old-game">
+        <string>Предыдущая игра</string>
+     </text>
+     <text alias="free-slot">
+        <string>свободно</string>
+     </text>
+     <text alias="options-menu">
+        <string>Опции</string>
+     </text>
+     <text alias="keys-menu">
+        <string>Выбрать клавиши</string>
+     </text>
+     <text alias="movenorth">
+        <string>на север</string>
+     </text>
+     <text alias="movesouth">
+        <string>на юг</string>
+     </text>
+     <text alias="moveeast">
+        <string>на восток</string>
+     </text>
+     <text alias="movewest">
+        <string>на запад</string>
+     </text>
+     <text alias="take">
+        <string>взять или положить</string>
+     </text>
+     <text alias="jump">
+        <string>прыгнуть</string>
+     </text>
+     <text alias="doughnut">
+        <string>выпустить пончик</string>
+     </text>
+     <text alias="takeandjump">
+        <string>взять и прыгнуть</string>
+     </text>
+     <text alias="swap">
+        <string>поменять персонажа</string>
+     </text>
+     <text alias="pause">
+        <string>пауза</string>
+     </text>
+     <text alias="automap">
+        <string>показать карту</string>
+     </text>
+     <text alias="video-menu">
+        <string>Параметры графики</string>
+     </text>
+     <text alias="screen-size">
+        <string>размеры экрана</string>
+     </text>
+     <text alias="full-screen">
+        <string>во весь экран</string>
+     </text>
+     <text alias="draw-shadows">
+        <string>рисовать тени</string>
+     </text>
+     <text alias="draw-decor">
+        <string>рисовать декорации</string>
+     </text>
+     <text alias="show-miniatures">
+        <string>рисовать миниатюры</string>
+     </text>
+     <text alias="center-camera-on">
+        <string>центрировать на</string>
+     </text>
+     <text alias="room">
+        <string>комнате</string>
+     </text>
+     <text alias="character">
+        <string>персонаже</string>
+     </text>
+     <text alias="graphic-set">
+        <string>выбрать набор графики</string>
+     </text>
+     <text alias="audio-menu">
+        <string>Параметры звука</string>
+     </text>
+     <text alias="soundfx">
+        <string>громкость эффектов</string>
+     </text>
+     <text alias="music">
+        <string>громкость музыки</string>
+     </text>
+     <text alias="play-room-melodies">
+        <string>играть мелодии комнат</string>
+     </text>
+     <text alias="language-menu">
+        <string>Выбрать язык</string>
+     </text>
+     <text alias="show-credits">
+        <string>Титры</string>
+     </text>
+     <text alias="exit-game">
+        <string>Выход</string>
+     </text>
+     <text alias="confirm-quit">
+        <string font="big" color="cyan">нажмите Escape для выхода из игры</string>
+     </text>
+     <text alias="confirm-resume">
+        <string font="big" color="yellow">или другую клавишу для продолжения</string>
+     </text>
+     <text alias="save-game">
+        <string font="big" color="cyan">Рыба Реинкарнации</string>
+        <string font="big" color="orange">даёт шанс</string>
+        <string font="big" color="cycling">сохранить игру</string>
+        <string font="big" color="orange">коснувшись пробела (space)</string>
+     </text>
+     <text alias="score">
+        <string>счёт игры</string>
+     </text>
+     <text alias="explored-rooms">
+        <string>исследованных комнат %d</string>
+     </text>
+     <text alias="liberated-planets">
+        <string>освобождённых планет %d</string>
+     </text>
+     <text alias="rooms">
+        <string>комнат</string>
+     </text>
+     <text alias="planets">
+        <string>планет</string>
+     </text>
+     <text alias="dummy">
+        <string>глупышка</string>
+     </text>
+     <text alias="novice">
+        <string>новичок</string>
+     </text>
+     <text alias="spy">
+        <string>шпион</string>
+     </text>
+     <text alias="master-spy">
+        <string>мастер шпион</string>
+     </text>
+     <text alias="hero">
+        <string>герой</string>
+     </text>
+     <text alias="liberator">
+        <string>освободитель</string>
+     </text>
+     <text alias="final-text">
+        <string font="big" color="multicolor">Люди восхваляют тебя !</string>
+        <string></string>
+        <string color="white">Вот так, мой дорогой друг,</string>
+        <string color="cyan">два наших героя положили конец</string>
+        <string color="orange">тирании Императора Блэктут,</string>
+        <string color="yellow">раз и навсегда.</string>
+     </text>
 
 </language>
