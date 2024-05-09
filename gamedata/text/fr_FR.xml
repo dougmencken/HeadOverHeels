@@ -135,7 +135,7 @@
         <string font="big" color="cyan">Le poisson de réincarnation</string>
         <string font="big" color="orange">donne une chance</string>
         <string font="big" color="cycling">de sauvegarder le jeu</string>
-        <string font="big" color="orange">en touchant ESPACE</string>
+        <string font="big" color="orange">en touchant Espace</string>
      </text>
      <text alias="score">
         <string>Score</string>
@@ -173,10 +173,10 @@
      <text alias="final-text">
         <string font="big" color="multicolor">Le peuple te exalte !</string>
         <string></string>
-        <string font="plain" color="white">Ainsi, mon cher ami,</string>
-        <string font="plain" color="cyan">nos deux héros mettent fin à la</string>
-        <string font="plain" color="orange">tyrannie de l’Empereur de Blacktooth,</string>
-        <string font="plain" color="yellow">une fois pour toutes.</string>
+        <string color="white">Ainsi, mon cher ami,</string>
+        <string color="cyan">nos deux héros mettent fin à la</string>
+        <string color="orange">tyrannie de l’Empereur de Blacktooth,</string>
+        <string color="yellow">une fois pour toutes.</string>
      </text>
 
 </language>

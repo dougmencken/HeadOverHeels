@@ -27,10 +27,10 @@ void CreateOptionsMenu::act ()
 
                 LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
-                Label* defineKeys = new Label( languageStrings->getTranslatedStringByAlias( "keys-menu" )->getText() );
-                Label* adjustAudio = new Label( languageStrings->getTranslatedStringByAlias( "audio-menu" )->getText() );
-                Label* adjustVideo = new Label( languageStrings->getTranslatedStringByAlias( "video-menu" )->getText() );
-                Label* chooseLanguage = new Label( languageStrings->getTranslatedStringByAlias( "language-menu" )->getText() );
+                Label* defineKeys = new Label( languageStrings->getTranslatedTextByAlias( "keys-menu" )->getText() );
+                Label* adjustAudio = new Label( languageStrings->getTranslatedTextByAlias( "audio-menu" )->getText() );
+                Label* adjustVideo = new Label( languageStrings->getTranslatedTextByAlias( "video-menu" )->getText() );
+                Label* chooseLanguage = new Label( languageStrings->getTranslatedTextByAlias( "language-menu" )->getText() );
 
                 defineKeys->setAction( new CreateKeysMenu() );
                 adjustAudio->setAction( new CreateAudioMenu() );

@@ -25,7 +25,7 @@ class LanguageLine
 
 private:
 
-        std::string text ;
+        std::string line ;
 
         std::string fontName ;
 
@@ -33,22 +33,22 @@ private:
 
 public:
 
-        const std::string & getText() const {  return this->text ;  }
+        const std::string & getString () const {  return this->line ;  }
 
-        void setText( const std::string & newText ) {  this->text = newText ;  }
+        void setString( const std::string & newString ) {  this->line = newString ;  }
 
-        bool isBigHeight() const {  return ( this->fontName == "big" );  }
+        bool isBigHeight () const {  return this->fontName == "big" ;  }
 
-        const std::string & getColor() const {  return this->color ;  }
+        const std::string & getColor () const {  return this->color ;  }
 
-        LanguageLine( const std::string & theText )
-                : text( theText )
+        LanguageLine( const std::string & theLine )
+                : line( theLine )
                 , fontName( "" )
                 , color( "" )
         {}
 
-        LanguageLine( const std::string & theText, const std::string & whichFont, const std::string & whichColor )
-                : text( theText )
+        LanguageLine( const std::string & theLine, const std::string & whichFont, const std::string & whichColor )
+                : line( theLine )
                 , fontName( whichFont )
                 , color( whichColor )
         {
@@ -64,7 +64,7 @@ public:
                 if ( ! this->color.empty() ) out << " color=\"" << this->color << "\"" ;
                 out << ">" ;
 
-                if ( ! this->text.empty() ) out << this->text ;
+                if ( ! this->line.empty() ) out << this->line ;
 
                 out << "</" << tag << ">" ;
 
@@ -105,14 +105,27 @@ public:
 
         const LanguageLine & getNthLine ( size_t number ) const {  return this->lines[ number ] ;  }
 
-        const std::string & getText () const {  return this->getFirstLine().getText() ;  }
+        std::string getText () const
+        {
+                unsigned int howManyLines = howManyLinesOfText() ;
+
+                if ( howManyLines == 0 ) return "" ;
+                if ( howManyLines == 1 ) return getFirstLine().getString () ;
+
+                std::ostringstream text ;
+                for ( unsigned int n = 0 ; n < howManyLines ; ++ n ) {
+                        text << getNthLine( n ).getString() ;
+                        if ( ( n + 1 ) < howManyLines ) text << std::endl ;
+                }
+                return text.str ();
+        }
 
         unsigned int howManyLinesOfText () const {  return this->lines.size() ;  }
 
         void prefixWith( const std::string & prefix )
         {
                 for ( unsigned int i = 0 ; i < this->lines.size() ; ++ i )
-                        this->lines[ i ].setText( prefix + this->lines[ i ].getText() );
+                        this->lines[ i ].setString( prefix + this->lines[ i ].getString () );
         }
 
         std::string toXml( const std::string & tag = "text" ) const

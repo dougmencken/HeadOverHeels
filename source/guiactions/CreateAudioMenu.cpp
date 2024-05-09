@@ -32,13 +32,13 @@ void CreateAudioMenu::act ()
 {
         LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
-        LanguageText* langStringEffects = languageStrings->getTranslatedStringByAlias( "soundfx" );
-        LanguageText* langStringMusic = languageStrings->getTranslatedStringByAlias( "music" );
+        LanguageText* langStringEffects = languageStrings->getTranslatedTextByAlias( "soundfx" );
+        LanguageText* langStringMusic = languageStrings->getTranslatedTextByAlias( "music" );
 
-        LanguageText* langStringRoomTunes = languageStrings->getTranslatedStringByAlias( "play-room-melodies" );
+        LanguageText* langStringRoomTunes = languageStrings->getTranslatedTextByAlias( "play-room-melodies" );
 
-        std::string yeah = languageStrings->getTranslatedStringByAlias( "yep" )-> getText ();
-        std::string nope = languageStrings->getTranslatedStringByAlias( "nope" )->getText ();
+        std::string yeah = languageStrings->getTranslatedTextByAlias( "yep" )-> getText ();
+        std::string nope = languageStrings->getTranslatedTextByAlias( "nope" )->getText ();
 
         std::stringstream ss;
 

@@ -9,7 +9,8 @@
 #include "util.hpp"
 #include "ospaths.hpp"
 
-#define DUMP_XML        1
+#define DUMP_XML                0
+#define DUMP_UPDATE_XML         1
 
 
 namespace gui
@@ -17,13 +18,49 @@ namespace gui
 
 LanguageStrings::LanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings )
 {
-        parseFile( ospaths::pathToFile( ospaths::sharePath() + "text", file ), this->strings );
+        parseFile( file, this->strings );
 
         if ( file != fileWithGuaranteedStrings ) {
-                parseFile( ospaths::pathToFile( ospaths::sharePath() + "text", fileWithGuaranteedStrings ), this->backupStrings );
+                parseFile( fileWithGuaranteedStrings, this->backupStrings );
                 for ( unsigned int i = 0 ; i < backupStrings.size () ; i ++ )
                         backupStrings[ i ]->prefixWith( "_*" + fileWithGuaranteedStrings.substr( 0, 2 ) + "*_ " );
         }
+
+#if defined( DUMP_UPDATE_XML ) && DUMP_UPDATE_XML
+        std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl << std::endl ;
+
+        const char * linguonym = nilPointer ;
+        const char * iso = nilPointer ;
+
+        tinyxml2::XMLDocument translatedStringsXml ;
+        tinyxml2::XMLError result = translatedStringsXml.LoadFile( ospaths::pathToFile( ospaths::sharePath() + "text", file ).c_str () );
+        if ( result == tinyxml2::XML_SUCCESS ) {
+                tinyxml2::XMLElement * root = translatedStringsXml.FirstChildElement( "language" );
+                linguonym = root->Attribute( "name" );
+                iso = root->Attribute( "iso" );
+        }
+
+        std::cout << "<language" ;
+        if ( linguonym != nilPointer ) std::cout << " name=\"" << linguonym << "\"" ;
+        if ( iso != nilPointer ) std::cout << " iso=\"" << iso << "\"" ;
+        std::cout << ">" << std::endl << std::endl ;
+
+        for ( unsigned int i = 0 ; i < this->backupStrings.size () ; ++ i )
+        {
+                LanguageText * text = this->backupStrings[ i ];
+                const std::string & alias = text->getAlias() ;
+
+                for ( unsigned int j = 0 ; j < this->strings.size () ; ++ j )
+                        if ( this->strings[ j ]->getAlias() == alias ) {
+                                text = this->strings[ j ];
+                                break ;
+                        }
+
+                std::cout << text->toXml() << std::endl ;
+        }
+
+        std::cout << std::endl << "</language>" << std::endl ;
+#endif
 }
 
 LanguageStrings::~LanguageStrings()
@@ -35,7 +72,7 @@ LanguageStrings::~LanguageStrings()
         backupStrings.clear();
 }
 
-LanguageText* LanguageStrings::getTranslatedStringByAlias( const std::string & alias )
+LanguageText* LanguageStrings::getTranslatedTextByAlias( const std::string & alias )
 {
         for ( size_t i = 0 ; i < strings.size () ; i ++ )
                 if ( strings[ i ]->getAlias() == alias ) return strings[ i ];
@@ -50,16 +87,17 @@ LanguageText* LanguageStrings::getTranslatedStringByAlias( const std::string & a
 
 void LanguageStrings::parseFile( const std::string & fileName, std::vector< LanguageText * > & strings )
 {
-        std::cout << "parsing \"" << fileName << "\"" << std::endl ;
+        std::string filePath = ospaths::pathToFile( ospaths::sharePath() + "text", fileName );
+        std::cout << "parsing \"" << fileName << "\" (" << filePath << ")" << std::endl ;
 
-        tinyxml2::XMLDocument languageXml ;
-        tinyxml2::XMLError result = languageXml.LoadFile( fileName.c_str () );
+        tinyxml2::XMLDocument translatedStringsXml ;
+        tinyxml2::XMLError result = translatedStringsXml.LoadFile( filePath.c_str () );
         if ( result != tinyxml2::XML_SUCCESS ) {
-                std::cerr << "can’t parse language strings file \"" << fileName << "\"" << std::endl ;
+                std::cerr << "can’t parse language strings file \"" << fileName << "\" (" << filePath << ")" << std::endl ;
                 return ;
         }
 
-        tinyxml2::XMLElement* root = languageXml.FirstChildElement( "language" );
+        tinyxml2::XMLElement* root = translatedStringsXml.FirstChildElement( "language" );
 
         #if defined( DUMP_XML ) && DUMP_XML
                 std::cout << "<language" ;

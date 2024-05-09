@@ -48,11 +48,18 @@ private:
 
         TextField * linesOfCredits ;
 
+        unsigned int initialX ;
         unsigned int initialY ;
 
         PicturePtr loadingScreen ;
 
-};
+        void alignLeft () ;
+        void alignCenter () ;
+        void alignRight () ;
+
+        void alignRandom () ;
+
+} ;
 
 }
 

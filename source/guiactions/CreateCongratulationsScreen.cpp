@@ -35,25 +35,22 @@ void CreateCongratulationsScreen::act ()
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
                 autouniqueptr< Picture > imageDuChapeau( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
 
-                // Head coronado
                 screen.addWidget( new PictureWidget( 192, 50, PicturePtr( new Picture( *imageDuChapeau ) ), "image du chapeau de Head" ) );
                 screen.addPictureOfHeadAt( 192, 100 );
 
-                // Heels coronado
                 screen.addWidget( new PictureWidget( 400, 50, PicturePtr( new Picture( *imageDuChapeau ) ), "image du chapeau de Heels" ) );
                 screen.addPictureOfHeelsAt( 400, 100 );
         }
 
         // texto final
         LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
-        LanguageText* finalText = languageStrings->getTranslatedStringByAlias( "final-text" );
+        LanguageText* finalText = languageStrings->getTranslatedTextByAlias( "final-text" );
         TextField* textField = new TextField( GamePreferences::getScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 
-        for ( size_t i = 0; i < finalText->howManyLinesOfText(); i ++ )
-        {
+        for ( size_t i = 0; i < finalText->howManyLinesOfText(); i ++ ) {
                 const LanguageLine & line = finalText->getNthLine( i );
-                textField->appendText( line.getText(), line.isBigHeight(), line.getColor() );
+                textField->appendText( line.getString(), line.isBigHeight(), line.getColor() );
         }
 
         screen.addWidget( textField );

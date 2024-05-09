@@ -18,7 +18,7 @@
 
 #include <tinyxml2.h>
 
-#define REGENERATE_CREDITS_FILE         1
+#define REGENERATE_CREDITS_FILE         0
 
 #if defined( REGENERATE_CREDITS_FILE ) && REGENERATE_CREDITS_FILE
 #  include <fstream>
@@ -31,6 +31,7 @@ ShowAuthors::ShowAuthors( )
         : Action( )
         , creditsText( nilPointer )
         , linesOfCredits( nilPointer )
+        , initialX( 0 )
         , initialY( 0 )
         , loadingScreen( )
 {
@@ -112,24 +113,28 @@ void ShowAuthors::act ()
         if ( screen.isNewAndEmpty() )
         {
                 if ( this->linesOfCredits != nilPointer ) delete this->linesOfCredits ;
+
                 this->linesOfCredits = new TextField( GamePreferences::getScreenWidth(), "center" );
 
+                this->initialX = this->linesOfCredits->getX() ;
                 this->initialY = screen.getImageOfScreen().getHeight() ;
-                this->linesOfCredits->moveTo( 0, initialY );
+                this->linesOfCredits->moveTo( this->initialX, this->initialY );
 
                 size_t howManyLines = this->creditsText->howManyLinesOfText () ;
                 std::cout << "credits-text has " << howManyLines << " lines" << std::endl ;
 
                 for ( size_t n = 0; n < howManyLines; ++ n ) {
                         const LanguageLine & line = this->creditsText->getNthLine( n );
-                        linesOfCredits->appendText( line.getText(), line.isBigHeight(), line.getColor() );
+                        linesOfCredits->appendText( line.getString(), line.isBigHeight(), line.getColor() );
                 }
 
                 screen.addWidget( this->linesOfCredits );
         }
         else
                 // restore the initial position
-                this->linesOfCredits->moveTo( this->linesOfCredits->getX(), initialY );
+                this->linesOfCredits->moveTo( this->initialX, this->initialY );
+
+        alignRandom () ;
 
         screen.setEscapeAction( new CreateMainMenu() );
 
@@ -144,7 +149,7 @@ void ShowAuthors::act ()
 
         std::cout << "height of credits-text is " << heightOfCredits << std::endl ;
 
-        PictureWidget* widgetForLoadingScreen = nilPointer;
+        PictureWidget* widgetForLoadingScreen = nilPointer ;
 
         while ( ! screen.getEscapeAction()->hasBegun() )
         {
@@ -159,11 +164,11 @@ void ShowAuthors::act ()
                                 yNow ++ ;
                 }
 
-                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Left" ) )
+                if ( allegro::isShiftKeyPushed() && ( allegro::isKeyPushed( "Left" ) || allegro::isKeyPushed( "Pad 4" ) ) )
                 {
                         linesOfCredits->moveTo( linesOfCredits->getX () - 1, linesOfCredits->getY () );
                 }
-                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Right" ) )
+                if ( allegro::isShiftKeyPushed() && ( allegro::isKeyPushed( "Right" ) || allegro::isKeyPushed( "Pad 6" ) ) )
                 {
                         linesOfCredits->moveTo( linesOfCredits->getX () + 1, linesOfCredits->getY () );
                 }
@@ -172,23 +177,26 @@ void ShowAuthors::act ()
                         linesOfCredits->moveTo( 0, linesOfCredits->getY () );
                 }
 
-                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "l" ) )
+                if ( allegro::isKeyPushed( "l" ) )
                 {
-                        linesOfCredits->setAlignment( "left" );
+                        alignLeft() ;
+                        allegro::releaseKey( "l" );
                 }
-                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "c" ) )
+                if ( allegro::isKeyPushed( "c" ) )
                 {
-                        linesOfCredits->setAlignment( "center" );
+                        alignCenter() ;
+                        allegro::releaseKey( "c" );
                 }
-                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
+                if ( allegro::isKeyPushed( "r" ) )
                 {
-                        linesOfCredits->setAlignment( "right" );
+                        alignRight() ;
+                        allegro::releaseKey( "r" );
                 }
 
                 if ( yNow <= whenToReloop )
                 {
                         // loop it
-                        yNow = initialY ;
+                        yNow = this->initialY ;
                 }
 
                 linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
@@ -201,16 +209,16 @@ void ShowAuthors::act ()
                                 autouniqueptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
                                         ospaths::pathToFile( ospaths::sharePath(), "loading-screen.png" )
                                 ) );
-                                loadingScreen = PicturePtr( new Picture( * png ) );
-                                loadingScreen->setName( "image of loading screen from original speccy version" );
+                                this->loadingScreen = PicturePtr( new Picture( * png ) );
+                                this->loadingScreen->setName( "snap of the original speccy version’s tape loading screen" );
                         }
 
                         if ( loadingScreen->getAllegroPict().isNotNil() )
                         {
                                 widgetForLoadingScreen = new PictureWidget (
                                                 ( widthOfSlide - loadingScreen->getWidth() ) >> 1, heightOfSlide,
-                                                loadingScreen,
-                                                "loading screen from original speccy version"
+                                                this->loadingScreen,
+                                                "PictureWidget for the tape loading screen"
                                 ) ;
                                 screen.addWidget( widgetForLoadingScreen );
                         }
@@ -248,4 +256,37 @@ void ShowAuthors::act ()
         {
                 screen.removeWidget( widgetForLoadingScreen );
         }
+}
+
+/* private */
+void ShowAuthors::alignLeft ()
+{
+        linesOfCredits->setAlignment( "left" );
+        linesOfCredits->moveTo( this->initialX + 100, linesOfCredits->getY () );
+        std::cout << "credits are aligned left" << std::endl ;
+}
+
+/* private */
+void ShowAuthors::alignCenter ()
+{
+        linesOfCredits->setAlignment( "center" );
+        linesOfCredits->moveTo( this->initialX, linesOfCredits->getY () );
+        std::cout << "credits are centered" << std::endl ;
+}
+
+/* private */
+void ShowAuthors::alignRight ()
+{
+        linesOfCredits->setAlignment( "right" );
+        linesOfCredits->moveTo( this->initialX - 100, linesOfCredits->getY () );
+        std::cout << "credits are aligned right" << std::endl ;
+}
+
+/* private */
+void ShowAuthors::alignRandom ()
+{
+        int random012 = ( rand() % 3 );
+             if ( random012 == 0 ) alignCenter() ;
+        else if ( random012 == 1 ) alignLeft() ;
+        else if ( random012 == 2 ) alignRight() ;
 }

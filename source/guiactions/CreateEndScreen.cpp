@@ -49,20 +49,20 @@ void CreateEndScreen::act ()
 
         // the score reached by the player
         unsigned int score = this->visitedRooms * 160 + this->liberatedPlanets * 10000 ;
-        Label* scoreLabel = new Label ( languageStrings->getTranslatedStringByAlias( "score" )->getText() + " " + util::number2string( score ),
+        Label* scoreLabel = new Label ( languageStrings->getTranslatedTextByAlias( "score" )->getText() + " " + util::number2string( score ),
                                         Font::fontWithColor( "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         screen.addWidget( scoreLabel );
 
         // the number of the rooms visited
-        std::string exploredRooms = languageStrings->getTranslatedStringByAlias( "explored-rooms" )->getText();
+        std::string exploredRooms = languageStrings->getTranslatedTextByAlias( "explored-rooms" )->getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
         Label* rooms = new Label( exploredRooms, Font::fontWithColor( "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         screen.addWidget( rooms );
 
         // the number of the planets liberated
-        std::string liberatedPlanets = languageStrings->getTranslatedStringByAlias( "liberated-planets" )->getText();
+        std::string liberatedPlanets = languageStrings->getTranslatedTextByAlias( "liberated-planets" )->getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
         Label* planets = new Label( liberatedPlanets, Font::fontWithColor( "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
@@ -84,7 +84,7 @@ void CreateEndScreen::act ()
                         if ( score > bounds[ i ] )
                         {
                                 TextField* result = new TextField( screenWidth, "center" );
-                                result->appendText( languageStrings->getTranslatedStringByAlias( ranges[ i ] )->getText(), "big", "multicolor" );
+                                result->appendText( languageStrings->getTranslatedTextByAlias( ranges[ i ] )->getText(), "big", "multicolor" );
                                 result->moveTo( 0, resultY );
                                 screen.addWidget( result );
 

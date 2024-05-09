@@ -135,7 +135,7 @@
         <string font="big" color="cyan">The Reincarnation Fish</string>
         <string font="big" color="orange">gives a chance</string>
         <string font="big" color="cycling">to save the game</string>
-        <string font="big" color="orange">by touching SPACE</string>
+        <string font="big" color="orange">by touching Space</string>
      </text>
      <text alias="score">
         <string>Score</string>
@@ -173,10 +173,10 @@
      <text alias="final-text">
         <string font="big" color="multicolor">The people praise you !</string>
         <string></string>
-        <string font="plain" color="white">This way, my dear friend,</string>
-        <string font="plain" color="cyan">our two heroes put an end to the</string>
-        <string font="plain" color="orange">Blacktooth Emperor’s tyranny,</string>
-        <string font="plain" color="yellow">once and for all.</string>
+        <string color="white">This way, my dear friend,</string>
+        <string color="cyan">our two heroes put an end to the</string>
+        <string color="orange">Blacktooth Emperor’s tyranny,</string>
+        <string color="yellow">once and for all.</string>
      </text>
 
 </language>

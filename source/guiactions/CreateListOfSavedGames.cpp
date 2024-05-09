@@ -47,8 +47,8 @@ void CreateListOfSavedGames::act ()
                 if ( gameInfo.howManyRoomsVisited () >= 2 ) // less than 2 rooms means "couldn't read"
                 {
                         std::ostringstream ss;
-                        ss << gameInfo.howManyRoomsVisited () << " " << languageStrings->getTranslatedStringByAlias( "rooms" )->getText() << " "
-                                << gameInfo.howManyPlanetsLiberated () << " " << languageStrings->getTranslatedStringByAlias( "planets" )->getText() ;
+                        ss << gameInfo.howManyRoomsVisited () << " " << languageStrings->getTranslatedTextByAlias( "rooms" )->getText() << " "
+                                << gameInfo.howManyPlanetsLiberated () << " " << languageStrings->getTranslatedTextByAlias( "planets" )->getText() ;
                         Label* label = new Label( ss.str() );
 
                         if ( isLoadMenu() )
@@ -66,7 +66,7 @@ void CreateListOfSavedGames::act ()
                 # endif
 
                         std::ostringstream ss;
-                        ss << languageStrings->getTranslatedStringByAlias( "free-slot" )->getText ();
+                        ss << languageStrings->getTranslatedTextByAlias( "free-slot" )->getText ();
                         Label* freeLine = new Label( ss.str() );
                         if ( isLoadMenu() ) {
                                 freeLine->changeColor( "cyan" );

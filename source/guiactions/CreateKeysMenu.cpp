@@ -38,7 +38,7 @@ void CreateKeysMenu::act ()
                         const std::string & theAction = userActions[ i ];
                         std::string xmlAction = ( theAction == "take&jump" ) ? "takeandjump" : theAction ;
 
-                        Label* label = new Label( languageStrings->getTranslatedStringByAlias( xmlAction )->getText() );
+                        Label* label = new Label( languageStrings->getTranslatedTextByAlias( xmlAction )->getText() );
 
                         std::string theKey = InputManager::getInstance().getUserKeyFor( theAction );
                         if ( theKey == "none" ) label->changeColor( "cyan" );

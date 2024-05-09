@@ -34,7 +34,7 @@ public:
 
         ~LanguageStrings( );
 
-        LanguageText * getTranslatedStringByAlias ( const std::string & alias ) ;
+        LanguageText * getTranslatedTextByAlias ( const std::string & alias ) ;
 
 private:
 

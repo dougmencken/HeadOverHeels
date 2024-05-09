@@ -32,14 +32,15 @@ public:
 
         ~CreateLanguageMenu( ) ;
 
+        // std::map < std::string /* iso */, std::string /* linguonym */ >
+        static void makeMapOfLanguages ( const std::string & languagesFolder, std::map < std::string, std::string > & languages ) ;
+
 protected:
 
         // show the language menu
         virtual void act () ;
 
 private:
-
-        void makeListOfLanguages ( const std::string & languagesFolder ) ;
 
         std::map < std::string /* iso */, std::string /* linguonym */ > languages ;
 
