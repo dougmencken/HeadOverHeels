@@ -95,9 +95,9 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
 
         unsigned int maxHeight = planeOfTile->getH() ;
 
-        fullTile.getAllegroPict().lock( true, false );
+        fullTile.getAllegroPict().lockReadOnly() ;
 
-        depthOfTile->lock( false, true );
+        /////depthOfTile->lockWriteOnly() ;
 
         for ( unsigned int dy = dyBegin ; dy < dyEnd ; ++ dy )
         {
@@ -135,7 +135,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 }
         }
 
-        depthOfTile->unlock();
+        /////depthOfTile->unlock() ;
 
         if ( whichPart == "north" || whichPart == "ne" || whichPart == "nw" )
         {
@@ -156,7 +156,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 maxHeight -= ( sizeOfPlaneY >> 1 ) ;
         }
 
-        planeOfTile->lock( false, true );
+        /////planeOfTile->lockWriteOnly() ;
 
         for ( unsigned int dy = dyBegin ; dy < dyEnd ; ++ dy )
         {
@@ -194,9 +194,9 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 }
         }
 
-        planeOfTile->unlock();
+        /////planeOfTile->unlock() ;
 
-        fullTile.getAllegroPict().unlock();
+        fullTile.getAllegroPict().unlock() ;
 
         PicturePtr plane( new Picture( *planeOfTile ) );
         plane->expandOrCropTo( planeOfTile->getW() , maxHeight );

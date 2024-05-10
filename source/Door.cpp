@@ -115,21 +115,18 @@ Picture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, uns
                 int yStart = noPixel;
                 int yEnd = noPixel - 1;
 
-                top->getAllegroPict().lock( false, true );
+                /////top->getAllegroPict().lockWriteOnly() ;
 
-                for ( unsigned int yPic = height + widthX; yPic < topHeight; yPic++ )
-                {
+                for ( unsigned int yPic = height + widthX; yPic < topHeight; yPic++ ) {
                         for ( unsigned int xPic = delta; xPic > 0; xPic-- )
                         {
                                 if ( yPic != height + widthX && ( static_cast< int >( xPic ) - 1 ) == noPixel )
                                 {
-                                        if ( noPixel > yEnd )
-                                        {
-                                                noPixel--;
+                                        if ( noPixel > yEnd ) {
+                                                noPixel -- ;
                                         }
-                                        else
-                                        {
-                                                yStart += 2;
+                                        else {
+                                                yStart += 2 ;
                                                 noPixel = yStart;
                                         }
                                 }
@@ -142,7 +139,7 @@ Picture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, uns
                         delta -= 2;
                 }
 
-                top->getAllegroPict().unlock();
+                /////top->getAllegroPict().unlock() ;
         }
         else
         {
@@ -153,21 +150,18 @@ Picture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, uns
                 int yStart = noPixel;
                 int yEnd = noPixel + 1;
 
-                top->getAllegroPict().lock( false, true );
+                /////top->getAllegroPict().lockWriteOnly() ;
 
-                for ( unsigned int yPic = height + widthY; yPic < topHeight; yPic++ )
-                {
+                for ( unsigned int yPic = height + widthY; yPic < topHeight; yPic++ ) {
                         for ( unsigned int xPic = delta; xPic < topWidth; xPic++ )
                         {
                                 if ( yPic != height + widthY && static_cast< int >( xPic ) == noPixel )
                                 {
-                                        if ( noPixel < yEnd )
-                                        {
-                                                noPixel++;
+                                        if ( noPixel < yEnd ) {
+                                                noPixel ++ ;
                                         }
-                                        else
-                                        {
-                                                yStart -= 2;
+                                        else {
+                                                yStart -= 2 ;
                                                 noPixel = yStart;
                                         }
                                 }
@@ -180,7 +174,7 @@ Picture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, uns
                         delta += 2;
                 }
 
-                top->getAllegroPict().unlock();
+                /////top->getAllegroPict().unlock() ;
         }
 
         return top;

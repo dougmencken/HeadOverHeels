@@ -296,6 +296,8 @@ unsigned int Pict::getH() const
 
 AllegroColor Pict::getPixelAt( int x, int y ) const
 {
+        if ( ! isNotNil() ) return AllegroColor::keyColor() ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         return al_get_pixel( it, x, y ) ;
@@ -309,6 +311,8 @@ AllegroColor Pict::getPixelAt( int x, int y ) const
 
 void Pict::putPixelAt( int x, int y, AllegroColor color ) const
 {
+        if ( ! isNotNil() ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;
@@ -325,6 +329,8 @@ void Pict::putPixelAt( int x, int y, AllegroColor color ) const
 
 void Pict::drawPixelAt( int x, int y, AllegroColor color ) const
 {
+        if ( ! isNotNil() ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;
@@ -356,23 +362,24 @@ void Pict::clearToColor( AllegroColor color ) const
 #endif
 }
 
-void Pict::lock( bool read, bool write ) const
+void Pict::lockReadOnly() const
 {
         if ( ! isNotNil() ) return ;
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        int rw = ( read && write ) ? ALLEGRO_LOCK_READWRITE :
-                        ( read && ! write ? ALLEGRO_LOCK_READONLY :
-                                ( write && ! read ? ALLEGRO_LOCK_WRITEONLY : ALLEGRO_LOCK_READWRITE ) ) ;
+        al_lock_bitmap( it, al_get_bitmap_format( it ), ALLEGRO_LOCK_READONLY );
 
-        al_lock_bitmap( it, al_get_bitmap_format( it ), rw );
+#endif
+}
 
-#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+void Pict::lockReadWrite() const
+{
+        if ( ! isNotNil() ) return ;
 
-        ( void ) read ;
-        ( void ) write ;
-        // do nothing
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_lock_bitmap( it, al_get_bitmap_format( it ), ALLEGRO_LOCK_READWRITE );
 
 #endif
 }
@@ -1626,6 +1633,8 @@ void fillRect( int x1, int y1, int x2, int y2, AllegroColor color )
 
 void bitBlit( const Pict& from, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height )
 {
+        if ( ! ( from.isNotNil() && Pict::getWhereToDraw().isNotNil() ) ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         al_draw_bitmap_region( from.ptr(), fromX, fromY, width, height, toX, toY, /* flipping */ 0 );
@@ -1639,6 +1648,8 @@ void bitBlit( const Pict& from, int fromX, int fromY, int toX, int toY, unsigned
 
 void bitBlit( const Pict& from, int toX, int toY )
 {
+        if ( ! ( from.isNotNil() && Pict::getWhereToDraw().isNotNil() ) ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         al_draw_bitmap( from.ptr(), toX, toY, /* flipping */ 0 );
@@ -1652,6 +1663,8 @@ void bitBlit( const Pict& from, int toX, int toY )
 
 void bitBlit( const Pict& from, const Pict& to, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height )
 {
+        if ( ! ( from.isNotNil() && to.isNotNil() ) ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;
@@ -1668,6 +1681,8 @@ void bitBlit( const Pict& from, const Pict& to, int fromX, int fromY, int toX, i
 
 void bitBlit( const Pict& from, const Pict& to, int toX, int toY )
 {
+        if ( ! ( from.isNotNil() && to.isNotNil() ) ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;
@@ -1688,6 +1703,8 @@ void bitBlit ( const Pict & from, const Pict & to ) {  bitBlit( from, to, 0, 0 )
 
 void stretchBlit( const Pict& source, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH )
 {
+        if ( ! ( source.isNotNil() && Pict::getWhereToDraw().isNotNil() ) ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         al_draw_scaled_bitmap( source.ptr (), sX, sY, sW, sH, dX, dY, dW, dH, /* flipping */ 0 );
@@ -1701,6 +1718,8 @@ void stretchBlit( const Pict& source, int sX, int sY, int sW, int sH, int dX, in
 
 void stretchBlit( const Pict& source, const Pict& dest, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH )
 {
+        if ( ! ( source.isNotNil() && dest.isNotNil() ) ) return ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;

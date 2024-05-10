@@ -109,7 +109,7 @@ void Color::replaceColor( Picture & picture, const Color & from, const Color & t
 {
         if ( to == from ) return ;
 
-        picture.getAllegroPict().lock( true, true );
+        picture.getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0 ; y < picture.getHeight() ; y ++ ) {
                 for ( unsigned int x = 0 ; x < picture.getWidth() ; x ++ )
@@ -124,7 +124,7 @@ void Color::replaceColor( Picture & picture, const Color & from, const Color & t
                 }
         }
 
-        picture.getAllegroPict().unlock();
+        picture.getAllegroPict().unlock() ;
 }
 
 /* public static */
@@ -132,7 +132,7 @@ void Color::replaceColorAnyAlpha( Picture & picture, const Color & from, const C
 {
         if ( to == from ) return ;
 
-        picture.getAllegroPict().lock( true, true );
+        picture.getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0 ; y < picture.getHeight() ; y ++ ) {
                 for ( unsigned int x = 0 ; x < picture.getWidth() ; x ++ )
@@ -146,7 +146,7 @@ void Color::replaceColorAnyAlpha( Picture & picture, const Color & from, const C
                 }
         }
 
-        picture.getAllegroPict().unlock();
+        picture.getAllegroPict().unlock() ;
 }
 
 /* public static */
@@ -160,7 +160,7 @@ void Color::multiplyWithColor( Picture & picture, const Color & color )
 /* private static */
 void Color::multiplyWithColor( Picture & picture, unsigned char red, unsigned char green, unsigned char blue )
 {
-        picture.getAllegroPict().lock( true, true );
+        picture.getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0; y < picture.getHeight(); ++ y ) {
                 for ( unsigned int x = 0; x < picture.getWidth(); ++ x )
@@ -175,13 +175,13 @@ void Color::multiplyWithColor( Picture & picture, unsigned char red, unsigned ch
                 }
         }
 
-        picture.getAllegroPict().unlock();
+        picture.getAllegroPict().unlock() ;
 }
 
 /* public static */
 void Color::changeAlpha ( Picture & picture, unsigned char newAlpha )
 {
-        picture.getAllegroPict().lock( true, true );
+        picture.getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0; y < picture.getHeight(); ++ y ) {
                 for ( unsigned int x = 0; x < picture.getWidth(); ++ x )
@@ -193,13 +193,13 @@ void Color::changeAlpha ( Picture & picture, unsigned char newAlpha )
                 }
         }
 
-        picture.getAllegroPict().unlock();
+        picture.getAllegroPict().unlock() ;
 }
 
 /* public static */
 void Color::pictureToGrayscale ( Picture & picture )
 {
-        picture.getAllegroPict().lock( true, true );
+        picture.getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0; y < picture.getHeight(); y++ ) {
                 for ( unsigned int x = 0; x < picture.getWidth(); x++ )
@@ -228,13 +228,13 @@ void Color::pictureToGrayscale ( Picture & picture )
                 }
         }
 
-        picture.getAllegroPict().unlock();
+        picture.getAllegroPict().unlock() ;
 }
 
 /* public static */
 void Color::invertColors( Picture & picture )
 {
-        picture.getAllegroPict().lock( true, true );
+        picture.getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0; y < picture.getHeight(); y++ ) {
                 for ( unsigned int x = 0; x < picture.getWidth(); x++ )
@@ -246,5 +246,5 @@ void Color::invertColors( Picture & picture )
                 }
         }
 
-        picture.getAllegroPict().unlock();
+        picture.getAllegroPict().unlock() ;
 }

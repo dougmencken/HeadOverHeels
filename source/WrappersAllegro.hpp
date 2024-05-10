@@ -113,7 +113,8 @@ public:
 
         void clearToColor ( AllegroColor color ) const ;
 
-        void lock( bool read, bool write ) const ;
+        void lockReadOnly () const ;
+        void lockReadWrite () const ;
         void unlock () const ;
 
         bool isNotNil () const {  return it != NULL ;  }

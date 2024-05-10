@@ -92,7 +92,7 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
         const Color& white = Color::whiteColor() ;
         const Color& gray75white = Color::byName( "gray 75% white" );
 
-        getAllegroPict().lock( true, true );
+        getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0 ; y < height ; y ++ ) {
                 for ( unsigned int x = 0 ; x < width ; x ++ )
@@ -111,7 +111,7 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
                 }
         }
 
-        getAllegroPict().unlock();
+        getAllegroPict().unlock() ;
 }
 
 void Picture::colorizeWhite( const Color& color )
@@ -145,18 +145,15 @@ void Picture::flipHorizontal()
 
         allegro::Pict* flipped = allegro::Pict::newPict( width, height );
 
-        picture->lock( true, false );
-        flipped->lock( false, true );
+        picture->lockReadOnly() ;
+        /////flipped->lockWriteOnly() ;
 
-        for ( unsigned int y = 0 ; y < height ; y ++ ) {
+        for ( unsigned int y = 0 ; y < height ; y ++ )
                 for ( unsigned int x = 0 ; x < width ; x ++ )
-                {
                         flipped->putPixelAt( width - x - 1, y, picture->getPixelAt( x, y ) );
-                }
-        }
 
-        flipped->unlock();
-        picture->unlock();
+        /////flipped->unlock() ;
+        picture->unlock() ;
 
         picture = multiptr< allegro::Pict >( flipped );
 }
@@ -168,18 +165,15 @@ void Picture::flipVertical()
 
         allegro::Pict* flipped = allegro::Pict::newPict( width, height );
 
-        picture->lock( true, false );
-        flipped->lock( false, true );
+        picture->lockReadOnly() ;
+        /////flipped->lockWriteOnly() ;
 
-        for ( unsigned int y = 0 ; y < height ; y ++ ) {
+        for ( unsigned int y = 0 ; y < height ; y ++ )
                 for ( unsigned int x = 0 ; x < width ; x ++ )
-                {
                         flipped->putPixelAt( x, height - y - 1, picture->getPixelAt( x, y ) );
-                }
-        }
 
-        flipped->unlock();
-        picture->unlock();
+        /////flipped->unlock() ;
+        picture->unlock() ;
 
         picture = multiptr< allegro::Pict >( flipped );
 }
@@ -191,18 +185,15 @@ void Picture::rotate90 ()
 
         allegro::Pict* rotated = allegro::Pict::newPict( height, width );
 
-        picture->lock( true, false );
-        rotated->lock( false, true );
+        picture->lockReadOnly() ;
+        /////rotated->lockWriteOnly() ;
 
-        for ( unsigned int y = 0 ; y < height ; y ++ ) {
+        for ( unsigned int y = 0 ; y < height ; y ++ )
                 for ( unsigned int x = 0 ; x < width ; x ++ )
-                {
                         rotated->putPixelAt( y, x, picture->getPixelAt( x, y ) );
-                }
-        }
 
-        rotated->unlock();
-        picture->unlock();
+        /////rotated->unlock() ;
+        picture->unlock() ;
 
         picture = multiptr< allegro::Pict >( rotated );
 }
@@ -214,18 +205,15 @@ void Picture::rotate270 ()
 
         allegro::Pict* rotated = allegro::Pict::newPict( height, width );
 
-        picture->lock( true, false );
-        rotated->lock( false, true );
+        picture->lockReadOnly() ;
+        /////rotated->lockWriteOnly() ;
 
-        for ( unsigned int y = 0 ; y < height ; y ++ ) {
+        for ( unsigned int y = 0 ; y < height ; y ++ )
                 for ( unsigned int x = 0 ; x < width ; x ++ )
-                {
                         rotated->putPixelAt( height - y - 1, width - x - 1, picture->getPixelAt( x, y ) );
-                }
-        }
 
-        rotated->unlock();
-        picture->unlock();
+        /////rotated->unlock() ;
+        picture->unlock() ;
 
         picture = multiptr< allegro::Pict >( rotated );
 }
