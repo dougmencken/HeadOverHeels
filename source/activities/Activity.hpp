@@ -46,9 +46,6 @@ public: /* constants */
         static const unsigned int AutomovingEast        = 43 ;
         static const unsigned int AutomovingWest        = 44 ;
 
-        static const unsigned int GoingDown             = 60 ;
-        static const unsigned int GoingUp               = 70 ;
-
         static const unsigned int Jumping               = 80 ;
         static const unsigned int Falling               = 90 ;
         static const unsigned int Gliding               = 98 ;
@@ -84,9 +81,6 @@ public: /* constants */
 
         static const unsigned int Freeze = 271 ;
         static const unsigned int WakeUp = 272 ;
-
-        static const unsigned int StopAtTop = 287 ;
-        static const unsigned int StopAtBottom = 288 ;
 
         static const unsigned int MetLethalItem                 = 290 ;
         static const unsigned int Vanishing                     = 299 ;

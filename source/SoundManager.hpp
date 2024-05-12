@@ -67,8 +67,6 @@ public:
 
         allegro::Sample * getSampleFor ( const std::string & item, const std::string & event ) ;
 
-        static std::string activityToNameOfSound ( const activities::Activity & activity ) ;
-
         void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = ( volume <= 99 ) ? volume : 99 ;  }
 
         unsigned int getVolumeOfEffects () const {  return this->effectsVolume ;  }
@@ -76,6 +74,8 @@ public:
         void setVolumeOfMusic ( unsigned int volume ) ;
 
         unsigned int getVolumeOfMusic () const {  return this->musicVolume ;  }
+
+        static std::string activityToNameOfSound ( const activities::Activity & activity ) ;
 
 private:
 

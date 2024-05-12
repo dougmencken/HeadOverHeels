@@ -29,12 +29,12 @@ bool Elevator::update_returningdisappearance ()
 
         switch ( getCurrentActivity() )
         {
-                case activities::Activity::Waiting:
-                        setCurrentActivity ( ascent ? activities::Activity::GoingUp : activities::Activity::GoingDown );
+                case activities::Activity::Waiting :
+                        setCurrentActivity ( this->ascent ? activities::ActivityOfElevator::GoingUp : activities::ActivityOfElevator::GoingDown );
                         this->lastActivity = getCurrentActivity ();
                         break;
 
-                case activities::Activity::GoingUp:
+                case activities::ActivityOfElevator::GoingUp :
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
                                 activities::Moving::getInstance().move( *this, false );
@@ -42,9 +42,9 @@ bool Elevator::update_returningdisappearance ()
                                 speedTimer->reset() ;
 
                                 // elevator reached the top
-                                if ( freeItem.getZ() > top * Room::LayerHeight )
+                                if ( freeItem.getZ() > this->top * Room::LayerHeight )
                                 {
-                                        setCurrentActivity( activities::Activity::StopAtTop );
+                                        setCurrentActivity( activities::ActivityOfElevator::ReachedTop );
                                         this->lastActivity = getCurrentActivity ();
                                         waitingTimer->reset() ;
                                 }
@@ -53,7 +53,7 @@ bool Elevator::update_returningdisappearance ()
                         freeItem.animate();
                         break;
 
-                case activities::Activity::GoingDown:
+                case activities::ActivityOfElevator::GoingDown :
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
                                 activities::Moving::getInstance().move( *this, false );
@@ -61,9 +61,9 @@ bool Elevator::update_returningdisappearance ()
                                 speedTimer->reset() ;
 
                                 // elevator reached the bottom
-                                if ( freeItem.getZ() <= bottom * Room::LayerHeight )
+                                if ( freeItem.getZ() <= this->bottom * Room::LayerHeight )
                                 {
-                                        setCurrentActivity( activities::Activity::StopAtBottom );
+                                        setCurrentActivity( activities::ActivityOfElevator::ReachedBottom );
                                         this->lastActivity = getCurrentActivity ();
                                         waitingTimer->reset() ;
                                 }
@@ -73,10 +73,10 @@ bool Elevator::update_returningdisappearance ()
                         break;
 
                 // stop elevator for a moment when it reaches the lowest point
-                case activities::Activity::StopAtBottom:
+                case activities::ActivityOfElevator::ReachedBottom :
                         if ( waitingTimer->getValue() >= 0.250 )
                         {
-                                setCurrentActivity( activities::Activity::GoingUp );
+                                setCurrentActivity( activities::ActivityOfElevator::GoingUp );
                                 this->lastActivity = getCurrentActivity ();
                         }
 
@@ -84,10 +84,10 @@ bool Elevator::update_returningdisappearance ()
                         break;
 
                 // stop elevator for a moment when it reaches the highest point
-                case activities::Activity::StopAtTop:
+                case activities::ActivityOfElevator::ReachedTop :
                         if ( waitingTimer->getValue() >= 0.250 )
                         {
-                                setCurrentActivity( activities::Activity::GoingDown );
+                                setCurrentActivity( activities::ActivityOfElevator::GoingDown );
                                 this->lastActivity = getCurrentActivity ();
                         }
 

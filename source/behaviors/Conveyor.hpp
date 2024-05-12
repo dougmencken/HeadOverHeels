@@ -33,10 +33,8 @@ public:
 
 private:
 
-       /**
-        * Timer for speed of dragging items above
-        */
-        autouniqueptr < Timer > speedTimer ;
+        // the timer for dragging things above conveyor
+        autouniqueptr < Timer > dragTimer ;
 
         autouniqueptr < Timer > animationTimer ;
 

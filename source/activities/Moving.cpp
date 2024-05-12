@@ -1,11 +1,13 @@
 
 #include "Moving.hpp"
 
+#include "Activity.hpp"
 #include "Falling.hpp"
+#include "PropagateActivity.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
-#include "PropagateActivity.hpp"
+#include "Elevator.hpp"
 
 #include <stack>
 
@@ -83,7 +85,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
                         toItemsNearby = activities::Activity::PushedSouthwest ;
                         break;
 
-                case activities::Activity::GoingUp:
+                case activities::ActivityOfElevator::GoingUp :
                         moved = whatMoves.addToZ( 1 );
 
                         // if can’t move up, raise the items above
@@ -110,7 +112,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
                         }
                         break;
 
-                case activities::Activity::GoingDown:
+                case activities::ActivityOfElevator::GoingDown :
                 {
                         // is there anything above
                         bool loaded = ! whatMoves.canAdvanceTo( 0, 0, /* 2 */ 1 );
@@ -152,7 +154,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
         // if the item can move freely
         if ( whatMoves.whichItemClass() == "free item" || whatMoves.whichItemClass() == "avatar item" )
         {
-                bool onElevator = ( activity == activities::Activity::GoingUp || activity == activities::Activity::GoingDown );
+                bool onElevator = ( activity == activities::ActivityOfElevator::GoingUp || activity == activities::ActivityOfElevator::GoingDown );
                 if ( /* don’t affect activity of items on elevator */ ! onElevator )
                 {
                         if ( /* there’s a collision */ ! moved ) {

@@ -1,6 +1,8 @@
 
 #include "SoundManager.hpp"
 
+#include "Elevator.hpp"
+
 #include "util.hpp"
 #include "ospaths.hpp"
 
@@ -197,12 +199,12 @@ std::string SoundManager::activityToNameOfSound ( const activities::Activity & a
                 case activities::Activity::MovingSoutheast :
                 case activities::Activity::MovingSouthwest :
                 case activities::Activity::MovingNorthwest :
-                case activities::Activity::GoingUp :
-                case activities::Activity::GoingDown :
                 case activities::Activity::AutomovingNorth :
                 case activities::Activity::AutomovingSouth :
                 case activities::Activity::AutomovingEast :
                 case activities::Activity::AutomovingWest :
+                case activities::ActivityOfElevator::GoingUp :
+                case activities::ActivityOfElevator::GoingDown :
                         return "move" ;
 
                 case activities::Activity::Jumping : return "jump" ;

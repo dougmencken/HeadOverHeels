@@ -263,7 +263,7 @@ bool Item::canAdvanceTo( int x, int y, int z )
         return ! collisionFound ;
 }
 
-bool Item::crossesWith( const Item & item ) const
+bool Item::overlapsWith( const Item & item ) const
 {
         return  ( this->getX() < item.getX() + item.getWidthX() ) &&
                         ( item.getX() < this->getX() + this->getWidthX() ) &&

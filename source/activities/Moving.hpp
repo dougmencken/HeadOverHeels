@@ -12,7 +12,6 @@
 #define Moving_hpp_
 
 #include "Behavior.hpp"
-#include "Activity.hpp"
 
 class FreeItem ;
 

@@ -109,13 +109,13 @@ public:
         virtual bool addToPosition ( int x, int y, int z ) = 0 ;
 
         /**
-         * May this item advance to given offset
-         * @return true if position is free or false if there’s a collision,
-         *         in the latter case place colliding items into stack of collisions
+         * May this item advance to the given offset or not
+         * @return true if that location is free, or false if there’s a collision,
+         *         in the latter case the colliding items are collected
          */
         virtual bool canAdvanceTo ( int x, int y, int z ) ;
 
-        bool crossesWith ( const Item & item ) const ;
+        bool overlapsWith ( const Item & item ) const ;
 
         bool doGraphicsOverlap ( const Item & item ) const ;
 
@@ -165,24 +165,24 @@ public:
         void setZ ( int newZ ) {  this->zYet = newZ ;  }
 
         /**
-         * The width of this item on X in isometric units
+         * The width of this item on X in free units
          */
         unsigned int getUnsignedWidthX () const ;
         int getWidthX () const {  return static_cast< int >( getUnsignedWidthX () );  }
 
         /**
-         * The width of this item on Y in isometric units
+         * The width of this item on Y in free units
          */
         unsigned int getUnsignedWidthY () const ;
         int getWidthY () const {  return static_cast< int >( getUnsignedWidthY () );  }
 
         /**
-         * The height, or width on Z, of this item in isometric units
+         * The height, or width on Z, of this item in free units
          */
-        unsigned int getUnsignedHeight () const {  return height ;  }
+        unsigned int getUnsignedHeight () const {  return this->height ;  }
         int getHeight () const {  return static_cast< int >( getUnsignedHeight () );  }
 
-        void changeHeightTo ( int newHeight ) {  height = newHeight ;  }
+        void changeHeightTo ( int newHeight ) {  this->height = newHeight ;  }
 
         bool isMortal () const ;
 
@@ -308,21 +308,12 @@ private:
          */
         autouniqueptr< Picture > processedImage ;
 
-        /**
-         * The spatial position on X in isometric units
-         */
+        // the position in 3-dimensional space of this item’s lower north-west point, in free units
         int xYet ;
-
-        /**
-         * The spatial position on Y in isometric units
-         */
         int yYet ;
-
-        /**
-         * The spatial position on Z in isometric units
-         */
         int zYet ;
 
+        // the height, or width along the z, of this item in free units
         unsigned int height ;
 
         // the angular orientation

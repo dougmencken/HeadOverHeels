@@ -804,7 +804,7 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
         {
                 const FreeItem & freeItem = * allFreeItems[ f ];
                 if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isNotIgnoringCollisions () ) {
-                        if ( item->crossesWith( freeItem ) ) {
+                        if ( item->overlapsWith( freeItem ) ) {
                                 collisions.push_back( freeItem.getUniqueName() );
                                 collisionFound = true ;
                         }
@@ -814,26 +814,25 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
         // look for collisions with grid items
         const std::vector < std::vector < GridItemPtr > > & gridItems = room->getGridItems ();
 
-        // for a grid item
+        // a grid item collides with grid items
         if ( item->whichItemClass() == "grid item" )
         {
                 int column = dynamic_cast< GridItem & >( *item ).getColumnOfGrid() ;
 
-                // look for collisions with grid items
                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin ();
                                 g != gridItems[ column ].end (); ++ g )
                 {
                         const GridItem & gridItem = *( *g ) ;
 
                         if ( gridItem.getUniqueName() != item->getUniqueName() ) {
-                                if ( item->crossesWith( gridItem ) ) {
+                                if ( item->overlapsWith( gridItem ) ) {
                                         collisions.push_back( gridItem.getUniqueName() );
                                         collisionFound = true ;
                                 }
                         }
                 }
         }
-        // for a free item
+        // a free item collides with grid items
         else if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
                 // the range of cells where the item is

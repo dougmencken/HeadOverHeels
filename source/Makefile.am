@@ -118,6 +118,7 @@ headoverheels_SOURCES = main.cpp \
 			Timer.hpp \
 			Timer.cpp \
 			activities/Activity.hpp \
+			activities/ActivityToString.hpp \
 			activities/PropagateActivity.cpp \
 			activities/PropagateActivity.hpp \
 			activities/Displacing.cpp \
