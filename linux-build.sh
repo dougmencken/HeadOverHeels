@@ -474,7 +474,6 @@ if [ ! -f source/Makefile ]; then
 LDFLAGS="-Wl,-rpath ${zlibinstallpath}/lib -Wl,-rpath ${libpnginstallpath}/lib -Wl,-rpath ${libogginstallpath}/lib -Wl,-rpath ${libvorbisinstallpath}/lib -Wl,-rpath ${tinyxml2installpath}/lib -Wl,-rpath ${allegro4installpath}/lib" \
 ./configure \
         --prefix="${gameInstallPath}" \
-        --with-zlib-prefix="${zlibinstallpath}" \
         --with-libpng-prefix="${libpnginstallpath}" \
         --with-ogg-prefix="${libogginstallpath}" \
         --with-vorbis-prefix="${libvorbisinstallpath}" \

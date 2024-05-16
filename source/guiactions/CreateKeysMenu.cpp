@@ -46,7 +46,7 @@ void CreateKeysMenu::act ()
                         label->setAction( new RedefineKey( menuOfKeys, theAction ) );
 
                         menuOfKeys->addOption( label );
-                        menuOfKeys->setValueOf( label, theKey );
+                        menuOfKeys->setValueOf( label, CreateKeysMenu::allegroKeyToMenuKey( theKey ) );
                 }
 
                 screen.addWidget( menuOfKeys );

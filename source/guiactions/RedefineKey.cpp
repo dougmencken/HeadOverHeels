@@ -7,18 +7,17 @@
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
 #include "MenuWithValues.hpp"
+#include "CreateKeysMenu.hpp"
 #include "Label.hpp"
 
-using gui::RedefineKey ;
 
+namespace gui {
 
-RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& keyAction )
+RedefineKey::RedefineKey( MenuWithValues * menu, const std::string & keyAction )
         : Action( )
         , menu( menu )
         , whatKeyDoes( keyAction )
-{
-
-}
+{}
 
 void RedefineKey::act ()
 {
@@ -85,7 +84,7 @@ void RedefineKey::act ()
 
                                         std::cout << "the key for \"" << this->whatKeyDoes << "\" was \"" << thatKey << "\" now is \"" << newKey << "\"" << std::endl ;
 
-                                        menu->setValueOf( choice, newKey );
+                                        menu->setValueOf( choice, CreateKeysMenu::allegroKeyToMenuKey( newKey ) );
 
                                         InputManager::getInstance().changeUserKey( this->whatKeyDoes, newKey );
                                 }
@@ -107,4 +106,6 @@ void RedefineKey::act ()
                 choice->changeColor( "cyan" );
 
         menu->redraw ();
+}
+
 }

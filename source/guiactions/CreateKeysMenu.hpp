@@ -13,6 +13,8 @@
 
 #include "Action.hpp"
 
+#include <string>
+
 namespace gui
 {
 
@@ -29,6 +31,17 @@ class CreateKeysMenu : public Action
 public:
 
         CreateKeysMenu( ) : Action( ), menuOfKeys( nilPointer ) { }
+
+        static std::string allegroKeyToMenuKey( const std::string & key )
+        {
+                if ( key == "Left" ) return "[⇦]" ;
+                if ( key == "Up" ) return "[⇧]" ;
+                if ( key == "Right" ) return "[⇨]" ;
+                if ( key == "Down" ) return "[⇩]" ;
+                ///if ( key == "Space" ) return "[ ]" ;
+
+                return key ;
+        }
 
 protected:
 

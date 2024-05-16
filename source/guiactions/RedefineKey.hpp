@@ -20,7 +20,7 @@ namespace gui
 class MenuWithValues ;
 
 /**
- * Cambia una tecla para el control del juego por otra indicada por el usuario
+ * Use to change one of the game control keys
  */
 
 class RedefineKey : public Action
