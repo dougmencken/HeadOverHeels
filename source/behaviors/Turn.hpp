@@ -34,7 +34,7 @@ public:
 
         virtual ~Turn( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 protected:
 

@@ -33,7 +33,7 @@ public:
 
         virtual ~FinalBall( ) { }
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 private:
 

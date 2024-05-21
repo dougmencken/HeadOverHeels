@@ -21,7 +21,7 @@ Mobile::Mobile( FreeItem & item, const std::string & behavior )
         fallTimer->go ();
 }
 
-bool Mobile::update_returningdisappearance ()
+bool Mobile::update ()
 {
         FreeItem & mobileItem = dynamic_cast< FreeItem & >( getItem() );
 
@@ -103,7 +103,7 @@ bool Mobile::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

@@ -29,7 +29,7 @@ public:
 
         virtual ~Doughnut( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 private:
 

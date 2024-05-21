@@ -49,7 +49,7 @@ public:
 
         virtual ~Elevator( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
         int getTop () const {  return top ;  }
 

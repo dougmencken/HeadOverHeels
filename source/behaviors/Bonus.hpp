@@ -34,7 +34,7 @@ public:
 
         virtual ~Bonus () { }
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 protected:
 

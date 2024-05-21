@@ -29,7 +29,7 @@ public:
 
         virtual ~Trampoline( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 private:
 

@@ -27,6 +27,7 @@ namespace behaviors
  * Models the behavior of a character whose actions are controlled by the player
  */
 
+/* abstract */
 class PlayerControlled : public Behavior
 {
 

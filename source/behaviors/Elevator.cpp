@@ -23,7 +23,7 @@ Elevator::Elevator( FreeItem & item, const std::string & behavior )
         waitingTimer->go ();
 }
 
-bool Elevator::update_returningdisappearance ()
+bool Elevator::update ()
 {
         FreeItem & freeItem = dynamic_cast< FreeItem & >( getItem() );
 
@@ -101,7 +101,8 @@ bool Elevator::update_returningdisappearance ()
 
         SoundManager::getInstance().play( freeItem.getKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
-        return false ;
+        // elevators are eternal
+        return true ;
 }
 
 }

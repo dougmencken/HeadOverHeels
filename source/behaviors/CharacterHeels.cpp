@@ -40,7 +40,7 @@ CharacterHeels::CharacterHeels( AvatarItem & item )
         fallTimer->go ();
 }
 
-bool CharacterHeels::update_returningdisappearance ()
+bool CharacterHeels::update ()
 {
         AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
@@ -127,7 +127,7 @@ bool CharacterHeels::update_returningdisappearance ()
         // play sound for the current activity
         SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
-        return false ;
+        return true ;
 }
 
 void CharacterHeels::behave ()

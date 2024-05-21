@@ -33,7 +33,7 @@ public:
 
         virtual ~Driven( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 private:
 

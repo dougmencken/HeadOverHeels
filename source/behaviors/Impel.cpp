@@ -20,7 +20,7 @@ Impel::Impel( FreeItem & item, const std::string & behavior )
         fallTimer->go() ;
 }
 
-bool Impel::update_returningdisappearance ()
+bool Impel::update ()
 {
         FreeItem & impelItem = dynamic_cast< FreeItem & >( getItem() );
 
@@ -70,7 +70,7 @@ bool Impel::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

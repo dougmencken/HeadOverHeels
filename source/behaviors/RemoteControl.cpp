@@ -26,7 +26,7 @@ RemoteControl::RemoteControl( FreeItem & item, const std::string & behavior )
         }
 }
 
-bool RemoteControl::update_returningdisappearance ()
+bool RemoteControl::update ()
 {
         FreeItem & thisItem = dynamic_cast< FreeItem & >( getItem() );
 
@@ -148,7 +148,7 @@ bool RemoteControl::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

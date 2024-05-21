@@ -86,7 +86,7 @@ Item::~Item( )
 
 bool Item::updateItem ()
 {
-        return ( this->behavior != nilPointer ) ? ( ! this->behavior->update_returningdisappearance () ) : true ;
+        return ( this->behavior != nilPointer ) ? this->behavior->update() : true ;
 }
 
 /* private */

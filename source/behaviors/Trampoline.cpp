@@ -27,7 +27,7 @@ Trampoline::Trampoline( FreeItem & item, const std::string & behavior )
         reboundTimer->go() ;
 }
 
-bool Trampoline::update_returningdisappearance ()
+bool Trampoline::update ()
 {
         FreeItem & springItem = dynamic_cast< FreeItem & >( getItem () );
 
@@ -125,7 +125,7 @@ bool Trampoline::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

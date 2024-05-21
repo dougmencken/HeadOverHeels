@@ -23,7 +23,7 @@ ThereAndBack::ThereAndBack( FreeItem & item, const std::string & behavior, bool 
         if ( ! flying ) fallTimer->go ();
 }
 
-bool ThereAndBack::update_returningdisappearance ()
+bool ThereAndBack::update ()
 {
         FreeItem & thisItem = dynamic_cast< FreeItem & >( getItem () );
 
@@ -115,7 +115,7 @@ bool ThereAndBack::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 void ThereAndBack::moveIt ()

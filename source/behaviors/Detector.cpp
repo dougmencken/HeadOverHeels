@@ -23,7 +23,7 @@ Detector::Detector( FreeItem & item, const std::string & behavior )
         fallTimer->go();
 }
 
-bool Detector::update_returningdisappearance ()
+bool Detector::update ()
 {
         FreeItem & detectorItem = dynamic_cast< FreeItem & >( getItem () );
         AvatarItemPtr activeCharacter = detectorItem.getMediator()->getActiveCharacter();
@@ -129,7 +129,7 @@ bool Detector::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

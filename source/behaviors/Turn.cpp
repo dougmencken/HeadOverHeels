@@ -22,7 +22,7 @@ Turn::Turn( FreeItem & item, const std::string & behavior )
         fallTimer->go ();
 }
 
-bool Turn::update_returningdisappearance ()
+bool Turn::update ()
 {
         FreeItem & turningItem = dynamic_cast< FreeItem & >( getItem() );
 
@@ -105,7 +105,7 @@ bool Turn::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 void Turn::beginMoving ()

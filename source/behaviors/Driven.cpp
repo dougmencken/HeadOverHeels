@@ -23,7 +23,7 @@ Driven::Driven( FreeItem & item, const std::string & behavior )
         fallTimer->go() ;
 }
 
-bool Driven::update_returningdisappearance ()
+bool Driven::update ()
 {
         FreeItem & freeItem = dynamic_cast< FreeItem & >( getItem () );
         Mediator * mediator = freeItem.getMediator() ;
@@ -172,7 +172,7 @@ bool Driven::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

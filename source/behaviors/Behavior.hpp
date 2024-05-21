@@ -26,7 +26,7 @@ namespace behaviors
  * Different kinds of behavior define different transitions between these activities
  */
 
-class Behavior
+/* abstract */ class Behavior
 {
 
 protected:
@@ -45,9 +45,9 @@ public:
 
         /**
          * Updates the item’s behavior programmatically
-         * @return true^Wfalse if the item can be updated thereafter (it didn’t disappear from the room)
+         * @return true if the item can be updated thereafter (it didn’t disappear from the room)
          */
-        virtual bool update_returningdisappearance () = 0 ;
+        virtual bool update () = 0 ;
 
         const std::string & getNameOfBehavior () const {  return this->nameOfBehavior ;  }
 

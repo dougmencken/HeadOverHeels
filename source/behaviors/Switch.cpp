@@ -19,7 +19,7 @@ Switch::Switch( FreeItem & item, const std::string & behavior )
         whenToggledTimer->go ();
 }
 
-bool Switch::update_returningdisappearance ()
+bool Switch::update ()
 {
         Item & switchItem = getItem () ;
         Mediator * mediator = switchItem.getMediator();
@@ -108,7 +108,8 @@ bool Switch::update_returningdisappearance ()
                         ;
         }
 
-        return false ;
+        // switches are eternal
+        return true ;
 }
 
 void Switch::toggleIt ()

@@ -19,7 +19,7 @@ Doughnut::Doughnut( FreeItem & item, const std::string & behavior )
         speedTimer->go();
 }
 
-bool Doughnut::update_returningdisappearance ()
+bool Doughnut::update ()
 {
         FreeItem & donutItem = dynamic_cast< FreeItem & >( getItem () );
 
@@ -106,7 +106,7 @@ bool Doughnut::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

@@ -47,7 +47,7 @@ CharacterHead::CharacterHead( AvatarItem & item )
         timerForBlinking->go ();
 }
 
-bool CharacterHead::update_returningdisappearance ()
+bool CharacterHead::update ()
 {
         AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
 
@@ -133,7 +133,7 @@ bool CharacterHead::update_returningdisappearance ()
         // play sound for the current activity
         SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
-        return false ;
+        return true ;
 }
 
 void CharacterHead::behave ()

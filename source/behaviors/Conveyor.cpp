@@ -25,7 +25,7 @@ Conveyor::Conveyor( GridItem & item, const std::string & behavior )
         animationTimer->go() ;
 }
 
-bool Conveyor::update_returningdisappearance ()
+bool Conveyor::update ()
 {
         Item & conveyorItem = getItem() ;
         Mediator * mediator = conveyorItem.getMediator ();
@@ -137,7 +137,7 @@ bool Conveyor::update_returningdisappearance ()
         }
 
         // conveyors are eternal
-        return false ;
+        return true ;
 }
 
 }

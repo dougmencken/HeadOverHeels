@@ -32,7 +32,7 @@ public:
 
         virtual ~Switch( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 private:
 

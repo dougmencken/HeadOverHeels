@@ -26,7 +26,7 @@ public:
 
         virtual ~CharacterHeadAndHeels( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
         virtual void behave () ;
 

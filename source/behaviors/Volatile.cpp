@@ -23,7 +23,7 @@ Volatile::Volatile( Item & item, const std::string & behavior )
         disappearanceTimer->go() ;
 }
 
-bool Volatile::update_returningdisappearance ()
+bool Volatile::update ()
 {
         Item & volatileItem = getItem ();
         Mediator * mediator = volatileItem.getMediator() ;
@@ -181,7 +181,7 @@ bool Volatile::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 }

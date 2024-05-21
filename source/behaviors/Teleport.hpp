@@ -32,7 +32,7 @@ public:
 
         virtual ~Teleport( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 private:
 

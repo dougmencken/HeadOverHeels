@@ -24,7 +24,7 @@ Patrol::Patrol( FreeItem & item, const std::string & behavior )
         patrolTimer->go ();
 }
 
-bool Patrol::update_returningdisappearance ()
+bool Patrol::update ()
 {
         FreeItem & patrolItem = dynamic_cast< FreeItem & >( getItem() );
 
@@ -123,7 +123,7 @@ bool Patrol::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 void Patrol::randomlyChangeOrientation ()

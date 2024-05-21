@@ -16,7 +16,7 @@ Sink::Sink( GridItem & item, const std::string & behavior )
         fallTimer->go();
 }
 
-bool Sink::update_returningdisappearance ()
+bool Sink::update ()
 {
         GridItem & sinkingItem = dynamic_cast< GridItem & >( getItem() );
 
@@ -46,7 +46,7 @@ bool Sink::update_returningdisappearance ()
 
         SoundManager::getInstance().play( sinkingItem.getKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
-        return false ;
+        return true ;
 }
 
 }

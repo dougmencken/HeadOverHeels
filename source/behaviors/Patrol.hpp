@@ -37,7 +37,7 @@ public:
 
         virtual ~Patrol( ) {}
 
-        virtual bool update_returningdisappearance () ;
+        virtual bool update () ;
 
 private:
 

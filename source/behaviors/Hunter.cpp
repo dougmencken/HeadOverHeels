@@ -23,7 +23,7 @@ Hunter::Hunter( FreeItem & item, const std::string & behavior )
         speedTimer->go ();
 }
 
-bool Hunter::update_returningdisappearance ()
+bool Hunter::update ()
 {
         FreeItem & hunterItem = dynamic_cast< FreeItem & >( getItem () );
         AvatarItemPtr whoToHunt = hunterItem.getMediator()->getActiveCharacter() ;
@@ -181,7 +181,7 @@ bool Hunter::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 void Hunter::updateDirection ()

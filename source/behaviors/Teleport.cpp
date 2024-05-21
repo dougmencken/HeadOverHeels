@@ -17,7 +17,7 @@ Teleport::Teleport( GridItem & item, const std::string & behavior ) :
 {
 }
 
-bool Teleport::update_returningdisappearance ()
+bool Teleport::update ()
 {
         Item & teleportItem = getItem ();
         Mediator * mediator = teleportItem.getMediator() ;
@@ -81,7 +81,7 @@ bool Teleport::update_returningdisappearance ()
         }
 
         // teleports are eternal
-        return false ;
+        return true ;
 }
 
 }

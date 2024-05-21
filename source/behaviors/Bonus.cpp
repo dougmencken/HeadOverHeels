@@ -24,7 +24,7 @@ Bonus::Bonus( FreeItem & item, const std::string & behavior )
         fallTimer->go();
 }
 
-bool Bonus::update_returningdisappearance ()
+bool Bonus::update ()
 {
         bool present = true ;
 
@@ -172,7 +172,7 @@ bool Bonus::update_returningdisappearance ()
                         ;
         }
 
-        return ! present ;
+        return present ;
 }
 
 bool Bonus::mayTake( const Item & taker )

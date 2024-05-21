@@ -18,7 +18,7 @@ FinalBall::FinalBall( FreeItem & item, const std::string & behavior )
         speedTimer->go();
 }
 
-bool FinalBall::update_returningdisappearance ()
+bool FinalBall::update ()
 {
         Item & thisBall = getItem() ;
 
@@ -55,7 +55,7 @@ bool FinalBall::update_returningdisappearance ()
                         ;
         }
 
-        return false ;
+        return true ;
 }
 
 }
