@@ -21,7 +21,6 @@
 
 #include "Timer.hpp"
 #include "Picture.hpp"
-#include "PoolOfPictures.hpp"
 
 namespace behaviors {  class Behavior ;  }
 using behaviors::Behavior ;
@@ -134,8 +133,6 @@ public:
          * Set animation going from last to first frame, backwards
          */
         void doBackwardsMotion () ;
-
-        static PoolOfPictures & getPoolOfPictures () {  return * poolOfPictures ;  }
 
         const std::string & getUniqueName () const {  return this->uniqueName ;  }
 
@@ -269,8 +266,6 @@ public:
         bool isNotIgnoringCollisions () const {  return ! ignoreCollisions ;  }
 
 private:
-
-        static PoolOfPictures * poolOfPictures ;
 
         void readGraphicsOfItem () ;
 

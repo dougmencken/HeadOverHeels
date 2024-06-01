@@ -42,9 +42,13 @@ public:
 
         static bool isPictureThere ( const std::string & imageFile ) ;
 
+        static PoolOfPictures & getPoolOfPictures () {  return * thePoolOfPictures ;  }
+
 private:
 
         std::map < std::string /* imageFile */, PicturePtr /* image */ > pictures ;
+
+        static PoolOfPictures * thePoolOfPictures ;
 
 } ;
 

@@ -17,6 +17,7 @@
 #include "SoundManager.hpp"
 #include "LanguageStrings.hpp"
 #include "Color.hpp"
+#include "PoolOfPictures.hpp"
 
 #include "util.hpp"
 #include "ospaths.hpp"
@@ -71,7 +72,7 @@ void GameManager::cleanUp ()
         isomot.binView ();
         GameMap::getInstance().clear ();
 
-        Item::getPoolOfPictures().clear ();
+        PoolOfPictures::getPoolOfPictures().clear ();
 
         delete freedomLabel ;
 }

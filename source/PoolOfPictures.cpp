@@ -10,6 +10,9 @@
 #endif
 
 
+PoolOfPictures * PoolOfPictures::thePoolOfPictures = new PoolOfPictures( ) ;
+
+
 /* static */
 bool PoolOfPictures::isPictureThere ( const std::string & imageFile )
 {
