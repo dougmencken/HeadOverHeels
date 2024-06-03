@@ -1742,7 +1742,8 @@ void drawSprite( const Pict& sprite, int x, int y )
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        draw_sprite( Pict::getWhereToDraw().ptr (), sprite.ptr (), x, y );
+        if ( sprite.isNotNil() && Pict::getWhereToDraw().isNotNil() )
+                draw_sprite( Pict::getWhereToDraw().ptr (), sprite.ptr (), x, y );
 
 #endif
 }

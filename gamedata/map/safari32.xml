@@ -4,35 +4,35 @@
     <color>magenta</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>safari-wall-x-3.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>safari-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>safari-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>7</position>
             <picture>safari-wall-x-3.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>8</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
@@ -40,12 +40,12 @@
     <items>
         <item x="0" y="0" z="-1">
             <kind>safari-door-south</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
         <item x="9" y="0" z="-1">
             <kind>safari-door-south</kind>
-            <orientation>south</orientation>
+            <where>south</where>
             <class>door</class>
         </item>
     </items>

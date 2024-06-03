@@ -4,51 +4,51 @@
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>moon-wall-x-4.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>moon-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>moon-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>moon-wall-x-3.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>moon-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>moon-wall-x-4.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>moon-wall-y-4.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>moon-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>moon-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>moon-wall-y-3.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>moon-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>moon-wall-y-4.png</picture>
         </wall>
@@ -71,13 +71,11 @@
         </item>
         <item x="2" y="2" z="0">
             <kind>teleport</kind>
-            <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
             <class>griditem</class>
         </item>
         <item x="3" y="2" z="0">
             <kind>teleport</kind>
-            <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
             <class>griditem</class>
         </item>
@@ -93,13 +91,11 @@
         </item>
         <item x="2" y="3" z="0">
             <kind>teleport</kind>
-            <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
             <class>griditem</class>
         </item>
         <item x="3" y="3" z="0">
             <kind>teleport</kind>
-            <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
             <class>griditem</class>
         </item>
@@ -160,7 +156,7 @@
         </item>
         <item x="2" y="6" z="-1">
             <kind>moon-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

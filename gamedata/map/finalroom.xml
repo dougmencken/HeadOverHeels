@@ -486,83 +486,83 @@
         </tile>
     </floor>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>7</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>8</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>9</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>10</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>11</position>
             <picture>trees-x-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>trees-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>trees-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>trees-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>trees-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>trees-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>trees-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>trees-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>7</position>
             <picture>trees-y-1.png</picture>
         </wall>
@@ -570,77 +570,62 @@
     <items>
         <item x="4" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="4" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="5" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="5" z="1">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="5" z="1">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="5" z="0">
             <kind>stool</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="5" z="1">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="0" z="0">

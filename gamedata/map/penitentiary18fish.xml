@@ -4,83 +4,83 @@
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
-            <position>1</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>3</position>
-            <picture>penitentiary-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>4</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>5</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>6</position>
-            <picture>penitentiary-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>7</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>8</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>9</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>10</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>11</position>
-            <picture>penitentiary-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>12</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>13</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>14</position>
-            <picture>penitentiary-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>15</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>16</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>1</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>1</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>2</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>3</position>
+            <picture>penitentiary-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>4</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>5</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>5</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>6</position>
+            <picture>penitentiary-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>7</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>8</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>9</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>10</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>11</position>
+            <picture>penitentiary-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>12</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>13</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>14</position>
+            <picture>penitentiary-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>15</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>16</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>4</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
@@ -88,136 +88,112 @@
     <items>
         <item x="1" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="1" z="4">
             <kind>teleport-too</kind>
-            <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
             <class>griditem</class>
         </item>
         <item x="2" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="12" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="13" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="14" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="15" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="16" y="1" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="16" y="1" z="4">
             <kind>teleport</kind>
-            <orientation>none</orientation>
             <behavior>behavior of teletransport</behavior>
             <class>griditem</class>
         </item>
         <item x="0" y="2" z="0">
             <kind>penitentiary-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="2" z="1">
             <kind>penitentiary-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="0">
             <kind>penitentiary-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="1">
             <kind>penitentiary-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="4" z="0">
             <kind>portable-brick</kind>
-            <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
             <class>freeitem</class>
         </item>
         <item x="4" y="1" z="4">
             <kind>reincarnation-fish</kind>
-            <orientation>none</orientation>
             <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="0" y="2" z="-1">
             <kind>penitentiary-door-south</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
         <item x="12" y="6" z="-1">
             <kind>penitentiary-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

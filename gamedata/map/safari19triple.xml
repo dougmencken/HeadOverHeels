@@ -53,35 +53,35 @@
     <nofloor x="7" y="4"/>
     <nofloor x="7" y="5"/>
     <walls>
-        <wall on="x">
-            <position>9</position>
-            <picture>safari-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>10</position>
-            <picture>safari-wall-x-3.png</picture>
-        </wall>
-        <wall on="x">
-            <position>11</position>
-            <picture>safari-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>15</position>
-            <picture>safari-wall-x-3.png</picture>
-        </wall>
-        <wall on="x">
-            <position>16</position>
-            <picture>safari-wall-x-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>7</position>
             <picture>safari-wall-y-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
+            <position>9</position>
+            <picture>safari-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>10</position>
+            <picture>safari-wall-x-3.png</picture>
+        </wall>
+        <wall along="x">
+            <position>11</position>
+            <picture>safari-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>15</position>
+            <picture>safari-wall-x-3.png</picture>
+        </wall>
+        <wall along="x">
+            <position>16</position>
+            <picture>safari-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
             <position>14</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>10</position>
             <picture>safari-wall-y-1.png</picture>
         </wall>
@@ -89,165 +89,133 @@
     <items>
         <item x="8" y="1" z="0">
             <kind>safari-wall-y-2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="2" z="0">
             <kind>safari-wall-y-1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="2" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="3" z="0">
             <kind>safari-wall-y-3</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="3" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="4" z="0">
             <kind>safari-wall-y-3</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="4" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="5" z="0">
             <kind>safari-wall-y-1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="6" z="0">
             <kind>safari-wall-x-1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="6" z="0">
             <kind>safari-wall-x-3</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="6" z="0">
             <kind>safari-wall-x-1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="6" z="0">
             <kind>safari-wall-x-2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="6" z="0">
             <kind>safari-wall-x-2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="6" z="0">
             <kind>safari-wall-x-1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="6" z="0">
             <kind>safari-wall-x-3</kind>
-            <orientation>none</orientation>
-            <class>griditem</class>
-        </item>
-        <item x="8" y="6" z="0">
-            <kind>safari-wall-y-2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="6" z="0">
             <kind>safari-wall-x-1</kind>
-            <orientation>none</orientation>
+            <class>griditem</class>
+        </item>
+        <item x="8" y="6" z="0">
+            <kind>safari-wall-y-2</kind>
             <class>griditem</class>
         </item>
         <item x="4" y="10" z="1">
             <kind>drum</kind>
-            <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="10" z="2">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="10" z="0">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="9" z="1">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="8" z="2">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="16" y="1" z="5">
             <kind>cylinder</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="16" y="1" z="3">
             <kind>cylinder</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="16" y="1" z="1">
             <kind>cylinder</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="8" z="0">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="7" z="1">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="10" y="3" z="1">
             <kind>trampoline</kind>
-            <orientation>none</orientation>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="10" y="2" z="1">
             <kind>drum</kind>
-            <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
             <class>freeitem</class>
         </item>
         <item x="16" y="1" z="0">
             <kind>cylinder</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="16" y="1" z="2">
             <kind>cylinder</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="16" y="1" z="4">
             <kind>cylinder</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="16" y="1" z="6">
@@ -258,59 +226,51 @@
         </item>
         <item x="10" y="4" z="1">
             <kind>drum</kind>
-            <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="7" z="0">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="7" z="2">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="8" z="1">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="9" z="0">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="9" z="2">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="3" y="10" z="1">
             <kind>bars-ns</kind>
-            <orientation>none</orientation>
             <class>freeitem</class>
         </item>
         <item x="4" y="10" z="0">
             <kind>siren</kind>
-            <orientation>none</orientation>
             <behavior>behavior of random patroling in four secondary directions</behavior>
             <class>freeitem</class>
         </item>
         <item x="12" y="0" z="-1">
             <kind>safari-door-east</kind>
-            <orientation>eastsouth</orientation>
+            <where>eastsouth</where>
             <class>door</class>
         </item>
         <item x="0" y="8" z="-1">
             <kind>safari-door-north</kind>
-            <orientation>northwest</orientation>
+            <where>northwest</where>
             <class>door</class>
         </item>
         <item x="12" y="11" z="-1">
             <kind>safari-door-west</kind>
-            <orientation>westsouth</orientation>
+            <where>westsouth</where>
             <class>door</class>
         </item>
     </items>

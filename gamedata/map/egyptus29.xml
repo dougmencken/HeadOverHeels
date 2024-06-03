@@ -4,51 +4,51 @@
     <color>white</color>
     <floorKind>absent</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="y">
+            <position>1</position>
+            <picture>egyptus-wall-y-1.png</picture>
+        </wall>
+        <wall along="x">
             <position>2</position>
             <picture>egyptus-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="y">
+            <position>2</position>
+            <picture>egyptus-wall-y-2.png</picture>
+        </wall>
+        <wall along="x">
             <position>3</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="y">
+            <position>3</position>
+            <picture>egyptus-wall-y-1.png</picture>
+        </wall>
+        <wall along="x">
             <position>4</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>egyptus-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
-            <position>1</position>
-            <picture>egyptus-wall-y-1.png</picture>
-        </wall>
-        <wall on="y">
-            <position>2</position>
-            <picture>egyptus-wall-y-2.png</picture>
-        </wall>
-        <wall on="y">
-            <position>3</position>
-            <picture>egyptus-wall-y-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>7</position>
             <picture>egyptus-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>8</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
@@ -56,42 +56,35 @@
     <items>
         <item x="0" y="4" z="0">
             <kind>egyptus-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="4" z="1">
             <kind>egyptus-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="4" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="5" z="0">
             <kind>egyptus-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="5" z="1">
             <kind>egyptus-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="5" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="8" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="4" z="-1">
             <kind>egyptus-door-south</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
     </items>

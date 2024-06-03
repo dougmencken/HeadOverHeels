@@ -4,51 +4,51 @@
     <color>yellow</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="x">
-            <position>3</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="x">
-            <position>7</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="x">
-            <position>8</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>2</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall along="y">
             <position>2</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>3</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall along="y">
             <position>3</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>7</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall along="y">
             <position>7</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>8</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall along="y">
             <position>8</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>jail-wall-y.png</picture>
         </wall>
@@ -56,127 +56,105 @@
     <items>
         <item x="8" y="5" z="0">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="6" z="1">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="0">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="1">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="2">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="3">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="4">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="5">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="6">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="2">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="4">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="5">
             <kind>book</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="6">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="8" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="8" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="8" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="8" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="8" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="8" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="8" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="9" z="3">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="9" z="3">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="-1">
             <kind>jail-door-east</kind>
-            <orientation>east</orientation>
+            <where>east</where>
             <class>door</class>
         </item>
         <item x="0" y="4" z="-1">
             <kind>jail-door-north</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
         <item x="4" y="9" z="-1">
             <kind>jail-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

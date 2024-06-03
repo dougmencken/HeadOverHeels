@@ -4,35 +4,35 @@
     <color>green</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>egyptus-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>6</position>
-            <picture>egyptus-wall-x-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>2</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>2</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>6</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>6</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
@@ -40,57 +40,49 @@
     <items>
         <item x="2" y="1" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="2" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="2" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="5" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="5" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="6" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="6" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="-1">
             <kind>egyptus-door-east</kind>
-            <orientation>east</orientation>
+            <where>east</where>
             <class>door</class>
         </item>
         <item x="0" y="3" z="-1">
             <kind>egyptus-door-north</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
         <item x="3" y="7" z="-1">
             <kind>egyptus-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

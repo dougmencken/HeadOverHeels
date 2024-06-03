@@ -30,11 +30,15 @@ public:
         /**
          * @param trueXfalseY is this a piece of the wall along X or not
          * @param index where’s this piece on the wall, the number from zero onwards
-         * @param graphicsOfPiece the picture of the piece
+         * @param pictureFile the name of picture file
          */
-        WallPiece( bool trueXfalseY, int index, Picture* graphicsOfPiece ) ;
+        WallPiece( bool trueXfalseY, int index, const std::string & pictureFile )
+                : Mediated()
+                , alongX( trueXfalseY )
+                , position( index )
+                , nameOfImage( pictureFile ) {}
 
-        virtual ~WallPiece( ) ;
+        virtual ~WallPiece( ) {}
 
         virtual void draw () ;
 
@@ -55,27 +59,22 @@ private:
         // if true, then this piece is part of the wall along X, otherwise along Y
         bool alongX ;
 
-        // the position of this piece on the wall, the smaller the closer to the room’s origin
+        // the position of this piece, the smaller the closer to the room’s origin
         int position ;
 
         std::pair < int, int > offset ;
 
-        // graphics of this section of the wall
-        const Picture * image ;
+        // name of the picture file for this part of the wall
+        std::string nameOfImage ;
 
 public:
 
-        bool isAlongX () const {  return this->alongX ;  }
-
+        bool isAlongX () const {  return   this->alongX ;  }
         bool isAlongY () const {  return ! this->alongX ;  }
 
         int getPosition () const {  return this->position ;  }
 
-        const std::string & getNameOfImage () const
-        {
-                assert( this->image != nilPointer );
-                return this->image->getName () ;
-        }
+        const std::string & getNameOfImage () const {  return this->nameOfImage ;  }
 
 } ;
 

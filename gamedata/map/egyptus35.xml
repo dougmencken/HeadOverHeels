@@ -4,43 +4,43 @@
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>egyptus-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>egyptus-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>7</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
@@ -48,69 +48,57 @@
     <items>
         <item x="0" y="0" z="0">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="0" z="3">
             <kind>toaster</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="0" z="2">
             <kind>toaster</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="1" z="1">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="1" z="4">
             <kind>toaster</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="2" z="2">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="2" z="5">
             <kind>toaster</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="3">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="4" z="4">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="5" z="4">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="5" z="5">
             <kind>trampoline</kind>
-            <orientation>none</orientation>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="1" y="5" z="0">
             <kind>drum</kind>
-            <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
             <class>freeitem</class>
         </item>
         <item x="0" y="8" z="-1">
             <kind>egyptus-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

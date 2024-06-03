@@ -2,22 +2,8 @@
 #include "WallPiece.hpp"
 
 #include "Mediator.hpp"
+#include "PoolOfPictures.hpp"
 
-
-WallPiece::WallPiece( bool trueXfalseY, int index, Picture* graphicsOfPiece )
-        : Mediated()
-        , alongX( trueXfalseY )
-        , position( index )
-        , image( graphicsOfPiece )
-{
-
-}
-
-WallPiece::~WallPiece()
-{
-          delete image ;
-          image = nilPointer ;
-}
 
 void WallPiece::calculateOffset()
 {
@@ -35,20 +21,19 @@ void WallPiece::calculateOffset()
         else
                 this->offset.first += 1 - tileSize * ( ( this->position + 2 ) << 1 ) ;
 
-        this->offset.second += ( this->position + 1 ) * tileSize - this->image->getHeight() - 1 ;
+        PicturePtr image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( this->nameOfImage );
+        this->offset.second += ( this->position + 1 ) * tileSize - image->getHeight() - 1 ;
 
         if ( isAlongX() && ( room->hasDoorOn( "east" ) ||
                                 room->hasDoorOn( "eastnorth" ) || room->hasDoorOn( "eastsouth" )
-                                        || ! room->hasFloor() ) )
-        {
+                                        || ! room->hasFloor() ) ) {
                 this->offset.first -= ( tileSize << 1 );
                 this->offset.second += tileSize ;
         }
 
         if ( isAlongY() && ( room->hasDoorOn( "north" ) ||
                                 room->hasDoorOn( "northeast" ) || room->hasDoorOn( "northwest" )
-                                        || ! room->hasFloor() ) )
-        {
+                                        || ! room->hasFloor() ) ) {
                 this->offset.first += ( tileSize << 1 );
                 this->offset.second += tileSize ;
         }
@@ -56,6 +41,7 @@ void WallPiece::calculateOffset()
 
 void WallPiece::draw ()
 {
-        if ( this->image != nilPointer )
-                allegro::drawSprite( this->image->getAllegroPict(), this->offset.first, this->offset.second );
+        PicturePtr image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( this->nameOfImage );
+        if ( image != nilPointer )
+                allegro::drawSprite( image->getAllegroPict(), this->offset.first, this->offset.second );
 }

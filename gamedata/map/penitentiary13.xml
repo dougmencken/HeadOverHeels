@@ -4,51 +4,51 @@
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>penitentiary-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>penitentiary-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>7</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
@@ -56,76 +56,63 @@
     <items>
         <item x="0" y="0" z="0">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="0" z="1">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="0">
             <kind>toaster</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="2">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <behavior>behavior of slow disappearance on jump into</behavior>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="3">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="6">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="0" z="4">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="0" z="5">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="3" z="0">
             <kind>toaster</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="3" z="1">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <behavior>behavior of slow disappearance on jump into</behavior>
             <class>griditem</class>
         </item>
         <item x="6" y="3" z="0">
             <kind>toaster</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="3" z="1">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <behavior>behavior of slow disappearance on jump into</behavior>
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="7">
             <kind>trampoline</kind>
-            <orientation>none</orientation>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="4" z="-1">
             <kind>penitentiary-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

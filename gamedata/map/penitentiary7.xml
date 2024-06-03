@@ -4,51 +4,51 @@
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>penitentiary-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>6</position>
-            <picture>penitentiary-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>7</position>
-            <picture>penitentiary-wall-x-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>2</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>2</position>
             <picture>penitentiary-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>penitentiary-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>6</position>
+            <picture>penitentiary-wall-x-2.png</picture>
+        </wall>
+        <wall along="y">
             <position>6</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
+            <position>7</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
             <position>5</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
@@ -56,89 +56,74 @@
     <items>
         <item x="3" y="0" z="0">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="2">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="3">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="4">
             <kind>penitentiary-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="2">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="3">
             <kind>penitentiary-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="4">
             <kind>penitentiary-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="1" z="0">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="1" z="1">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="1" z="3">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="1" z="0">
             <kind>bubble-robot</kind>
-            <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
             <class>freeitem</class>
         </item>
         <item x="4" y="1" z="0">
             <kind>bubble-robot</kind>
-            <orientation>none</orientation>
             <behavior>behavior of random patroling in eight directions</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
             <kind>penitentiary-door-west</kind>
-            <orientation>east</orientation>
+            <where>east</where>
             <class>door</class>
         </item>
         <item x="8" y="3" z="-1">
             <kind>penitentiary-door-south</kind>
-            <orientation>south</orientation>
+            <where>south</where>
             <class>door</class>
         </item>
     </items>

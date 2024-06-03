@@ -4,59 +4,59 @@
     <color>white.reduced</color>
     <floorKind>mortal</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>market-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>market-wall-x-3.png</picture>
         </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>market-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>6</position>
-            <picture>market-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>7</position>
-            <picture>market-wall-x-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>market-wall-y-3.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>2</position>
+            <picture>market-wall-x-2.png</picture>
+        </wall>
+        <wall along="y">
             <position>2</position>
             <picture>market-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>market-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>market-wall-y-3.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>market-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>6</position>
+            <picture>market-wall-x-2.png</picture>
+        </wall>
+        <wall along="y">
             <position>6</position>
             <picture>market-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>7</position>
+            <picture>market-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>7</position>
             <picture>market-wall-y-3.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>8</position>
             <picture>market-wall-y-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>market-wall-x-3.png</picture>
         </wall>
@@ -64,107 +64,86 @@
     <items>
         <item x="3" y="0" z="0">
             <kind>market-column-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
             <kind>market-column-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
             <kind>market-column-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
             <kind>market-column-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="2" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="2" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="2" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="3" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="8" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="8" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="8" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="9" z="0">
             <kind>market-column-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="9" z="0">
             <kind>market-column-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="1" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
@@ -176,54 +155,47 @@
         </item>
         <item x="0" y="2" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
         <item x="2" y="2" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
         <item x="1" y="3" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
         <item x="6" y="6" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
         <item x="5" y="7" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
         <item x="7" y="7" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
         <item x="6" y="8" z="1">
             <kind>remote-control</kind>
-            <orientation>none</orientation>
             <behavior>behavior of remote control</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">
             <kind>market-door-west</kind>
-            <orientation>east</orientation>
+            <where>east</where>
             <class>door</class>
         </item>
         <item x="3" y="9" z="-1">
             <kind>market-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

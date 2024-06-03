@@ -58,99 +58,99 @@
     <nofloor x="12" y="16"/>
     <nofloor x="12" y="17"/>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>moon-wall-x-4.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="y">
+            <position>1</position>
+            <picture>moon-wall-y-4.png</picture>
+        </wall>
+        <wall along="x">
             <position>2</position>
             <picture>moon-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="y">
+            <position>2</position>
+            <picture>moon-wall-y-1.png</picture>
+        </wall>
+        <wall along="y">
+            <position>3</position>
+            <picture>moon-wall-y-3.png</picture>
+        </wall>
+        <wall along="x">
             <position>3</position>
             <picture>moon-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>moon-wall-x-3.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>moon-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>moon-wall-x-4.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>7</position>
             <picture>moon-wall-x-4.png</picture>
         </wall>
-        <wall on="x">
-            <position>8</position>
-            <picture>moon-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>12</position>
-            <picture>moon-wall-x-3.png</picture>
-        </wall>
-        <wall on="y">
-            <position>1</position>
-            <picture>moon-wall-y-4.png</picture>
-        </wall>
-        <wall on="y">
-            <position>2</position>
-            <picture>moon-wall-y-1.png</picture>
-        </wall>
-        <wall on="y">
-            <position>3</position>
-            <picture>moon-wall-y-3.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>7</position>
             <picture>moon-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>8</position>
             <picture>moon-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>8</position>
+            <picture>moon-wall-x-2.png</picture>
+        </wall>
+        <wall along="y">
             <position>9</position>
             <picture>moon-wall-y-4.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>10</position>
             <picture>moon-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>11</position>
             <picture>moon-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>12</position>
+            <picture>moon-wall-x-3.png</picture>
+        </wall>
+        <wall along="y">
             <position>12</position>
             <picture>moon-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>13</position>
             <picture>moon-wall-y-3.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>14</position>
             <picture>moon-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>15</position>
             <picture>moon-wall-y-4.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>16</position>
             <picture>moon-wall-y-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>11</position>
             <picture>moon-wall-x-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>moon-wall-y-3.png</picture>
         </wall>
@@ -228,42 +228,34 @@
         </item>
         <item x="7" y="9" z="0">
             <kind>invisible-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
-        <item x="7" y="9" z="10">
+        <item x="7" y="9" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="9" z="0">
             <kind>invisible-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="9" z="0">
             <kind>invisible-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="9" z="0">
             <kind>invisible-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="9" z="0">
             <kind>invisible-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="12" y="9" z="0">
             <kind>invisible-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="10" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="11" z="0">
@@ -278,7 +270,6 @@
         </item>
         <item x="7" y="11" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="12" z="0">
@@ -293,7 +284,6 @@
         </item>
         <item x="7" y="12" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="13" z="0">
@@ -308,7 +298,6 @@
         </item>
         <item x="7" y="13" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="14" z="0">
@@ -323,7 +312,6 @@
         </item>
         <item x="7" y="14" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="15" z="0">
@@ -333,12 +321,10 @@
         </item>
         <item x="7" y="15" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="16" z="0">
             <kind>invisible-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="14" z="1">
@@ -460,17 +446,17 @@
         </item>
         <item x="9" y="0" z="-1">
             <kind>moon-door-east</kind>
-            <orientation>eastsouth</orientation>
+            <where>eastsouth</where>
             <class>door</class>
         </item>
         <item x="0" y="4" z="-1">
             <kind>moon-door-north</kind>
-            <orientation>northeast</orientation>
+            <where>northeast</where>
             <class>door</class>
         </item>
         <item x="3" y="17" z="-1">
             <kind>moon-door-west</kind>
-            <orientation>westnorth</orientation>
+            <where>westnorth</where>
             <class>door</class>
         </item>
     </items>

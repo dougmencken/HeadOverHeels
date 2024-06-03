@@ -41,10 +41,6 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
         unsigned int xTiles = std::atoi( xTilesElement->FirstChild()->ToText()->Value() );
         unsigned int yTiles = std::atoi( yTilesElement->FirstChild()->ToText()->Value() );
 
-        std::string roomColor = "white" ;
-        tinyxml2::XMLElement* colorElement = xmlRoot->FirstChildElement( "color" ) ;
-        if ( colorElement != nilPointer ) roomColor = colorElement->FirstChild()->ToText()->Value() ;
-
         tinyxml2::XMLElement* floorKind = xmlRoot->FirstChildElement( "floorKind" ) ;
         if ( floorKind == nilPointer ) floorKind = xmlRoot->FirstChildElement( "floorType" ) ;
         std::string kindOfFloor = floorKind->FirstChild()->ToText()->Value() ;
@@ -68,14 +64,14 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
                 return nilPointer;
         }
 
-#if defined( DEBUG ) && DEBUG
-        std::cout << "the room’s color is " << Color::byName( roomColor ).toString () << std::endl ;
-#endif
-        theRoom->setColor( roomColor );
+        std::string roomColor = "white" ;
+        tinyxml2::XMLElement* colorElement = xmlRoot->FirstChildElement( "color" ) ;
+        if ( colorElement != nilPointer ) {
+                roomColor = colorElement->FirstChild()->ToText()->Value() ;
+                theRoom->setColor( roomColor );
+        }
 
         // add items to room
-
-        std::set< std::pair< int, int > > wallsXY ; // the pieces of walls
 
         tinyxml2::XMLElement* items = xmlRoot->FirstChildElement( "items" );
 
@@ -83,9 +79,9 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                int gridCellX = std::atoi( item->Attribute( "x" ) );
-                int gridCellY = std::atoi( item->Attribute( "y" ) );
-                int gridCellZ = std::atoi( item->Attribute( "z" ) );
+                int itemCellX = std::atoi( item->Attribute( "x" ) );
+                int itemCellY = std::atoi( item->Attribute( "y" ) );
+                int itemCellZ = std::atoi( item->Attribute( "z" ) );
 
                 tinyxml2::XMLElement* itemClass = item->FirstChildElement( "class" );
                 assert( itemClass != nilPointer );
@@ -98,60 +94,38 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
                         if ( door != nilPointer )
                                 theRoom->addDoor( door );
                         else
-                                std::cout << "oops, can’t make a door at cell " << gridCellX << ", " << gridCellY << ", " << gridCellZ << std::endl ;
+                                std::cout << "oops, can’t make a door at cell cx=" << itemCellX << " cy=" << itemCellY << " cz=" << itemCellZ << std::endl ;
                 }
                 else if ( whichClass == "griditem" ) // is it a grid item
                 {
                         std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
-                        int wallX = std::atoi( item->Attribute( "x" ) );
-                        int wallY = std::atoi( item->Attribute( "y" ) );
 
-                        if ( kind.find( "wall" ) != std::string::npos &&
-                                ( ( wallY == 0 && kind.find( "-x" ) != std::string::npos ) || ( wallX == 0 && kind.find( "-y" ) != std::string::npos ) ) )
-                        {
-                                bool onX = ( wallY == 0 && kind.find( "-x" ) != std::string::npos );
-                                int index = ( onX ? wallX : wallY );
+                        bool wallAlongX = false ;
+                        bool wallAlongY = false ;
 
-                                std::cout << "converting grid item \"" << kind << "\" to wall on " << ( onX ? "x:" : "y:" ) << index
-                                                << " of room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
-
-                                std::string fileWithPicture = kind + ".png";
-                                std::string gfxSet = GameManager::getInstance().getChosenGraphicsSet() ;
-
-                                autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
-                                        ospaths::pathToFile( ospaths::sharePath() + gfxSet, fileWithPicture )
-                                ) );
-
-                                if ( picture->isNotNil() )
-                                {
-                                        wallsXY.insert( std::pair< int, int >( onX ? index : 0, onX ? 0 : index ) );
-
-                                        Picture* imageOfWall = new Picture( *picture );
-                                        imageOfWall->setName( fileWithPicture );
-
-                                        WallPiece* wallSegment = new WallPiece( onX, index, imageOfWall );
-
-                                        theRoom->addWallPiece( wallSegment );
-                                }
-                                else
-                                {
-                                        std::cerr << "picture \"" << fileWithPicture << "\" from \"" << gfxSet << "\" is absent" << std::endl ;
-                                }
+                        if ( kind.find( "wall" ) != std::string::npos && kind.find( "invisible-wall" ) == std::string::npos ) {
+                                wallAlongX = ( itemCellY == 0 && kind.find( "-x" ) != std::string::npos );
+                                wallAlongY = ( itemCellX == 0 && kind.find( "-y" ) != std::string::npos );
                         }
-                        else
-                        {
+
+                        if ( wallAlongX || wallAlongY ) {
+                                int where = ( wallAlongX ) ? itemCellX : itemCellY ;
+
+                                std::cout << "converting grid item \"" << kind << "\" @ cx=" << itemCellX << " cy=" << itemCellY
+                                                << " to wall piece at " << ( wallAlongX ? "x:" : "y:" ) << where
+                                                        << " in room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+
+                                std::string fileWithPicture = kind + ".png" ;
+                                theRoom->addWallPiece( new WallPiece( wallAlongX, where, fileWithPicture ) );
+                        }
+                        else {
                                 GridItemPtr gridItem = makeGridItem( item, theRoom );
 
                                 if ( gridItem != nilPointer )
-                                {
                                         theRoom->addGridItem( gridItem );
-
-                                        if ( gridItem->isSegmentOfWallAlongX () || gridItem->isSegmentOfWallAlongY () )
-                                                wallsXY.insert( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
-                                }
                                 else
-                                        std::cout << "oops, can’t make a grid item at cell "
-                                                        << gridCellX << ", " << gridCellY << ", " << gridCellZ << std::endl ;
+                                        std::cout << "oops, can’t make a grid item at cell"
+                                                        << " cx=" << itemCellX << " cy=" << itemCellY << " cz=" << itemCellZ << std::endl ;
                         }
                 }
                 else if ( whichClass == "freeitem" ) // is it a free item
@@ -160,8 +134,9 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
 
                         if ( freeItem != nilPointer )
                                 theRoom->addFreeItem( freeItem );
-                        else // there may be bonus item already taken and thus absent
-                                std::cout << "free item at cell " << gridCellX << ", " << gridCellY << ", " << gridCellZ << " is absent" << std::endl ;
+                        else // there may be a bonus item already taken and thus absent
+                                std::cout << "free item at cell cx=" << itemCellX << " cy=" << itemCellY << " cz=" << itemCellZ
+                                                << " is absent" << std::endl ;
                 }
         }
 
@@ -180,14 +155,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
                         WallPiece* wallSegment = makeWallPiece( wall );
 
                         if ( wallSegment != nilPointer )
-                        {
-                                if ( wallSegment->isAlongX () )
-                                        wallsXY.insert( std::pair< int, int >( wallSegment->getPosition(), 0 ) );
-                                else
-                                        wallsXY.insert( std::pair< int, int >( 0, wallSegment->getPosition() ) );
-
                                 theRoom->addWallPiece( wallSegment );
-                        }
                 }
         }
 
@@ -512,39 +480,19 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
 /* static */
 WallPiece * RoomMaker::makeWallPiece( tinyxml2::XMLElement* wall )
 {
-        std::string xy;
-        if ( wall->Attribute( "on" ) != nilPointer )
-        {
-                xy = wall->Attribute( "on" );
-        }
-        else
-        {
-                tinyxml2::XMLElement* axis = wall->FirstChildElement( "axis" );
-                if ( axis != nilPointer )
-                        xy = axis->FirstChild()->ToText()->Value();
-        }
+        std::string xy ;
+        if ( wall->Attribute( "along" ) != nilPointer )
+                xy = wall->Attribute( "along" );
 
         tinyxml2::XMLElement* position = wall->FirstChildElement( "position" );
-        if ( position == nilPointer ) position = wall->FirstChildElement( "index" );
+        //////if ( position == nilPointer ) position = wall->FirstChildElement( "index" );
+        assert( position != nilPointer );
+        int where = std::atoi( position->FirstChild()->ToText()->Value() );
 
         tinyxml2::XMLElement* picture = wall->FirstChildElement( "picture" );
         std::string pictureString = picture->FirstChild()->ToText()->Value();
 
-        autouniqueptr< allegro::Pict > image( allegro::Pict::fromPNGFile (
-                ospaths::pathToFile( ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), pictureString )
-        ) );
-
-        if ( image->isNotNil() )
-        {
-                Picture* imageOfWallPiece = new Picture( *image );
-                imageOfWallPiece->setName( pictureString );
-
-                return new WallPiece( xy == "x" ? true : false, std::atoi( position->FirstChild()->ToText()->Value() ), imageOfWallPiece );
-        }
-        else
-                std::cerr << "there’s no picture \"" << pictureString << "\"" << std::endl ;
-
-        return nilPointer;
+        return new WallPiece( xy == "x" ? true : false, where, pictureString );
 }
 
 /* static */
@@ -567,8 +515,7 @@ GridItemPtr RoomMaker::makeGridItem( tinyxml2::XMLElement* item, Room* room )
                 if ( orientation != nilPointer )
                         heading = orientation->FirstChild()->ToText()->Value();
 
-                //// for backward compatibility
-                if ( heading == "none" || heading == "nowhere" ) heading = "" ;
+                if ( heading == "none" ) heading = "" ; //// backwards compatibility
 
                 GridItemPtr gridItem( new GridItem( *itemDescription, gridCellX, gridCellY, freeZ, heading ) );
 
@@ -593,15 +540,15 @@ FreeItemPtr RoomMaker::makeFreeItem( tinyxml2::XMLElement* item, Room* room )
 
         if ( itemDescription != nilPointer )
         {
-                int gridCellX = std::atoi( item->Attribute( "x" ) );
-                int gridCellY = std::atoi( item->Attribute( "y" ) );
-                int gridCellZ = std::atoi( item->Attribute( "z" ) );
+                int cellX = std::atoi( item->Attribute( "x" ) );
+                int cellY = std::atoi( item->Attribute( "y" ) );
+                int cellZ = std::atoi( item->Attribute( "z" ) );
 
                 // convert the location of cell to the free coordinates
                 unsigned int oneTileLong = room->getSizeOfOneTile ();
-                int freeX = gridCellX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
-                int freeY = ( gridCellY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
-                int freeZ = ( gridCellZ > Room::FloorZ ) ? gridCellZ * Room::LayerHeight : Room::FloorZ ;
+                int freeX = cellX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
+                int freeY = ( cellY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
+                int freeZ = ( cellZ > Room::FloorZ ) ? cellZ * Room::LayerHeight : Room::FloorZ ;
 
                 // don’t create an item if it's a bonus that disappears once when taken
                 if ( BonusManager::getInstance().isAbsent( BonusInRoom( itemDescription->getKind (), room->getNameOfRoomDescriptionFile() ) ) )
@@ -612,18 +559,17 @@ FreeItemPtr RoomMaker::makeFreeItem( tinyxml2::XMLElement* item, Room* room )
                 if ( orientation != nilPointer )
                         heading = orientation->FirstChild()->ToText()->Value();
 
-                //// for backward compatibility
-                if ( heading == "none" || heading == "nowhere" ) heading = "" ;
+                if ( heading == "none" ) heading = "" ; //// backwards compatibility
 
                 FreeItemPtr freeItem( new FreeItem( *itemDescription, freeX, freeY, freeZ, heading ) );
-                freeItem->setInitialCellLocation( gridCellX, gridCellY, gridCellZ );
+                freeItem->setInitialCellLocation( cellX, cellY, cellZ );
 
-                std::string behaviorOfItem = "still";
+                std::string behaviorOfItem ;
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
-                if ( behavior != nilPointer )
+                if ( behavior != nilPointer && behavior->FirstChild() != nilPointer ) {
                         behaviorOfItem = behavior->FirstChild()->ToText()->Value() ;
-
-                freeItem->setBehaviorOf( behaviorOfItem );
+                        freeItem->setBehaviorOf( behaviorOfItem );
+                }
 
                 // more data for the behavior of elevator
                 if ( behaviorOfItem == "behavior of elevator" )
@@ -674,23 +620,24 @@ Door* RoomMaker::makeDoor( tinyxml2::XMLElement* item )
 {
         std::string kind = item->FirstChildElement( "kind" )->FirstChild()->ToText()->Value();
 
-        int gridCellX = std::atoi( item->Attribute( "x" ) );
-        int gridCellY = std::atoi( item->Attribute( "y" ) );
-        int gridCellZ = std::atoi( item->Attribute( "z" ) );
+        int cellX = std::atoi( item->Attribute( "x" ) );
+        int cellY = std::atoi( item->Attribute( "y" ) );
+        int cellZ = std::atoi( item->Attribute( "z" ) );
 
         // "z" can't be below the floor, that's less than Room::FloorZ = -1
-        int freeZ = ( gridCellZ > Room::FloorZ ) ? gridCellZ * Room::LayerHeight : Room::FloorZ ;
+        int freeZ = ( cellZ > Room::FloorZ ) ? cellZ * Room::LayerHeight : Room::FloorZ ;
 
-        std::string doorOrientation ;
-        tinyxml2::XMLElement* orientation = item->FirstChildElement( "orientation" );
-        if ( orientation != nilPointer )
-                doorOrientation = orientation->FirstChild()->ToText()->Value() ;
-        else {
-                // the door's kind is %scenery%-door-%at%
-                size_t doorInKind = kind.find( "door-" );
-                if ( doorInKind != std::string::npos )
-                        doorOrientation = kind.substr( doorInKind + 5 );
-        }
+        // the door's kind is %scenery%-door-%at%
+        size_t doorInKind = kind.find( "door-" );
+        IF_DEBUG( assert( doorInKind != std::string::npos ) )
 
-        return new Door( kind, gridCellX, gridCellY, freeZ, doorOrientation );
+        std::string whereIsDoor ;
+        if ( doorInKind != std::string::npos )
+                whereIsDoor = kind.substr( doorInKind + 5 );
+
+        tinyxml2::XMLElement* where = item->FirstChildElement( "where" );
+        if ( where != nilPointer )
+                whereIsDoor = where->FirstChild()->ToText()->Value() ;
+
+        return new Door( kind, cellX, cellY, freeZ, whereIsDoor );
 }

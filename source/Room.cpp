@@ -22,8 +22,6 @@
 
 #include <algorithm> // std::for_each
 
-using behaviors::Elevator ;
-
 /* static */
 const std::string Room::Sides_Of_Room[ Room::Sides ] =
                         {  "northeast", "northwest", "north", "southeast", "southwest", "south",
@@ -101,8 +99,7 @@ Room::Room( const std::string & roomFile,
 
         size_t pos = 0;
 
-        for ( unsigned int f = 0 ; f < xTiles + yTiles ; ++ f )
-        {
+        for ( unsigned int f = 0 ; f < xTiles + yTiles ; ++ f ) {
                 for ( unsigned int g = yTiles ; g > 0 ; -- g )
                 {
                         unsigned int n = g - 1 ; // g = n + 1
@@ -116,9 +113,7 @@ Room::Room( const std::string & roomFile,
         // 0 for black shadows, 128 for 50% opacity, 256 for no shadows
         this->shadingTransparency = GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
 
-#if defined( DEBUG ) && DEBUG
-        std::cout << "created room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
-#endif
+        IF_DEBUG( std::cout << "created room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl )
 }
 
 Room::~Room()
@@ -235,9 +230,11 @@ bool Room::saveAsXML( const std::string & file )
 
         // write walls
 
+        tinyxml2::XMLElement* walls = nilPointer ;
+
         if ( wallPieces.size() > 0 )
         {
-                tinyxml2::XMLElement* walls = roomXml.NewElement( "walls" );
+                walls = roomXml.NewElement( "walls" );
 
                 for ( std::vector< WallPiece * >::const_iterator it = wallPieces.begin () ; it != wallPieces.end () ; ++ it )
                 {
@@ -246,7 +243,7 @@ bool Room::saveAsXML( const std::string & file )
                         {
                                 tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
 
-                                wall->SetAttribute( "on", piece->isAlongX() ? "x" : "y" );
+                                wall->SetAttribute( "along", piece->isAlongX() ? "x" : "y" );
 
                                 tinyxml2::XMLElement* wallPosition = roomXml.NewElement( "position" );
                                 wallPosition->SetText( piece->getPosition() );
@@ -259,9 +256,10 @@ bool Room::saveAsXML( const std::string & file )
                                 walls->InsertEndChild( wall );
                         }
                 }
-
-                root->InsertEndChild( walls );
         }
+
+        if ( walls != nilPointer )
+                root->InsertEndChild( walls );
 
         // write items
 
@@ -269,73 +267,80 @@ bool Room::saveAsXML( const std::string & file )
         {
                 tinyxml2::XMLElement* items = roomXml.NewElement( "items" );
 
-                // grid items
+                // the grid items
 
-                for ( unsigned int column = 0; column < gridItems.size (); column ++ )
-                {
+                for ( unsigned int column = 0; column < gridItems.size (); column ++ ) {
                         for ( std::vector< GridItemPtr >::const_iterator gi = gridItems[ column ].begin (); gi != gridItems[ column ].end (); ++ gi )
                         {
                                 GridItemPtr theItem = *gi ;
-                                if ( theItem != nilPointer )
+                                if ( theItem == nilPointer ) continue ;
+
+                                const std::string & kindOfItem = theItem->getOriginalKind() ;
+
+                                if ( kindOfItem.find( "wall" ) != std::string::npos
+                                                && kindOfItem.find( "invisible-wall" ) == std::string::npos
+                                                        && walls != nilPointer )
                                 {
-                                        /******* old code to convert grid items to walls
-                                        ////////
-                                        if ( ( theItem->isSegmentOfWallAlongX () && theItem->getCellY() == 0 )
-                                                        || ( theItem->isSegmentOfWallAlongY () && theItem->getCellX() == 0 ) )
+                                        bool isAlongX = ( theItem->getCellY() == 0 && kindOfItem.find( "-x" ) != std::string::npos );
+                                        bool isAlongY = ( theItem->getCellX() == 0 && kindOfItem.find( "-y" ) != std::string::npos );
+                                        if ( isAlongX || isAlongY )
                                         {
+                                                // write a wall grid item as a wall piece
+
                                                 tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
 
-                                                wall->SetAttribute( "on", theItem->isSegmentOfWallAlongX () ? "x" : "y" );
+                                                wall->SetAttribute( "along", isAlongX ? "x" : "y" );
 
                                                 tinyxml2::XMLElement* wallPosition = roomXml.NewElement( "position" );
-                                                wallPosition->SetText( theItem->isSegmentOfWallAlongX() ? theItem->getCellX() : theItem->getCellY() );
+                                                wallPosition->SetText( isAlongX ? theItem->getCellX() : theItem->getCellY() );
                                                 wall->InsertEndChild( wallPosition );
 
                                                 tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
-                                                wallPicture->SetText( ( theItem->getOriginalKind() + ".png" ).c_str () );
+                                                wallPicture->SetText( ( kindOfItem + ".png" ).c_str () );
                                                 wall->InsertEndChild( wallPicture );
 
                                                 walls->InsertEndChild( wall );
 
                                                 continue ;
                                         }
-                                        *******/
+                                }
 
-                                        tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
+                                tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
 
-                                        item->SetAttribute( "x", theItem->getCellX() );
-                                        item->SetAttribute( "y", theItem->getCellY() );
-                                        int z = theItem->getZ();
-                                        z = ( z > Room::FloorZ ) ? ( z / Room::LayerHeight ) : Room::FloorZ ;
-                                        item->SetAttribute( "z", z );
+                                item->SetAttribute( "x", theItem->getCellX() );
+                                item->SetAttribute( "y", theItem->getCellY() );
+                                int z = theItem->getZ();
+                                z = ( z > Room::FloorZ ) ? ( z / Room::LayerHeight ) : Room::FloorZ ;
+                                item->SetAttribute( "z", z );
 
-                                        tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
-                                        kindOfItem->SetText( theItem->getKind().c_str () );
-                                        item->InsertEndChild( kindOfItem );
+                                tinyxml2::XMLElement* kind = roomXml.NewElement( "kind" );
+                                kind->SetText( kindOfItem.c_str () );
+                                item->InsertEndChild( kind );
 
+                                const std::string & heading = theItem->getHeading ();
+                                const std::string orientation = ( heading.empty() || heading == "none" ) ? "" : heading ;
+                                if ( ! orientation.empty() ) {
                                         tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                        const std::string & heading = theItem->getHeading ();
-                                        const std::string orientation = ( heading.empty() || heading == "nowhere" ) ? "none" : heading ;
                                         itemOrientation->SetText( orientation.c_str () );
                                         item->InsertEndChild( itemOrientation );
-
-                                        if ( theItem->getBehavior() != nilPointer )
-                                        {
-                                                tinyxml2::XMLElement* itemBehavior = roomXml.NewElement( "behavior" );
-                                                itemBehavior->SetText( theItem->getBehavior()->getNameOfBehavior().c_str () );
-                                                item->InsertEndChild( itemBehavior );
-                                        }
-
-                                        tinyxml2::XMLElement* itemClass = roomXml.NewElement( "class" );
-                                        itemClass->SetText( "griditem" );
-                                        item->InsertEndChild( itemClass );
-
-                                        items->InsertEndChild( item );
                                 }
+
+                                if ( theItem->getBehavior() != nilPointer )
+                                {
+                                        tinyxml2::XMLElement* itemBehavior = roomXml.NewElement( "behavior" );
+                                        itemBehavior->SetText( theItem->getBehavior()->getNameOfBehavior().c_str () );
+                                        item->InsertEndChild( itemBehavior );
+                                }
+
+                                tinyxml2::XMLElement* itemClass = roomXml.NewElement( "class" );
+                                itemClass->SetText( "griditem" );
+                                item->InsertEndChild( itemClass );
+
+                                items->InsertEndChild( item );
                         }
                 }
 
-                // free items
+                // the free items
 
                 for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
                 {
@@ -348,35 +353,38 @@ bool Room::saveAsXML( const std::string & file )
                                 item->SetAttribute( "y", theItem->getInitialCellY () );
                                 item->SetAttribute( "z", theItem->getInitialCellZ () );
 
-                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
-                                kindOfItem->SetText( theItem->getKind().c_str () );
-                                item->InsertEndChild( kindOfItem );
+                                tinyxml2::XMLElement* kind = roomXml.NewElement( "kind" );
+                                kind->SetText( theItem->getOriginalKind().c_str () );
+                                item->InsertEndChild( kind );
 
-                                tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
                                 const std::string & heading = theItem->getHeading ();
-                                const std::string orientation = ( heading.empty() || heading == "nowhere" ) ? "none" : heading ;
-                                itemOrientation->SetText( orientation.c_str () );
-                                item->InsertEndChild( itemOrientation );
+                                const std::string orientation = ( heading.empty() || heading == "none" ) ? "" : heading ;
+                                if ( ! orientation.empty() ) {
+                                        tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
+                                        itemOrientation->SetText( orientation.c_str () );
+                                        item->InsertEndChild( itemOrientation );
+                                }
 
                                 if ( theItem->getBehavior() != nilPointer )
                                 {
-                                        std::string behavior = theItem->getBehavior()->getNameOfBehavior();
+                                        const behaviors::Behavior & behavior = * theItem->getBehavior() ;
+                                        std::string whichBehavior = behavior.getNameOfBehavior();
 
                                         tinyxml2::XMLElement* itemBehavior = roomXml.NewElement( "behavior" );
-                                        itemBehavior->SetText( behavior.c_str () );
+                                        itemBehavior->SetText( whichBehavior.c_str () );
                                         item->InsertEndChild( itemBehavior );
 
-                                        if ( behavior == "behavior of elevator" )
+                                        if ( whichBehavior == "behavior of elevator" )
                                         {
-                                                Elevator* elevatorBehavior = dynamic_cast< Elevator* >( theItem->getBehavior().get () );
+                                                const behaviors::Elevator & behaviorOfElevator = dynamic_cast< const behaviors::Elevator & >( behavior );
 
                                                 tinyxml2::XMLElement* top = roomXml.NewElement( "top" );
                                                 tinyxml2::XMLElement* bottom = roomXml.NewElement( "bottom" );
                                                 tinyxml2::XMLElement* ascent = roomXml.NewElement( "ascent" );
 
-                                                top->SetText( elevatorBehavior->getTop() );
-                                                bottom->SetText( elevatorBehavior->getBottom() );
-                                                ascent->SetText( elevatorBehavior->getAscent() ? "true" : "false" ); // is first movement of elevator ascending
+                                                top->SetText( behaviorOfElevator.getTop() );
+                                                bottom->SetText( behaviorOfElevator.getBottom() );
+                                                ascent->SetText( behaviorOfElevator.getAscent() ? "true" : "false" ); // does it go up first or down?
 
                                                 item->InsertEndChild( top );
                                                 item->InsertEndChild( bottom );
@@ -392,7 +400,7 @@ bool Room::saveAsXML( const std::string & file )
                         }
                 }
 
-                // doors
+                // the doors
 
                 for ( std::map< std::string, Door* >::const_iterator di = doors.begin (); di != doors.end (); ++ di )
                 {
@@ -407,13 +415,13 @@ bool Room::saveAsXML( const std::string & file )
                                 z = ( z > Room::FloorZ ) ? ( z / Room::LayerHeight ) : Room::FloorZ ;
                                 item->SetAttribute( "z", z );
 
-                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
-                                kindOfItem->SetText( theDoor->getKind().c_str () );
-                                item->InsertEndChild( kindOfItem );
+                                tinyxml2::XMLElement* kind = roomXml.NewElement( "kind" );
+                                kind->SetText( theDoor->getKind().c_str () );
+                                item->InsertEndChild( kind );
 
-                                tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                itemOrientation->SetText( theDoor->getWhereIsDoor().c_str () );
-                                item->InsertEndChild( itemOrientation );
+                                tinyxml2::XMLElement* whereIsDoor = roomXml.NewElement( "where" );
+                                whereIsDoor->SetText( theDoor->getWhereIsDoor().c_str () );
+                                item->InsertEndChild( whereIsDoor );
 
                                 tinyxml2::XMLElement* itemClass = roomXml.NewElement( "class" );
                                 itemClass->SetText( "door" );
@@ -427,13 +435,12 @@ bool Room::saveAsXML( const std::string & file )
         }
 
         tinyxml2::XMLError result = roomXml.SaveFile( file.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
+        if ( result != tinyxml2::XML_SUCCESS ) {
                 std::cerr << "can’t save room as \"" << file << "\"" << std::endl ;
-                return false;
+                return false ;
         }
 
-        return true;
+        return true ;
 }
 
 void Room::addFloorTile( FloorTile * floorTile )

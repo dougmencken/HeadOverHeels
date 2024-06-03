@@ -4,59 +4,59 @@
     <color>yellow.reduced</color>
     <floorKind>absent</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>7</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>8</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>jail-wall-y.png</picture>
         </wall>
@@ -64,27 +64,23 @@
     <items>
         <item x="4" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="7" z="0">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="7" z="0">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="7" z="-1">
             <kind>jail-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

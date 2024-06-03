@@ -4,43 +4,43 @@
     <color>cyan</color>
     <floorKind>absent</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="x">
-            <position>6</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>2</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall along="y">
             <position>2</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>6</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall along="y">
             <position>6</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>jail-wall-x.png</picture>
         </wall>
@@ -48,22 +48,18 @@
     <items>
         <item x="3" y="0" z="0">
             <kind>jail-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="1">
             <kind>jail-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
             <kind>jail-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="1">
             <kind>jail-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="1" z="0">
@@ -110,7 +106,6 @@
         </item>
         <item x="1" y="6" z="0">
             <kind>elevator</kind>
-            <orientation>none</orientation>
             <behavior>behavior of elevator</behavior>
             <top>7</top>
             <bottom>0</bottom>
@@ -119,7 +114,7 @@
         </item>
         <item x="3" y="0" z="-1">
             <kind>jail-door-west</kind>
-            <orientation>east</orientation>
+            <where>east</where>
             <class>door</class>
         </item>
     </items>

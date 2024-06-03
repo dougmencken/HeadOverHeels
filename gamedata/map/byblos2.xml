@@ -4,67 +4,67 @@
     <color>white</color>
     <floorKind>mortal</floorKind>
     <walls>
-        <wall on="x">
-            <position>1</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>byblos-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>3</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>4</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>5</position>
-            <picture>byblos-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>6</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>7</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>8</position>
-            <picture>byblos-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>9</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>10</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>11</position>
-            <picture>byblos-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>12</position>
-            <picture>byblos-wall-x-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>byblos-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>1</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>1</position>
             <picture>byblos-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>2</position>
+            <picture>byblos-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>3</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>4</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>5</position>
+            <picture>byblos-wall-x-2.png</picture>
+        </wall>
+        <wall along="y">
             <position>5</position>
             <picture>byblos-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>6</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>7</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>8</position>
+            <picture>byblos-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>9</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>10</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>11</position>
+            <picture>byblos-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>12</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall along="y">
             <position>4</position>
             <picture>byblos-wall-y-1.png</picture>
         </wall>
@@ -157,17 +157,14 @@
         </item>
         <item x="0" y="2" z="0">
             <kind>byblos-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="2" z="1">
             <kind>byblos-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="2" z="2">
             <kind>byblos-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="2" z="0">
@@ -184,22 +181,18 @@
         </item>
         <item x="13" y="2" z="2">
             <kind>byblos-capital-south</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="0">
             <kind>byblos-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="1">
             <kind>byblos-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="2">
             <kind>byblos-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="3" z="0">
@@ -222,7 +215,6 @@
         </item>
         <item x="13" y="3" z="2">
             <kind>byblos-capital-south</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="4" z="0">
@@ -279,12 +271,12 @@
         </item>
         <item x="0" y="2" z="-1">
             <kind>byblos-door-south</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
         <item x="13" y="2" z="-1">
             <kind>byblos-door-south</kind>
-            <orientation>south</orientation>
+            <where>south</where>
             <class>door</class>
         </item>
     </items>

@@ -61,43 +61,43 @@
     <nofloor x="6" y="7"/>
     <nofloor x="7" y="0"/>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>8</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>9</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
-            <position>13</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>9</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>10</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>11</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>12</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="x">
+            <position>13</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall along="y">
             <position>13</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>14</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>12</position>
             <picture>jail-wall-x.png</picture>
         </wall>
@@ -105,188 +105,151 @@
     <items>
         <item x="10" y="0" z="0">
             <kind>jail-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="0" z="1">
             <kind>jail-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="0" z="0">
             <kind>jail-shaft-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="0" z="1">
             <kind>jail-capital-east</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="1" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="12" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="13" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="2" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="3" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="13" y="3" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
             <class>griditem</class>
         </item>
         <item x="7" y="4" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="5" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="5" z="0">
             <kind>spikes</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="13" y="5" z="0">
             <kind>spikes</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="13" y="5" z="1">
             <kind>spikes</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="6" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="6" z="0">
             <kind>spikes</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="7" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="12" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="13" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="8" z="0">
             <kind>jail-wall-x</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="8" z="0">
             <kind>jail-wall-y</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="8" z="0">
@@ -297,37 +260,30 @@
         </item>
         <item x="0" y="9" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="9" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="9" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="9" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="9" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="9" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="9" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="9" z="0">
@@ -344,109 +300,88 @@
         </item>
         <item x="6" y="10" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="11" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
             <class>griditem</class>
         </item>
         <item x="6" y="11" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="12" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="13" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="14" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="8" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="14" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="10" y="15" z="0">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="11" y="15" z="0">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="9" y="5" z="1">
             <kind>bomb</kind>
-            <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
             <class>freeitem</class>
         </item>
         <item x="6" y="11" z="1">
             <kind>bomb</kind>
-            <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
             <class>freeitem</class>
         </item>
@@ -458,12 +393,12 @@
         </item>
         <item x="10" y="0" z="-1">
             <kind>jail-door-west</kind>
-            <orientation>eastsouth</orientation>
+            <where>eastsouth</where>
             <class>door</class>
         </item>
         <item x="10" y="15" z="-1">
             <kind>jail-door-west</kind>
-            <orientation>westsouth</orientation>
+            <where>westsouth</where>
             <class>door</class>
         </item>
     </items>

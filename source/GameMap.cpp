@@ -16,7 +16,11 @@
 
 #include <tinyxml2.h>
 
-#define GENERATE_ROOM_DESCRIPTIONS      0
+/*
+ * if 1 and buildEveryRoomAtOnce is true, readMap will re-generate
+ * the XML descriptions of rooms and write them to home-path/rooms
+ */
+#define GENERATE_ROOM_DESCRIPTIONS      1
 
 
 /* static */ GameMap GameMap::instance ;
@@ -173,7 +177,7 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
 
         GameManager & gameManager = GameManager::getInstance () ;
 
-        // reset the number of lives and other game's data
+        // reset the number of lives and other info
         gameManager.getGameInfo().resetForANewGame () ;
 
         if ( linksBetweenRooms.empty() )
@@ -207,13 +211,11 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
 
                         addRoomAsVisited( firstRoom->getNameOfRoomDescriptionFile () ) ;
 
-                        activeRoom = firstRoom;
+                        this->activeRoom = firstRoom ;
                 }
         }
         else
-        {
                 std::cerr << "room \"" << headRoom << "\" doesn’t exist" << std::endl ;
-        }
 
         if ( headRoom != heelsRoom )
         {
@@ -240,12 +242,10 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
                         }
                 }
                 else
-                {
                         std::cerr << "room \"" << heelsRoom << "\" doesn’t exist" << std::endl ;
-                }
         }
 
-        if ( activeRoom != nilPointer ) activeRoom->activate();
+        if ( this->activeRoom != nilPointer ) this->activeRoom->activate() ;
 }
 
 void GameMap::beginOldGameWithCharacter( const std::string & roomFile, const std::string & characterName,
@@ -260,10 +260,9 @@ void GameMap::beginOldGameWithCharacter( const std::string & roomFile, const std
 
         Room * room = nilPointer ;
 
-        // if there’s already created room,
-        // it happens when both characters are in the same room
-        if ( activeRoom != nilPointer && activeRoom->getNameOfRoomDescriptionFile() == roomFile )
-                room = activeRoom ;
+        if ( this->activeRoom != nilPointer && this->activeRoom->getNameOfRoomDescriptionFile() == roomFile )
+                // the room is already created and is active... are both characters in the same room?
+                room = this->activeRoom ;
         else
                 room = getOrBuildRoomByFile( roomFile );
 
@@ -281,8 +280,7 @@ void GameMap::beginOldGameWithCharacter( const std::string & roomFile, const std
                         /////// don’t show bubbles for whosoever, they are unseen due to the planets screen anyway
                         /////////newCharacter->setWayOfEntry( "via second teleport" );
 
-                        activeRoom = room ;
-                        activeRoom->activate() ;
+                        setActiveRoom( room );
                 }
         }
 }
@@ -312,7 +310,7 @@ void GameMap::rebuildRoom( Room* room )
                 // for each character entered this room
                 std::vector< AvatarItemPtr > charactersOnEntry = room->getCharactersWhoEnteredRoom ();
 
-        //#ifdef DEBUG
+        ///#ifdef DEBUG
                 size_t howManyCharactersEntered = charactersOnEntry.size () ;
                 std::cout << "there " ;
                 if ( howManyCharactersEntered == 1 ) std::cout << "is " ;
@@ -320,7 +318,7 @@ void GameMap::rebuildRoom( Room* room )
                 std::cout << howManyCharactersEntered << " character" ;
                 if ( howManyCharactersEntered != 1 ) std::cout << "s" ;
                 std::cout << " who entered room \"" << fileOfRoom << "\"" << std::endl ;
-        //#endif
+        ///#endif
 
                 for ( unsigned int i = 0 ; i < charactersOnEntry.size () ; )
                 {
@@ -333,10 +331,8 @@ void GameMap::rebuildRoom( Room* room )
 
                         if ( character->getKind() == "headoverheels" || character->getLives() > 0 )
                         {
-                        //#ifdef DEBUG
-                                std::cout << "got character \"" << character->getKind() << "\" who entered room \"" << fileOfRoom << "\""
+                                std::cout << "character \"" << character->getKind() << "\" entered room \"" << fileOfRoom << "\""
                                                 << " @ GameMap::rebuildRoom" << std::endl ;
-                        //#endif
 
                                 // when the joined character splits, and then some simple character migrates to another room
                                 // and further the player swaps back to the room of splitting, and loses a life there
@@ -399,8 +395,8 @@ void GameMap::rebuildRoom( Room* room )
 
 Room* GameMap::changeRoom ()
 {
-        assert( activeRoom->getMediator()->getActiveCharacter() != nilPointer );
-        return changeRoom( activeRoom->getMediator()->getActiveCharacter()->getWayOfExit() );
+        assert( getActiveRoom()->getMediator()->getActiveCharacter() != nilPointer );
+        return changeRoom( getActiveRoom()->getMediator()->getActiveCharacter()->getWayOfExit() );
 }
 
 Room* GameMap::changeRoom( const std::string & wayOfExit )

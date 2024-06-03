@@ -4,35 +4,35 @@
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
-            <position>2</position>
-            <picture>egyptus-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>3</position>
-            <picture>egyptus-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>7</position>
-            <picture>egyptus-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>8</position>
-            <picture>egyptus-wall-x-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
+            <position>2</position>
+            <picture>egyptus-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>3</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
+            <position>7</position>
+            <picture>egyptus-wall-x-2.png</picture>
+        </wall>
+        <wall along="x">
+            <position>8</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall along="x">
             <position>6</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
@@ -40,17 +40,17 @@
     <items>
         <item x="4" y="0" z="-1">
             <kind>egyptus-door-east</kind>
-            <orientation>east</orientation>
+            <where>east</where>
             <class>door</class>
         </item>
         <item x="0" y="2" z="-1">
             <kind>egyptus-door-north</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
         <item x="9" y="2" z="-1">
             <kind>egyptus-door-south</kind>
-            <orientation>south</orientation>
+            <where>south</where>
             <class>door</class>
         </item>
     </items>

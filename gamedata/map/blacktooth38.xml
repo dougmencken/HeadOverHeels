@@ -4,51 +4,51 @@
     <color>magenta</color>
     <floorKind>absent</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>jail-wall-y.png</picture>
         </wall>
@@ -56,27 +56,23 @@
     <items>
         <item x="3" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="7" z="0">
             <kind>blacktooth-column-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="7" z="0">
             <kind>blacktooth-column-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="7" z="-1">
             <kind>jail-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

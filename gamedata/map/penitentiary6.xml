@@ -4,43 +4,43 @@
     <color>white</color>
     <floorKind>absent</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="y">
+            <position>1</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+        <wall along="x">
             <position>2</position>
             <picture>penitentiary-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="y">
+            <position>2</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+        <wall along="x">
             <position>3</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>penitentiary-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>penitentiary-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
-            <position>1</position>
-            <picture>penitentiary-wall-y-1.png</picture>
-        </wall>
-        <wall on="y">
-            <position>2</position>
-            <picture>penitentiary-wall-y-1.png</picture>
-        </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>penitentiary-wall-y-1.png</picture>
         </wall>
@@ -48,67 +48,54 @@
     <items>
         <item x="3" y="1" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="1" z="0">
             <kind>brick1</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="2" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="0">
             <kind>penitentiary-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="1">
             <kind>penitentiary-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="2">
             <kind>penitentiary-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="3" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="4" z="0">
             <kind>penitentiary-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="4" z="1">
             <kind>penitentiary-shaft-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="4" z="2">
             <kind>penitentiary-capital-north</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="4" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="5" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="6" z="0">
             <kind>vulcano</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="6" z="1">
@@ -119,7 +106,7 @@
         </item>
         <item x="0" y="3" z="-1">
             <kind>penitentiary-door-south</kind>
-            <orientation>north</orientation>
+            <where>north</where>
             <class>door</class>
         </item>
     </items>

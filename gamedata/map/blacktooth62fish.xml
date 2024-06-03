@@ -4,91 +4,91 @@
     <color>green</color>
     <floorKind>mortal</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>jail-wall-x.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>7</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>8</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>9</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>10</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>11</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>12</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>13</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>14</position>
             <picture>jail-wall-y.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>15</position>
             <picture>jail-wall-y.png</picture>
         </wall>
@@ -96,67 +96,54 @@
     <items>
         <item x="0" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="2" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="3" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="3" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="3" z="0">
             <kind>jail-capital-south</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="4" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="4" z="0">
             <kind>jail-capital-south</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="5" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="5" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="6" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="7" z="0">
@@ -167,7 +154,6 @@
         </item>
         <item x="5" y="7" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="8" z="0">
@@ -178,7 +164,6 @@
         </item>
         <item x="5" y="8" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="9" z="0">
@@ -201,88 +186,74 @@
         </item>
         <item x="0" y="15" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="1" y="15" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="15" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="15" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="4" y="15" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="5" y="15" z="0">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="2" y="16" z="0">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="16" z="0">
             <kind>jail-capital-west</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="0" y="0" z="1">
             <kind>reincarnation-fish</kind>
-            <orientation>none</orientation>
             <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="1" y="0" z="0">
             <kind>trampoline</kind>
-            <orientation>none</orientation>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="0" y="3" z="0">
             <kind>trampoline</kind>
-            <orientation>none</orientation>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="5" y="9" z="0">
             <kind>trampoline</kind>
-            <orientation>none</orientation>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="5" y="13" z="0">
             <kind>another-portable-brick</kind>
-            <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
             <class>freeitem</class>
         </item>
         <item x="5" y="14" z="0">
             <kind>another-portable-brick</kind>
-            <orientation>none</orientation>
             <behavior>behavior of thing able to move by pushing</behavior>
             <class>freeitem</class>
         </item>
         <item x="6" y="3" z="-1">
             <kind>jail-door-south</kind>
-            <orientation>south</orientation>
+            <where>south</where>
             <class>door</class>
         </item>
         <item x="2" y="16" z="-1">
             <kind>jail-door-west</kind>
-            <orientation>west</orientation>
+            <where>west</where>
             <class>door</class>
         </item>
     </items>

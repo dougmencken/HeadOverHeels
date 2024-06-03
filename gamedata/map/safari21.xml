@@ -4,67 +4,67 @@
     <color>yellow</color>
     <floorKind>plain</floorKind>
     <walls>
-        <wall on="x">
+        <wall along="x">
             <position>0</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>1</position>
             <picture>safari-wall-x-3.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>2</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>3</position>
             <picture>safari-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>4</position>
             <picture>safari-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>5</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>6</position>
             <picture>safari-wall-x-3.png</picture>
         </wall>
-        <wall on="x">
+        <wall along="x">
             <position>7</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>0</position>
             <picture>safari-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>1</position>
             <picture>safari-wall-y-3.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>2</position>
             <picture>safari-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>3</position>
             <picture>safari-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>4</position>
             <picture>safari-wall-y-2.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>5</position>
             <picture>safari-wall-y-1.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>6</position>
             <picture>safari-wall-y-3.png</picture>
         </wall>
-        <wall on="y">
+        <wall along="y">
             <position>7</position>
             <picture>safari-wall-y-1.png</picture>
         </wall>
@@ -72,58 +72,49 @@
     <items>
         <item x="0" y="0" z="1">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="2">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="6" y="0" z="3">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
             <class>griditem</class>
         </item>
         <item x="7" y="0" z="4">
             <kind>brick2</kind>
-            <orientation>none</orientation>
             <class>griditem</class>
         </item>
         <item x="7" y="0" z="5">
             <kind>donuts</kind>
-            <orientation>none</orientation>
             <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>
         <item x="5" y="2" z="0">
             <kind>bomb</kind>
-            <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
             <class>freeitem</class>
         </item>
         <item x="2" y="3" z="0">
             <kind>bomb</kind>
-            <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="3" z="0">
             <kind>siren</kind>
-            <orientation>none</orientation>
             <behavior>behavior of random patroling in four secondary directions</behavior>
             <class>freeitem</class>
         </item>
         <item x="4" y="5" z="0">
             <kind>bomb</kind>
-            <orientation>none</orientation>
             <behavior>behavior of detector</behavior>
             <class>freeitem</class>
         </item>
         <item x="8" y="3" z="-1">
             <kind>safari-door-south</kind>
-            <orientation>south</orientation>
+            <where>south</where>
             <class>door</class>
         </item>
     </items>

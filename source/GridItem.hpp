@@ -53,14 +53,6 @@ public:
                 return ( getZ() < other.getZ() + other.getHeight() );
         }
 
-        bool isSegmentOfWallAlongX () const
-                {  return getOriginalKind().find( "wall-x" ) != std::string::npos &&
-                                getOriginalKind().find( "invisible-wall" ) == std::string::npos ;  }
-
-        bool isSegmentOfWallAlongY () const
-                {  return getOriginalKind().find( "wall-y" ) != std::string::npos &&
-                                getOriginalKind().find( "invisible-wall" ) == std::string::npos ;  }
-
         virtual int getImageOffsetX () const {  return imageOffset.first ;  }
         virtual int getImageOffsetY () const {  return imageOffset.second ;  }
 

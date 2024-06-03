@@ -129,11 +129,13 @@ private:
         std::map < std::string, Room * > gameRooms ;
 
         /*
-         * when any character visits a room, the unique name of room's file is added to this set
+         * When any character visits a room, the room’s file name is added to this set
          */
         std::set < std::string > visitedRooms ;
 
-        // compose the game map by an XML file
+        /**
+         * Read the game map from an XML file
+         */
         void readMap ( const std::string & fileName ) ;
 
         void addRoomAsVisited( const std::string & roomFile ) {  visitedRooms.insert( roomFile ) ;  }
