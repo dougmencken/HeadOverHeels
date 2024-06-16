@@ -76,7 +76,7 @@ void CreateLanguageMenu::act ()
                 menu->addOption( tongue );
 
                 if ( chosenLanguage == ( *it ).first || ( chosenLanguage.empty() && it == languages.begin() ) )
-                        menu->setActiveOption( ( *it ).second );
+                        menu->setActiveOptionByText( ( *it ).second );
         }
 
         screen.addWidget( menu );

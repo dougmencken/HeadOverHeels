@@ -95,7 +95,7 @@ void MenuWithTwoColumns::draw ()
                 dy -= label->getHeight() >> 5 ;
         }
 
-        // back to initial position of menu
+        // back to the initial location
         setX ( previousX );
         setY ( previousY );
 }
@@ -147,38 +147,37 @@ void MenuWithTwoColumns::handleKey ( const std::string & key )
 {
         Menu::handleKey( key );
 
-        if ( getActiveOption() != nilPointer )
-        {
-                const std::string & activeOptionText = getActiveOption()->getText() ;
+        if ( getActiveOption() == nilPointer ) return ;
 
-                if ( ( key == "Right" || key == "p" )
-                                && ( isInTheFirstColumn( activeOptionText) ) )
+        const std::string & activeOptionText = getActiveOption()->getText() ;
+
+        if ( ( key == "Right" || key == "p" )
+                        && isInTheFirstColumn( activeOptionText ) )
+        {
+                const std::vector< Label* > & options = getEveryOption ();
+                unsigned int lastRow = lastRowInTheFirstColumn() ;
+                for ( unsigned int row = 0 ; row <= lastRow ; ++ row )
                 {
-                        const std::vector< Label* > & options = getEveryOption ();
-                        unsigned int lastRow = lastRowInTheFirstColumn() ;
-                        for ( unsigned int row = 0 ; row <= lastRow ; ++ row )
-                        {
-                                if ( options[ row ]->getText() == activeOptionText ) {
-                                        unsigned int rowInTheSecondColumn = row + lastRow + 1 ;
-                                        if ( rowInTheSecondColumn < options.size () )
-                                                setActiveOption( options[ rowInTheSecondColumn ]->getText() );
-                                        break ;
-                                }
+                        if ( options[ row ]->getText() == activeOptionText ) {
+                                unsigned int rowInTheSecondColumn = row + lastRow + 1 ;
+                                if ( rowInTheSecondColumn < options.size () )
+                                        setNthOptionAsActive( rowInTheSecondColumn );
+                                break ;
                         }
                 }
-                else if ( ( key == "Left" || key == "o" )
-                                && ( isInTheSecondColumn( activeOptionText ) ) )
+        }
+        else if ( ( key == "Left" || key == "o" )
+                        && isInTheSecondColumn( activeOptionText ) )
+        {
+                const std::vector< Label* > & options = getEveryOption ();
+                unsigned int firstRow = lastRowInTheFirstColumn() + 1 ;
+                for ( unsigned int row = firstRow ; row < options.size () ; ++ row )
                 {
-                        const std::vector< Label* > & options = getEveryOption ();
-                        unsigned int firstRow = lastRowInTheFirstColumn() + 1 ;
-                        for ( unsigned int row = firstRow ; row < options.size () ; ++ row )
-                        {
-                                if ( options[ row ]->getText() == activeOptionText ) {
-                                        int rowInTheFirstColumn = row - firstRow ;
-                                        if ( rowInTheFirstColumn >= 0 )
-                                                setActiveOption( options[ rowInTheFirstColumn ]->getText() );
-                                        break ;
-                                }
+                        if ( options[ row ]->getText() == activeOptionText ) {
+                                int rowInTheFirstColumn = row - firstRow ;
+                                if ( rowInTheFirstColumn >= 0 )
+                                        setNthOptionAsActive( rowInTheFirstColumn );
+                                break ;
                         }
                 }
         }

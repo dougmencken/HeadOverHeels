@@ -107,9 +107,7 @@ void GuiManager::dumpScreenz () const
 
 void GuiManager::begin ()
 {
-        std::cout << "chosenLanguage is \"" << this->chosenLanguage << "\"" << std::endl ;
-
-        // if the language isn’t set, show the menu of languages, otherwise show the main menu
+        // if the language isn’t set, show the menu of languages, or the main menu otherwise
         Action * firstMenu = this->chosenLanguage.empty() ? static_cast< Action * >( new CreateLanguageMenu() )
                                                           : static_cast< Action * >( new CreateMainMenu() ) ;
         if ( firstMenu != nilPointer )
@@ -179,9 +177,8 @@ ScreenPtr GuiManager::findOrCreateScreenForAction ( Action & action )
                 this->screens[ nameOfAction ] = ScreenPtr( new Screen( action ) );
 
                 if ( this->screens[ nameOfAction ] == nilPointer )
-                        throw MayNotBePossible( "can't make the screen for action \" " + nameOfAction + " \"" ) ;
-        } else
-                std::cout << "there’s existing screen for action \" " << nameOfAction << " \"" << std::endl ;
+                        throw MayNotBePossible( "can't make a screen for action \" " + nameOfAction + " \"" ) ;
+        }
 
         dumpScreenz() ;
 

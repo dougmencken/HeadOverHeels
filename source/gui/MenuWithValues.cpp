@@ -183,33 +183,19 @@ unsigned int MenuWithValues::getWidthOfMenu () const
         return widthOfMenu ;
 }
 
-void MenuWithValues::previousOption ()
+unsigned int MenuWithValues::getIndexOfActiveOption () const
 {
-        const std::vector< Label* > & options = getEveryOption ();
-        for ( std::vector< Label* >::const_iterator o = options.begin (); o != options.end (); ++ o )
-        {  // compare by text of option here
-                if ( ( *o )->getText() == getActiveOption()->getText() )
-                {
-                        Label* previousOption = ( o == options.begin() ? *( --options.end() ) : *( -- o ) );
-                        setActiveOption( previousOption->getText() );
-                        break;
-                }
-        }
-}
+        if ( getActiveOption() == nilPointer ) return 0 ;
 
-void MenuWithValues::nextOption ()
-{
         const std::vector< Label* > & options = getEveryOption ();
-        for ( std::vector< Label* >::const_iterator o = options.begin (); o != options.end (); ++ o )
-        {  // compare by text of option here
-                if ( ( *o )->getText() == getActiveOption()->getText() )
-                {
-                        ++ o ;
-                        Label* nextOption = ( o == options.end() ? *options.begin() : *o );
-                        setActiveOption( nextOption->getText() );
-                        break;
-                }
-        }
+        unsigned int o = 0 ;
+        for ( ; o < options.size (); ++ o )
+                // compare by the text of option here
+                if ( options[ o ]->getText() == getActiveOption()->getText() )
+                        return o ;
+
+        // if can't find the active menu option
+        return 0 ;
 }
 
 }

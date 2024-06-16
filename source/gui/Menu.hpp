@@ -52,16 +52,24 @@ public:
          */
         void addOption ( Label * label ) ;
 
+        unsigned int howManyOptions () const {  return this->options.size() ;  }
+
+        const std::vector < Label * > & getEveryOption () const {  return this->options ;  }
+
         Label * getActiveOption () const {  return this->activeOption ;  }
 
-        void setActiveOption ( const std::string & textOfOption ) ;
+        void setNthOptionAsActive ( unsigned int n )
+        {
+                if ( n < howManyOptions () )
+                        this->activeOption = this->options[ n ];
+        }
+
+        void setActiveOptionByText ( const std::string & textOfOption ) ;
 
         /**
          * Make the first option active
          */
-        void resetActiveOption () ;
-
-        const std::vector < Label * > & getEveryOption () const {  return this->options ;  }
+        void resetActiveOption () {  setNthOptionAsActive( 0 ) ;  }
 
         void setVerticalOffset ( int offset ) ;
 
@@ -70,6 +78,8 @@ public:
         virtual unsigned int getHeightOfMenu () const ;
 
 protected:
+
+        virtual unsigned int getIndexOfActiveOption () const ;
 
         /**
          * Choose the previous option of this menu
@@ -92,8 +102,6 @@ private:
          * The chosen option
          */
         Label * activeOption ;
-
-private:
 
         /**
          * The picture to show before a menu option

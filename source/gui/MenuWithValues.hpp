@@ -48,9 +48,7 @@ public:
 
 protected:
 
-        virtual void previousOption () ;
-
-        virtual void nextOption () ;
+        virtual unsigned int getIndexOfActiveOption () const ;
 
 private:
 

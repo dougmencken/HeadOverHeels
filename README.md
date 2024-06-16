@@ -88,16 +88,12 @@ just after finishing the build to get the game running! 😲🥹😌
 
 ## If something ’s wrong there
 
-Don’t hear any music and sounds? Try
+Don’t hear any music and sounds (with allegro 4)? Previously, I used `padsp` to deal with this... But then I installed some packages, namely `libsndfile1-dev` and `libasound2-dev`, and the subsequent full build played sounds and music just out of the box. So the solution is
 
 ```
-padsp bin/headoverheels
+sudo apt install -y libsndfile1-dev libasound2-dev
 ```
 
-And if that doesn’t work, maybe it will the more complicated way
-
-```
-LD_PRELOAD=$(find /usr/lib/ -name libpulsedsp.so) bin/headoverheels --linux-audio=oss
-```
+before `./linux-build.sh`
 
 Any other gotchas? Feel free to write and ask 😚

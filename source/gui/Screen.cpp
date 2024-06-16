@@ -258,16 +258,11 @@ void Screen::handleKey( const std::string& key )
                 return;
         }
 
-        if ( escapeAction != nilPointer && key == "Escape" )
-        {
-                fprintf( stdout, "escape action %s ~~\n", ( escapeAction != nilPointer ? escapeAction->getNameOfAction().c_str () : "nope" ) );
+        if ( this->escapeAction != nilPointer && key == "Escape" )
                 this->escapeAction->doIt ();
-                fprintf( stdout, "~~ done with action %s\n", ( escapeAction != nilPointer ? escapeAction->getNameOfAction().c_str () : "nope" ) );
-        }
-        else {
+        else
                 if ( this->nextKeyHandler != nilPointer )
                         this->nextKeyHandler->handleKey( key );
-        }
 }
 
 void Screen::addWidget( Widget* widget )

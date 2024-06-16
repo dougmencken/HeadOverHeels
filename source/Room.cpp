@@ -916,8 +916,8 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
                 copyOfCharacter->setBehaviorOf( character->getBehavior()->getNameOfBehavior() );
                 this->charactersWhoEnteredRoom.push_back( copyOfCharacter );
 
-                std::cout << "copy of character \"" << copyOfCharacter->getOriginalKind() << "\""
-                                << " is created to restart this room" << std::endl ;
+                std::cout << "character \"" << copyOfCharacter->getOriginalKind() << "\""
+                                << " was copied to restart this room" << std::endl ;
         }
 
         // perhaps the character appeared in the room by means of teleportation

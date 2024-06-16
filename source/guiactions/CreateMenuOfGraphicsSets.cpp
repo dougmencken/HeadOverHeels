@@ -68,7 +68,7 @@ void CreateMenuOfGraphicsSets::act ()
         for ( unsigned int i = 0 ; i < sets.size (); ++ i )
         {
                 if ( sets[ i ]->getFont().getColor() == "yellow" )
-                        menuOfGraphicsSets->setActiveOption( sets[ i ]->getText () );
+                        menuOfGraphicsSets->setNthOptionAsActive( i );
         }
 
         gui::GuiManager::getInstance().changeScreen( screen, true );

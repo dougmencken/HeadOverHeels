@@ -220,24 +220,17 @@ void Menu::addOption( Label* label )
                 options.push_back( label );
 }
 
-void Menu::setActiveOption ( const std::string & textOfOption )
+void Menu::setActiveOptionByText ( const std::string & textOfOption )
 {
         for ( std::vector< Label * >::const_iterator it = options.begin () ; it != options.end () ; ++ it )
         {
-                if ( ( *it )->getText() == textOfOption )
-                {
+                if ( ( *it )->getText() == textOfOption ) {
                         this->activeOption = *it ;
                         return ;
                 }
         }
 
         std::cerr << "option \"" << textOfOption << "\" isn’t from this menu" << std::endl ;
-}
-
-void Menu::resetActiveOption ()
-{
-        if ( options.size () > 0 )
-                setActiveOption( ( * options.begin() )->getText() );
 }
 
 void Menu::setVerticalOffset ( int offset )
@@ -271,31 +264,32 @@ unsigned int Menu::getHeightOfMenu () const
         return ( heightOfMenu >= 4 ) ? ( heightOfMenu - 4 ) : 0; // -4 is for that single active option
 }
 
+unsigned int Menu::getIndexOfActiveOption () const
+{
+        if ( getActiveOption() == nilPointer ) return 0 ;
+
+        unsigned int j = 0 ;
+        for ( ; j < howManyOptions() ; ++ j )
+                // compare by the location
+                if ( this->options[ j ]->getY () == getActiveOption()->getY ()
+                        && this->options[ j ]->getX () == getActiveOption()->getX () ) return j ;
+
+        // if can't find the active menu option
+        return 0 ;
+}
+
 void Menu::previousOption ()
 {
-        std::vector < Label * >::const_iterator it = options.begin ();
-        for ( ; it != options.end (); ++ it )
-        {
-                if ( ( *it )->getY () == this->activeOption->getY ()
-                        && ( *it )->getX () == this->activeOption->getX () ) break ;
-        }
-        assert ( it != options.end () );
-
-        this->activeOption = ( it == options.begin() ? *( -- options.end() ) : *( -- it ) );
+        unsigned int active = getIndexOfActiveOption() ;
+        unsigned int previous = ( active > 0 ) ? active - 1 : howManyOptions() - 1 ;
+        setNthOptionAsActive( previous );
 }
 
 void Menu::nextOption ()
 {
-        std::vector < Label * >::const_iterator it = options.begin ();
-        for ( ; it != options.end (); ++ it )
-        {
-                if ( ( *it )->getY () == this->activeOption->getY ()
-                        && ( *it )->getX () == this->activeOption->getX () ) break ;
-        }
-        assert ( it != options.end () );
-
-        ++ it ;
-        this->activeOption = ( it == options.end() ? *options.begin() : *it );
+        unsigned int active = getIndexOfActiveOption() ;
+        unsigned int next = ( active + 1 < howManyOptions() ) ? active + 1 : 0 ;
+        setNthOptionAsActive( next );
 }
 
 }
