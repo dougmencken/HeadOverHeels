@@ -282,7 +282,7 @@ echo "    tinyxml2"
 echo "    simple, small, C++ XML parser that can be easily integrated into other programs"
 echo
 
-tinyxml2_version="6.2.0"
+tinyxml2_version="10.0.0"
 tinyxml2name=tinyxml2-"$tinyxml2_version"
 tinyxml2installpath="${installPath}"/"$tinyxml2name"
 
@@ -307,7 +307,7 @@ if [ -x "$( command -v cmake )" ]; then
             export CC=`command -v gcc`
             export CXX=`command -v g++`
             cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="${tinyxml2installpath}" \
-                  -DBUILD_TESTS:BOOL=ON ..
+                  ..
         fi
 
         make

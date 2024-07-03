@@ -88,10 +88,10 @@ just after finishing the build to get the game running! 😲🥹😌
 
 ## If something ’s wrong there
 
-Don’t hear any music and sounds (with allegro 4)? Previously, I used `padsp` to deal with this... But then I installed some packages, namely `libsndfile1-dev` and `libasound2-dev`, and the subsequent full build played sounds and music just out of the box. So the solution is
+Don’t hear any music and sounds (with allegro 4)? Previously, I used **padsp** to deal with this... But then I installed some packages, namely `libpulse-dev`, `libsndfile1-dev` and `libasound2-dev`, and the subsequent full build played sounds and music just out of the box. So the solution is
 
 ```
-sudo apt install -y libsndfile1-dev libasound2-dev
+sudo apt install -y libpulse-dev libsndfile1-dev libasound2-dev
 ```
 
 before `./linux-build.sh`

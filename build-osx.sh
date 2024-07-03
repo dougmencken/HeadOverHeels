@@ -16,8 +16,8 @@ export PATH="$a4path"/bin:$PATH
 
 if [ ! -f source/Makefile ]
 then
-        LDFLAGS="-headerpad_max_install_names -L${a4path}/lib -L${a5path}/lib -L/opt/tinyxml2-6.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.43/lib -L/opt/zlib-1.3.1/lib -L${pathToCompiler}/lib" \
-        CPPFLAGS="-I/opt/zlib-1.3.1/include -I/opt/libpng-1.6.43/include -I/opt/tinyxml2-6.2.0/include -I/opt/ogg-vorbis/include -I${a4path}/include -I${a5path}/include" \
+        LDFLAGS="-headerpad_max_install_names -L${a4path}/lib -L${a5path}/lib -L/opt/tinyxml2-10.0.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.43/lib -L/opt/zlib-1.3.1/lib -L${pathToCompiler}/lib" \
+        CPPFLAGS="-I/opt/zlib-1.3.1/include -I/opt/libpng-1.6.43/include -I/opt/tinyxml2-10.0.0/include -I/opt/ogg-vorbis/include -I${a4path}/include -I${a5path}/include" \
         CC="${pathToCompiler}/bin/gcc" CXX="${pathToCompiler}/bin/g++" \
         ./configure --prefix=${installPrefix} --enable-debug --with-allegro5 # --with-allegro4
 fi
