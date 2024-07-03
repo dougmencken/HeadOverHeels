@@ -39,7 +39,7 @@
         <string>Options</string>
      </text>
      <text alias="keys-menu">
-        <string>Select keys</string>
+        <string>Select the keys</string>
      </text>
      <text alias="movenorth">
         <string>Move North</string>

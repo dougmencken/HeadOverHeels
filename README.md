@@ -77,6 +77,9 @@ To get a binary running over the newer allegro **version 5** (however, it is cur
 ./extras/linux-allegro5-build.sh
 ```
 
+(install ``libgl1-mesa-dev`` package if you see the “X11 support currently requires OpenGL or OpenGL ES support” error)
+
+Okay, now you have a new and successful build of the game.
 Unedited ``linux-build.sh`` script installs the game inside your build directory at *where-the-build-dir-is/_rootdir*, thus type
 
 ```
