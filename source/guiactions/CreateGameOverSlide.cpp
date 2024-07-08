@@ -1,5 +1,5 @@
 
-#include "CreateEndScreen.hpp"
+#include "CreateGameOverSlide.hpp"
 
 #include "GamePreferences.hpp"
 #include "GameManager.hpp"
@@ -13,17 +13,8 @@
 #include "TextField.hpp"
 #include "CreateMainMenu.hpp"
 
-using gui::CreateEndScreen ;
 
-
-CreateEndScreen::CreateEndScreen( unsigned int rooms, unsigned short planets )
-        : Action( )
-        , visitedRooms( rooms )
-        , liberatedPlanets( planets )
-{
-}
-
-void CreateEndScreen::act ()
+void gui::CreateGameOverSlide::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 

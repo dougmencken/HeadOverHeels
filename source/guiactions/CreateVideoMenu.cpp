@@ -13,46 +13,14 @@
 
 #include "sleep.hpp"
 
-using gui::CreateVideoMenu ;
-using gui::CreateMenuOfGraphicsSets ;
 
-
-static std::multimap< unsigned int, unsigned int > sizesOfScreen ;
-
-CreateVideoMenu::CreateVideoMenu( )
-        : Action( )
-        , listOfOptions ( nilPointer )
-        , screenSize ( nilPointer )
-        , fullScreen ( nilPointer )
-        , drawShadows ( nilPointer )
-        , drawSceneryDecor ( nilPointer )
-        , drawRoomMiniatures ( nilPointer )
-        , centerCameraOn ( nilPointer )
-        , chooseGraphics ( nilPointer )
+void gui::CreateVideoMenu::act ()
 {
-        if ( sizesOfScreen.size () == 0 )
+        Screen & slideWithVideoMenu = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+
+        if ( slideWithVideoMenu.isNewAndEmpty() )
         {
-                // fill the list of screen sizes
-
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) );
-                /* sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 576 ) ); */
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 600 ) );
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 768 ) );
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 720 ) );
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 1024 ) );
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1366, 768 ) ); // my laptop
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1600, 900 ) );
-        }
-}
-
-void CreateVideoMenu::act ()
-{
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
-
-        if ( screen.isNewAndEmpty() )
-        {
-                screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+                slideWithVideoMenu.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
 
@@ -79,47 +47,45 @@ void CreateVideoMenu::act ()
                 this->chooseGraphics = new Label( textChooseGraphics->getText(), Font::fontWithColor( "yellow" ) );
                 this->chooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
-                this->listOfOptions = new MenuWithValues( ' ', 1 );
+                this->videoOptions = new MenuWithValues( ' ', 1 );
 
-                listOfOptions->addOption( screenSize );
-                listOfOptions->addOption( fullScreen );
-                listOfOptions->addOption( drawShadows );
-                listOfOptions->addOption( drawSceneryDecor );
-                listOfOptions->addOption( drawRoomMiniatures );
-                listOfOptions->addOption( centerCameraOn );
-                listOfOptions->addOption( chooseGraphics );
+                videoOptions->addOption( screenSize );
+                videoOptions->addOption( fullScreen );
+                videoOptions->addOption( drawShadows );
+                videoOptions->addOption( drawSceneryDecor );
+                videoOptions->addOption( drawRoomMiniatures );
+                videoOptions->addOption( centerCameraOn );
+                videoOptions->addOption( chooseGraphics );
 
-                updateLabels ();
+                videoOptions->setVerticalOffset( 33 );
 
-                listOfOptions->setVerticalOffset( 33 );
-
-                screen.addWidget( listOfOptions );
+                slideWithVideoMenu.addWidget( this->videoOptions );
         }
-        else
-                updateLabels();
 
-        screen.setEscapeAction( new CreateOptionsMenu() );
+        updateOptions ();
 
-        if ( screen.getNextKeyHandler() == nilPointer )
-                screen.setNextKeyHandler( listOfOptions );
+        slideWithVideoMenu.setEscapeAction( new CreateOptionsMenu() );
 
-        screen.drawSpectrumColorBoxes( true );
+        if ( slideWithVideoMenu.getNextKeyHandler() == nilPointer )
+                slideWithVideoMenu.setNextKeyHandler( videoOptions );
 
-        gui::GuiManager::getInstance().changeScreen( screen, true );
+        slideWithVideoMenu.drawSpectrumColorBoxes( true );
+
+        gui::GuiManager::getInstance().changeScreen( slideWithVideoMenu, true );
 
         allegro::emptyKeyboardBuffer();
 
-        while ( ! screen.getEscapeAction()->hasBegun() )
+        while ( ! slideWithVideoMenu.getEscapeAction()->hasBegun() )
         {
                 if ( allegro::areKeypushesWaiting() )
                 {
-                        // get the key pressed by the user
+                        // get the key typed by the user
                         std::string theKey = allegro::nextKey() ;
 
                         if ( theKey == "Escape" )
                         {
                                 allegro::emptyKeyboardBuffer();
-                                screen.handleKey( theKey );
+                                slideWithVideoMenu.handleKey( theKey );
                                 break;
                         }
                         else
@@ -128,27 +94,27 @@ void CreateVideoMenu::act ()
 
                                 if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                 {
-                                        if ( listOfOptions->getActiveOption () == fullScreen )
+                                        if ( videoOptions->getActiveOption () == fullScreen )
                                         {
                                                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == drawShadows )
+                                        else if ( videoOptions->getActiveOption () == drawShadows )
                                         {
                                                 GameManager::getInstance().toggleCastShadows ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == drawSceneryDecor )
+                                        else if ( videoOptions->getActiveOption () == drawSceneryDecor )
                                         {
                                                 GameManager::getInstance().toggleSceneryDecor ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == drawRoomMiniatures )
+                                        else if ( videoOptions->getActiveOption () == drawRoomMiniatures )
                                         {
                                                 GameManager::getInstance().toggleRoomMiniatures ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == centerCameraOn )
+                                        else if ( videoOptions->getActiveOption () == centerCameraOn )
                                         {
                                                 GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
                                                 doneWithKey = true;
@@ -156,12 +122,11 @@ void CreateVideoMenu::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                        screen.getNextKeyHandler()->handleKey( theKey );
+                                        slideWithVideoMenu.getNextKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
 
-                                // update options now
-                                updateLabels();
+                                updateOptions ();
                         }
 
                         // no te comas la CPU
@@ -171,24 +136,24 @@ void CreateVideoMenu::act ()
         }
 }
 
-void CreateVideoMenu::updateLabels ()
+void gui::CreateVideoMenu::updateOptions ()
 {
         LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
 
         std::string yeah = languageStrings->getTranslatedTextByAlias( "yep" )-> getText ();
         std::string nope = languageStrings->getTranslatedTextByAlias( "nope" )->getText ();
 
-        listOfOptions->setValueOf( drawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
-        listOfOptions->setValueOf( drawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
-        listOfOptions->setValueOf( drawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
-        listOfOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isInFullScreen () ? yeah : nope );
+        videoOptions->setValueOf( drawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
+        videoOptions->setValueOf( drawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
+        videoOptions->setValueOf( drawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
+        videoOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isInFullScreen () ? yeah : nope );
 
         std::string room = languageStrings->getTranslatedTextByAlias( "room" )-> getText ();
         std::string character = languageStrings->getTranslatedTextByAlias( "character" )-> getText ();
 
-        listOfOptions->setValueOf( centerCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
+        videoOptions->setValueOf( centerCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
 
         // chooseGraphics has no value but action
 
-        listOfOptions->redraw ();
+        videoOptions->redraw ();
 }

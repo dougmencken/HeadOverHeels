@@ -5,10 +5,10 @@
 #include "GuiManager.hpp"
 #include "GameMap.hpp"
 #include "SoundManager.hpp"
-#include "CreatePlanetsScreen.hpp"
-#include "CreateEndScreen.hpp"
+#include "CreateGameOverSlide.hpp"
 #include "CreateListOfSavedGames.hpp"
-#include "CreateCongratulationsScreen.hpp"
+#include "ShowCongratulations.hpp"
+#include "ShowSlideWithPlanets.hpp"
 
 using gui::ContinueGame;
 
@@ -37,50 +37,31 @@ void ContinueGame::act ()
         //  when the game is paused
         if ( uiManager.getWhyTheGameIsPaused().isPlanetLiberated () )
         {
-                // when some planet is liberated, show the screen with planets
-                CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( true );
-
-                if ( gameManager.isFreePlanet( "blacktooth" ) )
-                        planetsAction->liberateBlacktooth();
-
-                if ( gameManager.isFreePlanet( "egyptus" ) )
-                        planetsAction->liberateEgyptus();
-
-                if ( gameManager.isFreePlanet( "penitentiary" ) )
-                        planetsAction->liberatePenitentiary();
-
-                if ( gameManager.isFreePlanet( "safari" ) )
-                        planetsAction->liberateSafari();
-
-                if ( gameManager.isFreePlanet( "byblos" ) )
-                        planetsAction->liberateByblos();
-
+                // when some planet is liberated, show the slide with planets
+                ShowSlideWithPlanets * planetsAction = new ShowSlideWithPlanets( true );
                 planetsAction->doIt ();
         }
         else if ( uiManager.getWhyTheGameIsPaused().isTimeToSaveTheGame () )
         {
                 // show the save game screen
                 CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( false );
-
                 listOfGamesAction->doIt ();
         }
         else if ( uiManager.getWhyTheGameIsPaused().isGameOver ()
                         || uiManager.getWhyTheGameIsPaused().isInFreedomWithoutAllTheCrowns () )
         {
-                CreateEndScreen * endScreenAction =
-                        new CreateEndScreen(
-                                GameMap::getInstance().howManyVisitedRooms(), gameManager.howManyFreePlanets()
-                        );
+                CreateGameOverSlide * gameOverScoreAction =
+                        new CreateGameOverSlide (
+                                GameMap::getInstance().howManyVisitedRooms(), gameManager.howManyFreePlanets() );
 
-                endScreenAction->doIt ();
+                gameOverScoreAction->doIt ();
         }
         else if ( uiManager.getWhyTheGameIsPaused().isThatFinalSuccessScreen () )
         {
-                CreateCongratulationsScreen * congratulationsScreenAction =
-                        new CreateCongratulationsScreen(
-                                GameMap::getInstance().howManyVisitedRooms(), gameManager.howManyFreePlanets()
-                        );
+                ShowCongratulations * congratulationsAction =
+                        new ShowCongratulations (
+                                GameMap::getInstance().howManyVisitedRooms(), gameManager.howManyFreePlanets() );
 
-                congratulationsScreenAction->doIt ();
+                congratulationsAction->doIt ();
         }
 }

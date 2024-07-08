@@ -111,7 +111,7 @@ void GuiManager::changeScreen( Screen & newScreen, bool dive )
         std::map< std::string, ScreenPtr >::const_iterator iscreen = this->screens.find( newScreenAction );
         if ( iscreen != this->screens.end () ) {
                 if ( this->activeScreen != nilPointer ) {
-                        if ( this->activeScreen->getNameOfAction() != "CreatePlanetsScreen" )
+                        if ( this->activeScreen->getNameOfAction() != "ShowSlideWithPlanets" )
                                 Screen::barWipeHorizontally( * this->activeScreen, newScreen, dive );
                 } else
                         // this is the first screen ever shown

@@ -79,7 +79,7 @@ void CreateMenuOfGraphicsSets::act ()
         {
                 if ( allegro::areKeypushesWaiting() )
                 {
-                        // get the key pressed by the user
+                        // get the key typed by the user
                         std::string theKey = allegro::nextKey() ;
 
                         if ( theKey == "Escape" )

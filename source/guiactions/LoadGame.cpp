@@ -5,20 +5,11 @@
 
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
-#include "CreatePlanetsScreen.hpp"
+#include "ShowSlideWithPlanets.hpp"
 #include "CreateMainMenu.hpp"
 
-using gui::LoadGame;
-using gui::CreatePlanetsScreen;
 
-
-LoadGame::LoadGame( unsigned int slot )
-        : Action( )
-        , slot( slot )
-{
-}
-
-void LoadGame::act ()
+void gui::LoadGame::act ()
 {
         GameManager & gameManager = GameManager::getInstance () ;
         gameManager.resetPlanets() ;
@@ -33,22 +24,6 @@ void LoadGame::act ()
                 return ;
         }
 
-        CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( true );
-
-        if ( gameManager.isFreePlanet( "blacktooth" ) )
-                planetsAction->liberateBlacktooth();
-
-        if ( gameManager.isFreePlanet( "egyptus" ) )
-                planetsAction->liberateEgyptus();
-
-        if ( gameManager.isFreePlanet( "penitentiary" ) )
-                planetsAction->liberatePenitentiary();
-
-        if ( gameManager.isFreePlanet( "safari" ) )
-                planetsAction->liberateSafari();
-
-        if ( gameManager.isFreePlanet( "byblos" ) )
-                planetsAction->liberateByblos();
-
+        ShowSlideWithPlanets * planetsAction = new ShowSlideWithPlanets( true );
         planetsAction->doIt ();
 }

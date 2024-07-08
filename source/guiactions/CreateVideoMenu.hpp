@@ -22,7 +22,7 @@ class Label ;
 
 
 /**
- * Create menu to modify video & graphics
+ * Create menu for adjusting video & graphics
  */
 
 class CreateVideoMenu : public Action
@@ -30,20 +30,28 @@ class CreateVideoMenu : public Action
 
 public:
 
-        CreateVideoMenu( ) ;
+        CreateVideoMenu( )
+                : Action( )
+                , videoOptions ( nilPointer )
+                , screenSize ( nilPointer )
+                , fullScreen ( nilPointer )
+                , drawShadows ( nilPointer )
+                , drawSceneryDecor ( nilPointer )
+                , drawRoomMiniatures ( nilPointer )
+                , centerCameraOn ( nilPointer )
+                , chooseGraphics ( nilPointer ) {}
+
+        virtual ~CreateVideoMenu( ) {}
 
 protected:
 
-        /**
-         * Show this menu
-         */
         virtual void act () ;
 
 private:
 
-        void updateLabels () ;
+        void updateOptions () ;
 
-        MenuWithValues * listOfOptions ;
+        MenuWithValues * videoOptions ;
 
         Label * screenSize ;
         Label * fullScreen ;

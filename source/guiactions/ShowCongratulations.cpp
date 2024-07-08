@@ -1,5 +1,5 @@
 
-#include "CreateCongratulationsScreen.hpp"
+#include "ShowCongratulations.hpp"
 
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
@@ -8,26 +8,17 @@
 #include "Screen.hpp"
 #include "PictureWidget.hpp"
 #include "TextField.hpp"
-#include "CreateEndScreen.hpp"
+#include "CreateGameOverSlide.hpp"
 
 #include "ospaths.hpp"
 
 
-namespace gui {
-
-CreateCongratulationsScreen::CreateCongratulationsScreen( unsigned short rooms, unsigned short planets )
-        : Action( )
-        , rooms( rooms )
-        , planets( planets )
-{
-}
-
-void CreateCongratulationsScreen::act ()
+void gui::ShowCongratulations::act ()
 {
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
 
         if ( screen.isNewAndEmpty() )
-                screen.setEscapeAction( new CreateEndScreen( rooms, planets ) );
+                screen.setEscapeAction( new CreateGameOverSlide( rooms, planets ) );
         else
                 screen.freeWidgets() ;
 
@@ -56,6 +47,4 @@ void CreateCongratulationsScreen::act ()
         screen.addWidget( textField );
 
         GuiManager::getInstance().changeScreen( screen, true );
-}
-
 }

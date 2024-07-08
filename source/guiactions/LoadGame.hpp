@@ -25,7 +25,11 @@ public:
         /**
          * @param slot Number of file to load
          */
-        explicit LoadGame( unsigned int slot ) ;
+        explicit LoadGame( unsigned int slot )
+                : Action( )
+                , slot( slot ) {}
+
+        virtual ~LoadGame( ) {}
 
 protected:
 

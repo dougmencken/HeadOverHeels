@@ -17,6 +17,10 @@
 namespace gui
 {
 
+/**
+ * Show the main menu of the game
+ */
+
 class CreateMainMenu : public Action
 {
 
@@ -26,9 +30,6 @@ public:
 
 protected:
 
-        /**
-         * Show the main menu of the game
-         */
         virtual void act () ;
 
 };

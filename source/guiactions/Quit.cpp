@@ -1,5 +1,5 @@
 
-#include "ExitApplication.hpp"
+#include "Quit.hpp"
 
 #include "ospaths.hpp"
 
@@ -12,7 +12,7 @@
 namespace gui
 {
 
-void ExitApplication::bye ()
+void Quit::bye ()
 {
         GamePreferences::writePreferences( ospaths::pathToFile( ospaths::homePath(), "preferences.xml" ) );
         GuiManager::getInstance().suspend() ;

@@ -22,13 +22,14 @@ class ChooseLanguage : public Action
 
 public:
 
-        explicit ChooseLanguage( const std::string & laLangueChoisie ) ;
+        explicit ChooseLanguage( const std::string & laLangueChoisie )
+                : Action( )
+                , language( laLangueChoisie ) {}
+
+        virtual ~ChooseLanguage( ) {}
 
 protected:
 
-        /**
-         * Set the language of the game
-         */
         virtual void act () ;
 
 private:

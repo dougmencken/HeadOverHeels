@@ -5,17 +5,7 @@
 #include "GuiManager.hpp"
 
 
-namespace gui
-{
-
-ChooseLanguage::ChooseLanguage( const std::string & laLangueChoisie )
-        : Action( )
-        , language( laLangueChoisie )
-{
-
-}
-
-void ChooseLanguage::act ()
+void gui::ChooseLanguage::act ()
 {
         if ( GuiManager::getInstance().countScreens() > 1 ) // not the very first screen
                 GuiManager::getInstance().freeScreens() ;
@@ -24,6 +14,4 @@ void ChooseLanguage::act ()
 
         CreateMainMenu * mainMenu = new CreateMainMenu();
         mainMenu->doIt ();
-}
-
 }

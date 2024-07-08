@@ -1,26 +1,25 @@
 
-#include "CreatePlanetsScreen.hpp"
+#include "ShowSlideWithPlanets.hpp"
 
 #include "GameManager.hpp"
 #include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
 #include "GuiManager.hpp"
+#include "GamePreferences.hpp"
 #include "Color.hpp"
 #include "Screen.hpp"
 #include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 #include "ContinueGame.hpp"
-#include "GamePreferences.hpp"
 
 #include "ospaths.hpp"
 
-using gui::CreatePlanetsScreen ;
-using gui::ContinueGame ;
-using gui::GuiManager ;
 
+namespace gui
+{
 
-CreatePlanetsScreen::CreatePlanetsScreen( bool notNewGame )
+ShowSlideWithPlanets::ShowSlideWithPlanets( bool notNewGame )
         : Action( )
         , gameInProgress( notNewGame )
         , blacktoothFree( false )
@@ -29,9 +28,14 @@ CreatePlanetsScreen::CreatePlanetsScreen( bool notNewGame )
         , byblosFree( false )
         , safariFree( false )
 {
+        if ( GameManager::getInstance().isFreePlanet( "blacktooth" ) ) liberateBlacktooth() ;
+        if ( GameManager::getInstance().isFreePlanet( "byblos" ) ) liberateByblos() ;
+        if ( GameManager::getInstance().isFreePlanet( "egyptus" ) ) liberateEgyptus() ;
+        if ( GameManager::getInstance().isFreePlanet( "penitentiary" ) ) liberatePenitentiary() ;
+        if ( GameManager::getInstance().isFreePlanet( "safari" ) ) liberateSafari() ;
 }
 
-void CreatePlanetsScreen::act ()
+void ShowSlideWithPlanets::act ()
 {
         SoundManager::getInstance().playOgg( "music/HeadOverHeels.ogg", /* loop */ false );
 
@@ -196,4 +200,6 @@ void CreatePlanetsScreen::act ()
         }
 
         GuiManager::getInstance().changeScreen( planets, true );
+}
+
 }

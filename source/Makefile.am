@@ -210,38 +210,38 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/ChooseLanguage.hpp \
 			guiactions/ContinueGame.cpp \
 			guiactions/ContinueGame.hpp \
+			guiactions/LoadGame.cpp \
+			guiactions/LoadGame.hpp \
+			guiactions/SaveGame.cpp \
+			guiactions/SaveGame.hpp \
 			guiactions/CreateAudioMenu.cpp \
 			guiactions/CreateAudioMenu.hpp \
 			guiactions/CreateVideoMenu.hpp \
 			guiactions/CreateVideoMenu.cpp \
 			guiactions/CreateMenuOfGraphicsSets.hpp \
 			guiactions/CreateMenuOfGraphicsSets.cpp \
-			guiactions/CreateCongratulationsScreen.cpp \
-			guiactions/CreateCongratulationsScreen.hpp \
-			guiactions/CreateEndScreen.cpp \
-			guiactions/CreateEndScreen.hpp \
+			guiactions/CreateGameOverSlide.cpp \
+			guiactions/CreateGameOverSlide.hpp \
 			guiactions/CreateListOfSavedGames.cpp \
 			guiactions/CreateListOfSavedGames.hpp \
 			guiactions/CreateKeysMenu.cpp \
 			guiactions/CreateKeysMenu.hpp \
+			guiactions/RedefineKey.cpp \
+			guiactions/RedefineKey.hpp \
 			guiactions/CreateLanguageMenu.cpp \
 			guiactions/CreateLanguageMenu.hpp \
 			guiactions/CreateMainMenu.cpp \
 			guiactions/CreateMainMenu.hpp \
 			guiactions/CreateOptionsMenu.cpp \
 			guiactions/CreateOptionsMenu.hpp \
-			guiactions/CreatePlanetsScreen.cpp \
-			guiactions/CreatePlanetsScreen.hpp \
-			guiactions/ExitApplication.cpp \
-			guiactions/ExitApplication.hpp \
-			guiactions/LoadGame.cpp \
-			guiactions/LoadGame.hpp \
-			guiactions/RedefineKey.cpp \
-			guiactions/RedefineKey.hpp \
-			guiactions/SaveGame.cpp \
-			guiactions/SaveGame.hpp \
+			guiactions/ShowSlideWithPlanets.cpp \
+			guiactions/ShowSlideWithPlanets.hpp \
+			guiactions/ShowCongratulations.cpp \
+			guiactions/ShowCongratulations.hpp \
 			guiactions/ShowAuthors.cpp \
-			guiactions/ShowAuthors.hpp
+			guiactions/ShowAuthors.hpp \
+			guiactions/Quit.cpp \
+			guiactions/Quit.hpp
 
 if USE_ALLEGRO5
 headoverheels_SOURCES += algif5/algif.c \

@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef ExitApplication_hpp_
-#define ExitApplication_hpp_
+#ifndef Quit_hpp_
+#define Quit_hpp_
 
 #include "Action.hpp"
 
@@ -17,12 +17,12 @@
 namespace gui
 {
 
-class ExitApplication : public Action
+class Quit : public Action
 {
 
 public:
 
-        ExitApplication( ) : Action( ) { }
+        Quit( ) : Action( ) { }
 
 protected:
 

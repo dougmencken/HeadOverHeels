@@ -8,11 +8,11 @@
 #include "Menu.hpp"
 #include "Screen.hpp"
 
-#include "CreatePlanetsScreen.hpp"
+#include "ShowSlideWithPlanets.hpp"
 #include "CreateListOfSavedGames.hpp"
 #include "CreateOptionsMenu.hpp"
 #include "ShowAuthors.hpp"
-#include "ExitApplication.hpp"
+#include "Quit.hpp"
 
 
 namespace gui
@@ -36,11 +36,11 @@ void CreateMainMenu::act ()
                 Label* showCredits = new Label( languageStrings->getTranslatedTextByAlias( "show-credits" )->getText() );
                 Label* quitGame = new Label( languageStrings->getTranslatedTextByAlias( "exit-game" )->getText() );
 
-                newGame->setAction( new CreatePlanetsScreen( false ) );
+                newGame->setAction( new ShowSlideWithPlanets( false ) );
                 loadGame->setAction( new CreateListOfSavedGames( true ) );
                 optionsMenu->setAction( new CreateOptionsMenu() );
                 showCredits->setAction( new ShowAuthors() );
-                quitGame->setAction( new ExitApplication() );
+                quitGame->setAction( new Quit() );
 
                 Menu * menu = new Menu( );
                 menu->setVerticalOffset( 12 );

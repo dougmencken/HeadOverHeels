@@ -15,20 +15,8 @@
 #include <string>
 #include <sstream>
 
-using gui::CreateAudioMenu ;
 
-
-CreateAudioMenu::CreateAudioMenu( ) :
-        Action( ),
-        listOfOptions( nilPointer ),
-        labelEffects( nilPointer ),
-        labelMusic( nilPointer ),
-        playRoomTunes( nilPointer )
-{
-
-}
-
-void CreateAudioMenu::act ()
+void gui::CreateAudioMenu::act ()
 {
         LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
@@ -42,12 +30,11 @@ void CreateAudioMenu::act ()
 
         std::stringstream ss;
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
-        if ( screen.isNewAndEmpty() )
-        {
-                screen.setEscapeAction( new CreateOptionsMenu() );
+        Screen & slideWithAudioMenu = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        if ( slideWithAudioMenu.isNewAndEmpty() ) {
+                slideWithAudioMenu.setEscapeAction( new CreateOptionsMenu() );
 
-                screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+                slideWithAudioMenu.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 // efectos sonoros
                 this->labelEffects = new Label( langStringEffects->getText() );
@@ -60,37 +47,36 @@ void CreateAudioMenu::act ()
 
                 // create the menu
 
-                this->listOfOptions = new MenuWithValues( );
+                this->audioOptions = new MenuWithValues( );
 
-                listOfOptions->addOption( labelEffects );
+                audioOptions->addOption( labelEffects );
                 ss.str( std::string() ); // clear ss
                 ss << SoundManager::getInstance().getVolumeOfEffects();
-                listOfOptions->setValueOf( labelEffects, ss.str() );
+                audioOptions->setValueOf( labelEffects, ss.str() );
 
-                listOfOptions->addOption( labelMusic );
+                audioOptions->addOption( labelMusic );
                 ss.str( std::string() );
                 ss << SoundManager::getInstance().getVolumeOfMusic();
-                listOfOptions->setValueOf( labelMusic, ss.str() );
+                audioOptions->setValueOf( labelMusic, ss.str() );
 
-                listOfOptions->addOption( playRoomTunes );
-                listOfOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                audioOptions->addOption( playRoomTunes );
+                audioOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
-                listOfOptions->setVerticalOffset( 35 );
+                audioOptions->setVerticalOffset( 35 );
 
                 // add this menu to the screen
 
-                screen.addWidget( listOfOptions );
+                slideWithAudioMenu.addWidget( audioOptions );
         }
-        else
-        {
+        else {
                 // update labels
-                listOfOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                audioOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
         }
 
-        if ( screen.getNextKeyHandler() == nilPointer )
-                screen.setNextKeyHandler( listOfOptions );
+        if ( slideWithAudioMenu.getNextKeyHandler() == nilPointer )
+                slideWithAudioMenu.setNextKeyHandler( this->audioOptions );
 
-        GuiManager::getInstance().changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( slideWithAudioMenu, true );
 
         allegro::emptyKeyboardBuffer();
 
@@ -98,24 +84,24 @@ void CreateAudioMenu::act ()
         {
                 if ( allegro::areKeypushesWaiting() )
                 {
-                        // get the key pressed by the user
+                        // get the key typed by the user
                         std::string theKey = allegro::nextKey() ;
 
                         if ( theKey == "Escape" )
                         {
                                 allegro::emptyKeyboardBuffer();
-                                screen.handleKey ( theKey );
+                                slideWithAudioMenu.handleKey ( theKey );
                                 break;
                         }
                         else
                         {
                                 bool doneWithKey = false;
 
-                                if ( listOfOptions->getActiveOption () == labelMusic || listOfOptions->getActiveOption () == labelEffects )
+                                if ( audioOptions->getActiveOption () == labelMusic || audioOptions->getActiveOption () == labelEffects )
                                 {
                                         int musicVolume = SoundManager::getInstance().getVolumeOfMusic();
                                         int effectsVolume = SoundManager::getInstance().getVolumeOfEffects();
-                                        int value = ( listOfOptions->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
+                                        int value = ( audioOptions->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
                                         int previousValue = value;
 
                                         if ( theKey == "Left" || theKey == "o" )
@@ -134,36 +120,36 @@ void CreateAudioMenu::act ()
                                                 ss.str( std::string() ); // clear ss
                                                 ss << value;
 
-                                                if ( listOfOptions->getActiveOption () == labelMusic )
+                                                if ( audioOptions->getActiveOption () == labelMusic )
                                                 {
-                                                        listOfOptions->setValueOf( labelMusic, ss.str() );
+                                                        audioOptions->setValueOf( labelMusic, ss.str() );
                                                         SoundManager::getInstance().setVolumeOfMusic( value );
                                                 }
-                                                else if ( listOfOptions->getActiveOption () == labelEffects )
+                                                else if ( audioOptions->getActiveOption () == labelEffects )
                                                 {
-                                                        listOfOptions->setValueOf( labelEffects, ss.str() );
+                                                        audioOptions->setValueOf( labelEffects, ss.str() );
                                                         SoundManager::getInstance().setVolumeOfEffects( value );
                                                         SoundManager::getInstance().stopEverySound ();
                                                         SoundManager::getInstance().play ( "menus", "effect", /* loop */ false );
                                                 }
                                         }
                                 }
-                                else if ( listOfOptions->getActiveOption () == playRoomTunes )
+                                else if ( audioOptions->getActiveOption () == playRoomTunes )
                                 {
                                         if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                         {
                                                 GameManager::getInstance().togglePlayMelodyOfScenery ();
-                                                listOfOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                                                audioOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
                                                 doneWithKey = true;
                                         }
                                 }
 
                                 if ( ! doneWithKey )
-                                        screen.getNextKeyHandler()->handleKey( theKey );
+                                        slideWithAudioMenu.getNextKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
-                                listOfOptions->redraw ();
+                                audioOptions->redraw ();
                         }
                 }
 

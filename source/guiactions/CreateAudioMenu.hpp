@@ -29,18 +29,22 @@ class CreateAudioMenu : public Action
 
 public:
 
-        CreateAudioMenu( ) ;
+        CreateAudioMenu( )
+                : Action( )
+                , audioOptions( nilPointer )
+                , labelEffects( nilPointer )
+                , labelMusic( nilPointer )
+                , playRoomTunes( nilPointer ) {}
+
+        virtual ~CreateAudioMenu( ) {}
 
 protected:
 
-        /**
-         * Show the audio menu
-         */
         virtual void act () ;
 
 private:
 
-        MenuWithValues * listOfOptions ;
+        MenuWithValues * audioOptions ;
 
         Label * labelEffects ;
         Label * labelMusic ;
