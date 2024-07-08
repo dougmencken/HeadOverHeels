@@ -104,10 +104,10 @@ public:
 
         void suspend () {  this->active = false ;  }
 
-        bool isAtFullScreen () const {  return this->atFullScreen ;  }
+        bool isInFullScreen () const {  return this->inFullScreen ;  }
 
        /**
-        * Use it to toggle video at full screen & video in window
+        * Switches between full screen video & windowed video
         */
         void toggleFullScreenVideo () ;
 
@@ -139,8 +139,6 @@ public:
 
 private:
 
-        void dumpScreenz () const ;
-
         /**
          * Unique object of this class for the whole game
          */
@@ -163,9 +161,9 @@ private:
         WhyPaused whyTheGameIsPaused ;
 
         /**
-         * Draw graphics at the full screen when true or in a window when false
+         * Draw graphics in full screen when true or in a window when false
          */
-        bool atFullScreen ;
+        bool inFullScreen ;
 
         void useLanguage ( const std::string & language ) ;
 

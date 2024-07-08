@@ -181,7 +181,7 @@ void CreateVideoMenu::updateLabels ()
         listOfOptions->setValueOf( drawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
         listOfOptions->setValueOf( drawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
         listOfOptions->setValueOf( drawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
-        listOfOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
+        listOfOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isInFullScreen () ? yeah : nope );
 
         std::string room = languageStrings->getTranslatedTextByAlias( "room" )-> getText ();
         std::string character = languageStrings->getTranslatedTextByAlias( "character" )-> getText ();

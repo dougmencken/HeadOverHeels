@@ -122,18 +122,15 @@ bool GamePreferences::readPreferences( const std::string & fileName )
                                 GamePreferences::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
                 }
 
-                bool atFullScreen = false ;
+                bool inFullScreen = false ;
                 tinyxml2::XMLElement* fullscreen = video->FirstChildElement( "fullscreen" ) ;
                 if ( fullscreen != nilPointer )
-                {
-                        atFullScreen = ( std::string( fullscreen->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
-                }
+                        inFullScreen = ( std::string( fullscreen->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
 
                 allegroWindowSizeToScreenSize ();
 
-                if ( gui::GuiManager::getInstance().isAtFullScreen () != atFullScreen ) {
+                if ( gui::GuiManager::getInstance().isInFullScreen () != inFullScreen )
                         gui::GuiManager::getInstance().toggleFullScreenVideo ();
-                }
 
                 tinyxml2::XMLElement* shadows = video->FirstChildElement( "drawshadows" ) ;
                 if ( shadows != nilPointer )
@@ -248,7 +245,7 @@ bool GamePreferences::writePreferences( const std::string & fileName )
                 video->InsertEndChild( height );
 
                 tinyxml2::XMLElement * fullscreen = preferences.NewElement( "fullscreen" );
-                fullscreen->SetText( gui::GuiManager::getInstance().isAtFullScreen () ? "true" : "false" );
+                fullscreen->SetText( gui::GuiManager::getInstance().isInFullScreen () ? "true" : "false" );
                 video->InsertEndChild( fullscreen );
 
                 tinyxml2::XMLElement * shadows = preferences.NewElement( "drawshadows" );

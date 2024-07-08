@@ -18,10 +18,6 @@
 
 #include <algorithm>
 
-#if defined( DEBUG ) && DEBUG
-# define DEBUG_GUI_SCREENS      0
-#endif
-
 
 namespace gui
 {
@@ -33,7 +29,7 @@ GuiManager::GuiManager( ) :
         chosenLanguage( "" ),
         languageStrings( nilPointer ),
         active( true ),
-        atFullScreen( false )
+        inFullScreen( false )
 {
         std::string nameOfWindow = "Head over Heels" ;
 
@@ -84,27 +80,6 @@ GuiManager& GuiManager::getInstance ()
         return *instance ;
 }
 
-void GuiManager::dumpScreenz () const
-{
-# if  defined( DEBUG_GUI_SCREENS )  &&  DEBUG_GUI_SCREENS
-        if ( this->screens.size () > 0 )
-        {
-                fprintf ( stdout, " + +  s c r e e n z \n" ) ;
-                for ( std::map< std::string, ScreenPtr >::const_iterator i = this->screens.begin (); i != this->screens.end (); ++ i )
-                {
-                        if ( i->second != nilPointer ) {
-                                std::cout << "   screen @ " << i->second.tostring() ;
-                                const Screen & screen = * i->second ;
-                                /* const Picture & pict = screen.getImageOfScreen () ;
-                                 * std::cout << " with picture \" " << pict.getName() << " \"" << std::endl ; */
-                                std::cout << " for action \" " << screen.getNameOfAction() << " \"" << std::endl ;
-                        }
-                }
-                fprintf ( stdout, " - -  s c r e e n z \n" ) ;
-        }
-# endif
-}
-
 void GuiManager::begin ()
 {
         // if the language isn’t set, show the menu of languages, or the main menu otherwise
@@ -133,17 +108,6 @@ void GuiManager::changeScreen( Screen & newScreen, bool dive )
 {
         const std::string & newScreenAction = newScreen.getNameOfAction () ;
 
-# if  defined( DEBUG_GUI_SCREENS )  &&  DEBUG_GUI_SCREENS
-        fprintf( stdout, ">< changing screen" );
-
-        if ( this->activeScreen != nilPointer )
-                fprintf( stdout, " from the one for action \" %s \"", this->activeScreen->getNameOfAction().c_str () );
-        else
-                fprintf( stdout, " from the void" );
-
-        fprintf( stdout, " to the one for action \" %s \"\n", newScreenAction.c_str () ) ;
-# endif
-
         std::map< std::string, ScreenPtr >::const_iterator iscreen = this->screens.find( newScreenAction );
         if ( iscreen != this->screens.end () ) {
                 if ( this->activeScreen != nilPointer ) {
@@ -164,11 +128,6 @@ void GuiManager::changeScreen( Screen & newScreen, bool dive )
 
 ScreenPtr GuiManager::findOrCreateScreenForAction ( Action & action )
 {
-        /* if ( action == nilPointer ) {
-                std::cerr << "screen for nil action is nil screen" << std::endl ;
-                return ScreenPtr () ;
-        } */
-
         const std::string & nameOfAction = action.getNameOfAction() ;
 
         if ( this->screens.find( nameOfAction ) == this->screens.end () ) {
@@ -179,8 +138,6 @@ ScreenPtr GuiManager::findOrCreateScreenForAction ( Action & action )
                 if ( this->screens[ nameOfAction ] == nilPointer )
                         throw MayNotBePossible( "can't make a screen for action \" " + nameOfAction + " \"" ) ;
         }
-
-        dumpScreenz() ;
 
         return this->screens[ nameOfAction ];
 }
@@ -211,25 +168,23 @@ void GuiManager::toggleFullScreenVideo ()
 {
         bool switched = false;
 
-        if ( this->atFullScreen )
+        if ( this->inFullScreen )
                 switched = allegro::switchToWindowedVideo();
         else
                 switched = allegro::switchToFullscreenVideo();
 
-        if ( switched )
-        {
-                this->atFullScreen = ! this->atFullScreen ;
+        if ( switched ) {
+                this->inFullScreen = ! this->inFullScreen ;
 
-                fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
+                fprintf( stdout, "video is now %s\n", ( this->inFullScreen ? "in full screen" : "in window" ) );
                 somn::milliSleep( 80 );
                 redraw ();
         }
-        else
-        {
+        else {
                 SoundManager::getInstance().stopEverySound ();
                 SoundManager::getInstance().play( "menus", "mistake", /* loop */ false );
 
-                if ( this->atFullScreen )
+                if ( this->inFullScreen )
                         allegro::switchToFullscreenVideo();
                 else
                         allegro::switchToWindowedVideo();
