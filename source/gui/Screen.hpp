@@ -96,12 +96,10 @@ public:
 
         Action * getEscapeAction () const {  return this->escapeAction ;  }
 
-        /**
-         * the next widget in the chain of handling typed keys
-         */
-        void setNextKeyHandler ( Widget* widget ) {  this->nextKeyHandler = widget ;  }
+        // assigns the handler of typed keys
+        void setKeyHandler ( KeyHandler* handler ) {  this->keyHandler = handler ;  }
 
-        Widget * getNextKeyHandler () const {  return this->nextKeyHandler ;  }
+        KeyHandler * getKeyHandler () const {  return this->keyHandler ;  }
 
         static void scrollHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
 
@@ -133,7 +131,7 @@ private:
 
         Action * escapeAction ;
 
-        Widget * nextKeyHandler ;
+        KeyHandler * keyHandler ;
 
         AnimatedPictureWidget * pictureOfHead ;
 

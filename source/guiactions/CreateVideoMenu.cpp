@@ -66,8 +66,8 @@ void gui::CreateVideoMenu::act ()
 
         slideWithVideoMenu.setEscapeAction( new CreateOptionsMenu() );
 
-        if ( slideWithVideoMenu.getNextKeyHandler() == nilPointer )
-                slideWithVideoMenu.setNextKeyHandler( videoOptions );
+        if ( slideWithVideoMenu.getKeyHandler() == nilPointer )
+                slideWithVideoMenu.setKeyHandler( videoOptions );
 
         slideWithVideoMenu.drawSpectrumColorBoxes( true );
 
@@ -122,7 +122,7 @@ void gui::CreateVideoMenu::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                        slideWithVideoMenu.getNextKeyHandler()->handleKey( theKey );
+                                        slideWithVideoMenu.getKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
 

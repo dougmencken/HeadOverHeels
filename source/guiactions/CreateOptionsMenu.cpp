@@ -46,7 +46,7 @@ void CreateOptionsMenu::act ()
                 menu->addOption( chooseLanguage );
 
                 screen.addWidget( menu );
-                screen.setNextKeyHandler( menu );
+                screen.setKeyHandler( menu );
 
                 screen.setEscapeAction( new CreateMainMenu() );
         }

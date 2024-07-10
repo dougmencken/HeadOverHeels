@@ -73,8 +73,8 @@ void gui::CreateAudioMenu::act ()
                 audioOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
         }
 
-        if ( slideWithAudioMenu.getNextKeyHandler() == nilPointer )
-                slideWithAudioMenu.setNextKeyHandler( this->audioOptions );
+        if ( slideWithAudioMenu.getKeyHandler() == nilPointer )
+                slideWithAudioMenu.setKeyHandler( this->audioOptions );
 
         GuiManager::getInstance().changeScreen( slideWithAudioMenu, true );
 
@@ -146,7 +146,7 @@ void gui::CreateAudioMenu::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                        slideWithAudioMenu.getNextKeyHandler()->handleKey( theKey );
+                                        slideWithAudioMenu.getKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
                                 audioOptions->redraw ();

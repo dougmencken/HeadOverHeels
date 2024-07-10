@@ -50,7 +50,7 @@ void CreateKeysMenu::act ()
                 }
 
                 screen.addWidget( menuOfKeys );
-                screen.setNextKeyHandler( menuOfKeys );
+                screen.setKeyHandler( menuOfKeys );
         }
         else    // select the first menu option
                 menuOfKeys->resetActiveOption();

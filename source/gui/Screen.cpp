@@ -58,7 +58,7 @@ Screen::Screen( Action & action ) :
         drawSpectrumColors( false ),
         actionOfScreen( action ),
         escapeAction( nilPointer ),
-        nextKeyHandler( nilPointer ),
+        keyHandler( nilPointer ),
         pictureOfHead( nilPointer ),
         pictureOfHeels( nilPointer )
 {
@@ -111,7 +111,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 int xHead = this->pictureOfHead->getX ();
                 int yHead = this->pictureOfHead->getY ();
 
-                if ( this->pictureOfHead->isOnScreen() )
+                if ( this->pictureOfHead->isOnSomeSlide() )
                         removeWidget( this->pictureOfHead );
                 else
                         delete this->pictureOfHead ;
@@ -125,7 +125,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 int xHeels = this->pictureOfHeels->getX ();
                 int yHeels = this->pictureOfHeels->getY ();
 
-                if ( this->pictureOfHeels->isOnScreen() )
+                if ( this->pictureOfHeels->isOnSomeSlide() )
                         removeWidget( this->pictureOfHeels );
                 else
                         delete this->pictureOfHeels ;
@@ -150,16 +150,14 @@ void Screen::refresh () const
 
         imageOfScreen->fillWithColor( Color::byName( "red" ) ); // the red background is so red
 
-        // draw background, if any
+        // draw background
 
         if ( Screen::backgroundPicture == nilPointer )
-        {
                 Screen::refreshBackground ();
-        }
+
         if ( Screen::backgroundPicture == nilPointer )
-        {       // it's impossible
+                // it's impossible
                 throw MayNotBePossible( "Screen::backgroundPicture is nil after Screen::refreshBackground()" ) ;
-        }
 
         unsigned int backgroundWidth = backgroundPicture->getWidth();
         unsigned int backgroundHeight = backgroundPicture->getHeight();
@@ -261,8 +259,8 @@ void Screen::handleKey( const std::string& key )
         if ( this->escapeAction != nilPointer && key == "Escape" )
                 this->escapeAction->doIt ();
         else
-                if ( this->nextKeyHandler != nilPointer )
-                        this->nextKeyHandler->handleKey( key );
+                if ( this->keyHandler != nilPointer )
+                        this->keyHandler->handleKey( key );
 }
 
 void Screen::addWidget( Widget* widget )
@@ -270,7 +268,7 @@ void Screen::addWidget( Widget* widget )
         if ( widget == nilPointer ) return ;
 
         this->widgets.push_back( widget );
-        widget->setOnScreen( true );
+        widget->setContainingSlide( this );
 }
 
 bool Screen::removeWidget( Widget* widget )
@@ -291,10 +289,10 @@ bool Screen::removeWidget( Widget* widget )
 
 void Screen::freeWidgets ()
 {
-        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnScreen () )
+        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide () )
                 delete pictureOfHead;
 
-        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnScreen () )
+        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnSomeSlide () )
                 delete pictureOfHeels;
 
         while ( ! this->widgets.empty () )

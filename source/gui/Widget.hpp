@@ -14,6 +14,9 @@
 #include "WrappersAllegro.hpp"
 
 #include "Drawable.hpp"
+#include "KeyHandler.hpp"
+
+#include "util.hpp"
 
 #include <string>
 #include <utility>
@@ -22,54 +25,46 @@
 namespace gui
 {
 
+class Screen ;
+
+
 /**
- * Foundation for creating elements of the user interface
+ * The foundation for creating elements of the user interface
  */
 
-class Widget : public Drawable
+class Widget : public Drawable, public KeyHandler
 {
 
 public:
 
-        Widget( ) : xy ( std::make_pair( 0, 0 ) ), onScreen( false ) { }
+        Widget( ) : whereX( 0 ), whereY( 0 ), onWhatSlide( nilPointer ) { }
 
-        Widget( int x, int y ) : xy ( std::make_pair( x, y ) ), onScreen( false ) { }
+        Widget( int x, int y ) : whereX( x ), whereY( y ), onWhatSlide( nilPointer ) { }
 
         virtual ~Widget( ) { }
 
-        /**
-         * Subclasses may handle this event or pass it to some other widget
-         */
-        virtual void handleKey ( const std::string& key ) = 0 ;
+        int getX () const {  return this->whereX ;  }
+        int getY () const {  return this->whereY ;  }
 
-        /**
-         * Change position of the widget
-         */
-        virtual void moveTo ( int x, int y ) {  xy = std::make_pair( x, y ) ;  }
+        virtual void moveTo ( int x, int y ) {  setX( x ); setY( y );  }
 
-        int getX () const {  return this->xy.first ;  }
+        Screen * getContainingSlide () const {  return this->onWhatSlide ;  }
+        void setContainingSlide( Screen * theSlide ) {  this->onWhatSlide = theSlide ;  }
 
-        int getY () const {  return this->xy.second ;  }
-
-        bool isOnScreen() const {  return this->onScreen ;  }
-
-        void setOnScreen( bool onscreen ) {  this->onScreen = onscreen ;  }
-
-private:
-
-        /**
-         * first es la coordenada X de pantalla donde situar el elemento
-         * second es la coordenada Y de pantalla donde situar el elemento
-         */
-        std::pair < int, int > xy;
-
-        bool onScreen ;
+        bool isOnSomeSlide() const {  return this->onWhatSlide != nilPointer ;  }
 
 protected:
 
-        void setX ( int x ) {  this->xy.first = x ;  }
+        void setX ( int x ) {  this->whereX = x ;  }
+        void setY ( int y ) {  this->whereY = y ;  }
 
-        void setY ( int y ) {  this->xy.second = y ;  }
+private:
+
+        // where is this widget on the containing slide
+        int whereX ;
+        int whereY ;
+
+        Screen* onWhatSlide ;
 
 };
 

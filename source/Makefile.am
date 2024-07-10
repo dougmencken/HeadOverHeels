@@ -182,6 +182,8 @@ headoverheels_SOURCES = main.cpp \
 			gui/Font.hpp \
 			gui/GuiManager.cpp \
 			gui/GuiManager.hpp \
+			gui/KeyHandler.hpp \
+			gui/Widget.hpp \
 			gui/PictureWidget.cpp \
 			gui/PictureWidget.hpp \
 			gui/AnimatedPictureWidget.cpp \
@@ -203,7 +205,6 @@ headoverheels_SOURCES = main.cpp \
 			gui/Screen.hpp \
 			gui/TextField.cpp \
 			gui/TextField.hpp \
-			gui/Widget.hpp \
 			guiactions/Action.hpp \
 			guiactions/PlaySound.hpp \
 			guiactions/ChooseLanguage.cpp \

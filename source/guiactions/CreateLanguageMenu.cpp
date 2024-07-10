@@ -80,7 +80,7 @@ void CreateLanguageMenu::act ()
         }
 
         screen.addWidget( menu );
-        screen.setNextKeyHandler( menu );
+        screen.setKeyHandler( menu );
 
         GuiManager::getInstance().changeScreen( screen, true );
 }

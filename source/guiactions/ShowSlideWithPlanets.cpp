@@ -60,7 +60,7 @@ void ShowSlideWithPlanets::act ()
         empire->setAction( new ContinueGame( this->gameInProgress ) );
 
         planets.addWidget( empire );
-        planets.setNextKeyHandler( empire );
+        planets.setKeyHandler( empire );
 
         const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
 

@@ -61,7 +61,7 @@ void CreateMenuOfGraphicsSets::act ()
                 }
 
                 screen.addWidget( menuOfGraphicsSets );
-                screen.setNextKeyHandler( menuOfGraphicsSets );
+                screen.setKeyHandler( menuOfGraphicsSets );
         }
 
         const std::vector< Label* > & sets = menuOfGraphicsSets->getEveryOption ();
@@ -114,7 +114,7 @@ void CreateMenuOfGraphicsSets::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                        screen.getNextKeyHandler()->handleKey( theKey );
+                                        screen.getKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
                                 menuOfGraphicsSets->redraw ();

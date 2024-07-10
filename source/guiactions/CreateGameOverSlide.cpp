@@ -85,7 +85,7 @@ void gui::CreateGameOverSlide::act ()
         }
 
         scoreLabel->setAction( screen.getEscapeAction () );
-        screen.setNextKeyHandler( scoreLabel );
+        screen.setKeyHandler( scoreLabel );
 
         GuiManager::getInstance().changeScreen( screen, false );
 }
