@@ -35,8 +35,8 @@ class TextField : public Widget
 public:
 
         /**
-         * @param width of field
-         * @param align horizontal alignment: left, center, or right
+         * @param the width of field
+         * @param howToAlign the horizontal alignment: left, center, or right
          */
         TextField( unsigned int widthOField, const std::string & howToAlign )
                 : Widget( )
@@ -54,7 +54,7 @@ public:
 
         void appendText ( const std::string & text, bool height2x, const std::string & color ) ;
 
-        void moveTo ( int x, int y ) {  Widget::moveTo( x, y ) ; updatePositions () ;  }
+        virtual void moveTo ( int x, int y ) {  Widget::moveTo( x, y ) ; updatePositions () ;  }
 
         unsigned int getWidthOfField () const {  return this->width ;  }
 

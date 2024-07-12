@@ -152,10 +152,7 @@ void Menu::draw ()
         for ( unsigned int o = 0 ; o < this->options.size (); ++ o )
         {
                 Label* option = this->options[ o ] ;
-
-                if ( ( option == getActiveOption() && ! option->getFont().isDoubleHeight() )
-                                || ( getActiveOption() != option && option->getFont().isDoubleHeight() ) )
-                        option->toggleDoubleHeight() ;
+                option->getFontToChange().setDoubleHeight( option == getActiveOption() ) ;
         }
 
         // update position of the whole menu to draw it centered

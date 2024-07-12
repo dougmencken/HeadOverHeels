@@ -5,124 +5,113 @@
 #include "Action.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
-#include "UnicodeUtilities.hpp"
 
 
 namespace gui
 {
 
-Label::Label( const std::string & text )
-: Widget( )
-        , imageOfLetters( nilPointer )
-        , text( text )
-        , color( "white" )
-        , height2x( false )
-        , multicolored( false )
+Label::Label( const std::string & theText )
+        : Widget( )
+        , text( theText )
+        , howManyLetters( utf8StringLength( theText ) )
+        , font( new Font( "white" ) )
+        , cyclicallyColoredLetters( false )
         , spacing( 0 )
         , myAction( nilPointer )
 {
-        createImageOfLabel( text );
 }
 
-Label::Label( const std::string & text, const Font & font, bool multicolor )
-: Widget( )
-        , imageOfLetters( nilPointer )
-        , text( text )
-        , color( font.getColor () )
-        , height2x( font.isDoubleHeight () )
-        , multicolored( multicolor )
+Label::Label( const std::string & theText, Font * theFont, bool multicolor )
+        : Widget( )
+        , text( theText )
+        , howManyLetters( utf8StringLength( theText ) )
+        , font( theFont != nilPointer ? theFont : new Font( "white" ) )
+        , cyclicallyColoredLetters( multicolor )
         , spacing( 0 )
         , myAction( nilPointer )
 {
-        if ( this->color.empty() ) this->color = "white" ;
-
-        createImageOfLabel( text );
 }
 
 Label::~Label( )
 {
-        delete imageOfLetters ;
-}
-
-void Label::update()
-{
-        createImageOfLabel( getText() );
+        delete font ;
 }
 
 void Label::draw ()
 {
-        if ( imageOfLetters != nilPointer )
-                allegro::drawSprite( imageOfLetters->getAllegroPict(), getX(), getY() );
+        Picture* image = createImageOfLabel() ;
+        if ( image != nilPointer ) allegro::drawSprite( image->getAllegroPict(), getX(), getY() );
+        delete image ;
 }
 
-void Label::handleKey( const std::string& key )
+void Label::handleKey( const std::string & key )
 {
         if ( myAction != nilPointer && ( key == "Enter" || key == "Space" ) )
-        {
                 myAction->doIt ();
-        }
 }
 
-void Label::createImageOfLabel( const std::string & text )
+/* static */
+Picture* Label::createImageOfString ( const std::string & text, unsigned int textLength, int spacing,
+                                        const Font & font, std::vector< std::string > colorCycle )
 {
-        const Font & font = getFont() ;
+        if ( text.empty() ) return new Picture( font.getWidthOfLetter(), font.getHeightOfLetter() ) ;
 
-        // re-create the image of letters
-        delete imageOfLetters ;
-
-        unsigned int howManyLetters = utf8StringLength( text );
-        imageOfLetters = new Picture( howManyLetters * ( font.getWidthOfLetter( "O" ) + getSpacing() ), font.getHeightOfLetter( "I" ) );
+        Picture* imageOfString = new Picture( textLength * ( font.getWidthOfLetter() + spacing ) - spacing,
+                                                font.getHeightOfLetter() );
 
         std::string kindOFont = font.isDoubleHeight() ? "double-height font" : "font" ;
-        std::string nameOfImage = "image of label \"" + text + "\" using the game’s " + kindOFont + " colored " + this->color ;
-        imageOfLetters->setName( nameOfImage );
+        std::string nameOfImage = "image of label \"" + text + "\" using the game’s " + kindOFont + " colored " + font.getColor() ;
+        imageOfString->setName( nameOfImage );
 
-        if ( ! text.empty() )
-        {
-                static const size_t colors_in_multicolor = 3;
-                // the sequence of colors for a multicolor label
-                static std::string multiColors[ colors_in_multicolor ] = {  "cyan", "yellow", "orange"  }; // the amstrad cpc sequence
-                if ( GameManager::getInstance().isSimpleGraphicsSet() )
-                        multiColors[ 2 ] = "white" ; // the original speccy sequence is “ cyan yellow white ”
+        unsigned short color = 0 ; // current position in the sequence of colors
+        unsigned int letterInLine = 0 ;
 
-                unsigned short cycle = 0 ; // current position in that sequence
-                std::string fontColor = font.getColor() ;
+        std::string::const_iterator iter = text.begin ();
+        while ( iter != text.end () ) {
+                size_t from = std::distance( text.begin (), iter );
+                size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // the string iterator increments here
+                std::string utf8letter = text.substr( from, howMany );
 
-                unsigned int letterInLine = 0 ;
+                // add image of this letter
+                Font forLetter( colorCycle[ color ], font.isDoubleHeight() );
+                Picture* letter = forLetter.getPictureOfLetter( utf8letter ) ;
+                if ( letter != nilPointer )
+                        allegro::bitBlit(
+                            letter->getAllegroPict(),
+                            imageOfString->getAllegroPict(),
+                            0,
+                            0,
+                            letterInLine * ( letter->getWidth() + spacing ),
+                            0,
+                            letter->getWidth(),
+                            letter->getHeight()
+                        ) ;
 
-                std::string::const_iterator iter = text.begin ();
-                while ( iter != text.end () )
-                {
-                        if ( this->multicolored )
-                        {
-                                fontColor = multiColors[ cycle ] ;
+                letterInLine ++ ;
 
-                                // cycle in the sequence of colors
-                                ++ cycle ;
-                                if ( cycle >= colors_in_multicolor ) cycle = 0 ;
-                        }
-
-                        size_t from = std::distance( text.begin (), iter );
-                        size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // the string iterator increments here
-                        std::string utf8letter = text.substr( from, howMany );
-
-                        // draw letter
-                        Picture* letter = Font::fontByColorAndSize( fontColor, font.isDoubleHeight() ).getPictureOfLetter( utf8letter ) ;
-                        if ( letter != nilPointer )
-                                allegro::bitBlit(
-                                    letter->getAllegroPict(),
-                                    imageOfLetters->getAllegroPict(),
-                                    0,
-                                    0,
-                                    letterInLine * ( letter->getWidth() + getSpacing() ),
-                                    0,
-                                    letter->getWidth(),
-                                    letter->getHeight()
-                                ) ;
-
-                        letterInLine ++ ;
+                if ( colorCycle.size() > 1 )
+                {       // cycle in the sequence of colors
+                        ++ color ;
+                        if ( color >= colorCycle.size() ) color = 0 ;
                 }
         }
+
+        return imageOfString ;
+}
+
+std::vector< std::string > Label::getColorCycle () const
+{
+        std::vector< std::string > colorCycle ;
+        if ( areLettersCyclicallyColored() ) {
+                colorCycle.push_back( "cyan" );
+                colorCycle.push_back( "yellow" );
+                // the original speccy sequence is “ cyan yellow white ”
+                // “ cyan yellow orange ” is the amstrad cpc sequence
+                colorCycle.push_back( GameManager::getInstance().isSimpleGraphicsSet() ? "white" : "orange" );
+        } else
+                colorCycle.push_back( getFont().getColor() );
+
+        return colorCycle ;
 }
 
 }

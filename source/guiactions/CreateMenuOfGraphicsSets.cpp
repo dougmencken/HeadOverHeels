@@ -54,10 +54,10 @@ void CreateMenuOfGraphicsSets::act ()
                                 nameOfSetSpaced = nameOfSetSpaced + " ";
                         }
 
-                        Label * theLabel = new Label( nameOfSetSpaced + i->first );
-                        theLabel->changeColor( i->first == GameManager::getInstance().getChosenGraphicsSet() ? "yellow" : "cyan" );
-
-                        menuOfGraphicsSets->addOption( theLabel );
+                        menuOfGraphicsSets->addOption( new Label (
+                                nameOfSetSpaced + i->first,
+                                new Font( i->first == GameManager::getInstance().getChosenGraphicsSet() ? "yellow" : "cyan" )
+                        ) );
                 }
 
                 screen.addWidget( menuOfGraphicsSets );
@@ -104,10 +104,9 @@ void CreateMenuOfGraphicsSets::act ()
 
                                                 const std::vector< Label * > & everySet = menuOfGraphicsSets->getEveryOption ();
                                                 for ( unsigned int i = 0 ; i < everySet.size (); ++ i )
-                                                {
-                                                        everySet[ i ]->changeColor( "cyan" );
-                                                }
-                                                menuOfGraphicsSets->getActiveOption()->changeColor( "yellow" );
+                                                        everySet[ i ]->getFontToChange().setColor( "cyan" );
+
+                                                menuOfGraphicsSets->getActiveOption()->getFontToChange().setColor( "yellow" );
                                         }
 
                                         doneWithKey = true;

@@ -22,8 +22,8 @@ RedefineKey::RedefineKey( MenuWithValues * menu, const std::string & keyAction )
 void RedefineKey::act ()
 {
         Label * choice = menu->getActiveOption ();
-        choice->changeColor( "yellow" );
-        if ( ! choice->getFont().isDoubleHeight() ) choice->toggleDoubleHeight() ;
+        choice->getFontToChange().setColor( "yellow" );
+        choice->getFontToChange().setDoubleHeight( true );
         menu->redraw ();
 
         allegro::emptyKeyboardBuffer();
@@ -73,9 +73,9 @@ void RedefineKey::act ()
                                                         if ( option->getText() == textOfThatKey )
                                                         {
                                                                 menu->setValueOf( option, "none" );
-                                                                option->changeColor( "cyan" );
+                                                                option->getFontToChange().setColor( "cyan" );
 
-                                                                std::cout << "NO key for \"" << previousAction << "\" yet" << std::endl ;
+                                                                std::cout << "NO key for \"" << previousAction << "\" is yet defined" << std::endl ;
                                                                 break;
                                                         }
                                                 }
@@ -100,10 +100,7 @@ void RedefineKey::act ()
                 somn::milliSleep( 20 );
         }
 
-        if ( InputManager::getInstance().getUserKeyFor( this->whatKeyDoes ) != "none" )
-                choice->changeColor( "white" );
-        else
-                choice->changeColor( "cyan" );
+        choice->getFontToChange().setColor( InputManager::getInstance().getUserKeyFor( this->whatKeyDoes ) != "none" ? "white" : "cyan" );
 
         menu->redraw ();
 }

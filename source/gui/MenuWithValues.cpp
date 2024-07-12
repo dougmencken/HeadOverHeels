@@ -44,14 +44,11 @@ void MenuWithValues::draw ()
                 }
         }
 
-        // the active, that is currently chosen, option is drawn stretched to double height
+        // the chosen option’s font is double-height stretched
         for ( unsigned int o = 0 ; o < options.size (); ++ o )
         {
                 Label* option = options[ o ] ;
-
-                if ( ( option == getActiveOption() && ! option->getFont().isDoubleHeight() )
-                                || ( getActiveOption() != option && option->getFont().isDoubleHeight() ) )
-                        option->toggleDoubleHeight() ;
+                option->getFontToChange().setDoubleHeight( option == getActiveOption() ) ;
         }
 
         std::vector< Label * > optionsWithValues ;
@@ -65,15 +62,13 @@ void MenuWithValues::draw ()
                 std::string filler ;
                 unsigned int lengthOfText = utf8StringLength( textOfOption );
                 for ( unsigned int off = lengthOfText; off < maxLetters + minSpacesBeforeValue; off++ )
-                {
                         filler += symbolToFill ;
-                }
 
-                Label* optionWithValue = new Label( textOfOption + filler + getValueOf( textOfOption ), option->getFont(), option->getSpacing() );
-                optionsWithValues.push_back( optionWithValue );
+                std::string withValue = textOfOption + filler + getValueOf( textOfOption );
+                optionsWithValues.push_back( new Label( withValue, new Font( option->getFont() ), option->getSpacing() ) );
 
                 if ( option == getActiveOption() )
-                        activeOptionWithValue = optionWithValue ;
+                        activeOptionWithValue = optionsWithValues.back() ;
         }
 
         // condense menu options so they fit on the screen
@@ -174,7 +169,7 @@ unsigned int MenuWithValues::getWidthOfMenu () const
                 for ( unsigned int i = utf8StringLength( textOfOption ); i < maxLetters + minSpacesBeforeValue ; i++ )
                         filler += symbolToFill ;
 
-                Label optionWithValue( textOfOption + filler + getValueOf( textOfOption ), option->getFont(), option->getSpacing() );
+                Label optionWithValue( textOfOption + filler + getValueOf( textOfOption ), new Font( option->getFont() ), option->getSpacing() );
 
                 unsigned int theWidth = optionWithValue.getWidth() + Menu::getPictureBeforeOption().getWidth() ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;

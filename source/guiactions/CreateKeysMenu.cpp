@@ -41,7 +41,7 @@ void CreateKeysMenu::act ()
                         Label* label = new Label( languageStrings->getTranslatedTextByAlias( xmlAction )->getText() );
 
                         std::string theKey = InputManager::getInstance().getUserKeyFor( theAction );
-                        if ( theKey == "none" ) label->changeColor( "cyan" );
+                        if ( theKey == "none" ) label->getFontToChange().setColor( "cyan" );
 
                         label->setAction( new RedefineKey( menuOfKeys, theAction ) );
 

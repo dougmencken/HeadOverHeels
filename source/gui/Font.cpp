@@ -14,13 +14,11 @@ namespace gui
 
 /* static */ unsigned int Font::howManyLetters = 0 ;
 
-/* static */ std::string * Font::listOfLetters = nilPointer ;
-
-/* static */ std::vector < Font * > Font::fonts ;
+/* static */ std::map< std::string /* letter */, unsigned int /* index */ > * Font::mapOfLetters = nilPointer ;
 
 
 Font::Font( const std::string & color, bool doubleHeightStretching )
-        : fontColor( color )
+        : fontColor( color.empty() ? "white" : color )
         , doubleHeight( doubleHeightStretching )
 {
         if ( Font::imageOfFont == nilPointer )
@@ -64,63 +62,19 @@ Font::Font( const std::string & color, bool doubleHeightStretching )
                 Font::imageOfFont->setName( "image of the game’s font" );
         }
 
-        Picture lettersOfFont( * Font::imageOfFont );
+        // read the letters file once for all fonts
+        if ( Font::mapOfLetters == nilPointer )
+                /* bool mapOfLettersOkay = */ Font::readLettersFile() ;
 
-        // colorize letters by changing white to the font color
-        if ( getColor() != "white" )
-                lettersOfFont.colorizeWhite( Color::byName( getColor() ) );
-
-        std::string pictureOfWhat = "letters" ;
-
-        if ( isDoubleHeight () )
-        {       // stretch for the double height
-                autouniqueptr < allegro::Pict > bigfont( allegro::Pict::newPict( lettersOfFont.getWidth(), lettersOfFont.getHeight() << 1 ) );
-                bigfont->clearToColor( Color::keyColor().toAllegroColor() );
-                allegro::stretchBlit( lettersOfFont.getAllegroPict(), *bigfont,
-                                        0, 0, lettersOfFont.getWidth(), lettersOfFont.getHeight(),
-                                        0, 0, lettersOfFont.getWidth(), lettersOfFont.getHeight() << 1 );
-
-                lettersOfFont = Picture( * bigfont );
-                pictureOfWhat = "stretched double height letters" ;
-        }
-
-        lettersOfFont.setName( "picture of " + pictureOfWhat + " colored " + getColor() );
-
-        // read the list of letters once for all fonts
-        if ( Font::listOfLetters == nilPointer ) {
-                /* bool listOfLetterOkay = */ Font::readListOfLetters() ;
-        }
-
-        // decompose letters
-        const unsigned int lettersPerLine = 16;
-        const unsigned int linesInFont = 21;
-
-        if ( linesInFont * lettersPerLine != howManyLetters )
-                std::cout << "hmmm, the list of letters has more or less letters than the picture of font" << std::endl ;
-
-        // the size of the font image is 272 x 609 pixels, or 16 x 21 letters 17 x 29 pixels each
-        unsigned int charWidth = lettersOfFont.getWidth() / lettersPerLine ;
-        unsigned int charHeight = lettersOfFont.getHeight() / linesInFont ;
-
-        size_t positionInTable = 0;
-
-        for ( unsigned int y = 0; y < lettersOfFont.getHeight(); y += charHeight )
-        {
-                for ( unsigned int x = 0; x < lettersOfFont.getWidth(); x += charWidth )
-                {
-                        Picture* letter = new Picture( charWidth, charHeight );
-                        if ( listOfLetters[ positionInTable ] != "" )
-                                allegro::bitBlit( lettersOfFont.getAllegroPict(), letter->getAllegroPict(), x, y, 0, 0, charWidth, charHeight );
-
-                        letter->setName( "image of letter \'" + listOfLetters[ positionInTable ++ ] + "\' for the "
-                                                + ( isDoubleHeight() ? "double-height" : "" ) + " game’s font colored " + getColor() );
-                        letters.push_back( letter );
-                }
-        }
+        if ( Font::howManyLetters != Font::Lines_In_Font * Font::Letters_Per_Line )
+                std::cout << "hmmm, the letters file lists more or less letters"
+                                << " (" << Font::howManyLetters << ") than the picture of font has"
+                                        << " (" << ( Font::Lines_In_Font * Font::Letters_Per_Line ) << ")"
+                                                << std::endl ;
 }
 
 /* static */
-bool Font::readListOfLetters ()
+bool Font::readLettersFile ()
 {
         Font::howManyLetters = 0 ;
 
@@ -149,25 +103,23 @@ bool Font::readListOfLetters ()
                 unsigned char c = static_cast< unsigned char >( buffer[ at ] );
                 if ( ( c == 0 ) || ( ( c & 0x80 ) == 0 ) || ( ( c & 0xC0 ) == 0xC0 ) )
                 {
-                        howManyLetters++;
+                        Font::howManyLetters ++ ;
                 }
         }
 
-        std::cout << "file \"" << fileWithLetters << "\" lists " << howManyLetters << " letters" << std::endl ;
-        listOfLetters = new std::string[ howManyLetters ];
+        std::cout << "file \"" << fileWithLetters << "\" lists " << Font::howManyLetters << " letters" << std::endl ;
+        Font::mapOfLetters = new std::map< std::string /* letter */, unsigned int /* index */ > () ;
 
         unsigned int inTable = 0;
         for ( unsigned int inBuf = 0 ; inBuf < length ; )
         {
                 unsigned char c = static_cast< unsigned char >( buffer[ inBuf ] );
 
-                if ( c == 0 )
-                {
-                        listOfLetters[ inTable ++ ] = "" ;
-                        inBuf ++ ;
+                if ( c == 0 ) {
+                        ++ inTable ;
+                        ++ inBuf ;
                 }
-                else
-                {
+                else {
                         char letter[ 5 ];
                         unsigned int byteInLetter = 0 ;
 
@@ -182,7 +134,7 @@ bool Font::readListOfLetters ()
 
                         letter[ byteInLetter ] = 0 ; // end of string
 
-                        listOfLetters[ inTable ] = std::string( letter );
+                        Font::mapOfLetters->insert( std::make_pair( std::string( letter ), inTable ) );
                         inTable ++ ;
                 }
         }
@@ -190,15 +142,9 @@ bool Font::readListOfLetters ()
         return true ;
 }
 
-Font::~Font( )
-{
-        for ( std::vector < Picture * >::iterator it = letters.begin () ; it != letters.end () ; ++ it )
-                delete *it ;
-}
-
 Picture* Font::getPictureOfLetter( const std::string & letter ) const
 {
-        if ( listOfLetters != nilPointer )
+        if ( Font::imageOfFont != nilPointer && Font::mapOfLetters != nilPointer )
         {
                 std::string letterInTable = letter ;
 
@@ -206,35 +152,37 @@ Picture* Font::getPictureOfLetter( const std::string & letter ) const
                 if ( letter == "\u0451" ) letterInTable = "\u00EB" ; // \u0451 cyrillic small letter io — \u00EB latin small letter e with diaeresis
                 if ( letter == "\u0401" ) letterInTable = "\u00CB" ; // \u0401 cyrillic capital letter IO — \u00CB latin capital letter E with diaeresis
 
-                for ( unsigned int i = 0; i < howManyLetters; i++ )
+                if ( Font::mapOfLetters->find( letterInTable ) != Font::mapOfLetters->end() )
                 {
-                        if ( letterInTable == listOfLetters[ i ] )
-                                return letters.at( i );
+                        unsigned int letterWidth = getWidthOfLetter() ;
+                        unsigned int letterHeight = getHeightOfLetter() ;
+                        Picture* letter = new Picture( letterWidth, letterHeight );
+
+                        unsigned int letterHeightSingle = isDoubleHeight() ? ( letterHeight >> 1 ) : letterHeight ;
+
+                        unsigned int n = Font::mapOfLetters->operator[]( letterInTable );
+                        unsigned int x = ( n % Font::Letters_Per_Line ) * letterWidth ;
+                        unsigned int y = ( n / Font::Letters_Per_Line ) * letterHeightSingle ;
+
+                        if ( ! isDoubleHeight() )
+                                allegro::bitBlit( Font::imageOfFont->getAllegroPict(), letter->getAllegroPict(),
+                                                        x, y, 0, 0, letterWidth, letterHeight );
+                        else
+                                allegro::stretchBlit( Font::imageOfFont->getAllegroPict(), letter->getAllegroPict(),
+                                                        x, y, letterWidth, letterHeightSingle,
+                                                        0, 0, letterWidth, letterHeight );
+
+                        letter->colorizeWhite( Color::byName( getColor() ) );
+
+                        letter->setName( "image of letter “" + letterInTable + "” for the "
+                                                + ( isDoubleHeight() ? "double-height " : "" ) + "game’s font colored " + getColor() );
+
+                        return letter ;
                 }
         }
 
         // return '?' when letter isn’t found
-        if ( letters.size() > ( '?' - 32 ) )
-                return letters.at( '?' - 32 );
-
-        return nilPointer ;
-}
-
-/* static */
-const Font & Font::fontByColorAndSize ( const std::string & color, bool height2x )
-{
-        std::string fontColor = ( ! color.empty() ) ? color : "white" ;
-
-        for ( unsigned int i = 0 ; i < Font::fonts.size() ; ++ i ) {
-                Font * font = Font::fonts[ i ] ;
-                if ( font->isDoubleHeight() == height2x && font->getColor() == fontColor )
-                        return *font ;
-        }
-
-        Font* newFont = new Font( fontColor, height2x );
-        Font::fonts.push_back( newFont ) ;
-
-        return *newFont ;
+        return getPictureOfLetter( "?" );
 }
 
 }

@@ -311,9 +311,9 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
-        Label* Head = new Label( "Head", Font::fontWith2xHeightAndColor( "yellow" ) );
-        Label* over = new Label( "over", Font::fontWithColor( "" ), /* multicolor */ true );
-        Label* Heels = new Label( "Heels", Font::fontWith2xHeightAndColor( "yellow" ) );
+        Label* Head = new Label( "Head", new Font( "yellow", true ) );
+        Label* over = new Label( "over", new Font( "white" ), /* multicolor */ true );
+        Label* Heels = new Label( "Heels", new Font( "yellow", true ) );
 
         over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
         addWidget( over );
@@ -348,8 +348,8 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 
         if ( copyrightsToo )
         {
-                Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", Font::fontWithColor( "orange" ) );
-                Label* Douglas = new Label( "{ 2024 Douglas Mencken", Font::fontWithColor( "yellow" ) );
+                Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", new Font( "orange" ) );
+                Label* Douglas = new Label( "{ 2024 Douglas Mencken", new Font( "yellow" ) );
 
                 const unsigned int screenHeight = GamePreferences::getScreenHeight();
                 const int leading = 28;

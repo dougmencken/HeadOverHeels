@@ -23,11 +23,10 @@ void TextField::draw ()
         {
                 Label* label = *i ;
 
-                if ( ( label->getY() + static_cast< int >( label->getWidth() ) >= 0 ) &&
-                                ( label->getY() < static_cast< int >( allegro::Pict::getWhereToDraw().getH() ) ) )
-                {
-                        label->draw ();
-                }
+                if ( label->getY() + static_cast< int >( label->getHeight() ) < 0 ) continue ;
+                if ( label->getY() >= static_cast< int >( allegro::Pict::getWhereToDraw().getH() ) ) continue ;
+
+                label->draw ();
         }
 }
 
@@ -36,7 +35,7 @@ void TextField::appendText( const std::string & text, bool height2x, const std::
         bool multicolor = ( color == "multicolor" ) ;
         bool colorcycling = ( color == "cycling" ) ;
         Label* label = colorcycling ? new ColorCyclingLabel( text, height2x )
-                                    : new Label( text, Font::fontByColorAndSize( multicolor ? "" : color, height2x ), multicolor ) ;
+                                    : new Label( text, new Font( multicolor ? "" : color, height2x ), multicolor ) ;
 
         const int differenceInWidth = static_cast< int >( this->width ) - static_cast< int >( label->getWidth() );
         int offsetX = 0 ;

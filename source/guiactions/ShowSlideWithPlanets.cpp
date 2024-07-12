@@ -55,7 +55,7 @@ void ShowSlideWithPlanets::act ()
         std::string colorOfLabel = "yellow" ;
         if ( GameManager::getInstance().isSimpleGraphicsSet () ) colorOfLabel = "red" ;
         Label* empire = new Label( languageStrings->getTranslatedTextByAlias( "blacktooth-empire" )->getText(),
-                                        Font::fontWith2xHeightAndColor( colorOfLabel ) );
+                                        new Font( colorOfLabel, /* double height */ true ) );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
         empire->setAction( new ContinueGame( this->gameInProgress ) );
 

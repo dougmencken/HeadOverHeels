@@ -34,8 +34,7 @@ void gui::CreateVideoMenu::act ()
                 std::string widtHxHeight = util::number2string( GamePreferences::getScreenWidth() )
                                                         + "×"
                                                 + util::number2string( GamePreferences::getScreenHeight() );
-                this->screenSize = new Label( textScreenSize->getText() + " " + widtHxHeight );
-                this->screenSize->changeColor( "cyan" );
+                this->screenSize = new Label( textScreenSize->getText() + " " + widtHxHeight, new Font( "cyan" ) );
 
                 this->fullScreen = new Label( textFullscreen->getText() );
                 this->drawShadows = new Label( textDrawShadows->getText() );
@@ -44,7 +43,7 @@ void gui::CreateVideoMenu::act ()
                 this->centerCameraOn = new Label( textCenterCameraOn->getText() );
 
                 LanguageText* textChooseGraphics = languageStrings->getTranslatedTextByAlias( "graphic-set" );
-                this->chooseGraphics = new Label( textChooseGraphics->getText(), Font::fontWithColor( "yellow" ) );
+                this->chooseGraphics = new Label( textChooseGraphics->getText(), new Font( "yellow" ) );
                 this->chooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
                 this->videoOptions = new MenuWithValues( ' ', 1 );

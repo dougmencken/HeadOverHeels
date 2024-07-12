@@ -69,11 +69,11 @@ void CreateListOfSavedGames::act ()
                         ss << languageStrings->getTranslatedTextByAlias( "free-slot" )->getText ();
                         Label* freeLine = new Label( ss.str() );
                         if ( isLoadMenu() ) {
-                                freeLine->changeColor( "cyan" );
+                                freeLine->getFontToChange().setColor( "cyan" );
                                 freeLine->setAction( new PlaySound( "mistake" ) );
                         }
                         else {
-                                freeLine->changeColor( "orange" );
+                                freeLine->getFontToChange().setColor( "orange" );
                                 freeLine->setAction( new SaveGame( slot ) );
                         }
 

@@ -11,6 +11,7 @@
 #ifndef Font_hpp_
 #define Font_hpp_
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -32,34 +33,48 @@ class Font
 
 private:
 
+        static bool readLettersFile () ;
+
+public:
+
         /**
          * @param color the color of letters
          * @param doubleHeightStretching true for the double height stretching of letters
          */
         Font( const std::string & color, bool doubleHeightStretching = false ) ;
 
-        Font( const Font & ) {} // no copying
+        Font( const Font & toCopy )
+                : fontColor( toCopy.getColor() )
+                , doubleHeight( toCopy.isDoubleHeight() ) {}
 
-        static bool readListOfLetters () ;
-
-public:
-
-        virtual ~Font( ) ;
+        virtual ~Font( ) {}
 
         Picture * getPictureOfLetter ( const std::string & letter ) const ;
 
         const std::string & getColor () const {  return this->fontColor ;  }
+        void setColor ( const std::string & newColor ) {  this->fontColor = newColor ;  }
 
         bool isDoubleHeight () const {  return this->doubleHeight ;  }
+        void setDoubleHeight ( bool new2xHeight ) {  this->doubleHeight = new2xHeight ;  }
+        void toggleDoubleHeight () {  this->doubleHeight = ! this->doubleHeight ;  }
 
-        unsigned int getWidthOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getWidth () ;  }
+        unsigned int getWidthOfLetter () const
+        {
+                return ( Font::imageOfFont != nilPointer ) ? ( Font::imageOfFont->getWidth() / Font::Letters_Per_Line ) : 17 ;
+        }
 
-        unsigned int getHeightOfLetter( const std::string & letter ) const {  return getPictureOfLetter( letter )->getHeight () ;  }
+        unsigned int getHeightOfLetter () const
+        {
+                unsigned int letterHeight = ( Font::imageOfFont != nilPointer ) ? ( Font::imageOfFont->getHeight() / Font::Lines_In_Font ) : 29 ;
+                return isDoubleHeight() ? ( letterHeight << 1 ) : letterHeight ;
+        }
 
-        static const Font & fontWithColor ( const std::string & color ) {  return fontByColorAndSize( color, false );  }
-        static const Font & fontWith2xHeightAndColor ( const std::string & color ) {  return fontByColorAndSize( color, true );  }
+        unsigned int getWidthOfLetter( const std::string & letter ) const  {  return /* the font is monospaced */ getWidthOfLetter() ;  }
+        unsigned int getHeightOfLetter( const std::string & letter ) const {  return /* the font is monospaced */ getHeightOfLetter() ;  }
 
-        static const Font & fontByColorAndSize ( const std::string & color, bool height2x ) ;
+        // the size of the font image is 272 x 609 pixels, or 16 x 21 letters 17 x 29 pixels each
+        static const unsigned int Letters_Per_Line = 16 ;
+        static const unsigned int Lines_In_Font = 21 ;
 
 private:
 
@@ -67,22 +82,13 @@ private:
 
         bool doubleHeight ;
 
-        /**
-         * Images of letters
-         */
-        std::vector < Picture * > letters ;
-
+        // the letters drawn in the font, read from the font's picture file once for all font instances
         static Picture * imageOfFont ;
 
         static unsigned int howManyLetters ;
 
-        /**
-         * The letters drawn in the font
-         * for mapping between the image of letter from the font's picture file and the UTF-8 code of this letter
-         */
-        static std::string * listOfLetters ;
-
-        static std::vector < Font * > fonts ;
+        // the mapping between the UTF-8 string of a letter and the sequential index of an image
+        static std::map< std::string /* letter */, unsigned int /* index */ > * mapOfLetters ;
 
 };
 

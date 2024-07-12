@@ -25,16 +25,19 @@ public:
 
         ColorCyclingLabel( const std::string & text, bool doubleHeight = false ) ;
 
-        virtual ~ColorCyclingLabel( ) ;
+        virtual ~ColorCyclingLabel( ) {}
 
-        virtual void draw () ;
+        virtual bool areLettersCyclicallyColored () const {  return true ;  }
+
+        static const double single_interval ;
+
+protected:
+
+        virtual std::vector< std::string > getColorCycle () const ;
 
 private:
 
-        void updateImageOfLabel () ;
-
-        unsigned short cycle ;
-
+        // it counts the seconds to cycle in the sequence of colors
         autouniqueptr < Timer > colorCyclingTimer ;
 
 };

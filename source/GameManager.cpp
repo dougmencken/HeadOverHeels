@@ -509,14 +509,14 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 
                 // vidas de Head
                 unsigned char livesForHead = this->theInfo.getHeadLives () ;
-                gui::Label headLivesLabel( util::number2string( livesForHead ), gui::Font::fontWith2xHeightAndColor( "white" ) );
+                gui::Label headLivesLabel( util::number2string( livesForHead ), new gui::Font( "white", true ) );
                 headLivesLabel.setSpacing( -2 );
                 headLivesLabel.moveTo( ( livesForHead > 9 ? 214 : 221 ) + dx, headHeelsAmbianceY - 1 );
                 headLivesLabel.draw ();
 
                 // vidas de Heels
                 unsigned char livesForHeels = this->theInfo.getHeelsLives () ;
-                gui::Label heelsLivesLabel( util::number2string( livesForHeels ), gui::Font::fontWith2xHeightAndColor( "white" ) );
+                gui::Label heelsLivesLabel( util::number2string( livesForHeels ), new gui::Font( "white", true ) );
                 heelsLivesLabel.setSpacing( -2 );
                 heelsLivesLabel.moveTo( ( livesForHeels > 9 ? 398 : 405 ) + dx, headHeelsAmbianceY - 1 );
                 heelsLivesLabel.draw ();
@@ -528,7 +528,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         leftTooAmbianceX, charStuffAmbianceY );
                 if ( doughnuts > 0 )
                 {
-                        gui::Label donutsLabel( util::number2string( doughnuts ), gui::Font::fontWithColor( colorOfLabels ) );
+                        gui::Label donutsLabel( util::number2string( doughnuts ), new gui::Font( colorOfLabels ) );
                         donutsLabel.setSpacing( -2 );
                         donutsLabel.moveTo( ( doughnuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
                         donutsLabel.draw ();
@@ -541,7 +541,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         rightAmbianceX, bonusAmbianceY );
                 if ( highJumps > 0 )
                 {
-                        gui::Label highJumpsLabel( util::number2string( highJumps ), gui::Font::fontWithColor( colorOfLabels ) );
+                        gui::Label highJumpsLabel( util::number2string( highJumps ), new gui::Font( colorOfLabels ) );
                         highJumpsLabel.setSpacing( -2 );
                         highJumpsLabel.moveTo( ( highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
                         highJumpsLabel.draw ();
@@ -554,7 +554,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         leftAmbianceX, bonusAmbianceY );
                 if ( quickSteps > 0 )
                 {
-                        gui::Label quickSpeedLabel( util::number2string( quickSteps ), gui::Font::fontWithColor( colorOfLabels ) );
+                        gui::Label quickSpeedLabel( util::number2string( quickSteps ), new gui::Font( colorOfLabels ) );
                         quickSpeedLabel.setSpacing( -2 );
                         quickSpeedLabel.moveTo( ( quickSteps > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
                         quickSpeedLabel.draw ();
@@ -567,7 +567,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         leftAmbianceX, immunityAmbianceY );
                 if ( headShieldInteger > 0 )
                 {
-                        gui::Label headShieldLabel( util::number2string( headShieldInteger ), gui::Font::fontWithColor( colorOfLabels ) );
+                        gui::Label headShieldLabel( util::number2string( headShieldInteger ), new gui::Font( colorOfLabels ) );
                         headShieldLabel.setSpacing( -2 );
                         headShieldLabel.moveTo( ( headShieldInteger > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
                         headShieldLabel.draw ();
@@ -580,7 +580,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         rightAmbianceX, immunityAmbianceY );
                 if ( heelsShieldInteger > 0 )
                 {
-                        gui::Label heelsShieldLabel( util::number2string( heelsShieldInteger ), gui::Font::fontWithColor( colorOfLabels ) );
+                        gui::Label heelsShieldLabel( util::number2string( heelsShieldInteger ), new gui::Font( colorOfLabels ) );
                         heelsShieldLabel.setSpacing( -2 );
                         heelsShieldLabel.moveTo( ( heelsShieldInteger > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
                         heelsShieldLabel.draw ();

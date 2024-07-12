@@ -11,77 +11,29 @@ namespace gui
 {
 
 ColorCyclingLabel::ColorCyclingLabel( const std::string & text, bool doubleHeight )
-        : Label( text, Font::fontByColorAndSize( "white", doubleHeight ) )
-        , cycle( 0 )
+        : Label( text, new Font( "white", doubleHeight ) )
         , colorCyclingTimer( new Timer () )
 {
         colorCyclingTimer->go();
 }
 
-ColorCyclingLabel::~ColorCyclingLabel( )
+/* static */ const double ColorCyclingLabel::single_interval = 0.2 ;
+
+std::vector< std::string > ColorCyclingLabel::getColorCycle () const
 {
-}
+        double time = this->colorCyclingTimer->getValue() ;
+        unsigned int cycle = static_cast< unsigned int >( time * ( 1 / ColorCyclingLabel::single_interval ) );
 
-void ColorCyclingLabel::draw ()
-{
-        updateImageOfLabel() ;
+        // the original speccy sequence “ cyan magenta green ”
+        static const size_t numberOfColors = 3 ;
+        static const std::string sequence[ numberOfColors ] = {  "cyan", "magenta", "green"  };
 
-        Label::draw ();
-}
+        std::vector< std::string > colorCycle ;
+        colorCycle.push_back( sequence[ cycle % numberOfColors ] );
+        colorCycle.push_back( sequence[ ( cycle + 1 ) % numberOfColors ] );
+        colorCycle.push_back( sequence[ ( cycle + 2 ) % numberOfColors ] );
 
-void ColorCyclingLabel::updateImageOfLabel ()
-{
-        if ( colorCyclingTimer->getValue() < 0.2 && imageOfLetters != nilPointer ) return ;
-
-        delete imageOfLetters ;
-
-        const std::string & text = getText() ;
-        unsigned int howManyLetters = utf8StringLength( text );
-        const Font & font = getFont() ;
-
-        imageOfLetters = new Picture( howManyLetters * ( font.getWidthOfLetter( "O" ) + getSpacing() ), font.getHeightOfLetter( "I" ) );
-
-        if ( ! text.empty() )
-        {
-                const size_t numberOfColors = 3;
-                const std::string cyclingColors[ numberOfColors ] = {  "cyan", "magenta", "green"  }; // original speccy sequence
-
-                std::string fontColor = font.getColor() ;
-
-                size_t letterInString = 0 ;
-
-                std::string::const_iterator iter = text.begin ();
-                while ( iter != text.end () )
-                {
-                        fontColor = cyclingColors[ cycle ] ;
-
-                        // cycle in the sequence of colors
-                        ++ cycle ;
-                        if ( cycle >= numberOfColors ) cycle = 0 ;
-
-                        size_t from = std::distance( text.begin (), iter );
-                        size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
-                        std::string utf8letter = text.substr( from, howMany );
-
-                        // draw letter
-                        Picture * letter = Font::fontByColorAndSize( fontColor, font.isDoubleHeight() ).getPictureOfLetter( utf8letter ) ;
-                        if ( letter != nilPointer )
-                                allegro::bitBlit(
-                                        letter->getAllegroPict(),
-                                        imageOfLetters->getAllegroPict(),
-                                        0,
-                                        0,
-                                        letterInString * ( letter->getWidth() + getSpacing() ),
-                                        0,
-                                        letter->getWidth(),
-                                        letter->getHeight()
-                                );
-
-                        letterInString ++ ;
-                }
-        }
-
-        colorCyclingTimer->reset ();
+        return colorCycle ;
 }
 
 }

@@ -41,21 +41,21 @@ void gui::CreateGameOverSlide::act ()
         // the score reached by the player
         unsigned int score = this->visitedRooms * 160 + this->liberatedPlanets * 10000 ;
         Label* scoreLabel = new Label ( languageStrings->getTranslatedTextByAlias( "score" )->getText() + " " + util::number2string( score ),
-                                        Font::fontWithColor( "yellow" ) );
+                                        new Font( "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         screen.addWidget( scoreLabel );
 
         // the number of the rooms visited
         std::string exploredRooms = languageStrings->getTranslatedTextByAlias( "explored-rooms" )->getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
-        Label* rooms = new Label( exploredRooms, Font::fontWithColor( "cyan" ) );
+        Label* rooms = new Label( exploredRooms, new Font( "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         screen.addWidget( rooms );
 
         // the number of the planets liberated
         std::string liberatedPlanets = languageStrings->getTranslatedTextByAlias( "liberated-planets" )->getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
-        Label* planets = new Label( liberatedPlanets, Font::fontWithColor( "white" ) );
+        Label* planets = new Label( liberatedPlanets, new Font( "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
         screen.addWidget( planets );
 
