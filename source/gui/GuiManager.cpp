@@ -25,10 +25,10 @@ namespace gui
 GuiManager * GuiManager::instance = nilPointer ;
 
 GuiManager::GuiManager( ) :
-        activeScreen( nilPointer ),
+        activeSlide( nilPointer ),
         chosenLanguage( "" ),
         languageStrings( nilPointer ),
-        active( true ),
+        looping( true ),
         inFullScreen( false )
 {
         std::string nameOfWindow = "Head over Heels" ;
@@ -67,7 +67,7 @@ GuiManager::GuiManager( ) :
 
 GuiManager::~GuiManager( )
 {
-        freeScreens () ;
+        freeSlides () ;
 
         delete this->languageStrings ;
 }
@@ -80,7 +80,7 @@ GuiManager& GuiManager::getInstance ()
         return *instance ;
 }
 
-void GuiManager::begin ()
+void GuiManager::firstMenu ()
 {
         // if the language isn’t set, show the menu of languages, or the main menu otherwise
         Action * firstMenu = this->chosenLanguage.empty() ? static_cast< Action * >( new CreateLanguageMenu() )
@@ -90,35 +90,40 @@ void GuiManager::begin ()
         else
                 throw MayNotBePossible( "can't create the first menu" );
 
-        // draw the user interface and handle keys
-        while ( this->active )
-        {
-                activeScreen->draw ();
-
-                if ( allegro::areKeypushesWaiting() )
-                        activeScreen->handleKey( allegro::nextKey() );
-
-                somn::milliSleep( 30 );
-        }
+        loop() ;
 
         delete firstMenu ;
 }
 
-void GuiManager::changeScreen( Screen & newScreen, bool dive )
+void GuiManager::loop ()
+{
+        while ( this->looping )
+        {
+                // draw an active slide
+                this->activeSlide->draw ();
+
+                // handle keys
+                if ( allegro::areKeypushesWaiting() )
+                        this->activeSlide->handleKey( allegro::nextKey() );
+
+                somn::milliSleep( 30 );
+        }
+}
+
+void GuiManager::changeSlide( Screen & newScreen, bool dive )
 {
         const std::string & newScreenAction = newScreen.getNameOfAction () ;
 
-        std::map< std::string, ScreenPtr >::const_iterator iscreen = this->screens.find( newScreenAction );
-        if ( iscreen != this->screens.end () ) {
-                if ( this->activeScreen != nilPointer ) {
-                        if ( // it’s not a slide with planets
-                             this->activeScreen->getNameOfAction().find( "ShowSlideWithPlanets" ) == std::string::npos )
-                                Screen::barWipeHorizontally( * this->activeScreen, newScreen, dive );
+        std::map< std::string, ScreenPtr >::const_iterator inewslide = this->slides.find( newScreenAction );
+        if ( inewslide != this->slides.end () && inewslide->second != nilPointer ) {
+                if ( this->activeSlide != nilPointer ) {
+                        if ( /* it’s not a slide with planets */ this->activeSlide->getNameOfAction().find( "ShowSlideWithPlanets" ) == std::string::npos )
+                                Screen::barWipeHorizontally( * this->activeSlide, newScreen, dive );
                 } else
                         // this is the first slide ever shown
                         Screen::randomPixelFadeIn( Color::blackColor(), newScreen );
 
-                setActiveScreen( iscreen->second );
+                setActiveSlide( inewslide->second );
                 redraw() ;
         }
         else {
@@ -127,42 +132,42 @@ void GuiManager::changeScreen( Screen & newScreen, bool dive )
         }
 }
 
-ScreenPtr GuiManager::findOrCreateScreenForAction ( Action & action )
+ScreenPtr GuiManager::findOrCreateSlideForAction ( Action & action )
 {
         const std::string & nameOfAction = action.getNameOfAction() ;
 
-        if ( this->screens.find( nameOfAction ) == this->screens.end () ) {
-                std::cout << "making new screen for action \" " << nameOfAction << " \"" << std::endl ;
+        if ( this->slides.find( nameOfAction ) == this->slides.end () ) {
+                std::cout << "making new slide for action \" " << nameOfAction << " \"" << std::endl ;
 
-                this->screens[ nameOfAction ] = ScreenPtr( new Screen( action ) );
+                this->slides[ nameOfAction ] = ScreenPtr( new Screen( action ) );
 
-                if ( this->screens[ nameOfAction ] == nilPointer )
-                        throw MayNotBePossible( "can't make a screen for action \" " + nameOfAction + " \"" ) ;
+                if ( this->slides[ nameOfAction ] == nilPointer )
+                        throw MayNotBePossible( "can't make a slide for action \" " + nameOfAction + " \"" ) ;
         }
 
-        return this->screens[ nameOfAction ];
+        return this->slides[ nameOfAction ];
 }
 
-void GuiManager::freeScreens ()
+void GuiManager::freeSlides ()
 {
-        this->screens.clear() ;
-        setActiveScreen( ScreenPtr () );
+        this->slides.clear() ;
+        setActiveSlide( /* null */ ScreenPtr() );
 }
 
-void GuiManager::refreshScreens ()
+void GuiManager::refreshSlides ()
 {
-        for (  std::map< std::string, ScreenPtr >::iterator i = this->screens.begin (); i != this->screens.end (); ++ i ) {
-                if ( i->second != nilPointer )
-                        i->second->refreshPicturesOfHeadAndHeels () ;
+        for (  std::map< std::string, ScreenPtr >::iterator it = this->slides.begin (); it != this->slides.end (); ++ it ) {
+                if ( it->second != nilPointer )
+                        it->second->refreshPicturesOfHeadAndHeels () ;
         }
 
         Screen::refreshBackground () ;
 }
 
-void GuiManager::redraw()
+void GuiManager::redraw() const
 {
-        if ( this->active && ( this->activeScreen != nilPointer ) )
-                this->activeScreen->draw ();
+        if ( this->looping && this->activeSlide != nilPointer )
+                this->activeSlide->draw ();
 }
 
 void GuiManager::toggleFullScreenVideo ()

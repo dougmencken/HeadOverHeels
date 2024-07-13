@@ -17,7 +17,7 @@ namespace gui
 
 void CreateKeysMenu::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( screen.isNewAndEmpty() )
         {
@@ -55,7 +55,7 @@ void CreateKeysMenu::act ()
         else    // select the first menu option
                 menuOfKeys->resetActiveOption();
 
-        GuiManager::getInstance().changeScreen( screen, true );
+        GuiManager::getInstance().changeSlide( screen, true );
 }
 
 }

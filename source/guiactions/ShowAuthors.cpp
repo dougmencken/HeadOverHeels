@@ -108,7 +108,7 @@ void ShowAuthors::act ()
 {
         SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( screen.isNewAndEmpty() )
         {
@@ -138,7 +138,7 @@ void ShowAuthors::act ()
 
         screen.setEscapeAction( new CreateMainMenu() );
 
-        GuiManager::getInstance().changeScreen( screen, true );
+        GuiManager::getInstance().changeSlide( screen, true );
 
         const unsigned int widthOfSlide = screen.getImageOfScreen().getWidth() ;
         const unsigned int heightOfSlide = screen.getImageOfScreen().getHeight() ;

@@ -86,23 +86,28 @@ public:
 
         static GuiManager & getInstance () ;
 
-        void begin () ;
+        void firstMenu () ;
 
-        void changeScreen ( Screen & newScreen, bool dive /* it becomes rightToLeft for barWipeHorizontally */ ) ;
+        /**
+         * Draw the user interface and handle keys
+         */
+        void loop () ;
 
-       /*
-        * Search in the list of screens for the one associated with this action
-        * And if there’s no such screen found, create the new one
-        */
-        ScreenPtr findOrCreateScreenForAction ( Action & action ) ;
+        void changeSlide ( Screen & newScreen, bool dive /* it becomes rightToLeft for barWipeHorizontally */ ) ;
 
-        void freeScreens () ;
+        /*
+         * Find among all the slides the one that is associated with this action.
+         * And if there’s no such slide, create a new one
+         */
+        ScreenPtr findOrCreateSlideForAction ( Action & action ) ;
 
-        void refreshScreens () ;
+        void freeSlides () ;
 
-        void redraw () ;
+        void refreshSlides () ;
 
-        void suspend () {  this->active = false ;  }
+        void redraw () const ;
+
+        void exit () {  this->looping = false ;  }
 
         bool isInFullScreen () const {  return this->inFullScreen ;  }
 
@@ -126,11 +131,11 @@ public:
 
         LanguageStrings* getLanguageStrings () const {  return this->languageStrings ;  }
 
-        const ScreenPtr & getActiveScreen () const {  return this->activeScreen ;  }
+        const ScreenPtr & getActiveSlide () const {  return this->activeSlide ;  }
 
-        void setActiveScreen ( ScreenPtr newScreen ) {  this->activeScreen = newScreen ;  }
+        void setActiveSlide ( ScreenPtr newSlide ) {  this->activeSlide = newSlide ;  }
 
-        unsigned int countScreens () const {  return this->screens.size() ;  }
+        unsigned int countSlides () const {  return this->slides.size() ;  }
 
         const WhyPaused & getWhyTheGameIsPaused () const {  return whyTheGameIsPaused ;  }
         WhyPaused & getWhyTheGameIsPausedToAlter () {  return whyTheGameIsPaused ;  }
@@ -144,10 +149,10 @@ private:
          */
         static GuiManager * instance ;
 
-        // the screen to draw by the user interface
-        ScreenPtr activeScreen ;
+        // the slide that is currently being drawn
+        ScreenPtr activeSlide ;
 
-        std::map < /* name of action */ std::string, ScreenPtr > screens ;
+        std::map < /* name of action */ std::string, ScreenPtr > slides ;
 
         // a language of the user interface in the LLL_CC format
         std::string chosenLanguage ;
@@ -155,7 +160,7 @@ private:
         LanguageStrings * languageStrings ;
 
         // when true draw the user interface and handle the keyboard
-        bool active ;
+        bool looping ;
 
         // a reason why the game is paused
         WhyPaused whyTheGameIsPaused ;

@@ -37,7 +37,7 @@ void CreateMenuOfGraphicsSets::act ()
 {
         const size_t positionOfSecondColumn = 18;
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( screen.isNewAndEmpty() )
         {
@@ -71,7 +71,7 @@ void CreateMenuOfGraphicsSets::act ()
                         menuOfGraphicsSets->setNthOptionAsActive( i );
         }
 
-        gui::GuiManager::getInstance().changeScreen( screen, true );
+        gui::GuiManager::getInstance().changeSlide( screen, true );
 
         allegro::emptyKeyboardBuffer();
 
@@ -100,7 +100,7 @@ void CreateMenuOfGraphicsSets::act ()
                                         { // the new set is not the same as the previous one
                                                 GameManager::getInstance().setChosenGraphicsSet( chosenSet.c_str () ) ;
 
-                                                gui::GuiManager::getInstance().refreshScreens ();
+                                                gui::GuiManager::getInstance().refreshSlides ();
 
                                                 const std::vector< Label * > & everySet = menuOfGraphicsSets->getEveryOption ();
                                                 for ( unsigned int i = 0 ; i < everySet.size (); ++ i )

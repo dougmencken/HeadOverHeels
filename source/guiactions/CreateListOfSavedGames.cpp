@@ -25,7 +25,7 @@ namespace gui
 
 void CreateListOfSavedGames::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( ! screen.isNewAndEmpty () ) screen.freeWidgets() ;
 
@@ -84,7 +84,7 @@ void CreateListOfSavedGames::act ()
         screen.addWidget( menu );
         screen.setKeyHandler( menu );
 
-        GuiManager::getInstance().changeScreen( screen, true );
+        GuiManager::getInstance().changeSlide( screen, true );
 }
 
 SavedGameInfo CreateListOfSavedGames::readSomeInfoFromTheSavedGame( const std::string & fileName )

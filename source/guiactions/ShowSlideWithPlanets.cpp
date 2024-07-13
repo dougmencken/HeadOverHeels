@@ -44,7 +44,7 @@ void ShowSlideWithPlanets::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::toBlackBackground () ; // change the background from red to black
 
-        Screen & planets = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & planets = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( ! planets.isNewAndEmpty() ) planets.freeWidgets() ;
 
@@ -199,7 +199,7 @@ void ShowSlideWithPlanets::act ()
                 planets.addWidget( nameOfPlanet );
         }
 
-        GuiManager::getInstance().changeScreen( planets, true );
+        GuiManager::getInstance().changeSlide( planets, true );
 }
 
 }

@@ -15,18 +15,15 @@
 #include "Quit.hpp"
 
 
-namespace gui
-{
-
-void CreateMainMenu::act ()
+void gui::CreateMainMenu::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & mainMenuSlide = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
-        if ( screen.isNewAndEmpty() )
+        if ( mainMenuSlide.isNewAndEmpty() )
         {
-                screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
+                mainMenuSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
                 LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
@@ -51,11 +48,9 @@ void CreateMainMenu::act ()
                 menu->addOption( showCredits );
                 menu->addOption( quitGame );
 
-                screen.addWidget( menu );
-                screen.setKeyHandler( menu );
+                mainMenuSlide.addWidget( menu );
+                mainMenuSlide.setKeyHandler( menu );
         }
 
-        GuiManager::getInstance().changeScreen( screen, false );
-}
-
+        GuiManager::getInstance().changeSlide( mainMenuSlide, false );
 }

@@ -21,7 +21,7 @@ void gui::CreateGameOverSlide::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::refreshBackground () ; // get the background back
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
         if ( ! screen.isNewAndEmpty() )
                 screen.freeWidgets();
         else
@@ -87,5 +87,5 @@ void gui::CreateGameOverSlide::act ()
         scoreLabel->setAction( screen.getEscapeAction () );
         screen.setKeyHandler( scoreLabel );
 
-        GuiManager::getInstance().changeScreen( screen, false );
+        GuiManager::getInstance().changeSlide( screen, false );
 }

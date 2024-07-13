@@ -32,7 +32,7 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( ! screen.isNewAndEmpty() ) screen.freeWidgets ();
 
@@ -82,7 +82,7 @@ void CreateLanguageMenu::act ()
         screen.addWidget( menu );
         screen.setKeyHandler( menu );
 
-        GuiManager::getInstance().changeScreen( screen, true );
+        GuiManager::getInstance().changeSlide( screen, true );
 }
 
 /* public static */

@@ -203,10 +203,10 @@ int main( int argc, char** argv )
         if ( newGameNoGui )
                 GameManager::getInstance().begin () ;
         else
-                gui::GuiManager::getInstance().begin () ;
+                gui::GuiManager::getInstance().firstMenu () ;
 
         GameManager::getInstance().cleanUp () ;
-        gui::GuiManager::getInstance().freeScreens () ;
+        gui::GuiManager::getInstance().freeSlides () ;
 
         std::cout << std::endl << "bye :*" << std::endl ;
 

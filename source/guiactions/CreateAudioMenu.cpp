@@ -30,7 +30,7 @@ void gui::CreateAudioMenu::act ()
 
         std::stringstream ss;
 
-        Screen & slideWithAudioMenu = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & slideWithAudioMenu = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
         if ( slideWithAudioMenu.isNewAndEmpty() ) {
                 slideWithAudioMenu.setEscapeAction( new CreateOptionsMenu() );
 
@@ -76,7 +76,7 @@ void gui::CreateAudioMenu::act ()
         if ( slideWithAudioMenu.getKeyHandler() == nilPointer )
                 slideWithAudioMenu.setKeyHandler( this->audioOptions );
 
-        GuiManager::getInstance().changeScreen( slideWithAudioMenu, true );
+        GuiManager::getInstance().changeSlide( slideWithAudioMenu, true );
 
         allegro::emptyKeyboardBuffer();
 

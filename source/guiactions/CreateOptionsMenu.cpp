@@ -19,7 +19,7 @@ namespace gui
 
 void CreateOptionsMenu::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( screen.isNewAndEmpty() )
         {
@@ -51,7 +51,7 @@ void CreateOptionsMenu::act ()
                 screen.setEscapeAction( new CreateMainMenu() );
         }
 
-        GuiManager::getInstance().changeScreen( screen, true );
+        GuiManager::getInstance().changeSlide( screen, true );
 }
 
 }

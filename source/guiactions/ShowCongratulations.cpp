@@ -15,7 +15,7 @@
 
 void gui::ShowCongratulations::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( *this );
+        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
 
         if ( screen.isNewAndEmpty() )
                 screen.setEscapeAction( new CreateGameOverSlide( rooms, planets ) );
@@ -46,5 +46,5 @@ void gui::ShowCongratulations::act ()
 
         screen.addWidget( textField );
 
-        GuiManager::getInstance().changeScreen( screen, true );
+        GuiManager::getInstance().changeSlide( screen, true );
 }
