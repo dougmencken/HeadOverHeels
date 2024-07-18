@@ -32,7 +32,7 @@ namespace gui
 class AnimatedPictureWidget ;
 
 /**
- * A container for user interface elements with associated action
+ * A container for user interface elements
  */
 
 class Screen : public Widget
@@ -40,10 +40,7 @@ class Screen : public Widget
 
 public:
 
-        /**
-         * @param action The associated action
-         */
-        Screen( Action & action ) ;
+        Screen( ) ;
 
         virtual ~Screen( ) ;
 
@@ -55,12 +52,12 @@ public:
 
         void handleKey ( const std::string& key ) ;
 
-        void addWidget ( Widget* widget ) ;
+        void addWidget( Widget* widget ) ;
 
         /**
          * @return true if it is found and removed
          */
-        bool removeWidget ( Widget* widget ) ;
+        bool removeWidget( Widget* widget ) ;
 
         /* ////// size_t countWidgets () {  return this->widgets.size () ;  } */
 
@@ -84,17 +81,16 @@ public:
 
         void drawSpectrumColorBoxes( bool draw ) {  this->drawSpectrumColors = draw ;  }
 
-        /* ////// Action & getActionOfScreen () const {  return this->actionOfScreen ;  } */
+        bool isTransitionOff () const {  return this->noTransition ;  }
+        void setTransitionOff ( bool transitionOff = true ) {  this->noTransition = transitionOff ;  }
 
-        std::string getNameOfAction () const {  return typeid( this->actionOfScreen ).name () ;  }
+        Action * getEscapeAction () const {  return this->escapeAction ;  }
 
         void setEscapeAction ( Action * action )
         {
                 delete this->escapeAction ;
                 this->escapeAction = action ;
         }
-
-        Action * getEscapeAction () const {  return this->escapeAction ;  }
 
         // assigns the handler of typed keys
         void setKeyHandler ( KeyHandler* handler ) {  this->keyHandler = handler ;  }
@@ -125,9 +121,9 @@ private:
          */
         std::vector < Widget * > widgets ;
 
-        bool drawSpectrumColors ;
+        bool noTransition ;
 
-        Action & actionOfScreen ;
+        bool drawSpectrumColors ;
 
         Action * escapeAction ;
 

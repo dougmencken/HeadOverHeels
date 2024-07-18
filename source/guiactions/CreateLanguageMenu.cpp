@@ -32,11 +32,11 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & languagesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( ! screen.isNewAndEmpty() ) screen.freeWidgets ();
+        if ( ! languagesSlide.isNewAndEmpty() ) languagesSlide.freeWidgets ();
 
-        screen.setEscapeAction( new CreateMainMenu() );
+        languagesSlide.setEscapeAction( new CreateMainMenu() );
 
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
@@ -46,20 +46,20 @@ void CreateLanguageMenu::act ()
         Label* Heels = new Label( "Heels", new Font( "yellow", true ) );
 
         over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
-        screen.addWidget( over );
+        languagesSlide.addWidget( over );
 
         unsigned int widthOfSpace = over->getFont().getWidthOfLetter ( " " );
         int spaceWithoutSpacing = widthOfSpace - over->getSpacing ();
 
         Head->moveTo( over->getX() - Head->getWidth() - spaceWithoutSpacing, space );
-        screen.addWidget( Head );
+        languagesSlide.addWidget( Head );
 
         Heels->moveTo( over->getX() + over->getWidth() + spaceWithoutSpacing, space );
-        screen.addWidget( Heels );
+        languagesSlide.addWidget( Heels );
 
         const unsigned int headHeelsWidth = 48;
-        screen.addPictureOfHeadAt( Head->getX() - ( headHeelsWidth << 1 ) - space, space + 5 );
-        screen.addPictureOfHeelsAt( Heels->getX() + Heels->getWidth() + headHeelsWidth + space, space + 5 );
+        languagesSlide.addPictureOfHeadAt( Head->getX() - ( headHeelsWidth << 1 ) - space, space + 5 );
+        languagesSlide.addPictureOfHeelsAt( Heels->getX() + Heels->getWidth() + headHeelsWidth + space, space + 5 );
 
         // present the language menu
 
@@ -79,10 +79,10 @@ void CreateLanguageMenu::act ()
                         menu->setActiveOptionByText( ( *it ).second );
         }
 
-        screen.addWidget( menu );
-        screen.setKeyHandler( menu );
+        languagesSlide.addWidget( menu );
+        languagesSlide.setKeyHandler( menu );
 
-        GuiManager::getInstance().changeSlide( screen, true );
+        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
 
 /* public static */

@@ -37,13 +37,13 @@ void CreateMenuOfGraphicsSets::act ()
 {
         const size_t positionOfSecondColumn = 18;
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & slideOfGraphicsSets = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( screen.isNewAndEmpty() )
+        if ( slideOfGraphicsSets.isNewAndEmpty() )
         {
-                screen.setEscapeAction( this->actionOnEscape );
+                slideOfGraphicsSets.setEscapeAction( this->actionOnEscape );
 
-                screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
+                slideOfGraphicsSets.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
                 for ( std::map < std::string, std::string >::const_iterator i = setsOfGraphics.begin (); i != setsOfGraphics.end (); ++ i )
                 {
@@ -60,8 +60,8 @@ void CreateMenuOfGraphicsSets::act ()
                         ) );
                 }
 
-                screen.addWidget( menuOfGraphicsSets );
-                screen.setKeyHandler( menuOfGraphicsSets );
+                slideOfGraphicsSets.addWidget( menuOfGraphicsSets );
+                slideOfGraphicsSets.setKeyHandler( menuOfGraphicsSets );
         }
 
         const std::vector< Label* > & sets = menuOfGraphicsSets->getEveryOption ();
@@ -71,7 +71,7 @@ void CreateMenuOfGraphicsSets::act ()
                         menuOfGraphicsSets->setNthOptionAsActive( i );
         }
 
-        gui::GuiManager::getInstance().changeSlide( screen, true );
+        gui::GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 
         allegro::emptyKeyboardBuffer();
 
@@ -85,7 +85,7 @@ void CreateMenuOfGraphicsSets::act ()
                         if ( theKey == "Escape" )
                         {
                                 allegro::emptyKeyboardBuffer();
-                                screen.handleKey( theKey );
+                                slideOfGraphicsSets.handleKey( theKey );
                                 break;
                         }
                         else
@@ -113,7 +113,7 @@ void CreateMenuOfGraphicsSets::act ()
                                 }
 
                                 if ( ! doneWithKey )
-                                        screen.getKeyHandler()->handleKey( theKey );
+                                        slideOfGraphicsSets.getKeyHandler()->handleKey( theKey );
 
                                 allegro::emptyKeyboardBuffer();
                                 menuOfGraphicsSets->redraw ();

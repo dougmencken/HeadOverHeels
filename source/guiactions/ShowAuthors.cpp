@@ -108,16 +108,16 @@ void ShowAuthors::act ()
 {
         SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & credits = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( screen.isNewAndEmpty() )
+        if ( credits.isNewAndEmpty() )
         {
                 if ( this->linesOfCredits != nilPointer ) delete this->linesOfCredits ;
 
                 this->linesOfCredits = new TextField( GamePreferences::getScreenWidth(), "center" );
 
                 this->initialX = this->linesOfCredits->getX() ;
-                this->initialY = screen.getImageOfScreen().getHeight() ;
+                this->initialY = credits.getImageOfScreen().getHeight() ;
                 this->linesOfCredits->moveTo( this->initialX, this->initialY );
 
                 size_t howManyLines = this->creditsText->howManyLinesOfText () ;
@@ -128,7 +128,7 @@ void ShowAuthors::act ()
                         linesOfCredits->appendText( line.getString(), line.isBigHeight(), line.getColor() );
                 }
 
-                screen.addWidget( this->linesOfCredits );
+                credits.addWidget( this->linesOfCredits );
         }
         else
                 // restore the initial position
@@ -136,12 +136,12 @@ void ShowAuthors::act ()
 
         alignRandom () ;
 
-        screen.setEscapeAction( new CreateMainMenu() );
+        credits.setEscapeAction( new CreateMainMenu() );
 
-        GuiManager::getInstance().changeSlide( screen, true );
+        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 
-        const unsigned int widthOfSlide = screen.getImageOfScreen().getWidth() ;
-        const unsigned int heightOfSlide = screen.getImageOfScreen().getHeight() ;
+        const unsigned int widthOfSlide = credits.getImageOfScreen().getWidth() ;
+        const unsigned int heightOfSlide = credits.getImageOfScreen().getHeight() ;
 
         const unsigned int heightOfCredits = ( ( this->linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
         const unsigned int verticalSpace = ( heightOfSlide * 3 ) >> 2;
@@ -151,7 +151,7 @@ void ShowAuthors::act ()
 
         PictureWidget* widgetForLoadingScreen = nilPointer ;
 
-        while ( ! screen.getEscapeAction()->hasBegun() )
+        while ( ! credits.getEscapeAction()->hasBegun() )
         {
                 int yNow = linesOfCredits->getY() - 1 ; // move it up
 
@@ -220,7 +220,7 @@ void ShowAuthors::act ()
                                                 this->loadingScreen,
                                                 "PictureWidget for the tape loading screen"
                                 ) ;
-                                screen.addWidget( widgetForLoadingScreen );
+                                credits.addWidget( widgetForLoadingScreen );
                         }
                 }
                 else if ( yNow < static_cast< int >( heightOfSlide ) - static_cast< int >( heightOfCredits ) && widgetForLoadingScreen != nilPointer )
@@ -229,7 +229,7 @@ void ShowAuthors::act ()
                 }
                 else if ( widgetForLoadingScreen != nilPointer )
                 {
-                        screen.removeWidget( widgetForLoadingScreen );
+                        credits.removeWidget( widgetForLoadingScreen );
                         widgetForLoadingScreen = nilPointer;
                 }
 
@@ -248,14 +248,12 @@ void ShowAuthors::act ()
                 if ( allegro::isKeyPushed( "Escape" ) )
                 {
                         allegro::emptyKeyboardBuffer();
-                        screen.handleKey( "Escape" );
+                        credits.handleKey( "Escape" );
                 }
         }
 
         if ( widgetForLoadingScreen != nilPointer )
-        {
-                screen.removeWidget( widgetForLoadingScreen );
-        }
+                credits.removeWidget( widgetForLoadingScreen );
 }
 
 /* private */

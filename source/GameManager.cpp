@@ -280,7 +280,7 @@ void GameManager::pause ()
         }
         else if ( keyMoments.areHeadAndHeelsInFreedomWithAllTheCrowns( true ) )
         {
-                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forThatFinalScreen() ;
+                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forFinalSuccess() ;
         }
         else if ( keyMoments.isGameOver( true ) )
         {

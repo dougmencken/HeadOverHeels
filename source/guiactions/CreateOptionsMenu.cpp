@@ -19,11 +19,11 @@ namespace gui
 
 void CreateOptionsMenu::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & optionsSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( screen.isNewAndEmpty() )
+        if ( optionsSlide.isNewAndEmpty() )
         {
-                screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
+                optionsSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
                 LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
@@ -45,13 +45,13 @@ void CreateOptionsMenu::act ()
                 menu->addOption( adjustVideo );
                 menu->addOption( chooseLanguage );
 
-                screen.addWidget( menu );
-                screen.setKeyHandler( menu );
+                optionsSlide.addWidget( menu );
+                optionsSlide.setKeyHandler( menu );
 
-                screen.setEscapeAction( new CreateMainMenu() );
+                optionsSlide.setEscapeAction( new CreateMainMenu() );
         }
 
-        GuiManager::getInstance().changeSlide( screen, true );
+        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
 
 }

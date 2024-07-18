@@ -73,7 +73,7 @@ LanguageStrings::~LanguageStrings()
         backupStrings.clear();
 }
 
-LanguageText* LanguageStrings::getTranslatedTextByAlias( const std::string & alias )
+LanguageText* LanguageStrings::getTranslatedTextByAlias( const std::string & alias ) const
 {
         for ( size_t i = 0 ; i < strings.size () ; i ++ )
                 if ( strings[ i ]->getAlias() == alias ) return strings[ i ];

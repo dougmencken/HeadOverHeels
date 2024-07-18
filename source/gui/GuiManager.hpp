@@ -20,7 +20,6 @@
 namespace gui
 {
 
-class Action ;
 class LanguageStrings ;
 
 
@@ -39,7 +38,7 @@ private:
         static const unsigned int LiberatePlanet = 1 ;  /* a crown is taken and one more planet was liberated this way */
         static const unsigned int SaveGame = 2 ;        /* save the current progress */
         static const unsigned int InFreedom = 3 ;       /* at least one character reached Freedom (not with all crowns) */
-        static const unsigned int TheFinalScreen = 4 ;  /* both characters reached Freedom with all the crowns */
+        static const unsigned int TheFinal = 4 ;        /* both characters reached Freedom with all the crowns */
         static const unsigned int GameOver = 5 ;        /* the user quit the game or all lives are lost */
 
 public:
@@ -51,7 +50,7 @@ public:
                 return ( whyPaused == LiberatePlanet
                                 || whyPaused == SaveGame
                                     || whyPaused == InFreedom
-                                        || whyPaused == TheFinalScreen
+                                        || whyPaused == TheFinal
                                             || whyPaused == GameOver ) ;
         }
 
@@ -60,13 +59,13 @@ public:
         void forNewlyLiberatedPlanet() {  whyPaused = LiberatePlanet ;  }
         void forSaving() {  whyPaused = SaveGame ;  }
         void forArrivingInFreedom() {  whyPaused = InFreedom ;  }
-        void forThatFinalScreen() {  whyPaused = TheFinalScreen ;  }
+        void forFinalSuccess() {  whyPaused = TheFinal ;  }
         void forGameOver() {  whyPaused = GameOver ;  }
 
         bool isPlanetLiberated() const {  return whyPaused == LiberatePlanet ;  }
         bool isTimeToSaveTheGame() const {  return whyPaused == SaveGame ;  }
-        bool isThatFinalSuccessScreen() const {  return whyPaused == TheFinalScreen ;  }
         bool isInFreedomWithoutAllTheCrowns() const {  return whyPaused == InFreedom ;  }
+        bool isFinalSuccess() const {  return whyPaused == TheFinal ;  }
         bool isGameOver() const {  return whyPaused == GameOver ;  }
 } ;
 
@@ -93,13 +92,13 @@ public:
          */
         void loop () ;
 
-        void changeSlide ( Screen & newScreen, bool dive /* it becomes rightToLeft for barWipeHorizontally */ ) ;
+        void changeSlide ( const std::string & newAction, bool dive /* it becomes rightToLeft for barWipeHorizontally */ ) ;
 
-        /*
+        /**
          * Find among all the slides the one that is associated with this action.
          * And if there’s no such slide, create a new one
          */
-        ScreenPtr findOrCreateSlideForAction ( Action & action ) ;
+        ScreenPtr findOrCreateSlideForAction ( const std::string & nameOfAction ) ;
 
         void freeSlides () ;
 

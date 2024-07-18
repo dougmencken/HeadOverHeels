@@ -110,36 +110,32 @@ void GuiManager::loop ()
         }
 }
 
-void GuiManager::changeSlide( Screen & newScreen, bool dive )
+void GuiManager::changeSlide( const std::string & newAction, bool dive )
 {
-        const std::string & newScreenAction = newScreen.getNameOfAction () ;
-
-        std::map< std::string, ScreenPtr >::const_iterator inewslide = this->slides.find( newScreenAction );
+        std::map< std::string, ScreenPtr >::const_iterator inewslide = this->slides.find( newAction );
         if ( inewslide != this->slides.end () && inewslide->second != nilPointer ) {
                 if ( this->activeSlide != nilPointer ) {
-                        if ( /* it’s not a slide with planets */ this->activeSlide->getNameOfAction().find( "ShowSlideWithPlanets" ) == std::string::npos )
-                                Screen::barWipeHorizontally( * this->activeSlide, newScreen, dive );
+                        if ( ! this->activeSlide->isTransitionOff() )
+                                Screen::barWipeHorizontally( * this->activeSlide, * inewslide->second, dive );
                 } else
                         // this is the first slide ever shown
-                        Screen::randomPixelFadeIn( Color::blackColor(), newScreen );
+                        Screen::randomPixelFadeIn( Color::blackColor(), * inewslide->second );
 
                 setActiveSlide( inewslide->second );
                 redraw() ;
         }
         else {
-                fprintf( stderr, "there’s no screen for action \" %s \", please create it before use\n", newScreenAction.c_str () );
-                throw MayNotBePossible( "the screen for action \" " + newScreenAction + " \" is absent" ) ;
+                std::cerr << "there’s no slide for action \"" << newAction << "\", please create it before use" << std::endl ;
+                throw MayNotBePossible( "the slide for action \" " + newAction + " \" is absent" ) ;
         }
 }
 
-ScreenPtr GuiManager::findOrCreateSlideForAction ( Action & action )
+ScreenPtr GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAction )
 {
-        const std::string & nameOfAction = action.getNameOfAction() ;
-
         if ( this->slides.find( nameOfAction ) == this->slides.end () ) {
-                std::cout << "making new slide for action \" " << nameOfAction << " \"" << std::endl ;
+                std::cout << "making a new slide for action \" " << nameOfAction << " \"" << std::endl ;
 
-                this->slides[ nameOfAction ] = ScreenPtr( new Screen( action ) );
+                this->slides[ nameOfAction ] = ScreenPtr( new Screen() );
 
                 if ( this->slides[ nameOfAction ] == nilPointer )
                         throw MayNotBePossible( "can't make a slide for action \" " + nameOfAction + " \"" ) ;

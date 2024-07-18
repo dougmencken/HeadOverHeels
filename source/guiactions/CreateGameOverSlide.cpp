@@ -21,13 +21,13 @@ void gui::CreateGameOverSlide::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::refreshBackground () ; // get the background back
 
-        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
-        if ( ! screen.isNewAndEmpty() )
-                screen.freeWidgets();
+        Screen & slide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        if ( ! slide.isNewAndEmpty() )
+                slide.freeWidgets();
         else
-                screen.setEscapeAction( new CreateMainMenu() );
+                slide.setEscapeAction( new CreateMainMenu() );
 
-        screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
+        slide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
         const unsigned int leading = 40 ;
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
@@ -43,27 +43,27 @@ void gui::CreateGameOverSlide::act ()
         Label* scoreLabel = new Label ( languageStrings->getTranslatedTextByAlias( "score" )->getText() + " " + util::number2string( score ),
                                         new Font( "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
-        screen.addWidget( scoreLabel );
+        slide.addWidget( scoreLabel );
 
         // the number of the rooms visited
         std::string exploredRooms = languageStrings->getTranslatedTextByAlias( "explored-rooms" )->getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
         Label* rooms = new Label( exploredRooms, new Font( "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
-        screen.addWidget( rooms );
+        slide.addWidget( rooms );
 
         // the number of the planets liberated
         std::string liberatedPlanets = languageStrings->getTranslatedTextByAlias( "liberated-planets" )->getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
         Label* planets = new Label( liberatedPlanets, new Font( "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
-        screen.addWidget( planets );
+        slide.addWidget( planets );
 
         if ( score == 0 ) {
                 TextField* result = new TextField( screenWidth, "center" );
                 result->appendText( "fix the game please", "big", "orange" );
                 result->moveTo( 0, resultY );
-                screen.addWidget( result );
+                slide.addWidget( result );
         }
         else {
                 // the range reached by the player
@@ -77,15 +77,15 @@ void gui::CreateGameOverSlide::act ()
                                 TextField* result = new TextField( screenWidth, "center" );
                                 result->appendText( languageStrings->getTranslatedTextByAlias( ranges[ i ] )->getText(), "big", "multicolor" );
                                 result->moveTo( 0, resultY );
-                                screen.addWidget( result );
+                                slide.addWidget( result );
 
                                 break;
                         }
                 }
         }
 
-        scoreLabel->setAction( screen.getEscapeAction () );
-        screen.setKeyHandler( scoreLabel );
+        scoreLabel->setAction( slide.getEscapeAction () );
+        slide.setKeyHandler( scoreLabel );
 
-        GuiManager::getInstance().changeSlide( screen, false );
+        GuiManager::getInstance().changeSlide( getNameOfAction(), false );
 }

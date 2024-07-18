@@ -16,7 +16,7 @@
 
 void gui::CreateVideoMenu::act ()
 {
-        Screen & slideWithVideoMenu = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & slideWithVideoMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideWithVideoMenu.isNewAndEmpty() )
         {
@@ -66,11 +66,11 @@ void gui::CreateVideoMenu::act ()
         slideWithVideoMenu.setEscapeAction( new CreateOptionsMenu() );
 
         if ( slideWithVideoMenu.getKeyHandler() == nilPointer )
-                slideWithVideoMenu.setKeyHandler( videoOptions );
+                slideWithVideoMenu.setKeyHandler( this->videoOptions );
 
         slideWithVideoMenu.drawSpectrumColorBoxes( true );
 
-        gui::GuiManager::getInstance().changeSlide( slideWithVideoMenu, true );
+        gui::GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 
         allegro::emptyKeyboardBuffer();
 

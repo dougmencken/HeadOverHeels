@@ -194,8 +194,7 @@ void Menu::redraw ()
 
 void Menu::handleKey( const std::string & key )
 {
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
-        {
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) ) {
                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 return;
         }

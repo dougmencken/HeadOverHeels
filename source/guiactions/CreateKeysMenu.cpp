@@ -17,13 +17,13 @@ namespace gui
 
 void CreateKeysMenu::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & gameKeysSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( screen.isNewAndEmpty() )
+        if ( gameKeysSlide.isNewAndEmpty() )
         {
-                screen.setEscapeAction( new CreateOptionsMenu() );
+                gameKeysSlide.setEscapeAction( new CreateOptionsMenu() );
 
-                screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+                gameKeysSlide.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 this->menuOfKeys = new MenuWithValues( '.', 5 );
                 menuOfKeys->setVerticalOffset( 64 );
@@ -49,13 +49,13 @@ void CreateKeysMenu::act ()
                         menuOfKeys->setValueOf( label, CreateKeysMenu::allegroKeyToMenuKey( theKey ) );
                 }
 
-                screen.addWidget( menuOfKeys );
-                screen.setKeyHandler( menuOfKeys );
+                gameKeysSlide.addWidget( menuOfKeys );
+                gameKeysSlide.setKeyHandler( menuOfKeys );
         }
         else    // select the first menu option
                 menuOfKeys->resetActiveOption();
 
-        GuiManager::getInstance().changeSlide( screen, true );
+        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
 
 }

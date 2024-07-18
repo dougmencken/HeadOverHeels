@@ -56,7 +56,7 @@ void ContinueGame::act ()
 
                 gameOverScoreAction->doIt ();
         }
-        else if ( uiManager.getWhyTheGameIsPaused().isThatFinalSuccessScreen () )
+        else if ( uiManager.getWhyTheGameIsPaused().isFinalSuccess () )
         {
                 ShowCongratulations * congratulationsAction =
                         new ShowCongratulations (

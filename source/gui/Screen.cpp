@@ -52,18 +52,16 @@ namespace gui
         Screen::backgroundPicture->setName( "the black background for user interface slides" );
 }
 
-Screen::Screen( Action & action ) :
+Screen::Screen() :
         Widget( 0, 0 ),
         imageOfScreen( new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) ),
+        noTransition( false ),
         drawSpectrumColors( false ),
-        actionOfScreen( action ),
         escapeAction( nilPointer ),
         keyHandler( nilPointer ),
         pictureOfHead( nilPointer ),
         pictureOfHeels( nilPointer )
 {
-        this->imageOfScreen->setName( "image of screen for action " + getNameOfAction() );
-
         if ( Screen::backgroundPicture == nilPointer ) Screen::refreshBackground () ;
 
         refreshPicturesOfHeadAndHeels ();
@@ -111,7 +109,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 int xHead = this->pictureOfHead->getX ();
                 int yHead = this->pictureOfHead->getY ();
 
-                if ( this->pictureOfHead->isOnSomeSlide() )
+                if ( this->pictureOfHead->isOnSomeSlide () )
                         removeWidget( this->pictureOfHead );
                 else
                         delete this->pictureOfHead ;
@@ -125,7 +123,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 int xHeels = this->pictureOfHeels->getX ();
                 int yHeels = this->pictureOfHeels->getY ();
 
-                if ( this->pictureOfHeels->isOnSomeSlide() )
+                if ( this->pictureOfHeels->isOnSomeSlide () )
                         removeWidget( this->pictureOfHeels );
                 else
                         delete this->pictureOfHeels ;
@@ -248,19 +246,19 @@ void Screen::draw2x8colors ( const Screen & slide )
         }
 }
 
-void Screen::handleKey( const std::string& key )
+void Screen::handleKey( const std::string & key )
 {
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
-        {
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) ) {
                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 return;
         }
 
-        if ( this->escapeAction != nilPointer && key == "Escape" )
+        if ( this->escapeAction != nilPointer && key == "Escape" ) {
+                allegro::releaseKey( "Escape" );
                 this->escapeAction->doIt ();
-        else
-                if ( this->keyHandler != nilPointer )
-                        this->keyHandler->handleKey( key );
+        } else
+          if ( this->keyHandler != nilPointer )
+                this->keyHandler->handleKey( key );
 }
 
 void Screen::addWidget( Widget* widget )
@@ -289,10 +287,10 @@ bool Screen::removeWidget( Widget* widget )
 
 void Screen::freeWidgets ()
 {
-        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide () )
+        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide() )
                 delete pictureOfHead;
 
-        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnSomeSlide () )
+        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnSomeSlide() )
                 delete pictureOfHeels;
 
         while ( ! this->widgets.empty () )

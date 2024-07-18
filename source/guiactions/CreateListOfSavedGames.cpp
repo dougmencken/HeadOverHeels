@@ -25,14 +25,14 @@ namespace gui
 
 void CreateListOfSavedGames::act ()
 {
-        Screen & screen = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & savedGamesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( ! screen.isNewAndEmpty () ) screen.freeWidgets() ;
+        if ( ! savedGamesSlide.isNewAndEmpty () ) savedGamesSlide.freeWidgets() ;
 
-        screen.setEscapeAction( isLoadMenu() ? static_cast< Action * >( /* to the main menu */ new CreateMainMenu() )
-                                             : static_cast< Action * >( /* back to the game */ new ContinueGame( true ) ) );
+        savedGamesSlide.setEscapeAction( isLoadMenu() ? static_cast< Action * >( /* to the main menu */ new CreateMainMenu() )
+                                                      : static_cast< Action * >( /* back to the game */ new ContinueGame( true ) ) );
 
-        screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
+        savedGamesSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
         LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
 
@@ -81,10 +81,10 @@ void CreateListOfSavedGames::act ()
                 }
         }
 
-        screen.addWidget( menu );
-        screen.setKeyHandler( menu );
+        savedGamesSlide.addWidget( menu );
+        savedGamesSlide.setKeyHandler( menu );
 
-        GuiManager::getInstance().changeSlide( screen, true );
+        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
 
 SavedGameInfo CreateListOfSavedGames::readSomeInfoFromTheSavedGame( const std::string & fileName )

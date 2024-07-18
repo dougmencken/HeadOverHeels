@@ -19,7 +19,7 @@ void gui::CreateMainMenu::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen & mainMenuSlide = * GuiManager::getInstance().findOrCreateSlideForAction( *this );
+        Screen & mainMenuSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( mainMenuSlide.isNewAndEmpty() )
         {
@@ -52,5 +52,5 @@ void gui::CreateMainMenu::act ()
                 mainMenuSlide.setKeyHandler( menu );
         }
 
-        GuiManager::getInstance().changeSlide( mainMenuSlide, false );
+        GuiManager::getInstance().changeSlide( getNameOfAction(), false );
 }
