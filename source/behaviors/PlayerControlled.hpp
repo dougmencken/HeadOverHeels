@@ -37,6 +37,8 @@ public:
 
         virtual ~PlayerControlled( ) ;
 
+        virtual bool update () ;
+
         /**
          * Updates the character’s behavior according to the player’s controls
          */

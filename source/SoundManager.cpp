@@ -212,9 +212,8 @@ std::string SoundManager::activityToNameOfSound ( const activities::Activity & a
                 case activities::Activity::Falling : return "fall" ;
                 case activities::Activity::Gliding : return "fall" ;
 
-                case activities::Activity::TakeItem : case activities::Activity::TakeAndJump : return "take" ;
-                case activities::Activity::ItemTaken : return "taken" ;
-                case activities::Activity::DropItem : case activities::Activity::DropAndJump : return "drop" ;
+                case activities::Activity::TakingItem : case activities::Activity::TakeAndJump : return "take" ;
+                case activities::Activity::DroppingItem : case activities::Activity::DropAndJump : return "drop" ;
 
                 case activities::Activity::PushedNorth : case activities::Activity::PushedSouth :
                 case activities::Activity::PushedEast : case activities::Activity::PushedWest :

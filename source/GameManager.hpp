@@ -189,7 +189,7 @@ public:
         void emptyHandbag () {  setImageOfItemInBag( PicturePtr () ) ;  }
 
         /**
-         * Image of the item inside hand bag
+         * Image of an item inside the hand bag
          */
         void setImageOfItemInBag ( const PicturePtr & pic ) {  this->imageOfItemInBag = pic ;  }
 

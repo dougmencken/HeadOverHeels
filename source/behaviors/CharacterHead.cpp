@@ -49,12 +49,8 @@ CharacterHead::CharacterHead( AvatarItem & item )
 
 bool CharacterHead::update ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
-
-        if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
-
         // change the height for climbing bars easier
-        avatar.changeHeightTo (
+        getItem().changeHeightTo (
                 ( getCurrentActivity() == activities::Activity::Gliding ||
                                 getCurrentActivity() == activities::Activity::Falling )
                 ? 23 : 24 );
@@ -130,10 +126,7 @@ bool CharacterHead::update ()
                         ;
         }
 
-        // play sound for the current activity
-        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
-
-        return true ;
+        return PlayerControlled::update() ;
 }
 
 void CharacterHead::behave ()
@@ -247,12 +240,12 @@ void CharacterHead::behave ()
 
 void CharacterHead::wait ()
 {
-        PlayerControlled::wait ();
+        PlayerControlled::wait() ;
 
         if ( getCurrentActivity() == activities::Activity::Waiting ) {
                 if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
                 {
-                        timerForBlinking->reset();
+                        timerForBlinking->reset() ;
                         setCurrentActivity( activities::Activity::Blinking );
                 }
         }
@@ -260,7 +253,7 @@ void CharacterHead::wait ()
 
 void CharacterHead::blink ()
 {
-        double time = timerForBlinking->getValue ();
+        double time = timerForBlinking->getValue() ;
 
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {

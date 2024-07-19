@@ -42,10 +42,6 @@ CharacterHeels::CharacterHeels( AvatarItem & item )
 
 bool CharacterHeels::update ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
-
-        if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
-
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
@@ -105,17 +101,12 @@ bool CharacterHeels::update ()
                         collideWithALethalItem ();
                         break;
 
-                case activities::Activity::TakeItem:
+                case activities::Activity::TakingItem:
                 case activities::Activity::TakeAndJump:
                         takeItem ();
                         break;
 
-                case activities::Activity::ItemTaken:
-                        avatar.addToZ( - Room::LayerHeight );
-                        setCurrentActivity( activities::Activity::Waiting );
-                        break;
-
-                case activities::Activity::DropItem:
+                case activities::Activity::DroppingItem:
                 case activities::Activity::DropAndJump:
                         dropItem ();
                         break;
@@ -124,10 +115,7 @@ bool CharacterHeels::update ()
                         ;
         }
 
-        // play sound for the current activity
-        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
-
-        return true ;
+        return PlayerControlled::update() ;
 }
 
 void CharacterHeels::behave ()
@@ -149,8 +137,8 @@ void CharacterHeels::behave ()
         {
                 if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
@@ -175,8 +163,8 @@ void CharacterHeels::behave ()
                 }
                 else if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
@@ -200,8 +188,8 @@ void CharacterHeels::behave ()
                 }
                 else if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
@@ -230,8 +218,8 @@ void CharacterHeels::behave ()
                 // take or drop an item when jumping or falling
                 if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
         }

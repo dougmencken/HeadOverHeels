@@ -50,11 +50,10 @@ public: /* constants */
         static const unsigned int Falling               = 90 ;
         static const unsigned int Gliding               = 98 ;
 
-        static const unsigned int TakeItem = 100 ;
-        static const unsigned int ItemTaken = 101 ;
-        static const unsigned int DropItem = 102 ;
-        static const unsigned int TakeAndJump = 115 ;
-        static const unsigned int DropAndJump = 116 ;
+        static const unsigned int TakingItem                    = 100 ;
+        static const unsigned int DroppingItem                  = 105 ;
+        static const unsigned int TakeAndJump                   = 110 ;
+        static const unsigned int DropAndJump                   = 115 ;
 
         static const unsigned int PushedNorth                   = 124 ;
         static const unsigned int PushedSouth                   = 125 ;
@@ -66,7 +65,7 @@ public: /* constants */
         static const unsigned int PushedSouthwest               = 134 ;
         static const unsigned int PushedNorthwest               = 135 ;
 
-        static const unsigned int PushedUp = 150 ;
+        static const unsigned int PushedUp                      = 150 ;
         /* static const unsigned int PushedDown = 160 ; */
 
         static const unsigned int DraggedNorth                  = 181 ;

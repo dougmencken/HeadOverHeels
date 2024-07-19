@@ -39,8 +39,9 @@ I reworked almost every piece of the Jorge’s code, dealed around many gotchas 
 * the room entry tunes
 * room miniatures
 * the camera optionally follows the active character
-* the support for various screen sizes not only 640 x 480
-* the support for both the allegro 5 and allegro 4 libraries
+* accelerated falling
+* support for various screen sizes not only 640 x 480
+* support for both the allegro 5 and allegro 4 libraries
 * the many easy-to-enable cheats :O
 
 But yep, all of this is still quite “raw” for now and really needs some more love.

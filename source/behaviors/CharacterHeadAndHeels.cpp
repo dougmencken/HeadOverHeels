@@ -51,10 +51,6 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( AvatarItem & item )
 
 bool CharacterHeadAndHeels::update ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
-
-        if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
-
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
@@ -122,17 +118,12 @@ bool CharacterHeadAndHeels::update ()
                         collideWithALethalItem ();
                         break;
 
-                case activities::Activity::TakeItem:
+                case activities::Activity::TakingItem:
                 case activities::Activity::TakeAndJump:
                         takeItem ();
                         break;
 
-                case activities::Activity::ItemTaken:
-                        avatar.addToZ( - Room::LayerHeight );
-                        setCurrentActivity( activities::Activity::Waiting );
-                        break;
-
-                case activities::Activity::DropItem:
+                case activities::Activity::DroppingItem:
                 case activities::Activity::DropAndJump:
                         dropItem ();
                         break;
@@ -141,10 +132,7 @@ bool CharacterHeadAndHeels::update ()
                         ;
         }
 
-        // play sound for the current activity
-        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
-
-        return true ;
+        return PlayerControlled::update() ;
 }
 
 void CharacterHeadAndHeels::behave ()
@@ -173,8 +161,8 @@ void CharacterHeadAndHeels::behave ()
                 }
                 else if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
@@ -200,8 +188,8 @@ void CharacterHeadAndHeels::behave ()
                 }
                 else if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
@@ -229,8 +217,8 @@ void CharacterHeadAndHeels::behave ()
                 }
                 else if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
@@ -273,8 +261,8 @@ void CharacterHeadAndHeels::behave ()
                 // pick or drop an item when falling
                 else if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 // entonces Head y Heels planean
@@ -296,8 +284,8 @@ void CharacterHeadAndHeels::behave ()
                 else if ( input.takeTyped() ) {
                         // pick or drop an item when gliding
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeItem
-                                                : activities::Activity::DropItem );
+                                                ? activities::Activity::TakingItem
+                                                : activities::Activity::DroppingItem );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( ! moveKeyChangesHeading () ) {
@@ -325,7 +313,7 @@ void CharacterHeadAndHeels::blink ()
 
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {
-                AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
+                AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem () );
                 avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
         }
         // eyes open

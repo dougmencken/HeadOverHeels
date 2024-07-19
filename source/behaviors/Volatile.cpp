@@ -80,20 +80,20 @@ bool Volatile::update ()
                                         if ( mediator->howManyCollisions() > 1 ) {
                                                 while ( mediator->isThereAnyCollision() )
                                                 {
-                                                        ItemPtr bottomItem = mediator->findCollisionPop( );
+                                                        ItemPtr belowItem = mediator->findCollisionPop( );
 
-                                                        if ( bottomItem != nilPointer ) {
+                                                        if ( belowItem != nilPointer ) {
                                                                 // a volatile doesn’t vanish if it is leaning~
                                                                 //     on an item without behavior, or
                                                                 //     on a non-volatile item, or
                                                                 //     on another item that is vanishing
-                                                                if ( ( bottomItem->getBehavior() == nilPointer )
-                                                                        || ( bottomItem->getBehavior() != nilPointer
-                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into"
-                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
-                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
-                                                                        || ( bottomItem->getBehavior() != nilPointer
-                                                                                && bottomItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanishing ) )
+                                                                if ( ( belowItem->getBehavior() == nilPointer )
+                                                                        || ( belowItem->getBehavior() != nilPointer
+                                                                                && belowItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into"
+                                                                                && belowItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
+                                                                                && belowItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
+                                                                        || ( belowItem->getBehavior() != nilPointer
+                                                                                && belowItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanishing ) )
                                                                 {
                                                                         gone = false ;
                                                                 }

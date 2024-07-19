@@ -48,9 +48,8 @@ public:
                         case Activity::Falling : return "falling" ;
                         case Activity::Gliding : return "gliding" ;
 
-                        case Activity::TakeItem : return "take item" ;
-                        case Activity::ItemTaken : return "item taken" ;
-                        case Activity::DropItem : return "drop item" ;
+                        case Activity::TakingItem : return "taking" ;
+                        case Activity::DroppingItem : return "dropping" ;
                         case Activity::TakeAndJump : return "take & jump" ;
                         case Activity::DropAndJump : return "drop & jump" ;
 
