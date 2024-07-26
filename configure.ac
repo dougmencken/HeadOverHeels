@@ -161,7 +161,9 @@ preprocessor_options_before="$CPPFLAGS"
 
 AC_CHECK_HEADER([unistd.h],, [AC_MSG_ERROR([unistd.h is absent])])
 AC_CHECK_HEADER([pthread.h],, [AC_MSG_ERROR([pthread.h is absent])])
-AC_CHECK_HEADER([execinfo.h])
+
+AC_CHECK_HEADER([execinfo.h], [EXECINFO_H=1], [EXECINFO_H=0])
+AM_CONDITIONAL([HAVE_EXECINFO_H], [test "$EXECINFO_H" -eq 1])
 
 AC_SUBST([CPPFLAGS], ["$libpng_HEADERS $preprocessor_options_before"])
 AC_CHECK_HEADER([png.h],, [AC_MSG_ERROR([libpng headers are absent, with CPPFLAGS="$CPPFLAGS"])])

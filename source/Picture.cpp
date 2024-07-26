@@ -236,7 +236,7 @@ Picture * Picture::loadPicture ( const std::string & pathToPicture )
         if ( pict != nilPointer && pict->isNotNil () )
                 return new Picture( *pict ) ;
 
-        IF_DEBUG( std::cout << "can’t load picture \"" << pictureFile << "\"" << std::endl )
+        IF_DEBUG( std::cout << "can’t load picture \"" << pathToPicture << "\"" << std::endl )
         return nilPointer ;
 }
 

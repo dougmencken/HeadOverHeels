@@ -16,8 +16,6 @@
 
 void gui::CreateGameOverSlide::act ()
 {
-        SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
-
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::refreshBackground () ; // get the background back
 
@@ -59,6 +57,11 @@ void gui::CreateGameOverSlide::act ()
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
         slide.addWidget( planets );
 
+        std::cout << "game over with score " << score
+                        << " for " << this->visitedRooms << " visited rooms"
+                        << " and " << this->liberatedPlanets << " liberated planets"
+                        << std::endl ;
+
         if ( score == 0 ) {
                 TextField* result = new TextField( screenWidth, "center" );
                 result->appendText( "fix the game please", "big", "orange" );
@@ -87,5 +90,6 @@ void gui::CreateGameOverSlide::act ()
         scoreLabel->setAction( slide.getEscapeAction () );
         slide.setKeyHandler( scoreLabel );
 
+        SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
         GuiManager::getInstance().changeSlide( getNameOfAction(), false );
 }

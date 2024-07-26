@@ -386,12 +386,7 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
 
                                 addTile = addTile && ( tilesWithoutFloor.find( tileXY ) == tilesWithoutFloor.end() );
 
-                                if ( addTile )
-                                {
-                                # if defined( DEBUG ) && DEBUG
-                                        std::cout << " tile@" << tileX << "," << tileY ;
-                                # endif
-
+                                if ( addTile ) {
                                         if ( ! PoolOfPictures::isPictureThere( fileOfTile ) )
                                                 std::cout << "picture \"" << fileOfTile << "\" is *not* there :(" << std::endl ;
 
@@ -471,10 +466,6 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                         }
                 }
         }
-
-#if defined( DEBUG ) && DEBUG
-        std::cout << std::endl ;
-#endif
 }
 
 /* static */

@@ -579,7 +579,7 @@ void PlayerControlled::takeItem ()
         if ( getCurrentActivity() == activities::Activity::TakingItem || getCurrentActivity() == activities::Activity::TakeAndJump )
                 // wait if can’t take
                 setCurrentActivity( activities::Activity::Waiting );
-                // moreover, the original game played a yucky sound for that
+                // moreover, the original game plays a yucky sound for that
 }
 
 void PlayerControlled::dropItem ()

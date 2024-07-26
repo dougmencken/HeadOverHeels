@@ -36,10 +36,6 @@ protected:
 
         virtual void blink () ;
 
-protected:
-
-        std::map < std::string, unsigned int > blinkFrames ;
-
 };
 
 }

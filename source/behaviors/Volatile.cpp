@@ -164,9 +164,7 @@ bool Volatile::update ()
                                 SoundManager::getInstance().play( volatileItem.getKind (), "vanish" );
 
                                 // morph into bubbles
-
                                 volatileItem.setIgnoreCollisions( true );
-
                                 volatileItem.changeHeightTo( 0 );
                                 volatileItem.metamorphInto( "bubbles", "vanishing volatile item" );
                                 volatileItem.setBehaviorOf( "behavior of disappearance in time" );
