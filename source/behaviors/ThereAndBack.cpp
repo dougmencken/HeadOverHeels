@@ -43,15 +43,14 @@ bool ThereAndBack::update ()
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )
                                 {
-                                        // move it
-                                        if ( ! activities::Moving::getInstance().move( *this, true ) )
-                                        {
-                                                turnBack() ;
-
+                                        if ( ! activities::Moving::getInstance().move( *this, true ) ) {
+                                                // a collision with something
                                                 SoundManager::getInstance().play( thisItem.getKind(), "collision" );
+
+                                                turnBack() ;
                                         }
 
-                                        speedTimer->reset();
+                                        speedTimer->go() ;
                                 }
 
                                 thisItem.animate() ;
@@ -92,10 +91,11 @@ bool ThereAndBack::update ()
                                         if ( ! activities::Falling::getInstance().fall( *this ) ) {
                                                 // emit the sound of falling
                                                 SoundManager::getInstance().play( thisItem.getKind (), "fall" );
+
                                                 setCurrentActivity( activities::Activity::Waiting );
                                         }
 
-                                        fallTimer->reset();
+                                        fallTimer->go() ;
                                 }
                         } else
                                 setCurrentActivity( activities::Activity::Waiting );

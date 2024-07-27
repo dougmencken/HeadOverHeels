@@ -52,20 +52,19 @@ bool Patrol::update ()
                                         if ( patrolTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
                                         {
                                                 randomlyChangeOrientation ();
-                                                patrolTimer->reset();
+                                                patrolTimer->go() ;
                                         }
 
-                                        // move item
-                                        if ( ! activities::Moving::getInstance().move( *this, true ) )
-                                        {
-                                                randomlyChangeOrientation ();
-
+                                        if ( ! activities::Moving::getInstance().move( *this, true ) ) {
+                                                // a collision with something
                                                 SoundManager::getInstance().play( patrolItem.getKind (), "collision" );
+
+                                                randomlyChangeOrientation ();
                                         }
 
                                         SoundManager::getInstance().play( patrolItem.getKind (), "move" );
 
-                                        speedTimer->reset();
+                                        speedTimer->go() ;
                                 }
 
                                 patrolItem.animate() ;
@@ -106,7 +105,7 @@ bool Patrol::update ()
                                         setCurrentActivity( activities::Activity::Waiting );
                                 }
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
                         }
                         break;
 

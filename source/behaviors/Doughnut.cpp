@@ -96,7 +96,7 @@ bool Doughnut::update ()
                                         present = false ;
                                 }
 
-                                speedTimer->reset();
+                                speedTimer->go() ;
 
                                 donutItem.animate() ;
                         }

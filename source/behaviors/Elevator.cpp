@@ -39,14 +39,14 @@ bool Elevator::update ()
                         {
                                 activities::Moving::getInstance().move( *this, false );
 
-                                speedTimer->reset() ;
+                                speedTimer->go() ;
 
                                 // elevator reached the top
                                 if ( freeItem.getZ() > this->top * Room::LayerHeight )
                                 {
                                         setCurrentActivity( activities::ActivityOfElevator::ReachedTop );
                                         this->lastActivity = getCurrentActivity ();
-                                        waitingTimer->reset() ;
+                                        waitingTimer->go() ;
                                 }
                         }
 
@@ -58,14 +58,14 @@ bool Elevator::update ()
                         {
                                 activities::Moving::getInstance().move( *this, false );
 
-                                speedTimer->reset() ;
+                                speedTimer->go() ;
 
                                 // elevator reached the bottom
                                 if ( freeItem.getZ() <= this->bottom * Room::LayerHeight )
                                 {
                                         setCurrentActivity( activities::ActivityOfElevator::ReachedBottom );
                                         this->lastActivity = getCurrentActivity ();
-                                        waitingTimer->reset() ;
+                                        waitingTimer->go() ;
                                 }
                         }
 

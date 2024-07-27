@@ -47,7 +47,7 @@ std::string FlickeringColor::toString() const
                 if ( thiz->changeColorTimer->getValue() > thiz->period )
                 {
                         thiz->isFirst = ! thiz->isFirst ;
-                        thiz->changeColorTimer->reset ();
+                        thiz->changeColorTimer->go ();
                 }
 
                 // no te comas la CPU

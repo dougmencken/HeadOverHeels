@@ -122,12 +122,12 @@ bool Conveyor::update ()
                                 }
                         }
 
-                        dragTimer->reset() ;
+                        dragTimer->go() ;
 
                         if ( animationTimer->getValue() > 2 * conveyorItem.getSpeed() )
                         {
                                 conveyorItem.animate ();
-                                animationTimer->reset() ;
+                                animationTimer->go() ;
                         }
 
                         break;

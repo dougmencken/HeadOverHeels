@@ -42,7 +42,7 @@ bool Bonus::update ()
                                 // can that above item take this bonus
                                 if ( itemAbove != nilPointer && mayTake( * itemAbove ) ) {
                                         changeActivityDueTo( activities::Activity::Vanishing, itemAbove );
-                                        disappearanceTimer->reset() ;
+                                        disappearanceTimer->go() ;
                                 }
                         }
 
@@ -78,7 +78,7 @@ bool Bonus::update ()
                                 // to falling
                                 setCurrentActivity( activities::Activity::Falling );
 
-                                speedTimer->reset();
+                                speedTimer->go() ;
                         }
                 }
                         break;
@@ -95,7 +95,7 @@ bool Bonus::update ()
                                 // to falling
                                 setCurrentActivity( activities::Activity::Falling );
 
-                                speedTimer->reset();
+                                speedTimer->go() ;
                         }
                         break;
 
@@ -113,7 +113,7 @@ bool Bonus::update ()
                                         setCurrentActivity( activities::Activity::Waiting );
                                 }
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
 
                                 // look if the bonus falls on a character
                                 if ( ! bonusItem.canAdvanceTo( 0, 0, -1 ) )
@@ -131,7 +131,7 @@ bool Bonus::update ()
                                                         // disappear when taken
                                                         changeActivityDueTo( activities::Activity::Vanishing, itemBelow );
 
-                                                        disappearanceTimer->reset();
+                                                        disappearanceTimer->go() ;
                                                 }
                                         }
                                 }

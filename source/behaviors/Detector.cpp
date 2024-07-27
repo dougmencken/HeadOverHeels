@@ -72,7 +72,7 @@ bool Detector::update ()
                                                 // to waiting when can’t move
                                                 setCurrentActivity( activities::Activity::Waiting );
 
-                                        speedTimer->reset();
+                                        speedTimer->go() ;
                                 }
 
                                 detectorItem.animate() ;
@@ -92,7 +92,7 @@ bool Detector::update ()
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
                                         setCurrentActivity( activities::Activity::Waiting );
 
-                                speedTimer->reset();
+                                speedTimer->go() ;
                         }
 
                         // retain a frozen item’s inactivity
@@ -112,7 +112,7 @@ bool Detector::update ()
                                 if ( ! activities::Falling::getInstance().fall( * this ) )
                                         setCurrentActivity( activities::Activity::Waiting );
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
                         }
                         break;
 

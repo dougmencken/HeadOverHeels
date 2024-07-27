@@ -670,8 +670,7 @@ void Isomot::updateFinalRoom()
                 // it's time to count the crowns
                 gameManager.inFreedomWithSoManyCrowns( crowns );
 
-                finalRoomTimer->reset();
-                finalRoomTimer->go();
+                finalRoomTimer->go() ;
 
                 this->finalRoomBuilt = true;
                 std::cout << "final room is okay" << std::endl ;
@@ -689,7 +688,7 @@ void Isomot::updateFinalRoom()
                         finalBall->setBehaviorOf( "behaivor of final ball" );
                         activeRoom->addFreeItem( finalBall );
 
-                        finalRoomTimer->reset();
+                        finalRoomTimer->go() ;
                 }
         }
 }

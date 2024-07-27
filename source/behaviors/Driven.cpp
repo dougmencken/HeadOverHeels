@@ -115,7 +115,7 @@ bool Driven::update ()
                                                 SoundManager::getInstance().play( freeItem.getKind(), "collision" );
                                         }
 
-                                        speedTimer->reset();
+                                        speedTimer->go() ;
                                 }
 
                                 freeItem.animate() ;
@@ -135,7 +135,7 @@ bool Driven::update ()
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
                                         setCurrentActivity( activities::Activity::Waiting );
 
-                                speedTimer->reset();
+                                speedTimer->go() ;
                         }
 
                         // frozen item continues to be frozen
@@ -155,7 +155,7 @@ bool Driven::update ()
                                 if ( ! activities::Falling::getInstance().fall( *this ) )
                                         setCurrentActivity( activities::Activity::Waiting );
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
                         }
                         break;
 

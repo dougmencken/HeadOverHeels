@@ -121,7 +121,8 @@ void Switch::toggleIt ()
 
         switchItem.animate ();
         switchItem.getMediator()->toggleSwitchInRoom () ;
-        this->whenToggledTimer->reset() ;
+
+        this->whenToggledTimer->go() ;
 
         // play the sound of switching
         SoundManager::getInstance().play( switchItem.getKind(), "switch" );

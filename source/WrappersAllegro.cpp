@@ -1020,7 +1020,7 @@ static void peekKey( int scancode, bool repeat, ALLEGRO_KEYBOARD_STATE* ks )
                         {
                                 addScancode( scancode );
                                 firstRepeat = true ;
-                                keyRepeatTimer->reset() ;
+                                keyRepeatTimer->go() ;
                         }
                 }
                 else if ( repeat )
@@ -1029,7 +1029,7 @@ static void peekKey( int scancode, bool repeat, ALLEGRO_KEYBOARD_STATE* ks )
                                 ( ! firstRepeat && keyRepeatTimer->getValue() > nextRepeatDelay ) )
                         {
                                 addScancode( scancode );
-                                keyRepeatTimer->reset() ;
+                                keyRepeatTimer->go() ;
                                 firstRepeat = false ;
                         }
                 }
@@ -1438,7 +1438,7 @@ void update()
                 savePictAsPCX( "frame" + static_cast< std::ostringstream & >( std::ostringstream() << std::dec << ( ++ number ) ).str (), Pict::theScreen() );
 #endif
 
-                redrawTimer->reset ();
+                redrawTimer->go ();
         }
 }
 

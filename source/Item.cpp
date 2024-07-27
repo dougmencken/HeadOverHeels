@@ -134,7 +134,7 @@ void Item::animate()
 
                         changeFrame( newFrame );
 
-                        motionTimer->reset();
+                        motionTimer->go() ;
                 }
         }
 }

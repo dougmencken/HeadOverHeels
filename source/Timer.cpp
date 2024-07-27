@@ -3,43 +3,48 @@
 
 Timer::Timer()
 {
-        trestart.tv_sec = 0;
-        trestart.tv_usec = 0;
-        tstop.tv_sec = 0;
-        tstop.tv_usec = 0;
-}
+        goTime.tv_sec = 0 ;
+        goTime.tv_usec = 0 ;
+        stopTime.tv_sec = 0 ;
+        stopTime.tv_usec = 0 ;
 
-Timer::~Timer()
-{
-
+        started = false ;
 }
 
 void Timer::go()
 {
-        gettimeofday( &trestart, &tz );
+        gettimeofday( &goTime, &tz );
+        started = true ;
 }
 
 double Timer::getValue()
 {
-        gettimeofday( &tstop, &tz );
+        if ( ! this->started ) {
+                go() ;
+                return 0.0 ;
+        }
 
-        double t1 = double( trestart.tv_sec ) + double( trestart.tv_usec ) / 1000000 ;
-        double t2 = double( tstop.tv_sec ) + double( tstop.tv_usec ) / 1000000 ;
+        gettimeofday( &stopTime, &tz );
 
-        return t2 - t1;
-}
+        double go = double( goTime.tv_sec ) + double( goTime.tv_usec ) / 1000000 ;
+        double stop = double( stopTime.tv_sec ) + double( stopTime.tv_usec ) / 1000000 ;
 
-void Timer::reset()
-{
-        gettimeofday( &trestart, &tz );
+        return stop - go ;
 }
 
 void Timer::stop()
 {
-        gettimeofday( &tstop, &tz );
+        gettimeofday( &stopTime, &tz );
 }
 
-void Timer::restart()
+void Timer::copyValueOf( const Timer & thatTimer )
 {
-        gettimeofday( &tstop, &tz );
+        if ( thatTimer.started ) {
+                this->goTime.tv_sec = thatTimer.goTime.tv_sec ;
+                this->goTime.tv_usec = thatTimer.goTime.tv_usec ;
+                this->stopTime.tv_sec = thatTimer.stopTime.tv_sec ;
+                this->stopTime.tv_usec = thatTimer.stopTime.tv_usec ;
+
+                this->started = true ;
+        }
 }

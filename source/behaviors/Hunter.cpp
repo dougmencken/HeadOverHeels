@@ -81,8 +81,8 @@ bool Hunter::update ()
                                         // move item
                                         activities::Moving::getInstance().move( *this, false );
 
-                                        // reset timer to next cycle
-                                        speedTimer->reset();
+                                        // reset timer
+                                        speedTimer->go() ;
 
                                         updateDirection () ;
 
@@ -136,8 +136,7 @@ bool Hunter::update ()
                                                 updateDirection () ;
                                         }
 
-                                        // reset timer to next cycle
-                                        speedTimer->reset();
+                                        speedTimer->go() ; // reset timer
                                 }
 
                                 hunterItem.animate() ;
@@ -159,7 +158,7 @@ bool Hunter::update ()
                         {
                                 activities::Displacing::getInstance().displace( *this, false );
                                 setCurrentActivity( activities::Activity::Waiting );
-                                speedTimer->reset();
+                                speedTimer->go() ;
                         }
 
                         // preserve inactivity for the frozen item

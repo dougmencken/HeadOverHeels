@@ -31,7 +31,7 @@ bool FinalBall::update ()
                 case activities::Activity::MovingNorth:
                         if ( speedTimer->getValue() > thisBall.getSpeed() )
                         {
-                                speedTimer->reset();
+                                speedTimer->go() ;
 
                                 thisBall.animate() ;
 

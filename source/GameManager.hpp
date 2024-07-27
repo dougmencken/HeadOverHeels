@@ -280,7 +280,7 @@ public:
                         numberOfCapture = 0 ;
                 }
 
-                recordingTimer->reset () ;
+                recordingTimer->go () ;
         }
 
 private:

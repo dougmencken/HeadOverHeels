@@ -50,7 +50,7 @@ bool RemoteControl::update ()
                                         if ( getCurrentActivity() != activities::Activity::Falling )
                                                 setCurrentActivity( activities::Activity::Waiting );
 
-                                        speedTimer->reset();
+                                        speedTimer->go() ;
                                 }
 
                                 thisItem.animate() ;
@@ -77,7 +77,7 @@ bool RemoteControl::update ()
                                         if ( getCurrentActivity() != activities::Activity::Falling )
                                                 setCurrentActivity( activities::Activity::Waiting );
 
-                                        speedTimer->reset();
+                                        speedTimer->go() ;
                                 }
 
                                 thisItem.animate() ;
@@ -140,7 +140,7 @@ bool RemoteControl::update ()
                                         setCurrentActivity( activities::Activity::Waiting );
                                 }
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
                         }
                         break;
 

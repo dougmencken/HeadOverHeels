@@ -1,6 +1,11 @@
 
 #include "GameInfo.hpp"
 
+#if defined( DEBUG ) && DEBUG
+#  include "util.hpp"
+#  include <iostream>
+#endif
+
 
 unsigned char GameInfo::getLivesByName ( const std::string & character ) const
 {
@@ -87,7 +92,7 @@ void GameInfo::decrementHighJumpsByName ( const std::string & character )
         }
 }
 
-int GameInfo::getShieldPointsByName ( const std::string & character ) const
+short GameInfo::getShieldPointsByName ( const std::string & character ) const
 {
         if ( character == "headoverheels" )
         {
@@ -102,32 +107,30 @@ int GameInfo::getShieldPointsByName ( const std::string & character ) const
                 return this->heelsShieldPoints ;
         }
 
-        return 0.0 ;
+        return 0 ;
 }
 
-double GameInfo::getShieldSecondsByName ( const std::string & character ) const
+void GameInfo::setShieldPointsByName ( const std::string & character, short points )
 {
-        return GameInfo::convertShieldFromPointsToSeconds( getShieldPointsByName( character ) );
-}
+        short pointsBefore = getShieldPointsByName( character ) ;
+        if ( points == pointsBefore ) return ;
 
-void GameInfo::setShieldPointsByName ( const std::string & character, int points )
-{
+#if defined( DEBUG ) && DEBUG
+        if ( points < pointsBefore - 1 ) {
+                std::cout << "non-sequential decrement of shield points for character " << character
+                                << " : was " << pointsBefore << " and now changes to " << points << std::endl ;
+                util::printBacktrace () ;
+        }
+#endif
+
         if ( points > 99 ) points = 99 ;
         if ( points <  0 ) points =  0 ;
 
         if ( character == "head" || character == "headoverheels" )
-        {
                 setHeadShieldPoints( points ) ;
-        }
-        if ( character == "heels" || character == "headoverheels" )
-        {
-                setHeelsShieldPoints( points ) ;
-        }
-}
 
-void GameInfo::setShieldSecondsByName( const std::string & character, double seconds )
-{
-        setShieldPointsByName( character, GameInfo::convertShieldFromSecondsToPoints( seconds ) );
+        if ( character == "heels" || character == "headoverheels" )
+                setHeelsShieldPoints( points ) ;
 }
 
 void GameInfo::takeMagicTool ( const std::string & tool )

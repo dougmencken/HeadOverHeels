@@ -76,21 +76,25 @@ public:
          * temporary invulnerability
          */
 
-        int getHeadShieldPoints () const {  return this->headShieldPoints ;  }
+        short getHeadShieldPoints () const {  return this->headShieldPoints ;  }
+        short getHeelsShieldPoints () const {  return this->heelsShieldPoints ;  }
 
-        int getHeelsShieldPoints () const {  return this->heelsShieldPoints ;  }
+        short getShieldPointsByName ( const std::string & character ) const ;
 
-        int getShieldPointsByName ( const std::string & character ) const ;
+        double getShieldSecondsByName ( const std::string & character ) const
+        {
+                return GameInfo::convertShieldFromPointsToSeconds( getShieldPointsByName( character ) );
+        }
 
-        double getShieldSecondsByName ( const std::string & character ) const ;
+        void setHeadShieldPoints ( short points ) {  this->headShieldPoints = points ;  }
+        void setHeelsShieldPoints ( short points ) {  this->heelsShieldPoints = points ;  }
 
-        void setHeadShieldPoints ( int points ) {  this->headShieldPoints = points ;  }
+        void setShieldPointsByName ( const std::string & character, short points ) ;
 
-        void setHeelsShieldPoints ( int points ) {  this->heelsShieldPoints = points ;  }
-
-        void setShieldPointsByName ( const std::string & character, int points ) ;
-
-        void setShieldSecondsByName( const std::string & character, double seconds ) ;
+        void setShieldSecondsByName( const std::string & character, double seconds )
+        {
+                setShieldPointsByName( character, GameInfo::convertShieldFromSecondsToPoints( seconds ) );
+        }
 
         /**
          * the magic tools
@@ -138,10 +142,10 @@ private:
         unsigned short bonusHighJumps ;
 
         // the time remaining when Head is inviolable, in "points" 0..99
-        int headShieldPoints ;
+        short headShieldPoints ;
 
         // the time remaining when Heels is inviolable, in "points" 0..99
-        int heelsShieldPoints ;
+        short heelsShieldPoints ;
 
         // does Head have the doughnut horn
         bool horn ;
@@ -166,14 +170,14 @@ public:
 private:
         // 99 of "points" are equal to fullShieldTimeInSeconds (25) of seconds
         //
-        static int convertShieldFromSecondsToPoints( double seconds )
+        static short convertShieldFromSecondsToPoints( double seconds )
         {
-                return static_cast< int >( seconds * 99.0 / fullShieldTimeInSeconds ) ;
+                return static_cast< short >( seconds * 99.0 / fullShieldTimeInSeconds ) ;
         }
 
-        static double convertShieldFromPointsToSeconds( int points )
+        static double convertShieldFromPointsToSeconds( short points )
         {
-                return static_cast< double >( points ) * fullShieldTimeInSeconds / 99.0;
+                return static_cast< double >( points ) * fullShieldTimeInSeconds / 99.0 ;
         }
 
 } ;

@@ -49,7 +49,7 @@ bool Turn::update ()
                                                 SoundManager::getInstance().play( turningItem.getKind (), "collision" );
                                         }
 
-                                        speedTimer->reset();
+                                        speedTimer->go() ;
                                 }
 
                                 turningItem.animate() ;
@@ -88,7 +88,7 @@ bool Turn::update ()
                                         setCurrentActivity( activities::Activity::Waiting );
                                 }
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
                         }
                         break;
 

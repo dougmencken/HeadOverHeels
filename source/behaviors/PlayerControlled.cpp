@@ -82,7 +82,8 @@ void PlayerControlled::wait ()
 
         if ( activities::Falling::getInstance().fall( * this ) )
         {
-                speedTimer->reset() ;
+                speedTimer->go() ;
+
                 setCurrentActivity( activities::Activity::Falling );
 
                 if ( character.isHead ()
@@ -118,7 +119,7 @@ void PlayerControlled::move ()
                         }
                 }
 
-                speedTimer->reset();
+                speedTimer->go() ;
 
                 character.animate();
         }
@@ -137,7 +138,7 @@ void PlayerControlled::automove ()
                 // move it
                 activities::Moving::getInstance().move( *this, true );
 
-                speedTimer->reset();
+                speedTimer->go() ;
 
                 character.animate() ;
 
@@ -218,7 +219,7 @@ void PlayerControlled::displace ()
 
                 setCurrentActivity( activities::Activity::Waiting );
 
-                speedTimer->reset();
+                speedTimer->go() ;
         }
 }
 
@@ -260,12 +261,10 @@ void PlayerControlled::cancelDragging ()
 
         if ( ! character.isFrozen() )
         {
-                if ( speedTimer->getValue() > character.getSpeed() )
-                {
-                        // move it
+                if ( speedTimer->getValue() > character.getSpeed() ) {
                         activities::Moving::getInstance().move( *this, false );
 
-                        speedTimer->reset();
+                        speedTimer->go() ;
 
                         character.animate ();
                 }
@@ -285,7 +284,7 @@ void PlayerControlled::fall ()
                 else if ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() )
                         setCurrentActivity( activities::Activity::Waiting );
 
-                fallTimer->reset();
+                fallTimer->go() ;
         }
 
         if ( getCurrentActivity() != activities::Activity::Falling )
@@ -305,7 +304,7 @@ void PlayerControlled::glide ()
                         setCurrentActivity( activities::Activity::Waiting );
                 }
 
-                glideTimer->reset();
+                glideTimer->go() ;
         }
 
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
@@ -334,7 +333,7 @@ void PlayerControlled::glide ()
                 // may turn while gliding so update the frame of falling
                 character.changeFrame( fallFrames[ character.getHeading() ] );
 
-                speedTimer->reset();
+                speedTimer->go() ;
         }
 
         // unlike falling, gliding doesn’t accelerate over time
@@ -390,7 +389,7 @@ void PlayerControlled::jump ()
 
                         if ( getCurrentActivity() == activities::Activity::Falling ) this->jumpPhase = -1 ; // end of jump
 
-                        speedTimer->reset();
+                        speedTimer->go() ;
 
                         character.animate() ;
                 }

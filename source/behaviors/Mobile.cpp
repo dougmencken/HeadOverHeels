@@ -31,8 +31,7 @@ bool Mobile::update ()
         {
                 case activities::Activity::Waiting :
                         if ( activities::Falling::getInstance().fall( *this ) ) {
-                                // the item falls
-                                fallTimer->reset() ;
+                                fallTimer->go() ;
                                 setCurrentActivity( activities::Activity::Falling );
                         }
                         break;
@@ -53,11 +52,11 @@ bool Mobile::update ()
 
                                 activities::Displacing::getInstance().displace( *this, true );
 
-                        /* ///// */ if ( speedTimer->getValue() > 1.25 * mobileItem.getSpeed() ) {
+                        /* ////// */ if ( speedTimer->getValue() > 1.25 * mobileItem.getSpeed() ) {
                                 setCurrentActivity( activities::Activity::Falling );
 
-                                speedTimer->reset() ;
-                        /* ///// */ }
+                                speedTimer->go() ;
+                        /* ////// */ }
                         }
 
                         mobileItem.animate() ;
@@ -73,7 +72,7 @@ bool Mobile::update ()
 
                                 setCurrentActivity( activities::Activity::Falling );
 
-                                speedTimer->reset() ;
+                                speedTimer->go() ;
                         }
                         break;
 
@@ -91,7 +90,7 @@ bool Mobile::update ()
                                         setCurrentActivity( activities::Activity::Waiting );
                                 }
 
-                                fallTimer->reset() ;
+                                fallTimer->go() ;
                         }
                         break;
 

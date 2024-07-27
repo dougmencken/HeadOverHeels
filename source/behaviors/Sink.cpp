@@ -36,7 +36,7 @@ bool Sink::update ()
                                 if ( ! activities::Falling::getInstance().fall( *this ) || sinkingItem.canAdvanceTo( 0, 0, 1 ) )
                                         setCurrentActivity( activities::Activity::Waiting );
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
                         }
                         break;
 

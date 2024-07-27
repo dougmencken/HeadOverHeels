@@ -669,7 +669,7 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
                                 ospaths::pathToFile( capturePath, prefixOfCaptures + util::number2string( numberOfCapture ) )
                                 , view );
 
-                        recordingTimer->reset ();
+                        recordingTimer->go ();
                 }
         }
 

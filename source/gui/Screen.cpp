@@ -395,7 +395,7 @@ void Screen::scrollHorizontally( const Screen& oldScreen, const Screen& newScree
                 {
                         allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
-                        drawTimer->reset ();
+                        drawTimer->go() ;
                 }
 
                 somn::milliSleep( 1 );
@@ -431,7 +431,7 @@ void Screen::wipeHorizontally( const Screen& oldScreen, const Screen& newScreen,
                 {
                         allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
-                        drawTimer->reset ();
+                        drawTimer->go() ;
                 }
 
                 somn::milliSleep( 1 );
@@ -473,7 +473,7 @@ void Screen::barWipeHorizontally( const Screen& oldScreen, const Screen& newScre
                 {
                         allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
-                        drawTimer->reset ();
+                        drawTimer->go() ;
                 }
 
                 somn::milliSleep( 2 );
@@ -535,7 +535,7 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
                         {
                                 allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                                 allegro::update ();
-                                drawTimer->reset ();
+                                drawTimer->go() ;
                         }
 
                         bits[ x + y * screenWidth ] = true;

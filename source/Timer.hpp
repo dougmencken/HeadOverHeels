@@ -26,7 +26,7 @@ public:
 
         Timer( ) ;
 
-        virtual ~Timer( ) ;
+        virtual ~Timer( ) {}
 
         /**
          * Start timer
@@ -39,29 +39,27 @@ public:
         double getValue () ;
 
         /**
-         * Reset timer
-         */
-        void reset () ;
-
-        /**
          * Stop timer
          */
         void stop () ;
 
         /**
-         * Restart timer
+         * Set the timer to the value of that another timer aka synchronise
          */
-        void restart () ;
+        void copyValueOf( const Timer & thatTimer ) ;
+        void synchronizeWith( const Timer & anotherTimer ) {  copyValueOf( anotherTimer ) ;  }
 
 private:
 
         // the moment when the chronometer (aka stopwatch or timer) was started
-        timeval trestart ;
+        timeval goTime ;
 
         // the moment when the stopwatch is stopped
-        timeval tstop ;
+        timeval stopTime ;
 
         struct timezone tz ;
+
+        bool started ;
 
 };
 

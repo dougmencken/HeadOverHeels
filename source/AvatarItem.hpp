@@ -83,8 +83,10 @@ public:
 
         void decrementBonusHighJumps () ;
 
-        void activateShield () ;
+        short getShieldPoints () const ;
+        double getShieldSeconds () const ;
 
+        void activateShield () ;
         void activateShieldForSeconds ( double seconds ) ;
 
         void decrementShieldOverTime () ;
@@ -115,12 +117,12 @@ public:
         virtual void metamorphInto ( const std::string & newKind, const std::string & initiatedBy ) ;
 
         /**
-         * This character has the temporary invulnerability or doesn't have
+         * Does this character have the temporary invulnerability or not
          */
-        bool hasShield () const ;
+        bool hasShield () const {  return getShieldPoints() > 0 ;  }
 
         /**
-         * This character has the magic tool, the horn or the bag, or doesn't have
+         * Does this character have the magic tool, the horn or the bag, or doesn’t
          */
         bool hasTool ( const std::string & tool ) const ;
 

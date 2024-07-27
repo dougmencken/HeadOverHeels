@@ -59,7 +59,7 @@ bool Trampoline::update ()
                                         // begin bouncing when an item above moves away
                                         if ( this->folded ) {
                                                 this->rebounding = true ;
-                                                reboundTimer->reset();
+                                                reboundTimer->go() ;
                                         }
 
                                         // folded no longer
@@ -71,7 +71,7 @@ bool Trampoline::update ()
 
                         if ( activities::Falling::getInstance().fall( *this ) ) {
                                 // it falls down
-                                fallTimer->reset();
+                                fallTimer->go() ;
                                 setCurrentActivity( activities::Activity::Falling );
                         }
 
@@ -95,7 +95,7 @@ bool Trampoline::update ()
                                 if ( getCurrentActivity() != activities::Activity::Falling )
                                         setCurrentActivity( activities::Activity::Waiting );
 
-                                speedTimer->reset();
+                                speedTimer->go() ;
                         }
                         break;
 
@@ -113,7 +113,7 @@ bool Trampoline::update ()
                                         setCurrentActivity( activities::Activity::Waiting );
                                 }
 
-                                fallTimer->reset();
+                                fallTimer->go() ;
                         }
                         break;
 

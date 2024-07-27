@@ -31,6 +31,12 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
         , descriptionOfTakenItem( nilPointer )
 {
         characterToBehaviour ();
+
+        if ( GameManager::getInstance().getGameInfo().getShieldPointsByName( getOriginalKind() ) > 0 ) {
+                std::cout << "character \"" << getOriginalKind() << "\" continues to be immune for "
+                                                << toCopy.getShieldSeconds() << " seconds" << std::endl ;
+                this->shieldTimer->copyValueOf( * toCopy.shieldTimer );
+        }
 }
 
 /* private */ void AvatarItem::characterToBehaviour ()
@@ -446,7 +452,7 @@ void AvatarItem::activateBonusQuickSteps ()
         {
                 GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
 
-                unsigned short bonusHighSpeedSteps = 99 ;
+                static const unsigned short bonusHighSpeedSteps = 99 ;
                 gameInfo.addQuickStepsByName( this->getOriginalKind(), bonusHighSpeedSteps );
         }
 }
@@ -474,43 +480,42 @@ void AvatarItem::decrementBonusHighJumps ()
         GameManager::getInstance().getGameInfo().decrementHighJumpsByName( this->getOriginalKind() );
 }
 
+short AvatarItem::getShieldPoints () const
+{
+        return GameManager::getInstance().getGameInfo().getShieldPointsByName( getOriginalKind() );
+}
+
+double AvatarItem::getShieldSeconds () const
+{
+        return GameManager::getInstance().getGameInfo().getShieldSecondsByName( getOriginalKind() );
+}
+
 void AvatarItem::activateShield ()
 {
-        shieldTimer->reset () ;
-        shieldTimer->go () ;
-
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        const std::string & character = this->getOriginalKind() ;
-        gameInfo.setShieldPointsByName( character, 99 );
+        gameInfo.setShieldPointsByName( getOriginalKind(), 99 );
+
+        shieldTimer->go () ;
 }
 
 void AvatarItem::activateShieldForSeconds ( double seconds )
 {
-        shieldTimer->reset () ;
-
-        if ( seconds > 0 && ! hasShield() )
-        {
-                shieldTimer->go () ;
-        }
-
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        const std::string & character = this->getOriginalKind() ;
-        gameInfo.setShieldSecondsByName( character, seconds );
+        gameInfo.setShieldSecondsByName( getOriginalKind(), seconds );
+
+        if ( seconds > 0 && ! hasShield() ) shieldTimer->go () ;
 }
 
 void AvatarItem::decrementShieldOverTime ()
 {
-        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
         double shieldSecondsRemaining = GameInfo::fullShieldTimeInSeconds - shieldTimer->getValue() ;
 
-        if ( shieldSecondsRemaining < 0 )
-        {
+        if ( shieldSecondsRemaining < 0 ) {
                 shieldSecondsRemaining = 0 ;
                 shieldTimer->stop () ;
         }
 
-        const std::string & character = this->getOriginalKind() ;
-        gameInfo.setShieldSecondsByName( character, shieldSecondsRemaining );
+        GameManager::getInstance().getGameInfo().setShieldSecondsByName( getOriginalKind(), shieldSecondsRemaining );
 }
 
 void AvatarItem::liberateCurrentPlanet ()
@@ -548,7 +553,7 @@ void AvatarItem::placeItemInBag ( const std::string & kindOfItem, const std::str
 void AvatarItem::emptyBag ()
 {
         this->descriptionOfTakenItem = nilPointer ;
-        this->behaviorOfTakenItem = "still" ;
+        this->behaviorOfTakenItem = "" ;
 }
 
 void AvatarItem::saveGame ()
@@ -577,12 +582,6 @@ bool AvatarItem::hasTool( const std::string & tool ) const
                         return true ;
 
         return false ;
-}
-
-bool AvatarItem::hasShield () const
-{
-        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        return gameInfo.getShieldPointsByName( this->getOriginalKind() ) > 0 ;
 }
 
 bool AvatarItem::isNotUnderDoorAt( const std::string & where )

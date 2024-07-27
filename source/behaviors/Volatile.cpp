@@ -104,7 +104,7 @@ bool Volatile::update ()
 
                                 if ( gone ) {
                                         setCurrentActivity( activities::Activity::Vanishing );
-                                        disappearanceTimer->reset();
+                                        disappearanceTimer->go() ;
                                 }
                         }
                         // if it's a puppy which disappears when Head or the composite character is in the room
@@ -114,7 +114,7 @@ bool Volatile::update ()
                                         mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                 {
                                         setCurrentActivity( activities::Activity::Vanishing );
-                                        disappearanceTimer->reset();
+                                        disappearanceTimer->go() ;
                                 }
                         }
                         // is it volatile in time
