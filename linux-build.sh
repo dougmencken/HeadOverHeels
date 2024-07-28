@@ -374,6 +374,9 @@ if [ -x "$( command -v cmake )" ]; then
         sed -i 's/WANT_EXAMPLES \"Build example programs\" on/WANT_EXAMPLES \"Build example programs\" off/' ./CMakeLists.txt
         sed -i 's/WANT_TOOLS \"Build tool programs\" on/WANT_TOOLS \"Build tool programs\" off/' ./CMakeLists.txt
         sed -i 's/WANT_TESTS \"Build test programs\" on/WANT_TESTS \"Build test programs\" off/' ./CMakeLists.txt
+        cp "${buildFolder}"/gamedata/head48.icon.png ./misc/icon.png
+        cp "${buildFolder}"/gamedata/icon.xpm ./misc/
+        cp "${buildFolder}"/gamedata/icon.xpm ./src/x/
         cd ..
     fi
 
