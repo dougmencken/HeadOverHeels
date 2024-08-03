@@ -1,10 +1,8 @@
 
 #include "GameInfo.hpp"
 
-#if defined( DEBUG ) && DEBUG
-#  include "util.hpp"
-#  include <iostream>
-#endif
+#include "GameMap.hpp"
+#include "Mediator.hpp"
 
 
 unsigned char GameInfo::getLivesByName ( const std::string & character ) const
@@ -92,45 +90,49 @@ void GameInfo::decrementHighJumpsByName ( const std::string & character )
         }
 }
 
-short GameInfo::getShieldPointsByName ( const std::string & character ) const
+double GameInfo::getShieldSecondsByName ( const std::string & character ) const
 {
         if ( character == "headoverheels" )
         {
-                return std::max( this->headShieldPoints, this->heelsShieldPoints );
+                return std::max( this->headShieldSeconds, this->heelsShieldSeconds );
         }
         else if ( character == "head" )
         {
-                return this->headShieldPoints ;
+                return this->headShieldSeconds ;
         }
         else if ( character == "heels" )
         {
-                return this->heelsShieldPoints ;
+                return this->heelsShieldSeconds ;
         }
 
-        return 0 ;
+        return 0.0 ;
 }
 
-void GameInfo::setShieldPointsByName ( const std::string & character, short points )
+void GameInfo::setShieldSecondsByName ( const std::string & character, double seconds )
 {
-        short pointsBefore = getShieldPointsByName( character ) ;
-        if ( points == pointsBefore ) return ;
-
-#if defined( DEBUG ) && DEBUG
-        if ( points < pointsBefore - 1 ) {
-                std::cout << "non-sequential decrement of shield points for character " << character
-                                << " : was " << pointsBefore << " and now changes to " << points << std::endl ;
-                util::printBacktrace () ;
-        }
-#endif
-
-        if ( points > 99 ) points = 99 ;
-        if ( points <  0 ) points =  0 ;
+        if ( seconds > fullShieldTimeInSeconds ) seconds = fullShieldTimeInSeconds ;
+        if ( seconds < 0.0 ) seconds = 0.0 ;
 
         if ( character == "head" || character == "headoverheels" )
-                setHeadShieldPoints( points ) ;
+                setHeadShieldSeconds( seconds ) ;
 
         if ( character == "heels" || character == "headoverheels" )
-                setHeelsShieldPoints( points ) ;
+                setHeelsShieldSeconds( seconds ) ;
+}
+
+void GameInfo::updateShield ()
+{
+        const std::string & activeDude = GameMap::getInstance().getActiveRoom()->getMediator()->getNameOfActiveCharacter() ;
+
+        if ( ! activeDude.empty() ) {
+                double oldSeconds = getShieldSecondsByName( activeDude ) ;
+                if ( oldSeconds > 0.0 ) {
+                        double newSeconds = oldSeconds - this->shieldDecreaseTimer.getValue() ;
+                        setShieldSecondsByName( activeDude, newSeconds );
+                }
+        }
+
+        resetShieldDecreaseTimer() ; // restart the shield-decreasing chronometer
 }
 
 void GameInfo::takeMagicTool ( const std::string & tool )
@@ -150,8 +152,8 @@ void GameInfo::resetForANewGame ()
         this->heelsLives = 8 ;
         this->bonusQuickSteps = 0 ;
         this->bonusHighJumps = 0 ;
-        this->headShieldPoints = 0 ;
-        this->heelsShieldPoints = 0 ;
+        this->headShieldSeconds = 0.0 ;
+        this->heelsShieldSeconds = 0.0 ;
         this->horn = false ;
         this->handbag = false ;
         this->donuts = 0 ;

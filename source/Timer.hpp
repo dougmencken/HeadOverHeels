@@ -34,14 +34,9 @@ public:
         void go () ;
 
         /**
-         * @return seconds since the timer was started
+         * @return seconds since the last go()
          */
         double getValue () ;
-
-        /**
-         * Stop timer
-         */
-        void stop () ;
 
         /**
          * Set the timer to the value of that another timer aka synchronise
@@ -51,15 +46,12 @@ public:
 
 private:
 
-        // the moment when the chronometer (aka stopwatch or timer) was started
+        // the moment when the chronometer aka timer was started
         timeval goTime ;
 
-        // the moment when the stopwatch is stopped
-        timeval stopTime ;
+        bool started ;
 
         struct timezone tz ;
-
-        bool started ;
 
 };
 

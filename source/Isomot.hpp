@@ -77,9 +77,9 @@ private:
 
         bool paused ;
 
-        autouniqueptr < Timer > finalRoomTimer ;
-
         bool finalRoomBuilt ;
+
+        Timer finalRoomTimer ;
 
         unsigned int sizeOfTileForMiniature ;
 

@@ -160,6 +160,8 @@ public:
          */
         void resume () ;
 
+        static bool isPaused () ;
+
         void loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom );
 
         GameInfo & getGameInfo() {  return theInfo ;  }

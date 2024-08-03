@@ -21,7 +21,6 @@
 Isomot::Isomot( ) :
         view( nilPointer ),
         paused( false ),
-        finalRoomTimer( new Timer() ),
         finalRoomBuilt( false ),
         sizeOfTileForMiniature( 3 ),
         cameraFollowsCharacter( false ),
@@ -52,7 +51,6 @@ void Isomot::prepare ()
         paused = false ;
 
         finalRoomBuilt = false ;
-        finalRoomTimer->stop();
 
         // image where the isometric view is drawn
         if ( view == nilPointer )
@@ -670,16 +668,15 @@ void Isomot::updateFinalRoom()
                 // it's time to count the crowns
                 gameManager.inFreedomWithSoManyCrowns( crowns );
 
-                finalRoomTimer->go() ;
-
-                this->finalRoomBuilt = true;
+                this->finalRoomBuilt = true ;
                 std::cout << "final room is okay" << std::endl ;
+                finalRoomTimer.go() ;
 
                 SoundManager::getInstance().playOgg ( "music/freedom.ogg", /* loop */ true );
         }
         else
         {
-                if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
+                if ( finalRoomTimer.getValue() > 4.0 /* each 4 seconds */ )
                 {
                         FreeItemPtr finalBall( new FreeItem (
                                 * ItemDescriptions::descriptions().getDescriptionByKind( "ball" ),
@@ -688,7 +685,7 @@ void Isomot::updateFinalRoom()
                         finalBall->setBehaviorOf( "behaivor of final ball" );
                         activeRoom->addFreeItem( finalBall );
 
-                        finalRoomTimer->go() ;
+                        finalRoomTimer.go() ; // restart the timer
                 }
         }
 }

@@ -135,6 +135,8 @@ void Mediator::update()
                 this->room->sortFreeItems() ;
                 this->needToSortFreeItems = false ;
         }
+
+        GameManager::getInstance().getGameInfo().updateShield() ;
 }
 
 void Mediator::beginUpdating ()
@@ -1101,7 +1103,7 @@ bool Mediator::pickNextCharacter ()
 
                                 unlockFreeItemsMutex ();
 
-                                std::cout << "join both characters into Head over Heels"
+                                std::cout << "both characters are joined into Head over Heels"
                                                 << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
                                 return true;
                         }
@@ -1110,7 +1112,7 @@ bool Mediator::pickNextCharacter ()
         // is it composite character
         else if ( currentCharacter->getOriginalKind() == "headoverheels" )
         {
-                std::cout << "split Head over Heels in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
+                std::cout << "splitting Head over Heels in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
 
                 int x = currentCharacter->getX ();
                 int y = currentCharacter->getY ();

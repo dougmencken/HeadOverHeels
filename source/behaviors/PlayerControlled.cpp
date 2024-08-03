@@ -41,19 +41,15 @@ PlayerControlled::~PlayerControlled( )
 
 bool PlayerControlled::update ()
 {
-        AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem() );
-
-        if ( avatar.hasShield() ) avatar.decrementShieldOverTime () ;
-
         // play sound for the current activity
-        SoundManager::getInstance().play( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
+        SoundManager::getInstance().play( getItem().getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
 
         return true ;
 }
 
 bool PlayerControlled::isInvulnerableToLethalItems () const
 {
-        return ( dynamic_cast< const ::AvatarItem & >( getItem () ) ).hasShield ()
+        return (dynamic_cast< const ::AvatarItem & >( getItem () )).hasShield ()
                         || GameManager::getInstance().isImmuneToCollisionsWithMortalItems () ;
 }
 

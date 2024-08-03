@@ -13,6 +13,8 @@
 
 #include <string>
 
+#include "Timer.hpp"
+
 
 /**
  * Holds the game's info for the characters, Head and Heels
@@ -27,8 +29,8 @@ public:
                 , heelsLives( 0 )
                 , bonusQuickSteps( 0 )
                 , bonusHighJumps( 0 )
-                , headShieldPoints( 0 )
-                , heelsShieldPoints( 0 )
+                , headShieldSeconds( 0.0 )
+                , heelsShieldSeconds( 0.0 )
                 , horn( false )
                 , handbag( false )
                 , donuts( 0 )
@@ -76,25 +78,46 @@ public:
          * temporary invulnerability
          */
 
-        short getHeadShieldPoints () const {  return this->headShieldPoints ;  }
-        short getHeelsShieldPoints () const {  return this->heelsShieldPoints ;  }
+        double getHeadShieldSeconds () const {  return this->headShieldSeconds ;  }
+        double getHeelsShieldSeconds () const {  return this->heelsShieldSeconds ;  }
 
-        short getShieldPointsByName ( const std::string & character ) const ;
+        double getShieldSecondsByName ( const std::string & character ) const ;
 
-        double getShieldSecondsByName ( const std::string & character ) const
+        short getHeadShieldPoints () const {  return GameInfo::convertShieldFromSecondsToPoints( this->headShieldSeconds ) ;  }
+        short getHeelsShieldPoints () const {  return GameInfo::convertShieldFromSecondsToPoints( this->heelsShieldSeconds ) ;  }
+
+        short getShieldPointsByName ( const std::string & character ) const
         {
-                return GameInfo::convertShieldFromPointsToSeconds( getShieldPointsByName( character ) );
+                return GameInfo::convertShieldFromSecondsToPoints( getShieldSecondsByName( character ) );
         }
 
-        void setHeadShieldPoints ( short points ) {  this->headShieldPoints = points ;  }
-        void setHeelsShieldPoints ( short points ) {  this->heelsShieldPoints = points ;  }
+        void setHeadShieldSeconds ( double seconds ) {  this->headShieldSeconds = seconds ;  }
+        void setHeelsShieldSeconds ( double seconds ) {  this->heelsShieldSeconds = seconds ;  }
 
-        void setShieldPointsByName ( const std::string & character, short points ) ;
+        void setShieldSecondsByName( const std::string & character, double seconds ) ;
 
-        void setShieldSecondsByName( const std::string & character, double seconds )
+        // a character gets 30 seconds of immunity when a rabbit is touched
+        #define _fullShieldTimeInSeconds        30.0
+
+#ifdef __Cxx11__ /* when complier supports c++11 */
+        static constexpr double fullShieldTimeInSeconds = _fullShieldTimeInSeconds ;
+#else
+        #define fullShieldTimeInSeconds         _fullShieldTimeInSeconds
+#endif
+
+        void activateShieldByName( const std::string & character ) {  setShieldSecondsByName( character, fullShieldTimeInSeconds ) ;  }
+
+        void setHeadShieldPoints ( short points ) {  this->headShieldSeconds = GameInfo::convertShieldFromPointsToSeconds( points ) ;  }
+        void setHeelsShieldPoints ( short points ) {  this->heelsShieldSeconds = GameInfo::convertShieldFromPointsToSeconds( points ) ;  }
+
+        void setShieldPointsByName ( const std::string & character, short points )
         {
-                setShieldPointsByName( character, GameInfo::convertShieldFromSecondsToPoints( seconds ) );
+                setShieldSecondsByName( character, GameInfo::convertShieldFromPointsToSeconds( points ) );
         }
+
+        void updateShield () ;
+
+        void resetShieldDecreaseTimer () {  this->shieldDecreaseTimer.go() ;  }
 
         /**
          * the magic tools
@@ -141,11 +164,13 @@ private:
         // the number (between 0 and 10) of remaining bonus high jumps for Heels
         unsigned short bonusHighJumps ;
 
-        // the time remaining when Head is inviolable, in "points" 0..99
-        short headShieldPoints ;
+        // the time remaining while Head is inviolable
+        double headShieldSeconds ;
 
-        // the time remaining when Heels is inviolable, in "points" 0..99
-        short heelsShieldPoints ;
+        // the time remaining while Heels is inviolable
+        double heelsShieldSeconds ;
+
+        Timer shieldDecreaseTimer ;
 
         // does Head have the doughnut horn
         bool horn ;
@@ -156,19 +181,7 @@ private:
         // the number of donuts collected by Head
         unsigned short donuts ;
 
-public:
-
-        // a character gets 25 seconds of immunity when a rabbit is touched
-        #define _fullShieldTimeInSeconds        25.0
-
-#ifdef __Cxx11__ /* when complier supports c++11 */
-        static constexpr double fullShieldTimeInSeconds = _fullShieldTimeInSeconds ;
-#else
-        #define fullShieldTimeInSeconds         _fullShieldTimeInSeconds
-#endif
-
-private:
-        // 99 of "points" are equal to fullShieldTimeInSeconds (25) of seconds
+        // 99 of "points" are equal to fullShieldTimeInSeconds (30) of seconds
         //
         static short convertShieldFromSecondsToPoints( double seconds )
         {

@@ -124,7 +124,7 @@ void GameManager::update ()
 {
         gui::GuiManager::getInstance().resetWhyTheGameIsPaused() ;
 
-        while ( ! gui::GuiManager::getInstance().getWhyTheGameIsPaused().isPaused () )
+        while ( ! GameManager::isPaused () )
         {
                 if ( InputManager::getInstance().pauseTyped ()
                                 || keyMoments.isGameOver( false )
@@ -155,8 +155,7 @@ void GameManager::update ()
                                         // update the isometric view
                                         Picture* view = isomot.updateMe ();
 
-                                        if ( view != nilPointer )
-                                        {
+                                        if ( view != nilPointer ) {
                                                 drawAmbianceOfGame( view->getAllegroPict() );
                                                 drawOnScreen( view->getAllegroPict() );
                                         }
@@ -357,6 +356,11 @@ void GameManager::resume ()
         isomot.resume ();
 
         this->update ();
+}
+
+/* static */ bool GameManager::isPaused ()
+{
+        return gui::GuiManager::getInstance().getWhyTheGameIsPaused().isPaused () ;
 }
 
 void GameManager::loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom )

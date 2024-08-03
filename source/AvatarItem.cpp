@@ -17,7 +17,6 @@ AvatarItem::AvatarItem( const DescriptionOfItem & description, int x, int y, int
         : FreeItem( description, x, y, z, heading )
         , wayOfExit( "" )
         , wayOfEntry( "" )
-        , shieldTimer( new Timer () )
         , descriptionOfTakenItem( nilPointer )
 {
         characterToBehaviour ();
@@ -27,16 +26,9 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
         : FreeItem( toCopy )
         , wayOfExit( toCopy.wayOfExit )
         , wayOfEntry( toCopy.wayOfEntry )
-        , shieldTimer( new Timer () )
         , descriptionOfTakenItem( nilPointer )
 {
         characterToBehaviour ();
-
-        if ( GameManager::getInstance().getGameInfo().getShieldPointsByName( getOriginalKind() ) > 0 ) {
-                std::cout << "character \"" << getOriginalKind() << "\" continues to be immune for "
-                                                << toCopy.getShieldSeconds() << " seconds" << std::endl ;
-                this->shieldTimer->copyValueOf( * toCopy.shieldTimer );
-        }
 }
 
 /* private */ void AvatarItem::characterToBehaviour ()
@@ -492,30 +484,7 @@ double AvatarItem::getShieldSeconds () const
 
 void AvatarItem::activateShield ()
 {
-        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        gameInfo.setShieldPointsByName( getOriginalKind(), 99 );
-
-        shieldTimer->go () ;
-}
-
-void AvatarItem::activateShieldForSeconds ( double seconds )
-{
-        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        gameInfo.setShieldSecondsByName( getOriginalKind(), seconds );
-
-        if ( seconds > 0 && ! hasShield() ) shieldTimer->go () ;
-}
-
-void AvatarItem::decrementShieldOverTime ()
-{
-        double shieldSecondsRemaining = GameInfo::fullShieldTimeInSeconds - shieldTimer->getValue() ;
-
-        if ( shieldSecondsRemaining < 0 ) {
-                shieldSecondsRemaining = 0 ;
-                shieldTimer->stop () ;
-        }
-
-        GameManager::getInstance().getGameInfo().setShieldSecondsByName( getOriginalKind(), shieldSecondsRemaining );
+        GameManager::getInstance().getGameInfo().activateShieldByName( getOriginalKind() );
 }
 
 void AvatarItem::liberateCurrentPlanet ()

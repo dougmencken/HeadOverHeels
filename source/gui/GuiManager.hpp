@@ -47,11 +47,12 @@ public:
 
         bool isPaused() const
         {
-                return ( whyPaused == LiberatePlanet
+                return whyPaused != Nevermind ;
+                /* return ( whyPaused == LiberatePlanet
                                 || whyPaused == SaveGame
                                     || whyPaused == InFreedom
                                         || whyPaused == TheFinal
-                                            || whyPaused == GameOver ) ;
+                                            || whyPaused == GameOver ) ; */
         }
 
         void nevermind () {  whyPaused = Nevermind ;  }

@@ -15,7 +15,6 @@
 
 #include "FreeItem.hpp"
 #include "DescriptionOfItem.hpp"
-#include "Timer.hpp"
 #include "Picture.hpp"
 
 
@@ -87,9 +86,6 @@ public:
         double getShieldSeconds () const ;
 
         void activateShield () ;
-        void activateShieldForSeconds ( double seconds ) ;
-
-        void decrementShieldOverTime () ;
 
         /**
          * Character just liberated a planet
@@ -161,8 +157,6 @@ private:
          * through a door, or via teleport, or going below the floor or above the ceiling
          */
         std::string wayOfEntry ;
-
-        autouniqueptr < Timer > shieldTimer ;
 
         const DescriptionOfItem * descriptionOfTakenItem ;
 
