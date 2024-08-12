@@ -24,6 +24,7 @@
 #endif
 
 #include "ospaths.hpp"
+#include "version.hpp"
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 #  include <allegro5/allegro.h>
@@ -73,9 +74,7 @@ int main( int argc, char** argv )
 {
         std::cout << "Head over Heels" << std::endl ;
         std::cout << "the free and open source remake (in C++)" << std::endl ;
-# ifdef PACKAGE_VERSION
-        std::cout << "version " << std::string( PACKAGE_VERSION ) << std::endl;
-# endif
+        std::cout << "version " << gameVersion() << std::endl ;
         std::cout << std::endl ;
 
         if ( argc > 0 ) ospaths::setPathToGame( argv[ 0 ] );

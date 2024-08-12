@@ -13,6 +13,11 @@ if HAVE_EXECINFO_H
     AM_CXXFLAGS += -DHAVE_EXECINFO_H=1
 endif
 
+if IN_GIT
+    AM_CFLAGS += -DGIT_HEAD_HASH=\"$(git_HEAD_hash)\"
+    AM_CXXFLAGS += -DGIT_HEAD_HASH=\"$(git_HEAD_hash)\"
+endif
+
 if USE_ALLEGRO5
     AM_CFLAGS += -DUSE_ALLEGRO5=1
     AM_CXXFLAGS += -DUSE_ALLEGRO5=1
@@ -49,6 +54,7 @@ headoverheels_SOURCES = main.cpp \
 			pointers.hpp \
 			ospaths.cpp \
 			ospaths.hpp \
+                        version.hpp \
 			MayNotBePossible.hpp \
 			UnicodeUtilities.hpp \
 			WrappersAllegro.cpp \

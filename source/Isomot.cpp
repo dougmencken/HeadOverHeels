@@ -77,25 +77,19 @@ void Isomot::beginNewGame ()
 void Isomot::offRecording ()
 {
         if ( GameManager::getInstance().recordingCaptures () )
-        {
                 GameManager::getInstance().toggleRecordingCaptures ();
-        }
 }
 
 void Isomot::offVidasInfinitas ()
 {
         if ( GameManager::getInstance().areLivesInexhaustible () )
-        {
                 GameManager::getInstance().toggleInfiniteLives ();
-        }
 }
 
 void Isomot::offInviolability ()
 {
         if ( GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
-        {
                 GameManager::getInstance().toggleImmunityToCollisionsWithMortalItems ();
-        }
 }
 
 void Isomot::pause ()
@@ -118,26 +112,24 @@ void Isomot::resume ()
 
 Picture* Isomot::updateMe ()
 {
-        if ( view == nilPointer ) return nilPointer ;
+        if ( this->view == nilPointer ) return nilPointer ;
 
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-        if ( chequerboard == nilPointer )
+        if ( this->chequerboard == nilPointer )
         {
                 chequerboard = PicturePtr( new Picture( view->getWidth(), view->getHeight() ) );
                 chequerboard->fillWithTransparencyChequerboard ();
         }
 
-        if ( drawOnChequerboard )
-        {
+        const GameManager & gameManager = GameManager::getInstance() ;
+
+        if ( this->drawOnChequerboard ) {
                 allegro::bitBlit( chequerboard->getAllegroPict(), view->getAllegroPict() );
         }
-        else
-        {
-                Color backgroundColor = Color::blackColor();
-                if ( GameManager::getInstance().charactersFly() ) backgroundColor = Color::byName( "dark blue" );
-
+        else {
+                Color backgroundColor = ( ! gameManager.charactersFly() ) ? Color::blackColor() : Color::byName( "dark blue" ) ;
                 view->fillWithColor( backgroundColor );
         }
 
@@ -206,7 +198,7 @@ Picture* Isomot::updateMe ()
 
         const Color& roomColor = Color::byName( activeRoom->getColor() );
 
-        if ( GameManager::getInstance().isSimpleGraphicsSet() )
+        if ( gameManager.isSimpleGraphicsSet() )
                 Color::multiplyWithColor( * activeRoom->getWhereToDraw(), roomColor );
 
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
@@ -216,7 +208,7 @@ Picture* Isomot::updateMe ()
                 - cameraDeltaX, - cameraDeltaY
         );
 
-        if ( GameManager::getInstance().drawRoomMiniatures () )
+        if ( gameManager.drawRoomMiniatures () )
         {
                 // show information about the current room and draw the miniature
 
@@ -272,17 +264,17 @@ Picture* Isomot::updateMe ()
                 miniatureOfRoom.draw ();
         }
 
-        // cheats
+        // show text when the infinite lives and inviolability cheats are enabled
 
-        if ( GameManager::getInstance().areLivesInexhaustible () )
+        if ( gameManager.areLivesInexhaustible () )
         {
-                std::string infiniteLives = "VIDAS INFINITAS" ;
+                static const std::string infiniteLives = "VIDAS INFINITAS" ;
                 allegro::textOut( infiniteLives, view->getWidth() - ( 8 * infiniteLives.length() ) - 16, 10, Color::whiteColor().toAllegroColor() );
         }
 
-        if ( GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+        if ( gameManager.isImmuneToCollisionsWithMortalItems () )
         {
-                std::string immunity = "INVIOLABILITY" ;
+                static const std::string immunity = "INVIOLABILITY" ;
                 allegro::textOut( immunity, ( view->getWidth() - ( immunity.length() * 8 ) ) >> 1, 10, Color::whiteColor().toAllegroColor() );
         }
 

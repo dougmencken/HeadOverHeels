@@ -78,7 +78,11 @@ To get a binary running over the newer allegro **version 5** (however, it is cur
 ./extras/linux-allegro5-build.sh
 ```
 
-(install ``libgl1-mesa-dev`` package if you see the “X11 support currently requires OpenGL or OpenGL ES support” error)
+(install ``libgl1-mesa-dev`` package if you see the “X11 support currently requires OpenGL or OpenGL ES support” error and ``libxcursor-dev`` on “Looking for XcursorImageCreate in Xcursor - not found : X11 support requires Xcursor library”)
+
+```
+sudo apt install libgl1-mesa-dev libxcursor-dev
+```
 
 Okay, now you have a new and successful build of the game.
 Unedited ``linux-build.sh`` script installs the game inside your build directory at *where-the-build-dir-is/_rootdir*, thus type
@@ -88,7 +92,7 @@ cd _rootdir
 bin/headoverheels
 ```
 
-just after finishing the build to get the game running! 😲🥹😌
+just after finishing a build to get the game running! 😲🥹😌
 
 ## If something ’s wrong there
 

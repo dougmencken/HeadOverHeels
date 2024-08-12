@@ -17,6 +17,11 @@ AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_CC_C_O
 
+# get the hash for the current git commit
+git_HEAD_hash=`git rev-parse --short HEAD 2>/dev/null`
+AM_CONDITIONAL([IN_GIT], [test x"$git_HEAD_hash" != x""])
+AC_SUBST([git_HEAD_hash])
+
 # support for debug build
 
 AC_ARG_ENABLE([debug],

@@ -15,6 +15,7 @@
 
 #include "ospaths.hpp"
 #include "sleep.hpp"
+#include "version.hpp"
 
 #include <algorithm>
 
@@ -33,21 +34,12 @@ GuiManager::GuiManager( ) :
 {
         std::string nameOfWindow = "Head over Heels" ;
 
-#ifdef PACKAGE_VERSION
-        std::string version = "v" + std::string( PACKAGE_VERSION );
-
-        if ( version == "v1.30" )
-                version = "30th anniversary";
-        else if ( version == "v1.31" )
-                version = "31st anniversary";
-        else if ( version == "v1.32" )
-                version = "0x20 32nd anniversary";
+        std::string version = "v" + gameVersion() ;
 
         if ( version.find( "v1.4" ) != std::string::npos )
                 nameOfWindow = "Foot and Mouth" ;
 
         nameOfWindow += " " + version ;
-#endif
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
         nameOfWindow += " (allegro5)" ;
