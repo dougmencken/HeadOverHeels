@@ -92,22 +92,22 @@ void Isomot::offInviolability ()
                 GameManager::getInstance().toggleImmunityToCollisionsWithMortalItems ();
 }
 
-void Isomot::pause ()
+void Isomot::pauseMe ()
 {
         Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
         if ( activeRoom != nilPointer )
                 activeRoom->deactivate() ;
 
-        paused = true ;
+        this->paused = true ;
 }
 
-void Isomot::resume ()
+void Isomot::resumeMe ()
 {
         Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
         if ( activeRoom != nilPointer )
                 activeRoom->activate() ;
 
-        paused = false ;
+        this->paused = false ;
 }
 
 Picture* Isomot::updateMe ()

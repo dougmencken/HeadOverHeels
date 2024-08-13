@@ -23,54 +23,6 @@ namespace gui
 class LanguageStrings ;
 
 
-/**
- * Why the game was paused
- */
-
-class WhyPaused
-{
-private:
-
-        unsigned int whyPaused ;
-
-        static const unsigned int Nevermind = 99 ;
-
-        static const unsigned int LiberatePlanet = 1 ;  /* a crown is taken and one more planet was liberated this way */
-        static const unsigned int SaveGame = 2 ;        /* save the current progress */
-        static const unsigned int InFreedom = 3 ;       /* at least one character reached Freedom (not with all crowns) */
-        static const unsigned int TheFinal = 4 ;        /* both characters reached Freedom with all the crowns */
-        static const unsigned int GameOver = 5 ;        /* the user quit the game or all lives are lost */
-
-public:
-
-        WhyPaused() : whyPaused( Nevermind ) { }
-
-        bool isPaused() const
-        {
-                return whyPaused != Nevermind ;
-                /* return ( whyPaused == LiberatePlanet
-                                || whyPaused == SaveGame
-                                    || whyPaused == InFreedom
-                                        || whyPaused == TheFinal
-                                            || whyPaused == GameOver ) ; */
-        }
-
-        void nevermind () {  whyPaused = Nevermind ;  }
-
-        void forNewlyLiberatedPlanet() {  whyPaused = LiberatePlanet ;  }
-        void forSaving() {  whyPaused = SaveGame ;  }
-        void forArrivingInFreedom() {  whyPaused = InFreedom ;  }
-        void forFinalSuccess() {  whyPaused = TheFinal ;  }
-        void forGameOver() {  whyPaused = GameOver ;  }
-
-        bool isPlanetLiberated() const {  return whyPaused == LiberatePlanet ;  }
-        bool isTimeToSaveTheGame() const {  return whyPaused == SaveGame ;  }
-        bool isInFreedomWithoutAllTheCrowns() const {  return whyPaused == InFreedom ;  }
-        bool isFinalSuccess() const {  return whyPaused == TheFinal ;  }
-        bool isGameOver() const {  return whyPaused == GameOver ;  }
-} ;
-
-
 class GuiManager
 {
 
@@ -137,11 +89,6 @@ public:
 
         unsigned int countSlides () const {  return this->slides.size() ;  }
 
-        const WhyPaused & getWhyTheGameIsPaused () const {  return whyTheGameIsPaused ;  }
-        WhyPaused & getWhyTheGameIsPausedToAlter () {  return whyTheGameIsPaused ;  }
-
-        void resetWhyTheGameIsPaused () {  whyTheGameIsPaused.nevermind () ;  }
-
 private:
 
         /**
@@ -161,9 +108,6 @@ private:
 
         // when true draw the user interface and handle the keyboard
         bool looping ;
-
-        // a reason why the game is paused
-        WhyPaused whyTheGameIsPaused ;
 
         /**
          * Draw graphics in full screen when true or in a window when false

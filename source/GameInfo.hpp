@@ -115,8 +115,9 @@ public:
                 setShieldSecondsByName( character, GameInfo::convertShieldFromPointsToSeconds( points ) );
         }
 
-        void updateShield () ;
+        void updateShieldForActiveCharacter () ;
 
+        // restart the shield-decreasing chronometer
         void resetShieldDecreaseTimer () {  this->shieldDecreaseTimer.go() ;  }
 
         /**

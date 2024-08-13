@@ -136,23 +136,23 @@ void Mediator::update()
                 this->needToSortFreeItems = false ;
         }
 
-        GameManager::getInstance().getGameInfo().updateShield() ;
+        GameManager::getInstance().getGameInfo().updateShieldForActiveCharacter() ;
 }
 
 void Mediator::beginUpdating ()
 {
         if ( this->threadRunning ) return ;
 
-        pthread_attr_t attr;
+        pthread_attr_t threadAttr ;
 
-        pthread_attr_init( &attr );
-        pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
+        pthread_attr_init( &threadAttr );
+        pthread_attr_setdetachstate( &threadAttr, PTHREAD_CREATE_JOINABLE );
 
-        pthread_create( &thread, &attr, Mediator::updateThread, reinterpret_cast< void * >( this ) );
+        pthread_create( &this->updateThread, &threadAttr, Mediator::updateFromThread, reinterpret_cast< void * >( this ) );
 
         this->threadRunning = true;
 
-        pthread_attr_destroy( &attr );
+        pthread_attr_destroy( &threadAttr );
 }
 
 void Mediator::endUpdating ()
@@ -161,17 +161,17 @@ void Mediator::endUpdating ()
 
         this->threadRunning = false;
 
-        pthread_join( thread, nilPointer );
+        pthread_join( this->updateThread, nilPointer );
 }
 
-void* Mediator::updateThread( void* mediatorAsVoid )
+void* Mediator::updateFromThread( void* mediatorAsVoid )
 {
         Mediator* mediator = reinterpret_cast< Mediator* >( mediatorAsVoid );
 
         while ( mediator->isThreadRunning() )
         {
                 mediator->update() ;
-                somn::milliSleep( 1000 / Isomot::updatesPerSecond );
+                somn::milliSleep( 1000 / GameManager::updatesPerSecond );
         }
 
         pthread_exit( nilPointer );

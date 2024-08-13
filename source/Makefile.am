@@ -128,6 +128,7 @@ headoverheels_SOURCES = main.cpp \
 			SoundManager.hpp \
 			Timer.hpp \
 			Timer.cpp \
+			TheKeyMoments.hpp \
 			activities/Activity.hpp \
 			activities/ActivityToString.hpp \
 			activities/PropagateActivity.cpp \

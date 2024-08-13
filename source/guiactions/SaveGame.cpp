@@ -6,9 +6,8 @@
 #include "GameManager.hpp"
 #include "ContinueGame.hpp"
 
-using gui::SaveGame;
-using gui::ContinueGame;
-
+namespace gui
+{
 
 SaveGame::SaveGame( unsigned int slot )
         : Action( )
@@ -33,4 +32,6 @@ void SaveGame::act ()
 
         ContinueGame * game = new ContinueGame( true );
         game->doIt ();
+}
+
 }

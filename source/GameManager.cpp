@@ -34,7 +34,6 @@ GameManager::GameManager( )
         , roomWhereLifeWasLost( nilPointer )
         , headRoom( "blacktooth1head.xml" )
         , heelsRoom( "blacktooth23heels.xml" )
-        , freedomLabel( nilPointer )
         , numberOfCapture( 0 )
         , prefixOfCaptures( util::makeRandomString( 10 ) )
         , capturePath( ospaths::homePath() + "capture" )
@@ -73,8 +72,6 @@ void GameManager::cleanUp ()
         GameMap::getInstance().clear ();
 
         PoolOfPictures::getPoolOfPictures().clear ();
-
-        delete freedomLabel ;
 }
 
 /* static */
@@ -122,14 +119,14 @@ void GameManager::begin ()
 
 void GameManager::update ()
 {
-        gui::GuiManager::getInstance().resetWhyTheGameIsPaused() ;
+        if ( getKeyMoments().isThereAny() ) resetKeyMoments() ;
 
-        while ( ! GameManager::isPaused () )
+        while ( ! getKeyMoments().isThereAny () )
         {
-                if ( InputManager::getInstance().pauseTyped ()
-                                || keyMoments.isGameOver( false )
-                                        || keyMoments.wasFishEaten( false )
-                                                || keyMoments.wasCrownTaken( false ) )
+                if ( InputManager::getInstance().pauseTyped()
+                                || keyMoments.isGameOver()
+                                        /* //// || keyMoments.wasFishEaten() || keyMoments.isSavingGame() ///// */
+                                                || keyMoments.wasCrownTaken() )
                         this->pause ();
                 else
                 {
@@ -163,7 +160,7 @@ void GameManager::update ()
                                                 throw MayNotBePossible( "GameManager::update doesn’t get a canvas to draw on" ) ;
                                 }
 
-                                somn::milliSleep( 1000 / Isomot::updatesPerSecond );
+                                somn::milliSleep( 1000 / GameManager::updatesPerSecond );
                         }
                         else // no lives left
                         {
@@ -176,8 +173,10 @@ void GameManager::update ()
 
 void GameManager::pause ()
 {
+std::cout << "------------- GameManager::pause () -------------" << std::endl ;
+
         // pause the isometric engine
-        isomot.pause();
+        isomot.pauseMe() ;
 
         Picture* view = isomot.updateMe ();
         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
@@ -188,106 +187,8 @@ void GameManager::pause ()
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-        /*
-         * convert from GameManager's "key moments" to GuiManager's "why paused"
-         */
-
-        gui::GuiManager::getInstance().resetWhyTheGameIsPaused () ;
-
-        // the user just got the planet's crown
-        if ( keyMoments.wasCrownTaken( true ) )
-        {
-                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forNewlyLiberatedPlanet() ;
-        }
-        // the user just ate a reincarnation fish
-        else if ( keyMoments.wasFishEaten( true ) )
-        {
-                gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
-                gui::LanguageText* text = languageStrings->getTranslatedTextByAlias( "save-game" );
-                int textAtY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
-
-                gui::TextField ateFishText( GamePreferences::getScreenWidth(), "center" );
-                ateFishText.moveTo( 0, textAtY );
-                ateFishText.setInterlignePercentage( 80 );
-                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
-                {
-                        const gui::LanguageLine & line = text->getNthLine( i );
-                        ateFishText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
-                }
-
-                text = languageStrings->getTranslatedTextByAlias( "confirm-resume" );
-                textAtY += ateFishText.getHeightOfField () + 20 ;
-
-                gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
-                resumeText.moveTo( 0, textAtY );
-                resumeText.setInterlignePercentage( 80 );
-                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
-                {
-                        const gui::LanguageLine & line = text->getNthLine( i );
-                        resumeText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
-                }
-
-                allegro::emptyKeyboardBuffer();
-
-                bool saveit = false ;
-                bool resume = false ;
-
-                // as long as the user doesn't pick one of the two options, to save or not to save
-                while ( ! saveit && ! resume )
-                {
-                        allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
-                        allegro::update ();
-
-                        ateFishText.draw ();
-                        resumeText.draw ();
-
-                        if ( allegro::areKeypushesWaiting() )
-                        {
-                                InputManager& inputManager = InputManager::getInstance();
-
-                                std::string key = allegro::nextKey();
-
-                                // save game by touching Space, or another key to don't save
-                                if ( key == "Space" )
-                                {
-                                        saveit = true ;
-                                        gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forSaving ();
-                                }
-                                else if ( key != inputManager.getUserKeyFor( "movenorth" ) &&
-                                          key != inputManager.getUserKeyFor( "movesouth" ) &&
-                                          key != inputManager.getUserKeyFor( "moveeast" ) &&
-                                          key != inputManager.getUserKeyFor( "movewest" ) &&
-                                          key != inputManager.getUserKeyFor( "jump" ) &&
-                                          key != inputManager.getUserKeyFor( "take" ) &&
-                                          key != inputManager.getUserKeyFor( "take&jump" ) &&
-                                          key != inputManager.getUserKeyFor( "swap" ) &&
-                                          key != inputManager.getUserKeyFor( "doughnut" ) &&
-                                          key != inputManager.getUserKeyFor( "pause" ) &&
-                                          key != "Escape" )
-                                {
-                                        resume = true ;
-                                        isomot.resume() ;
-                                }
-                        }
-
-                        somn::milliSleep( 100 );
-                }
-        }
-        else if ( keyMoments.arrivedInFreedomNotWithAllCrowns( true ) )
-        {
-                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forArrivingInFreedom() ;
-        }
-        else if ( keyMoments.areHeadAndHeelsInFreedomWithAllTheCrowns( true ) )
-        {
-                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forFinalSuccess() ;
-        }
-        else if ( keyMoments.isGameOver( true ) )
-        {
-                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forGameOver ();
-        }
-        // none of the above, thus the user just typed the pause key
-        else
-        {
+        if ( ! this->keyMoments.isThereAny() )
+        {       // not a key moment, that’s the pause key is typed
                 SoundManager::getInstance().stopEverySound ();
 
                 gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings();
@@ -318,7 +219,7 @@ void GameManager::pause ()
                 bool quit = false ;
                 bool resume = false ;
 
-                while ( ! quit && ! resume ) // wait for the user's choice
+                while ( ! quit && ! resume ) // wait for the player’s choice
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
@@ -328,15 +229,88 @@ void GameManager::pause ()
 
                         if ( allegro::areKeypushesWaiting() )
                         {
-                                if ( allegro::nextKey() == "Escape" )
-                                {
-                                        quit = true;
-                                        gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forGameOver ();
+                                if ( allegro::nextKey() == "Escape" ) {
+                                        quit = true ;
+                                        keyMoments.gameOver() ;
                                 }
-                                else
+                                else {
+                                        resume = true ;
+                                        isomot.resumeMe() ;
+                                }
+                        }
+
+                        somn::milliSleep( 100 );
+                }
+        }
+        else if ( getKeyMoments().wasFishEaten() )
+        {
+std::cout << "!!!!!!!!!!!!!!!!!!! getKeyMoments().wasFishEaten() !!!!!!!!!!!!!!!!!!!" << std::endl ;
+
+                gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
+                gui::LanguageText* text = languageStrings->getTranslatedTextByAlias( "save-game" );
+                int textAtY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
+
+                gui::TextField ateFishText( GamePreferences::getScreenWidth(), "center" );
+                ateFishText.moveTo( 0, textAtY );
+                ateFishText.setInterlignePercentage( 80 );
+                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
+                {
+                        const gui::LanguageLine & line = text->getNthLine( i );
+                        ateFishText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
+                }
+
+                text = languageStrings->getTranslatedTextByAlias( "confirm-resume" );
+                textAtY += ateFishText.getHeightOfField () + 20 ;
+
+                gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
+                resumeText.moveTo( 0, textAtY );
+                resumeText.setInterlignePercentage( 80 );
+                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
+                {
+                        const gui::LanguageLine & line = text->getNthLine( i );
+                        resumeText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
+                }
+
+                allegro::emptyKeyboardBuffer();
+
+                bool saveit = false ;
+                bool resume = false ;
+
+                // as long as the player doesn’t pick one of the two options, to save or not to save
+                while ( ! saveit && ! resume )
+                {
+                        allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
+                        allegro::update ();
+
+                        ateFishText.draw ();
+                        resumeText.draw ();
+
+                        if ( allegro::areKeypushesWaiting() )
+                        {
+                                InputManager& inputManager = InputManager::getInstance();
+
+                                std::string key = allegro::nextKey();
+
+                                // save the game by touching Space, or another key to don’t save
+                                if ( key == "Space" )
                                 {
-                                        resume = true;
-                                        isomot.resume();
+                                        saveit = true ;
+                                        keyMoments.saveGame() ;
+                                }
+                                else if ( key != inputManager.getUserKeyFor( "movenorth" ) &&
+                                          key != inputManager.getUserKeyFor( "movesouth" ) &&
+                                          key != inputManager.getUserKeyFor( "moveeast" ) &&
+                                          key != inputManager.getUserKeyFor( "movewest" ) &&
+                                          key != inputManager.getUserKeyFor( "jump" ) &&
+                                          key != inputManager.getUserKeyFor( "take" ) &&
+                                          key != inputManager.getUserKeyFor( "take&jump" ) &&
+                                          key != inputManager.getUserKeyFor( "swap" ) &&
+                                          key != inputManager.getUserKeyFor( "doughnut" ) &&
+                                          key != inputManager.getUserKeyFor( "pause" ) &&
+                                          key != "Escape" )
+                                {
+                                        resume = true ;
+                                        isomot.resumeMe() ;
                                 }
                         }
 
@@ -353,14 +327,9 @@ void GameManager::resume ()
         refreshSceneryBackgrounds ();
 
         // resume the isometric engine
-        isomot.resume ();
+        isomot.resumeMe() ;
 
         this->update ();
-}
-
-/* static */ bool GameManager::isPaused ()
-{
-        return gui::GuiManager::getInstance().getWhyTheGameIsPaused().isPaused () ;
 }
 
 void GameManager::loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom )
@@ -599,13 +568,9 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
         else
         {
                 // draw color~cycling FREEDOM on the final scene
-                if ( freedomLabel == nilPointer )
-                {
-                        freedomLabel = new gui::ColorCyclingLabel( "FREEDOM", /* double height font */ true );
-                        freedomLabel->moveTo( GamePreferences::getScreenWidth() / 10, GamePreferences::getScreenHeight() - 100 );
-                }
-
-                freedomLabel->draw ();
+                static gui::ColorCyclingLabel freedomLabel( "FREEDOM", /* double height font */ true );
+                freedomLabel.moveTo( GamePreferences::getScreenWidth() / 10, GamePreferences::getScreenHeight() - 100 );
+                freedomLabel.draw ();
         }
 
         if ( ! drawSceneryDecor () )
@@ -744,9 +709,13 @@ unsigned short GameManager::howManyFreePlanets () const
 
 void GameManager::eatFish ( const AvatarItem & character, Room* room )
 {
-        assert( room != nilPointer );
+        if ( room == nilPointer ) {
+                std::cout << "><((((o> ate fish without room <o))))><" << std::endl ;
+                return ;
+        }
 
-        keyMoments.fishEaten ();
+        keyMoments.fishEaten () /* <>< */ ;
+        this->pause () ;
 
         ItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
 
@@ -780,7 +749,7 @@ void GameManager::inFreedomWithSoManyCrowns( unsigned int crowns )
 {
         if ( crowns == 5 ) {
                 // all the five crowns are taken
-                keyMoments.HeadAndHeelsAreInFreedomWithAllTheCrowns ();
+                keyMoments.finalSuccess ();
         } else {
                 keyMoments.arriveInFreedomNotWithAllCrowns ();
         }

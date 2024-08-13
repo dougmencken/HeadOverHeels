@@ -197,7 +197,7 @@ private:
         Room * room ;
 
         // for updating of items
-        pthread_t thread ;
+        pthread_t updateThread ;
 
         volatile bool threadRunning ;
 
@@ -233,7 +233,7 @@ private:
 
         std::deque < std::string > collisions ;
 
-        static void * updateThread ( void * mediatorAsVoid ) ;
+        static void * updateFromThread ( void * mediatorAsVoid ) ;
 
 };
 

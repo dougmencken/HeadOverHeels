@@ -120,19 +120,21 @@ void GameInfo::setShieldSecondsByName ( const std::string & character, double se
                 setHeelsShieldSeconds( seconds ) ;
 }
 
-void GameInfo::updateShield ()
+void GameInfo::updateShieldForActiveCharacter ()
 {
-        const std::string & activeDude = GameMap::getInstance().getActiveRoom()->getMediator()->getNameOfActiveCharacter() ;
-
-        if ( ! activeDude.empty() ) {
-                double oldSeconds = getShieldSecondsByName( activeDude ) ;
-                if ( oldSeconds > 0.0 ) {
-                        double newSeconds = oldSeconds - this->shieldDecreaseTimer.getValue() ;
-                        setShieldSecondsByName( activeDude, newSeconds );
+        Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
+        if ( activeRoom != nilPointer ) {
+                const std::string & activeDude = activeRoom->getMediator()->getNameOfActiveCharacter() ;
+                if ( ! activeDude.empty() ) {
+                        double oldSeconds = getShieldSecondsByName( activeDude ) ;
+                        if ( oldSeconds > 0.0 ) {
+                                double newSeconds = oldSeconds - this->shieldDecreaseTimer.getValue() ;
+                                setShieldSecondsByName( activeDude, newSeconds );
+                        }
                 }
         }
 
-        resetShieldDecreaseTimer() ; // restart the shield-decreasing chronometer
+        resetShieldDecreaseTimer() ;
 }
 
 void GameInfo::takeMagicTool ( const std::string & tool )

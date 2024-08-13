@@ -11,6 +11,7 @@
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
 #include "ItemDescriptions.hpp"
+#include "Color.hpp"
 
 #include "ospaths.hpp"
 

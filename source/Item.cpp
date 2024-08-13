@@ -8,6 +8,7 @@
 #include "CreatorOfBehaviors.hpp"
 #include "GameManager.hpp"
 #include "PoolOfPictures.hpp"
+#include "Color.hpp"
 #include "Way.hpp"
 
 #include <util.hpp>

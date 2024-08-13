@@ -2,7 +2,6 @@
 #include "ContinueGame.hpp"
 
 #include "GameManager.hpp"
-#include "GuiManager.hpp"
 #include "GameMap.hpp"
 #include "SoundManager.hpp"
 #include "CreateGameOverSlide.hpp"
@@ -24,9 +23,9 @@ void ContinueGame::act ()
         SoundManager::getInstance().stopOgg (); // or else hear the planets screen's music when resuming an old (saved) game
 
         GameManager & gameManager = GameManager::getInstance() ;
-        gui::GuiManager & uiManager = gui::GuiManager::getInstance() ;
 
-        uiManager.resetWhyTheGameIsPaused () ;
+        ////if ( gameManager.getKeyMoments().isThereAny() )
+                gameManager.resetKeyMoments() ;
 
         // until the game is paused
         if ( gameInProgress )
@@ -34,21 +33,20 @@ void ContinueGame::act ()
         else
                 gameManager.begin () ;
 
-        //  when the game is paused
-        if ( uiManager.getWhyTheGameIsPaused().isPlanetLiberated () )
-        {
+        // when the game is paused or there’s a key moment in the game
+        if ( gameManager.getKeyMoments().wasCrownTaken () ) {
                 // when some planet is liberated, show the slide with planets
                 ShowSlideWithPlanets * planetsAction = new ShowSlideWithPlanets( true );
                 planetsAction->doIt ();
         }
-        else if ( uiManager.getWhyTheGameIsPaused().isTimeToSaveTheGame () )
+        else if ( gameManager.getKeyMoments().isSavingGame () )
         {
                 // show the save game screen
                 CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( false );
                 listOfGamesAction->doIt ();
         }
-        else if ( uiManager.getWhyTheGameIsPaused().isGameOver ()
-                        || uiManager.getWhyTheGameIsPaused().isInFreedomWithoutAllTheCrowns () )
+        else if ( gameManager.getKeyMoments().isGameOver ()
+                        || gameManager.getKeyMoments().arrivedInFreedomNotWithAllCrowns () )
         {
                 CreateGameOverSlide * gameOverScoreAction =
                         new CreateGameOverSlide (
@@ -56,7 +54,7 @@ void ContinueGame::act ()
 
                 gameOverScoreAction->doIt ();
         }
-        else if ( uiManager.getWhyTheGameIsPaused().isFinalSuccess () )
+        else if ( gameManager.getKeyMoments().isFinalSuccess () )
         {
                 ShowCongratulations * congratulationsAction =
                         new ShowCongratulations (

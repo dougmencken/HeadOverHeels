@@ -13,111 +13,15 @@
 
 #include <string>
 
+#include "TheKeyMoments.hpp"
 #include "GameInfo.hpp"
 #include "Picture.hpp"
 #include "GameSaverAndLoader.hpp"
 #include "Isomot.hpp"
-#include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"
 
 class Room ;
 class AvatarItem ;
-
-
-/**
- * Marks the definitive moments of the game
- *
- * Only the single lone of these moments may be set true at the same time
- * Checking for a key moment optionally resets it to false, so be sure to use such a knowledge
- */
-
-class TheKeyMoments
-{
-
-private:
-
-        bool theMomentOfGameOver ;   /* all lives are lost or the user quit the game */
-
-        bool theMomentOFishWasEaten ;      /* a chance to save the current progress */
-        bool theMomentOfCrownWasTaken ;    /* a crown is taken and one more planet was liberated this way */
-
-        bool theMomentOfArrivalInFreedomNotWithAllCrowns ;            /* at least one character reached Freedom (not with all crowns) */
-        bool theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ;  /* both characters reached Freedom with all the crowns */
-
-public:
-
-        TheKeyMoments()
-                : theMomentOfGameOver( false )
-                , theMomentOFishWasEaten( false )
-                , theMomentOfCrownWasTaken( false )
-                , theMomentOfArrivalInFreedomNotWithAllCrowns( false )
-                , theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns( false )
-        {}
-
-        void gameOver() {  resetAll() ; theMomentOfGameOver = true ;  }
-
-        bool isGameOver( bool reset )
-        {
-                bool is = theMomentOfGameOver ;
-                if ( reset ) theMomentOfGameOver = false ;
-                return is ;
-        }
-
-        void fishEaten() {  resetAll() ; theMomentOFishWasEaten = true ;  }
-
-        bool wasFishEaten( bool reset )
-        {
-                bool was = theMomentOFishWasEaten ;
-                if ( reset ) theMomentOFishWasEaten = false ;
-                return was ;
-        }
-
-        void crownTaken() {  resetAll() ; theMomentOfCrownWasTaken = true ;  }
-
-        bool wasCrownTaken( bool reset )
-        {
-                bool was = theMomentOfCrownWasTaken ;
-                if ( reset ) theMomentOfCrownWasTaken = false ;
-                return was ;
-        }
-
-        void arriveInFreedomNotWithAllCrowns() {  resetAll() ; theMomentOfArrivalInFreedomNotWithAllCrowns = true ;  }
-
-        bool arrivedInFreedomNotWithAllCrowns( bool reset )
-        {
-                bool arrived = theMomentOfArrivalInFreedomNotWithAllCrowns ;
-                if ( reset ) theMomentOfArrivalInFreedomNotWithAllCrowns = false ;
-                return arrived ;
-        }
-
-        void HeadAndHeelsAreInFreedomWithAllTheCrowns() {  resetAll() ; theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = true ;  }
-
-        bool areHeadAndHeelsInFreedomWithAllTheCrowns( bool reset )
-        {
-                bool are = theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ;
-                if ( reset ) theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
-                return are ;
-        }
-
-        bool isThereAny() const
-        {
-                return ( theMomentOfGameOver
-                         || theMomentOFishWasEaten
-                            || theMomentOfCrownWasTaken
-                               || theMomentOfArrivalInFreedomNotWithAllCrowns
-                                  || theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ) ;
-        }
-
-        void resetAll()
-        {
-                theMomentOfGameOver = false ;
-                theMomentOFishWasEaten = false ;
-                theMomentOfCrownWasTaken = false ;
-                theMomentOfArrivalInFreedomNotWithAllCrowns = false ;
-                theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
-        }
-
-} ;
 
 
 /**
@@ -135,6 +39,7 @@ private:
 
 protected:
 
+        /////// here?
         static PicturePtr refreshPicture ( const std::string & nameOfPicture ) ;
 
 public:
@@ -160,11 +65,13 @@ public:
          */
         void resume () ;
 
-        static bool isPaused () ;
-
         void loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom );
 
         GameInfo & getGameInfo() {  return theInfo ;  }
+
+        const TheKeyMoments & getKeyMoments () const {  return this->keyMoments ;  }
+
+        void resetKeyMoments () {  this->keyMoments.resetAll() ;  }
 
         const std::string & getHeadRoom () const {  return headRoom ;  }
 
@@ -234,6 +141,8 @@ public:
         // at the end of the game it's time to count the crowns
         void inFreedomWithSoManyCrowns( unsigned int crowns ) ;
 
+        static const unsigned int updatesPerSecond = 50 ;
+
 private:
 
         /**
@@ -296,8 +205,6 @@ private:
         std::string headRoom ;
 
         std::string heelsRoom ;
-
-        gui::ColorCyclingLabel * freedomLabel ;
 
         unsigned int numberOfCapture ;
 

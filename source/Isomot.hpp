@@ -44,17 +44,15 @@ public:
 
         void beginNewGame () ;
 
-        void pause () ;
+        void pauseMe () ;
 
-        void resume () ;
+        void resumeMe () ;
 
         Picture * updateMe () ;
 
         bool doesCameraFollowCharacter () const {  return cameraFollowsCharacter ;  }
 
         void toggleCameraFollowsCharacter () {  cameraFollowsCharacter = ! cameraFollowsCharacter ;  }
-
-        static const unsigned int updatesPerSecond = 50 ;
 
 private:
 
