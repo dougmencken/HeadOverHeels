@@ -124,9 +124,7 @@ void GameManager::update ()
         while ( ! getKeyMoments().isThereAny () )
         {
                 if ( InputManager::getInstance().pauseTyped()
-                                || keyMoments.isGameOver()
-                                        /* //// || keyMoments.wasFishEaten() || keyMoments.isSavingGame() ///// */
-                                                || keyMoments.wasCrownTaken() )
+                                || keyMoments.isGameOver() || keyMoments.wasCrownTaken() )
                         this->pause ();
                 else
                 {
@@ -173,7 +171,7 @@ void GameManager::update ()
 
 void GameManager::pause ()
 {
-std::cout << "------------- GameManager::pause () -------------" << std::endl ;
+        IF_DEBUG( std::cout << "GameManager::pause ()" << std::endl )
 
         // pause the isometric engine
         isomot.pauseMe() ;
@@ -244,8 +242,6 @@ std::cout << "------------- GameManager::pause () -------------" << std::endl ;
         }
         else if ( getKeyMoments().wasFishEaten() )
         {
-std::cout << "!!!!!!!!!!!!!!!!!!! getKeyMoments().wasFishEaten() !!!!!!!!!!!!!!!!!!!" << std::endl ;
-
                 gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
                 gui::LanguageText* text = languageStrings->getTranslatedTextByAlias( "save-game" );
                 int textAtY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
@@ -310,6 +306,7 @@ std::cout << "!!!!!!!!!!!!!!!!!!! getKeyMoments().wasFishEaten() !!!!!!!!!!!!!!!
                                           key != "Escape" )
                                 {
                                         resume = true ;
+                                        keyMoments.resetAll() ;
                                         isomot.resumeMe() ;
                                 }
                         }
@@ -323,6 +320,8 @@ std::cout << "!!!!!!!!!!!!!!!!!!! getKeyMoments().wasFishEaten() !!!!!!!!!!!!!!!
 
 void GameManager::resume ()
 {
+        IF_DEBUG( fprintf ( stdout, "GameManager::resume ()\n" ) )
+
         refreshAmbianceImages ();
         refreshSceneryBackgrounds ();
 
@@ -709,6 +708,8 @@ unsigned short GameManager::howManyFreePlanets () const
 
 void GameManager::eatFish ( const AvatarItem & character, Room* room )
 {
+        if ( getKeyMoments().wasFishEaten() ) return ;
+
         if ( room == nilPointer ) {
                 std::cout << "><((((o> ate fish without room <o))))><" << std::endl ;
                 return ;

@@ -24,8 +24,7 @@ void ContinueGame::act ()
 
         GameManager & gameManager = GameManager::getInstance() ;
 
-        ////if ( gameManager.getKeyMoments().isThereAny() )
-                gameManager.resetKeyMoments() ;
+        gameManager.resetKeyMoments() ;
 
         // until the game is paused
         if ( gameInProgress )

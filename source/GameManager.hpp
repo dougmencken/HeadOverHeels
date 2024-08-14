@@ -60,9 +60,6 @@ public:
          */
         void pause () ;
 
-        /**
-         * Resume the game after a pause
-         */
         void resume () ;
 
         void loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom );
@@ -146,7 +143,7 @@ public:
 private:
 
         /**
-         * Update game periodically by redrawing the isometric view and updating items
+         * Update the game periodically
          */
         void update () ;
 

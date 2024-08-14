@@ -143,7 +143,7 @@ Picture* Isomot::updateMe ()
         // la sala final es muy especial
         if ( activeRoom->getNameOfRoomDescriptionFile() == "finalroom.xml" )
         {
-                updateFinalRoom();
+                updateFinalRoom() ;
         }
         else if ( activeRoom->getMediator()->getActiveCharacter() != nilPointer )
         {
@@ -371,12 +371,12 @@ void Isomot::handleMagicKeys ()
         {
                 gameManager.togglePlayMelodyOfScenery ();
 
-                if ( gameManager.playMelodyOfScenery() )
-                {
-                        std::cout << "room tunes on" << std::endl ;
+                std::cout << "room tunes are " ;
+                if ( gameManager.playMelodyOfScenery() ) {
+                        std::cout << "on" << std::endl ;
                         playTuneForScenery( activeRoom->getScenery () );
                 } else
-                        std::cout << "room tunes off" << std::endl ;
+                        std::cout << "off" << std::endl ;
 
                 allegro::releaseKey( "t" );
         }
@@ -586,11 +586,11 @@ void Isomot::playTuneForScenery ( const std::string& scenery )
                 std::cout << "( ignore melody for scenery \"" << scenery << "\" )" << std::endl ;
 }
 
-void Isomot::updateFinalRoom()
+void Isomot::updateFinalRoom ()
 {
-        Room* activeRoom = GameMap::getInstance().getActiveRoom();
-        assert( activeRoom != nilPointer );
-        Mediator* mediator = activeRoom->getMediator();
+        Room* finalRoom = GameMap::getInstance().getActiveRoom() ;
+        assert( finalRoom != nilPointer );
+        Mediator* mediator = finalRoom->getMediator() ;
         assert( mediator != nilPointer );
 
         if ( ! this->finalRoomBuilt )
@@ -599,17 +599,17 @@ void Isomot::updateFinalRoom()
 
                 std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalKind();
 
-                activeRoom->removeCharacterFromRoom( * mediator->getActiveCharacter(), true );
+                finalRoom->removeCharacterFromRoom( * mediator->getActiveCharacter(), true );
 
                 std::cout << "character \"" << arrivedCharacter << "\" arrived to the final room" << std::endl ;
 
                 const DescriptionOfItem* arrived = ItemDescriptions::descriptions().getDescriptionByKind( arrivedCharacter );
                 if ( arrived != nilPointer ) {
                         FreeItemPtr character( new FreeItem( *arrived, 66, 92, Room::FloorZ, "south" ) );
-                        activeRoom->addFreeItem( character );
+                        finalRoom->addFreeItem( character );
                 }
 
-                activeRoom->getCamera()->instantCenterRoom ();
+                finalRoom->getCamera()->instantCenterRoom ();
 
                 // crea las coronas
 
@@ -623,35 +623,35 @@ void Isomot::updateFinalRoom()
                 if ( gameManager.isFreePlanet( "safari" ) )
                 {
                         FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Room::FloorZ ) );
-                        activeRoom->addFreeItem( chapeau );
+                        finalRoom->addFreeItem( chapeau );
                         crowns ++ ;
                 }
                 // la corona de Egyptus
                 if ( gameManager.isFreePlanet( "egyptus" ) )
                 {
                         FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Room::FloorZ ) );
-                        activeRoom->addFreeItem( chapeau );
+                        finalRoom->addFreeItem( chapeau );
                         crowns ++ ;
                 }
                 // la corona de Penitentiary
                 if ( gameManager.isFreePlanet( "penitentiary" ) )
                 {
                         FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Room::FloorZ ) );
-                        activeRoom->addFreeItem( chapeau );
+                        finalRoom->addFreeItem( chapeau );
                         crowns ++ ;
                 }
                 // la corona de Byblos
                 if ( gameManager.isFreePlanet( "byblos" ) )
                 {
                         FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Room::FloorZ ) );
-                        activeRoom->addFreeItem( chapeau );
+                        finalRoom->addFreeItem( chapeau );
                         crowns ++ ;
                 }
                 // la corona de Blacktooth
                 if ( gameManager.isFreePlanet( "blacktooth" ) )
                 {
                         FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Room::FloorZ ) );
-                        activeRoom->addFreeItem( chapeau );
+                        finalRoom->addFreeItem( chapeau );
                         ++ crowns ;
                 }
 
@@ -675,7 +675,7 @@ void Isomot::updateFinalRoom()
                                 146, 93, Room::LayerHeight, "none"
                         ) );
                         finalBall->setBehaviorOf( "behaivor of final ball" );
-                        activeRoom->addFreeItem( finalBall );
+                        finalRoom->addFreeItem( finalBall );
 
                         finalRoomTimer.go() ; // restart the timer
                 }
