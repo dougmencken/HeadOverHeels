@@ -60,6 +60,8 @@ private:
 
         void continueSavedGame ( tinyxml2::XMLElement * characters ) ;
 
+        void saveToolsFor ( const std::string & characterName, tinyxml2::XMLElement & characterElement, tinyxml2::XMLDocument & xml ) ;
+
         // the room where the reincarnation fish is caught
         std::string fishRoom ;
 

@@ -216,19 +216,11 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
 
                         if ( characterName == "headoverheels" )
                         {
-                                // formula for lives of the composite character from the lives of two simple characters is
-                                // lives H & H = 100 * lives Head + lives Heels
+                                // the formula for lives of the composite character from the lives of two simple characters is
+                                // lives Head & Heels = 100 * lives Head + lives Heels
 
-                                unsigned char headLives = 0 ;
-                                unsigned char heelsLives = 0 ;
-
-                                while ( howManyLives > 100 )
-                                {
-                                        howManyLives -= 100;
-                                        headLives++;
-                                }
-
-                                heelsLives = static_cast< unsigned char >( howManyLives );
+                                unsigned char headLives = static_cast< unsigned char >( howManyLives / 100 );
+                                unsigned char heelsLives = static_cast< unsigned char >( howManyLives % 100 );
 
                                 gameInfo.setHeadLives( headLives );
                                 gameInfo.setHeelsLives( heelsLives );
@@ -273,7 +265,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
         GameManager & gameManager = GameManager::getInstance () ;
         GameInfo & gameInfo = gameManager.getGameInfo () ;
 
-        tinyxml2::XMLDocument saveXml;
+        tinyxml2::XMLDocument saveXml ;
 
         tinyxml2::XMLElement * root = saveXml.NewElement( "savegame" );
         root->SetAttribute( "version", GameSaverAndLoader::Current_Save_Version ().c_str () );
@@ -399,112 +391,62 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 heading->SetText( whereLooksFish.c_str () );
                 activeCharacter->InsertEndChild( heading );
 
-                if ( whoPlaysYet == "head" || whoPlaysYet == "headoverheels" )
-                {
-                        bool hasHorn = gameInfo.hasHorn () ;
-
-                        tinyxml2::XMLElement* horn = saveXml.NewElement( "hasHorn" );
-                        horn->SetText( hasHorn ? "yes" : "no" );
-                        activeCharacter->InsertEndChild( horn );
-
-                        tinyxml2::XMLElement* donuts = saveXml.NewElement( "donuts" );
-                        donuts->SetText( gameInfo.getDoughnuts () );
-                        activeCharacter->InsertEndChild( donuts );
-                }
-
-                if ( whoPlaysYet == "heels" || whoPlaysYet == "headoverheels" )
-                {
-                        bool hasHandbag = gameInfo.hasHandbag () ;
-
-                        tinyxml2::XMLElement* handbag = saveXml.NewElement( "hasHandbag" );
-                        handbag->SetText( hasHandbag ? "yes" : "no" );
-                        activeCharacter->InsertEndChild( handbag );
-                }
+                saveToolsFor( whoPlaysYet, *activeCharacter, saveXml );
 
                 characters->InsertEndChild( activeCharacter );
         }
 
         // inactive character, if any
 
-        std::string whoWaitsToPlay = "no one" ;
+        AvatarItemPtr characterToo ;
 
         Room* activeRoom = GameMap::getInstance().getActiveRoom () ;
         Room* secondRoom = GameMap::getInstance().getRoomOfInactiveCharacter () ;
 
-        if ( secondRoom != nilPointer )
-                whoWaitsToPlay = secondRoom->getMediator()->getNameOfActiveCharacter() ;
-        else
-        if ( activeRoom->getMediator()->getWaitingCharacter() != nilPointer )
-                whoWaitsToPlay = activeRoom->getMediator()->getWaitingCharacter()->getKind () ;
+        if ( secondRoom != nilPointer ) {
+                if ( secondRoom->getMediator()->getActiveCharacter() != nilPointer )
+                        characterToo = secondRoom->getMediator()->getActiveCharacter() ;
+                else if ( secondRoom->getMediator()->getWaitingCharacter() != nilPointer )
+                        characterToo = secondRoom->getMediator()->getWaitingCharacter() ;
+        } else
+          if ( activeRoom->getMediator()->getWaitingCharacter() != nilPointer )
+                characterToo = activeRoom->getMediator()->getWaitingCharacter() ;
 
-        AvatarItemPtr characterToo ;
+        std::string whoWaitsToPlay = ( characterToo != nilPointer ) ? characterToo->getOriginalKind() : "no one" ;
 
-        if ( whoWaitsToPlay != "no one" )
-        {
+        if ( whoWaitsToPlay != "no one" ) {
+                ///// assert ( characterToo != nilPointer ) ;
+
+                tinyxml2::XMLElement* inactiveCharacter = saveXml.NewElement( "character" );
+                inactiveCharacter->SetAttribute( "name", whoWaitsToPlay.c_str () );
+
                 Room* roomWithWaitingGuy = ( secondRoom != nilPointer ) ? secondRoom : activeRoom ;
 
-                std::vector< AvatarItemPtr > charactersOnEntry = roomWithWaitingGuy->getCharactersWhoEnteredRoom () ;
+                tinyxml2::XMLElement* roomFile = saveXml.NewElement( "room" );
+                roomFile->SetText( roomWithWaitingGuy->getNameOfRoomDescriptionFile().c_str() );
+                inactiveCharacter->InsertEndChild( roomFile );
 
-                for ( std::vector< AvatarItemPtr >::const_iterator p = charactersOnEntry.begin (); p != charactersOnEntry.end (); ++ p )
-                {
-                        if ( ( *p )->getKind () == whoWaitsToPlay )
-                        {
-                                characterToo = *p ;
-                                break;
-                        }
-                }
+                tinyxml2::XMLElement* x = saveXml.NewElement( "x" );
+                x->SetText( characterToo->getX() );
+                tinyxml2::XMLElement* y = saveXml.NewElement( "y" );
+                y->SetText( characterToo->getY() );
+                tinyxml2::XMLElement* z = saveXml.NewElement( "z" );
+                z->SetText( characterToo->getZ() );
+                inactiveCharacter->InsertEndChild( x );
+                inactiveCharacter->InsertEndChild( y );
+                inactiveCharacter->InsertEndChild( z );
 
-                if ( characterToo != nilPointer )
-                {
-                        tinyxml2::XMLElement* inactiveCharacter = saveXml.NewElement( "character" );
-                        inactiveCharacter->SetAttribute( "name", whoWaitsToPlay.c_str () );
+                tinyxml2::XMLElement* lives = saveXml.NewElement( "lives" );
+                lives->SetText( characterToo->getLives() );
+                inactiveCharacter->InsertEndChild( lives );
 
-                        tinyxml2::XMLElement* roomFile = saveXml.NewElement( "room" );
-                        roomFile->SetText( roomWithWaitingGuy->getNameOfRoomDescriptionFile().c_str() );
-                        inactiveCharacter->InsertEndChild( roomFile );
+                tinyxml2::XMLElement* heading = saveXml.NewElement( "heading" );
+                heading->SetText( characterToo->getHeading().c_str () );
+                inactiveCharacter->InsertEndChild( heading );
 
-                        tinyxml2::XMLElement* x = saveXml.NewElement( "x" );
-                        x->SetText( characterToo->getX() );
-                        tinyxml2::XMLElement* y = saveXml.NewElement( "y" );
-                        y->SetText( characterToo->getY() );
-                        tinyxml2::XMLElement* z = saveXml.NewElement( "z" );
-                        z->SetText( characterToo->getZ() );
-                        inactiveCharacter->InsertEndChild( x );
-                        inactiveCharacter->InsertEndChild( y );
-                        inactiveCharacter->InsertEndChild( z );
+                saveToolsFor( whoWaitsToPlay, *inactiveCharacter, saveXml );
 
-                        tinyxml2::XMLElement* lives = saveXml.NewElement( "lives" );
-                        lives->SetText( characterToo->getLives() );
-                        inactiveCharacter->InsertEndChild( lives );
-
-                        tinyxml2::XMLElement* heading = saveXml.NewElement( "heading" );
-                        heading->SetText( characterToo->getHeading().c_str () );
-                        inactiveCharacter->InsertEndChild( heading );
-
-                        if ( whoWaitsToPlay == "head" )
-                        {
-                                bool hasHorn = gameInfo.hasHorn () ;
-
-                                tinyxml2::XMLElement* horn = saveXml.NewElement( "hasHorn" );
-                                horn->SetText( hasHorn ? "yes" : "no" );
-                                inactiveCharacter->InsertEndChild( horn );
-
-                                tinyxml2::XMLElement* donuts = saveXml.NewElement( "donuts" );
-                                donuts->SetText( gameInfo.getDoughnuts () );
-                                inactiveCharacter->InsertEndChild( donuts );
-                        }
-
-                        if ( whoWaitsToPlay == "heels" )
-                        {
-                                bool hasHandbag = gameInfo.hasHandbag () ;
-
-                                tinyxml2::XMLElement* handbag = saveXml.NewElement( "hasHandbag" );
-                                handbag->SetText( hasHandbag ? "yes" : "no" );
-                                inactiveCharacter->InsertEndChild( handbag );
-                        }
-
-                        characters->InsertEndChild( inactiveCharacter );
-                }
+                characters->InsertEndChild( inactiveCharacter );
         }
 
         root->InsertEndChild( characters );
@@ -517,4 +459,33 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
         }
 
         return true;
+}
+
+/* private */
+void GameSaverAndLoader::saveToolsFor ( const std::string & characterName,
+                                                tinyxml2::XMLElement & characterElement, tinyxml2::XMLDocument & xml )
+{
+        const GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
+
+        if ( characterName == "head" || characterName == "headoverheels" )
+        {
+                bool hasHorn = gameInfo.hasHorn () ;
+
+                tinyxml2::XMLElement* horn = xml.NewElement( "hasHorn" );
+                horn->SetText( hasHorn ? "yes" : "no" );
+                characterElement.InsertEndChild( horn );
+
+                tinyxml2::XMLElement* donuts = xml.NewElement( "donuts" );
+                donuts->SetText( gameInfo.getDoughnuts () );
+                characterElement.InsertEndChild( donuts );
+        }
+
+        if ( characterName == "heels" || characterName == "headoverheels" )
+        {
+                bool hasHandbag = gameInfo.hasHandbag () ;
+
+                tinyxml2::XMLElement* handbag = xml.NewElement( "hasHandbag" );
+                handbag->SetText( hasHandbag ? "yes" : "no" );
+                characterElement.InsertEndChild( handbag );
+        }
 }

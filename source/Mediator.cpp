@@ -1206,13 +1206,16 @@ void Mediator::toggleSwitchInRoom ()
 
 AvatarItemPtr Mediator::getWaitingCharacter() const
 {
-        std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
+        if ( this->room->isAnyCharacterStillInRoom() ) {
+                std::vector< AvatarItemPtr > charactersInRoom = this->room->getCharactersYetInRoom() ;
 
-        for ( std::vector< AvatarItemPtr >::const_iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++ p )
-        {
-                if ( ( *p )->getUniqueName() != getActiveCharacter()->getUniqueName() )
-                        return *p ;
+                for ( std::vector< AvatarItemPtr >::const_iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++ p )
+                {
+                        if ( getActiveCharacter() == nilPointer
+                                        || ( *p )->getUniqueName() != getActiveCharacter()->getUniqueName() )
+                                return *p ;
+                }
         }
 
-        return AvatarItemPtr ();
+        return AvatarItemPtr() ;
 }

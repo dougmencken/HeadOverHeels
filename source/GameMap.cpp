@@ -237,7 +237,6 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
 
                                 // create character Heels
                                 secondRoom->placeCharacterInRoom( "heels", true, centerX, centerY, 0, "south" );
-                                //////secondRoom->getMediator()->activateCharacterByName( "heels" );
 
                                 addRoomAsVisited( secondRoom->getNameOfRoomDescriptionFile () ) ;
                         }
