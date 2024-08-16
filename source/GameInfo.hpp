@@ -13,8 +13,6 @@
 
 #include <string>
 
-#include "Timer.hpp"
-
 
 /**
  * Holds the game's info for the characters, Head and Heels
@@ -115,11 +113,6 @@ public:
                 setShieldSecondsByName( character, GameInfo::convertShieldFromPointsToSeconds( points ) );
         }
 
-        void updateShieldForActiveCharacter () ;
-
-        // restart the shield-decreasing chronometer
-        void resetShieldDecreaseTimer () {  this->shieldDecreaseTimer.go() ;  }
-
         /**
          * the magic tools
          */
@@ -171,8 +164,6 @@ private:
         // the time remaining while Heels is inviolable
         double heelsShieldSeconds ;
 
-        Timer shieldDecreaseTimer ;
-
         // does Head have the doughnut horn
         bool horn ;
 
@@ -186,7 +177,7 @@ private:
         //
         static short convertShieldFromSecondsToPoints( double seconds )
         {
-                return static_cast< short >( seconds * 99.0 / fullShieldTimeInSeconds ) ;
+                return static_cast< short >( ( seconds * 99.0 / fullShieldTimeInSeconds ) + 0.5 ) ;
         }
 
         static double convertShieldFromPointsToSeconds( short points )

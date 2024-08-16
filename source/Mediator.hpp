@@ -39,7 +39,7 @@ public:
         /**
          * @param room the room in which this mediator negotiates
          */
-        Mediator( Room* whichRoom ) ;
+        Mediator( Room * whichRoom ) ;
 
         virtual ~Mediator( ) ;
 
@@ -56,6 +56,11 @@ public:
         void beginUpdating () ;
 
         void endUpdating () ;
+
+        /**
+         * Decrease shield for an active player character by 'seconds'
+         */
+        void decreaseShieldForActiveCharacter ( double seconds ) ;
 
         void wantToMaskWithFreeItemImageAt ( const FreeItem & item, int x, int y ) ;
 

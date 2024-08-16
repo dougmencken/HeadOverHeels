@@ -120,23 +120,6 @@ void GameInfo::setShieldSecondsByName ( const std::string & character, double se
                 setHeelsShieldSeconds( seconds ) ;
 }
 
-void GameInfo::updateShieldForActiveCharacter ()
-{
-        Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
-        if ( activeRoom != nilPointer ) {
-                const std::string & activeDude = activeRoom->getMediator()->getNameOfActiveCharacter() ;
-                if ( ! activeDude.empty() ) {
-                        double oldSeconds = getShieldSecondsByName( activeDude ) ;
-                        if ( oldSeconds > 0.0 ) {
-                                double newSeconds = oldSeconds - this->shieldDecreaseTimer.getValue() ;
-                                setShieldSecondsByName( activeDude, newSeconds );
-                        }
-                }
-        }
-
-        resetShieldDecreaseTimer() ;
-}
-
 void GameInfo::takeMagicTool ( const std::string & tool )
 {
         if ( tool == "horn" ) this->horn = true ;

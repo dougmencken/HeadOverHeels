@@ -3,11 +3,14 @@
 
 #include "RoomMaker.hpp"
 #include "GameManager.hpp"
+#include "GameMap.hpp"
 #include "DescriptionOfItem.hpp"
 #include "FloorTile.hpp"
 #include "ShadowCaster.hpp"
 #include "Masker.hpp"
 #include "Behavior.hpp"
+#include "Timer.hpp"
+#include "MayNotBePossible.hpp"
 
 #include "sleep.hpp"
 
@@ -18,7 +21,7 @@
 #endif
 
 
-Mediator::Mediator( Room* whichRoom )
+Mediator::Mediator( Room * whichRoom )
         : room( whichRoom )
         , threadRunning( false )
         , needToSortGridItems( false )
@@ -26,6 +29,9 @@ Mediator::Mediator( Room* whichRoom )
         , switchInRoomIsOn( false )
         , currentlyActiveCharacter( nilPointer )
 {
+        if ( whichRoom == nilPointer )
+                throw MayNotBePossible( "can’t be mediator for a nil room" );
+
         pthread_mutex_init( &gridItemsMutex, nilPointer );
         pthread_mutex_init( &freeItemsMutex, nilPointer );
         pthread_mutex_init( &collisionsMutex, nilPointer );
@@ -135,8 +141,6 @@ void Mediator::update()
                 this->room->sortFreeItems() ;
                 this->needToSortFreeItems = false ;
         }
-
-        GameManager::getInstance().getGameInfo().updateShieldForActiveCharacter() ;
 }
 
 void Mediator::beginUpdating ()
@@ -166,15 +170,40 @@ void Mediator::endUpdating ()
 
 void* Mediator::updateFromThread( void* mediatorAsVoid )
 {
+        const double period = 1.0 / GameManager::updatesPerSecond ;
+
         Mediator* mediator = reinterpret_cast< Mediator* >( mediatorAsVoid );
+
+        Timer updateTimer ;
 
         while ( mediator->isThreadRunning() )
         {
+                updateTimer.go() ;
+
                 mediator->update() ;
-                somn::milliSleep( 1000 / GameManager::updatesPerSecond );
+
+                double secondsElapsed = updateTimer.getValue() ;
+                if ( secondsElapsed < period )
+                        somn::microSleep( static_cast< unsigned long >( /* microseconds */ 1.0e6 * ( period - secondsElapsed ) ) );
+
+                mediator->decreaseShieldForActiveCharacter( period );
         }
 
         pthread_exit( nilPointer );
+}
+
+void Mediator::decreaseShieldForActiveCharacter ( double seconds )
+{
+        if ( this->room != GameMap::getInstance().getActiveRoom() ) return ;
+
+        const std::string & activeDude = getNameOfActiveCharacter() ;
+        if ( ! activeDude.empty() ) {
+                double oldSeconds = GameManager::getInstance().getGameInfo().getShieldSecondsByName( activeDude ) ;
+                if ( oldSeconds > 0.0 ) {
+                        double newSeconds = oldSeconds - seconds ;
+                        GameManager::getInstance().getGameInfo().setShieldSecondsByName( activeDude, newSeconds );
+                }
+        }
 }
 
 void Mediator::wantToMaskWithFreeItem( const FreeItem & item )
