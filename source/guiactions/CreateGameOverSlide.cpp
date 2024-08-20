@@ -34,24 +34,24 @@ void gui::CreateGameOverSlide::act ()
         const unsigned int labelsY = screenHeight - ( leading * 3 ) - ( space << 1 ) ;
         const unsigned int resultY = ( screenHeight >> 1 ) - ( screenHeight >> 4 ) - 20 ;
 
-        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
+        LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
         // the score reached by the player
         unsigned int score = this->visitedRooms * 160 + this->liberatedPlanets * 10000 ;
-        Label* scoreLabel = new Label ( languageStrings->getTranslatedTextByAlias( "score" )->getText() + " " + util::number2string( score ),
+        Label* scoreLabel = new Label ( languageStrings.getTranslatedTextByAlias( "score" ).getText() + " " + util::number2string( score ),
                                         new Font( "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         slide.addWidget( scoreLabel );
 
         // the number of the rooms visited
-        std::string exploredRooms = languageStrings->getTranslatedTextByAlias( "explored-rooms" )->getText();
+        std::string exploredRooms = languageStrings.getTranslatedTextByAlias( "explored-rooms" ).getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
         Label* rooms = new Label( exploredRooms, new Font( "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         slide.addWidget( rooms );
 
         // the number of the planets liberated
-        std::string liberatedPlanets = languageStrings->getTranslatedTextByAlias( "liberated-planets" )->getText();
+        std::string liberatedPlanets = languageStrings.getTranslatedTextByAlias( "liberated-planets" ).getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
         Label* planets = new Label( liberatedPlanets, new Font( "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
@@ -64,7 +64,7 @@ void gui::CreateGameOverSlide::act ()
 
         if ( score == 0 ) {
                 TextField* result = new TextField( screenWidth, "center" );
-                result->appendText( "fix the game please", "big", "orange" );
+                result->appendLine( "fix the game please", "big", "orange" );
                 result->moveTo( 0, resultY );
                 slide.addWidget( result );
         }
@@ -78,7 +78,7 @@ void gui::CreateGameOverSlide::act ()
                         if ( score > bounds[ i ] )
                         {
                                 TextField* result = new TextField( screenWidth, "center" );
-                                result->appendText( languageStrings->getTranslatedTextByAlias( ranges[ i ] )->getText(), "big", "multicolor" );
+                                result->appendLine( languageStrings.getTranslatedTextByAlias( ranges[ i ] ).getText(), "big", "multicolor" );
                                 result->moveTo( 0, resultY );
                                 slide.addWidget( result );
 

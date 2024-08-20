@@ -83,6 +83,9 @@ void ShowAuthors::readCreditsText( const std::string & fileName )
                                 this->creditsText->addEmptyLine() ;
                 }
 
+                unsigned int howManyLines = this->creditsText->howManyLinesOfText () ;
+                std::cout << "credits-text has " << howManyLines << " lines" << std::endl ;
+
         #if defined( REGENERATE_CREDITS_FILE ) && REGENERATE_CREDITS_FILE
                 std::string newFileName = fileName + ".new" ;
                 std::string newFilePath = ospaths::pathToFile( ospaths::homePath(), newFileName );
@@ -120,13 +123,7 @@ void ShowAuthors::act ()
                 this->initialY = credits.getImageOfScreen().getHeight() ;
                 this->linesOfCredits->moveTo( this->initialX, this->initialY );
 
-                size_t howManyLines = this->creditsText->howManyLinesOfText () ;
-                std::cout << "credits-text has " << howManyLines << " lines" << std::endl ;
-
-                for ( size_t n = 0; n < howManyLines; ++ n ) {
-                        const LanguageLine & line = this->creditsText->getNthLine( n );
-                        linesOfCredits->appendText( line.getString(), line.isBigHeight(), line.getColor() );
-                }
+                this->linesOfCredits->fillWithLanguageText( * this->creditsText );
 
                 credits.addWidget( this->linesOfCredits );
         }

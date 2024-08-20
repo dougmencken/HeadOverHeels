@@ -28,7 +28,7 @@ void CreateKeysMenu::act ()
                 this->menuOfKeys = new MenuWithValues( '.', 5 );
                 menuOfKeys->setVerticalOffset( 64 );
 
-                LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings();
+                LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings();
 
                 // add menu option for each key
                 std::vector< std::string > userActions ;
@@ -38,7 +38,7 @@ void CreateKeysMenu::act ()
                         const std::string & theAction = userActions[ i ];
                         std::string xmlAction = ( theAction == "take&jump" ) ? "takeandjump" : theAction ;
 
-                        Label* label = new Label( languageStrings->getTranslatedTextByAlias( xmlAction )->getText() );
+                        Label* label = new Label( languageStrings.getTranslatedTextByAlias( xmlAction ).getText() );
 
                         std::string theKey = InputManager::getInstance().getUserKeyFor( theAction );
                         if ( theKey == "none" ) label->getFontToChange().setColor( "cyan" );

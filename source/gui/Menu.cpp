@@ -199,15 +199,12 @@ void Menu::handleKey( const std::string & key )
                 return;
         }
 
-        if ( getActiveOption() != nilPointer )
-        {
-                if ( key == "Up" || key == "q" )
-                        this->previousOption() ;
-                else if ( key == "Down" || key == "a" )
-                        this->nextOption() ;
-                else
-                        activeOption->handleKey( key );
-        }
+        if ( key == "Up" || key == "q" )
+                this->previousOption() ;
+        else if ( key == "Down" || key == "a" )
+                this->nextOption() ;
+        else if ( getActiveOption() != nilPointer )
+                getActiveOption()->handleKey( key );
 }
 
 void Menu::addOption( Label* label )

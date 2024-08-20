@@ -39,7 +39,7 @@ void ShowSlideWithPlanets::act ()
 {
         SoundManager::getInstance().playOgg( "music/HeadOverHeels.ogg", /* loop */ false );
 
-        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
+        LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::toBlackBackground () ; // change the background from red to black
@@ -54,7 +54,7 @@ void ShowSlideWithPlanets::act ()
         // “ El Imperio Blacktooth ”
         std::string colorOfLabel = "yellow" ;
         if ( GameManager::getInstance().isSimpleGraphicsSet () ) colorOfLabel = "red" ;
-        Label* empire = new Label( languageStrings->getTranslatedTextByAlias( "blacktooth-empire" )->getText(),
+        Label* empire = new Label( languageStrings.getTranslatedTextByAlias( "blacktooth-empire" ).getText(),
                                         new Font( colorOfLabel, /* double height */ true ) );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
         empire->setAction( new ContinueGame( this->gameInProgress ) );
@@ -98,7 +98,7 @@ void ShowSlideWithPlanets::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->getTranslatedTextByAlias( "blacktooth" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "blacktooth" ).getText() );
                 nameOfPlanet->moveTo( blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), blacktoothY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -122,7 +122,7 @@ void ShowSlideWithPlanets::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->getTranslatedTextByAlias( "egyptus" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "egyptus" ).getText() );
                 nameOfPlanet->moveTo( egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), egyptusY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -146,7 +146,7 @@ void ShowSlideWithPlanets::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->getTranslatedTextByAlias( "penitentiary" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "penitentiary" ).getText() );
                 nameOfPlanet->moveTo( penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), penitentiaryY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -170,7 +170,7 @@ void ShowSlideWithPlanets::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->getTranslatedTextByAlias( "byblos" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "byblos" ).getText() );
                 nameOfPlanet->moveTo( byblosX + ( imageOfByblos->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), byblosY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }
@@ -194,7 +194,7 @@ void ShowSlideWithPlanets::act ()
                 );
                 planets.addWidget( imageOfChapeau );
 
-                Label* nameOfPlanet = new Label( languageStrings->getTranslatedTextByAlias( "safari" )->getText() );
+                Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "safari" ).getText() );
                 nameOfPlanet->moveTo( safariX + ( imageOfSafari->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), safariY + labelOffsetY );
                 planets.addWidget( nameOfPlanet );
         }

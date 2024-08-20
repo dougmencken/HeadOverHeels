@@ -326,14 +326,14 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         addWidget( Heels );
 
         TextField* JonRitman = new TextField( screenWidth >> 2, "center" ) ;
-        JonRitman->appendText( "Jon", false, "multicolor" );
-        JonRitman->appendText( "Ritman", false, "multicolor" );
+        JonRitman->appendLine( "Jon", false, "multicolor" );
+        JonRitman->appendLine( "Ritman", false, "multicolor" );
         JonRitman->moveTo( Head->getX() - JonRitman->getWidthOfField() - space, space );
         addWidget( JonRitman );
 
         TextField* BernieDrummond = new TextField( screenWidth >> 2, "center" ) ;
-        BernieDrummond->appendText( "Bernie", false, "multicolor" );
-        BernieDrummond->appendText( "Drummond", false, "multicolor" );
+        BernieDrummond->appendLine( "Bernie", false, "multicolor" );
+        BernieDrummond->appendLine( "Drummond", false, "multicolor" );
         BernieDrummond->moveTo( Heels->getX() + Heels->getWidth() + space, space );
         addWidget( BernieDrummond );
 

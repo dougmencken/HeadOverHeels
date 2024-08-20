@@ -21,7 +21,7 @@ namespace gui
 {
 
 /**
- * Reads the strings of text from a language XML file
+ * The strings of text from a language XML file
  */
 
 class LanguageStrings
@@ -29,22 +29,34 @@ class LanguageStrings
 
 public:
 
-        // the backup "fileWithGuaranteedStrings" may have more strings than the "file"
-        LanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings ) ;
+        LanguageStrings( const std::string & file )
+        {
+                makeLanguageStrings( file, file );
+        }
+
+        // "fileWithMoreStrings" has more strings than the "file"
+        LanguageStrings( const std::string & file, const std::string & fileWithMoreStrings )
+        {
+                makeLanguageStrings( file, fileWithMoreStrings );
+        }
 
         ~LanguageStrings( );
 
-        LanguageText * getTranslatedTextByAlias ( const std::string & alias ) const ;
+        const LanguageText & getTranslatedTextByAlias ( const std::string & alias ) ;
 
 private:
 
-        void parse ( const std::string & file, const std::string& fileWithGuaranteedStrings ) ;
+        void makeLanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings ) ;
+
+        void parse ( const std::string & file, const std::string & fileWithGuaranteedStrings ) ;
 
         void parseFile ( const std::string & fileName, std::vector < LanguageText * > & strings ) ;
 
         std::vector< LanguageText * > strings ;
 
         std::vector< LanguageText * > backupStrings ;
+
+        std::vector< LanguageText * > untranslatedStrings ;
 
 };
 

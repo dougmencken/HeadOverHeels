@@ -25,12 +25,12 @@ void CreateOptionsMenu::act ()
         {
                 optionsSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-                LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
+                LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
-                Label* defineKeys = new Label( languageStrings->getTranslatedTextByAlias( "keys-menu" )->getText() );
-                Label* adjustAudio = new Label( languageStrings->getTranslatedTextByAlias( "audio-menu" )->getText() );
-                Label* adjustVideo = new Label( languageStrings->getTranslatedTextByAlias( "video-menu" )->getText() );
-                Label* chooseLanguage = new Label( languageStrings->getTranslatedTextByAlias( "language-menu" )->getText() );
+                Label* defineKeys = new Label( languageStrings.getTranslatedTextByAlias( "keys-menu" ).getText() );
+                Label* adjustAudio = new Label( languageStrings.getTranslatedTextByAlias( "audio-menu" ).getText() );
+                Label* adjustVideo = new Label( languageStrings.getTranslatedTextByAlias( "video-menu" ).getText() );
+                Label* chooseLanguage = new Label( languageStrings.getTranslatedTextByAlias( "language-menu" ).getText() );
 
                 defineKeys->setAction( new CreateKeysMenu() );
                 adjustAudio->setAction( new CreateAudioMenu() );

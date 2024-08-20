@@ -44,6 +44,8 @@ protected:
 
 private:
 
+        void updateOptions () ;
+
         MenuWithValues * audioOptions ;
 
         Label * labelEffects ;

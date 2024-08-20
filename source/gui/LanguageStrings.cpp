@@ -16,7 +16,7 @@
 namespace gui
 {
 
-LanguageStrings::LanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings )
+void LanguageStrings::makeLanguageStrings( const std::string & file, const std::string & fileWithGuaranteedStrings )
 {
         parseFile( file, this->strings );
 
@@ -67,23 +67,30 @@ LanguageStrings::LanguageStrings( const std::string & file, const std::string & 
 LanguageStrings::~LanguageStrings()
 {
         std::for_each( strings.begin(), strings.end(), DeleteIt() );
-        strings.clear();
+        strings.clear() ;
 
         std::for_each( backupStrings.begin(), backupStrings.end(), DeleteIt() );
-        backupStrings.clear();
+        backupStrings.clear() ;
+
+        std::for_each( untranslatedStrings.begin(), untranslatedStrings.end(), DeleteIt() );
+        untranslatedStrings.clear() ;
 }
 
-LanguageText* LanguageStrings::getTranslatedTextByAlias( const std::string & alias ) const
+const LanguageText & LanguageStrings::getTranslatedTextByAlias( const std::string & alias )
 {
         for ( size_t i = 0 ; i < strings.size () ; i ++ )
-                if ( strings[ i ]->getAlias() == alias ) return strings[ i ];
+                if ( strings[ i ]->getAlias() == alias ) return *strings[ i ];
 
         for ( size_t i = 0 ; i < backupStrings.size () ; i ++ )
-                if ( backupStrings[ i ]->getAlias() == alias ) return backupStrings[ i ] ;
+                if ( backupStrings[ i ]->getAlias() == alias ) return *backupStrings[ i ] ;
+
+        for ( size_t i = 0 ; i < untranslatedStrings.size () ; i ++ )
+                if ( untranslatedStrings[ i ]->getAlias() == alias ) return *untranslatedStrings[ i ] ;
 
         LanguageText* untranslated = new LanguageText( alias ) ;
         untranslated->addLine( "(" + alias + ")" );
-        return untranslated ;
+        this->untranslatedStrings.push_back( untranslated );
+        return *untranslated ;
 }
 
 void LanguageStrings::parseFile( const std::string & fileName, std::vector< LanguageText * > & strings )

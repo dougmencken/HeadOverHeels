@@ -25,13 +25,13 @@ void gui::CreateMainMenu::act ()
         {
                 mainMenuSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
-                LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
+                LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
-                Label* newGame = new Label( languageStrings->getTranslatedTextByAlias( "new-game" )->getText() );
-                Label* loadGame = new Label( languageStrings->getTranslatedTextByAlias( "load-old-game" )->getText() );
-                Label* optionsMenu = new Label( languageStrings->getTranslatedTextByAlias( "options-menu" )->getText() );
-                Label* showCredits = new Label( languageStrings->getTranslatedTextByAlias( "show-credits" )->getText() );
-                Label* quitGame = new Label( languageStrings->getTranslatedTextByAlias( "exit-game" )->getText() );
+                Label* newGame = new Label( languageStrings.getTranslatedTextByAlias( "new-game" ).getText() );
+                Label* loadGame = new Label( languageStrings.getTranslatedTextByAlias( "load-old-game" ).getText() );
+                Label* optionsMenu = new Label( languageStrings.getTranslatedTextByAlias( "options-menu" ).getText() );
+                Label* showCredits = new Label( languageStrings.getTranslatedTextByAlias( "show-credits" ).getText() );
+                Label* quitGame = new Label( languageStrings.getTranslatedTextByAlias( "exit-game" ).getText() );
 
                 newGame->setAction( new ShowSlideWithPlanets( false ) );
                 loadGame->setAction( new CreateListOfSavedGames( true ) );

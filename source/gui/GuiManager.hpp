@@ -15,6 +15,7 @@
 #include <map>
 
 #include "Screen.hpp"
+#include "LanguageStrings.hpp"
 
 
 namespace gui
@@ -77,11 +78,26 @@ public:
 
         void setLanguage ( const std::string & language )
         {
-                useLanguage( language );
-                this->chosenLanguage = language ;
+                if ( language != this->chosenLanguage ) {
+                        if ( this->languageStrings != nilPointer ) {
+                                delete this->languageStrings ;
+                                this->languageStrings = nilPointer ;
+                        }
+
+                        this->chosenLanguage = language ;
+                }
         }
 
-        LanguageStrings* getLanguageStrings () const {  return this->languageStrings ;  }
+        LanguageStrings & getOrMakeLanguageStrings ()
+        {
+                if ( this->languageStrings == nilPointer ) {
+                        this->languageStrings = ( ! this->chosenLanguage.empty() )
+                                                        ? new LanguageStrings( this->chosenLanguage + ".xml", "en_US.xml" )
+                                                        : new LanguageStrings( "en_US.xml" ) ;
+                }
+
+                return * this->languageStrings ;
+        }
 
         const ScreenPtr & getActiveSlide () const {  return this->activeSlide ;  }
 
@@ -113,8 +129,6 @@ private:
          * Draw graphics in full screen when true or in a window when false
          */
         bool inFullScreen ;
-
-        void useLanguage ( const std::string & language ) ;
 
 };
 

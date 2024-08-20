@@ -189,30 +189,21 @@ void GameManager::pause ()
         {       // not a key moment, that’s the pause key is typed
                 SoundManager::getInstance().stopEverySound ();
 
-                gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings();
-                gui::LanguageText* text = languageStrings->getTranslatedTextByAlias( "confirm-quit" );
-                int textAtY = ( GamePreferences::getScreenHeight() >> 2 );
+                gui::LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
+
+                int textY = ( GamePreferences::getScreenHeight() >> 2 );
 
                 gui::TextField quitText( GamePreferences::getScreenWidth(), "center" );
-                quitText.moveTo( 0, textAtY );
+                quitText.moveTo( 0, textY );
                 quitText.setInterlignePercentage( 80 );
-                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
-                {
-                        const gui::LanguageLine & line = text->getNthLine( i );
-                        quitText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
-                }
+                quitText.fillWithLanguageText( languageStrings.getTranslatedTextByAlias( "confirm-quit" ) );
 
-                text = languageStrings->getTranslatedTextByAlias( "confirm-resume" );
-                textAtY += quitText.getHeightOfField () + 20 ;
+                textY += quitText.getHeightOfField () + 20 ;
 
                 gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
-                resumeText.moveTo( 0, textAtY );
+                resumeText.moveTo( 0, textY );
                 resumeText.setInterlignePercentage( 80 );
-                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
-                {
-                        const gui::LanguageLine & line = text->getNthLine( i );
-                        resumeText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
-                }
+                resumeText.fillWithLanguageText( languageStrings.getTranslatedTextByAlias( "confirm-resume" ) );
 
                 bool quit = false ;
                 bool resume = false ;
@@ -242,30 +233,21 @@ void GameManager::pause ()
         }
         else if ( getKeyMoments().wasFishEaten() )
         {
-                gui::LanguageStrings* languageStrings = gui::GuiManager::getInstance().getLanguageStrings() ;
-                gui::LanguageText* text = languageStrings->getTranslatedTextByAlias( "save-game" );
-                int textAtY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
+                gui::LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
+
+                int textY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
 
                 gui::TextField ateFishText( GamePreferences::getScreenWidth(), "center" );
-                ateFishText.moveTo( 0, textAtY );
+                ateFishText.moveTo( 0, textY );
                 ateFishText.setInterlignePercentage( 80 );
-                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
-                {
-                        const gui::LanguageLine & line = text->getNthLine( i );
-                        ateFishText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
-                }
+                ateFishText.fillWithLanguageText( languageStrings.getTranslatedTextByAlias( "save-game" ) );
 
-                text = languageStrings->getTranslatedTextByAlias( "confirm-resume" );
-                textAtY += ateFishText.getHeightOfField () + 20 ;
+                textY += ateFishText.getHeightOfField () + 20 ;
 
                 gui::TextField resumeText( GamePreferences::getScreenWidth(), "center" );
-                resumeText.moveTo( 0, textAtY );
+                resumeText.moveTo( 0, textY );
                 resumeText.setInterlignePercentage( 80 );
-                for ( unsigned int i = 0; i < text->howManyLinesOfText (); i ++ )
-                {
-                        const gui::LanguageLine & line = text->getNthLine( i );
-                        resumeText.appendText( line.getString(), line.isBigHeight(), line.getColor() );
-                }
+                resumeText.fillWithLanguageText( languageStrings.getTranslatedTextByAlias( "confirm-resume" ) );
 
                 allegro::emptyKeyboardBuffer();
 

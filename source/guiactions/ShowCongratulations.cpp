@@ -34,17 +34,12 @@ void gui::ShowCongratulations::act ()
         }
 
         // texto final
-        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
-        LanguageText* finalText = languageStrings->getTranslatedTextByAlias( "final-text" );
-        TextField* textField = new TextField( GamePreferences::getScreenWidth(), "center" );
-        textField->moveTo( 0, 180 );
+        LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
+        TextField* finalTextField = new TextField( GamePreferences::getScreenWidth(), "center" );
+        finalTextField->moveTo( 0, 180 );
+        finalTextField->fillWithLanguageText( languageStrings.getTranslatedTextByAlias( "final-text" ) );
 
-        for ( size_t i = 0; i < finalText->howManyLinesOfText(); i ++ ) {
-                const LanguageLine & line = finalText->getNthLine( i );
-                textField->appendText( line.getString(), line.isBigHeight(), line.getColor() );
-        }
-
-        theFinSlide.addWidget( textField );
+        theFinSlide.addWidget( finalTextField );
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }

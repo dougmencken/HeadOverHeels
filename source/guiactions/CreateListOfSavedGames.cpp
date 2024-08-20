@@ -34,7 +34,7 @@ void CreateListOfSavedGames::act ()
 
         savedGamesSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-        LanguageStrings* languageStrings = GuiManager::getInstance().getLanguageStrings() ;
+        LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
         // list of games
         Menu* menu = new Menu( );
@@ -46,10 +46,13 @@ void CreateListOfSavedGames::act ()
 
                 if ( gameInfo.howManyRoomsVisited () >= 2 ) // less than 2 rooms means "couldn't read"
                 {
-                        std::ostringstream ss;
-                        ss << gameInfo.howManyRoomsVisited () << " " << languageStrings->getTranslatedTextByAlias( "rooms" )->getText() << " "
-                                << gameInfo.howManyPlanetsLiberated () << " " << languageStrings->getTranslatedTextByAlias( "planets" )->getText() ;
-                        Label* label = new Label( ss.str() );
+                        Label* label = new Label (
+                                util::number2string( gameInfo.howManyRoomsVisited () ) + " "
+                                        + languageStrings.getTranslatedTextByAlias( "rooms" ).getText()
+                                + " "
+                                + util::number2string( gameInfo.howManyPlanetsLiberated () ) + " "
+                                        + languageStrings.getTranslatedTextByAlias( "planets" ).getText()
+                        );
 
                         if ( isLoadMenu() )
                                 label->setAction( new LoadGame( slot ) );
@@ -65,9 +68,7 @@ void CreateListOfSavedGames::act ()
                         std::cout << "slot \"" << file << "\" is free" << std::endl ;
                 # endif
 
-                        std::ostringstream ss;
-                        ss << languageStrings->getTranslatedTextByAlias( "free-slot" )->getText ();
-                        Label* freeLine = new Label( ss.str() );
+                        Label* freeLine = new Label( languageStrings.getTranslatedTextByAlias( "free-slot" ).getText() );
                         if ( isLoadMenu() ) {
                                 freeLine->getFontToChange().setColor( "cyan" );
                                 freeLine->setAction( new PlaySound( "mistake" ) );

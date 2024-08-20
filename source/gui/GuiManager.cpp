@@ -1,7 +1,6 @@
 
 #include "GuiManager.hpp"
 
-#include "LanguageStrings.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 #include "Color.hpp"
@@ -183,19 +182,6 @@ void GuiManager::toggleFullScreenVideo ()
                 else
                         allegro::switchToWindowedVideo();
         }
-}
-
-/* private */
-void GuiManager::useLanguage( const std::string & language )
-{
-        if ( this->languageStrings != nilPointer ) {
-                delete this->languageStrings ;
-                this->languageStrings = nilPointer ;
-        }
-
-        fprintf( stdout, "using language \"%s\"\n", language.c_str () );
-
-        this->languageStrings = new LanguageStrings( language + ".xml", "en_US.xml" );
 }
 
 }

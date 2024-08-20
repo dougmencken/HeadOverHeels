@@ -64,7 +64,7 @@ void RedefineKey::act ()
 
                                                 // update menu
                                                 std::string toLook = ( previousAction == "take&jump" ) ? "takeandjump" : previousAction ;
-                                                std::string textOfThatKey = GuiManager::getInstance().getLanguageStrings()->getTranslatedTextByAlias( toLook )->getText();
+                                                const std::string & textOfThatKey = GuiManager::getInstance().getOrMakeLanguageStrings().getTranslatedTextByAlias( toLook ).getText();
 
                                                 const std::vector < Label * > & allOptions = menu->getEveryOption ();
                                                 for ( unsigned int o = 0 ; o < allOptions.size() ; ++ o )

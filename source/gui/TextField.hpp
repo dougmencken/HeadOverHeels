@@ -23,6 +23,7 @@ namespace gui
 {
 
 class Label ;
+class LanguageText ;
 
 
 /**
@@ -48,11 +49,13 @@ public:
 
         virtual ~TextField( ) ;
 
+        void fillWithLanguageText ( const gui::LanguageText & text ) ;
+
         virtual void draw () ;
 
         void handleKey ( const std::string& /* key */ ) { /* do nothing */ }
 
-        void appendText ( const std::string & text, bool height2x, const std::string & color ) ;
+        void appendLine ( const std::string & text, bool height2x, const std::string & color ) ;
 
         virtual void moveTo ( int x, int y ) {  Widget::moveTo( x, y ) ; updatePositions () ;  }
 

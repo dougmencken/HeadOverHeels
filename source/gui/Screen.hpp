@@ -50,7 +50,7 @@ public:
 
         void drawOnGlobalScreen () ;
 
-        void handleKey ( const std::string& key ) ;
+        void handleKey ( const std::string & key ) ;
 
         void addWidget( Widget* widget ) ;
 

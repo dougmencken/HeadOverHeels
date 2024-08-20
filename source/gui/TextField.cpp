@@ -4,6 +4,7 @@
 #include "Font.hpp"
 #include "Label.hpp"
 #include "ColorCyclingLabel.hpp"
+#include "LanguageText.hpp"
 
 #include <algorithm> // std::for_each
 
@@ -15,6 +16,16 @@ TextField::~TextField()
 {
         std::for_each( this->lines.begin (), this->lines.end (), DeleteIt() );
         this->lines.clear();
+}
+
+void TextField::fillWithLanguageText ( const gui::LanguageText & text )
+{
+        unsigned int soManyLines = text.howManyLinesOfText ();
+        for ( unsigned int i = 0 ; i < soManyLines ; ++ i )
+        {
+                const gui::LanguageLine & line = text.getNthLine( i );
+                appendLine( line.getString(), line.isBigHeight(), line.getColor() );
+        }
 }
 
 void TextField::draw ()
@@ -30,7 +41,7 @@ void TextField::draw ()
         }
 }
 
-void TextField::appendText( const std::string & text, bool height2x, const std::string & color )
+void TextField::appendLine( const std::string & text, bool height2x, const std::string & color )
 {
         bool multicolor = ( color == "multicolor" ) ;
         bool colorcycling = ( color == "cycling" ) ;
