@@ -55,7 +55,8 @@ namespace gui
 Screen::Screen() :
         Widget( 0, 0 ),
         imageOfScreen( new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) ),
-        noTransition( false ),
+        noTransitionFrom( false ),
+        noTransitionTo( false ),
         drawSpectrumColors( false ),
         escapeAction( nilPointer ),
         keyHandler( nilPointer ),

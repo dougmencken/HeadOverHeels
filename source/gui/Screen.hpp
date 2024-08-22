@@ -81,8 +81,11 @@ public:
 
         void drawSpectrumColorBoxes( bool draw ) {  this->drawSpectrumColors = draw ;  }
 
-        bool isTransitionOff () const {  return this->noTransition ;  }
-        void setTransitionOff ( bool transitionOff = true ) {  this->noTransition = transitionOff ;  }
+        bool isTransitionFromThisSlideOff () const {  return this->noTransitionFrom ;  }
+        void setTransitionFromThisSlideOff () {  this->noTransitionFrom = true ;  }
+
+        bool isTransitionToThisSlideOff () const {  return this->noTransitionTo ;  }
+        void setTransitionToThisSlideOff () {  this->noTransitionTo = true ;  }
 
         Action * getEscapeAction () const {  return this->escapeAction ;  }
 
@@ -121,7 +124,8 @@ private:
          */
         std::vector < Widget * > widgets ;
 
-        bool noTransition ;
+        bool noTransitionFrom ;
+        bool noTransitionTo ;
 
         bool drawSpectrumColors ;
 

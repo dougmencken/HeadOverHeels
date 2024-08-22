@@ -199,7 +199,7 @@ void ShowSlideWithPlanets::act ()
                 planets.addWidget( nameOfPlanet );
         }
 
-        planets.setTransitionOff() ; // no transition because after this slide the game begins
+        planets.setTransitionFromThisSlideOff() ; // no transition because after this slide the game begins
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
 

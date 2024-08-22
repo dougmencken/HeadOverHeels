@@ -53,7 +53,7 @@ void gui::CreateAudioMenu::act ()
 
         allegro::emptyKeyboardBuffer();
 
-        while ( true )
+        while ( ! slideWithAudioMenu.getEscapeAction()->hasBegun() )
         {
                 if ( allegro::areKeypushesWaiting() )
                 {

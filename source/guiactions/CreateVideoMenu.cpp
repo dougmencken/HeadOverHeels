@@ -119,11 +119,11 @@ void gui::CreateVideoMenu::act ()
 
                                 updateOptions ();
                         }
-
-                        // no te comas la CPU
-                        // do not eat the CPU
-                        somn::milliSleep( 25 );
                 }
+
+                // no te comas la CPU
+                // do not eat the CPU
+                somn::milliSleep( 25 );
         }
 }
 

@@ -101,7 +101,7 @@ public:
 
         const ScreenPtr & getActiveSlide () const {  return this->activeSlide ;  }
 
-        void setActiveSlide ( ScreenPtr newSlide ) {  this->activeSlide = newSlide ;  }
+        void setActiveSlide ( const ScreenPtr & newSlide ) {  this->activeSlide = newSlide ;  }
 
         unsigned int countSlides () const {  return this->slides.size() ;  }
 

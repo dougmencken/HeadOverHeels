@@ -105,14 +105,18 @@ void GuiManager::changeSlide( const std::string & newAction, bool dive )
 {
         std::map< std::string, ScreenPtr >::const_iterator inewslide = this->slides.find( newAction );
         if ( inewslide != this->slides.end () && inewslide->second != nilPointer ) {
-                if ( this->activeSlide != nilPointer ) {
-                        if ( ! this->activeSlide->isTransitionOff() )
-                                Screen::barWipeHorizontally( * this->activeSlide, * inewslide->second, dive );
+                const ScreenPtr & newSlide = inewslide->second ;
+                const ScreenPtr & oldSlide = getActiveSlide () ;
+
+                // show transition effect between slides
+                if ( oldSlide != nilPointer ) {
+                        if ( ! oldSlide->isTransitionFromThisSlideOff() && ! newSlide->isTransitionToThisSlideOff() )
+                                Screen::barWipeHorizontally( * oldSlide, * newSlide, dive );
                 } else
                         // this is the first slide ever shown
-                        Screen::randomPixelFadeIn( Color::blackColor(), * inewslide->second );
+                        Screen::randomPixelFadeIn( Color::blackColor(), * newSlide );
 
-                setActiveSlide( inewslide->second );
+                setActiveSlide( newSlide );
                 redraw() ;
         }
         else {

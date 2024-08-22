@@ -19,13 +19,13 @@ void gui::CreateGameOverSlide::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::refreshBackground () ; // get the background back
 
-        Screen & slide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
-        if ( ! slide.isNewAndEmpty() )
-                slide.freeWidgets();
+        Screen & gameOverSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        if ( ! gameOverSlide.isNewAndEmpty() )
+                gameOverSlide.freeWidgets();
         else
-                slide.setEscapeAction( new CreateMainMenu() );
+                gameOverSlide.setEscapeAction( new CreateMainMenu() );
 
-        slide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
+        gameOverSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
         const unsigned int leading = 40 ;
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
@@ -41,21 +41,21 @@ void gui::CreateGameOverSlide::act ()
         Label* scoreLabel = new Label ( languageStrings.getTranslatedTextByAlias( "score" ).getText() + " " + util::number2string( score ),
                                         new Font( "yellow" ) );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
-        slide.addWidget( scoreLabel );
+        gameOverSlide.addWidget( scoreLabel );
 
         // the number of the rooms visited
         std::string exploredRooms = languageStrings.getTranslatedTextByAlias( "explored-rooms" ).getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
         Label* rooms = new Label( exploredRooms, new Font( "cyan" ) );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
-        slide.addWidget( rooms );
+        gameOverSlide.addWidget( rooms );
 
         // the number of the planets liberated
         std::string liberatedPlanets = languageStrings.getTranslatedTextByAlias( "liberated-planets" ).getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
         Label* planets = new Label( liberatedPlanets, new Font( "white" ) );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
-        slide.addWidget( planets );
+        gameOverSlide.addWidget( planets );
 
         std::cout << "game over with score " << score
                         << " for " << this->visitedRooms << " visited rooms"
@@ -66,7 +66,7 @@ void gui::CreateGameOverSlide::act ()
                 TextField* result = new TextField( screenWidth, "center" );
                 result->appendLine( "fix the game please", "big", "orange" );
                 result->moveTo( 0, resultY );
-                slide.addWidget( result );
+                gameOverSlide.addWidget( result );
         }
         else {
                 // the range reached by the player
@@ -80,16 +80,18 @@ void gui::CreateGameOverSlide::act ()
                                 TextField* result = new TextField( screenWidth, "center" );
                                 result->appendLine( languageStrings.getTranslatedTextByAlias( ranges[ i ] ).getText(), "big", "multicolor" );
                                 result->moveTo( 0, resultY );
-                                slide.addWidget( result );
+                                gameOverSlide.addWidget( result );
 
                                 break;
                         }
                 }
         }
 
-        scoreLabel->setAction( slide.getEscapeAction () );
-        slide.setKeyHandler( scoreLabel );
+        scoreLabel->setAction( gameOverSlide.getEscapeAction () );
+        gameOverSlide.setKeyHandler( scoreLabel );
 
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
+
+        gameOverSlide.setTransitionToThisSlideOff() ;
         GuiManager::getInstance().changeSlide( getNameOfAction(), false );
 }
