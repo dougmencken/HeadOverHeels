@@ -6,7 +6,7 @@
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
 #include "LanguageStrings.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
 #include "CreateOptionsMenu.hpp"
@@ -16,7 +16,7 @@
 
 void gui::CreateVideoMenu::act ()
 {
-        Screen & slideWithVideoMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & slideWithVideoMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideWithVideoMenu.isNewAndEmpty() )
         {

@@ -9,7 +9,7 @@
 #include "SoundManager.hpp"
 
 #include "Font.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "Label.hpp"
 #include "PictureWidget.hpp"
 #include "LanguageText.hpp"
@@ -111,7 +111,7 @@ void ShowAuthors::act ()
 {
         SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Screen & credits = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & credits = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( credits.isNewAndEmpty() )
         {
@@ -120,7 +120,7 @@ void ShowAuthors::act ()
                 this->linesOfCredits = new TextField( GamePreferences::getScreenWidth(), "center" );
 
                 this->initialX = this->linesOfCredits->getX() ;
-                this->initialY = credits.getImageOfScreen().getHeight() ;
+                this->initialY = credits.getImageOfSlide().getHeight() ;
                 this->linesOfCredits->moveTo( this->initialX, this->initialY );
 
                 this->linesOfCredits->fillWithLanguageText( * this->creditsText );
@@ -137,8 +137,8 @@ void ShowAuthors::act ()
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 
-        const unsigned int widthOfSlide = credits.getImageOfScreen().getWidth() ;
-        const unsigned int heightOfSlide = credits.getImageOfScreen().getHeight() ;
+        const unsigned int widthOfSlide = credits.getImageOfSlide().getWidth() ;
+        const unsigned int heightOfSlide = credits.getImageOfSlide().getHeight() ;
 
         const unsigned int heightOfCredits = ( ( this->linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
         const unsigned int verticalSpace = ( heightOfSlide * 3 ) >> 2;

@@ -5,7 +5,7 @@
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
 #include "GamePreferences.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "PictureWidget.hpp"
 #include "TextField.hpp"
 #include "CreateGameOverSlide.hpp"
@@ -15,7 +15,7 @@
 
 void gui::ShowCongratulations::act ()
 {
-        Screen & theFinSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & theFinSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( theFinSlide.isNewAndEmpty() )
                 theFinSlide.setEscapeAction( new CreateGameOverSlide( rooms, planets ) );

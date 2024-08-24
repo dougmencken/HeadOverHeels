@@ -90,7 +90,7 @@
         <file name="gui/Menu.cpp" />
         <file name="gui/MenuWithValues.cpp" />
         <file name="gui/MenuWithTwoColumns.cpp" />
-        <file name="gui/Screen.cpp" />
+        <file name="gui/Slide.cpp" />
         <file name="gui/TextField.cpp" />
         <file name="guiactions/ChooseLanguage.cpp" />
         <file name="guiactions/ContinueGame.cpp" />

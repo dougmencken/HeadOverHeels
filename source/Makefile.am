@@ -213,8 +213,8 @@ headoverheels_SOURCES = main.cpp \
 			gui/MenuWithValues.hpp \
 			gui/MenuWithTwoColumns.cpp \
 			gui/MenuWithTwoColumns.hpp \
-			gui/Screen.cpp \
-			gui/Screen.hpp \
+			gui/Slide.cpp \
+			gui/Slide.hpp \
 			gui/TextField.cpp \
 			gui/TextField.hpp \
 			guiactions/Action.hpp \

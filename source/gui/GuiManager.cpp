@@ -103,18 +103,18 @@ void GuiManager::loop ()
 
 void GuiManager::changeSlide( const std::string & newAction, bool dive )
 {
-        std::map< std::string, ScreenPtr >::const_iterator inewslide = this->slides.find( newAction );
+        std::map< std::string, SlidePtr >::const_iterator inewslide = this->slides.find( newAction );
         if ( inewslide != this->slides.end () && inewslide->second != nilPointer ) {
-                const ScreenPtr & newSlide = inewslide->second ;
-                const ScreenPtr & oldSlide = getActiveSlide () ;
+                const SlidePtr & newSlide = inewslide->second ;
+                const SlidePtr & oldSlide = getActiveSlide () ;
 
                 // show transition effect between slides
                 if ( oldSlide != nilPointer ) {
                         if ( ! oldSlide->isTransitionFromThisSlideOff() && ! newSlide->isTransitionToThisSlideOff() )
-                                Screen::barWipeHorizontally( * oldSlide, * newSlide, dive );
+                                Slide::barWipeHorizontally( * oldSlide, * newSlide, dive );
                 } else
                         // this is the first slide ever shown
-                        Screen::randomPixelFadeIn( Color::blackColor(), * newSlide );
+                        Slide::randomPixelFadeIn( Color::blackColor(), * newSlide );
 
                 setActiveSlide( newSlide );
                 redraw() ;
@@ -125,12 +125,12 @@ void GuiManager::changeSlide( const std::string & newAction, bool dive )
         }
 }
 
-ScreenPtr GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAction )
+SlidePtr GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAction )
 {
         if ( this->slides.find( nameOfAction ) == this->slides.end () ) {
                 std::cout << "making a new slide for action \" " << nameOfAction << " \"" << std::endl ;
 
-                this->slides[ nameOfAction ] = ScreenPtr( new Screen() );
+                this->slides[ nameOfAction ] = SlidePtr( new Slide() );
 
                 if ( this->slides[ nameOfAction ] == nilPointer )
                         throw MayNotBePossible( "can't make a slide for action \" " + nameOfAction + " \"" ) ;
@@ -142,17 +142,17 @@ ScreenPtr GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAct
 void GuiManager::freeSlides ()
 {
         this->slides.clear() ;
-        setActiveSlide( /* null */ ScreenPtr() );
+        setActiveSlide( /* null */ SlidePtr() );
 }
 
 void GuiManager::refreshSlides ()
 {
-        for (  std::map< std::string, ScreenPtr >::iterator it = this->slides.begin (); it != this->slides.end (); ++ it ) {
+        for (  std::map< std::string, SlidePtr >::iterator it = this->slides.begin (); it != this->slides.end (); ++ it ) {
                 if ( it->second != nilPointer )
                         it->second->refreshPicturesOfHeadAndHeels () ;
         }
 
-        Screen::refreshBackground () ;
+        Slide::refreshBackground () ;
 }
 
 void GuiManager::redraw() const

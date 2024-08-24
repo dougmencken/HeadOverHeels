@@ -14,7 +14,7 @@
 #include <string>
 #include <map>
 
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "LanguageStrings.hpp"
 
 
@@ -52,7 +52,7 @@ public:
          * Find among all the slides the one that is associated with this action.
          * And if there’s no such slide, create a new one
          */
-        ScreenPtr findOrCreateSlideForAction ( const std::string & nameOfAction ) ;
+        SlidePtr findOrCreateSlideForAction ( const std::string & nameOfAction ) ;
 
         void freeSlides () ;
 
@@ -99,9 +99,9 @@ public:
                 return * this->languageStrings ;
         }
 
-        const ScreenPtr & getActiveSlide () const {  return this->activeSlide ;  }
+        const SlidePtr & getActiveSlide () const {  return this->activeSlide ;  }
 
-        void setActiveSlide ( const ScreenPtr & newSlide ) {  this->activeSlide = newSlide ;  }
+        void setActiveSlide ( const SlidePtr & newSlide ) {  this->activeSlide = newSlide ;  }
 
         unsigned int countSlides () const {  return this->slides.size() ;  }
 
@@ -113,9 +113,9 @@ private:
         static GuiManager * instance ;
 
         // the slide that is currently being drawn
-        ScreenPtr activeSlide ;
+        SlidePtr activeSlide ;
 
-        std::map < /* name of action */ std::string, ScreenPtr > slides ;
+        std::map < /* name of action */ std::string, SlidePtr > slides ;
 
         // a language of the user interface in the LLL_CC format
         std::string chosenLanguage ;

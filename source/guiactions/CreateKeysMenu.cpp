@@ -6,7 +6,7 @@
 #include "RedefineKey.hpp"
 #include "Font.hpp"
 #include "Label.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "MenuWithValues.hpp"
 #include "CreateOptionsMenu.hpp"
 #include "LanguageStrings.hpp"
@@ -17,7 +17,7 @@ namespace gui
 
 void CreateKeysMenu::act ()
 {
-        Screen & gameKeysSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & gameKeysSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( gameKeysSlide.isNewAndEmpty() )
         {

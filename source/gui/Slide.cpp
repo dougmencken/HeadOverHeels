@@ -1,5 +1,5 @@
 
-#include "Screen.hpp"
+#include "Slide.hpp"
 
 #include "Menu.hpp"
 #include "GuiManager.hpp"
@@ -25,36 +25,36 @@ const float delayBetweenFrames = 0.1 ;
 namespace gui
 {
 
-/* static */ Picture * Screen::backgroundPicture = nilPointer ;
+/* static */ Picture * Slide::backgroundPicture = nilPointer ;
 
-/* static */ void Screen::refreshBackground ()
+/* static */ void Slide::refreshBackground ()
 {
         std::cout << "refreshing the background for user interface slides" << std::endl ;
 
-        delete Screen::backgroundPicture ;
+        delete Slide::backgroundPicture ;
 
         const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
-        Screen::backgroundPicture = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background.png" ) );
+        Slide::backgroundPicture = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background.png" ) );
 
-        if ( Screen::backgroundPicture == nilPointer ) // not found
+        if ( Slide::backgroundPicture == nilPointer ) // not found
         {       // don't crash, just present the red one like in the original game
-                Screen::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::byName( "red" ) ) ;
+                Slide::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::byName( "red" ) ) ;
                 std::cout << "there’s no \"background.png\" but I made the red background for you dear" << std::endl ;
         }
 
-        Screen::backgroundPicture->setName( "the background for user interface slides" );
+        Slide::backgroundPicture->setName( "the background for user interface slides" );
 }
 
-/* static */ void Screen::toBlackBackground ()
+/* static */ void Slide::toBlackBackground ()
 {
-        delete Screen::backgroundPicture ;
-        Screen::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::blackColor() ) ;
-        Screen::backgroundPicture->setName( "the black background for user interface slides" );
+        delete Slide::backgroundPicture ;
+        Slide::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::blackColor() ) ;
+        Slide::backgroundPicture->setName( "the black background for user interface slides" );
 }
 
-Screen::Screen() :
+Slide::Slide() :
         Widget( 0, 0 ),
-        imageOfScreen( new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) ),
+        imageOfSlide( new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) ),
         noTransitionFrom( false ),
         noTransitionTo( false ),
         drawSpectrumColors( false ),
@@ -63,17 +63,17 @@ Screen::Screen() :
         pictureOfHead( nilPointer ),
         pictureOfHeels( nilPointer )
 {
-        if ( Screen::backgroundPicture == nilPointer ) Screen::refreshBackground () ;
+        if ( Slide::backgroundPicture == nilPointer ) Slide::refreshBackground () ;
 
         refreshPicturesOfHeadAndHeels ();
 }
 
-Screen::~Screen( )
+Slide::~Slide( )
 {
         freeWidgets() ;
 }
 
-void Screen::addPictureOfHeadAt ( int x, int y )
+void Slide::addPictureOfHeadAt ( int x, int y )
 {
         if ( this->pictureOfHead == nilPointer ) {
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
@@ -88,7 +88,7 @@ void Screen::addPictureOfHeadAt ( int x, int y )
         addWidget( this->pictureOfHead );
 }
 
-void Screen::addPictureOfHeelsAt ( int x, int y )
+void Slide::addPictureOfHeelsAt ( int x, int y )
 {
         if ( this->pictureOfHeels == nilPointer ) {
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
@@ -103,7 +103,7 @@ void Screen::addPictureOfHeelsAt ( int x, int y )
         addWidget( this->pictureOfHeels );
 }
 
-void Screen::refreshPicturesOfHeadAndHeels ()
+void Slide::refreshPicturesOfHeadAndHeels ()
 {
         if ( this->pictureOfHead != nilPointer )
         {
@@ -134,29 +134,29 @@ void Screen::refreshPicturesOfHeadAndHeels ()
         }
 }
 
-void Screen::draw ()
+void Slide::draw ()
 {
         refresh ();
         drawOnGlobalScreen( );
 }
 
-void Screen::refresh () const
+void Slide::refresh () const
 {
-        if ( imageOfScreen == nilPointer ) return ; // nothing to refresh
+        if ( imageOfSlide == nilPointer ) return ; // nothing to refresh
 
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
-        allegro::Pict::setWhereToDraw( imageOfScreen->getAllegroPict() );
+        allegro::Pict::setWhereToDraw( imageOfSlide->getAllegroPict() );
 
-        imageOfScreen->fillWithColor( Color::byName( "red" ) ); // the red background is so red
+        imageOfSlide->fillWithColor( Color::byName( "red" ) ); // the red background is so red
 
         // draw background
 
-        if ( Screen::backgroundPicture == nilPointer )
-                Screen::refreshBackground ();
+        if ( Slide::backgroundPicture == nilPointer )
+                Slide::refreshBackground ();
 
-        if ( Screen::backgroundPicture == nilPointer )
+        if ( Slide::backgroundPicture == nilPointer )
                 // it's impossible
-                throw MayNotBePossible( "Screen::backgroundPicture is nil after Screen::refreshBackground()" ) ;
+                throw MayNotBePossible( "Slide::backgroundPicture is nil after Slide::refreshBackground()" ) ;
 
         unsigned int backgroundWidth = backgroundPicture->getWidth();
         unsigned int backgroundHeight = backgroundPicture->getHeight();
@@ -181,7 +181,7 @@ void Screen::refresh () const
                         unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
                         unsigned int offsetX = ( GamePreferences::getScreenWidth() - proportionalWidth ) >> 1;
 
-                        imageOfScreen->fillWithColor( Color::blackColor() );
+                        imageOfSlide->fillWithColor( Color::blackColor() );
 
                         allegro::stretchBlit( backgroundPicture->getAllegroPict(),
                                         0, 0, backgroundWidth, backgroundHeight,
@@ -192,7 +192,7 @@ void Screen::refresh () const
                         unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
                         unsigned int offsetY = ( GamePreferences::getScreenHeight() - proportionalHeight ) >> 1;
 
-                        imageOfScreen->fillWithColor( Color::blackColor() );
+                        imageOfSlide->fillWithColor( Color::blackColor() );
 
                         allegro::stretchBlit( backgroundPicture->getAllegroPict(),
                                         0, 0, backgroundWidth, backgroundHeight,
@@ -201,7 +201,7 @@ void Screen::refresh () const
         }
 
         if ( drawSpectrumColors /* || GameManager::getInstance().isSimpleGraphicsSet() */ )
-                Screen::draw2x8colors( *this ) ;
+                Slide::draw2x8colors( *this ) ;
 
         // draw each component
         for ( std::vector< Widget * >::const_iterator wi = widgets.begin () ; wi != widgets.end () ; ++ wi )
@@ -210,14 +210,14 @@ void Screen::refresh () const
         allegro::Pict::setWhereToDraw( previousWhere );
 }
 
-void Screen::drawOnGlobalScreen( )
+void Slide::drawOnGlobalScreen( )
 {
-        allegro::bitBlit( imageOfScreen->getAllegroPict(), allegro::Pict::theScreen() );
+        allegro::bitBlit( imageOfSlide->getAllegroPict(), allegro::Pict::theScreen() );
         allegro::update ();
 }
 
 /* static */
-void Screen::draw2x8colors ( const Screen & slide )
+void Slide::draw2x8colors ( const Slide & where )
 {
         static const size_t howManyColors = 8 ;
         static const std::string colors[ howManyColors ] =
@@ -225,29 +225,29 @@ void Screen::draw2x8colors ( const Screen & slide )
 
         const unsigned int sizeOfSquare = 8 ;
 
-        const unsigned int colorsX = slide.getImageOfScreen().getWidth () - ( howManyColors * sizeOfSquare );
-        const unsigned int colorsY = slide.getImageOfScreen().getHeight() - ( 2 * sizeOfSquare );
+        const unsigned int colorsX = where.getImageOfSlide().getWidth () - ( howManyColors * sizeOfSquare );
+        const unsigned int colorsY = where.getImageOfSlide().getHeight() - ( 2 * sizeOfSquare );
 
         for ( size_t i = 0 ; i < howManyColors ; ++ i )
         {
-                allegro::fillRect( slide.getImageOfScreen().getAllegroPict (),
+                allegro::fillRect( where.getImageOfSlide().getAllegroPict (),
                                    colorsX + ( i * sizeOfSquare ), colorsY + sizeOfSquare,
                                    colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare + sizeOfSquare - 1,
                                    Color::byName( colors[ i ] ).toAllegroColor () );
 
-                allegro::fillRect( slide.getImageOfScreen().getAllegroPict (),
+                allegro::fillRect( where.getImageOfSlide().getAllegroPict (),
                                    colorsX + ( i * sizeOfSquare ), colorsY,
                                    colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare - 1,
                                    Color::byName( "reduced " + colors[ i ] ).toAllegroColor () );
 
-                /* allegro::fillRect( slide.getImageOfScreen().getAllegroPict (),
+                /* allegro::fillRect( where.getImageOfSlide().getAllegroPict (),
                                    colorsX + ( i * sizeOfSquare ), colorsY + ( sizeOfSquare << 1 ),
                                    colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + ( sizeOfSquare << 1 ) + sizeOfSquare - 1,
                                    Color::byName( "light " + colors[ i ] ).toAllegroColor () ); */
         }
 }
 
-void Screen::handleKey( const std::string & key )
+void Slide::handleKey( const std::string & key )
 {
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) ) {
                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
@@ -262,7 +262,7 @@ void Screen::handleKey( const std::string & key )
                 this->keyHandler->handleKey( key );
 }
 
-void Screen::addWidget( Widget* widget )
+void Slide::addWidget( Widget* widget )
 {
         if ( widget == nilPointer ) return ;
 
@@ -270,7 +270,7 @@ void Screen::addWidget( Widget* widget )
         widget->setContainingSlide( this );
 }
 
-bool Screen::removeWidget( Widget* widget )
+bool Slide::removeWidget( Widget* widget )
 {
         for ( std::vector< Widget* >::const_iterator it = widgets.begin (); it != widgets.end (); )
         {
@@ -286,7 +286,7 @@ bool Screen::removeWidget( Widget* widget )
         return false ;
 }
 
-void Screen::freeWidgets ()
+void Slide::freeWidgets ()
 {
         if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide() )
                 delete pictureOfHead;
@@ -305,7 +305,7 @@ void Screen::freeWidgets ()
         this->pictureOfHeels = nilPointer ;
 }
 
-void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
+void Slide::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 {
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
@@ -366,18 +366,18 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 }
 
 /* static */
-void Screen::scrollHorizontally( const Screen& oldScreen, const Screen& newScreen, bool rightToLeft )
+void Slide::scrollHorizontally( const Slide & oldSlide, const Slide & newSlide, bool rightToLeft )
 {
-        if ( &oldScreen == &newScreen ||
-                oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
+        if ( &oldSlide == &newSlide ||
+                oldSlide.imageOfSlide == nilPointer || newSlide.imageOfSlide == nilPointer ) return ;
 
-        Picture buffer( * oldScreen.imageOfScreen );
+        Picture buffer( * oldSlide.imageOfSlide );
 
         autouniqueptr < Timer > drawTimer( new Timer() );
         drawTimer->go ();
 
-        newScreen.refresh ();
-        Picture& newPicture = * newScreen.imageOfScreen ;
+        newSlide.refresh ();
+        Picture& newPicture = * newSlide.imageOfSlide ;
 
         unsigned int step = ( ( ( GamePreferences::getScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
@@ -387,7 +387,7 @@ void Screen::scrollHorizontally( const Screen& oldScreen, const Screen& newScree
 
                 if ( rightToLeft )
                         allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
-                                                0, 0, oldScreen.imageOfScreen->getWidth() - x, 0, x, GamePreferences::getScreenHeight() );
+                                                0, 0, oldSlide.imageOfSlide->getWidth() - x, 0, x, GamePreferences::getScreenHeight() );
                 else
                         allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
                                                 newPicture.getWidth() - x, 0, 0, 0, x, GamePreferences::getScreenHeight() );
@@ -404,18 +404,18 @@ void Screen::scrollHorizontally( const Screen& oldScreen, const Screen& newScree
 }
 
 /* static */
-void Screen::wipeHorizontally( const Screen& oldScreen, const Screen& newScreen, bool rightToLeft )
+void Slide::wipeHorizontally( const Slide & oldSlide, const Slide & newSlide, bool rightToLeft )
 {
-        if ( &oldScreen == &newScreen ||
-                oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
+        if ( &oldSlide == &newSlide ||
+                oldSlide.imageOfSlide == nilPointer || newSlide.imageOfSlide == nilPointer ) return ;
 
-        Picture buffer( * oldScreen.imageOfScreen );
+        Picture buffer( * oldSlide.imageOfSlide );
 
         autouniqueptr < Timer > drawTimer( new Timer() );
         drawTimer->go ();
 
-        newScreen.refresh ();
-        Picture& newPicture = * newScreen.imageOfScreen ;
+        newSlide.refresh ();
+        Picture& newPicture = * newSlide.imageOfSlide ;
 
         unsigned int step = ( ( ( GamePreferences::getScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
@@ -440,18 +440,18 @@ void Screen::wipeHorizontally( const Screen& oldScreen, const Screen& newScreen,
 }
 
 /* static */
-void Screen::barWipeHorizontally( const Screen& oldScreen, const Screen& newScreen, bool rightToLeft )
+void Slide::barWipeHorizontally( const Slide & oldSlide, const Slide & newSlide, bool rightToLeft )
 {
-        if ( &oldScreen == &newScreen ||
-                oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
+        if ( &oldSlide == &newSlide ||
+                oldSlide.imageOfSlide == nilPointer || newSlide.imageOfSlide == nilPointer ) return ;
 
-        Picture buffer( * oldScreen.imageOfScreen );
+        Picture buffer( * oldSlide.imageOfSlide );
 
         autouniqueptr < Timer > drawTimer( new Timer() );
         drawTimer->go ();
 
-        newScreen.refresh ();
-        Picture& newPicture = * newScreen.imageOfScreen ;
+        newSlide.refresh ();
+        Picture& newPicture = * newSlide.imageOfSlide ;
 
         unsigned int pieces = GamePreferences::getScreenWidth() >> 6 ;
         unsigned int widthOfPiece = GamePreferences::getScreenWidth() / pieces ;
@@ -482,11 +482,11 @@ void Screen::barWipeHorizontally( const Screen& oldScreen, const Screen& newScre
 }
 
 /* static */
-void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& color )
+void Slide::randomPixelFade( bool fadeIn, const Slide & slide, const Color & color )
 {
-        if ( slide.imageOfScreen == nilPointer ) return;
+        if ( slide.imageOfSlide == nilPointer ) return;
 
-        // refresh screen before fading
+        // refresh the slide before fading
         slide.refresh();
 
         AllegroColor aColor = color.toAllegroColor() ;
@@ -497,8 +497,8 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
                 allegro::update();
         }
 
-        const unsigned int screenWidth = slide.imageOfScreen->getWidth() ;
-        const unsigned int screenHeight = slide.imageOfScreen->getHeight() ;
+        const unsigned int screenWidth = slide.imageOfSlide->getWidth() ;
+        const unsigned int screenHeight = slide.imageOfSlide->getHeight() ;
 
         const unsigned int howManyPixels = screenWidth * screenHeight ;
         const unsigned int chunk = ( howManyPixels >> 9 ) - 1 ;
@@ -525,7 +525,7 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
                 if ( ! bits[ x + y * screenWidth ] )
                 {
                         if ( fadeIn )
-                                buffer.getAllegroPict().drawPixelAt( x, y, slide.imageOfScreen->getPixelAt( x, y ) );
+                                buffer.getAllegroPict().drawPixelAt( x, y, slide.imageOfSlide->getPixelAt( x, y ) );
                         else
                                 buffer.getAllegroPict().drawPixelAt( x, y, aColor );
 

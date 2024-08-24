@@ -3,7 +3,7 @@
 
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "Menu.hpp"
 #include "Label.hpp"
 #include "CreateVideoMenu.hpp"
@@ -37,7 +37,7 @@ void CreateMenuOfGraphicsSets::act ()
 {
         const size_t positionOfSecondColumn = 18;
 
-        Screen & slideOfGraphicsSets = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & slideOfGraphicsSets = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideOfGraphicsSets.isNewAndEmpty() )
         {

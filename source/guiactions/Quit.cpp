@@ -5,7 +5,7 @@
 
 #include "GuiManager.hpp"
 #include "GamePreferences.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "Color.hpp"
 
 
@@ -15,5 +15,5 @@ void gui::Quit::bye ()
 
         GuiManager::getInstance().exit() ;
 
-        Screen::randomPixelFadeOut( * GuiManager::getInstance().getActiveSlide(), Color::blackColor() );
+        Slide::randomPixelFadeOut( * GuiManager::getInstance().getActiveSlide(), Color::blackColor() );
 }

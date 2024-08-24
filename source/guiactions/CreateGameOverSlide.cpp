@@ -7,7 +7,7 @@
 #include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
 #include "Font.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "Menu.hpp"
 #include "Label.hpp"
 #include "TextField.hpp"
@@ -17,9 +17,9 @@
 void gui::CreateGameOverSlide::act ()
 {
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
-                Screen::refreshBackground () ; // get the background back
+                Slide::refreshBackground () ; // get the background back
 
-        Screen & gameOverSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & gameOverSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
         if ( ! gameOverSlide.isNewAndEmpty() )
                 gameOverSlide.freeWidgets();
         else

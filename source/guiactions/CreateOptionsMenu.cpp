@@ -5,7 +5,7 @@
 #include "LanguageStrings.hpp"
 #include "Label.hpp"
 #include "Menu.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 
 #include "CreateKeysMenu.hpp"
 #include "CreateAudioMenu.hpp"
@@ -19,7 +19,7 @@ namespace gui
 
 void CreateOptionsMenu::act ()
 {
-        Screen & optionsSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & optionsSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( optionsSlide.isNewAndEmpty() )
         {

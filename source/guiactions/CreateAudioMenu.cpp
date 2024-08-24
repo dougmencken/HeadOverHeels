@@ -5,7 +5,7 @@
 #include "GameManager.hpp"
 #include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
 #include "CreateOptionsMenu.hpp"
@@ -17,7 +17,7 @@ void gui::CreateAudioMenu::act ()
 {
         LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
-        Screen & slideWithAudioMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & slideWithAudioMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideWithAudioMenu.isNewAndEmpty() ) {
                 slideWithAudioMenu.setEscapeAction( new CreateOptionsMenu() );

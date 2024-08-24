@@ -4,7 +4,7 @@
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
 #include "Font.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "MenuWithTwoColumns.hpp"
 #include "Label.hpp"
 #include "ChooseLanguage.hpp"
@@ -32,7 +32,7 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::act ()
 {
-        Screen & languagesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & languagesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( ! languagesSlide.isNewAndEmpty() ) languagesSlide.freeWidgets ();
 

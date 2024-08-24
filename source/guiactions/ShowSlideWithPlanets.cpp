@@ -7,7 +7,7 @@
 #include "GuiManager.hpp"
 #include "GamePreferences.hpp"
 #include "Color.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
@@ -42,9 +42,9 @@ void ShowSlideWithPlanets::act ()
         LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
-                Screen::toBlackBackground () ; // change the background from red to black
+                Slide::toBlackBackground () ; // change the background from red to black
 
-        Screen & planets = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & planets = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( ! planets.isNewAndEmpty() ) planets.freeWidgets() ;
 

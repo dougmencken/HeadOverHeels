@@ -6,7 +6,7 @@
 #include "LanguageStrings.hpp"
 #include "Label.hpp"
 #include "Menu.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 
 #include "ShowSlideWithPlanets.hpp"
 #include "CreateListOfSavedGames.hpp"
@@ -19,7 +19,7 @@ void gui::CreateMainMenu::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen & mainMenuSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & mainMenuSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( mainMenuSlide.isNewAndEmpty() )
         {

@@ -25,7 +25,7 @@
 namespace gui
 {
 
-class Screen ;
+class Slide ;
 
 
 /**
@@ -48,8 +48,8 @@ public:
 
         virtual void moveTo ( int x, int y ) {  setX( x ); setY( y );  }
 
-        Screen * getContainingSlide () const {  return this->onWhatSlide ;  }
-        void setContainingSlide( Screen * theSlide ) {  this->onWhatSlide = theSlide ;  }
+        Slide * getContainingSlide () const {  return this->onWhatSlide ;  }
+        void setContainingSlide( Slide * theSlide ) {  this->onWhatSlide = theSlide ;  }
 
         bool isOnSomeSlide() const {  return this->onWhatSlide != nilPointer ;  }
 
@@ -64,7 +64,7 @@ private:
         int whereX ;
         int whereY ;
 
-        Screen* onWhatSlide ;
+        Slide* onWhatSlide ;
 
 };
 

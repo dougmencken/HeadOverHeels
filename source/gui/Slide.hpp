@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Screen_hpp_
-#define Screen_hpp_
+#ifndef Slide_hpp_
+#define Slide_hpp_
 
 #include "pointers.hpp"
 
@@ -35,14 +35,14 @@ class AnimatedPictureWidget ;
  * A container for user interface elements
  */
 
-class Screen : public Widget
+class Slide : public Widget
 {
 
 public:
 
-        Screen( ) ;
+        Slide( ) ;
 
-        virtual ~Screen( ) ;
+        virtual ~Slide( ) ;
 
         void draw () ;
 
@@ -77,7 +77,7 @@ public:
 
         void refreshPicturesOfHeadAndHeels () ;
 
-        const Picture & getImageOfScreen () const {  return * this->imageOfScreen ;  }
+        const Picture & getImageOfSlide () const {  return * this->imageOfSlide ;  }
 
         void drawSpectrumColorBoxes( bool draw ) {  this->drawSpectrumColors = draw ;  }
 
@@ -100,27 +100,27 @@ public:
 
         KeyHandler * getKeyHandler () const {  return this->keyHandler ;  }
 
-        static void scrollHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
+        static void scrollHorizontally ( const Slide & oldSlide, const Slide & newSlide, bool rightToLeft ) ;
 
-        static void wipeHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
+        static void wipeHorizontally ( const Slide & oldSlide, const Slide & newSlide, bool rightToLeft ) ;
 
-        static void barWipeHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
+        static void barWipeHorizontally ( const Slide & oldSlide, const Slide & newSlide, bool rightToLeft ) ;
 
-        static void randomPixelFadeIn( const Color & fadeFrom, const Screen & screen ) {  randomPixelFade( true, screen, fadeFrom ) ;  }
+        static void randomPixelFadeIn( const Color & fadeFrom, const Slide & toSlide ) {  randomPixelFade( true, toSlide, fadeFrom ) ;  }
 
-        static void randomPixelFadeOut( const Screen & screen, const Color & fadeTo ) {  randomPixelFade( false, screen, fadeTo ) ;  }
+        static void randomPixelFadeOut( const Slide & fromSlide, const Color & fadeTo ) {  randomPixelFade( false, fromSlide, fadeTo ) ;  }
 
-        static void draw2x8colors ( const Screen & slide ) ;
+        static void draw2x8colors ( const Slide & where ) ;
 
 private:
 
         /**
-         * Image of this screen
+         * Image of this slide
          */
-        PicturePtr imageOfScreen ;
+        PicturePtr imageOfSlide ;
 
         /**
-         * What to draw on this screen
+         * What to draw on this slide
          */
         std::vector < Widget * > widgets ;
 
@@ -137,7 +137,7 @@ private:
 
         AnimatedPictureWidget * pictureOfHeels ;
 
-        static void randomPixelFade( bool fadeIn, const Screen & slide, const Color & color ) ;
+        static void randomPixelFade( bool fadeIn, const Slide & slide, const Color & color ) ;
 
 protected:
 
@@ -145,7 +145,7 @@ protected:
 
 };
 
-typedef multiptr < Screen > ScreenPtr ;
+typedef multiptr < Slide > SlidePtr ;
 
 }
 

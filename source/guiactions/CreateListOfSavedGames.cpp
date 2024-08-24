@@ -4,7 +4,7 @@
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
 #include "Font.hpp"
-#include "Screen.hpp"
+#include "Slide.hpp"
 #include "Menu.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
@@ -25,7 +25,7 @@ namespace gui
 
 void CreateListOfSavedGames::act ()
 {
-        Screen & savedGamesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & savedGamesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( ! savedGamesSlide.isNewAndEmpty () ) savedGamesSlide.freeWidgets() ;
 
