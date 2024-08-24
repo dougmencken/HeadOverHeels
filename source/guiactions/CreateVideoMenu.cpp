@@ -18,9 +18,12 @@ void gui::CreateVideoMenu::act ()
 {
         Slide & slideWithVideoMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( slideWithVideoMenu.isNewAndEmpty() )
-        {
+        if ( slideWithVideoMenu.isNewAndEmpty() ) {
+                slideWithVideoMenu.setEscapeAction( new CreateOptionsMenu() );
+
                 slideWithVideoMenu.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+
+                slideWithVideoMenu.drawSpectrumColorBoxes( true );
 
                 LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
@@ -57,74 +60,49 @@ void gui::CreateVideoMenu::act ()
 
         updateOptions ();
 
-        slideWithVideoMenu.setEscapeAction( new CreateOptionsMenu() );
-
-        if ( slideWithVideoMenu.getKeyHandler() == nilPointer )
-                slideWithVideoMenu.setKeyHandler( this->videoOptions );
-
-        slideWithVideoMenu.drawSpectrumColorBoxes( true );
+        slideWithVideoMenu.setKeyHandler( this );
 
         gui::GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+}
 
-        allegro::emptyKeyboardBuffer();
+void gui::CreateVideoMenu::handleKey ( const std::string & theKey )
+{
+        bool doneWithKey = false ;
 
-        while ( ! slideWithVideoMenu.getEscapeAction()->hasBegun() )
+        if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
         {
-                if ( allegro::areKeypushesWaiting() )
+                if ( videoOptions->getActiveOption () == fullScreen )
                 {
-                        // get the key typed by the user
-                        std::string theKey = allegro::nextKey() ;
-
-                        if ( theKey == "Escape" )
-                        {
-                                allegro::emptyKeyboardBuffer();
-                                slideWithVideoMenu.handleKey( theKey );
-                                break;
-                        }
-                        else
-                        {
-                                bool doneWithKey = false;
-
-                                if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
-                                {
-                                        if ( videoOptions->getActiveOption () == fullScreen )
-                                        {
-                                                gui::GuiManager::getInstance().toggleFullScreenVideo ();
-                                                doneWithKey = true;
-                                        }
-                                        else if ( videoOptions->getActiveOption () == drawShadows )
-                                        {
-                                                GameManager::getInstance().toggleCastShadows ();
-                                                doneWithKey = true;
-                                        }
-                                        else if ( videoOptions->getActiveOption () == drawSceneryDecor )
-                                        {
-                                                GameManager::getInstance().toggleSceneryDecor ();
-                                                doneWithKey = true;
-                                        }
-                                        else if ( videoOptions->getActiveOption () == drawRoomMiniatures )
-                                        {
-                                                GameManager::getInstance().toggleRoomMiniatures ();
-                                                doneWithKey = true;
-                                        }
-                                        else if ( videoOptions->getActiveOption () == centerCameraOn )
-                                        {
-                                                GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
-                                                doneWithKey = true;
-                                        }
-                                }
-
-                                if ( ! doneWithKey )
-                                        slideWithVideoMenu.handleKey( theKey );
-
-                                updateOptions ();
-                        }
+                        gui::GuiManager::getInstance().toggleFullScreenVideo ();
+                        doneWithKey = true ;
                 }
-
-                // no te comas la CPU
-                // do not eat the CPU
-                somn::milliSleep( 25 );
+                else if ( videoOptions->getActiveOption () == drawShadows )
+                {
+                        GameManager::getInstance().toggleCastShadows ();
+                        doneWithKey = true ;
+                }
+                else if ( videoOptions->getActiveOption () == drawSceneryDecor )
+                {
+                        GameManager::getInstance().toggleSceneryDecor ();
+                        doneWithKey = true ;
+                }
+                else if ( videoOptions->getActiveOption () == drawRoomMiniatures )
+                {
+                        GameManager::getInstance().toggleRoomMiniatures ();
+                        doneWithKey = true ;
+                }
+                else if ( videoOptions->getActiveOption () == centerCameraOn )
+                {
+                        GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
+                        doneWithKey = true ;
+                }
         }
+
+        if ( doneWithKey ) {
+                allegro::releaseKey( theKey );
+                updateOptions ();
+        } else
+                this->videoOptions->handleKey( theKey ) ;
 }
 
 void gui::CreateVideoMenu::updateOptions ()

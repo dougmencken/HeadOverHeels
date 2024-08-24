@@ -11,7 +11,7 @@
 #ifndef CreateMenuOfGraphicsSets_hpp_
 #define CreateMenuOfGraphicsSets_hpp_
 
-#include "Action.hpp"
+#include "ActionWithHandlingKeys.hpp"
 
 #include <map>
 
@@ -25,7 +25,7 @@ class Menu;
  * Create menu with list of graphic sets
  */
 
-class CreateMenuOfGraphicsSets : public Action
+class CreateMenuOfGraphicsSets : public ActionWithHandlingKeys
 {
 
 public:
@@ -36,6 +36,8 @@ public:
         explicit CreateMenuOfGraphicsSets( Action * previous ) ;
 
         virtual ~CreateMenuOfGraphicsSets( ) ;
+
+        virtual void handleKey ( const std::string & key ) ;
 
 protected:
 
@@ -51,6 +53,8 @@ private:
         Menu * menuOfGraphicsSets ;
 
         std::map < std::string, std::string > setsOfGraphics ;
+
+        static const unsigned int firstLetterOfSetNames  = 18 ;
 
 };
 

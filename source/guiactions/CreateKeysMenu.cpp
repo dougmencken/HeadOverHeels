@@ -12,10 +12,7 @@
 #include "LanguageStrings.hpp"
 
 
-namespace gui
-{
-
-void CreateKeysMenu::act ()
+void gui::CreateKeysMenu::act ()
 {
         Slide & gameKeysSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
@@ -50,12 +47,12 @@ void CreateKeysMenu::act ()
                 }
 
                 gameKeysSlide.addWidget( menuOfKeys );
-                gameKeysSlide.setKeyHandler( menuOfKeys );
         }
-        else    // select the first menu option
-                menuOfKeys->resetActiveOption();
+
+        // select the first menu option
+        menuOfKeys->resetActiveOption() ;
+
+        gameKeysSlide.setKeyHandler( menuOfKeys );
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
-}
-
 }

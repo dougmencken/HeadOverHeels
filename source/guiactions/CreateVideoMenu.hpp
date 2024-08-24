@@ -11,7 +11,7 @@
 #ifndef CreateVideoMenu_hpp_
 #define CreateVideoMenu_hpp_
 
-#include "Action.hpp"
+#include "ActionWithHandlingKeys.hpp"
 
 
 namespace gui
@@ -25,13 +25,13 @@ class Label ;
  * Create menu for adjusting video & graphics
  */
 
-class CreateVideoMenu : public Action
+class CreateVideoMenu : public ActionWithHandlingKeys
 {
 
 public:
 
         CreateVideoMenu( )
-                : Action( )
+                : ActionWithHandlingKeys( )
                 , videoOptions ( nilPointer )
                 , screenSize ( nilPointer )
                 , fullScreen ( nilPointer )
@@ -42,6 +42,8 @@ public:
                 , chooseGraphics ( nilPointer ) {}
 
         virtual ~CreateVideoMenu( ) {}
+
+        virtual void handleKey ( const std::string & key ) ;
 
 protected:
 

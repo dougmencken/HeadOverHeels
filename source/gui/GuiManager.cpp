@@ -97,7 +97,9 @@ void GuiManager::loop ()
                 if ( allegro::areKeypushesWaiting() )
                         this->activeSlide->handleKey( allegro::nextKey() );
 
-                somn::milliSleep( 30 );
+                // no te comas la CPU
+                // do not eat the CPU
+                somn::milliSleep( 25 );
         }
 }
 
@@ -117,6 +119,8 @@ void GuiManager::changeSlide( const std::string & newAction, bool dive )
                         Slide::randomPixelFadeIn( Color::blackColor(), * newSlide );
 
                 setActiveSlide( newSlide );
+
+                allegro::emptyKeyboardBuffer() ;
                 redraw() ;
         }
         else {

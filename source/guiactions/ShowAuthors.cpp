@@ -233,20 +233,13 @@ void ShowAuthors::act ()
                 GuiManager::getInstance().redraw ();
 
                 if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
-                {
                         gui::GuiManager::getInstance().toggleFullScreenVideo ();
-                }
-
-                if ( ! allegro::isKeyPushed( "Space" ) && ! allegro::isKeyPushed( "b" ) )
-                {
-                        somn::milliSleep( 20 );
-                }
 
                 if ( allegro::isKeyPushed( "Escape" ) )
-                {
-                        allegro::emptyKeyboardBuffer();
                         credits.handleKey( "Escape" );
-                }
+
+                if ( ! allegro::isKeyPushed( "Space" ) && ! allegro::isKeyPushed( "b" ) )
+                        somn::milliSleep( 20 );
         }
 
         if ( widgetForLoadingScreen != nilPointer )

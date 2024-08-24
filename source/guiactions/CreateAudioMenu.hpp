@@ -11,7 +11,7 @@
 #ifndef CreateAudioMenu_hpp_
 #define CreateAudioMenu_hpp_
 
-#include "Action.hpp"
+#include "ActionWithHandlingKeys.hpp"
 
 
 namespace gui
@@ -24,19 +24,21 @@ class Label ;
  * Create menu for adjusting music and sound effects
  */
 
-class CreateAudioMenu : public Action
+class CreateAudioMenu : public ActionWithHandlingKeys
 {
 
 public:
 
         CreateAudioMenu( )
-                : Action( )
+                : ActionWithHandlingKeys( )
                 , audioOptions( nilPointer )
                 , labelEffects( nilPointer )
                 , labelMusic( nilPointer )
                 , playRoomTunes( nilPointer ) {}
 
         virtual ~CreateAudioMenu( ) {}
+
+        virtual void handleKey ( const std::string & key ) ;
 
 protected:
 
