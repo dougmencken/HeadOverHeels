@@ -25,12 +25,14 @@ public:
         /**
          * @param inProgress false for a completely new game
          */
-        explicit ContinueGame( bool inProgress ) ;
+        explicit ContinueGame( bool inProgress )
+                : Action( )
+                , gameInProgress( inProgress ) {}
 
 protected:
 
         /**
-         * Begin the game
+         * continue or begin the game
          */
         virtual void act () ;
 

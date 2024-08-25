@@ -19,6 +19,11 @@
 #include "Color.hpp"
 #include "PoolOfPictures.hpp"
 
+#include "CreateGameOverSlide.hpp"
+#include "CreateListOfSavedGames.hpp"
+#include "ShowCongratulations.hpp"
+#include "ShowSlideWithPlanets.hpp"
+
 #include "util.hpp"
 #include "ospaths.hpp"
 #include "sleep.hpp"
@@ -167,6 +172,40 @@ void GameManager::update ()
                         }
                 }
         }
+
+        // there’s a key moment in the game
+        this->keyMoment ();
+}
+
+void GameManager::keyMoment ()
+{
+        if ( getKeyMoments().wasCrownTaken () ) {
+                // when some planet is liberated, show the slide with planets
+                gui::ShowSlideWithPlanets * planetsAction = new gui::ShowSlideWithPlanets( true );
+                planetsAction->doIt ();
+        }
+        else if ( getKeyMoments().isSavingGame () )
+        {
+                // show the save game screen
+                gui::CreateListOfSavedGames * listOfGamesAction = new gui::CreateListOfSavedGames( false );
+                listOfGamesAction->doIt ();
+        }
+        else if ( getKeyMoments().isGameOver () || getKeyMoments().arrivedInFreedomNotWithAllCrowns () )
+        {
+                gui::CreateGameOverSlide * gameOverScoreAction =
+                        new gui::CreateGameOverSlide ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );
+
+                gameOverScoreAction->doIt ();
+        }
+        else if ( getKeyMoments().isFinalSuccess () )
+        {
+                gui::ShowCongratulations * congratulationsAction =
+                        new gui::ShowCongratulations ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );
+
+                congratulationsAction->doIt ();
+        }
+        else
+                this->pause ();
 }
 
 void GameManager::pause ()
@@ -185,7 +224,7 @@ void GameManager::pause ()
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-        if ( ! this->keyMoments.isThereAny() )
+        if ( ! getKeyMoments().isThereAny() )
         {       // not a key moment, that’s the pause key is typed
                 SoundManager::getInstance().stopEverySound ();
 

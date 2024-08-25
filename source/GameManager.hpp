@@ -147,6 +147,8 @@ private:
          */
         void update () ;
 
+        void keyMoment () ;
+
         void refreshAmbianceImages () ;
 
         void refreshSceneryBackgrounds () ;
