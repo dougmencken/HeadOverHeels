@@ -98,6 +98,7 @@
         <file name="guiactions/SaveGame.cpp" />
         <file name="guiactions/CreateAudioMenu.cpp" />
         <file name="guiactions/CreateVideoMenu.cpp" />
+        <file name="guiactions/CreateGraphicsAreaSizeMenu.cpp" />
         <file name="guiactions/CreateMenuOfGraphicsSets.cpp" />
         <file name="guiactions/CreateGameOverSlide.cpp" />
         <file name="guiactions/CreateListOfSavedGames.cpp" />

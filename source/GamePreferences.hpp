@@ -34,27 +34,33 @@ public:
 
         static void setScreenWidth( unsigned int width )
         {
-                if ( width < Smallest_Screen_Width )
-                        width = Smallest_Screen_Width ;
+                if ( GamePreferences::isWidthKept () ) {
+                        GamePreferences::keepThisWidth( false );
+                        return ;
+                }
 
-                screenWidth = width;
+                if ( width < GamePreferences::Smallest_Screen_Width )
+                        width = GamePreferences::Smallest_Screen_Width ;
+
+                GamePreferences::screenWidth = width ;
         }
 
         static void setScreenHeight( unsigned int height )
         {
-                if ( height < Smallest_Screen_Height )
-                        height = Smallest_Screen_Height ;
+                if ( GamePreferences::isHeightKept () ) {
+                        GamePreferences::keepThisHeight( false );
+                        return ;
+                }
 
-                screenHeight = height;
+                if ( height < GamePreferences::Smallest_Screen_Height )
+                        height = GamePreferences::Smallest_Screen_Height ;
+
+                GamePreferences::screenHeight = height ;
         }
 
-        static void keepThisWidth ( bool keep ) {  keepWidth = keep ;  }
+        static void keepThisWidth ( bool keep = true ) {  GamePreferences::keepWidth = keep ;  }
 
-        static void keepThisHeight ( bool keep ) {  keepHeight = keep ;  }
-
-        static bool isWidthKept () {  return keepWidth ;  }
-
-        static bool isHeightKept () {  return keepHeight ;  }
+        static void keepThisHeight ( bool keep = true ) {  GamePreferences::keepHeight = keep ;  }
 
         /* constants */
 
@@ -65,6 +71,10 @@ public:
         static const unsigned int  Default_Screen_Height = Smallest_Screen_Height ;
 
 private:
+
+        static bool isWidthKept () {  return GamePreferences::keepWidth ;  }
+
+        static bool isHeightKept () {  return GamePreferences::keepHeight ;  }
 
         /* variables */
 

@@ -232,6 +232,8 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/CreateAudioMenu.hpp \
 			guiactions/CreateVideoMenu.hpp \
 			guiactions/CreateVideoMenu.cpp \
+			guiactions/CreateGraphicsAreaSizeMenu.hpp \
+			guiactions/CreateGraphicsAreaSizeMenu.cpp \
 			guiactions/CreateMenuOfGraphicsSets.hpp \
 			guiactions/CreateMenuOfGraphicsSets.cpp \
 			guiactions/CreateGameOverSlide.cpp \

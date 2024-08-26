@@ -106,21 +106,11 @@ bool GamePreferences::readPreferences( const std::string & fileName )
         {
                 tinyxml2::XMLElement* width = video->FirstChildElement( "width" ) ;
                 if ( width != nilPointer )
-                {
-                        if ( GamePreferences::isWidthKept () )
-                                GamePreferences::keepThisWidth( false );
-                        else
-                                GamePreferences::setScreenWidth( std::atoi( width->FirstChild()->ToText()->Value() ) ) ;
-                }
+                        GamePreferences::setScreenWidth( std::atoi( width->FirstChild()->ToText()->Value() ) ) ;
 
                 tinyxml2::XMLElement* height = video->FirstChildElement( "height" ) ;
                 if ( height != nilPointer )
-                {
-                        if ( GamePreferences::isHeightKept () )
-                                GamePreferences::keepThisHeight( false );
-                        else
-                                GamePreferences::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
-                }
+                        GamePreferences::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
 
                 bool inFullScreen = false ;
                 tinyxml2::XMLElement* fullscreen = video->FirstChildElement( "fullscreen" ) ;

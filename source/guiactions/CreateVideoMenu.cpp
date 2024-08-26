@@ -1,6 +1,7 @@
 
 #include "CreateVideoMenu.hpp"
 
+#include "CreateGraphicsAreaSizeMenu.hpp"
 #include "CreateMenuOfGraphicsSets.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
@@ -32,6 +33,7 @@ void gui::CreateVideoMenu::act ()
                                                 + util::number2string( GamePreferences::getScreenHeight() );
                 this->screenSize = new Label( languageStrings.getTranslatedTextByAlias( "screen-size" ).getText() + " " + widtHxHeight );
                 this->screenSize->getFontToChange().setColor( "cyan" );
+                this->screenSize->setAction( new CreateGraphicsAreaSizeMenu( this ) );
 
                 this->fullScreen = new Label( languageStrings.getTranslatedTextByAlias( "full-screen" ).getText() );
                 this->drawShadows = new Label( languageStrings.getTranslatedTextByAlias( "draw-shadows" ).getText() );
