@@ -17,7 +17,7 @@
 
 void gui::CreateVideoMenu::act ()
 {
-        Slide & slideWithVideoMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & slideWithVideoMenu = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideWithVideoMenu.isNewAndEmpty() ) {
                 slideWithVideoMenu.setEscapeAction( new CreateOptionsMenu() );

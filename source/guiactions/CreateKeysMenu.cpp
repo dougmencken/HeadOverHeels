@@ -14,7 +14,7 @@
 
 void gui::CreateKeysMenu::act ()
 {
-        Slide & gameKeysSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & gameKeysSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( gameKeysSlide.isNewAndEmpty() )
         {

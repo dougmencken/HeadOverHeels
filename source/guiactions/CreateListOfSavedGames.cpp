@@ -25,7 +25,7 @@ namespace gui
 
 void CreateListOfSavedGames::act ()
 {
-        Slide & savedGamesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & savedGamesSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( ! savedGamesSlide.isNewAndEmpty () ) savedGamesSlide.freeWidgets() ;
 

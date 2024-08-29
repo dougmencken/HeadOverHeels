@@ -19,7 +19,7 @@ void gui::CreateMainMenu::act ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Slide & mainMenuSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & mainMenuSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( mainMenuSlide.isNewAndEmpty() )
         {

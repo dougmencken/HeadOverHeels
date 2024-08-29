@@ -17,7 +17,7 @@ void gui::CreateAudioMenu::act ()
 {
         LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
-        Slide & slideWithAudioMenu = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & slideWithAudioMenu = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideWithAudioMenu.isNewAndEmpty() ) {
                 slideWithAudioMenu.setEscapeAction( new CreateOptionsMenu() );

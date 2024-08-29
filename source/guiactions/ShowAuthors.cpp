@@ -111,7 +111,7 @@ void ShowAuthors::act ()
 {
         SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Slide & credits = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & credits = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( credits.isNewAndEmpty() )
         {

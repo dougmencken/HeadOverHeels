@@ -90,12 +90,15 @@ void GuiManager::loop ()
 {
         while ( this->looping )
         {
-                // draw an active slide
-                this->activeSlide->draw ();
+                if ( this->activeSlide != nilPointer ) {
+                        // draw an active slide
+                        this->activeSlide->draw ();
 
-                // handle keys
-                if ( allegro::areKeypushesWaiting() )
-                        this->activeSlide->handleKey( allegro::nextKey() );
+                        // handle keys
+                        if ( allegro::areKeypushesWaiting() )
+                                this->activeSlide->handleKey( allegro::nextKey() );
+                }
+                else throw MayNotBePossible( "there’s no active slide" ) ;
 
                 // no te comas la CPU
                 // do not eat the CPU
@@ -129,7 +132,7 @@ void GuiManager::changeSlide( const std::string & newAction, bool dive )
         }
 }
 
-SlidePtr GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAction )
+Slide & GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAction )
 {
         if ( this->slides.find( nameOfAction ) == this->slides.end () ) {
                 std::cout << "making a new slide for action \" " << nameOfAction << " \"" << std::endl ;
@@ -140,12 +143,15 @@ SlidePtr GuiManager::findOrCreateSlideForAction ( const std::string & nameOfActi
                         throw MayNotBePossible( "can't make a slide for action \" " + nameOfAction + " \"" ) ;
         }
 
-        return this->slides[ nameOfAction ];
+        return * this->slides[ nameOfAction ];
 }
 
 void GuiManager::freeSlides ()
 {
         this->slides.clear() ;
+
+        std::cout << "all previously created slides were freed" << std::endl ;
+
         setActiveSlide( /* null */ SlidePtr() );
 }
 

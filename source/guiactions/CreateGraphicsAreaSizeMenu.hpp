@@ -43,6 +43,10 @@ protected:
 
 private:
 
+        void fillSlide ( Slide & slideToFill ) ;
+
+        void updateOptions () ;
+
         Menu * menuOfScreenSizes ;
 
         Action * actionOnEscape ;

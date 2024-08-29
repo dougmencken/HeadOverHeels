@@ -44,7 +44,7 @@ void ShowSlideWithPlanets::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Slide::toBlackBackground () ; // change the background from red to black
 
-        Slide & planets = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & planets = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( ! planets.isNewAndEmpty() ) planets.freeWidgets() ;
 

@@ -15,7 +15,7 @@
 
 void gui::ShowCongratulations::act ()
 {
-        Slide & theFinSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & theFinSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( theFinSlide.isNewAndEmpty() )
                 theFinSlide.setEscapeAction( new CreateGameOverSlide( rooms, planets ) );

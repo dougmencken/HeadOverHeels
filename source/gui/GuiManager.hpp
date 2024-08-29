@@ -46,13 +46,13 @@ public:
          */
         void loop () ;
 
-        void changeSlide ( const std::string & newAction, bool dive /* it becomes rightToLeft for barWipeHorizontally */ ) ;
+        void changeSlide ( const std::string & newAction, bool dive /* it becomes rightToLeft for barWipeHorizontally */ = false ) ;
 
         /**
          * Find among all the slides the one that is associated with this action.
          * And if there’s no such slide, create a new one
          */
-        SlidePtr findOrCreateSlideForAction ( const std::string & nameOfAction ) ;
+        Slide & findOrCreateSlideForAction ( const std::string & nameOfAction ) ;
 
         void freeSlides () ;
 
@@ -101,11 +101,11 @@ public:
 
         const SlidePtr & getActiveSlide () const {  return this->activeSlide ;  }
 
-        void setActiveSlide ( const SlidePtr & newSlide ) {  this->activeSlide = newSlide ;  }
-
         unsigned int countSlides () const {  return this->slides.size() ;  }
 
 private:
+
+        void setActiveSlide ( const SlidePtr & newSlide ) {  this->activeSlide = newSlide ;  }
 
         /**
          * Unique object of this class for the whole game

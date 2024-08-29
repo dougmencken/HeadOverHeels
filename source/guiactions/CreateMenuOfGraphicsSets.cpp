@@ -35,7 +35,7 @@ CreateMenuOfGraphicsSets::~CreateMenuOfGraphicsSets( )
 
 void CreateMenuOfGraphicsSets::act ()
 {
-        Slide & slideOfGraphicsSets = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & slideOfGraphicsSets = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideOfGraphicsSets.isNewAndEmpty() )
         {

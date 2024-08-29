@@ -19,7 +19,7 @@ void gui::CreateGameOverSlide::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Slide::refreshBackground () ; // get the background back
 
-        Slide & gameOverSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & gameOverSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
         if ( ! gameOverSlide.isNewAndEmpty() )
                 gameOverSlide.freeWidgets();
         else

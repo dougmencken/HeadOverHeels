@@ -19,7 +19,7 @@ namespace gui
 
 void CreateOptionsMenu::act ()
 {
-        Slide & optionsSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & optionsSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( optionsSlide.isNewAndEmpty() )
         {

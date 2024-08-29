@@ -32,7 +32,7 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::act ()
 {
-        Slide & languagesSlide = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & languagesSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( ! languagesSlide.isNewAndEmpty() ) languagesSlide.freeWidgets ();
 

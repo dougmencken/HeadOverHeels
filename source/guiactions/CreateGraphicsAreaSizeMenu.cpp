@@ -13,6 +13,38 @@
 /* public */ /* static */
 std::vector< std::pair< unsigned int, unsigned int > > gui::CreateGraphicsAreaSizeMenu::popularScreenSizes ;
 
+void gui::CreateGraphicsAreaSizeMenu::fillSlide ( Slide & slideToFill )
+{
+        if ( ! slideToFill.isNewAndEmpty() ) return ;
+
+        slideToFill.setEscapeAction( this->actionOnEscape );
+
+        slideToFill.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+
+        slideToFill.drawSpectrumColorBoxes( true );
+
+        ////LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
+
+        /////Label* customSize = new Label( languageStrings.getTranslatedTextByAlias( "custom-size" ).getText() );
+
+        //////customSize->setAction( new PickCustomScreenSize() );
+
+        this->menuOfScreenSizes = new Menu( );
+        this->menuOfScreenSizes->setVerticalOffset( 40 );
+
+        ///////this->menuOfScreenSizes->addOption( customSize );
+
+        unsigned int howManyPopularScreenSizes = popularScreenSizes.size ();
+        for ( unsigned int i = 0 ; i < howManyPopularScreenSizes ; ++ i ) {
+                std::string popularSize = util::number2string( popularScreenSizes[ i ].first )
+                                                + "×"
+                                                + util::number2string( popularScreenSizes[ i ].second ) ;
+                this->menuOfScreenSizes->addOption( new Label( popularSize ) );
+        }
+
+        slideToFill.addWidget( this->menuOfScreenSizes );
+}
+
 void gui::CreateGraphicsAreaSizeMenu::act ()
 {
         if ( popularScreenSizes.size () == 0 )
@@ -30,40 +62,15 @@ void gui::CreateGraphicsAreaSizeMenu::act ()
                 popularScreenSizes.push_back( std::pair< unsigned int, unsigned int >( 1920, 1080 ) );
         }
 
-        Slide & slideToPickScreenSize = * GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        Slide & slideToPickScreenSize = gui::GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( slideToPickScreenSize.isNewAndEmpty() ) {
-                slideToPickScreenSize.setEscapeAction( this->actionOnEscape );
+        fillSlide( slideToPickScreenSize );
 
-                slideToPickScreenSize.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
-
-                slideToPickScreenSize.drawSpectrumColorBoxes( true );
-
-                ////LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
-
-                /////Label* customSize = new Label( languageStrings.getTranslatedTextByAlias( "custom-size" ).getText() );
-
-                //////customSize->setAction( new PickCustomScreenSize() );
-
-                this->menuOfScreenSizes = new Menu( );
-                this->menuOfScreenSizes->setVerticalOffset( 40 );
-
-                ///////this->menuOfScreenSizes->addOption( customSize );
-
-                unsigned int howManyPopularScreenSizes = popularScreenSizes.size ();
-                for ( unsigned int i = 0 ; i < howManyPopularScreenSizes ; ++ i ) {
-                        std::string popularSize = util::number2string( popularScreenSizes[ i ].first )
-                                                        + "×"
-                                                        + util::number2string( popularScreenSizes[ i ].second ) ;
-                        this->menuOfScreenSizes->addOption( new Label( popularSize ) );
-                }
-
-                slideToPickScreenSize.addWidget( this->menuOfScreenSizes );
-        }
+        updateOptions ();
 
         slideToPickScreenSize.setKeyHandler( this );
 
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        gui::GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
 
 void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
@@ -89,6 +96,8 @@ void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
                                         << GamePreferences::getScreenWidth() << "×" << GamePreferences::getScreenHeight()
                                                 << std::endl ;
 
+                        gui::GuiManager::getInstance().freeSlides() ;
+
                         bool inFullScreen = gui::GuiManager::getInstance().isInFullScreen() ;
                         if ( inFullScreen )
                                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
@@ -97,6 +106,13 @@ void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
 
                         if ( inFullScreen )
                                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
+
+                        if ( this->actionOnEscape != nilPointer )
+                                this->actionOnEscape->doIt ();
+                        else
+                                this->doIt () ;
+
+                        return ; // don’t update options after deleting the slide
                 }
 
                 doneWithKey = true ;
@@ -104,7 +120,28 @@ void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
 
         if ( doneWithKey ) {
                 allegro::releaseKey( theKey );
-                this->menuOfScreenSizes->redraw ();
+                updateOptions ();
         } else
                 this->menuOfScreenSizes->handleKey( theKey ) ;
+}
+
+void gui::CreateGraphicsAreaSizeMenu::updateOptions ()
+{
+        std::string currentSize = util::number2string( GamePreferences::getScreenWidth() )
+                                                        + "×"
+                                + util::number2string( GamePreferences::getScreenHeight() ) ;
+
+        const std::vector< Label * > & everySize = this->menuOfScreenSizes->getEveryOption ();
+        for ( unsigned int i = 0 ; i < everySize.size() ; ++ i ) {
+                if ( everySize[ i ] == nilPointer ) continue ;
+                Label & option = * everySize[ i ] ;
+
+                if ( option.getText() == currentSize ) {
+                        this->menuOfScreenSizes->setNthOptionAsActive( i );
+                        option.getFontToChange().setColor( "cyan" );
+                } else
+                        option.getFontToChange().setColor( "white" );
+        }
+
+        this->menuOfScreenSizes->redraw ();
 }
