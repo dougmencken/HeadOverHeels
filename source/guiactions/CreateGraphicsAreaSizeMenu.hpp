@@ -14,6 +14,8 @@
 #include "ActionWithHandlingKeys.hpp"
 
 #include "Menu.hpp"
+#include "Label.hpp"
+#include "Timer.hpp"
 
 #include <string>
 #include <vector>
@@ -45,9 +47,17 @@ private:
 
         void fillSlide ( Slide & slideToFill ) ;
 
+        void pickCustomSize () ;
+
         void updateOptions () ;
 
         Menu * menuOfScreenSizes ;
+
+        Label * customSize ;
+
+        Timer customSizeBlinkTimer ;
+
+        bool pickingWidth ; // true for the width, false for the height
 
         Action * actionOnEscape ;
 

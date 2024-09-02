@@ -80,6 +80,9 @@
      <text alias="screen-size">
         <string>Size of screen</string>
      </text>
+     <text alias="custom-size">
+        <string>Custom size</string>
+     </text>
      <text alias="full-screen">
         <string>In full screen</string>
      </text>

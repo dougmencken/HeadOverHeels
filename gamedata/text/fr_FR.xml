@@ -80,6 +80,9 @@
      <text alias="screen-size">
         <string>Taille de l’écran</string>
      </text>
+     <text alias="custom-size">
+        <string>Taille personnalisée</string>
+     </text>
      <text alias="full-screen">
         <string>En plein écran</string>
      </text>
