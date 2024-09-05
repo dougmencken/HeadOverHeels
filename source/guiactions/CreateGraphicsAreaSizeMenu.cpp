@@ -86,29 +86,9 @@ void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
 
                 std::string chosenWidth = chosenSize.substr( 0, whereX ) ;
                 std::string chosenHeight = chosenSize.substr( whereX + std::string( "×" ).length() );
-                unsigned int newWidth = std::atoi( chosenWidth.c_str() );
-                unsigned int newHeight = std::atoi( chosenHeight.c_str() );
 
-                if ( GamePreferences::getScreenWidth() != newWidth || GamePreferences::getScreenHeight() != newHeight )
+                if ( CreateGraphicsAreaSizeMenu::applySize( chosenWidth, chosenHeight ) )
                 {
-                        GamePreferences::setScreenWidth( newWidth );
-                        GamePreferences::setScreenHeight( newHeight );
-
-                        std::cout << "the new size of the game’s graphics area is "
-                                        << GamePreferences::getScreenWidth() << "×" << GamePreferences::getScreenHeight()
-                                                << std::endl ;
-
-                        gui::GuiManager::getInstance().freeSlides() ;
-
-                        bool inFullScreen = gui::GuiManager::getInstance().isInFullScreen() ;
-                        if ( inFullScreen )
-                                gui::GuiManager::getInstance().toggleFullScreenVideo ();
-
-                        GamePreferences::allegroWindowSizeToScreenSize () ;
-
-                        if ( inFullScreen )
-                                gui::GuiManager::getInstance().toggleFullScreenVideo ();
-
                         if ( this->actionOnEscape != nilPointer )
                                 this->actionOnEscape->doIt ();
                         else
@@ -129,45 +109,121 @@ void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
 
 void gui::CreateGraphicsAreaSizeMenu::pickCustomSize ()
 {
-        this->pickingWidth = true ;
-        this->customSizeBlinkTimer.go () ;
-
         std::string currentWidth = util::number2string( GamePreferences::getScreenWidth() ) ;
         std::string currentHeight = util::number2string( GamePreferences::getScreenHeight() ) ;
 
         LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
         std::string customSizeText = languageStrings.getTranslatedTextByAlias( "custom-size" ).getText() ;
 
-        std::string absentWidth( currentWidth.length(), ' ' );
-        std::string absentHeight( currentHeight.length(), ' ' );
+        std::string chosenWidth = currentWidth ;
+        std::string chosenHeight = currentHeight ;
+
+        bool pickingWidth = true ; // first the width then the height
+        bool applyingCustomSize = false ; // and finally applying
+
+        Timer customSizeBlinkTimer ;
+        customSizeBlinkTimer.go () ;
 
         std::string key ;
         do {
-                if ( this->customSizeBlinkTimer.getValue() > .6 ) {
-                        this->customSize->setText ( customSizeText
-                                                        + " "
-                                                        + ( this->pickingWidth ? absentWidth : currentWidth )
-                                                        + "×"
-                                                        + ( this->pickingWidth ? currentHeight : absentHeight ) );
+                if ( customSizeBlinkTimer.getValue() > 1.5 )
+                        customSizeBlinkTimer.go () ;
 
-                        if ( this->customSizeBlinkTimer.getValue() > 1.0 )
-                                this->customSizeBlinkTimer.go () ;
-                } else
-                        this->customSize->setText( customSizeText + " " + currentWidth + "×" + currentHeight );
+                if ( customSizeBlinkTimer.getValue() > .9 /* 0.9 to 1.5 */ ) {
+                        if ( applyingCustomSize )
+                                this->customSize->setText(
+                                        customSizeText + " "
+                                                + std::string( utf8StringLength( chosenWidth + "×" + chosenHeight ), ' ' ) );
+                        else
+                                this->customSize->setText(
+                                        customSizeText + " "
+                                                + ( pickingWidth ? std::string( chosenWidth.length(), ' ' ) : chosenWidth )
+                                                + "×"
+                                                + ( pickingWidth ? chosenHeight : std::string( chosenHeight.length(), ' ' ) ) );
+                } else /* 0 to 0.9 */
+                        this->customSize->setText( customSizeText + " " + chosenWidth + "×" + chosenHeight );
+
+                if ( applyingCustomSize )
+                        this->customSize->getFontToChange().setColor( "yellow" );
+                else
+                        this->customSize->getFontToChange().setColor(
+                                ( currentWidth != chosenWidth || currentHeight != chosenHeight )
+                                        ? "white" : "cyan" );
 
                 this->menuOfScreenSizes->redraw ();
 
                 key = allegro::nextKey() ;
 
                 if ( key == "Enter" || key == "Space" ) {
-                        this->pickingWidth = ! this->pickingWidth ;
-                        allegro::releaseKey( key );
+                        if ( applyingCustomSize ) {
+                                if ( CreateGraphicsAreaSizeMenu::applySize( chosenWidth, chosenHeight ) )
+                                {
+                                        this->doIt () ;
+                                        break ;
+                                }
+                        }
+                        else // not applying custom size
+                        if ( pickingWidth ) pickingWidth = false ; // now picking the height
+                        else
+                        if ( chosenWidth != currentWidth || chosenHeight != currentHeight )
+                                applyingCustomSize = true ;
+                        else break ;
+                }
+                else
+                if ( ! applyingCustomSize ) {
+                        if ( key == "Up" || key == "q" ) {
+                                if ( pickingWidth )
+                                        chosenWidth = util::number2string( 2 + std::atoi( chosenWidth.c_str() ) );
+                                else
+                                        chosenHeight = util::number2string( 2 + std::atoi( chosenHeight.c_str() ) );
+                        }
+                        else if ( key == "Down" || key == "a" ) {
+                                if ( pickingWidth )
+                                        chosenWidth = util::number2string( std::atoi( chosenWidth.c_str() ) - 2 );
+                                else
+                                        chosenHeight = util::number2string( std::atoi( chosenHeight.c_str() ) - 2 );
+                        }
+                        else if ( key == "Left" || key == "o" || key == "Right" || key == "p" )
+                                pickingWidth = ! pickingWidth ;
                 }
         }
         while ( key != "Escape" ) ;
 
         allegro::releaseKey( "Escape" );
+
         updateOptions ();
+}
+
+/* static */
+bool gui::CreateGraphicsAreaSizeMenu::applySize ( const std::string & chosenWidth, const std::string & chosenHeight )
+{
+        unsigned int newWidth = std::atoi( chosenWidth.c_str() );
+        unsigned int newHeight = std::atoi( chosenHeight.c_str() );
+
+        if ( GamePreferences::getScreenWidth() != newWidth || GamePreferences::getScreenHeight() != newHeight )
+        {
+                GamePreferences::setScreenWidth( newWidth );
+                GamePreferences::setScreenHeight( newHeight );
+
+                std::cout << "the new size of the game’s graphics area is "
+                                << GamePreferences::getScreenWidth() << "×" << GamePreferences::getScreenHeight()
+                                        << std::endl ;
+
+                gui::GuiManager::getInstance().freeSlides() ;
+
+                bool inFullScreen = gui::GuiManager::getInstance().isInFullScreen() ;
+                if ( inFullScreen )
+                        gui::GuiManager::getInstance().toggleFullScreenVideo ();
+
+                GamePreferences::allegroWindowSizeToScreenSize () ;
+
+                if ( inFullScreen )
+                        gui::GuiManager::getInstance().toggleFullScreenVideo ();
+
+                return true ;
+        }
+
+        return false ;
 }
 
 void gui::CreateGraphicsAreaSizeMenu::updateOptions ()

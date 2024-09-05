@@ -49,15 +49,14 @@ private:
 
         void pickCustomSize () ;
 
+        // note that it deletes all the previously created slides to update them to the new size
+        static bool applySize ( const std::string & chosenWidth, const std::string & chosenHeight ) ;
+
         void updateOptions () ;
 
         Menu * menuOfScreenSizes ;
 
         Label * customSize ;
-
-        Timer customSizeBlinkTimer ;
-
-        bool pickingWidth ; // true for the width, false for the height
 
         Action * actionOnEscape ;
 
