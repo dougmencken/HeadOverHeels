@@ -100,14 +100,14 @@ void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & 
                         // walk thru pixels of each row within calculated limits
                         for ( itemPixel = iniX, shadowPixel = deltaX ; itemPixel < endX ; itemPixel ++, shadowPixel ++ )
                         {
-                                AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
-                                AllegroColor itemColor = rawImage.getPixelAt( itemPixel, itemRow );
-                                AllegroColor resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
+                                Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
+                                Color itemColor = rawImage.getPixelAt( itemPixel, itemRow );
+                                Color resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
 
                                 // when pixel of shadow isn’t transparent & pixel of item isn’t transparent
                                 // and a pixel of result isn’t changed before
                                 // then divide the colors of a result’s pixel by 2 ^ rgbDiv, darkening it
-                                if ( ! shadowColor.isKeyColor() && ! itemColor.isKeyColor() && resultColor.equalsRGB( itemColor ) )
+                                if ( ! shadowColor.isFullyTransparent() && ! itemColor.isFullyTransparent() && resultColor.equalsRGB( itemColor ) )
                                 {
                                         unsigned char resultRed = itemColor.getRed() >> rgbDiv ;
                                         unsigned char resultGreen = itemColor.getGreen() >> rgbDiv ;
@@ -133,13 +133,13 @@ void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & 
 
                         for ( itemPixel = iniX, shadowPixel = deltaX ; itemPixel < endX ; itemPixel ++, shadowPixel ++ )
                         {
-                                AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
-                                AllegroColor itemColor = rawImage.getPixelAt( itemPixel, itemRow );
-                                AllegroColor resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
+                                Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
+                                Color itemColor = rawImage.getPixelAt( itemPixel, itemRow );
+                                Color resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
 
-                                if ( ! shadowColor.isKeyColor() )
+                                if ( ! shadowColor.isFullyTransparent() )
                                 {
-                                        if ( ! itemColor.isKeyColor() && resultColor.equalsRGB( itemColor ) )
+                                        if ( ! itemColor.isFullyTransparent() && resultColor.equalsRGB( itemColor ) )
                                         {
                                                 unsigned char resultRed = itemColor.getRed() >> rgbDiv ;
                                                 unsigned char resultGreen = itemColor.getGreen() >> rgbDiv ;
@@ -151,10 +151,10 @@ void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & 
                                         {
                                                 for ( unsigned int yy = itemRow + 1 ; yy < rawImage.getHeight() ; yy++ )
                                                 {
-                                                        AllegroColor rawColor = rawImage.getPixelAt( itemPixel, yy );
-                                                        AllegroColor shadyColor = shadyImage.getPixelAt( itemPixel, yy );
+                                                        Color rawColor = rawImage.getPixelAt( itemPixel, yy );
+                                                        Color shadyColor = shadyImage.getPixelAt( itemPixel, yy );
 
-                                                        if ( ! rawColor.isKeyColor() && shadyColor.equalsRGB( rawColor ) )
+                                                        if ( ! rawColor.isFullyTransparent() && shadyColor.equalsRGB( rawColor ) )
                                                         {
                                                                 unsigned char shadyRed = rawColor.getRed() >> rgbDiv ;
                                                                 unsigned char shadyGreen = rawColor.getGreen() >> rgbDiv ;
@@ -176,14 +176,14 @@ void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & 
                         // walk thru pixels of each row within calculated limits
                         for ( itemPixel = iniX, shadowPixel = deltaX ; itemPixel < endX ; itemPixel ++, shadowPixel ++ )
                         {
-                                AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
-                                AllegroColor itemColor = rawImage.getPixelAt( itemPixel, itemRow );
-                                AllegroColor resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
+                                Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
+                                Color itemColor = rawImage.getPixelAt( itemPixel, itemRow );
+                                Color resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
 
                                 // when pixel of shadow isn’t transparent & pixel of item isn’t transparent
                                 // and a pixel of result isn’t changed before
                                 // then lower the colors of a result’s pixel to darken it
-                                if ( ! shadowColor.isKeyColor() && ! itemColor.isKeyColor() && resultColor.equalsRGB( itemColor ) )
+                                if ( ! shadowColor.isFullyTransparent() && ! itemColor.isFullyTransparent() && resultColor.equalsRGB( itemColor ) )
                                 {
                                         // there’s some transparency
                                         if ( opacity != 0 )
@@ -218,13 +218,13 @@ void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & 
 
                         for ( itemPixel = iniX, shadowPixel = deltaX ; itemPixel < endX ; itemPixel ++, shadowPixel ++ )
                         {
-                                AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
-                                AllegroColor itemColor = rawImage.getPixelAt( itemPixel, itemRow );
-                                AllegroColor resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
+                                Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
+                                Color itemColor = rawImage.getPixelAt( itemPixel, itemRow );
+                                Color resultColor = shadyImage.getPixelAt( itemPixel, itemRow );
 
-                                if ( ! shadowColor.isKeyColor() )
+                                if ( ! shadowColor.isFullyTransparent() )
                                 {
-                                        if ( ! itemColor.isKeyColor() && resultColor.equalsRGB( itemColor ) )
+                                        if ( ! itemColor.isFullyTransparent() && resultColor.equalsRGB( itemColor ) )
                                         {
                                                 // there’s some transparency
                                                 if ( opacity != 0 )
@@ -246,10 +246,10 @@ void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & 
                                         {
                                                 for ( unsigned int yy = itemRow + 1; yy < rawImage.getHeight(); yy++ )
                                                 {
-                                                        AllegroColor rawColor = rawImage.getPixelAt( itemPixel, yy );
-                                                        AllegroColor shadyColor = shadyImage.getPixelAt( itemPixel, yy );
+                                                        Color rawColor = rawImage.getPixelAt( itemPixel, yy );
+                                                        Color shadyColor = shadyImage.getPixelAt( itemPixel, yy );
 
-                                                        if ( ! rawColor.isKeyColor() && shadyColor.equalsRGB( rawColor ) )
+                                                        if ( ! rawColor.isFullyTransparent() && shadyColor.equalsRGB( rawColor ) )
                                                         {
                                                                 // there’s some transparency
                                                                 if ( opacity != 0 )
@@ -338,14 +338,14 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
                         // walk thru pixels of each row within calculated limits
                         for ( tilePixel = iniX, shadowPixel = deltaX ; tilePixel < endX ; tilePixel ++, shadowPixel ++ )
                         {
-                                AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
-                                AllegroColor tileColor = tileImage.getPixelAt( tilePixel, tileRow );
-                                /////////AllegroColor resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
+                                Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
+                                Color tileColor = tileImage.getPixelAt( tilePixel, tileRow );
+                                /////////Color resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
 
                                 // when a pixel of shadow isn’t transparent & a pixel of tile isn’t transparent
                                 ///////// and a pixel of result isn’t changed before
                                 // then divide the colors of a result’s pixel by 2 ^ rgbDiv, darkening it
-                                if ( ! shadowColor.isKeyColor() && ! tileColor.isKeyColor() /* ///////// && resultColor.equalsRGB( tileColor ) */ )
+                                if ( ! shadowColor.isFullyTransparent() && ! tileColor.isFullyTransparent() /* ///////// && resultColor.equalsRGB( tileColor ) */ )
                                 {
                                         unsigned char resultRed = tileColor.getRed() >> rgbDiv ;
                                         unsigned char resultGreen = tileColor.getGreen() >> rgbDiv ;
@@ -364,14 +364,14 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
                         // walk thru the pixels of each row within calculated limits
                         for ( tilePixel = iniX, shadowPixel = deltaX ; tilePixel < endX ; tilePixel ++, shadowPixel ++ )
                         {
-                                AllegroColor shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
-                                AllegroColor tileColor = tileImage.getPixelAt( tilePixel, tileRow );
-                                AllegroColor resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
+                                Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
+                                Color tileColor = tileImage.getPixelAt( tilePixel, tileRow );
+                                Color resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
 
                                 // when a pixel of shadow isn’t transparent & a pixel of tile isn’t transparent
                                 // and a pixel of result isn’t changed before
                                 // then lower the colors of a result’s pixel to darken it
-                                if ( ! shadowColor.isKeyColor() && ! tileColor.isKeyColor() && resultColor.equalsRGB( tileColor ) )
+                                if ( ! shadowColor.isFullyTransparent() && ! tileColor.isFullyTransparent() && resultColor.equalsRGB( tileColor ) )
                                 {
                                         // there’s some transparency
                                         if ( opacity != 0 )

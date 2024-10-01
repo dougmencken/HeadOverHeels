@@ -1,7 +1,10 @@
 
 #include "Color.hpp"
 
-#include <cmath> // for sqrt
+#include "util.hpp"
+
+#include <iostream>
+#include <cassert>
 
 
 const Color Color::transparency ( AllegroColor::redOfKeyColor, AllegroColor::greenOfKeyColor, AllegroColor::blueOfKeyColor,
@@ -42,6 +45,16 @@ const Color Color::theLightGreen ( 127, 255, 127, 0xff ) ;
 const Color Color::theLightCyan ( 127, 255, 255, 0xff ) ;
 const Color Color::theLightYellow ( 255, 255, 127, 0xff ) ;
 
+
+Color Color::add ( const Color & c ) const
+{
+        return Color( red + c.red, green + c.green, blue + c.blue, alpha + c.alpha ) ;
+}
+
+Color Color::subtract ( const Color & c ) const
+{
+        return Color( red - c.red, green - c.green, blue - c.blue, alpha - c.alpha ) ;
+}
 
 Color Color::multiply ( const Color & c ) const
 {
@@ -102,149 +115,4 @@ const Color& Color::byName ( const std::string & color )
         std::cout << "unknown color \"" << color << "\" in Color::byName" << std::endl ;
         assert( color == "unbeknown gray" );
         return theGray50 ;
-}
-
-/* public static */
-void Color::replaceColor( Picture & picture, const Color & from, const Color & to )
-{
-        if ( to == from ) return ;
-
-        picture.getAllegroPict().lockReadWrite() ;
-
-        for ( unsigned int y = 0 ; y < picture.getHeight() ; y ++ ) {
-                for ( unsigned int x = 0 ; x < picture.getWidth() ; x ++ )
-                {
-                        AllegroColor pixel = picture.getPixelAt( x, y );
-
-                        if ( pixel.getRed() == from.getRed() && pixel.getGreen() == from.getGreen() && pixel.getBlue() == from.getBlue()
-                                        && pixel.getAlpha() == from.getAlpha() )
-                        {
-                                picture.putPixelAt( x, y, to );
-                        }
-                }
-        }
-
-        picture.getAllegroPict().unlock() ;
-}
-
-/* public static */
-void Color::replaceColorAnyAlpha( Picture & picture, const Color & from, const Color & to )
-{
-        if ( to == from ) return ;
-
-        picture.getAllegroPict().lockReadWrite() ;
-
-        for ( unsigned int y = 0 ; y < picture.getHeight() ; y ++ ) {
-                for ( unsigned int x = 0 ; x < picture.getWidth() ; x ++ )
-                {
-                        AllegroColor pixel = picture.getPixelAt( x, y );
-
-                        if ( pixel.getRed() == from.getRed() && pixel.getGreen() == from.getGreen() && pixel.getBlue() == from.getBlue() )
-                        {
-                                picture.putPixelAt( x, y, to );
-                        }
-                }
-        }
-
-        picture.getAllegroPict().unlock() ;
-}
-
-/* public static */
-void Color::multiplyWithColor( Picture & picture, const Color & color )
-{
-        if ( color == Color::whiteColor() ) return ;
-
-        multiplyWithColor( picture, color.getRed (), color.getGreen (), color.getBlue () );
-}
-
-/* private static */
-void Color::multiplyWithColor( Picture & picture, unsigned char red, unsigned char green, unsigned char blue )
-{
-        picture.getAllegroPict().lockReadWrite() ;
-
-        for ( unsigned int y = 0; y < picture.getHeight(); ++ y ) {
-                for ( unsigned int x = 0; x < picture.getWidth(); ++ x )
-                {
-                        AllegroColor color = picture.getPixelAt( x, y );
-                        unsigned char r = color.getRed();
-                        unsigned char g = color.getGreen();
-                        unsigned char b = color.getBlue();
-
-                        if ( ! color.isKeyColor() ) // don’t touch pixels with the color of transparency
-                                picture.putPixelAt( x, y, Color( r * ( red / 255.0 ), g * ( green / 255.0 ), b * ( blue / 255.0 ), color.getAlpha() ) );
-                }
-        }
-
-        picture.getAllegroPict().unlock() ;
-}
-
-/* public static */
-void Color::changeAlpha ( Picture & picture, unsigned char newAlpha )
-{
-        picture.getAllegroPict().lockReadWrite() ;
-
-        for ( unsigned int y = 0; y < picture.getHeight(); ++ y ) {
-                for ( unsigned int x = 0; x < picture.getWidth(); ++ x )
-                {
-                        Color color( picture.getPixelAt( x, y ) );
-
-                        if ( color != Color::keyColor() ) // don’t touch pixels with the color of transparency
-                                picture.putPixelAt( x, y, color.withAlteredAlpha( newAlpha ) );
-                }
-        }
-
-        picture.getAllegroPict().unlock() ;
-}
-
-/* public static */
-void Color::pictureToGrayscale ( Picture & picture )
-{
-        picture.getAllegroPict().lockReadWrite() ;
-
-        for ( unsigned int y = 0; y < picture.getHeight(); y++ ) {
-                for ( unsigned int x = 0; x < picture.getWidth(); x++ )
-                {
-                        AllegroColor color = picture.getPixelAt( x, y );
-
-                        // convert every color but the “ key ” one
-                        if ( ! color.isKeyColor() )
-                        {
-                                /* imagine the color as the linear geometric vector c { r, g, b }
-                                   this color turns into the shade of gray r=g=b =w with vector b { w, w, w }
-                                   the lengths of vectors are c•c = rr + gg + bb and b•b = ww + ww + ww = 3ww
-                                   the converted vector has the same length as the original
-                                   for the same lengths
-                                        sqrt ( c•c ) = sqrt ( b•b )
-                                        sqrt( rr + gg + bb ) = sqrt( 3 ) * w
-                                        w = sqrt( ( rr + gg + bb ) / 3 )
-                                */
-                                double red = static_cast< double >( color.getRed() );
-                                double green = static_cast< double >( color.getGreen() );
-                                double blue = static_cast< double >( color.getBlue() );
-                                double ww = ( red * red + green * green + blue * blue ) / 3.0;
-                                unsigned char gray = static_cast< unsigned char >( std::sqrt( ww ) );
-                                picture.putPixelAt( x, y, Color( gray, gray, gray, color.getAlpha() ) );
-                        }
-                }
-        }
-
-        picture.getAllegroPict().unlock() ;
-}
-
-/* public static */
-void Color::invertColors( Picture & picture )
-{
-        picture.getAllegroPict().lockReadWrite() ;
-
-        for ( unsigned int y = 0; y < picture.getHeight(); y++ ) {
-                for ( unsigned int x = 0; x < picture.getWidth(); x++ )
-                {
-                        AllegroColor color = picture.getPixelAt( x, y );
-
-                        if ( ! color.isKeyColor() ) // don’t invert the color of transparency
-                                picture.putPixelAt( x, y, Color( 255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue(), color.getAlpha() ) );
-                }
-        }
-
-        picture.getAllegroPict().unlock() ;
 }

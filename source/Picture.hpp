@@ -16,8 +16,7 @@
 #include "pointers.hpp"
 
 #include "WrappersAllegro.hpp"
-
-class Color ;
+#include "Color.hpp"
 
 
 /**
@@ -33,50 +32,63 @@ public:
 
         Picture( unsigned int width, unsigned int height, const Color & color ) ;
 
-        Picture( const allegro::Pict& pict ) ;
+        Picture( const allegro::Pict & pict ) ;
 
-        Picture( const Picture& pic ) ;  // copy constructor
+        Picture( const Picture & pic ) ;  // the copy constructor
 
         virtual ~Picture( ) ;
 
-        const std::string& getName () const {  return name ;  }
+        const std::string & getName () const {  return name ;  }
 
-        void setName( const std::string& newName ) ;
+        void setName( const std::string & newName ) ;
 
-        unsigned int getWidth () const {  return picture->getW() ;  }
+        unsigned int getWidth () const {  return this->apicture->getW() ;  }
 
-        unsigned int getHeight () const {  return picture->getH() ;  }
+        unsigned int getHeight () const {  return this->apicture->getH() ;  }
 
-        AllegroColor getPixelAt ( int x, int y ) const {  return picture->getPixelAt( x, y ) ;  }
+        Color getPixelAt ( int x, int y ) const {  return Color( this->apicture->getPixelAt( x, y ) ) ;  }
 
-        void putPixelAt ( int x, int y, const Color& color ) const ;
+        void putPixelAt ( int x, int y, const Color & color ) const ;
+        void drawPixelAt ( int x, int y, const Color & color ) const ;
 
-        void drawPixelAt ( int x, int y, const Color& color ) const ;
-
-        const allegro::Pict& getAllegroPict () const {  return *picture ;  }
+        const allegro::Pict & getAllegroPict () const {  return *this->apicture ;  }
 
         void fillWithColor ( const Color & color ) ;
 
         void fillWithTransparencyChequerboard ( const unsigned int sizeOfSquare = 8 ) ;
 
-        void colorizeWhite ( const Color & color ) ;
-        void colorizeBlack ( const Color & color ) ;
+        void colorizeWhite ( const Color & color ) {  changeWhiteToColor( color ) ;  }
+        void changeWhiteToColor ( const Color & color ) {  replaceColor( Color::whiteColor(), color ) ;  }
+
+        void colorizeBlack ( const Color & color ) {  changeBlackToColor( color ) ;  }
+        void changeBlackToColor ( const Color & color ) {  replaceColor( Color::blackColor(), color ) ;  }
+
+        void replaceColor ( const Color & from, const Color & to ) ;
+
+        void replaceColorAnyAlpha ( const Color & from, const Color & to ) ;
 
         void toGrayscale () ;
 
         void expandOrCropTo ( unsigned int width, unsigned int height ) ;
 
         void flipHorizontal () ;
-
         void flipVertical () ;
 
         void rotate90 () ;
-
-        void rotate90counterclockwise () {  rotate90 () ;  }
-
         void rotate270 () ;
 
         void rotate90clockwise () {  rotate270 () ;  }
+        void rotate90counterclockwise () {  rotate90 () ;  }
+
+        void multiplyWithColor ( const Color & multiplier ) ;
+
+        void changeAlpha ( unsigned char newAlpha ) ;
+
+        void invertColors () ;
+
+        static Picture * summation ( const Picture & first, const Picture & second ) ;
+
+        static Picture * difference ( const Picture & first, const Picture & second ) ;
 
         void saveAsPCX ( const std::string & path ) ;
 
@@ -88,7 +100,7 @@ public:
 
 private:
 
-        multiptr < allegro::Pict > picture ;
+        multiptr < allegro::Pict > apicture ;
 
         std::string name ;
 

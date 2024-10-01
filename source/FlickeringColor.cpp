@@ -2,6 +2,9 @@
 #include "FlickeringColor.hpp"
 
 #include "sleep.hpp" // for milliSleep
+#include "util.hpp"
+
+#include <cassert>
 
 
 /* static */ const FlickeringColor * FlickeringColor::whiteAndTransparent = nilPointer ;

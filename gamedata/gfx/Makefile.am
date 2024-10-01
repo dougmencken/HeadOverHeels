@@ -306,7 +306,8 @@ gamedatagfx_DATA = item.png/diver-shadows.png \
 			gui.gfx/penitentiary.png \
 			gui.gfx/head.gif \
 			gui.gfx/moon-frame.png \
-			gui.gfx/background.png \
+			gui.gfx/background-left-difference.png \
+			gui.gfx/background-right-difference.png \
 			gui.gfx/quick-steps.png \
 			gui.gfx/gui-handbag.png \
 			gui.gfx/safari.png \

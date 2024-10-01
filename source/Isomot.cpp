@@ -196,10 +196,10 @@ Picture* Isomot::updateMe ()
         const int cameraDeltaX = activeRoom->getCamera()->getOffset().getX ();
         const int cameraDeltaY = activeRoom->getCamera()->getOffset().getY ();
 
-        const Color& roomColor = Color::byName( activeRoom->getColor() );
+        const Color & roomColor = Color::byName( activeRoom->getColor() );
 
         if ( gameManager.isSimpleGraphicsSet() )
-                Color::multiplyWithColor( * activeRoom->getWhereToDraw(), roomColor );
+                activeRoom->getWhereToDraw()->multiplyWithColor( roomColor );
 
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
@@ -279,7 +279,7 @@ Picture* Isomot::updateMe ()
         }
 
         if ( paused )
-                Color::multiplyWithColor( * view, Color::byName( "gray" ) );
+                view->multiplyWithColor( Color::byName( "gray" ) );
 
         allegro::Pict::setWhereToDraw( previousWhere );
 

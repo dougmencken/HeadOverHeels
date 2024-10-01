@@ -105,7 +105,7 @@ load_gif (AL_CONST char *filename, RGB *pal)
 
 /* Allegrified version. Saves only a single bitmap */
 int
-save_gif (AL_CONST char *filename, BITMAP *bmp, AL_CONST PALETTE pal)
+save_gif (AL_CONST char *filename, BITMAP *bmp, AL_CONST RGB* pal)
 {
     GIF_ANIMATION gif;
     GIF_FRAME frame;

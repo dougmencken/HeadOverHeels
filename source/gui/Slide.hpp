@@ -142,6 +142,7 @@ private:
 protected:
 
         static Picture * backgroundPicture ;
+        static Picture * scaledBackgroundPicture ;
 
 };
 

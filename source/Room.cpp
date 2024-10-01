@@ -1181,12 +1181,11 @@ void Room::dontDisappearOnJump ()
                                         gridItem.setBehaviorOf( "still" );
 
                                         if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
-                                                Color::multiplyWithColor(
-                                                        gridItem.getRawImageToChangeIt (),
+                                                gridItem.getRawImageToChangeIt().multiplyWithColor (
                                                         ( behavior == "behavior of slow disappearance on jump into" ) ?
                                                                 Color::byName( "magenta" ) : Color::byName( "red" ) );
                                         else
-                                                Color::invertColors( gridItem.getRawImageToChangeIt () );
+                                                gridItem.getRawImageToChangeIt().invertColors() ;
 
                                         gridItem.freshProcessedImage();
                                         gridItem.setWantShadow( true );
@@ -1207,12 +1206,11 @@ void Room::dontDisappearOnJump ()
                                 freeItem.setBehaviorOf( "still" );
 
                                 if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
-                                        Color::multiplyWithColor(
-                                                freeItem.getRawImageToChangeIt (),
+                                        freeItem.getRawImageToChangeIt().multiplyWithColor (
                                                 ( behavior == "behavior of slow disappearance on jump into" ) ?
                                                         Color::byName( "magenta" ) : Color::byName( "red" ) );
                                 else
-                                        Color::invertColors( freeItem.getRawImageToChangeIt () );
+                                        freeItem.getRawImageToChangeIt().invertColors() ;
 
                                 freeItem.freshBothProcessedImages();
                                 freeItem.setWantShadow( true );

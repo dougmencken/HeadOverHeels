@@ -35,11 +35,11 @@ Font::Font( const std::string & color, bool doubleHeightStretching )
                 autouniqueptr< Picture > blackLetters( new Picture( * fontFromFile ) );
 
                 autouniqueptr< Picture > whiteLetters( new Picture( * fontFromFile ) );
-                Color::invertColors( * whiteLetters );
+                whiteLetters->invertColors() ;
 
                 // background white or black to the color of transparency
-                Color::replaceColorAnyAlpha( * blackLetters, Color::whiteColor(), Color::keyColor() );
-                Color::replaceColorAnyAlpha( * whiteLetters, Color::blackColor(), Color::keyColor() );
+                blackLetters->replaceColorAnyAlpha( Color::whiteColor(), Color::keyColor() );
+                whiteLetters->replaceColorAnyAlpha( Color::blackColor(), Color::keyColor() );
 
                 unsigned int width  = fontFromFile->getW ();
                 unsigned int height = fontFromFile->getH ();

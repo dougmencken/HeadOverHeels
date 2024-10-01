@@ -48,11 +48,11 @@ void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offse
                 autouniqueptr< Picture > beforeOptionBlack( new Picture( * optionPict ) );
 
                 autouniqueptr< Picture > beforeOptionWhite( new Picture( * optionPict ) );
-                Color::invertColors( * beforeOptionWhite );
+                beforeOptionWhite->invertColors() ;
 
                 // background white or black to the color of transparency
-                Color::replaceColorAnyAlpha( * beforeOptionBlack, Color::whiteColor(), Color::keyColor() );
-                Color::replaceColorAnyAlpha( * beforeOptionWhite, Color::blackColor(), Color::keyColor() );
+                beforeOptionBlack->replaceColorAnyAlpha( Color::whiteColor(), Color::keyColor() );
+                beforeOptionWhite->replaceColorAnyAlpha( Color::blackColor(), Color::keyColor() );
 
                 pictureBeforeOption = new Picture( optionPict->getW(), optionPict->getH() );
 
@@ -82,11 +82,11 @@ void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offse
                 autouniqueptr< Picture > beforeChosenOptionBlack( new Picture( * chosenOptionSinglePict ) );
 
                 autouniqueptr< Picture > beforeChosenOptionWhite( new Picture( * chosenOptionSinglePict ) );
-                Color::invertColors( * beforeChosenOptionWhite );
+                beforeChosenOptionWhite->invertColors() ;
 
                 // background white or black to the color of transparency
-                Color::replaceColorAnyAlpha( * beforeChosenOptionBlack, Color::whiteColor(), Color::keyColor() );
-                Color::replaceColorAnyAlpha( * beforeChosenOptionWhite, Color::blackColor(), Color::keyColor() );
+                beforeChosenOptionBlack->replaceColorAnyAlpha( Color::whiteColor(), Color::keyColor() );
+                beforeChosenOptionWhite->replaceColorAnyAlpha( Color::blackColor(), Color::keyColor() );
 
                 pictureBeforeChosenOptionSingle = new Picture( chosenOptionSinglePict->getW(), chosenOptionSinglePict->getH() );
 

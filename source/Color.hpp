@@ -13,8 +13,6 @@
 
 #include "WrappersAllegro.hpp"
 
-#include "Picture.hpp"
-
 
 /**
  * Describes color as red, green, blue, and alpha components,
@@ -39,6 +37,12 @@ public:
         virtual unsigned char  getBlue () const {  return blue ;  }
         virtual unsigned char getAlpha () const {  return alpha ;  }
 
+        Color add ( const Color & c ) const ;
+        Color operator + ( const Color & c ) const {  return add( c ) ;  }
+
+        Color subtract ( const Color & c ) const ;
+        Color operator - ( const Color & c ) const {  return subtract( c ) ;  }
+
         Color multiply ( const Color & c ) const ;
 
         Color withAlteredAlpha ( unsigned char newAlpha ) const ;
@@ -47,6 +51,11 @@ public:
 
         bool operator == ( const Color & c ) const {  return   equals( c );  }
         bool operator != ( const Color & c ) const {  return ! equals( c );  }
+
+        bool equalsRGBA ( const Color & c ) const {  return equals( c ) ;  }
+
+        // ignoring alpha
+        bool equalsRGB ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue ;  }
 
         bool isFullyTransparent () const {  return toAllegroColor().isKeyColor() ;  }
 
@@ -62,22 +71,6 @@ public:
 
         static const Color & keyColor () {  return transparency ;  }
 
-        static void replaceColor ( Picture & picture, const Color & from, const Color & to ) ;
-
-        static void replaceColorAnyAlpha ( Picture & picture, const Color & from, const Color & to ) ;
-
-        static void changeWhiteToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, whiteColor(), color ) ;  }
-
-        static void changeBlackToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, blackColor(), color ) ;  }
-
-        static void multiplyWithColor ( Picture & picture, const Color & color ) ;
-
-        static void changeAlpha ( Picture & picture, unsigned char newAlpha ) ;
-
-        static void pictureToGrayscale ( Picture & picture ) ;
-
-        static void invertColors ( Picture & picture ) ;
-
 protected:
 
         unsigned char red ;
@@ -89,8 +82,6 @@ protected:
         unsigned char alpha ;
 
 private:
-
-        static void multiplyWithColor ( Picture & picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
         static const Color transparency ;
 

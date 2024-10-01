@@ -42,7 +42,7 @@ void Masker::maskFreeItemBehindItem( FreeItem& itemToMask, const Item& upwardIte
 
         for ( maskedRow = iniY, upwardRow = deltaY ; maskedRow < endY ; maskedRow ++, upwardRow ++ )
                 for ( maskedPixel = iniX, upwardPixel = deltaX ; maskedPixel < endX ; maskedPixel ++, upwardPixel ++ )
-                        if ( ! upwardImage.getPixelAt( upwardPixel, upwardRow ).isKeyColor () )
+                        if ( ! upwardImage.getPixelAt( upwardPixel, upwardRow ).isFullyTransparent () )
                                 maskedImage.putPixelAt( maskedPixel, maskedRow, Color::keyColor () );
 
         /////maskedImage.getAllegroPict().unlock() ;

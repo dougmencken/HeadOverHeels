@@ -165,31 +165,31 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                         unsigned int x = originX + dx - ( dy << 1 ) ;
                         unsigned int y = originY + dy + ( dx >> 1 ) ;
 
-                        planeOfTile->putPixelAt( x , y , fullTile.getPixelAt( x , y ) );
-                        planeOfTile->putPixelAt( x + 1 , y , fullTile.getPixelAt( x + 1 , y ) );
+                        planeOfTile->putPixelAt( x , y , fullTile.getPixelAt( x , y ).toAllegroColor() );
+                        planeOfTile->putPixelAt( x + 1 , y , fullTile.getPixelAt( x + 1 , y ).toAllegroColor() );
 
                         if ( x >= 2 )
                         {
-                                planeOfTile->putPixelAt( x - 1 , y , fullTile.getPixelAt( x - 1 , y ) );
-                                planeOfTile->putPixelAt( x - 2 , y , fullTile.getPixelAt( x - 2 , y ) );
+                                planeOfTile->putPixelAt( x - 1 , y , fullTile.getPixelAt( x - 1 , y ).toAllegroColor() );
+                                planeOfTile->putPixelAt( x - 2 , y , fullTile.getPixelAt( x - 2 , y ).toAllegroColor() );
 
                                 if ( dx == dxBegin && dy == dyEnd - 1 )
                                 {
-                                        planeOfTile->putPixelAt( x - 1 , y + 1 , fullTile.getPixelAt( x - 1 , y + 1 ) );
-                                        planeOfTile->putPixelAt( x - 2 , y + 1 , fullTile.getPixelAt( x - 2 , y + 1 ) );
+                                        planeOfTile->putPixelAt( x - 1 , y + 1 , fullTile.getPixelAt( x - 1 , y + 1 ).toAllegroColor() );
+                                        planeOfTile->putPixelAt( x - 2 , y + 1 , fullTile.getPixelAt( x - 2 , y + 1 ).toAllegroColor() );
                                 }
                         }
 
                         if ( dx + 2 == dxEnd )
                         {
-                                planeOfTile->putPixelAt( x , y + 1 , fullTile.getPixelAt( x , y + 1 ) );
-                                planeOfTile->putPixelAt( x + 1 , y + 1 , fullTile.getPixelAt( x + 1 , y + 1 ) );
+                                planeOfTile->putPixelAt( x , y + 1 , fullTile.getPixelAt( x , y + 1 ).toAllegroColor() );
+                                planeOfTile->putPixelAt( x + 1 , y + 1 , fullTile.getPixelAt( x + 1 , y + 1 ).toAllegroColor() );
                         }
 
                         if ( dy + 1 == dyEnd && y + 2 < maxHeight )
                         {
-                                planeOfTile->putPixelAt( x , y + 2 , fullTile.getPixelAt( x , y + 2 ) );
-                                planeOfTile->putPixelAt( x + 1 , y + 2 , fullTile.getPixelAt( x + 1 , y + 2 ) );
+                                planeOfTile->putPixelAt( x , y + 2 , fullTile.getPixelAt( x , y + 2 ).toAllegroColor() );
+                                planeOfTile->putPixelAt( x + 1 , y + 2 , fullTile.getPixelAt( x + 1 , y + 2 ).toAllegroColor() );
                         }
                 }
         }
@@ -203,7 +203,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
         plane->setName( fullTile.getName() + "-" + whichPart + "~plane" );
 
         if ( darkenPlane )
-                Color::multiplyWithColor( *plane, Color::byName( "gray" ) );
+                plane->multiplyWithColor( Color::byName( "gray" ) );
 
         unsigned int halfOfWidth = depthOfTile->getW() >> 1 ;
         unsigned int quarterOfWidth = halfOfWidth >> 1 ;

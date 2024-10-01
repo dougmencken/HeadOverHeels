@@ -26,17 +26,42 @@ namespace gui
 {
 
 /* static */ Picture * Slide::backgroundPicture = nilPointer ;
+/* static */ Picture * Slide::scaledBackgroundPicture = nilPointer ;
 
 /* static */ void Slide::refreshBackground ()
 {
         std::cout << "refreshing the background for user interface slides" << std::endl ;
 
-        delete Slide::backgroundPicture ;
+        if ( Slide::backgroundPicture != nilPointer ) {
+                delete Slide::backgroundPicture ;
+                Slide::backgroundPicture = nilPointer ;
+                delete Slide::scaledBackgroundPicture ;
+                Slide::scaledBackgroundPicture = nilPointer ;
+        }
 
         const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
-        Slide::backgroundPicture = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background.png" ) );
 
-        if ( Slide::backgroundPicture == nilPointer ) // not found
+        if ( GameManager::getInstance().isPresentGraphicsSet () ) {
+                Color backgroundColor( /* red */ 0x4e, /* green */ 0xbe, /* blue */ 0xef, /* alpha */ 0xff );
+                Picture * solidColoredBackground = new Picture( 1920, 1440, backgroundColor );
+
+                Picture * leftLensFlare = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background-left-difference.png" ) );
+                Picture * rightLensFlare = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background-right-difference.png" ) );
+
+                if ( leftLensFlare != nilPointer && rightLensFlare != nilPointer ) {
+                        Picture * colorPlusLeft = Picture::summation( *solidColoredBackground, *leftLensFlare );
+                        Slide::backgroundPicture = Picture::summation( *colorPlusLeft, *rightLensFlare ) ;
+                        delete colorPlusLeft ;
+                } else
+                        Slide::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), backgroundColor ) ;
+
+                delete solidColoredBackground ;
+                if ( leftLensFlare != nilPointer ) delete leftLensFlare ;
+                if ( rightLensFlare != nilPointer ) delete rightLensFlare ;
+        } else
+                Slide::backgroundPicture = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background.png" ) );
+
+        if ( Slide::backgroundPicture == nilPointer )
         {       // don't crash, just present the red one like in the original game
                 Slide::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::byName( "red" ) ) ;
                 std::cout << "there’s no \"background.png\" but I made the red background for you dear" << std::endl ;
@@ -47,7 +72,13 @@ namespace gui
 
 /* static */ void Slide::toBlackBackground ()
 {
-        delete Slide::backgroundPicture ;
+        if ( Slide::backgroundPicture != nilPointer ) {
+                delete Slide::backgroundPicture ;
+                Slide::backgroundPicture = nilPointer ;
+                delete Slide::scaledBackgroundPicture ;
+                Slide::scaledBackgroundPicture = nilPointer ;
+        }
+
         Slide::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::blackColor() ) ;
         Slide::backgroundPicture->setName( "the black background for user interface slides" );
 }
@@ -158,47 +189,82 @@ void Slide::refresh () const
                 // it's impossible
                 throw MayNotBePossible( "Slide::backgroundPicture is nil after Slide::refreshBackground()" ) ;
 
-        unsigned int backgroundWidth = backgroundPicture->getWidth();
-        unsigned int backgroundHeight = backgroundPicture->getHeight();
-
-        if ( backgroundWidth == GamePreferences::getScreenWidth() && backgroundHeight == GamePreferences::getScreenHeight() )
+        if ( Slide::scaledBackgroundPicture == nilPointer )
         {
-                allegro::bitBlit( backgroundPicture->getAllegroPict() );
+                const unsigned int screenWidth = GamePreferences::getScreenWidth() ;
+                const unsigned int screenHeight = GamePreferences::getScreenHeight() ;
+
+                const unsigned int backgroundWidth = backgroundPicture->getWidth() ;
+                const unsigned int backgroundHeight = backgroundPicture->getHeight() ;
+
+                float ratioX = static_cast< float >( screenWidth ) / static_cast< float >( backgroundWidth ) ;
+                float ratioY = static_cast< float >( screenHeight ) / static_cast< float >( backgroundHeight ) ;
+
+                std::cout << "scaling the background image to fit the screen" << std::endl ;
+                std::cout << "   screen width (" << screenWidth << ")"
+                                << " / background width (" << backgroundWidth << ") = " << ratioX << std::endl ;
+                std::cout << "   screen height (" << screenHeight << ")"
+                                << " / background height (" << backgroundHeight << ") = " << ratioY << std::endl ;
+
+                if ( backgroundWidth == screenWidth && backgroundHeight == screenHeight )
+                {
+                        Slide::scaledBackgroundPicture = /* just copy */ new Picture( Slide::backgroundPicture->getAllegroPict() );
+                }
+                else
+                {
+                        Slide::scaledBackgroundPicture = new Picture( screenWidth, screenHeight, Color::blackColor() );
+
+                        if ( ratioX == ratioY )
+                        {
+                                allegro::stretchBlit( Slide::backgroundPicture->getAllegroPict(),
+                                                      Slide::scaledBackgroundPicture->getAllegroPict(),
+                                                                0, 0, backgroundWidth, backgroundHeight,
+                                                                0, 0, screenWidth, screenHeight );
+                        }
+                        else if ( ratioX > ratioY ) /* horizontal over~stretching */
+                        {
+                                if ( backgroundWidth > 640 ) {
+                                        unsigned int scaledWidth = static_cast< unsigned int >( backgroundWidth * ratioX );
+                                        unsigned int scaledHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
+
+                                        Picture * uniformlyScaledBackground = new Picture( scaledWidth, scaledHeight, Color::whiteColor() );
+                                        allegro::stretchBlit( Slide::backgroundPicture->getAllegroPict(),
+                                                              uniformlyScaledBackground->getAllegroPict(),
+                                                                        0, 0, backgroundWidth, backgroundHeight,
+                                                                        0, 0, scaledWidth, scaledHeight ) ;
+
+                                        // the background will be cropped at the bottom
+                                        allegro::bitBlit( uniformlyScaledBackground->getAllegroPict(),
+                                                          Slide::scaledBackgroundPicture->getAllegroPict(),
+                                                                        0, 0, 0, 0,
+                                                                        scaledWidth, screenHeight );
+
+                                        delete uniformlyScaledBackground ;
+                                } else {
+                                        unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
+                                        unsigned int offsetX = ( screenWidth - proportionalWidth ) >> 1 ;
+
+                                        allegro::stretchBlit( Slide::backgroundPicture->getAllegroPict(),
+                                                              Slide::scaledBackgroundPicture->getAllegroPict(),
+                                                                        0, 0, backgroundWidth, backgroundHeight,
+                                                                        offsetX, 0, proportionalWidth, screenHeight );
+                                }
+                        }
+                        else /* if ( ratioY > ratioX ) */ /* vertical over~stretching */
+                        {
+                                unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
+                                unsigned int offsetY = ( screenHeight - proportionalHeight ) >> 1 ;
+
+                                allegro::stretchBlit( Slide::backgroundPicture->getAllegroPict(),
+                                                      Slide::scaledBackgroundPicture->getAllegroPict(),
+                                                                0, 0, backgroundWidth, backgroundHeight,
+                                                                0, offsetY, screenWidth, proportionalHeight );
+                        }
+                }
         }
-        else
-        {
-                float ratioX = static_cast< float >( GamePreferences::getScreenWidth() ) / static_cast< float >( backgroundWidth ) ;
-                float ratioY = static_cast< float >( GamePreferences::getScreenHeight() ) / static_cast< float >( backgroundHeight ) ;
 
-                if ( ratioX == ratioY )
-                {
-                        allegro::stretchBlit( backgroundPicture->getAllegroPict(),
-                                        0, 0, backgroundWidth, backgroundHeight,
-                                        0, 0, GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() );
-                }
-                else if ( ratioX > ratioY ) /* horizontal over~stretching */
-                {
-                        unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
-                        unsigned int offsetX = ( GamePreferences::getScreenWidth() - proportionalWidth ) >> 1;
-
-                        imageOfSlide->fillWithColor( Color::blackColor() );
-
-                        allegro::stretchBlit( backgroundPicture->getAllegroPict(),
-                                        0, 0, backgroundWidth, backgroundHeight,
-                                        offsetX, 0, proportionalWidth, GamePreferences::getScreenHeight() );
-                }
-                else /* if ( ratioY > ratioX ) */ /* vertical over~stretching */
-                {
-                        unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
-                        unsigned int offsetY = ( GamePreferences::getScreenHeight() - proportionalHeight ) >> 1;
-
-                        imageOfSlide->fillWithColor( Color::blackColor() );
-
-                        allegro::stretchBlit( backgroundPicture->getAllegroPict(),
-                                        0, 0, backgroundWidth, backgroundHeight,
-                                        0, offsetY, GamePreferences::getScreenWidth(), proportionalHeight );
-                }
-        }
+        // draw scaled background picture
+        allegro::bitBlit( Slide::scaledBackgroundPicture->getAllegroPict() );
 
         if ( drawSpectrumColors /* || GameManager::getInstance().isSimpleGraphicsSet() */ )
                 Slide::draw2x8colors( *this ) ;
@@ -525,7 +591,7 @@ void Slide::randomPixelFade( bool fadeIn, const Slide & slide, const Color & col
                 if ( ! bits[ x + y * screenWidth ] )
                 {
                         if ( fadeIn )
-                                buffer.getAllegroPict().drawPixelAt( x, y, slide.imageOfSlide->getPixelAt( x, y ) );
+                                buffer.getAllegroPict().drawPixelAt( x, y, slide.imageOfSlide->getPixelAt( x, y ).toAllegroColor() );
                         else
                                 buffer.getAllegroPict().drawPixelAt( x, y, aColor );
 
