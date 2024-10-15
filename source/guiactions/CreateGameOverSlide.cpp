@@ -21,7 +21,7 @@ void gui::CreateGameOverSlide::act ()
 
         Slide & gameOverSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
         if ( ! gameOverSlide.isNewAndEmpty() )
-                gameOverSlide.freeWidgets();
+                gameOverSlide.removeAllWidgets() ;
         else
                 gameOverSlide.setEscapeAction( new CreateMainMenu() );
 

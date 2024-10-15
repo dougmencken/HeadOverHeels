@@ -13,13 +13,13 @@
 
 #include "ActionWithHandlingKeys.hpp"
 
+#include "Menu.hpp"
+
 #include <map>
 
 
 namespace gui
 {
-
-class Menu;
 
 /**
  * Create menu with list of graphic sets
@@ -35,7 +35,7 @@ public:
          */
         explicit CreateMenuOfGraphicsSets( Action * previous ) ;
 
-        virtual ~CreateMenuOfGraphicsSets( ) ;
+        virtual ~CreateMenuOfGraphicsSets( ) {}
 
         virtual void handleKey ( const std::string & key ) ;
 
@@ -50,7 +50,7 @@ private:
 
         Action * actionOnEscape ;
 
-        Menu * menuOfGraphicsSets ;
+        Menu menuOfGraphicsSets ;
 
         std::map < std::string, std::string > setsOfGraphics ;
 

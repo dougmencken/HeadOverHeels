@@ -13,6 +13,8 @@
 
 #include "Action.hpp"
 
+#include "Menu.hpp"
+
 
 namespace gui
 {
@@ -65,7 +67,10 @@ public:
         explicit CreateListOfSavedGames( bool isLoadMenu )
                 : Action( )
                 , isMenuForLoad( isLoadMenu )
-        {}
+                , menu( )
+        {
+                menu.setVerticalOffset( 112 );
+        }
 
         bool isLoadMenu () {  return this->isMenuForLoad ;  }
 
@@ -79,11 +84,13 @@ protected:
 private:
 
         /**
-         * Read the number of rooms visited and the number of liberated planets from the saved game file to show
+         * Read the number of visited rooms and the number of liberated planets from a saved game file to show
          */
-        SavedGameInfo readSomeInfoFromTheSavedGame( const std::string & fileName ) ;
+        SavedGameInfo readSomeInfoFromASavedGame( const std::string & fileName ) ;
 
         bool isMenuForLoad ;
+
+        Menu menu ;
 
         static const unsigned int howManySaves = 10 ;
 

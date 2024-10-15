@@ -5,7 +5,6 @@
 #include "SoundManager.hpp"
 #include "LanguageStrings.hpp"
 #include "Label.hpp"
-#include "Menu.hpp"
 #include "Slide.hpp"
 
 #include "ShowSlideWithPlanets.hpp"
@@ -25,13 +24,13 @@ void gui::CreateMainMenu::act ()
         {
                 mainMenuSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
-                LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
+                mainMenu.deleteAllOptions() ;
 
-                Label* newGame = new Label( languageStrings.getTranslatedTextByAlias( "new-game" ).getText() );
-                Label* loadGame = new Label( languageStrings.getTranslatedTextByAlias( "load-old-game" ).getText() );
-                Label* optionsMenu = new Label( languageStrings.getTranslatedTextByAlias( "options-menu" ).getText() );
-                Label* showCredits = new Label( languageStrings.getTranslatedTextByAlias( "show-credits" ).getText() );
-                Label* quitGame = new Label( languageStrings.getTranslatedTextByAlias( "exit-game" ).getText() );
+                Label* newGame = mainMenu.addOptionByLanguageTextAlias( "new-game" ) ;
+                Label* loadGame = mainMenu.addOptionByLanguageTextAlias( "load-old-game" ) ;
+                Label* optionsMenu = mainMenu.addOptionByLanguageTextAlias( "options-menu" ) ;
+                Label* showCredits = mainMenu.addOptionByLanguageTextAlias( "show-credits" ) ;
+                Label* quitGame = mainMenu.addOptionByLanguageTextAlias( "exit-game" ) ;
 
                 newGame->setAction( new ShowSlideWithPlanets( false ) );
                 loadGame->setAction( new CreateListOfSavedGames( true ) );
@@ -39,17 +38,8 @@ void gui::CreateMainMenu::act ()
                 showCredits->setAction( new ShowAuthors() );
                 quitGame->setAction( new Quit() );
 
-                Menu * menu = new Menu( );
-                menu->setVerticalOffset( 12 );
-
-                menu->addOption( newGame );
-                menu->addOption( loadGame );
-                menu->addOption( optionsMenu );
-                menu->addOption( showCredits );
-                menu->addOption( quitGame );
-
-                mainMenuSlide.addWidget( menu );
-                mainMenuSlide.setKeyHandler( menu );
+                mainMenuSlide.addWidget( & mainMenu );
+                mainMenuSlide.setKeyHandler( & mainMenu );
         }
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), false );

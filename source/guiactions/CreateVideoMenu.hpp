@@ -13,11 +13,12 @@
 
 #include "ActionWithHandlingKeys.hpp"
 
+#include "MenuWithValues.hpp"
+
 
 namespace gui
 {
 
-class MenuWithValues ;
 class Label ;
 
 
@@ -32,14 +33,17 @@ public:
 
         CreateVideoMenu( )
                 : ActionWithHandlingKeys( )
-                , videoOptions ( nilPointer )
+                , videoOptions ( ' ', 1 )
                 , screenSize ( nilPointer )
                 , fullScreen ( nilPointer )
                 , drawShadows ( nilPointer )
                 , drawSceneryDecor ( nilPointer )
                 , drawRoomMiniatures ( nilPointer )
                 , centerCameraOn ( nilPointer )
-                , chooseGraphics ( nilPointer ) {}
+                , chooseGraphics ( nilPointer )
+        {
+                videoOptions.setVerticalOffset( 33 );
+        }
 
         virtual ~CreateVideoMenu( ) {}
 
@@ -53,7 +57,7 @@ private:
 
         void updateOptions () ;
 
-        MenuWithValues * videoOptions ;
+        MenuWithValues videoOptions ;
 
         Label * screenSize ;
         Label * fullScreen ;

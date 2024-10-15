@@ -7,7 +7,6 @@
 #include "Font.hpp"
 #include "Label.hpp"
 #include "Slide.hpp"
-#include "MenuWithValues.hpp"
 #include "CreateOptionsMenu.hpp"
 #include "LanguageStrings.hpp"
 
@@ -22,10 +21,7 @@ void gui::CreateKeysMenu::act ()
 
                 gameKeysSlide.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                this->menuOfKeys = new MenuWithValues( '.', 5 );
-                menuOfKeys->setVerticalOffset( 64 );
-
-                LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings();
+                this->menuOfKeys.deleteAllOptions() ;
 
                 // add menu option for each key
                 std::vector< std::string > userActions ;
@@ -35,24 +31,23 @@ void gui::CreateKeysMenu::act ()
                         const std::string & theAction = userActions[ i ];
                         std::string xmlAction = ( theAction == "take&jump" ) ? "takeandjump" : theAction ;
 
-                        Label* label = new Label( languageStrings.getTranslatedTextByAlias( xmlAction ).getText() );
+                        Label* label = menuOfKeys.addOptionByLanguageTextAlias( xmlAction );
 
                         std::string theKey = InputManager::getInstance().getUserKeyFor( theAction );
+                        menuOfKeys.setValueOf( label->getText(), CreateKeysMenu::allegroKeyToMenuKey( theKey ) );
+
                         if ( theKey == "none" ) label->getFontToChange().setColor( "cyan" );
 
                         label->setAction( new RedefineKey( menuOfKeys, theAction ) );
-
-                        menuOfKeys->addOption( label );
-                        menuOfKeys->setValueOf( label, CreateKeysMenu::allegroKeyToMenuKey( theKey ) );
                 }
 
-                gameKeysSlide.addWidget( menuOfKeys );
+                gameKeysSlide.addWidget( & this->menuOfKeys );
         }
 
         // select the first menu option
-        menuOfKeys->resetActiveOption() ;
+        menuOfKeys.resetActiveOption() ;
 
-        gameKeysSlide.setKeyHandler( menuOfKeys );
+        gameKeysSlide.setKeyHandler( & this->menuOfKeys );
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }

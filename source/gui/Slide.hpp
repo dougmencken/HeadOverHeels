@@ -32,7 +32,7 @@ namespace gui
 class AnimatedPictureWidget ;
 
 /**
- * A container for user interface elements
+ * A container for other user interface elements
  */
 
 class Slide : public Widget
@@ -52,18 +52,22 @@ public:
 
         void handleKey ( const std::string & key ) ;
 
+        /**
+         * Add widget to this slide
+         */
         void addWidget( Widget* widget ) ;
 
         /**
+         * Remove widget from this slide
          * @return true if it is found and removed
          */
         bool removeWidget( Widget* widget ) ;
 
+        void removeAllWidgets () ;
+
         /* ////// size_t countWidgets () {  return this->widgets.size () ;  } */
 
         bool isNewAndEmpty () {  return this->widgets.size() == 0 ;  }
-
-        void freeWidgets () ;
 
         void placeHeadAndHeels ( bool imagesToo, bool copyrightsToo ) ;
 

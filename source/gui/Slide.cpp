@@ -35,6 +35,8 @@ namespace gui
         if ( Slide::backgroundPicture != nilPointer ) {
                 delete Slide::backgroundPicture ;
                 Slide::backgroundPicture = nilPointer ;
+        }
+        if ( Slide::scaledBackgroundPicture != nilPointer ) {
                 delete Slide::scaledBackgroundPicture ;
                 Slide::scaledBackgroundPicture = nilPointer ;
         }
@@ -75,6 +77,8 @@ namespace gui
         if ( Slide::backgroundPicture != nilPointer ) {
                 delete Slide::backgroundPicture ;
                 Slide::backgroundPicture = nilPointer ;
+        }
+        if ( Slide::scaledBackgroundPicture != nilPointer ) {
                 delete Slide::scaledBackgroundPicture ;
                 Slide::scaledBackgroundPicture = nilPointer ;
         }
@@ -101,7 +105,7 @@ Slide::Slide() :
 
 Slide::~Slide( )
 {
-        freeWidgets() ;
+        removeAllWidgets() ;
 }
 
 void Slide::addPictureOfHeadAt ( int x, int y )
@@ -143,10 +147,10 @@ void Slide::refreshPicturesOfHeadAndHeels ()
 
                 if ( this->pictureOfHead->isOnSomeSlide () )
                         removeWidget( this->pictureOfHead );
-                else
-                        delete this->pictureOfHead ;
 
+                delete this->pictureOfHead ;
                 this->pictureOfHead = nilPointer ;
+
                 addPictureOfHeadAt( xHead, yHead );
         }
 
@@ -157,10 +161,10 @@ void Slide::refreshPicturesOfHeadAndHeels ()
 
                 if ( this->pictureOfHeels->isOnSomeSlide () )
                         removeWidget( this->pictureOfHeels );
-                else
-                        delete this->pictureOfHeels ;
 
+                delete this->pictureOfHeels ;
                 this->pictureOfHeels = nilPointer ;
+
                 addPictureOfHeelsAt( xHeels, yHeels );
         }
 }
@@ -212,7 +216,7 @@ void Slide::refresh () const
                 }
                 else
                 {
-                        Slide::scaledBackgroundPicture = new Picture( screenWidth, screenHeight, Color::blackColor() );
+                        Slide::scaledBackgroundPicture = new Picture( screenWidth, screenHeight, Color::byName( "green" ) );
 
                         if ( ratioX == ratioY )
                         {
@@ -338,12 +342,10 @@ void Slide::addWidget( Widget* widget )
 
 bool Slide::removeWidget( Widget* widget )
 {
-        for ( std::vector< Widget* >::const_iterator it = widgets.begin (); it != widgets.end (); )
+        for ( std::vector< Widget* >::const_iterator it = widgets.begin() ; it != widgets.end() ; )
         {
                 if ( ( *it ) == widget ) {
                         /* it = */ widgets.erase( it );
-                        delete widget ;
-
                         return true ;
                 } else
                         ++ it ;
@@ -352,23 +354,19 @@ bool Slide::removeWidget( Widget* widget )
         return false ;
 }
 
-void Slide::freeWidgets ()
+void Slide::removeAllWidgets ()
 {
-        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide() )
-                delete pictureOfHead;
-
-        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnSomeSlide() )
-                delete pictureOfHeels;
-
-        while ( ! this->widgets.empty () )
-        {
-                Widget* w = this->widgets.back ();
-                widgets.pop_back() ;
-                delete w ;
+        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide() ) {
+                delete pictureOfHead ;
+                this->pictureOfHead = nilPointer ;
         }
 
-        this->pictureOfHead = nilPointer ;
-        this->pictureOfHeels = nilPointer ;
+        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnSomeSlide() ) {
+                delete pictureOfHeels ;
+                this->pictureOfHeels = nilPointer ;
+        }
+
+        this->widgets.clear() ;
 }
 
 void Slide::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )

@@ -4,7 +4,6 @@
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
 #include "Label.hpp"
-#include "Menu.hpp"
 #include "Slide.hpp"
 
 #include "CreateKeysMenu.hpp"
@@ -14,10 +13,7 @@
 #include "CreateMainMenu.hpp"
 
 
-namespace gui
-{
-
-void CreateOptionsMenu::act ()
+void gui::CreateOptionsMenu::act ()
 {
         Slide & optionsSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
@@ -25,33 +21,23 @@ void CreateOptionsMenu::act ()
         {
                 optionsSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-                LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
+                optionsMenu.deleteAllOptions() ;
 
-                Label* defineKeys = new Label( languageStrings.getTranslatedTextByAlias( "keys-menu" ).getText() );
-                Label* adjustAudio = new Label( languageStrings.getTranslatedTextByAlias( "audio-menu" ).getText() );
-                Label* adjustVideo = new Label( languageStrings.getTranslatedTextByAlias( "video-menu" ).getText() );
-                Label* chooseLanguage = new Label( languageStrings.getTranslatedTextByAlias( "language-menu" ).getText() );
+                Label* defineKeys = optionsMenu.addOptionByLanguageTextAlias( "keys-menu" ) ;
+                Label* adjustAudio = optionsMenu.addOptionByLanguageTextAlias( "audio-menu" ) ;
+                Label* adjustVideo = optionsMenu.addOptionByLanguageTextAlias( "video-menu" ) ;
+                Label* chooseLanguage = optionsMenu.addOptionByLanguageTextAlias( "language-menu" );
 
                 defineKeys->setAction( new CreateKeysMenu() );
                 adjustAudio->setAction( new CreateAudioMenu() );
                 adjustVideo->setAction( new CreateVideoMenu() );
                 chooseLanguage->setAction( new CreateLanguageMenu() );
 
-                Menu * menu = new Menu( );
-                menu->setVerticalOffset( 6 );
-
-                menu->addOption( defineKeys );
-                menu->addOption( adjustAudio );
-                menu->addOption( adjustVideo );
-                menu->addOption( chooseLanguage );
-
-                optionsSlide.addWidget( menu );
-                optionsSlide.setKeyHandler( menu );
+                optionsSlide.addWidget( & optionsMenu );
+                optionsSlide.setKeyHandler( & optionsMenu );
 
                 optionsSlide.setEscapeAction( new CreateMainMenu() );
         }
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
-}
-
 }

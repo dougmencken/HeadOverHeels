@@ -5,7 +5,6 @@
 #include "LanguageStrings.hpp"
 #include "Font.hpp"
 #include "Slide.hpp"
-#include "Menu.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 #include "LoadGame.hpp"
@@ -27,7 +26,7 @@ void CreateListOfSavedGames::act ()
 {
         Slide & savedGamesSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( ! savedGamesSlide.isNewAndEmpty () ) savedGamesSlide.freeWidgets() ;
+        if ( ! savedGamesSlide.isNewAndEmpty () ) savedGamesSlide.removeAllWidgets() ;
 
         savedGamesSlide.setEscapeAction( isLoadMenu() ? static_cast< Action * >( /* to the main menu */ new CreateMainMenu() )
                                                       : static_cast< Action * >( /* back to the game */ new ContinueGame( true ) ) );
@@ -36,17 +35,17 @@ void CreateListOfSavedGames::act ()
 
         LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
-        // list of games
-        Menu* menu = new Menu( );
-        menu->setVerticalOffset( 112 );
+        menu.deleteAllOptions() ;
+
+        // fill the menu
         for ( unsigned int slot = 1 ; slot <= howManySaves ; ++ slot )
         {
                 std::string file = ospaths::pathToFile( ospaths::homePath() + "savegame", "saved." + util::number2string( slot ) );
-                SavedGameInfo gameInfo = readSomeInfoFromTheSavedGame( file );
+                SavedGameInfo gameInfo = readSomeInfoFromASavedGame( file );
 
-                if ( gameInfo.howManyRoomsVisited () >= 2 ) // less than 2 rooms means "couldn't read"
+                if ( gameInfo.howManyRoomsVisited () >= 2 )
                 {
-                        Label* label = new Label (
+                        Label* savedGame = menu.addOptionWithText(
                                 util::number2string( gameInfo.howManyRoomsVisited () ) + " "
                                         + languageStrings.getTranslatedTextByAlias( "rooms" ).getText()
                                 + " "
@@ -55,40 +54,36 @@ void CreateListOfSavedGames::act ()
                         );
 
                         if ( isLoadMenu() )
-                                label->setAction( new LoadGame( slot ) );
+                                savedGame->setAction( new LoadGame( slot ) );
                         else
-                                label->setAction( new SaveGame( slot ) );
-                                // very funny to change to LoadGame here, just try it
-
-                        menu->addOption( label );
+                                savedGame->setAction( new SaveGame( slot ) ); // very funny to change to LoadGame here, just try it
                 }
-                else
+                else // less than 2 visited rooms means "couldn't read"
                 {
                 # if defined( DEBUG ) && DEBUG
                         std::cout << "slot \"" << file << "\" is free" << std::endl ;
                 # endif
 
-                        Label* freeLine = new Label( languageStrings.getTranslatedTextByAlias( "free-slot" ).getText() );
+                        Label* freeSlot = menu.addOptionByLanguageTextAlias( "free-slot" );
+
                         if ( isLoadMenu() ) {
-                                freeLine->getFontToChange().setColor( "cyan" );
-                                freeLine->setAction( new PlaySound( "mistake" ) );
+                                freeSlot->getFontToChange().setColor( "cyan" );
+                                freeSlot->setAction( new PlaySound( "mistake" ) );
                         }
                         else {
-                                freeLine->getFontToChange().setColor( "orange" );
-                                freeLine->setAction( new SaveGame( slot ) );
+                                freeSlot->getFontToChange().setColor( "orange" );
+                                freeSlot->setAction( new SaveGame( slot ) );
                         }
-
-                        menu->addOption( freeLine );
                 }
         }
 
-        savedGamesSlide.addWidget( menu );
-        savedGamesSlide.setKeyHandler( menu );
+        savedGamesSlide.addWidget( & menu );
+        savedGamesSlide.setKeyHandler( & menu );
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
 
-SavedGameInfo CreateListOfSavedGames::readSomeInfoFromTheSavedGame( const std::string & fileName )
+SavedGameInfo CreateListOfSavedGames::readSomeInfoFromASavedGame( const std::string & fileName )
 {
         std::ifstream in( fileName.c_str() );
         if ( ! in.good() ) // there's no such file

@@ -6,7 +6,6 @@
 #include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
 #include "Slide.hpp"
-#include "MenuWithValues.hpp"
 #include "Label.hpp"
 #include "CreateOptionsMenu.hpp"
 
@@ -15,8 +14,6 @@
 
 void gui::CreateAudioMenu::act ()
 {
-        LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
-
         Slide & slideWithAudioMenu = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
         if ( slideWithAudioMenu.isNewAndEmpty() ) {
@@ -24,24 +21,18 @@ void gui::CreateAudioMenu::act ()
 
                 slideWithAudioMenu.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
+                this->audioOptions.deleteAllOptions() ;
+
                 // efectos sonoros
-                this->labelEffects = new Label( languageStrings.getTranslatedTextByAlias( "soundfx" ).getText() );
+                this->labelEffects = audioOptions.addOptionByLanguageTextAlias( "soundfx" );
 
                 // música
-                this->labelMusic = new Label( languageStrings.getTranslatedTextByAlias( "music" ).getText() );
+                this->labelMusic = audioOptions.addOptionByLanguageTextAlias( "music" ) ;
 
                 // play the melody of scenery on entry to a room or don’t
-                this->playRoomTunes = new Label( languageStrings.getTranslatedTextByAlias( "play-room-melodies" ).getText() );
+                this->playRoomTunes = audioOptions.addOptionByLanguageTextAlias( "play-room-melodies" );
 
-                // create the menu
-                this->audioOptions = new MenuWithValues( );
-
-                audioOptions->addOption( this->labelEffects );
-                audioOptions->addOption( this->labelMusic );
-                audioOptions->addOption( this->playRoomTunes );
-
-                audioOptions->setVerticalOffset( 33 );
-                slideWithAudioMenu.addWidget( this->audioOptions );
+                slideWithAudioMenu.addWidget( & this->audioOptions );
         }
 
         updateOptions ();
@@ -55,9 +46,11 @@ void gui::CreateAudioMenu::handleKey ( const std::string & theKey )
 {
         bool doneWithKey = false ;
 
-        if ( audioOptions->getActiveOption () == labelMusic || audioOptions->getActiveOption () == labelEffects )
+        Label * activeOption = audioOptions.getActiveOption() ;
+
+        if ( activeOption == labelMusic || activeOption == labelEffects )
         {
-                int value = ( audioOptions->getActiveOption () == labelMusic )
+                int value = ( activeOption == labelMusic )
                                         ? SoundManager::getInstance().getVolumeOfMusic()
                                         : SoundManager::getInstance().getVolumeOfEffects() ;
                 int previousValue = value ;
@@ -72,19 +65,17 @@ void gui::CreateAudioMenu::handleKey ( const std::string & theKey )
                 }
 
                 if ( value != previousValue ) {
-                        if ( audioOptions->getActiveOption () == labelMusic )
-                        {
+                        if ( activeOption == labelMusic ) {
                                 SoundManager::getInstance().setVolumeOfMusic( value );
                         }
-                        else if ( audioOptions->getActiveOption () == labelEffects )
-                        {
+                        else if ( activeOption == labelEffects ) {
                                 SoundManager::getInstance().setVolumeOfEffects( value );
                                 SoundManager::getInstance().stopEverySound ();
                                 SoundManager::getInstance().play ( "menus", "effect", /* loop */ false );
                         }
                 }
         }
-        else if ( audioOptions->getActiveOption () == playRoomTunes )
+        else if ( activeOption == playRoomTunes )
         {
                 if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                 {
@@ -97,7 +88,7 @@ void gui::CreateAudioMenu::handleKey ( const std::string & theKey )
                 allegro::releaseKey( theKey );
                 updateOptions ();
         } else
-                this->audioOptions->handleKey( theKey ) ;
+                this->audioOptions.handleKey( theKey ) ;
 }
 
 void gui::CreateAudioMenu::updateOptions ()
@@ -107,9 +98,9 @@ void gui::CreateAudioMenu::updateOptions ()
         std::string yeah = languageStrings.getTranslatedTextByAlias( "yep" ).getText ();
         std::string nope = languageStrings.getTranslatedTextByAlias( "nope" ).getText ();
 
-        audioOptions->setValueOf( labelEffects, util::number2string( SoundManager::getInstance().getVolumeOfEffects() ) );
-        audioOptions->setValueOf( labelMusic, util::number2string( SoundManager::getInstance().getVolumeOfMusic() ) );
-        audioOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+        audioOptions.setValueOf( labelEffects->getText(), util::number2string( SoundManager::getInstance().getVolumeOfEffects() ) );
+        audioOptions.setValueOf( labelMusic->getText(), util::number2string( SoundManager::getInstance().getVolumeOfMusic() ) );
+        audioOptions.setValueOf( playRoomTunes->getText(), GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
-        audioOptions->redraw ();
+        audioOptions.redraw ();
 }

@@ -99,13 +99,13 @@ public:
                 return * this->languageStrings ;
         }
 
-        const SlidePtr & getActiveSlide () const {  return this->activeSlide ;  }
+        Slide * getActiveSlide () const {  return this->activeSlide ;  }
 
         unsigned int countSlides () const {  return this->slides.size() ;  }
 
 private:
 
-        void setActiveSlide ( const SlidePtr & newSlide ) {  this->activeSlide = newSlide ;  }
+        void setActiveSlide ( Slide * newSlide ) ;
 
         /**
          * Unique object of this class for the whole game
@@ -113,9 +113,9 @@ private:
         static GuiManager * instance ;
 
         // the slide that is currently being drawn
-        SlidePtr activeSlide ;
+        Slide * activeSlide ;
 
-        std::map < /* name of action */ std::string, SlidePtr > slides ;
+        std::map < /* name of action */ std::string, Slide * > slides ;
 
         // a language of the user interface in the LLL_CC format
         std::string chosenLanguage ;

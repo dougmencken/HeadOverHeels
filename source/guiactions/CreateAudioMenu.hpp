@@ -13,11 +13,12 @@
 
 #include "ActionWithHandlingKeys.hpp"
 
+#include "MenuWithValues.hpp"
+
 
 namespace gui
 {
 
-class MenuWithValues ;
 class Label ;
 
 /**
@@ -31,10 +32,13 @@ public:
 
         CreateAudioMenu( )
                 : ActionWithHandlingKeys( )
-                , audioOptions( nilPointer )
+                , audioOptions( )
                 , labelEffects( nilPointer )
                 , labelMusic( nilPointer )
-                , playRoomTunes( nilPointer ) {}
+                , playRoomTunes( nilPointer )
+        {
+                audioOptions.setVerticalOffset( 33 );
+        }
 
         virtual ~CreateAudioMenu( ) {}
 
@@ -48,11 +52,10 @@ private:
 
         void updateOptions () ;
 
-        MenuWithValues * audioOptions ;
+        MenuWithValues audioOptions ;
 
         Label * labelEffects ;
         Label * labelMusic ;
-
         Label * playRoomTunes ;
 
 };

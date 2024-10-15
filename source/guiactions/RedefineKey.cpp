@@ -13,18 +13,18 @@
 
 namespace gui {
 
-RedefineKey::RedefineKey( MenuWithValues * menu, const std::string & keyAction )
+RedefineKey::RedefineKey( MenuWithValues & menu, const std::string & keyAction )
         : Action( )
-        , menu( menu )
+        , keysMenu( menu )
         , whatKeyDoes( keyAction )
 {}
 
 void RedefineKey::act ()
 {
-        Label * choice = menu->getActiveOption ();
+        Label * choice = keysMenu.getActiveOption() ;
         choice->getFontToChange().setColor( "yellow" );
         choice->getFontToChange().setDoubleHeight( true );
-        menu->redraw ();
+        keysMenu.redraw ();
 
         allegro::emptyKeyboardBuffer();
 
@@ -66,25 +66,25 @@ void RedefineKey::act ()
                                                 std::string toLook = ( previousAction == "take&jump" ) ? "takeandjump" : previousAction ;
                                                 const std::string & textOfThatKey = GuiManager::getInstance().getOrMakeLanguageStrings().getTranslatedTextByAlias( toLook ).getText();
 
-                                                const std::vector < Label * > & allOptions = menu->getEveryOption ();
+                                                const std::vector < Label * > & allOptions = keysMenu.getEveryOption ();
                                                 for ( unsigned int o = 0 ; o < allOptions.size() ; ++ o )
                                                 {
                                                         Label* option = allOptions[ o ];
                                                         if ( option->getText() == textOfThatKey )
                                                         {
-                                                                menu->setValueOf( option, "none" );
+                                                                keysMenu.setValueOf( option->getText(), "none" );
                                                                 option->getFontToChange().setColor( "cyan" );
 
                                                                 std::cout << "NO key for \"" << previousAction << "\" is yet defined" << std::endl ;
                                                                 break;
                                                         }
                                                 }
-                                                menu->redraw ();
+                                                keysMenu.redraw ();
                                         }
 
                                         std::cout << "the key for \"" << this->whatKeyDoes << "\" was \"" << thatKey << "\" now is \"" << newKey << "\"" << std::endl ;
 
-                                        menu->setValueOf( choice, CreateKeysMenu::allegroKeyToMenuKey( newKey ) );
+                                        keysMenu.setValueOf( choice->getText(), CreateKeysMenu::allegroKeyToMenuKey( newKey ) );
 
                                         InputManager::getInstance().changeUserKey( this->whatKeyDoes, newKey );
                                 }
@@ -102,7 +102,7 @@ void RedefineKey::act ()
 
         choice->getFontToChange().setColor( InputManager::getInstance().getUserKeyFor( this->whatKeyDoes ) != "none" ? "white" : "cyan" );
 
-        menu->redraw ();
+        keysMenu.redraw ();
 }
 
 }

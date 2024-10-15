@@ -227,6 +227,7 @@ void ShowAuthors::act ()
                 else if ( widgetForLoadingScreen != nilPointer )
                 {
                         credits.removeWidget( widgetForLoadingScreen );
+                        delete widgetForLoadingScreen ;
                         widgetForLoadingScreen = nilPointer;
                 }
 

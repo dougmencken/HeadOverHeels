@@ -42,7 +42,7 @@ public:
 
         std::string getValueOf( const std::string & textOfOption ) const ;
 
-        void setValueOf( const Label * const option, const std::string & value ) ;
+        void setValueOf( const std::string & textOfOption, const std::string & value ) ;
 
         virtual unsigned int getWidthOfMenu () const ;
 

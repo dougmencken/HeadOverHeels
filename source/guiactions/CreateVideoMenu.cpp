@@ -8,7 +8,6 @@
 #include "GamePreferences.hpp"
 #include "LanguageStrings.hpp"
 #include "Slide.hpp"
-#include "MenuWithValues.hpp"
 #include "Label.hpp"
 #include "CreateOptionsMenu.hpp"
 
@@ -24,40 +23,29 @@ void gui::CreateVideoMenu::act ()
 
                 slideWithVideoMenu.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
+                this->videoOptions.deleteAllOptions() ;
+
                 slideWithVideoMenu.drawSpectrumColorBoxes( true );
 
-                LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
-
+                this->screenSize = this->videoOptions.addOptionByLanguageTextAlias( "screen-size" );
+                this->screenSize->getFontToChange().setColor( "cyan" );
                 std::string widtHxHeight = util::number2string( GamePreferences::getScreenWidth() )
                                                         + "×"
                                                 + util::number2string( GamePreferences::getScreenHeight() );
-                this->screenSize = new Label( languageStrings.getTranslatedTextByAlias( "screen-size" ).getText() + " " + widtHxHeight );
-                this->screenSize->getFontToChange().setColor( "cyan" );
+                this->screenSize->setText( this->screenSize->getText() + " " + widtHxHeight );
                 this->screenSize->setAction( new CreateGraphicsAreaSizeMenu( this ) );
 
-                this->fullScreen = new Label( languageStrings.getTranslatedTextByAlias( "full-screen" ).getText() );
-                this->drawShadows = new Label( languageStrings.getTranslatedTextByAlias( "draw-shadows" ).getText() );
-                this->drawSceneryDecor = new Label( languageStrings.getTranslatedTextByAlias( "draw-decor" ).getText() );
-                this->drawRoomMiniatures = new Label( languageStrings.getTranslatedTextByAlias( "show-miniatures" ).getText() );
-                this->centerCameraOn = new Label( languageStrings.getTranslatedTextByAlias( "center-camera-on" ).getText() );
+                this->fullScreen = this->videoOptions.addOptionByLanguageTextAlias( "full-screen" );
+                this->drawShadows = this->videoOptions.addOptionByLanguageTextAlias( "draw-shadows" );
+                this->drawSceneryDecor = this->videoOptions.addOptionByLanguageTextAlias( "draw-decor" );
+                this->drawRoomMiniatures = this->videoOptions.addOptionByLanguageTextAlias( "show-miniatures" );
+                this->centerCameraOn = this->videoOptions.addOptionByLanguageTextAlias( "center-camera-on" );
 
-                const LanguageText & textChooseGraphics = languageStrings.getTranslatedTextByAlias( "graphic-set" );
-                this->chooseGraphics = new Label( textChooseGraphics.getText(), new Font( "yellow" ) );
+                this->chooseGraphics = this->videoOptions.addOptionByLanguageTextAlias( "graphic-set" );
+                this->chooseGraphics->getFontToChange().setColor( "yellow" );
                 this->chooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
-                this->videoOptions = new MenuWithValues( ' ', 1 );
-
-                videoOptions->addOption( screenSize );
-                videoOptions->addOption( fullScreen );
-                videoOptions->addOption( drawShadows );
-                videoOptions->addOption( drawSceneryDecor );
-                videoOptions->addOption( drawRoomMiniatures );
-                videoOptions->addOption( centerCameraOn );
-                videoOptions->addOption( chooseGraphics );
-
-                videoOptions->setVerticalOffset( 33 );
-
-                slideWithVideoMenu.addWidget( this->videoOptions );
+                slideWithVideoMenu.addWidget( & this->videoOptions );
         }
 
         updateOptions ();
@@ -73,27 +61,29 @@ void gui::CreateVideoMenu::handleKey ( const std::string & theKey )
 
         if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
         {
-                if ( videoOptions->getActiveOption () == fullScreen )
+                Label * activeOption = videoOptions.getActiveOption() ;
+
+                if ( activeOption == fullScreen )
                 {
                         gui::GuiManager::getInstance().toggleFullScreenVideo ();
                         doneWithKey = true ;
                 }
-                else if ( videoOptions->getActiveOption () == drawShadows )
+                else if ( activeOption == drawShadows )
                 {
                         GameManager::getInstance().toggleCastShadows ();
                         doneWithKey = true ;
                 }
-                else if ( videoOptions->getActiveOption () == drawSceneryDecor )
+                else if ( activeOption == drawSceneryDecor )
                 {
                         GameManager::getInstance().toggleSceneryDecor ();
                         doneWithKey = true ;
                 }
-                else if ( videoOptions->getActiveOption () == drawRoomMiniatures )
+                else if ( activeOption == drawRoomMiniatures )
                 {
                         GameManager::getInstance().toggleRoomMiniatures ();
                         doneWithKey = true ;
                 }
-                else if ( videoOptions->getActiveOption () == centerCameraOn )
+                else if ( activeOption == centerCameraOn )
                 {
                         GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
                         doneWithKey = true ;
@@ -104,7 +94,7 @@ void gui::CreateVideoMenu::handleKey ( const std::string & theKey )
                 allegro::releaseKey( theKey );
                 updateOptions ();
         } else
-                this->videoOptions->handleKey( theKey ) ;
+                this->videoOptions.handleKey( theKey ) ;
 }
 
 void gui::CreateVideoMenu::updateOptions ()
@@ -114,17 +104,17 @@ void gui::CreateVideoMenu::updateOptions ()
         std::string yeah = languageStrings.getTranslatedTextByAlias( "yep" ).getText() ;
         std::string nope = languageStrings.getTranslatedTextByAlias( "nope" ).getText() ;
 
-        videoOptions->setValueOf( drawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
-        videoOptions->setValueOf( drawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
-        videoOptions->setValueOf( drawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
-        videoOptions->setValueOf( fullScreen, gui::GuiManager::getInstance().isInFullScreen () ? yeah : nope );
+        videoOptions.setValueOf( drawRoomMiniatures->getText(), GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
+        videoOptions.setValueOf( drawSceneryDecor->getText(), GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
+        videoOptions.setValueOf( drawShadows->getText(), GameManager::getInstance().getCastShadows () ? yeah : nope );
+        videoOptions.setValueOf( fullScreen->getText(), gui::GuiManager::getInstance().isInFullScreen () ? yeah : nope );
 
         std::string room = languageStrings.getTranslatedTextByAlias( "room" ).getText ();
         std::string character = languageStrings.getTranslatedTextByAlias( "character" ).getText ();
 
-        videoOptions->setValueOf( centerCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
+        videoOptions.setValueOf( centerCameraOn->getText(), GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
 
         // chooseGraphics has no value but action
 
-        videoOptions->redraw ();
+        videoOptions.redraw ();
 }

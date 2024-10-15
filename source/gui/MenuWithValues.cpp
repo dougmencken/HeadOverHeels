@@ -120,27 +120,25 @@ std::string MenuWithValues::getValueOf( const std::string & textOfOption ) const
         const std::vector< Label* > & options = getEveryOption ();
         for ( unsigned int row = 0 ; row < options.size (); ++ row )
         {
-                if ( options[ row ]->getText() == textOfOption )
-                {
-                        assert( row < listOfValues.size() );
-
-                        return listOfValues[ row ] ;
+                if ( options[ row ]->getText() == textOfOption ) {
+                        if ( row < listOfValues.size() )
+                                return listOfValues[ row ] ;
                 }
         }
 
-        return "";
+        return "" ;
 }
 
-void MenuWithValues::setValueOf( const Label * const option, const std::string & value )
+void MenuWithValues::setValueOf( const std::string & textOfOption, const std::string & value )
 {
-        while ( listOfValues.size() < getEveryOption().size() ) // equalize sizes
+        const std::vector< Label* > & options = getEveryOption ();
+
+        while ( listOfValues.size() < options.size() ) // equalize sizes
                 listOfValues.push_back( "" );
 
-        const std::vector< Label* > & options = getEveryOption ();
         for ( unsigned int o = 0 ; o < options.size () ; ++ o )
         {
-                if ( options[ o ] == option )
-                {
+                if ( options[ o ]->getText() == textOfOption ) {
                         listOfValues[ o ] = value ;
                         break;
                 }

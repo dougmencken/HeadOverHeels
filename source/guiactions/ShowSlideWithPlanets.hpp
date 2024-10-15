@@ -25,19 +25,11 @@ public:
         /**
          * @param notNewGame true for a game in progress or false when a new game begins
          */
-        explicit ShowSlideWithPlanets( bool notNewGame );
+        explicit ShowSlideWithPlanets( bool notNewGame )
+                : Action( )
+                , gameInProgress( notNewGame ) {}
 
         virtual ~ShowSlideWithPlanets( ) {}
-
-        void liberateBlacktooth() {  this->blacktoothFree = true ;  }
-
-        void liberateEgyptus() {  this->egyptusFree = true ;  }
-
-        void liberatePenitentiary() {  this->penitentiaryFree = true ;  }
-
-        void liberateByblos() {  this->byblosFree = true ;  }
-
-        void liberateSafari() {  this->safariFree = true ;  }
 
 protected:
 
@@ -49,21 +41,6 @@ private:
          * false if a new game begins, true for a game already in progress
          */
         bool gameInProgress ;
-
-        // was the planet Blacktooth liberated
-        bool blacktoothFree ;
-
-        // was the planet Egyptus liberated
-        bool egyptusFree ;
-
-        // was the planet Penitentiary liberated
-        bool penitentiaryFree ;
-
-        // was the planet Byblos liberated
-        bool byblosFree ;
-
-        // was the planet Safari liberated
-        bool safariFree ;
 
 } ;
 

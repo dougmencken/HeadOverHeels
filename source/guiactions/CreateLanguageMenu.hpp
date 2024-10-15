@@ -14,6 +14,7 @@
 #include <map>
 
 #include "Action.hpp"
+#include "MenuWithTwoColumns.hpp"
 
 
 namespace gui
@@ -43,6 +44,8 @@ protected:
 private:
 
         std::map < std::string /* iso */, std::string /* linguonym */ > languages ;
+
+        MenuWithTwoColumns languageMenu ;
 
 };
 

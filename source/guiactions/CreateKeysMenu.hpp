@@ -13,14 +13,13 @@
 
 #include "Action.hpp"
 
+#include "MenuWithValues.hpp"
+
 #include <string>
 
 
 namespace gui
 {
-
-class MenuWithValues ;
-
 
 /**
  * Create “select the keys” menu
@@ -31,7 +30,12 @@ class CreateKeysMenu : public Action
 
 public:
 
-        CreateKeysMenu( ) : Action( ), menuOfKeys( nilPointer ) { }
+        CreateKeysMenu( )
+                : Action( )
+                , menuOfKeys( '.', 5 )
+        {
+                this->menuOfKeys.setVerticalOffset( 64 );
+        }
 
         static std::string allegroKeyToMenuKey( const std::string & key )
         {
@@ -53,7 +57,7 @@ protected:
 
 private:
 
-        MenuWithValues * menuOfKeys ;
+        MenuWithValues menuOfKeys ;
 
 };
 

@@ -12,6 +12,7 @@
 #define CreateOptionsMenu_hpp_
 
 #include "Action.hpp"
+#include "Menu.hpp"
 
 
 namespace gui
@@ -22,11 +23,20 @@ class CreateOptionsMenu : public Action
 
 public:
 
-        CreateOptionsMenu( ) : Action() {}
+        CreateOptionsMenu( )
+                : Action()
+                , optionsMenu( )
+        {
+                optionsMenu.setVerticalOffset( 6 );
+        }
 
 protected:
 
         virtual void act () ;
+
+private:
+
+        Menu optionsMenu ;
 
 };
 

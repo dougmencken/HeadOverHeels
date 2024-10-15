@@ -12,6 +12,7 @@
 #define CreateMainMenu_hpp_
 
 #include "Action.hpp"
+#include "Menu.hpp"
 
 
 namespace gui
@@ -26,11 +27,20 @@ class CreateMainMenu : public Action
 
 public:
 
-        CreateMainMenu( ) : Action() {}
+        CreateMainMenu( )
+                : Action()
+                , mainMenu( )
+        {
+                mainMenu.setVerticalOffset( 12 );
+        }
 
 protected:
 
         virtual void act () ;
+
+private:
+
+        Menu mainMenu ;
 
 };
 

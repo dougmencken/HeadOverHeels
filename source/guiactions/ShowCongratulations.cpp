@@ -20,7 +20,7 @@ void gui::ShowCongratulations::act ()
         if ( theFinSlide.isNewAndEmpty() )
                 theFinSlide.setEscapeAction( new CreateGameOverSlide( rooms, planets ) );
         else
-                theFinSlide.freeWidgets() ;
+                theFinSlide.removeAllWidgets() ;
 
         {
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;

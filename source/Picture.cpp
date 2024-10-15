@@ -85,29 +85,21 @@ void Picture::fillWithColor( const Color& color )
 
 void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare )
 {
-        const unsigned int sizeOfSquareDoubled = sizeOfSquare << 1 ;
+        const unsigned int doubleSquare = sizeOfSquare << 1 ;
 
         unsigned int width = getWidth ();
         unsigned int height = getHeight ();
-
-        const Color& white = Color::whiteColor() ;
-        const Color& gray75white = Color::byName( "gray 75% white" );
 
         getAllegroPict().lockReadWrite() ;
 
         for ( unsigned int y = 0 ; y < height ; y ++ ) {
                 for ( unsigned int x = 0 ; x < width ; x ++ )
                 {
-                        if ( getPixelAt( x, y ).isFullyTransparent () )
-                        {
-                                Color whichColor = white ;
-                                if ( ( ( y % sizeOfSquare ) == ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) != ( x % sizeOfSquareDoubled ) ) ||
-                                        ( ( y % sizeOfSquare ) != ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) == ( x % sizeOfSquareDoubled ) ) )
-                                {
-                                        whichColor = gray75white ;
-                                }
+                        if ( getPixelAt( x, y ).isFullyTransparent () ) {
+                                bool grey = ( ( y % sizeOfSquare ) == ( y % doubleSquare ) && ( x % sizeOfSquare ) != ( x % doubleSquare ) ) ||
+                                            ( ( y % sizeOfSquare ) != ( y % doubleSquare ) && ( x % sizeOfSquare ) == ( x % doubleSquare ) ) ;
 
-                                putPixelAt( x, y, whichColor );
+                                putPixelAt( x, y, grey ? Color::byName( "gray 75% white" ) : Color::whiteColor() );
                         }
                 }
         }

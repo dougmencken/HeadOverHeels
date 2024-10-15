@@ -31,7 +31,11 @@ public:
 
         CreateGraphicsAreaSizeMenu( Action* previous )
                 : ActionWithHandlingKeys()
-                , actionOnEscape( previous ) {}
+                , menuOfScreenSizes( )
+                , actionOnEscape( previous )
+        {
+                this->menuOfScreenSizes.setVerticalOffset( 40 );
+        }
 
         virtual ~CreateGraphicsAreaSizeMenu( ) {}
 
@@ -54,7 +58,7 @@ private:
 
         void updateOptions () ;
 
-        Menu * menuOfScreenSizes ;
+        Menu menuOfScreenSizes ;
 
         Label * customSize ;
 

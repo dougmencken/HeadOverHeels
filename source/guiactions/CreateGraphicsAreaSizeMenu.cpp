@@ -15,6 +15,7 @@ std::vector< std::pair< unsigned int, unsigned int > > gui::CreateGraphicsAreaSi
 void gui::CreateGraphicsAreaSizeMenu::fillSlide ( Slide & slideToFill )
 {
         if ( ! slideToFill.isNewAndEmpty() ) return ;
+        ////////this->menuOfScreenSizes.deleteAllOptions() ; slideToFill.removeAllWidgets() ;
 
         slideToFill.setEscapeAction( this->actionOnEscape );
 
@@ -22,22 +23,17 @@ void gui::CreateGraphicsAreaSizeMenu::fillSlide ( Slide & slideToFill )
 
         slideToFill.drawSpectrumColorBoxes( true );
 
-        this->customSize = new Label( "(custom)" );
-
-        this->menuOfScreenSizes = new Menu( );
-        this->menuOfScreenSizes->setVerticalOffset( 40 );
-
-        this->menuOfScreenSizes->addOption( this->customSize );
+        this->customSize = this->menuOfScreenSizes.addOptionByLanguageTextAlias( "custom-size" );
 
         unsigned int howManyPopularScreenSizes = popularScreenSizes.size() ;
         for ( unsigned int i = 0 ; i < howManyPopularScreenSizes ; ++ i ) {
                 std::string popularSize = util::number2string( popularScreenSizes[ i ].first )
                                                 + "×"
                                                 + util::number2string( popularScreenSizes[ i ].second ) ;
-                this->menuOfScreenSizes->addOption( new Label( popularSize ) );
+                this->menuOfScreenSizes.addOptionWithText( popularSize );
         }
 
-        slideToFill.addWidget( this->menuOfScreenSizes );
+        slideToFill.addWidget( & this->menuOfScreenSizes );
 }
 
 void gui::CreateGraphicsAreaSizeMenu::act ()
@@ -74,7 +70,7 @@ void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
 
         if ( theKey == "Enter" || theKey == "Space" )
         {
-                std::string chosenSize = this->menuOfScreenSizes->getActiveOption()->getText() ;
+                const std::string & chosenSize = this->menuOfScreenSizes.getActiveOption()->getText() ;
 
                 bool isCustomSize = chosenSize.find( " " ) != std::string::npos ;
                 if ( isCustomSize ) {
@@ -104,7 +100,7 @@ void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )
                 allegro::releaseKey( theKey );
                 updateOptions ();
         } else
-                this->menuOfScreenSizes->handleKey( theKey ) ;
+                this->menuOfScreenSizes.handleKey( theKey ) ;
 }
 
 void gui::CreateGraphicsAreaSizeMenu::pickCustomSize ()
@@ -150,7 +146,7 @@ void gui::CreateGraphicsAreaSizeMenu::pickCustomSize ()
                                 ( currentWidth != chosenWidth || currentHeight != chosenHeight )
                                         ? "white" : "cyan" );
 
-                this->menuOfScreenSizes->redraw ();
+                this->menuOfScreenSizes.redraw () ;
 
                 key = allegro::nextKey() ;
 
@@ -232,25 +228,23 @@ void gui::CreateGraphicsAreaSizeMenu::updateOptions ()
                                                         + "×"
                                 + util::number2string( GamePreferences::getScreenHeight() ) ;
 
-        const std::vector< Label * > & everySize = this->menuOfScreenSizes->getEveryOption ();
+        const std::vector< Label * > & everySize = this->menuOfScreenSizes.getEveryOption ();
         bool currentSizeIsPopular = false ;
         for ( unsigned int i = 0 ; i < everySize.size() ; ++ i ) {
                 if ( everySize[ i ] == nilPointer ) continue ;
                 Label & option = * everySize[ i ] ;
 
                 if ( option.getText() == currentSize ) {
-                        this->menuOfScreenSizes->setNthOptionAsActive( i );
+                        this->menuOfScreenSizes.setNthOptionAsActive( i );
                         option.getFontToChange().setColor( "cyan" );
                         currentSizeIsPopular = true ;
                 } else
                         option.getFontToChange().setColor( "white" );
         }
 
-        LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
-        this->customSize->setText( languageStrings.getTranslatedTextByAlias( "custom-size" ).getText() );
         this->customSize->getFontToChange().setColor( currentSizeIsPopular ? "white" : "cyan" ) ;
         if ( ! currentSizeIsPopular )
                 this->customSize->setText( this->customSize->getText() + " " + currentSize );
 
-        this->menuOfScreenSizes->redraw ();
+        this->menuOfScreenSizes.redraw ();
 }

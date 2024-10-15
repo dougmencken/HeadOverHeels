@@ -16,26 +16,7 @@
 #include "ospaths.hpp"
 
 
-namespace gui
-{
-
-ShowSlideWithPlanets::ShowSlideWithPlanets( bool notNewGame )
-        : Action( )
-        , gameInProgress( notNewGame )
-        , blacktoothFree( false )
-        , egyptusFree( false )
-        , penitentiaryFree( false )
-        , byblosFree( false )
-        , safariFree( false )
-{
-        if ( GameManager::getInstance().isFreePlanet( "blacktooth" ) ) liberateBlacktooth() ;
-        if ( GameManager::getInstance().isFreePlanet( "byblos" ) ) liberateByblos() ;
-        if ( GameManager::getInstance().isFreePlanet( "egyptus" ) ) liberateEgyptus() ;
-        if ( GameManager::getInstance().isFreePlanet( "penitentiary" ) ) liberatePenitentiary() ;
-        if ( GameManager::getInstance().isFreePlanet( "safari" ) ) liberateSafari() ;
-}
-
-void ShowSlideWithPlanets::act ()
+void gui::ShowSlideWithPlanets::act ()
 {
         SoundManager::getInstance().playOgg( "music/HeadOverHeels.ogg", /* loop */ false );
 
@@ -46,7 +27,7 @@ void ShowSlideWithPlanets::act ()
 
         Slide & planets = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( ! planets.isNewAndEmpty() ) planets.freeWidgets() ;
+        if ( ! planets.isNewAndEmpty() ) planets.removeAllWidgets() ;
 
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int screenHeight = GamePreferences::getScreenHeight();
@@ -90,13 +71,13 @@ void ShowSlideWithPlanets::act ()
                 PictureWidget* imageOfBlacktooth = new PictureWidget( blacktoothX, blacktoothY, planetBlacktooth, "planet Blacktooth" );
                 planets.addWidget( imageOfBlacktooth );
 
-                PictureWidget* imageOfChapeau = new PictureWidget(
+                PictureWidget* blacktoothChapeau = new PictureWidget(
                         blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - halfOfChapeauWidth,
                         blacktoothY + chapeauOffsetY,
-                        blacktoothFree ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "blacktooth" ) ? chapeau : chapeauTriste,
                         "image of chapeau for blacktooth"
                 );
-                planets.addWidget( imageOfChapeau );
+                planets.addWidget( blacktoothChapeau );
 
                 Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "blacktooth" ).getText() );
                 nameOfPlanet->moveTo( blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), blacktoothY + labelOffsetY );
@@ -114,13 +95,13 @@ void ShowSlideWithPlanets::act ()
                 PictureWidget* imageOfEgyptus = new PictureWidget( egyptusX, egyptusY, planetEgyptus, "planet Egyptus" );
                 planets.addWidget( imageOfEgyptus );
 
-                PictureWidget* imageOfChapeau = new PictureWidget(
+                PictureWidget* egyptusChapeau = new PictureWidget(
                         egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - halfOfChapeauWidth,
                         egyptusY + chapeauOffsetY,
-                        egyptusFree ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "egyptus" ) ? chapeau : chapeauTriste,
                         "image of chapeau for egyptus"
                 );
-                planets.addWidget( imageOfChapeau );
+                planets.addWidget( egyptusChapeau );
 
                 Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "egyptus" ).getText() );
                 nameOfPlanet->moveTo( egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), egyptusY + labelOffsetY );
@@ -138,13 +119,13 @@ void ShowSlideWithPlanets::act ()
                 PictureWidget* imageOfPenitentiary = new PictureWidget( penitentiaryX, penitentiaryY, planetPenitentiary, "planet Penitentiary" );
                 planets.addWidget( imageOfPenitentiary );
 
-                PictureWidget* imageOfChapeau = new PictureWidget(
+                PictureWidget* penitentiaryChapeau = new PictureWidget(
                         penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - halfOfChapeauWidth,
                         penitentiaryY + chapeauOffsetY,
-                        penitentiaryFree ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "penitentiary" ) ? chapeau : chapeauTriste,
                         "image of chapeau for penitentiary"
                 );
-                planets.addWidget( imageOfChapeau );
+                planets.addWidget( penitentiaryChapeau );
 
                 Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "penitentiary" ).getText() );
                 nameOfPlanet->moveTo( penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), penitentiaryY + labelOffsetY );
@@ -162,13 +143,13 @@ void ShowSlideWithPlanets::act ()
                 PictureWidget* imageOfByblos = new PictureWidget( byblosX, byblosY, planetByblos, "planet Bookworld" );
                 planets.addWidget( imageOfByblos );
 
-                PictureWidget* imageOfChapeau = new PictureWidget(
+                PictureWidget* byblosChapeau = new PictureWidget(
                         byblosX + ( imageOfByblos->getWidth() >> 1 ) - halfOfChapeauWidth,
                         byblosY + chapeauOffsetY,
-                        byblosFree ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "byblos" ) ? chapeau : chapeauTriste,
                         "image of chapeau for byblos"
                 );
-                planets.addWidget( imageOfChapeau );
+                planets.addWidget( byblosChapeau );
 
                 Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "byblos" ).getText() );
                 nameOfPlanet->moveTo( byblosX + ( imageOfByblos->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), byblosY + labelOffsetY );
@@ -186,13 +167,13 @@ void ShowSlideWithPlanets::act ()
                 PictureWidget* imageOfSafari = new PictureWidget( safariX, safariY, planetSafari, "planet Safari" );
                 planets.addWidget( imageOfSafari );
 
-                PictureWidget* imageOfChapeau = new PictureWidget(
+                PictureWidget* safariChapeau = new PictureWidget(
                         safariX + ( imageOfSafari->getWidth() >> 1 ) - halfOfChapeauWidth,
                         safariY + chapeauOffsetY,
-                        safariFree ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "safari" ) ? chapeau : chapeauTriste,
                         "image of chapeau for safari"
                 );
-                planets.addWidget( imageOfChapeau );
+                planets.addWidget( safariChapeau );
 
                 Label* nameOfPlanet = new Label( languageStrings.getTranslatedTextByAlias( "safari" ).getText() );
                 nameOfPlanet->moveTo( safariX + ( imageOfSafari->getWidth() >> 1 ) - ( nameOfPlanet->getWidth() >> 1 ), safariY + labelOffsetY );
@@ -201,6 +182,4 @@ void ShowSlideWithPlanets::act ()
 
         planets.setTransitionFromThisSlideOff() ; // no transition because after this slide the game begins
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
-}
-
 }

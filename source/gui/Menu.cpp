@@ -29,7 +29,7 @@ Menu::Menu( )
         makePicturesBeforeOptions() ;
 }
 
-Menu::~Menu( )
+void Menu::deleteAllOptions ()
 {
         std::for_each( options.begin (), options.end (), DeleteIt() );
         options.clear();
@@ -187,7 +187,7 @@ void Menu::draw ()
         setY ( previousY );
 }
 
-void Menu::redraw ()
+void Menu::redraw () const
 {
         GuiManager::getInstance().redraw();
 }
@@ -207,10 +207,17 @@ void Menu::handleKey( const std::string & key )
                 getActiveOption()->handleKey( key );
 }
 
-void Menu::addOption( Label* label )
+Label* Menu::addOptionWithText ( const std::string & textOfOption )
 {
-        if ( label != nilPointer )
-                options.push_back( label );
+        Label * option = new Label( textOfOption );
+        addOption( option );
+        return option ;
+}
+
+Label* Menu::addOptionByLanguageTextAlias ( const std::string & alias )
+{
+        LanguageStrings & languageStrings = GuiManager::getInstance().getOrMakeLanguageStrings() ;
+        return addOptionWithText( languageStrings.getTranslatedTextByAlias( alias ).getText() );
 }
 
 void Menu::setActiveOptionByText ( const std::string & textOfOption )
@@ -259,15 +266,16 @@ unsigned int Menu::getHeightOfMenu () const
 
 unsigned int Menu::getIndexOfActiveOption () const
 {
-        if ( getActiveOption() == nilPointer ) return 0 ;
+        Label * activeMenuOption = getActiveOption() ;
+        if ( activeMenuOption == nilPointer ) return 0 ;
 
-        unsigned int j = 0 ;
-        for ( ; j < howManyOptions() ; ++ j )
-                // compare by the location
-                if ( this->options[ j ]->getY () == getActiveOption()->getY ()
-                        && this->options[ j ]->getX () == getActiveOption()->getX () ) return j ;
+        unsigned int numberOfOptions = howManyOptions() ;
+        for ( unsigned int j = 0 ; j < numberOfOptions ; ++ j )
+                // compare by location
+                if ( this->options[ j ]->getY () == activeMenuOption->getY ()
+                        && this->options[ j ]->getX () == activeMenuOption->getX () ) return j ;
 
-        // if can't find the active menu option
+        // can’t find the active menu option
         return 0 ;
 }
 

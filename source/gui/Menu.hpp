@@ -39,18 +39,18 @@ public:
 
         Menu( );
 
-        virtual ~Menu( );
+        virtual ~Menu( ) {  this->deleteAllOptions() ;  }
+
+        void deleteAllOptions () ;
 
         virtual void draw () ;
 
-        void redraw () ;
+        void redraw () const ;
 
         virtual void handleKey ( const std::string & key ) ;
 
-        /**
-         * Add option to menu
-         */
-        void addOption ( Label * label ) ;
+        Label * addOptionWithText ( const std::string & textOfOption ) ;
+        Label * addOptionByLanguageTextAlias ( const std::string & alias ) ;
 
         unsigned int howManyOptions () const {  return this->options.size() ;  }
 
@@ -92,6 +92,11 @@ protected:
         virtual void nextOption () ;
 
 private:
+
+        void addOption ( Label * label )
+        {
+                if ( label != nilPointer ) this->options.push_back( label );
+        }
 
         /**
          * Options that make up the menu

@@ -31,7 +31,7 @@ public:
        /**
         * @param keyAction what the key does, like "jump" or "movesouth"
         */
-        RedefineKey( MenuWithValues * menu, const std::string & keyAction ) ;
+        RedefineKey( MenuWithValues & menu, const std::string & keyAction ) ;
 
 protected:
 
@@ -39,7 +39,7 @@ protected:
 
 private:
 
-        MenuWithValues * menu ;
+        MenuWithValues & keysMenu ;
 
         std::string whatKeyDoes ;
 

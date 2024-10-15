@@ -5,7 +5,6 @@
 #include "LanguageStrings.hpp"
 #include "Font.hpp"
 #include "Slide.hpp"
-#include "MenuWithTwoColumns.hpp"
 #include "Label.hpp"
 #include "ChooseLanguage.hpp"
 #include "CreateMainMenu.hpp"
@@ -20,9 +19,13 @@
 
 namespace gui {
 
-CreateLanguageMenu::CreateLanguageMenu( ) : Action( )
+CreateLanguageMenu::CreateLanguageMenu( )
+        : Action( )
+        , languageMenu( /* between columns */ ( GamePreferences::getScreenWidth() >> 3 ) - 20 )
 {
         CreateLanguageMenu::makeMapOfLanguages( ospaths::sharePath() + "text", this->languages );
+
+        languageMenu.setVerticalOffset( 50 ); // adjust for header over heelser
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )
@@ -34,7 +37,7 @@ void CreateLanguageMenu::act ()
 {
         Slide & languagesSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
 
-        if ( ! languagesSlide.isNewAndEmpty() ) languagesSlide.freeWidgets ();
+        if ( ! languagesSlide.isNewAndEmpty() ) languagesSlide.removeAllWidgets() ;
 
         languagesSlide.setEscapeAction( new CreateMainMenu() );
 
@@ -61,26 +64,23 @@ void CreateLanguageMenu::act ()
         languagesSlide.addPictureOfHeadAt( Head->getX() - ( headHeelsWidth << 1 ) - space, space + 5 );
         languagesSlide.addPictureOfHeelsAt( Heels->getX() + Heels->getWidth() + headHeelsWidth + space, space + 5 );
 
+        languageMenu.deleteAllOptions() ;
+
         // present the language menu
 
-        std::string chosenLanguage = GuiManager::getInstance().getLanguage() ;
-
-        MenuWithTwoColumns * menu = new MenuWithTwoColumns( /* between columns */ ( screenWidth >> 3 ) - 20 );
-        menu->setVerticalOffset( 50 ); // adjust for header over heelser
+        const std::string & chosenLanguage = GuiManager::getInstance().getLanguage() ;
 
         for ( std::map< std::string, std::string >::const_iterator it = languages.begin () ; it != languages.end () ; ++ it )
         {
-                Label* tongue = new Label( ( *it ).second );
+                Label* tongue = languageMenu.addOptionWithText( ( *it ).second );
                 tongue->setAction( new ChooseLanguage( ( *it ).first ) );
 
-                menu->addOption( tongue );
-
                 if ( chosenLanguage == ( *it ).first || ( chosenLanguage.empty() && it == languages.begin() ) )
-                        menu->setActiveOptionByText( ( *it ).second );
+                        languageMenu.setActiveOptionByText( tongue->getText() );
         }
 
-        languagesSlide.addWidget( menu );
-        languagesSlide.setKeyHandler( menu );
+        languagesSlide.addWidget( & languageMenu );
+        languagesSlide.setKeyHandler( & languageMenu );
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 }
