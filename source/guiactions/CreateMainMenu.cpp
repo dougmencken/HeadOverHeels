@@ -3,7 +3,6 @@
 
 #include "GuiManager.hpp"
 #include "SoundManager.hpp"
-#include "LanguageStrings.hpp"
 #include "Label.hpp"
 #include "Slide.hpp"
 

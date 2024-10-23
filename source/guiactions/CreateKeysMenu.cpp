@@ -8,7 +8,6 @@
 #include "Label.hpp"
 #include "Slide.hpp"
 #include "CreateOptionsMenu.hpp"
-#include "LanguageStrings.hpp"
 
 
 void gui::CreateKeysMenu::act ()

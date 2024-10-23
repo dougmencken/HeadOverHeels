@@ -2,7 +2,6 @@
 #include "CreateLanguageMenu.hpp"
 
 #include "GuiManager.hpp"
-#include "LanguageStrings.hpp"
 #include "Font.hpp"
 #include "Slide.hpp"
 #include "Label.hpp"

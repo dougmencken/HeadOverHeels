@@ -61,6 +61,8 @@ headoverheels_SOURCES = main.cpp \
 			WrappersAllegro.hpp \
 			Way.cpp \
 			Way.hpp \
+			Motion2D.hpp \
+			Motion3D.hpp \
 			Color.cpp \
 			Color.hpp \
 			FlickeringColor.cpp \
