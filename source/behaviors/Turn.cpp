@@ -107,47 +107,17 @@ bool Turn::update ()
 
 void Turn::turn ()
 {
-        bool turnLeft = ( getNameOfBehavior().find( "turn left" ) != std::string::npos );
-
         Item & item = getItem() ;
         const std::string & heading = item.getHeading ();
+        bool turnLeft = ( getNameOfBehavior().find( "turn left" ) != std::string::npos );
 
-        if ( heading == "north" ) {
-                if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
-                        item.changeHeading( "west" );
-                } else {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
-                        item.changeHeading( "east" );
-                }
-        }
-        else if ( heading == "south" ) {
-                if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
-                        item.changeHeading( "east" );
-                } else {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
-                        item.changeHeading( "west" );
-                }
-        }
-        else if ( heading == "east" ) {
-                if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
-                        item.changeHeading( "north" );
-                } else {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
-                        item.changeHeading( "south" );
-                }
-        }
-        else if ( heading == "west" ) {
-                if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
-                        item.changeHeading( "south" );
-                } else {
-                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
-                        item.changeHeading( "north" );
-                }
-        }
+             if ( heading == "north" ) item.changeHeading( turnLeft ? "west" : "east" );
+        else if ( heading == "south" ) item.changeHeading( turnLeft ? "east" : "west" );
+        else if ( heading ==  "east" ) item.changeHeading( turnLeft ? "north" : "south" );
+        else if ( heading == "west"  ) item.changeHeading( turnLeft ? "south" : "north" );
+
+        // will move where it is heading
+        setCurrentActivity( activities::Activity::Moving );
 }
 
 }
