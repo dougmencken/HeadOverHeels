@@ -29,20 +29,9 @@ public:
                         case Activity::Waiting : return "waiting" ;
                         case Activity::Blinking : return "blinking" ;
 
-                        case Activity::MovingNorth : return "moving north" ;
-                        case Activity::MovingSouth : return "moving south" ;
-                        case Activity::MovingEast : return "moving east" ;
-                        case Activity::MovingWest : return "moving west" ;
+                        case Activity::Moving : return "moving" ;
 
-                        case Activity::MovingNortheast : return "moving northeast" ;
-                        case Activity::MovingSoutheast : return "moving southeast" ;
-                        case Activity::MovingSouthwest : return "moving southwest" ;
-                        case Activity::MovingNorthwest : return "moving northwest" ;
-
-                        case Activity::AutomovingNorth : return "automoving north" ;
-                        case Activity::AutomovingSouth : return "automoving south" ;
-                        case Activity::AutomovingEast : return "automoving east" ;
-                        case Activity::AutomovingWest : return "automoving west" ;
+                        case Activity::Automoving : return "automoving" ;
 
                         case Activity::Jumping : return "jumping" ;
                         case Activity::Falling : return "falling" ;
@@ -85,9 +74,6 @@ public:
 
                         case Activity::MetLethalItem : return "met a lethal item" ;
                         case Activity::Vanishing : return "vanishing" ;
-
-                        case Activity::Collision : return "collision" ;
-                        case Activity::Function : return "function" ;
 
                         case Activity::Mistake : return "mistake" ;
                 }

@@ -37,10 +37,7 @@ bool RemoteControl::update ()
                 case activities::Activity::Waiting:
                         break;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
+                case activities::Activity::Moving:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )

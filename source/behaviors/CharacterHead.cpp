@@ -61,17 +61,11 @@ bool CharacterHead::update ()
                         wait ();
                         break;
 
-                case activities::Activity::AutomovingNorth:
-                case activities::Activity::AutomovingSouth:
-                case activities::Activity::AutomovingEast:
-                case activities::Activity::AutomovingWest:
+                case activities::Activity::Automoving:
                         automove ();
                         break;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
+                case activities::Activity::Moving:
                         move ();
                         break;
 
@@ -135,8 +129,7 @@ void CharacterHead::behave ()
 
         Activity whatDoing = getCurrentActivity() ;
 
-        if ( whatDoing == activities::Activity::AutomovingNorth || whatDoing == activities::Activity::AutomovingSouth ||
-                whatDoing == activities::Activity::AutomovingEast || whatDoing == activities::Activity::AutomovingWest ||
+        if ( whatDoing == activities::Activity::Automoving ||
                         whatDoing == activities::Activity::BeginTeletransportation || whatDoing == activities::Activity::EndTeletransportation
                                 || whatDoing == activities::Activity::MetLethalItem || whatDoing == activities::Activity::Vanishing )
                 return ; // moving by inertia, teleporting, or vanishing is not controlled by the player
@@ -158,8 +151,7 @@ void CharacterHead::behave ()
                 }
         }
         // already moving
-        else if ( whatDoing == activities::Activity::MovingNorth || whatDoing == activities::Activity::MovingSouth
-                        || whatDoing == activities::Activity::MovingEast || whatDoing == activities::Activity::MovingWest )
+        else if ( whatDoing == activities::Activity::Moving )
         {
                 if ( input.jumpTyped() ) {
                         toJumpOrTeleport ();

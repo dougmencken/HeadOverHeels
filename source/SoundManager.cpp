@@ -191,18 +191,8 @@ std::string SoundManager::activityToNameOfSound ( const activities::Activity & a
 
                 case activities::Activity::Blinking : return "blink" ;
 
-                case activities::Activity::MovingNorth :
-                case activities::Activity::MovingSouth :
-                case activities::Activity::MovingEast :
-                case activities::Activity::MovingWest :
-                case activities::Activity::MovingNortheast :
-                case activities::Activity::MovingSoutheast :
-                case activities::Activity::MovingSouthwest :
-                case activities::Activity::MovingNorthwest :
-                case activities::Activity::AutomovingNorth :
-                case activities::Activity::AutomovingSouth :
-                case activities::Activity::AutomovingEast :
-                case activities::Activity::AutomovingWest :
+                case activities::Activity::Moving :
+                case activities::Activity::Automoving :
                 case activities::ActivityOfElevator::GoingUp :
                 case activities::ActivityOfElevator::GoingDown :
                         return "move" ;
@@ -231,9 +221,9 @@ std::string SoundManager::activityToNameOfSound ( const activities::Activity & a
                 case activities::Activity::EndTeletransportation : return "teleport-in" ;
 
                 case activities::Activity::MetLethalItem : return "lose-life" ;
+
                 case activities::Activity::Vanishing : return "vanish" ;
-                case activities::Activity::Collision : return "collision" ;
-                case activities::Activity::Function : return "function" ;
+
                 case activities::Activity::Mistake : return "mistake" ;
         }
 

@@ -28,19 +28,21 @@ bool Hunter::update ()
         FreeItem & hunterItem = dynamic_cast< FreeItem & >( getItem () );
         AvatarItemPtr whoToHunt = hunterItem.getMediator()->getActiveCharacter() ;
 
+        bool isWaitingHunter = ( getNameOfBehavior().find( "waiting hunter" ) != std::string::npos );
+        bool movesInEightDirections = ( getNameOfBehavior().find( "eight directions" ) != std::string::npos );
+
         bool present = true ;
 
         switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting:
-                        // if the hunter is not a waiting one, activate it just now
-                        if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
-                                        getNameOfBehavior() == "behavior of hunter in eight directions" )
+                        // if this hunter is not a waiting one, activate it just now
+                        if ( ! isWaitingHunter )
                         {
                                 SoundManager::getInstance().play( hunterItem.getKind (), "wait" );
                                 updateDirection() ;
                         }
-                        // otherwise wait until the character is within the 3-tile rectangle around the hunter
+                        // otherwise wait until a character is within a 3-tile rectangle around the hunter
                         else
                         {
                                 const unsigned int sizeOfRectangleInTiles = 3 ;
@@ -55,86 +57,63 @@ bool Hunter::update ()
                                         updateDirection() ;
                                 }
 
-                                // the eight-directional waiting hunter emits the sound while it waits
-                                if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
+                                // an eight-directional waiting hunter emits the sound while it waits
+                                if ( movesInEightDirections )
                                         SoundManager::getInstance().play( hunterItem.getKind (), "wait" );
                         }
 
-                        // animate the waiting item
+                        // animate a waiting hunter
                         hunterItem.animate ();
 
                         break ;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
-                        // bin original item when full-bodied guard is created
-                        if ( getNameOfBehavior() == "behavior of waiting hunter in four directions" && createFullBody () )
+                case activities::Activity::Moving:
+                        // bin the original item when the full-bodied guard is created
+                        if ( isWaitingHunter && createFullBody () )
                         {
                                 present = false ;
                         }
-                        else if ( ! hunterItem.isFrozen() )
-                        {
-                                if ( speedTimer->getValue() > hunterItem.getSpeed() )
-                                {
-                                        // move item
-                                        activities::Moving::getInstance().move( *this, false );
-
-                                        // reset timer
-                                        speedTimer->go() ;
-
-                                        updateDirection () ;
-
-                                        // fall if it falls
-                                        if ( hunterItem.getWeight() > 0 )
-                                                activities::Falling::getInstance().fall( *this );
-                                }
-
-                                hunterItem.animate() ;
-
-                                SoundManager::getInstance().play( hunterItem.getKind(), "move" );
-                        }
-                        break;
-
-                case activities::Activity::MovingNortheast:
-                case activities::Activity::MovingNorthwest:
-                case activities::Activity::MovingSoutheast:
-                case activities::Activity::MovingSouthwest:
+                        else
                         if ( ! hunterItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > hunterItem.getSpeed() )
                                 {
-                                        // try to move item
-                                        if ( ! activities::Moving::getInstance().move( *this, false ) )
-                                        {       // can’t move that way
-                                                Activity thatActivity = getCurrentActivity() ;
+                                        // move a hunter
+                                        bool moved = activities::Moving::getInstance().move( *this, false );
+                                        if ( moved )
+                                                updateDirection () ;
+                                        else
+                                        if ( movesInEightDirections ) {
+                                                // an eight-directional hunter can’t move the current way
+                                                Motion2D vector = get2DVelocityVector() ;
 
-                                                if ( thatActivity == activities::Activity::MovingNortheast
-                                                                || thatActivity == activities::Activity::MovingNorthwest )
+                                                if ( vector.isMovingNortheast() || vector.isMovingNorthwest() )
                                                 {
                                                         // try moving north first and then west or east
-                                                        setCurrentActivity( activities::Activity::MovingNorth );
+                                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                                                         if ( ! activities::Moving::getInstance().move( *this, false ) )
-                                                                setCurrentActivity( thatActivity == activities::Activity::MovingNorthwest
-                                                                                                        ? activities::Activity::MovingWest
-                                                                                                        : activities::Activity::MovingEast );
-                                                } else // MoveSoutheast or MoveSouthwest
+                                                                setCurrentActivity(
+                                                                        activities::Activity::Moving,
+                                                                        vector.isMovingNorthwest()
+                                                                                ? Motion2D::movingWest()
+                                                                                : Motion2D::movingEast() );
+                                                }
+                                                else if ( vector.isMovingSoutheast() || vector.isMovingSouthwest() )
                                                 {
                                                         // try moving south first and then east or west
-                                                        setCurrentActivity( activities::Activity::MovingSouth );
+                                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                                                         if ( ! activities::Moving::getInstance().move( *this, false ) )
-                                                                setCurrentActivity( thatActivity == activities::Activity::MovingSoutheast
-                                                                                                        ? activities::Activity::MovingEast
-                                                                                                        : activities::Activity::MovingWest );
+                                                                setCurrentActivity(
+                                                                        activities::Activity::Moving,
+                                                                        vector.isMovingSoutheast()
+                                                                                ? Motion2D::movingEast()
+                                                                                : Motion2D::movingWest() );
                                                 }
+                                        }
 
-                                                if ( hunterItem.getWeight() > 0 )
-                                                        activities::Falling::getInstance().fall( *this );
-                                        }
-                                        else {
-                                                updateDirection () ;
-                                        }
+                                        // fall if it falls
+                                        if ( hunterItem.getWeight() > 0 )
+                                                activities::Falling::getInstance().fall( *this );
 
                                         speedTimer->go() ; // reset timer
                                 }
@@ -143,7 +122,8 @@ bool Hunter::update ()
 
                                 SoundManager::getInstance().play( hunterItem.getKind(), "move" );
                         }
-                        break;
+
+                        break ;
 
                 case activities::Activity::PushedNorth:
                 case activities::Activity::PushedSouth:
@@ -222,23 +202,23 @@ void Hunter::updateDirection4 ()
 
                 if ( abs( dx ) < abs( dy ) )
                 {
-                        if ( dx > 0 ) setCurrentActivity( activities::Activity::MovingNorth );
+                        if ( dx > 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                         else
-                        if ( dx < 0 ) setCurrentActivity( activities::Activity::MovingSouth );
+                        if ( dx < 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                         else
-                        if ( dy > 0 ) setCurrentActivity( activities::Activity::MovingEast );
+                        if ( dy > 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                         else
-                        if ( dy < 0 ) setCurrentActivity( activities::Activity::MovingWest );
+                        if ( dy < 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                 }
                 else if ( abs( dy ) < abs( dx ) )
                 {
-                        if ( dy > 0 ) setCurrentActivity( activities::Activity::MovingEast );
+                        if ( dy > 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                         else
-                        if ( dy < 0 ) setCurrentActivity( activities::Activity::MovingWest );
+                        if ( dy < 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                         else
-                        if ( dx > 0 ) setCurrentActivity( activities::Activity::MovingNorth );
+                        if ( dx > 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                         else
-                        if ( dx < 0 ) setCurrentActivity( activities::Activity::MovingSouth );
+                        if ( dx < 0 ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                 }
         }
 }
@@ -262,27 +242,27 @@ void Hunter::updateDirection8 ()
                         if ( dx > 1 )
                         {
                                 if ( dy > 1 )
-                                        setCurrentActivity( activities::Activity::MovingNortheast );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNortheast() );
                                 else if ( dy < -1 )
-                                        setCurrentActivity( activities::Activity::MovingNorthwest );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorthwest() );
                                 else
-                                        setCurrentActivity( activities::Activity::MovingNorth );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                         }
                         else if ( dx < -1 )
                         {
                                 if ( dy > 1 )
-                                        setCurrentActivity( activities::Activity::MovingSoutheast );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSoutheast() );
                                 else if ( dy < -1 )
-                                        setCurrentActivity( activities::Activity::MovingSouthwest );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouthwest() );
                                 else
-                                        setCurrentActivity( activities::Activity::MovingSouth );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        setCurrentActivity( activities::Activity::MovingEast );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                                 else if ( dy < 0 )
-                                        setCurrentActivity( activities::Activity::MovingWest );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
@@ -290,34 +270,34 @@ void Hunter::updateDirection8 ()
                         if ( dy > 1 )
                         {
                                 if ( dx > 1 )
-                                        setCurrentActivity( activities::Activity::MovingNortheast );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNortheast() );
                                 else if ( dx < -1 )
-                                        setCurrentActivity( activities::Activity::MovingSoutheast );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSoutheast() );
                                 else
-                                        setCurrentActivity( activities::Activity::MovingEast );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                         }
                         else if ( dy < -1 )
                         {
                                 if ( dx > 1 )
-                                        setCurrentActivity( activities::Activity::MovingNorthwest );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorthwest() );
                                 else if ( dx < -1 )
-                                        setCurrentActivity( activities::Activity::MovingSouthwest );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouthwest() );
                                 else
-                                        setCurrentActivity( activities::Activity::MovingWest );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        setCurrentActivity( activities::Activity::MovingNorth );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                                 else if ( dx < 0 )
-                                        setCurrentActivity( activities::Activity::MovingSouth );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                         }
                 }
 
                 // the guardian of throne flees from the player with four crowns
                 if ( hunterItem.getKind() == "throne-guard" && GameManager::getInstance().howManyFreePlanets() >= 4 )
                 {
-                        setCurrentActivity( activities::Activity::MovingSouthwest );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouthwest() );
                 }
         }
 }

@@ -38,8 +38,6 @@ public:
 
 protected:
 
-        void beginMoving () ;
-
         void turn () ;
 
 private:

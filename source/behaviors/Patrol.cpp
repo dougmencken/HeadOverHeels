@@ -36,14 +36,7 @@ bool Patrol::update ()
                         randomlyChangeOrientation ();
                         break;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
-                case activities::Activity::MovingNortheast:
-                case activities::Activity::MovingNorthwest:
-                case activities::Activity::MovingSoutheast:
-                case activities::Activity::MovingSouthwest:
+                case activities::Activity::Moving:
                         if ( ! patrolItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue () > patrolItem.getSpeed () )
@@ -141,35 +134,35 @@ void Patrol::randomlyChangeOrientation ()
         switch ( randomOrientation )
         {
                 case 0:
-                        setCurrentActivity( activities::Activity::MovingNorth );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                         break;
 
                 case 1:
-                        setCurrentActivity( activities::Activity::MovingSouth );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                         break;
 
                 case 2:
-                        setCurrentActivity( activities::Activity::MovingEast );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                         break;
 
                 case 3:
-                        setCurrentActivity( activities::Activity::MovingWest );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                         break;
 
                 case 4:
-                        setCurrentActivity( activities::Activity::MovingNortheast );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNortheast() );
                         break;
 
                 case 5:
-                        setCurrentActivity( activities::Activity::MovingNorthwest );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorthwest() );
                         break;
 
                 case 6:
-                        setCurrentActivity( activities::Activity::MovingSoutheast );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSoutheast() );
                         break;
 
                 case 7:
-                        setCurrentActivity( activities::Activity::MovingSouthwest );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouthwest() );
                         break;
 
                 default:

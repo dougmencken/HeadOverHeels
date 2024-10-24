@@ -93,10 +93,6 @@ std::string Way::exitToEntry ( const std::string & wayOfExit )
                 case Above :            return "below" ;
 
                 case Below :            return "above" ;
-
-                ///case ByTeleport :       return "via teleport" ;
-
-                ///case ByTeleportToo :    return "via second teleport" ;
         }
 
         // here it is either "via teleport" / "via second teleport" or maybe some other way

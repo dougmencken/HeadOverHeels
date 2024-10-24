@@ -25,10 +25,10 @@ bool FinalBall::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        setCurrentActivity( activities::Activity::MovingNorth );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                         break;
 
-                case activities::Activity::MovingNorth:
+                case activities::Activity::Moving:
                         if ( speedTimer->getValue() > thisBall.getSpeed() )
                         {
                                 speedTimer->go() ;

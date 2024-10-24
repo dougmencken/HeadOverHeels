@@ -35,55 +35,45 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
         Activity toItemsNearby = activities::Activity::Waiting ;
 
         Activity activity = behavior.getCurrentActivity() ;
+        Motion2D velocity = behavior.get2DVelocityVector() ;
+
         switch ( activity )
         {
-                case activities::Activity::MovingNorth:
-                case activities::Activity::AutomovingNorth:
-                        whatMoves.changeHeading( "north" );
-                        moved = whatMoves.addToX( -1 );
-                        toItemsNearby = activities::Activity::PushedNorth ;
-                        break;
+                case activities::Activity::Moving:
+                case activities::Activity::Automoving:
+                        if ( velocity.isMovingOnlyNorth() || velocity.isMovingOnlySouth() ) {
+                                if ( velocity.isMovingOnlyNorth() ) {
+                                        whatMoves.changeHeading( "north" );
+                                        toItemsNearby = activities::Activity::PushedNorth ;
+                                } else if ( velocity.isMovingOnlySouth() ) {
+                                        whatMoves.changeHeading( "south" );
+                                        toItemsNearby = activities::Activity::PushedSouth ;
+                                }
 
-                case activities::Activity::MovingSouth:
-                case activities::Activity::AutomovingSouth:
-                        whatMoves.changeHeading( "south" );
-                        moved = whatMoves.addToX( 1 );
-                        toItemsNearby = activities::Activity::PushedSouth ;
-                        break;
+                                moved = whatMoves.addToX( velocity.getMotionAlongX() );
+                        }
+                        else
+                        if ( velocity.isMovingOnlyEast() || velocity.isMovingOnlyWest() ) {
+                                if ( velocity.isMovingOnlyEast() ) {
+                                        whatMoves.changeHeading( "east" );
+                                        toItemsNearby = activities::Activity::PushedEast ;
+                                } else if ( velocity.isMovingOnlyWest() ) {
+                                        whatMoves.changeHeading( "west" );
+                                        toItemsNearby = activities::Activity::PushedWest ;
+                                }
 
-                case activities::Activity::MovingEast:
-                case activities::Activity::AutomovingEast:
-                        whatMoves.changeHeading( "east" );
-                        moved = whatMoves.addToY( -1 );
-                        toItemsNearby = activities::Activity::PushedEast ;
-                        break;
+                                moved = whatMoves.addToY( velocity.getMotionAlongY() );
+                        }
+                        else {
+                                     if ( velocity.isMovingNortheast() ) toItemsNearby = activities::Activity::PushedNortheast ;
+                                else if ( velocity.isMovingNorthwest() ) toItemsNearby = activities::Activity::PushedNorthwest ;
+                                else if ( velocity.isMovingSoutheast() ) toItemsNearby = activities::Activity::PushedSoutheast ;
+                                else if ( velocity.isMovingSouthwest() ) toItemsNearby = activities::Activity::PushedSouthwest ;
 
-                case activities::Activity::MovingWest:
-                case activities::Activity::AutomovingWest:
-                        whatMoves.changeHeading( "west" );
-                        moved = whatMoves.addToY( 1 );
-                        toItemsNearby = activities::Activity::PushedWest ;
-                        break;
+                                moved = whatMoves.addToPosition( velocity.getMotionAlongX(), velocity.getMotionAlongY(), 0 );
+                        }
 
-                case activities::Activity::MovingNortheast:
-                        moved = whatMoves.addToPosition( -1, -1, 0 );
-                        toItemsNearby = activities::Activity::PushedNortheast ;
-                        break;
-
-                case activities::Activity::MovingNorthwest:
-                        moved = whatMoves.addToPosition( -1, 1, 0 );
-                        toItemsNearby = activities::Activity::PushedNorthwest ;
-                        break;
-
-                case activities::Activity::MovingSoutheast:
-                        moved = whatMoves.addToPosition( 1, -1, 0 );
-                        toItemsNearby = activities::Activity::PushedSoutheast ;
-                        break;
-
-                case activities::Activity::MovingSouthwest:
-                        moved = whatMoves.addToPosition( 1, 1, 0 );
-                        toItemsNearby = activities::Activity::PushedSouthwest ;
-                        break;
+                        break ;
 
                 case activities::ActivityOfElevator::GoingUp :
                         moved = whatMoves.addToZ( 1 );

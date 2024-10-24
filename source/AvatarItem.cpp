@@ -1,6 +1,7 @@
 
 #include "AvatarItem.hpp"
 
+#include "Motion2D.hpp"
 #include "Behavior.hpp"
 #include "Door.hpp"
 #include "Mediator.hpp"
@@ -52,25 +53,25 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
                 case Way::North:
                 case Way::Northeast:
                 case Way::Northwest:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingSouth );
+                        getBehavior()->setCurrentActivity( activities::Activity::Automoving, Motion2D::movingSouth() );
                         break;
 
                 case Way::South:
                 case Way::Southeast:
                 case Way::Southwest:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingNorth );
+                        getBehavior()->setCurrentActivity( activities::Activity::Automoving, Motion2D::movingNorth() );
                         break;
 
                 case Way::East:
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingWest );
+                        getBehavior()->setCurrentActivity( activities::Activity::Automoving, Motion2D::movingWest() );
                         break;
 
                 case Way::West:
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        getBehavior()->setCurrentActivity( activities::Activity::AutomovingEast );
+                        getBehavior()->setCurrentActivity( activities::Activity::Automoving, Motion2D::movingEast() );
                         break;
 
                 case Way::ByTeleport:
@@ -141,8 +142,7 @@ bool AvatarItem::addToPosition( int x, int y, int z )
         // inactive character automoves when they both enter the same room
         // and couldn’t go out the door with the parent FreeItem’s addToPosition method
         const activities::Activity & activity = getBehavior()->getCurrentActivity() ;
-        bool autowalksThruDoor = ( activity == activities::Activity::AutomovingNorth || activity == activities::Activity::AutomovingSouth
-                                        || activity == activities::Activity::AutomovingEast || activity == activities::Activity::AutomovingWest );
+        bool autowalksThruDoor = ( activity == activities::Activity::Automoving );
 
         ////// can’t get what’s wrong with falling down near a door as uncontrolled FreeItem
         //////bool fallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );

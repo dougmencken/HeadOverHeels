@@ -39,19 +39,19 @@ bool Detector::update ()
                         if ( detectorItem.getX() >= activeCharacter->getX() - 1 && detectorItem.getX() <= activeCharacter->getX() + 1 )
                         {
                                 if ( activeCharacter->getY() <= detectorItem.getY() )
-                                        setCurrentActivity( activities::Activity::MovingEast );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                                 else
                                 if ( activeCharacter->getY() >= detectorItem.getY() )
-                                        setCurrentActivity( activities::Activity::MovingWest );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                         }
                         // meet the character on the Y way
                         else if ( detectorItem.getY() >= activeCharacter->getY() - 1 && detectorItem.getY() <= activeCharacter->getY() + 1 )
                         {
                                 if ( activeCharacter->getX() <= detectorItem.getX() )
-                                        setCurrentActivity( activities::Activity::MovingNorth );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                                 else
                                 if ( activeCharacter->getX() >= detectorItem.getX() )
-                                        setCurrentActivity( activities::Activity::MovingSouth );
+                                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                         }
 
                         // play the sound if moving
@@ -60,14 +60,10 @@ bool Detector::update ()
 
                         break;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
+                case activities::Activity::Moving:
                         if ( ! detectorItem.isFrozen() )
                         {
-                                if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() )
-                                {
+                                if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() ) {
                                         if ( ! activities::Moving::getInstance().move( *this, true ) )
                                                 // to waiting when can’t move
                                                 setCurrentActivity( activities::Activity::Waiting );

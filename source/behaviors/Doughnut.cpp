@@ -31,59 +31,43 @@ bool Doughnut::update ()
                 {
                         const std::string & heading = donutItem.getHeading() ;
 
-                             if ( heading == "north" ) setCurrentActivity( activities::Activity::MovingNorth );
-                        else if ( heading == "south" ) setCurrentActivity( activities::Activity::MovingSouth );
-                        else if ( heading == "east"  ) setCurrentActivity( activities::Activity::MovingEast );
-                        else if ( heading == "west"  ) setCurrentActivity( activities::Activity::MovingWest );
+                             if ( heading == "north" ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
+                        else if ( heading == "south" ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
+                        else if ( heading == "east"  ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
+                        else if ( heading == "west"  ) setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                 }
-                        break;
+                        break ;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
+                case activities::Activity::Moving:
                         if ( speedTimer->getValue() > donutItem.getSpeed() )
                         {
+                                Motion2D vector = get2DVelocityVector() ;
+
                                 // look for collisions with other items
                                 donutItem.setIgnoreCollisions( false );
-
-                                Activity busyness = getCurrentActivity() ;
-
-                                if ( busyness == activities::Activity::MovingNorth ) {
-                                        // for collisions on north
-                                        donutItem.canAdvanceTo( -1, 0, 0 );
-                                }
-                                else if ( busyness == activities::Activity::MovingSouth ) {
-                                        // for collisions on south
-                                        donutItem.canAdvanceTo( 1, 0, 0 );
-                                }
-                                else if ( busyness == activities::Activity::MovingEast ) {
-                                        // for collisions on east
-                                        donutItem.canAdvanceTo( 0, -1, 0 );
-                                }
-                                else if ( busyness == activities::Activity::MovingWest ) {
-                                        // for collisions on west
-                                        donutItem.canAdvanceTo( 0, 1, 0 );
-                                }
+                                donutItem.canAdvanceTo( vector.getMotionAlongX(), vector.getMotionAlongY(), 0 );
 
                                 Mediator* mediator = donutItem.getMediator() ;
+                                bool collision = mediator->isThereAnyCollision() ;
 
-                                // is there initial collision with the character who released the doughnut
+                                // maybe there’s an initial collision with the character who released a doughnut
                                 bool initialCollision = false ;
                                 const std::vector< AvatarItemPtr > & charactersInRoom = mediator->getRoom()->getCharactersYetInRoom() ;
+                                std::string whoReleased( "" ) ;
+
                                 for ( unsigned int c = 0 ; c < charactersInRoom.size() ; ++ c )
-                                        if ( mediator->collisionWithSomeKindOf( charactersInRoom[ c ]->getOriginalKind() ) != nilPointer
-                                                        && charactersInRoom[ c ]->hasTool( "horn" ) ) {
-                                                initialCollision = true ;
+                                        if ( charactersInRoom[ c ]->hasTool( "horn" ) ) {
+                                                whoReleased = charactersInRoom[ c ]->getOriginalKind() ;
                                                 break ;
                                         }
+
+                                initialCollision = ( mediator->collisionWithSomeKindOf( whoReleased ) != nilPointer );
 
                                 // ignore such collisions
                                 if ( initialCollision ) donutItem.setIgnoreCollisions( true );
 
                                 // if no collisions or an initial collision
-                                if ( ! mediator->isThereAnyCollision() || initialCollision )
-                                {
+                                if ( ! collision || initialCollision ) {
                                         // move the doughnut
                                         activities::Moving::getInstance().move( *this, false );
                                 }

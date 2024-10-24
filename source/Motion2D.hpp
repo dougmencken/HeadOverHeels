@@ -33,12 +33,17 @@ public:
 
         virtual ~Motion2D( ) {}
 
-        static Motion2D* newRest () {  return new Motion2D( 0, 0 ) ;  }
+        static Motion2D rest () {  return Motion2D( 0, 0 ) ;  }
 
-        static Motion2D* newMovingSouth () {  return new Motion2D( 1, 0 ) ;  }
-        static Motion2D* newMovingWest () {  return new Motion2D( 0, 1 ) ;  }
-        static Motion2D* newMovingNorth () {  return new Motion2D( -1, 0 ) ;  }
-        static Motion2D* newMovingEast () {  return new Motion2D( 0, -1 ) ;  }
+        static Motion2D movingSouth () {  return Motion2D( 1, 0 ) ;  }
+        static Motion2D movingWest () {  return Motion2D( 0, 1 ) ;  }
+        static Motion2D movingNorth () {  return Motion2D( -1, 0 ) ;  }
+        static Motion2D movingEast () {  return Motion2D( 0, -1 ) ;  }
+
+        static Motion2D movingNortheast () {  return Motion2D( -1, -1 ) ;  }
+        static Motion2D movingNorthwest () {  return Motion2D( -1, 1 ) ;  }
+        static Motion2D movingSoutheast () {  return Motion2D( 1, -1 ) ;  }
+        static Motion2D movingSouthwest () {  return Motion2D( 1, 1 ) ;  }
 
         int getMotionAlongX () const {  return this->alongX ;  }
         int getMotionAlongY () const {  return this->alongY ;  }
@@ -59,6 +64,18 @@ public:
 
         bool isMovingWest () const {  return getMotionAlongY() > 0 ;  }
         bool isMovingOnlyWest () const {  return isMovingWest() && getMotionAlongX() == 0 ;  }
+
+        bool isMovingNortheast () const {  return isMovingNorth() && isMovingEast() ;  }
+        bool isMovingNorthwest () const {  return isMovingNorth() && isMovingWest() ;  }
+        bool isMovingSoutheast () const {  return isMovingSouth() && isMovingEast() ;  }
+        bool isMovingSouthwest () const {  return isMovingSouth() && isMovingWest() ;  }
+
+        Motion2D& reverse ()
+        {
+                this->alongX = - this->alongX ;
+                this->alongY = - this->alongY ;
+                return *this ;
+        }
 
 } ;
 

@@ -14,6 +14,7 @@
 #include <string>
 
 #include "Activity.hpp"
+#include "Motion3D.hpp"
 #include "Item.hpp"
 
 using activities::Activity ;
@@ -35,6 +36,7 @@ protected:
                 : nameOfBehavior( behaviorName )
                 , itemThatBehaves( item )
                 , currentActivity( activities::Activity::Waiting )
+                , velocityVector( Motion2D::rest() )
                 , affectedBy( nilPointer )
                 , howLongFalls( 0 )
         {}
@@ -56,14 +58,48 @@ public:
          */
         const Activity & getCurrentActivity () const {  return this->currentActivity ;  }
 
+        const Motion3D & getVelocityVector () const {  return this->velocityVector ;  }
+        const Motion3D & get3DVelocityVector () const {  return getVelocityVector() ;  }
+
+        Motion2D get2DVelocityVector () const {  return this->velocityVector.to2D() ;  }
+
         virtual void setCurrentActivity ( const Activity & newActivity )
         {
-                changeActivityDueTo( newActivity, ItemPtr() );
+                if ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving )
+                        setCurrentActivity( newActivity, getItem().getHeading() );
+                else
+                        setCurrentActivity( newActivity, Motion2D::rest() );
+        }
+
+        virtual void setCurrentActivity ( const Activity & newActivity, const std::string & way )
+        {
+                if ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving ) {
+                        if ( way == "south" )
+                                setCurrentActivity( newActivity, Motion2D::movingSouth() );
+                        else if ( way == "north" )
+                                setCurrentActivity( newActivity, Motion2D::movingNorth() );
+                        else if ( way == "west" )
+                                setCurrentActivity( newActivity, Motion2D::movingWest() );
+                        else if ( way == "east" )
+                                setCurrentActivity( newActivity, Motion2D::movingEast() );
+                } else
+                        setCurrentActivity( newActivity, Motion2D::rest() );
+        }
+
+        virtual void setCurrentActivity ( const Activity & newActivity, const Motion2D & velocity )
+        {
+                changeActivityDueTo( newActivity, velocity, ItemPtr() );
         }
 
         virtual void changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
         {
+                changeActivityDueTo( newActivity, Motion2D::rest(), dueTo );
+        }
+
+        virtual void changeActivityDueTo ( const Activity & newActivity, const Motion2D & vector, const ItemPtr & dueTo )
+        {
                 this->currentActivity = newActivity ;
+                this->velocityVector = vector ;
                 this->affectedBy = dueTo ;
         }
 
@@ -89,6 +125,8 @@ private:
         Item & itemThatBehaves ;
 
         Activity currentActivity ;
+
+        Motion3D velocityVector ;
 
         ItemPtr affectedBy ;
 

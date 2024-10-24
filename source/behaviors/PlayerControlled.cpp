@@ -63,11 +63,21 @@ void PlayerControlled::setCurrentActivity ( const Activity & newActivity )
         Behavior::setCurrentActivity( newActivity );
 }
 
-void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
+void PlayerControlled::setCurrentActivity ( const Activity & newActivity, const Motion2D & velocity )
+{
+        // nullify “changed due to” item
+        Behavior::setCurrentActivity( getCurrentActivity(), velocity );
+
+        if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
+
+        Behavior::setCurrentActivity( newActivity, velocity );
+}
+
+void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const Motion2D & velocity, const ItemPtr & dueTo )
 {
         if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
 
-        Behavior::changeActivityDueTo( newActivity, dueTo );
+        Behavior::changeActivityDueTo( newActivity, velocity, dueTo );
 }
 
 void PlayerControlled::wait ()
@@ -161,19 +171,19 @@ bool PlayerControlled::moveKeySetsActivity ()
 
         if ( input.movenorthTyped() ) {
                 anyMoveTyped = true ;
-                setCurrentActivity( activities::Activity::MovingNorth );
+                setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
         }
         else if ( input.movesouthTyped() ) {
                 anyMoveTyped = true ;
-                setCurrentActivity( activities::Activity::MovingSouth );
+                setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
         }
         else if ( input.moveeastTyped() ) {
                 anyMoveTyped = true ;
-                setCurrentActivity( activities::Activity::MovingEast );
+                setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
         }
         else if ( input.movewestTyped() ) {
                 anyMoveTyped = true ;
-                setCurrentActivity( activities::Activity::MovingWest );
+                setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
         }
 
         return anyMoveTyped ;
@@ -229,25 +239,25 @@ void PlayerControlled::handleMoveKeyWhenDragged ()
                 avatar.changeHeading( "north" );
                 setCurrentActivity( whatDoing == activities::Activity::DraggedSouth
                                         ? activities::Activity::CancelDragging
-                                        : activities::Activity::MovingNorth );
+                                        : activities::Activity::Moving );
         }
         else if ( input.movesouthTyped() ) {
                 avatar.changeHeading( "south" );
                 setCurrentActivity( whatDoing == activities::Activity::DraggedNorth
                                         ? activities::Activity::CancelDragging
-                                        : activities::Activity::MovingSouth );
+                                        : activities::Activity::Moving );
         }
         else if ( input.moveeastTyped() ) {
                 avatar.changeHeading( "east" );
                 setCurrentActivity( whatDoing == activities::Activity::DraggedWest
                                         ? activities::Activity::CancelDragging
-                                        : activities::Activity::MovingEast );
+                                        : activities::Activity::Moving );
         }
         else if ( input.movewestTyped() ) {
                 avatar.changeHeading( "west" );
                 setCurrentActivity( whatDoing == activities::Activity::DraggedEast
                                         ? activities::Activity::CancelDragging
-                                        : activities::Activity::MovingWest );
+                                        : activities::Activity::Moving );
         }
 }
 
@@ -306,22 +316,8 @@ void PlayerControlled::glide ()
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
                 Activity priorActivity = getCurrentActivity() ;
-                Activity glideActivity = activities::Activity::Waiting ;
 
-                const std::string & heading = character.getHeading ();
-                if ( heading == "north" )
-                        glideActivity = activities::Activity::MovingNorth ;
-                else
-                if ( heading == "south" )
-                        glideActivity = activities::Activity::MovingSouth ;
-                else
-                if ( heading == "east" )
-                        glideActivity = activities::Activity::MovingEast ;
-                else
-                if ( heading == "west" )
-                        glideActivity = activities::Activity::MovingWest ;
-
-                setCurrentActivity( glideActivity );
+                setCurrentActivity( activities::Activity::Moving );
                 activities::Moving::getInstance().move( *this, false );
 
                 setCurrentActivity( priorActivity );

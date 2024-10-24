@@ -38,8 +38,6 @@ public:
 
 protected:
 
-        void moveIt () ;
-
         void turnBack () ;
 
 private:

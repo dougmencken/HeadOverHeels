@@ -32,13 +32,10 @@ bool ThereAndBack::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        moveIt() ;
-                        break;
+                        setCurrentActivity( activities::Activity::Moving );
+                        break ;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
+                case activities::Activity::Moving:
                         if ( ! thisItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )
@@ -55,7 +52,7 @@ bool ThereAndBack::update ()
 
                                 thisItem.animate() ;
                         }
-                        break;
+                        break ;
 
                 case activities::Activity::PushedNorth:
                 case activities::Activity::PushedSouth:
@@ -118,60 +115,10 @@ bool ThereAndBack::update ()
         return present ;
 }
 
-void ThereAndBack::moveIt ()
-{
-        switch ( Way( getItem().getHeading() ).getIntegerOfWay () )
-        {
-                case Way::North:
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                        break;
-
-                case Way::South:
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                        break;
-
-                case Way::East:
-                        setCurrentActivity( activities::Activity::MovingEast );
-                        break;
-
-                case Way::West:
-                        setCurrentActivity( activities::Activity::MovingWest );
-                        break;
-
-                default:
-                        ;
-        }
-}
-
 void ThereAndBack::turnBack ()
 {
-        Item & thisItem = getItem () ;
-
-        switch ( Way( thisItem.getHeading() ).getIntegerOfWay () )
-        {
-                case Way::North:
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                        thisItem.changeHeading( "south" );
-                        break;
-
-                case Way::South:
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                        thisItem.changeHeading( "north" );
-                        break;
-
-                case Way::East:
-                        setCurrentActivity( activities::Activity::MovingWest );
-                        thisItem.changeHeading( "west" );
-                        break;
-
-                case Way::West:
-                        setCurrentActivity( activities::Activity::MovingEast );
-                        thisItem.changeHeading( "east" );
-                        break;
-
-                default:
-                        ;
-        }
+        setCurrentActivity( activities::Activity::Moving, get2DVelocityVector().reverse() );
+        getItem().reverseHeading() ;
 }
 
 }

@@ -197,6 +197,14 @@ void Item::changeHeading( const std::string & where )
         }
 }
 
+void Item::reverseHeading ()
+{
+             if ( this->heading == "north" ) changeHeading( "south" );
+        else if ( this->heading == "south" ) changeHeading( "north" );
+        else if ( this->heading ==  "east" ) changeHeading( "west" );
+        else if ( this->heading == "west"  ) changeHeading( "east" );
+}
+
 void Item::changeFrame( unsigned int newFrame )
 {
         if ( howManyFrames() > newFrame )

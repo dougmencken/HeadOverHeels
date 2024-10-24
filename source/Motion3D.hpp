@@ -39,15 +39,20 @@ public:
 
         virtual ~Motion3D( ) {}
 
-        static Motion3D* newRestWithGravity () {  return new Motion3D( 0, 0, -1 ) ;  }
-        static Motion3D* newFallingDown () {  return newRestWithGravity() ;  }
+        static Motion3D restWithGravity () {  return Motion3D( 0, 0, -1 ) ;  }
+        static Motion3D fallingDown () {  return restWithGravity() ;  }
 
-        static Motion3D* newGlidingSouthWithGravity () {  return new Motion3D( 1, 0, -1 ) ;  }
-        static Motion3D* newGlidingWestWithGravity () {  return new Motion3D( 0, 1, -1 ) ;  }
-        static Motion3D* newGlidingNorthWithGravity () {  return new Motion3D( -1, 0, -1 ) ;  }
-        static Motion3D* newGlidingEastWithGravity () {  return new Motion3D( 0, -1, -1 ) ;  }
+        static Motion3D glidingSouthWithGravity () {  return Motion3D( 1, 0, -1 ) ;  }
+        static Motion3D glidingWestWithGravity () {  return Motion3D( 0, 1, -1 ) ;  }
+        static Motion3D glidingNorthWithGravity () {  return Motion3D( -1, 0, -1 ) ;  }
+        static Motion3D glidingEastWithGravity () {  return Motion3D( 0, -1, -1 ) ;  }
 
         int getMotionAlongZ () const {  return this->alongZ ;  }
+
+        Motion2D to2D () const
+        {
+                return Motion2D( getMotionAlongX(), getMotionAlongY() );
+        }
 
         bool isRest () const
         {

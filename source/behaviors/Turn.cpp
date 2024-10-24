@@ -31,13 +31,10 @@ bool Turn::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        beginMoving () ;
-                        break;
+                        setCurrentActivity( activities::Activity::Moving );
+                        break ;
 
-                case activities::Activity::MovingNorth:
-                case activities::Activity::MovingSouth:
-                case activities::Activity::MovingEast:
-                case activities::Activity::MovingWest:
+                case activities::Activity::Moving:
                         if ( ! turningItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > turningItem.getSpeed() )
@@ -54,7 +51,7 @@ bool Turn::update ()
 
                                 turningItem.animate() ;
                         }
-                        break;
+                        break ;
 
                 case activities::Activity::PushedNorth:
                 case activities::Activity::PushedSouth:
@@ -108,71 +105,46 @@ bool Turn::update ()
         return present ;
 }
 
-void Turn::beginMoving ()
-{
-        switch ( Way( getItem().getHeading () ).getIntegerOfWay () )
-        {
-                case Way::North:
-                        setCurrentActivity( activities::Activity::MovingNorth );
-                        break;
-
-                case Way::South:
-                        setCurrentActivity( activities::Activity::MovingSouth );
-                        break;
-
-                case Way::East:
-                        setCurrentActivity( activities::Activity::MovingEast );
-                        break;
-
-                case Way::West:
-                        setCurrentActivity( activities::Activity::MovingWest );
-                        break;
-
-                default:
-                        ;
-        }
-}
-
 void Turn::turn ()
 {
-        bool turnLeft = ( getNameOfBehavior() == "behavior of move then turn left and move" );
+        bool turnLeft = ( getNameOfBehavior().find( "turn left" ) != std::string::npos );
 
         Item & item = getItem() ;
         const std::string & heading = item.getHeading ();
 
         if ( heading == "north" ) {
                 if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::MovingWest );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                         item.changeHeading( "west" );
                 } else {
-                        setCurrentActivity( activities::Activity::MovingEast );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                         item.changeHeading( "east" );
                 }
         }
         else if ( heading == "south" ) {
                 if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::MovingEast );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingEast() );
                         item.changeHeading( "east" );
                 } else {
-                        setCurrentActivity( activities::Activity::MovingWest );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingWest() );
                         item.changeHeading( "west" );
                 }
         }
         else if ( heading == "east" ) {
                 if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::MovingNorth );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                         item.changeHeading( "north" );
                 } else {
-                        setCurrentActivity( activities::Activity::MovingSouth );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                         item.changeHeading( "south" );
                 }
         }
         else if ( heading == "west" ) {
                 if ( turnLeft ) {
-                        setCurrentActivity( activities::Activity::MovingSouth );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingSouth() );
                         item.changeHeading( "south" );
                 } else {
-                        setCurrentActivity( activities::Activity::MovingNorth );
+                        setCurrentActivity( activities::Activity::Moving, Motion2D::movingNorth() );
                         item.changeHeading( "north" );
                 }
         }

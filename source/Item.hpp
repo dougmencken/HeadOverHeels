@@ -202,6 +202,8 @@ public:
 
         void changeHeading ( const std::string & where ) ;
 
+        void reverseHeading () ;
+
         unsigned int firstFrameWhenHeading ( const std::string & where ) const ;
 
         unsigned int firstFrame () const {  return firstFrameWhenHeading( getHeading() ) ;  }

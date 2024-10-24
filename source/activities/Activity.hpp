@@ -20,7 +20,8 @@ class Activity
 public:
 
         Activity( unsigned int business ) : activity( business ) { }
-        operator unsigned int() const {  return activity ;  }
+
+        operator unsigned int() const {  return this->activity ;  }
 
 private:
 
@@ -31,24 +32,13 @@ public: /* constants */
         static const unsigned int Waiting               =  0 ;
         static const unsigned int Blinking              =  8 ;
 
-        static const unsigned int MovingNorth           = 24 ;
-        static const unsigned int MovingSouth           = 25 ;
-        static const unsigned int MovingEast            = 26 ;
-        static const unsigned int MovingWest            = 27 ;
+        static const unsigned int Moving                = 32 ;
 
-        static const unsigned int MovingNortheast       = 32 ;
-        static const unsigned int MovingSoutheast       = 33 ;
-        static const unsigned int MovingSouthwest       = 34 ;
-        static const unsigned int MovingNorthwest       = 35 ;
+        static const unsigned int Automoving            = 48 ;
 
-        static const unsigned int AutomovingNorth       = 41 ;
-        static const unsigned int AutomovingSouth       = 42 ;
-        static const unsigned int AutomovingEast        = 43 ;
-        static const unsigned int AutomovingWest        = 44 ;
-
-        static const unsigned int Jumping               = 80 ;
-        static const unsigned int Falling               = 90 ;
-        static const unsigned int Gliding               = 98 ;
+        static const unsigned int Jumping               = 64 ;
+        static const unsigned int Falling               = 72 ;
+        static const unsigned int Gliding               = 80 ;
 
         static const unsigned int TakingItem                    = 100 ;
         static const unsigned int DroppingItem                  = 105 ;
@@ -78,16 +68,14 @@ public: /* constants */
         static const unsigned int BeginTeletransportation       = 222 ;
         static const unsigned int EndTeletransportation         = 234 ;
 
-        static const unsigned int Freeze = 271 ;
-        static const unsigned int WakeUp = 272 ;
+        static const unsigned int Freeze                        = 271 ;
+        static const unsigned int WakeUp                        = 272 ;
 
-        static const unsigned int MetLethalItem                 = 290 ;
-        static const unsigned int Vanishing                     = 299 ;
+        static const unsigned int MetLethalItem                 = 303 ;
 
-        static const unsigned int Collision = 330 ;
-        static const unsigned int Function = 360 ;
+        static const unsigned int Vanishing                     = 330 ;
 
-        static const unsigned int Mistake = 599 ;
+        static const unsigned int Mistake                       = 599 ;
 
 } ;
 
