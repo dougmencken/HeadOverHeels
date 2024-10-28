@@ -53,24 +53,15 @@ bool Turn::update ()
                         }
                         break ;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
-                case activities::Activity::PushedNorthwest:
+                case activities::Activity::Pushed :
                         SoundManager::getInstance().play( turningItem.getKind (), "push" );
 
                         activities::Displacing::getInstance().displace( *this, true );
 
-                        if ( turningItem.isFrozen() ) // a frozen item remains to be frozen
-                                setCurrentActivity( activities::Activity::Freeze );
-                        else
-                                setCurrentActivity( activities::Activity::Waiting );
-
-                        break;
+                        setCurrentActivity( turningItem.isFrozen() // a frozen item remains to be frozen
+                                                        ? activities::Activity::Freeze
+                                                        : activities::Activity::Waiting );
+                        break ;
 
                 case activities::Activity::Falling:
                         if ( turningItem.getZ() == 0 && ! turningItem.getMediator()->getRoom()->hasFloor() ) {

@@ -231,31 +231,34 @@ void PlayerControlled::displace ()
 
 void PlayerControlled::handleMoveKeyWhenDragged ()
 {
-        const InputManager & input = InputManager::getInstance ();
         ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( getItem () );
+
         Activity whatDoing = getCurrentActivity() ;
+        Motion2D whereMoving = get2DVelocityVector() ;
+
+        const InputManager & input = InputManager::getInstance ();
 
         if ( input.movenorthTyped() ) {
                 avatar.changeHeading( "north" );
-                setCurrentActivity( whatDoing == activities::Activity::DraggedSouth
+                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlySouth()
                                         ? activities::Activity::CancelDragging
                                         : activities::Activity::Moving );
         }
         else if ( input.movesouthTyped() ) {
                 avatar.changeHeading( "south" );
-                setCurrentActivity( whatDoing == activities::Activity::DraggedNorth
+                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyNorth()
                                         ? activities::Activity::CancelDragging
                                         : activities::Activity::Moving );
         }
         else if ( input.moveeastTyped() ) {
                 avatar.changeHeading( "east" );
-                setCurrentActivity( whatDoing == activities::Activity::DraggedWest
+                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyWest()
                                         ? activities::Activity::CancelDragging
                                         : activities::Activity::Moving );
         }
         else if ( input.movewestTyped() ) {
                 avatar.changeHeading( "west" );
-                setCurrentActivity( whatDoing == activities::Activity::DraggedEast
+                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyEast()
                                         ? activities::Activity::CancelDragging
                                         : activities::Activity::Moving );
         }

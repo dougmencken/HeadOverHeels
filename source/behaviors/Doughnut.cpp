@@ -74,7 +74,7 @@ bool Doughnut::update ()
                                 else {
                                         // freeze a bad boy on a collision
                                         if ( mediator->collisionWithBadBoy() != nilPointer )
-                                                activities::PropagateActivity::spreadEasily( donutItem, activities::Activity::Freeze );
+                                                activities::PropagateActivity::spreadEasily( donutItem, activities::Activity::Freeze, Motion2D::rest() );
 
                                         // the doughnut disappears after a collision
                                         present = false ;

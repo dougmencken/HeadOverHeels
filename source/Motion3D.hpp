@@ -49,6 +49,27 @@ public:
 
         int getMotionAlongZ () const {  return this->alongZ ;  }
 
+        bool equals ( const Motion3D & that )
+        {
+                return Motion2D::equals( that ) && this->alongZ == that.alongZ ;
+        }
+        bool operator == ( const Motion3D & that ) {  return this->equals( that ) ;  }
+        bool operator != ( const Motion3D & that ) {  return ! this->equals( that ) ;  }
+
+        Motion3D& add ( const Motion3D & that )
+        {
+                Motion2D::add( that );
+                this->alongZ += that.alongZ ;
+                return *this ;
+        }
+
+        Motion3D& multiplyBy ( double multiplier )
+        {
+                Motion2D::multiplyBy( multiplier );
+                this->alongZ *= multiplier ;
+                return *this ;
+        }
+
         Motion2D to2D () const
         {
                 return Motion2D( getMotionAlongX(), getMotionAlongY() );
@@ -85,6 +106,8 @@ public:
         {
                 return isMovingWest() && getMotionAlongX() == 0 && getMotionAlongZ() == 0 ;
         }
+
+        void resetZ () {  this->alongZ = 0 ;  }
 
 } ;
 

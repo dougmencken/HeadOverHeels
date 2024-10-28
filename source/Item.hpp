@@ -81,19 +81,19 @@ public:
         void changeFrame ( unsigned int newFrame ) ;
 
         /**
-         * Add value to coordinate X
+         * Add value to the X coordinate
          * @return true on change or false when there’s collision
          */
         virtual bool addToX ( int value ) {  return addToPosition( value, 0, 0 ) ;  }
 
         /**
-         * Add value to coordinate Y
+         * Add value to the Y coordinate
          * @return true on change or false when there’s collision
          */
         virtual bool addToY ( int value ) {  return addToPosition( 0, value, 0 ) ;  }
 
         /**
-         * Add value to coordinate Z
+         * Add value to the Z coordinate
          * @return true on change or false when there’s collision
          */
         virtual bool addToZ ( int value ) {  return addToPosition( 0, 0, value ) ;  }

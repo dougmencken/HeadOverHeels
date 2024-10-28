@@ -69,20 +69,10 @@ bool CharacterHead::update ()
                         move ();
                         break;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
-                case activities::Activity::PushedNorthwest:
-                case activities::Activity::DraggedNorth:
-                case activities::Activity::DraggedSouth:
-                case activities::Activity::DraggedEast:
-                case activities::Activity::DraggedWest:
+                case activities::Activity::Pushed :
+                case activities::Activity::Dragged :
                         displace ();
-                        break;
+                        break ;
 
                 case activities::Activity::CancelDragging:
                         cancelDragging ();
@@ -167,8 +157,7 @@ void CharacterHead::behave ()
                 }
         }
         // being pushed
-        else if ( whatDoing == activities::Activity::PushedNorth || whatDoing == activities::Activity::PushedSouth ||
-                        whatDoing == activities::Activity::PushedEast || whatDoing == activities::Activity::PushedWest )
+        else if ( whatDoing == activities::Activity::Pushed )
         {
                 if ( input.jumpTyped() ) {
                         setCurrentActivity( activities::Activity::Jumping );
@@ -182,8 +171,7 @@ void CharacterHead::behave ()
                 }
         }
         // dragged by a conveyor
-        else if ( whatDoing == activities::Activity::DraggedNorth || whatDoing == activities::Activity::DraggedSouth ||
-                        whatDoing == activities::Activity::DraggedEast || whatDoing == activities::Activity::DraggedWest )
+        else if ( whatDoing == activities::Activity::Dragged )
         {
                 if ( input.jumpTyped() ) {
                         setCurrentActivity( activities::Activity::Jumping );

@@ -74,7 +74,7 @@ bool Elevator::update ()
 
                 // stop elevator for a moment when it reaches the lowest point
                 case activities::ActivityOfElevator::ReachedBottom :
-                        if ( waitingTimer->getValue() >= 0.250 )
+                        if ( waitingTimer->getValue() >= Delay_Before_Reversing )
                         {
                                 setCurrentActivity( activities::ActivityOfElevator::GoingUp );
                                 this->lastActivity = getCurrentActivity ();
@@ -85,7 +85,7 @@ bool Elevator::update ()
 
                 // stop elevator for a moment when it reaches the highest point
                 case activities::ActivityOfElevator::ReachedTop :
-                        if ( waitingTimer->getValue() >= 0.250 )
+                        if ( waitingTimer->getValue() >= Delay_Before_Reversing )
                         {
                                 setCurrentActivity( activities::ActivityOfElevator::GoingDown );
                                 this->lastActivity = getCurrentActivity ();

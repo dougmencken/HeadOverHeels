@@ -39,18 +39,18 @@ public:
 protected:
 
         /**
-         * Recursively lift the items stacked on that item
-         * @param freeItem That item
-         * @param z Units to ascend
+         * Lift the item and items stacked above it, recursively
+         * @param freeItem the item
+         * @param z units to ascend
          */
-        void ascent ( FreeItem & freeItem, int z ) ;
+        void ascend ( FreeItem & freeItem, int dz ) ;
 
         /**
-         * Recursively lower the items stacked on that item
-         * @param freeItem That item
-         * @param z Units to descend
+         * Lower the item and items below it, recursively
+         * @param freeItem the item
+         * @param z units to descend
          */
-        void descend ( FreeItem & freeItem, int z ) ;
+        void descend ( FreeItem & freeItem, int dz ) ;
 
 private:
 

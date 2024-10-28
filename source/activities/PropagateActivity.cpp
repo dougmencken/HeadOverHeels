@@ -14,19 +14,19 @@ namespace activities
 {
 
 /* static */
-void PropagateActivity::spreadEasily( const Item & sender, const Activity & activity )
+void PropagateActivity::spreadEasily( const Item & sender, const Activity & activity, const Motion2D & velocity )
 {
         Mediator* mediator = sender.getMediator() ;
         while ( mediator->isThereAnyCollision () ) // there are items collided with the sender
         {
                 ItemPtr collidedItem = mediator->findCollisionPop() ;
                 if ( collidedItem != nilPointer && collidedItem->getBehavior() != nilPointer )
-                        collidedItem->getBehavior()->setCurrentActivity( activity );
+                        collidedItem->getBehavior()->setCurrentActivity( activity, velocity );
         }
 }
 
 /* static */
-void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activity )
+void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activity, const Motion2D & velocity )
 {
         Mediator* mediator = sender.getMediator() ;
 
@@ -38,7 +38,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                 // to look at the collision name further
                 ItemPtr itemMeetsSender = mediator->findItemByUniqueName( nameOfCollision );
 
-                if ( itemMeetsSender != nilPointer )
+                if ( itemMeetsSender != nilPointer ) // a collision with an item
                 {
                         // is it free item or grid item
                         if ( itemMeetsSender->whichItemClass() == "grid item" ||
@@ -71,7 +71,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                                                 }
                                                 if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, ItemPtr( &sender ) );
+                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, velocity, ItemPtr( &sender ) );
                                                 }
                                         }
                                         // if not, just propagate activity to that item
@@ -79,7 +79,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                                         {
                                                 if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, ItemPtr( &sender ) );
+                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, velocity, ItemPtr( &sender ) );
                                                 }
                                         }
                                 }
@@ -114,7 +114,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
 }
 
 /* static */
-void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity )
+void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity, const Motion2D & velocity )
 {
         Mediator* mediator = sender.getMediator();
 
@@ -157,13 +157,8 @@ void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity )
                                                         // if not, propagate activity to that item above
                                                         else {
                                                                 Activity currentActivity = freeItemAbove.getBehavior()->getCurrentActivity();
-                                                                if ( currentActivity != activities::Activity::PushedNorth &&
-                                                                        currentActivity != activities::Activity::PushedSouth &&
-                                                                        currentActivity != activities::Activity::PushedEast &&
-                                                                        currentActivity != activities::Activity::PushedWest )
-                                                                {
-                                                                        freeItemAbove.getBehavior()->changeActivityDueTo( activity, ItemPtr( &sender ) );
-                                                                }
+                                                                if ( currentActivity != activities::Activity::Pushed )
+                                                                        freeItemAbove.getBehavior()->changeActivityDueTo( activity, velocity, ItemPtr( &sender ) );
                                                         }
                                                 }
                                         }

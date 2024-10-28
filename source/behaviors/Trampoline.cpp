@@ -77,14 +77,7 @@ bool Trampoline::update ()
 
                         break;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedNorthwest:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
+                case activities::Activity::Pushed :
                         // is it time to move
                         if ( speedTimer->getValue() > springItem.getSpeed() ) {
                                 // play the sound of pushing
@@ -97,7 +90,7 @@ bool Trampoline::update ()
 
                                 speedTimer->go() ;
                         }
-                        break;
+                        break ;
 
                 case activities::Activity::Falling:
                         if ( springItem.getZ() == 0 && ! springItem.getMediator()->getRoom()->hasFloor() ) {

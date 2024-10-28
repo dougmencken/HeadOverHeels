@@ -77,14 +77,7 @@ bool Driven::update ()
                         }
                         break ;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedNorthwest:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
+                case activities::Activity::Pushed:
                         if ( speedTimer->getValue() > drivenItem.getSpeed() ) // is it time to move
                         {
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )

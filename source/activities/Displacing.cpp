@@ -24,86 +24,34 @@ Displacing& Displacing::getInstance()
 
 bool Displacing::displace( behaviors::Behavior & behavior, bool canFall )
 {
-        bool displaced = false ;
-
         Item & item = behavior.getItem ();
 
+        bool displaced = false ;
+
         const Activity & currentActivity = behavior.getCurrentActivity ();
-        Activity activityToPropagate = currentActivity ;
+        Motion2D vector = behavior.get2DVelocityVector() ;
 
-        switch ( currentActivity )
-        {
-                case activities::Activity::DraggedNorth:
-                        activityToPropagate = activities::Activity::PushedNorth;
-                        // fallthru
-                case activities::Activity::PushedNorth:
-                        displaced = item.addToX( -1 );
-                        break;
-
-                case activities::Activity::DraggedSouth:
-                        activityToPropagate = activities::Activity::PushedSouth;
-                        // fallthru
-                case activities::Activity::PushedSouth:
-                        displaced = item.addToX( 1 );
-                        break;
-
-                case activities::Activity::DraggedEast:
-                        activityToPropagate = activities::Activity::PushedEast;
-                        // fallthru
-                case activities::Activity::PushedEast:
-                        displaced = item.addToY( -1 );
-                        break;
-
-                case activities::Activity::DraggedWest:
-                        activityToPropagate = activities::Activity::PushedWest;
-                        // fallthru
-                case activities::Activity::PushedWest:
-                        displaced = item.addToY( 1 );
-                        break;
-
-                case activities::Activity::PushedNortheast:
-                        displaced = item.addToPosition( -1, -1, 0 );
-                        break;
-
-                case activities::Activity::PushedNorthwest:
-                        displaced = item.addToPosition( -1, 1, 0 );
-                        break;
-
-                case activities::Activity::PushedSoutheast:
-                        displaced = item.addToPosition( 1, -1, 0 );
-                        break;
-
-                case activities::Activity::PushedSouthwest:
-                        displaced = item.addToPosition( 1, 1, 0 );
-                        break;
-
-                case activities::Activity::PushedUp:
-                        displaced = item.addToZ( 1 );
-                        break;
-
-                default:
-                        ;
-        }
+        if ( currentActivity == activities::Activity::Pushed || currentActivity == activities::Activity::Dragged )
+                displaced = item.addToPosition( vector.getMotionAlongX(), vector.getMotionAlongY(), 0 );
+        else if ( currentActivity == activities::Activity::PushedUp )
+                displaced = item.addToZ( 1 );
 
         if ( item.whichItemClass() == "free item" || item.whichItemClass() == "avatar item" )
         {
+                Activity activityToPropagate = ( currentActivity == activities::Activity::Dragged )
+                                                        ? Activity( activities::Activity::Pushed )
+                                                        : currentActivity ;
                 // when there’s a collision
                 if ( ! displaced )
-                {
                         // move involved items
-                        PropagateActivity::toAdjacentItems( item, activityToPropagate );
-                }
-                else {
+                        PropagateActivity::toAdjacentItems( item, activityToPropagate, vector );
+                else
                         // maybe there’s something on top
-                        PropagateActivity::toItemsAbove( item, activityToPropagate );
-                }
+                        PropagateActivity::toItemsAbove( item, activityToPropagate, vector );
         }
 
-        // when item can fall
-        if ( canFall )
-        {
-                if ( Falling::getInstance().fall( behavior ) )
-                {
+        if ( canFall ) {
+                if ( Falling::getInstance().fall( behavior ) ) {
                         behavior.setCurrentActivity( activities::Activity::Falling );
                         displaced = true ;
                 }

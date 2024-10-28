@@ -205,15 +205,11 @@ std::string SoundManager::activityToNameOfSound ( const activities::Activity & a
                 case activities::Activity::TakingItem : case activities::Activity::TakeAndJump : return "take" ;
                 case activities::Activity::DroppingItem : case activities::Activity::DropAndJump : return "drop" ;
 
-                case activities::Activity::PushedNorth : case activities::Activity::PushedSouth :
-                case activities::Activity::PushedEast : case activities::Activity::PushedWest :
-                case activities::Activity::PushedNortheast : case activities::Activity::PushedSoutheast :
-                case activities::Activity::PushedSouthwest : case activities::Activity::PushedNorthwest :
+                case activities::Activity::Pushed :
                 case activities::Activity::PushedUp : /* case activities::Activity::PushedDown : */
                         return "push" ;
 
-                case activities::Activity::DraggedNorth : case activities::Activity::DraggedSouth :
-                case activities::Activity::DraggedEast : case activities::Activity::DraggedWest : return "dragged" ;
+                case activities::Activity::Dragged : return "dragged" ;
 
                 case activities::Activity::CancelDragging: return "move" ;
 

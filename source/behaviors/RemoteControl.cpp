@@ -34,10 +34,10 @@ bool RemoteControl::update ()
 
         switch ( getCurrentActivity() )
         {
-                case activities::Activity::Waiting:
-                        break;
+                case activities::Activity::Waiting :
+                        break ;
 
-                case activities::Activity::Moving:
+                case activities::Activity::Moving :
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )
@@ -52,16 +52,9 @@ bool RemoteControl::update ()
 
                                 thisItem.animate() ;
                         }
-                        break;
+                        break ;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedNorthwest:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
+                case activities::Activity::Pushed :
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > thisItem.getSpeed() )
@@ -86,43 +79,29 @@ bool RemoteControl::update ()
                                 ItemPtr controlledItem = thisItem.getMediator()->findItemBehavingAs( "behavior of remotely controlled one" );
                                 if ( controlledItem != nilPointer )
                                 {
-                                        Activity toRemotelyControlled = activities::Activity::Waiting ;
+                                        Motion2D pushVector = get2DVelocityVector() ;
 
-                                        switch ( getCurrentActivity() )
-                                        {
-                                                case activities::Activity::PushedNorth:
-                                                        controlledItem->changeHeading( "north" );
-                                                        toRemotelyControlled = activities::Activity::PushedNorth ; /// previously MovingNorth ;
-                                                        break;
+                                        Activity toRemotelyControlled = pushVector.isRest() ? activities::Activity::Waiting : activities::Activity::Pushed ;
 
-                                                case activities::Activity::PushedSouth:
-                                                        controlledItem->changeHeading( "south" );
-                                                        toRemotelyControlled = activities::Activity::PushedSouth ; /// previously MovingSouth ;
-                                                        break;
+                                        // since ‘toRemotelyControlled’ is not Moving but Pushed, a displacement itself doesn’t change the heading
+                                        if ( pushVector.isMovingOnlySouth() )
+                                                controlledItem->changeHeading( "south" );
+                                        else if ( pushVector.isMovingOnlyNorth() )
+                                                controlledItem->changeHeading( "north" );
+                                        else if ( pushVector.isMovingOnlyWest() )
+                                                controlledItem->changeHeading( "west" );
+                                        else if ( pushVector.isMovingOnlyEast() )
+                                                controlledItem->changeHeading( "east" );
 
-                                                case activities::Activity::PushedEast:
-                                                        controlledItem->changeHeading( "east" );
-                                                        toRemotelyControlled = activities::Activity::PushedEast ; /// previously MovingEast ;
-                                                        break;
-
-                                                case activities::Activity::PushedWest:
-                                                        controlledItem->changeHeading( "west" );
-                                                        toRemotelyControlled = activities::Activity::PushedWest ; /// previously MovingWest ;
-                                                        break;
-
-                                                default:
-                                                        ;
-                                        }
-
-                                        controlledItem->getBehavior()->setCurrentActivity( toRemotelyControlled );
+                                        controlledItem->getBehavior()->setCurrentActivity( toRemotelyControlled, pushVector );
                                 }
 
                                 setCurrentActivity( activities::Activity::Waiting );
                         }
 
-                        break;
+                        break ;
 
-                case activities::Activity::Falling:
+                case activities::Activity::Falling :
                         if ( thisItem.getZ() == 0 && ! thisItem.getMediator()->getRoom()->hasFloor() ) {
                                 // disappear when reached bottom of a room without floor
                                 present = false ;
@@ -139,7 +118,7 @@ bool RemoteControl::update ()
 
                                 fallTimer->go() ;
                         }
-                        break;
+                        break ;
 
                 default:
                         ;

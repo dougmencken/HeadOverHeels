@@ -11,8 +11,9 @@
 #ifndef PropagateActivity_hpp_
 #define PropagateActivity_hpp_
 
-#include "Activity.hpp"
 #include "Item.hpp"
+#include "Activity.hpp"
+#include "Motion2D.hpp"
 
 
 namespace activities
@@ -24,20 +25,19 @@ class PropagateActivity
 public:
 
         /**
-         * Spread activity to every item collided with the sender
+         * Spread an activity to every item collided with the sender
          */
-        static void spreadEasily( const Item & sender, const Activity & activity ) ;
+        static void spreadEasily( const Item & sender, const Activity & activity, const Motion2D & velocity /* = Motion2D::rest() */ ) ;
 
         /**
-         * The comprehensive version of
-         * Spread activity to items that collide with the sender
+         * Spread an activity to all items that collide with the sender, the comprehensive version
          */
-        static void toAdjacentItems ( Item & sender, const Activity & activity ) ;
+        static void toAdjacentItems ( Item & sender, const Activity & activity, const Motion2D & velocity ) ;
 
         /**
-         * Spread activity to items above the sender
+         * Spread an activity to items above the sender
          */
-        static void toItemsAbove ( Item & sender, const Activity & activity ) ;
+        static void toItemsAbove ( Item & sender, const Activity & activity, const Motion2D & velocity ) ;
 
 };
 

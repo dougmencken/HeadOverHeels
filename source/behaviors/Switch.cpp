@@ -26,7 +26,7 @@ bool Switch::update ()
 
         switch ( getCurrentActivity() )
         {
-                case activities::Activity::Waiting:
+                case activities::Activity::Waiting :
                 {
                         std::set< std::string > itemsNearbyNow ;
                         lookForItemsNearby( itemsNearbyNow );
@@ -81,31 +81,19 @@ bool Switch::update ()
                         } else
                                 this->switchedFromAbove = false ;
                 }
-                        break;
+                        break ;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
-                case activities::Activity::PushedNorthwest:
-                {
+                case activities::Activity::Pushed :
                         const ItemPtr & pusher = getWhatAffectedThisBehavior() ;
-                        if ( pusher != nilPointer )
-                        {
+                        if ( pusher != nilPointer ) {
                                 bool isNewPusher = this->switchers.insert( pusher->getUniqueName () ).second ;
 
                                 if ( isNewPusher ) toggleIt() ;
                         }
 
                         setCurrentActivity( activities::Activity::Waiting );
-                }
-                        break;
 
-                default:
-                        ;
+                        break ;
         }
 
         // switches are eternal

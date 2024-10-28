@@ -54,14 +54,7 @@ bool Bonus::update ()
 
                         break;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
-                case activities::Activity::PushedNorthwest:
+                case activities::Activity::Pushed:
                 case activities::Activity::PushedUp:
                 {
                         const ItemPtr & taker = getWhatAffectedThisBehavior ();
@@ -83,10 +76,7 @@ bool Bonus::update ()
                 }
                         break;
 
-                case activities::Activity::DraggedNorth:
-                case activities::Activity::DraggedSouth:
-                case activities::Activity::DraggedEast:
-                case activities::Activity::DraggedWest:
+                case activities::Activity::Dragged:
                         // the bonus item is on a conveyor
                         if ( speedTimer->getValue() > bonusItem.getSpeed() )
                         {

@@ -73,7 +73,9 @@ public:
 
         virtual void setCurrentActivity ( const Activity & newActivity, const std::string & way )
         {
-                if ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving ) {
+                if ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving
+                                || newActivity == activities::Activity::Pushed || newActivity == activities::Activity::Dragged
+                ) {
                         if ( way == "south" )
                                 setCurrentActivity( newActivity, Motion2D::movingSouth() );
                         else if ( way == "north" )

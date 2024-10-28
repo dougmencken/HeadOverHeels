@@ -125,14 +125,7 @@ bool Hunter::update ()
 
                         break ;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedNorthwest:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
+                case activities::Activity::Pushed:
                         // when item is active and it’s time to move
                         if ( speedTimer->getValue() > hunterItem.getSpeed() )
                         {

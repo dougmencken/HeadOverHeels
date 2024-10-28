@@ -36,14 +36,7 @@ bool Mobile::update ()
                         }
                         break;
 
-                case activities::Activity::PushedNorth :
-                case activities::Activity::PushedSouth :
-                case activities::Activity::PushedEast :
-                case activities::Activity::PushedWest :
-                case activities::Activity::PushedNortheast :
-                case activities::Activity::PushedSoutheast :
-                case activities::Activity::PushedSouthwest :
-                case activities::Activity::PushedNorthwest :
+                case activities::Activity::Pushed :
                         // is it time to move
                         if ( speedTimer->getValue() > mobileItem.getSpeed() ) {
                                 const ItemPtr & otherItem = getWhatAffectedThisBehavior ();
@@ -52,20 +45,15 @@ bool Mobile::update ()
 
                                 activities::Displacing::getInstance().displace( *this, true );
 
-                        /* ////// */ if ( speedTimer->getValue() > 1.25 * mobileItem.getSpeed() ) {
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Waiting );
 
                                 speedTimer->go() ;
-                        /* ////// */ }
                         }
 
                         mobileItem.animate() ;
                         break;
 
-                case activities::Activity::DraggedNorth :
-                case activities::Activity::DraggedSouth :
-                case activities::Activity::DraggedEast :
-                case activities::Activity::DraggedWest :
+                case activities::Activity::Dragged :
                         // on a conveyor
                         if ( speedTimer->getValue() > mobileItem.getSpeed() ) {
                                 activities::Displacing::getInstance().displace( *this, true );

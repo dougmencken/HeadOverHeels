@@ -63,6 +63,12 @@ public:
 
         void setAscending ( bool ascend ) {  this->ascending = ascend ;  }
 
+#ifdef __Cxx11__ /* when complier supports c++11 */
+        static constexpr double Delay_Before_Reversing = 0.333 ; // in seconds
+#else
+        #define Delay_Before_Reversing          0.333
+#endif
+
 private:
 
         /**

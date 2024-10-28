@@ -127,22 +127,13 @@ bool Volatile::update ()
                         }
                         break;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
-                case activities::Activity::PushedNorthwest:
+                case activities::Activity::Pushed :
                         if ( ! solid ) {
                                 if ( getNameOfBehavior () == "behavior of disappearance on touch" )
-                                {
-                                        // pushing item which is volatile on contact
+                                        // pushing an item which is volatile on contact
                                         setCurrentActivity( activities::Activity::Vanishing );
-                                }
-                                else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
-                                {
+                                else
+                                if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" ) {
                                         if ( mediator->findItemOfKind( "head" ) != nilPointer
                                                         || mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                                 setCurrentActivity( activities::Activity::Vanishing );
@@ -151,7 +142,7 @@ bool Volatile::update ()
                         } else
                                 setCurrentActivity( activities::Activity::Freeze );
 
-                        break;
+                        break ;
 
                 case activities::Activity::Vanishing:
                         if ( ( getNameOfBehavior () != "behavior of disappearance on jump into" &&

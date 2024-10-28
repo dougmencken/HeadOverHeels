@@ -64,25 +64,16 @@ bool Patrol::update ()
                         }
                         break;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
-                case activities::Activity::PushedNorthwest:
+                case activities::Activity::Pushed :
                         SoundManager::getInstance().play( patrolItem.getKind (), "push" );
 
                         // displace this item when it’s pushed by some other one
                         activities::Displacing::getInstance().displace( *this, true );
 
-                        if ( patrolItem.isFrozen() ) // frozen item remains frozen
-                                setCurrentActivity( activities::Activity::Freeze );
-                        else
-                                setCurrentActivity( activities::Activity::Waiting );
-
-                        break;
+                        setCurrentActivity( patrolItem.isFrozen() // frozen item remains frozen
+                                                        ? activities::Activity::Freeze
+                                                        : activities::Activity::Waiting );
+                        break ;
 
                 case activities::Activity::Falling:
                         if ( patrolItem.getZ() == 0 && ! patrolItem.getMediator()->getRoom()->hasFloor() )

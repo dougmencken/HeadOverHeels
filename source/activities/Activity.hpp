@@ -19,7 +19,9 @@ class Activity
 
 public:
 
-        Activity( unsigned int business ) : activity( business ) { }
+        Activity( unsigned int business ) : activity( business ) {}
+
+        Activity( const Activity & copyMe ) : activity( copyMe.activity ) {}
 
         operator unsigned int() const {  return this->activity ;  }
 
@@ -29,39 +31,28 @@ private:
 
 public: /* constants */
 
-        static const unsigned int Waiting               =  0 ;
-        static const unsigned int Blinking              =  8 ;
+        static const unsigned int Waiting                       =  0 ;
+        static const unsigned int Blinking                      =  8 ;
 
-        static const unsigned int Moving                = 32 ;
+        static const unsigned int Moving                        = 32 ;
 
-        static const unsigned int Automoving            = 48 ;
+        static const unsigned int Automoving                    = 48 ;
 
-        static const unsigned int Jumping               = 64 ;
-        static const unsigned int Falling               = 72 ;
-        static const unsigned int Gliding               = 80 ;
+        static const unsigned int Jumping                       = 64 ;
+        static const unsigned int Falling                       = 72 ;
+        static const unsigned int Gliding                       = 80 ;
 
         static const unsigned int TakingItem                    = 100 ;
         static const unsigned int DroppingItem                  = 105 ;
         static const unsigned int TakeAndJump                   = 110 ;
         static const unsigned int DropAndJump                   = 115 ;
 
-        static const unsigned int PushedNorth                   = 124 ;
-        static const unsigned int PushedSouth                   = 125 ;
-        static const unsigned int PushedEast                    = 126 ;
-        static const unsigned int PushedWest                    = 127 ;
-
-        static const unsigned int PushedNortheast               = 132 ;
-        static const unsigned int PushedSoutheast               = 133 ;
-        static const unsigned int PushedSouthwest               = 134 ;
-        static const unsigned int PushedNorthwest               = 135 ;
+        static const unsigned int Pushed                        = 140 ;
 
         static const unsigned int PushedUp                      = 150 ;
         /* static const unsigned int PushedDown = 160 ; */
 
-        static const unsigned int DraggedNorth                  = 181 ;
-        static const unsigned int DraggedSouth                  = 182 ;
-        static const unsigned int DraggedEast                   = 183 ;
-        static const unsigned int DraggedWest                   = 184 ;
+        static const unsigned int Dragged                       = 180 ;
 
         static const unsigned int CancelDragging                = 190 ;
 

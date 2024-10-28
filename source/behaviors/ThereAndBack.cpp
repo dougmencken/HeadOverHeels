@@ -54,14 +54,7 @@ bool ThereAndBack::update ()
                         }
                         break ;
 
-                case activities::Activity::PushedNorth:
-                case activities::Activity::PushedSouth:
-                case activities::Activity::PushedEast:
-                case activities::Activity::PushedWest:
-                case activities::Activity::PushedNortheast:
-                case activities::Activity::PushedSoutheast:
-                case activities::Activity::PushedSouthwest:
-                case activities::Activity::PushedNorthwest:
+                case activities::Activity::Pushed :
                         if ( ! this->isFlying ) {
                                 SoundManager::getInstance().play( thisItem.getKind(), "push" );
 
@@ -69,12 +62,10 @@ bool ThereAndBack::update ()
                                 activities::Displacing::getInstance().displace( *this, true );
                         }
 
-                        if ( thisItem.isFrozen() ) // a frozen item remains frozen
-                                setCurrentActivity( activities::Activity::Freeze );
-                        else
-                                setCurrentActivity( activities::Activity::Waiting );
-
-                        break;
+                        setCurrentActivity( thisItem.isFrozen() // a frozen item remains frozen
+                                                        ? activities::Activity::Freeze
+                                                        : activities::Activity::Waiting );
+                        break ;
 
                 case activities::Activity::Falling:
                         if ( ! this->isFlying ) {

@@ -22,12 +22,10 @@ Jumping & Jumping::getInstance()
 
 bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > > & jumpVector )
 {
-        bool jumped = false ;
-
-        Activity displaceActivity = activities::Activity::Waiting ;
-
         AvatarItem & character = dynamic_cast< AvatarItem & >( behavior.getItem() );
         Mediator* mediator = character.getMediator() ;
+
+        bool jumped = false ;
 
         int deltaXY = jumpVector[ jumpPhase ].first ;
         int deltaZ = jumpVector[ jumpPhase ].second ;
@@ -79,42 +77,30 @@ bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, cons
                 }
         }
 
-        const std::string & heading = character.getHeading () ;
+        const std::string & heading = character.getHeading() ;
 
         if ( heading == "north" )
-        {
                 jumped = character.addToX( - deltaXY );
-                displaceActivity = activities::Activity::PushedNorth ;
-        }
-        else if ( heading == "south" )
-        {
+        else
+        if ( heading == "south" )
                 jumped = character.addToX( deltaXY );
-                displaceActivity = activities::Activity::PushedSouth ;
-        }
-        else if ( heading == "east" )
-        {
+        else
+        if ( heading == "east" )
                 jumped = character.addToY( - deltaXY );
-                displaceActivity = activities::Activity::PushedEast ;
-        }
-        else if ( heading == "west" )
-        {
+        else
+        if ( heading == "west" )
                 jumped = character.addToY( deltaXY );
-                displaceActivity = activities::Activity::PushedWest ;
-        }
 
         // displace adjacent items when there’s a horizontal collision
         if ( ! jumped || ( jumped && jumpPhase > 4 ) )
         {
-                // is it okay to move items above
-                // it is okay after the fourth phase of jump so the character can get rid of the item above
-                PropagateActivity::toAdjacentItems( character, displaceActivity );
+                // displacing the items above is okay after the fourth phase of jump so the character can get rid of the above item
+                PropagateActivity::toAdjacentItems( character, activities::Activity::Pushed, behavior.get2DVelocityVector() );
         }
 
         // end jump when it’s the last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
-        {
                 behavior.setCurrentActivity( activities::Activity::Falling );
-        }
 
         return jumped ;
 }

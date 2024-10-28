@@ -42,22 +42,11 @@ public:
                         case Activity::TakeAndJump : return "take & jump" ;
                         case Activity::DropAndJump : return "drop & jump" ;
 
-                        case Activity::PushedNorth : return "pushed north" ;
-                        case Activity::PushedSouth : return "pushed south" ;
-                        case Activity::PushedEast : return "pushed east" ;
-                        case Activity::PushedWest : return "pushed west" ;
-
-                        case Activity::PushedNortheast : return "pushed northeast" ;
-                        case Activity::PushedSoutheast : return "pushed southeast" ;
-                        case Activity::PushedSouthwest : return "pushed southwest" ;
-                        case Activity::PushedNorthwest : return "pushed northwest" ;
+                        case Activity::Pushed : return "pushed" ;
 
                         case Activity::PushedUp : return "pushed up" ;
 
-                        case Activity::DraggedNorth : return "dragged north" ;
-                        case Activity::DraggedSouth : return "dragged south" ;
-                        case Activity::DraggedEast : return "dragged east" ;
-                        case Activity::DraggedWest : return "dragged west" ;
+                        case Activity::Dragged : return "dragged" ;
 
                         case Activity::CancelDragging : return "cancel dragging" ;
 

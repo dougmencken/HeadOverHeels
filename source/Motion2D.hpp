@@ -48,6 +48,34 @@ public:
         int getMotionAlongX () const {  return this->alongX ;  }
         int getMotionAlongY () const {  return this->alongY ;  }
 
+        bool equals ( const Motion2D & that )
+        {
+                return this->alongX == that.alongX && this->alongY == that.alongY ;
+        }
+        bool operator == ( const Motion2D & that ) {  return   this->equals( that ) ;  }
+        bool operator != ( const Motion2D & that ) {  return ! this->equals( that ) ;  }
+
+        Motion2D& add ( const Motion2D & that )
+        {
+                this->alongX += that.alongX ;
+                this->alongY += that.alongY ;
+                return *this ;
+        }
+
+        Motion2D& multiplyBy ( double multiplier )
+        {
+                this->alongX *= multiplier ;
+                this->alongY *= multiplier ;
+                return *this ;
+        }
+
+        Motion2D& reverse ()
+        {
+                this->alongX = - this->alongX ;
+                this->alongY = - this->alongY ;
+                return *this ;
+        }
+
         bool isRest () const
         {
                 return getMotionAlongX() == 0 && getMotionAlongY() == 0 ;
@@ -70,12 +98,8 @@ public:
         bool isMovingSoutheast () const {  return isMovingSouth() && isMovingEast() ;  }
         bool isMovingSouthwest () const {  return isMovingSouth() && isMovingWest() ;  }
 
-        Motion2D& reverse ()
-        {
-                this->alongX = - this->alongX ;
-                this->alongY = - this->alongY ;
-                return *this ;
-        }
+        void resetX () {  this->alongX = 0 ;  }
+        void resetY () {  this->alongY = 0 ;  }
 
 } ;
 
