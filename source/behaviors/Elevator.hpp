@@ -51,34 +51,34 @@ public:
 
         virtual bool update () ;
 
-        int getTop () const {  return top ;  }
+        int getTop () const {  return this->top ;  }
 
-        int getBottom () const {  return bottom ;  }
+        int getBottom () const {  return this->bottom ;  }
 
-        bool getAscent () const {  return ascent ;  }
+        bool isAscending () const {  return this->ascending ;  }
 
-        void setTop ( int top ) {  this->top = top ;  }
+        void setTop ( int highest ) {  this->top = highest ;  }
 
-        void setBottom ( int bottom ) {  this->bottom = bottom ;  }
+        void setBottom ( int lowest ) {  this->bottom = lowest ;  }
 
-        void setAscent ( bool ascent ) {  this->ascent = ascent ;  }
+        void setAscending ( bool ascend ) {  this->ascending = ascend ;  }
 
 private:
 
         /**
-         * the maximum height at which elevator ascends
+         * the maximum height to which this elevator ascends
          */
         int top ;
 
         /**
-         * the minimum height at which elevator descends
+         * the minimum height to which this elevator descends
          */
         int bottom ;
 
         /**
-         * is the first movement of elevator ascending if true or descending if false
+         * is the first movement of the elevator ascending if true or descending if false
          */
-        bool ascent ;
+        bool ascending ;
 
         /**
          * used to retain the previous activity

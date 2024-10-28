@@ -380,15 +380,15 @@ bool Room::saveAsXML( const std::string & file )
 
                                                 tinyxml2::XMLElement* top = roomXml.NewElement( "top" );
                                                 tinyxml2::XMLElement* bottom = roomXml.NewElement( "bottom" );
-                                                tinyxml2::XMLElement* ascent = roomXml.NewElement( "ascent" );
+                                                tinyxml2::XMLElement* ascending = roomXml.NewElement( "ascending" );
 
                                                 top->SetText( behaviorOfElevator.getTop() );
                                                 bottom->SetText( behaviorOfElevator.getBottom() );
-                                                ascent->SetText( behaviorOfElevator.getAscent() ? "true" : "false" ); // does it go up first or down?
+                                                ascending->SetText( behaviorOfElevator.isAscending() ? "true" : "false" ); // goes it up first or down?
 
                                                 item->InsertEndChild( top );
                                                 item->InsertEndChild( bottom );
-                                                item->InsertEndChild( ascent );
+                                                item->InsertEndChild( ascending );
                                         }
                                 }
 

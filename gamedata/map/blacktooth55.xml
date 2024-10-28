@@ -59,7 +59,7 @@
             <behavior>behavior of elevator</behavior>
             <top>9</top>
             <bottom>0</bottom>
-            <ascent>false</ascent>
+            <ascending>false</ascending>
             <class>freeitem</class>
         </item>
         <item x="3" y="0" z="-1">

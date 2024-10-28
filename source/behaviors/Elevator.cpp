@@ -14,7 +14,7 @@ Elevator::Elevator( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , top( Room::MaxLayers )
         , bottom( 0 )
-        , ascent( true )
+        , ascending( true )
         , lastActivity( activities::Activity::Waiting )
         , speedTimer( new Timer() )
         , waitingTimer( new Timer() )
@@ -30,7 +30,7 @@ bool Elevator::update ()
         switch ( getCurrentActivity() )
         {
                 case activities::Activity::Waiting :
-                        setCurrentActivity ( this->ascent ? activities::ActivityOfElevator::GoingUp : activities::ActivityOfElevator::GoingDown );
+                        setCurrentActivity ( this->ascending ? activities::ActivityOfElevator::GoingUp : activities::ActivityOfElevator::GoingDown );
                         this->lastActivity = getCurrentActivity ();
                         break;
 

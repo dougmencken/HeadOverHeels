@@ -566,37 +566,15 @@ FreeItemPtr RoomMaker::makeFreeItem( tinyxml2::XMLElement* item, Room* room )
                 if ( behaviorOfItem == "behavior of elevator" )
                 {
                         behaviors::Elevator* behaviorOfElevator = dynamic_cast< behaviors::Elevator* >( freeItem->getBehavior().get () );
-
-                        tinyxml2::XMLElement* extra = item->FirstChildElement( "extra" );
-                        if ( extra != nilPointer )
-                        {
-                                int data[ 3 ];
-                                int foundEntries = 0;
-
-                                for ( ; extra != nilPointer ; extra = extra->NextSiblingElement( "extra" ) )
-                                {
-                                        data[ foundEntries++ ] = std::atoi( extra->FirstChild()->ToText()->Value() );
-                                        if ( foundEntries == 3 ) break ;
-                                }
-
-                                // three entries are needed
-                                if ( foundEntries == 3 )
-                                {
-                                        behaviorOfElevator->setTop( data[ 0 ] );
-                                        behaviorOfElevator->setBottom( data[ 1 ] );
-                                        behaviorOfElevator->setAscent( data[ 2 ] != 0 );
-                                }
-                        }
-                        else
                         {
                                 tinyxml2::XMLElement* top = item->FirstChildElement( "top" );
                                 tinyxml2::XMLElement* bottom = item->FirstChildElement( "bottom" );
-                                tinyxml2::XMLElement* ascent = item->FirstChildElement( "ascent" );
-                                std::string ascentString = ascent->FirstChild()->ToText()->Value();
+                                tinyxml2::XMLElement* ascending = item->FirstChildElement( "ascending" );
+                                std::string ascendingString = ascending->FirstChild()->ToText()->Value() ;
 
                                 behaviorOfElevator->setTop( std::atoi( top->FirstChild()->ToText()->Value() ) );
                                 behaviorOfElevator->setBottom( std::atoi( bottom->FirstChild()->ToText()->Value() ) );
-                                behaviorOfElevator->setAscent( ascentString != "false" );
+                                behaviorOfElevator->setAscending( ascendingString != "false" );
                         }
                 }
 
