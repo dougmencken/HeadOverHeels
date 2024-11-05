@@ -44,7 +44,7 @@ protected:
 
 public:
 
-        static GameManager & getInstance () ;
+        static GameManager & getInstance () {  return GameManager::instance ;  }
 
         virtual ~GameManager( ) ;
 

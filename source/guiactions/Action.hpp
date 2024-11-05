@@ -11,12 +11,13 @@
 #ifndef Action_hpp_
 #define Action_hpp_
 
+#include <iostream>
 #include <string>
 #include <typeinfo>
 
-#include "WrappersAllegro.hpp"
+#include "util.hpp"
 
-#include "Picture.hpp"
+#include "AllCreatedActions.hpp"
 
 
 namespace gui
@@ -25,25 +26,36 @@ namespace gui
 class Action
 {
 
-public:
+public :
 
-        Action() : doing( false ), done( false ) { }
+        Action() : doing( false ), done( false ) {  AllCreatedActions::add( this ) ;  }
 
         virtual ~Action( ) { }
 
-        void doIt () {  doing = true ;  act() ;  done = true ;  }
+        void doIt ()
+        {
+                IF_DEBUG( std::cout << "doing action " << getNameOfAction() << std::endl )
 
-        bool hasBegun() {  return doing ;  }
+                this->doing = true ;
+                act() ;
+                this->done = true ;
 
-        bool isDone() {  return done ;  }
+                IF_DEBUG( std::cout << "done action " << getNameOfAction() << std::endl )
 
-        virtual std::string getNameOfAction () const {  return typeid( *this ).name () ;  }
+                AllCreatedActions::getInstance().binFinishedActions() ; // delete this ;
+        }
 
-protected:
+        bool hasBegun() const {  return this->doing ;  }
+
+        bool isDone() const {  return this->done ;  }
+
+        virtual std::string getNameOfAction () const {  return util::demangle( typeid( *this ).name () );  }
+
+protected :
 
         virtual void act () = 0 ;
 
-private:
+private :
 
         bool doing ;
 

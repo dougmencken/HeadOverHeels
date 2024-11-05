@@ -565,17 +565,16 @@ FreeItemPtr RoomMaker::makeFreeItem( tinyxml2::XMLElement* item, Room* room )
                 // more data for the behavior of elevator
                 if ( behaviorOfItem == "behavior of elevator" )
                 {
-                        behaviors::Elevator* behaviorOfElevator = dynamic_cast< behaviors::Elevator* >( freeItem->getBehavior().get () );
-                        {
-                                tinyxml2::XMLElement* top = item->FirstChildElement( "top" );
-                                tinyxml2::XMLElement* bottom = item->FirstChildElement( "bottom" );
-                                tinyxml2::XMLElement* ascending = item->FirstChildElement( "ascending" );
-                                std::string ascendingString = ascending->FirstChild()->ToText()->Value() ;
+                        tinyxml2::XMLElement* top = item->FirstChildElement( "top" );
+                        tinyxml2::XMLElement* bottom = item->FirstChildElement( "bottom" );
+                        tinyxml2::XMLElement* ascending = item->FirstChildElement( "ascending" );
+                        std::string ascendingString = ascending->FirstChild()->ToText()->Value() ;
 
-                                behaviorOfElevator->setTop( std::atoi( top->FirstChild()->ToText()->Value() ) );
-                                behaviorOfElevator->setBottom( std::atoi( bottom->FirstChild()->ToText()->Value() ) );
-                                behaviorOfElevator->setAscending( ascendingString != "false" );
-                        }
+                        behaviors::Elevator* behaviorOfElevator = dynamic_cast< behaviors::Elevator* >( freeItem->getBehavior().get () );
+
+                        behaviorOfElevator->setTop( std::atoi( top->FirstChild()->ToText()->Value() ) );
+                        behaviorOfElevator->setBottom( std::atoi( bottom->FirstChild()->ToText()->Value() ) );
+                        behaviorOfElevator->setAscending( ascendingString != "false" );
                 }
 
                 return freeItem ;

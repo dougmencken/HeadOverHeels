@@ -38,7 +38,7 @@ void gui::ShowSlideWithPlanets::act ()
         Label* empire = new Label( languageStrings.getTranslatedTextByAlias( "blacktooth-empire" ).getText(),
                                         new Font( colorOfLabel, /* double height */ true ) );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
-        empire->setAction( new ContinueGame( this->gameInProgress ) );
+        empire->setAction( new ContinueGame( this->gameInProgress ) ); // from slides and menus to the game
 
         planets.addWidget( empire );
         planets.setKeyHandler( empire );

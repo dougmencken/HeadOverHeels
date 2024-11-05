@@ -30,8 +30,8 @@ void SaveGame::act ()
                         std::cout << "can’t save the game as \"" << "saved." << slot << "\"" << std::endl ;
         }
 
-        ContinueGame * game = new ContinueGame( true );
-        game->doIt ();
+        // back to the game
+        ( new ContinueGame( true ) )->doIt ();
 }
 
 }

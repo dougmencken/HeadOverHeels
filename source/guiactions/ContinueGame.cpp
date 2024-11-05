@@ -13,7 +13,7 @@ void gui::ContinueGame::act ()
 
         gameManager.resetKeyMoments() ;
 
-        if ( gameInProgress )
+        if ( this->gameInProgress )
                 gameManager.resume () ;
         else
                 gameManager.begin () ;

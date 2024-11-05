@@ -1256,13 +1256,11 @@ unsigned int Room::getHeightOfRoomImage () const
 
 void Room::drawRoom ()
 {
-        if ( whereToDraw == nilPointer )
-        {
+        if ( this->whereToDraw == nilPointer )
                 // crea la imagen with suitable dimensions to draw this room
-                whereToDraw = PicturePtr( new Picture( getWidthOfRoomImage (), getHeightOfRoomImage () ) );
-        }
+                this->whereToDraw = PicturePtr( new Picture( getWidthOfRoomImage (), getHeightOfRoomImage () ) );
 
-        drawOn( whereToDraw->getAllegroPict() ) ;
+        drawOn( this->whereToDraw->getAllegroPict() ) ;
 }
 
 void Room::draw ()
@@ -1298,8 +1296,8 @@ void Room::draw ()
                         ( *wi )->draw ();
         }
 
-        getMediator()->lockGridItemsMutex();
-        getMediator()->lockFreeItemsMutex();
+        getMediator()->lockGridItemsMutex() ;
+        getMediator()->lockFreeItemsMutex() ;
 
         // draw grid items
 
@@ -1346,9 +1344,8 @@ void Room::draw ()
                 freeItem.draw ();
         }
 
-        getMediator()->unlockGridItemsMutex();
-        getMediator()->unlockFreeItemsMutex();
-
+        getMediator()->unlockFreeItemsMutex() ;
+        getMediator()->unlockGridItemsMutex() ;
 
 #if defined( SHOW_ORIGIN_OF_ROOM ) && SHOW_ORIGIN_OF_ROOM
         // draw point of the room’s origin

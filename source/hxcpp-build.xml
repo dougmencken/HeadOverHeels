@@ -92,6 +92,7 @@
         <file name="gui/MenuWithTwoColumns.cpp" />
         <file name="gui/Slide.cpp" />
         <file name="gui/TextField.cpp" />
+        <file name="guiactions/AllCreatedActions.cpp" />
         <file name="guiactions/ChooseLanguage.cpp" />
         <file name="guiactions/ContinueGame.cpp" />
         <file name="guiactions/LoadGame.cpp" />

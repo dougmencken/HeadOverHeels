@@ -127,8 +127,8 @@ void GuiManager::changeSlide( const std::string & newAction, bool dive )
                 redraw() ;
         }
         else {
-                std::cerr << "there’s no slide for action \"" << newAction << "\", please create it before use" << std::endl ;
-                throw MayNotBePossible( "the slide for action \" " + newAction + " \" is absent" ) ;
+                std::cerr << "there’s no slide for action " << newAction << ", please create it before use" << std::endl ;
+                throw MayNotBePossible( "the slide for action " + newAction + " is absent" ) ;
         }
 }
 
@@ -146,12 +146,12 @@ void GuiManager::setActiveSlide ( Slide * newSlide )
 Slide & GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAction )
 {
         if ( this->slides.find( nameOfAction ) == this->slides.end () ) {
-                std::cout << "making a new slide for action \" " << nameOfAction << " \"" << std::endl ;
+                std::cout << "making a new slide for action " << nameOfAction << std::endl ;
 
                 this->slides[ nameOfAction ] = new Slide() ;
 
                 if ( this->slides[ nameOfAction ] == nilPointer )
-                        throw MayNotBePossible( "can't make a slide for action \" " + nameOfAction + " \"" ) ;
+                        throw MayNotBePossible( "can't make a slide for action " + nameOfAction ) ;
         }
 
         return * this->slides[ nameOfAction ];

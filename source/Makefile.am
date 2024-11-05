@@ -221,6 +221,8 @@ headoverheels_SOURCES = main.cpp \
 			gui/TextField.hpp \
 			guiactions/Action.hpp \
 			guiactions/ActionWithHandlingKeys.hpp \
+			guiactions/AllCreatedActions.cpp \
+			guiactions/AllCreatedActions.hpp \
 			guiactions/PlaySound.hpp \
 			guiactions/ChooseLanguage.cpp \
 			guiactions/ChooseLanguage.hpp \

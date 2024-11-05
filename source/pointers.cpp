@@ -5,7 +5,7 @@
 
 #if defined( DEBUG ) && DEBUG
 # define DEBUG_REFERENCES       1
-# define SHOW_MEMORY_LEAKS      1
+# define SHOW_MEMORY_LEAKS      0 /* 1 */
 #endif
 
 

@@ -16,8 +16,6 @@
 
 #include <string>
 
-#include <tinyxml2.h>
-
 
 class Color ;
 class Picture ;
@@ -45,6 +43,8 @@ public:
         void beginNewGame () ;
 
         void pauseMe () ;
+
+        bool isPaused () const {  return this->paused ;  }
 
         void resumeMe () ;
 

@@ -80,15 +80,9 @@ void GameManager::cleanUp ()
 }
 
 /* static */
-GameManager& GameManager::getInstance ()
+PicturePtr GameManager::refreshPicture ( const std::string & nameOfPicture )
 {
-        return instance ;
-}
-
-/* static */
-PicturePtr GameManager::refreshPicture ( const std::string& nameOfPicture )
-{
-        IF_DEBUG( std::cout << "refreshing picture \"" << nameOfPicture << "\"" << std::endl )
+        ///////IF_DEBUG( std::cout << "refreshing picture \"" << nameOfPicture << "\"" << std::endl )
 
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
                 ospaths::pathToFile( ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), nameOfPicture )
@@ -210,10 +204,12 @@ void GameManager::keyMoment ()
 
 void GameManager::pause ()
 {
-        IF_DEBUG( std::cout << "GameManager::pause ()" << std::endl )
+        IF_DEBUG( fprintf ( stdout, "GameManager::pause ()\n" ) )
+
+        if ( isomot.isPaused () ) return ; //////// really?
 
         // pause the isometric engine
-        isomot.pauseMe() ;
+        /* if ( ! isomot.isPaused () ) */ isomot.pauseMe() ;
 
         Picture* view = isomot.updateMe ();
         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
@@ -272,6 +268,8 @@ void GameManager::pause ()
         }
         else if ( getKeyMoments().wasFishEaten() )
         {
+                std::cout << "the key moment “the player ate the reincarnation fish” @ GameManager::pause()" << std::endl ;
+
                 gui::LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
                 int textY = ( GamePreferences::getScreenHeight() >> 2 ) - 60 ;
@@ -729,7 +727,11 @@ unsigned short GameManager::howManyFreePlanets () const
 
 void GameManager::eatFish ( const AvatarItem & character, Room* room )
 {
-        if ( getKeyMoments().wasFishEaten() ) return ;
+        std::cout << "GameManager::eatFish ( "
+                        << "character \"" << character.getOriginalKind() << "\", "
+                        << "room \"" << room->getNameOfRoomDescriptionFile() << "\" )" << std::endl ; ///////
+
+        if ( getKeyMoments().wasFishEaten() ) return ; // already ate
 
         if ( room == nilPointer ) {
                 std::cout << "><((((o> ate fish without room <o))))><" << std::endl ;
@@ -757,8 +759,7 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room )
 
         std::string whereLooks = character.getHeading ();
         if ( fish != nilPointer ) whereLooks = fish->getHeading() ;
-        if ( whereLooks.empty() ) whereLooks = "south" ; ///// better to indicate heading for every fish in the room description files
-                                                         ///// meanwhile, everything works well with empty <heading></heading> in a savegame file
+        if ( whereLooks.empty() ) whereLooks = "south" ;
 
         saverAndLoader.ateFish (
                 room->getNameOfRoomDescriptionFile (),

@@ -94,6 +94,8 @@ void Isomot::offInviolability ()
 
 void Isomot::pauseMe ()
 {
+        IF_DEBUG( std::cout << "Isomot::pauseMe ()" << std::endl )
+
         Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
         if ( activeRoom != nilPointer )
                 activeRoom->deactivate() ;
@@ -103,6 +105,10 @@ void Isomot::pauseMe ()
 
 void Isomot::resumeMe ()
 {
+        IF_DEBUG( std::cout << "Isomot::resumeMe ()" << std::endl )
+
+        if ( ! this->paused ) return ;
+
         Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
         if ( activeRoom != nilPointer )
                 activeRoom->activate() ;
