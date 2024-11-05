@@ -4,17 +4,16 @@
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
 
+#include <pthread.h>
+
 
 void gui::ContinueGame::act ()
 {
         SoundManager::getInstance().stopOgg (); // or else hear the planets screen’s music when resuming an old (saved) game
 
-        GameManager & gameManager = GameManager::getInstance() ;
+        bool * pointer = new bool ;
+        *pointer = this->gameInProgress ;
 
-        gameManager.resetKeyMoments() ;
-
-        if ( this->gameInProgress )
-                gameManager.resume () ;
-        else
-                gameManager.begin () ;
+        pthread_create( GameManager::getThread(), nilPointer, GameManager::beginOrResume, reinterpret_cast< void * >( pointer ) );
+        pthread_detach( * GameManager::getThread() );
 }

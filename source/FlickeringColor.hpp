@@ -49,7 +49,7 @@ public:
                 , period( copy.period )
                 , isFirst( true ) {  initTimer() ;  }
 
-        virtual ~FlickeringColor( ) ;
+        virtual ~FlickeringColor( ) {}
 
         virtual unsigned char getRed () const {  return isFirst ? first.getRed() : second.getRed() ;  }
 

@@ -1,6 +1,7 @@
 
 #include "GuiManager.hpp"
 
+#include "GameManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 #include "Color.hpp"
@@ -88,17 +89,19 @@ void GuiManager::firstMenu ()
 
 void GuiManager::loop ()
 {
-        while ( this->looping )
-        {
-                if ( this->activeSlide != nilPointer ) {
-                        // draw an active slide
-                        this->activeSlide->draw ();
+        while ( this->looping ) {
+                if ( ! GameManager::isThreadRunning() )
+                {
+                        if ( this->activeSlide != nilPointer ) {
+                                // draw an active slide
+                                this->activeSlide->draw ();
 
-                        // handle keys
-                        if ( allegro::areKeypushesWaiting() )
-                                this->activeSlide->handleKey( allegro::nextKey() );
+                                // handle keys
+                                if ( allegro::areKeypushesWaiting() )
+                                        this->activeSlide->handleKey( allegro::nextKey() );
+                        }
+                        else throw MayNotBePossible( "there’s no active slide" ) ;
                 }
-                else throw MayNotBePossible( "there’s no active slide" ) ;
 
                 // no te comas la CPU
                 // do not eat the CPU
@@ -184,7 +187,7 @@ void GuiManager::refreshSlides ()
 
 void GuiManager::redraw() const
 {
-        if ( this->looping && this->activeSlide != nilPointer )
+        if ( this->looping && this->activeSlide != nilPointer && ! GameManager::isThreadRunning() )
                 this->activeSlide->draw ();
 }
 

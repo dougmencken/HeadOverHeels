@@ -33,6 +33,10 @@
 
 GameManager GameManager::instance ;
 
+pthread_t GameManager::theThread ;
+
+bool GameManager::threadIsRunning = false ;
+
 
 GameManager::GameManager( )
         : theInfo( )
@@ -92,6 +96,27 @@ PicturePtr GameManager::refreshPicture ( const std::string & nameOfPicture )
         newPicture->setName( nameOfPicture );
 
         return newPicture ;
+}
+
+/* static */
+void * GameManager::beginOrResume ( void * pointerToBoolean )
+{
+        GameManager::getInstance().resetKeyMoments() ;
+
+        bool* pointer = reinterpret_cast< bool* >( pointerToBoolean );
+        bool resume = ( pointer != nilPointer ) ? *pointer : false ;
+        delete pointer ;
+
+        GameManager::threadIsRunning = true ;
+
+        if ( resume )
+                GameManager::getInstance().resume () ;
+        else
+                GameManager::getInstance().begin () ;
+
+        GameManager::threadIsRunning = false ;
+
+        pthread_exit( nilPointer );
 }
 
 void GameManager::begin ()

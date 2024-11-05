@@ -282,6 +282,8 @@ void Slide::refresh () const
 
 void Slide::drawOnGlobalScreen( )
 {
+        if ( GameManager::isThreadRunning () ) return ;
+
         allegro::bitBlit( imageOfSlide->getAllegroPict(), allegro::Pict::theScreen() );
         allegro::update ();
 }

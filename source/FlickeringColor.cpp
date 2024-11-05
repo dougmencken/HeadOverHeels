@@ -31,11 +31,6 @@ const FlickeringColor & FlickeringColor::flickerGray75AndTransparent ()
         return * FlickeringColor::gray75AndTransparent ;
 }
 
-FlickeringColor::~FlickeringColor( )
-{
-        pthread_join( thread, nilPointer );
-}
-
 std::string FlickeringColor::toString() const
 {
         return "flickering color: first " + first.toString() + " second " + second.toString() ;
@@ -67,4 +62,5 @@ void FlickeringColor::initTimer()
         changeColorTimer->go();
 
         pthread_create( &thread, nilPointer, FlickeringColor::flicker, reinterpret_cast< void * >( this ) );
+        pthread_detach( thread );
 }

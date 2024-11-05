@@ -20,6 +20,8 @@
 #include "Isomot.hpp"
 #include "Timer.hpp"
 
+#include <pthread.h>
+
 class Room ;
 class AvatarItem ;
 
@@ -49,6 +51,14 @@ public:
         virtual ~GameManager( ) ;
 
         void cleanUp () ;
+
+        // if *pointerToBoolean is true it does resume(), otherwise begin()
+        // it’s for use with pthread_create
+        static void * beginOrResume ( void * pointerToBoolean ) ;
+
+        static pthread_t * getThread () {  return & GameManager::theThread ;  }
+
+        static bool isThreadRunning () {  return GameManager::threadIsRunning ;  }
 
         /**
          * The game begins here
@@ -196,6 +206,10 @@ public:
 private:
 
         static GameManager instance ;
+
+        static pthread_t theThread ;
+
+        static bool threadIsRunning ;
 
         GameInfo theInfo ;
 
