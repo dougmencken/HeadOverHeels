@@ -134,7 +134,7 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
 
                                 BonusManager::getInstance().markAsAbsent( BonusInRoom( /* which bonus */ kind, /* in which room */ room ) );
 
-                                std::cout << "rebuilding room \"" << room << "\" without bonus \"" << kind << "\"" << std::endl ;
+                                std::cout << "rebuilding room " << room << " without bonus \"" << kind << "\"" << std::endl ;
                                 GameMap::getInstance().rebuildRoom( room );
                         }
                 }
@@ -415,8 +415,6 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
         std::string whoWaitsToPlay = ( characterToo != nilPointer ) ? characterToo->getOriginalKind() : "no one" ;
 
         if ( whoWaitsToPlay != "no one" ) {
-                ///// assert ( characterToo != nilPointer ) ;
-
                 tinyxml2::XMLElement* inactiveCharacter = saveXml.NewElement( "character" );
                 inactiveCharacter->SetAttribute( "name", whoWaitsToPlay.c_str () );
 

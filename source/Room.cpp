@@ -113,7 +113,7 @@ Room::Room( const std::string & roomFile,
         // 0 for black shadows, 128 for 50% opacity, 256 for no shadows
         this->shadingTransparency = GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
 
-        IF_DEBUG( std::cout << "created room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl )
+        IF_DEBUG( std::cout << "created room " << getNameOfRoomDescriptionFile() << std::endl )
 }
 
 Room::~Room()
@@ -629,9 +629,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         getMediator()->wantShadowFromGridItem( *gridItem );
         getMediator()->wantToMaskWithGridItem( *gridItem );
 
-#if defined( DEBUG ) && DEBUG
-        std::cout << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
-#endif
+        IF_DEBUG( std::cout << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" is yet part of room " << getNameOfRoomDescriptionFile() << std::endl )
 }
 
 void Room::sortGridItems ()
@@ -717,9 +715,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         getMediator()->wantShadowFromFreeItem( *freeItem );
         getMediator()->wantToMaskWithFreeItem( *freeItem );
 
-#if defined( DEBUG ) && DEBUG
-        std::cout << freeItem->whichItemClass() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
-#endif
+        IF_DEBUG( std::cout << freeItem->whichItemClass() << " \"" << freeItem->getUniqueName() << "\" is yet in room " << getNameOfRoomDescriptionFile() << std::endl )
 }
 
 void Room::sortFreeItems ()
@@ -868,14 +864,14 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
         unsigned int uniqueNumberOfItem = nextNumbers[ kindOfItem ] ;
         if ( uniqueNumberOfItem > 0 ) // is there some character with the same name
         {
-                 std::cerr << "oops, can’t add the second character \"" << kindOfItem << "\" to this room" << std::endl ;
+                 std::cerr << "oops, can’t add the second \"" << kindOfItem << "\" to this room" << std::endl ;
                  return false;
         }
         nextNumbers[ kindOfItem ] = uniqueNumberOfItem + 1;
 
         character->setUniqueName( kindOfItem + " @ " + getNameOfRoomDescriptionFile() );
 
-        std::cout << "adding character \"" << character->getOriginalKind() << "\" to room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+        std::cout << "adding character \"" << character->getOriginalKind() << "\" to room " << getNameOfRoomDescriptionFile() << std::endl ;
 
         addFreeItemToContainer( character );
 
@@ -936,7 +932,7 @@ void Room::dumpItemInsideThisRoom( const Item & item )
                         << " at " << item.getX() << " " << item.getY() << " " << item.getZ()
                         << " with dimensions " << item.getWidthX() << " x " << item.getWidthY() << " x " << item.getHeight()
                         << std::endl
-                        << "   inside room \"" << getNameOfRoomDescriptionFile() << "\""
+                        << "   inside room " << getNameOfRoomDescriptionFile()
                         << " of " << getTilesOnX () << " x " << getTilesOnY () << " tiles"
                         << " each tile of " << getSizeOfOneTile () << " pixels"
                         << std::endl ;
@@ -1021,7 +1017,7 @@ void Room::removeGridItemByUniqueName( const std::string & uniqueName )
                                 foundGridItem = *g ;
 
                                 std::cout << "removing " << ( *g )->whichItemClass() << " \"" << uniqueName <<
-                                        "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+                                        "\" from room " << getNameOfRoomDescriptionFile() << std::endl ;
 
                                 gridItems[ column ].erase( g );
 
@@ -1049,7 +1045,7 @@ void Room::removeFreeItemByUniqueName( const std::string & uniqueName )
                         foundFreeItem = *f ;
 
                         std::cout << "removing " << ( *f )->whichItemClass() << " \"" << uniqueName <<
-                                "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+                                "\" from room " << getNameOfRoomDescriptionFile() << std::endl ;
 
                         freeItems.erase( f );
 

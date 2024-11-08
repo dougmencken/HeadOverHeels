@@ -436,8 +436,8 @@ void Isomot::handleMagicKeys ()
 
                         if ( otherCharacter != nilPointer && roomWithInactiveCharacter != activeRoom )
                         {
-                                std::cout << "both characters suddenly found themselves together in the active room \""
-                                                << activeRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+                                std::cout << "both characters suddenly found themselves together"
+                                                << " in the active room " << activeRoom->getNameOfRoomDescriptionFile() << std::endl ;
 
                                 const std::string & nameOfAnotherCharacter = otherCharacter->getKind () ;
 

@@ -12,6 +12,7 @@
 #include "GamePreferences.hpp"
 #include "ItemDescriptions.hpp"
 #include "Color.hpp"
+#include "MayNotBePossible.hpp"
 
 #include "ospaths.hpp"
 
@@ -216,7 +217,7 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
                 }
         }
         else
-                std::cerr << "room \"" << headRoom << "\" doesn’t exist" << std::endl ;
+                throw MayNotBePossible( "room " + headRoom + " doesn’t exist" );
 
         if ( headRoom != heelsRoom )
         {
@@ -242,7 +243,7 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
                         }
                 }
                 else
-                        std::cerr << "room \"" << heelsRoom << "\" doesn’t exist" << std::endl ;
+                        throw MayNotBePossible( "room " + heelsRoom + " doesn’t exist" );
         }
 
         if ( this->activeRoom != nilPointer ) this->activeRoom->activate() ;
@@ -317,7 +318,7 @@ void GameMap::rebuildRoom( Room* room )
                 else                                 std::cout << "are " ;
                 std::cout << howManyCharactersEntered << " character" ;
                 if ( howManyCharactersEntered != 1 ) std::cout << "s" ;
-                std::cout << " who entered room \"" << fileOfRoom << "\"" << std::endl ;
+                std::cout << " who entered room " << fileOfRoom << std::endl ;
         ///#endif
 
                 for ( unsigned int i = 0 ; i < charactersOnEntry.size () ; )
@@ -325,13 +326,13 @@ void GameMap::rebuildRoom( Room* room )
                         const AvatarItemPtr character = charactersOnEntry[ i ];
                         assert( character != nilPointer );
                         /** std::cerr << "**nil** " << util::toStringWithOrdinalSuffix( i ) << " character"
-                                                << " among those who entered room \"" << fileOfRoom << "\""
+                                                << " among those who entered room " << fileOfRoom
                                                 << " @ GameMap::rebuildRoom" << std::endl ;
                         continue ; **/
 
                         if ( character->getKind() == "headoverheels" || character->getLives() > 0 )
                         {
-                                std::cout << "character \"" << character->getKind() << "\" entered room \"" << fileOfRoom << "\""
+                                std::cout << "character \"" << character->getKind() << "\" entered room " << fileOfRoom
                                                 << " @ GameMap::rebuildRoom" << std::endl ;
 
                                 // when the joined character splits, and then some simple character migrates to another room
@@ -444,15 +445,15 @@ Room* GameMap::changeRoom( const std::string & wayOfExit )
                 wayOfEntry = newRoom->getConnections()->clarifyTheWayOfEntryToABigRoom( wayOfEntry, fileOfPreviousRoom );
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
-                        << " from the room \"" << fileOfPreviousRoom << "\" at \"" << wayOfExit << "\""
-                        << " to the room \"" << fileOfNextRoom << "\" at \"" << wayOfEntry << "\"" << std::endl ;
+                        << " from the room " << fileOfPreviousRoom << " at \"" << wayOfExit << "\""
+                        << " to the room " << fileOfNextRoom << " at \"" << wayOfEntry << "\"" << std::endl ;
 
         // remove the active character from the previous room
         previousRoom->removeCharacterFromRoom( oldItemOfRoamer, true );
 
         if ( ! previousRoom->isAnyCharacterStillInRoom() || nameOfRoamer == "headoverheels" )
         {
-                std::cout << "there’re no characters left in room \"" << fileOfPreviousRoom << "\""
+                std::cout << "there’re no characters left in room " << fileOfPreviousRoom
                                 << " thus bye that room" << std::endl ;
 
                 removeRoomInPlay( previousRoom );
@@ -462,7 +463,7 @@ Room* GameMap::changeRoom( const std::string & wayOfExit )
 
         // calculate the entry location in the new room
 
-        std::cout << "the exit coordinates from room \"" << fileOfPreviousRoom << "\" are"
+        std::cout << "the exit coordinates from room " << fileOfPreviousRoom << " are"
                         << " x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
 
         // initially the coordinates of exit from the previous room
@@ -479,9 +480,9 @@ Room* GameMap::changeRoom( const std::string & wayOfExit )
         if ( ! okayToEnter )
                 std::cout << "coordinates"
                                 << " x=" << entryX << " y=" << entryY << " z=" << entryZ
-                                << " are not okay to enter room \"" << fileOfNextRoom << "\"" << std::endl ;
+                                << " are not okay to enter room " << fileOfNextRoom << std::endl ;
         else
-                std::cout << "the entry coordinates to room \"" << fileOfNextRoom << "\" are"
+                std::cout << "the entry coordinates to room " << fileOfNextRoom << " are"
                                 << " x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
 
         // create character
@@ -542,7 +543,7 @@ Room* GameMap::swapRoom ()
                 // when it’s last one swap with first one
                 activeRoom = ( ri != roomsInPlay.end () ? *ri : *roomsInPlay.begin () );
 
-                std::cout << "swop room \"" << fileOfPreviousRoom << "\" with \"" << activeRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+                std::cout << "change room " << fileOfPreviousRoom << " to " << activeRoom->getNameOfRoomDescriptionFile() << std::endl ;
 
                 activeRoom->activate();
         }
@@ -584,7 +585,7 @@ void GameMap::addRoomInPlay( Room* whichRoom )
 
         if ( isRoomInPlay( whichRoom ) || findRoomInPlayByFile( roomFile ) != nilPointer )
         {
-                std::cout << "room \"" << roomFile << "\" is already in play" << std::endl ;
+                std::cout << "room " << roomFile << " is already in play" << std::endl ;
                 return ;
         }
 

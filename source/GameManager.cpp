@@ -754,7 +754,7 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room )
 {
         std::cout << "GameManager::eatFish ( "
                         << "character \"" << character.getOriginalKind() << "\", "
-                        << "room \"" << room->getNameOfRoomDescriptionFile() << "\" )" << std::endl ; ///////
+                        << "room " << room->getNameOfRoomDescriptionFile() << " )" << std::endl ;
 
         if ( getKeyMoments().wasFishEaten() ) return ; // already ate
 

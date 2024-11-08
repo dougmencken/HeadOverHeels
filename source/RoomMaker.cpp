@@ -50,7 +50,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
         else
                 std::cout << "rebuilding" ;
 
-        std::cout << " room \"" << roomName << "\"" << std::endl ;
+        std::cout << " room " << roomName << std::endl ;
 
         Room * theRoom = new Room (
                 roomName,
@@ -60,7 +60,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
         );
 
         if ( theRoom == nilPointer ) {
-                std::cerr << "can’t make room \"" << roomName << "\"" << std::endl ;
+                std::cerr << "can’t make room " << roomName << std::endl ;
                 return nilPointer;
         }
 
@@ -113,7 +113,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
 
                                 std::cout << "converting grid item \"" << kind << "\" @ cx=" << itemCellX << " cy=" << itemCellY
                                                 << " to wall piece at " << ( wallAlongX ? "x:" : "y:" ) << where
-                                                        << " in room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+                                                        << " in room " << theRoom->getNameOfRoomDescriptionFile() << std::endl ;
 
                                 std::string fileWithPicture = kind + ".png" ;
                                 theRoom->addWallPiece( new WallPiece( wallAlongX, where, fileWithPicture ) );
@@ -162,7 +162,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
         theRoom->convertWallsNearDoors() ;
         theRoom->calculateBounds ();
 
-        std::cout << "built room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+        std::cout << "built room " << theRoom->getNameOfRoomDescriptionFile() << std::endl ;
 
         return theRoom ;
 }
