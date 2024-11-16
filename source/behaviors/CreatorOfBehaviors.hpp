@@ -14,7 +14,7 @@
 #include <string>
 
 #include "Behavior.hpp"
-#include "Item.hpp"
+#include "AbstractItem.hpp"
 
 
 namespace behaviors
@@ -29,7 +29,7 @@ private:
 
 public:
 
-        static autouniqueptr< Behavior > createBehaviorByName ( Item & item, const std::string & behavior ) ;
+        static autouniqueptr< Behavior > createBehaviorByName ( AbstractItem & item, const std::string & behavior ) ;
 
 } ;
 

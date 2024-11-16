@@ -11,8 +11,8 @@
 #ifndef Masker_hpp_
 #define Masker_hpp_
 
-#include "Item.hpp"
-#include "FreeItem.hpp"
+class DescribedItem ;
+class FreeItem ;
 
 
 /**
@@ -24,7 +24,7 @@ class Masker
 
 public:
 
-        static void maskFreeItemBehindItem ( FreeItem & itemToMask, const Item & upwardItem ) ;
+        static void maskFreeItemBehindItem ( FreeItem & itemToMask, const DescribedItem & upwardItem ) ;
 
 } ;
 

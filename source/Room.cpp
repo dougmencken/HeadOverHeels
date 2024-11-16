@@ -317,7 +317,7 @@ bool Room::saveAsXML( const std::string & file )
                                 kind->SetText( kindOfItem.c_str () );
                                 item->InsertEndChild( kind );
 
-                                const std::string & heading = theItem->getHeading ();
+                                const std::string & heading = theItem->getOrientation ();
                                 const std::string orientation = ( heading.empty() || heading == "none" ) ? "" : heading ;
                                 if ( ! orientation.empty() ) {
                                         tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
@@ -926,7 +926,7 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
         return true ;
 }
 
-void Room::dumpItemInsideThisRoom( const Item & item )
+void Room::dumpItemInsideThisRoom( const DescribedItem & item )
 {
         std::cout << "   " << item.whichItemClass() << " \"" << item.getUniqueName() << "\""
                         << " at " << item.getX() << " " << item.getY() << " " << item.getZ()

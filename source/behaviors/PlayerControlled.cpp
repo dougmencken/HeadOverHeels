@@ -42,14 +42,15 @@ PlayerControlled::~PlayerControlled( )
 bool PlayerControlled::update ()
 {
         // play sound for the current activity
-        SoundManager::getInstance().play( getItem().getOriginalKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );
-
+        SoundManager::getInstance().play (
+                        dynamic_cast< const ::DescribedItem & >( getItem() ).getOriginalKind(),
+                        SoundManager::activityToNameOfSound( getCurrentActivity() ) );
         return true ;
 }
 
 bool PlayerControlled::isInvulnerableToLethalItems () const
 {
-        return (dynamic_cast< const ::AvatarItem & >( getItem () )).hasShield ()
+        return dynamic_cast< const ::AvatarItem & >( getItem () ).hasShield ()
                         || GameManager::getInstance().isImmuneToCollisionsWithMortalItems () ;
 }
 
@@ -73,7 +74,7 @@ void PlayerControlled::setCurrentActivity ( const Activity & newActivity, const 
         Behavior::setCurrentActivity( newActivity, velocity );
 }
 
-void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const Motion2D & velocity, const ItemPtr & dueTo )
+void PlayerControlled::changeActivityDueTo ( const Activity & newActivity, const Motion2D & velocity, const AbstractItemPtr & dueTo )
 {
         if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
 
@@ -217,7 +218,7 @@ bool PlayerControlled::moveKeyChangesHeading ()
 
 void PlayerControlled::displace ()
 {
-        if ( speedTimer->getValue() > getItem().getSpeed() )
+        if ( speedTimer->getValue() > dynamic_cast< const ::DescribedItem & >( getItem() ).getSpeed() )
         {
                 activities::Displacing::getInstance().displace( *this, true );
                 // when the displacement couldn’t be performed due to a collision
@@ -412,7 +413,7 @@ void PlayerControlled::enterTeletransport ()
 
         // animate item, change room when the animation finishes
         character.animate() ;
-        if ( ! character.animationFinished () ) return ;
+        if ( ! character.isAnimationFinished () ) return ;
 
         character.addToZ( -1 ); // which teleport is below
         character.setWayOfExit( character.getMediator()->collisionWithSomeKindOf( "teleport" ) != nilPointer
@@ -433,7 +434,7 @@ void PlayerControlled::exitTeletransport ()
 
         // animate item, the character appears in the room when the animation finishes
         character.animate() ;
-        if ( ! character.animationFinished () ) return ;
+        if ( ! character.isAnimationFinished () ) return ;
 
         // back to the original appearance of character
         character.metamorphInto( character.getOriginalKind(), "end teletransportation" );
@@ -468,7 +469,7 @@ void PlayerControlled::collideWithALethalItem ()
 
                         if ( character.isActiveCharacter() ) {
                                 character.animate ();
-                                if ( character.animationFinished () && this->isLosingLife ) {
+                                if ( character.isAnimationFinished () && this->isLosingLife ) {
                                         character.loseLife() ;
                                         this->isLosingLife = false ;
                                 }
@@ -525,7 +526,7 @@ void PlayerControlled::takeItem ()
         if ( character.hasTool( "handbag" ) )
         {
                 Mediator* mediator = character.getMediator();
-                ItemPtr itemToTake ;
+                DescribedItemPtr itemToTake ;
 
                 // look for an item below the character
                 if ( ! character.canAdvanceTo( 0, 0, -1 ) )
@@ -534,7 +535,7 @@ void PlayerControlled::takeItem ()
 
                         while ( mediator->isThereAnyCollision() )
                         {
-                                ItemPtr belowItem = mediator->findCollisionPop( );
+                                DescribedItemPtr belowItem = mediator->findCollisionPop( );
 
                                 // pick a free pushable item less than or equal to 3/4 of the size of one tile
                                 if ( belowItem != nilPointer && belowItem->getBehavior() != nilPointer

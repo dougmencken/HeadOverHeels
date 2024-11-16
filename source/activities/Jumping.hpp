@@ -13,10 +13,11 @@
 
 #include <vector>
 
-#include "Item.hpp"
-#include "FreeItem.hpp"
 #include "Behavior.hpp"
 #include "Activity.hpp"
+
+class FreeItem ;
+class DescribedItem ;
 
 
 namespace activities
@@ -52,7 +53,7 @@ protected:
         * @param item the first item of the heap
         * @param z how many units to rise the heap
         */
-        void lift ( FreeItem & sender, Item & item, int z ) ;
+        void lift ( FreeItem & sender, DescribedItem & item, int z ) ;
 
 private:
 

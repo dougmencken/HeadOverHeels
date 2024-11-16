@@ -34,23 +34,23 @@ bool Driven::update ()
         {
                 case activities::Activity::Waiting:
                         if ( this->moving )
-                                setCurrentActivity( activities::Activity::Moving, drivenItem.getHeading() );
-                        else // when stopped, see if there is a character on it and use its orientation to begin moving
-                        {
+                                setCurrentActivity( activities::Activity::Moving );
+                        // when it doesn’t move see if there’s a character over it and move where that character is heading
+                        else {
                                 if ( ! drivenItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
                                         bool foundCharacter = false ;
 
                                         while ( mediator->isThereAnyCollision() && ! foundCharacter )
                                         {
-                                                ItemPtr item = mediator->findCollisionPop ();
+                                                DescribedItemPtr itemAbove = mediator->findCollisionPop ();
 
-                                                if ( item->whichItemClass() == "avatar item" )
-                                                {
+                                                if ( itemAbove->whichItemClass() == "avatar item" ) {
                                                         foundCharacter = true ;
                                                         this->moving = true ;
 
-                                                        setCurrentActivity( activities::Activity::Moving, item->getHeading() );
+                                                        const std::string & whereToMove = dynamic_cast< FreeItem & >( *itemAbove ).getHeading() ;
+                                                        setCurrentActivity( activities::Activity::Moving, whereToMove );
                                                 }
                                         }
                                 }

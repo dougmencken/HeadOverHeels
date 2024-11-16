@@ -11,7 +11,7 @@
 #ifndef PropagateActivity_hpp_
 #define PropagateActivity_hpp_
 
-#include "Item.hpp"
+#include "DescribedItem.hpp"
 #include "Activity.hpp"
 #include "Motion2D.hpp"
 
@@ -27,17 +27,17 @@ public:
         /**
          * Spread an activity to every item collided with the sender
          */
-        static void spreadEasily( const Item & sender, const Activity & activity, const Motion2D & velocity /* = Motion2D::rest() */ ) ;
+        static void spreadEasily( const AbstractItem & sender, const Activity & activity, const Motion2D & velocity /* = Motion2D::rest() */ ) ;
 
         /**
          * Spread an activity to all items that collide with the sender, the comprehensive version
          */
-        static void toAdjacentItems ( Item & sender, const Activity & activity, const Motion2D & velocity ) ;
+        static void toAdjacentItems ( DescribedItem & sender, const Activity & activity, const Motion2D & velocity ) ;
 
         /**
          * Spread an activity to items above the sender
          */
-        static void toItemsAbove ( Item & sender, const Activity & activity, const Motion2D & velocity ) ;
+        static void toItemsAbove ( DescribedItem & sender, const Activity & activity, const Motion2D & velocity ) ;
 
 };
 

@@ -2,6 +2,8 @@
 #include "Jumping.hpp"
 
 #include "AvatarItem.hpp"
+#include "FreeItem.hpp"
+#include "DescribedItem.hpp"
 #include "Mediator.hpp"
 #include "PropagateActivity.hpp"
 #include "GameManager.hpp"
@@ -56,7 +58,7 @@ bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, cons
                                         continue ;
                                 }
 
-                                ItemPtr item = mediator->findItemByUniqueName( collision );
+                                DescribedItemPtr item = mediator->findItemByUniqueName( collision );
                                 if ( item == nilPointer ) continue ;
 
                                 if ( item->isMortal() ) {
@@ -105,7 +107,7 @@ bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, cons
         return jumped ;
 }
 
-void Jumping::lift( FreeItem & sender, Item & item, int z )
+void Jumping::lift( FreeItem & sender, DescribedItem & item, int z )
 {
         const autouniqueptr< Behavior > & behavior = item.getBehavior() ;
         if ( behavior != nilPointer )
@@ -114,7 +116,7 @@ void Jumping::lift( FreeItem & sender, Item & item, int z )
                 if ( behavior->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 behavior->getNameOfBehavior () == "behavior of bonus" )
                 {
-                        behavior->changeActivityDueTo( activities::Activity::PushedUp, ItemPtr( &sender ) );
+                        behavior->changeActivityDueTo( activities::Activity::PushedUp, DescribedItemPtr( &sender ) );
                 }
                 // raise if the item isn’t an elevator
                 else if ( behavior->getNameOfBehavior () != "behavior of elevator" )
@@ -126,13 +128,11 @@ void Jumping::lift( FreeItem & sender, Item & item, int z )
 
                                 while ( mediator->isThereAnyCollision() )
                                 {
-                                        ItemPtr itemAtop = mediator->findCollisionPop();
+                                        DescribedItemPtr itemAtop = mediator->findCollisionPop() ;
 
                                         if ( itemAtop != nilPointer )
-                                        {
                                                 // raise free items recursively
                                                 lift( sender, *itemAtop, z );
-                                        }
                                 }
 
                                 // now it can move up

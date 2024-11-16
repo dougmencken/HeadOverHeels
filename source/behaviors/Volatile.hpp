@@ -26,15 +26,15 @@ namespace behaviors
 class Volatile : public Behavior
 {
 
-public:
+public :
 
-        Volatile( Item & item, const std::string & behavior ) ;
+        Volatile( DescribedItem & item, const std::string & behavior ) ;
 
         virtual ~Volatile( ) {}
 
         virtual bool update () ;
 
-private:
+private :
 
         /**
          * is true when this item isn’t currently volatile, such as when a switch is toggled

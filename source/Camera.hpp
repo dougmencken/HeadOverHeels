@@ -11,7 +11,7 @@
 #ifndef Camera_hpp_
 #define Camera_hpp_
 
-#include "Item.hpp"
+#include "DescribedItem.hpp"
 
 
 class Offset2D
@@ -114,7 +114,7 @@ public:
         void recenterRoom () ;
 
         /** @return whether camera has moved */
-        bool centerOnItem ( const Item & item ) ;
+        bool centerOnItem ( const DescribedItem & item ) ;
 
 } ;
 

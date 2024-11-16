@@ -47,12 +47,12 @@ public:
         virtual void setCurrentActivity ( const Activity & newActivity ) ;
         virtual void setCurrentActivity ( const Activity & newActivity, const Motion2D & velocity ) ;
 
-        virtual void changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
+        virtual void changeActivityDueTo ( const Activity & newActivity, const AbstractItemPtr & dueTo )
         {
                 changeActivityDueTo( newActivity, Motion2D::rest(), dueTo );
         }
 
-        virtual void changeActivityDueTo ( const Activity & newActivity, const Motion2D & velocity, const ItemPtr & dueTo ) ;
+        virtual void changeActivityDueTo ( const Activity & newActivity, const Motion2D & velocity, const AbstractItemPtr & dueTo ) ;
 
         bool isInvulnerableToLethalItems () const ;
 

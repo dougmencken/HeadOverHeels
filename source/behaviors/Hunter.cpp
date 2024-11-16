@@ -161,17 +161,17 @@ void Hunter::updateDirection ()
         AvatarItemPtr whoToHunt = getItem().getMediator()->getActiveCharacter ();
 
         if ( whoToHunt != nilPointer ) {
+                FreeItem & hunter = dynamic_cast< FreeItem & >( getItem() );
+
                 // a character above hunter is unseen
-                if ( whoToHunt->getZ () < getItem().getZ () + getItem().getHeight () )
+                if ( whoToHunt->getZ() < hunter.getZ() + hunter.getHeight() )
                 {
-                        if ( getNameOfBehavior() == "behavior of hunter in four directions"
-                                        || getNameOfBehavior() == "behavior of waiting hunter in four directions" )
+                        if ( getNameOfBehavior().find( "four directions" ) != std::string::npos )
                         {
                                 updateDirection4 ();
                                 return ;
                         }
-                        else if ( getNameOfBehavior() == "behavior of hunter in eight directions"
-                                        || getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
+                        else if ( getNameOfBehavior().find( "eight directions" ) != std::string::npos )
                         {
                                 updateDirection8 ();
                                 return ;
@@ -188,7 +188,7 @@ void Hunter::updateDirection4 ()
 
         if ( whoToHunt != nilPointer )
         {
-                Item & hunterItem = getItem() ;
+                FreeItem & hunterItem = dynamic_cast< FreeItem & >( getItem() );
 
                 int dx = hunterItem.getX() - whoToHunt->getX();
                 int dy = hunterItem.getY() - whoToHunt->getY();
@@ -222,7 +222,7 @@ void Hunter::updateDirection8 ()
 
         if ( whoToHunt != nilPointer )
         {
-                Item & hunterItem = getItem() ;
+                FreeItem & hunterItem = dynamic_cast< FreeItem & >( getItem() );
 
                 int dx = hunterItem.getX() - whoToHunt->getX();
                 int dy = hunterItem.getY() - whoToHunt->getY();

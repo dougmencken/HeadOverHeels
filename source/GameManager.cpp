@@ -766,11 +766,13 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room )
         keyMoments.fishEaten () /* <>< */ ;
         this->pause () ;
 
-        ItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
+        DescribedItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
 
         int x = character.getX ();
         int y = character.getY ();
         int z = character.getZ ();
+
+        std::string whereLooks = character.getHeading() ;
 
         if ( fish != nilPointer && fish->whichItemClass() == "free item" ) {
                 const FreeItem & freeFish = dynamic_cast< const FreeItem & >( *fish );
@@ -779,11 +781,11 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room )
                 // get the initial location o’ fish in the room
                 x = freeFish.getInitialCellX() * oneCell ;
                 y = ( freeFish.getInitialCellY() + 1 ) * oneCell - 1 ;
-                z = fish->getZ ();
+                z = freeFish.getZ ();
+
+                whereLooks = freeFish.getHeading() ;
         }
 
-        std::string whereLooks = character.getHeading ();
-        if ( fish != nilPointer ) whereLooks = fish->getHeading() ;
         if ( whereLooks.empty() ) whereLooks = "south" ;
 
         saverAndLoader.ateFish (

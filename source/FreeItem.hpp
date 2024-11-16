@@ -17,7 +17,7 @@
 #include "tribool.hpp"
 #include "WrappersAllegro.hpp"
 
-#include "Item.hpp"
+#include "DescribedItem.hpp"
 #include "Drawable.hpp"
 
 
@@ -28,16 +28,16 @@ class DescriptionOfItem ;
  * enemies, or something whose widths differ from the widths of the grid cells
  */
 
-class FreeItem : public Item, public Drawable
+class FreeItem : public DescribedItem, public Drawable
 {
 
-public:
+public :
 
        /**
         * @param description Description of this item
         * @param x Position on X
         * @param y Position on Y
-        * @param z Position on Z, or how far is floor
+        * @param z Position on Z, or how far is the floor
         * @param where The initial orientation of item
         */
         FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & where = "" ) ;
@@ -56,15 +56,18 @@ public:
                 return isBehind( that ) ;
         }
 
+        virtual int getX () const {  return this->theX ;  }
+        virtual int getY () const {  return this->theY ;  }
+        virtual int getZ () const {  return this->theZ ;  }
+
+        virtual void setX ( int newX ) {  this->theX = newX ;  }
+        virtual void setY ( int newY ) {  this->theY = newY ;  }
+        virtual void setZ ( int newZ ) {  this->theZ = newZ ;  }
+
         int getInitialCellX () const {  return this->initialCellX ;  }
-
         int getInitialCellY () const {  return this->initialCellY ;  }
-
         int getInitialCellZ () const {  return this->initialCellZ ;  }
 
-        /**
-         * the initial grid cell where this item was located when the room was (re)built
-         */
         void setInitialCellLocation ( int cx, int cy, int cz )
         {
                 this->initialCellX = cx ;
@@ -74,11 +77,19 @@ public:
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
+        const std::string & getHeading () const {  return this->heading ;  }
+
+        void changeHeading ( const std::string & where ) ;
+
+        void reverseHeading () ;
+
         virtual void draw () ;
 
         virtual void freshProcessedImage () ;
 
         void freshBothProcessedImages () ;
+
+        virtual unsigned int firstFrame () const {  return firstFrameWhenHeading( getHeading() ) ;  }
 
         /**
          * The distance of the processed image from the room’s origin
@@ -119,7 +130,7 @@ public:
 
         static const int farFarAway = -1024 ;
 
-protected:
+protected :
 
         virtual void updateImage () ;
 
@@ -134,19 +145,24 @@ protected:
          */
         bool isCollidingWithJamb ( const std::string & at, const std::string & collision, const int previousX, const int previousY ) ;
 
-private:
+private :
 
+        // the position in 3-dimensional space of this item’s lower north-west point, in free units
+        int theX ;
+        int theY ;
+        int theZ ;
+
+        // the initial grid cell where this item was in when the room was (re)built
         int initialCellX ;
-
         int initialCellY ;
-
         int initialCellZ ;
+
+        // the angular orientation
+        std::string heading ;
 
         tribool wantMask ;
 
-        /**
-         * Whether item is inactive
-         */
+        // whether this item is inactive
         bool frozen ;
 
         bool partOfDoor ;

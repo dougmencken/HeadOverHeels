@@ -41,7 +41,7 @@ protected:
         /**
          * whether can take this item or not
          */
-        bool mayTake ( const Item & taker ) ;
+        bool mayTake ( const AvatarItem & taker ) ;
 
         void takeIt ( AvatarItem & whoTakes ) ;
 

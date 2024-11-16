@@ -60,7 +60,7 @@ void Camera::recenterRoom ()
         instantCenterRoom () ;
 }
 
-bool Camera::centerOnItem( const Item & item )
+bool Camera::centerOnItem( const DescribedItem & item )
 {
         CameraOffset newOffset ;
 

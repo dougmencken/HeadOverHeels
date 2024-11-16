@@ -4,9 +4,12 @@
 #include "Color.hpp"
 #include "Picture.hpp"
 
+#include "DescribedItem.hpp"
+#include "FreeItem.hpp"
+
 
 /* static */
-void Masker::maskFreeItemBehindItem( FreeItem& itemToMask, const Item& upwardItem )
+void Masker::maskFreeItemBehindItem( FreeItem & itemToMask, const DescribedItem & upwardItem )
 {
         const Picture& upwardImage = upwardItem.getRawImage() ;
 

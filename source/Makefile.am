@@ -82,8 +82,10 @@ headoverheels_SOURCES = main.cpp \
 			WallPiece.hpp \
 			Door.cpp \
 			Door.hpp \
-			Item.cpp \
-			Item.hpp \
+			AbstractItem.cpp \
+			AbstractItem.hpp \
+			DescribedItem.cpp \
+			DescribedItem.hpp \
 			GridItem.cpp \
 			GridItem.hpp \
 			FreeItem.cpp \

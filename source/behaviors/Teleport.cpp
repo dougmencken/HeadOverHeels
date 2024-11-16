@@ -19,7 +19,7 @@ Teleport::Teleport( GridItem & item, const std::string & behavior ) :
 
 bool Teleport::update ()
 {
-        Item & teleportItem = getItem ();
+        GridItem & teleportItem = dynamic_cast< GridItem & >( getItem () );
         Mediator * mediator = teleportItem.getMediator() ;
 
         switch ( getCurrentActivity () )
@@ -36,7 +36,7 @@ bool Teleport::update ()
                                 // as long as there are items above the teletransport
                                 while ( ! itemsAbove.empty() )
                                 {
-                                        ItemPtr aboveItem = mediator->findItemByUniqueName( itemsAbove.top() );
+                                        DescribedItemPtr aboveItem = mediator->findItemByUniqueName( itemsAbove.top() );
                                         itemsAbove.pop();
 
                                         // is it a free item with behavior
@@ -51,7 +51,7 @@ bool Teleport::update ()
 
                                                         while ( mediator->isThereAnyCollision() )
                                                         {
-                                                                ItemPtr belowItem = mediator->findCollisionPop( );
+                                                                DescribedItemPtr belowItem = mediator->findCollisionPop( );
 
                                                                 if ( aboveItem->whichItemClass() == "avatar item"
                                                                         && belowItem->getUniqueName() == teleportItem.getUniqueName() )

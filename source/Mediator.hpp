@@ -43,7 +43,7 @@ public:
 
         virtual ~Mediator( ) ;
 
-        Room * getRoom () const {  return room ;  }
+        Room * getRoom () const {  return this->room ;  }
 
         /**
          * Update every item’s behavior
@@ -76,7 +76,7 @@ public:
 
         void wantShadowFromFreeItem ( const FreeItem & freeItem ) ;
 
-        void shadeFreeItemsBeneathItemAt ( const Item & item, int x, int y, int z ) ;
+        void shadeFreeItemsBeneathItemAt ( const DescribedItem & item, int x, int y, int z ) ;
 
         void castShadowOnFloor ( FloorTile & floorTile ) ;
 
@@ -91,23 +91,23 @@ public:
          * to place the given item above
          * @return the value of Z or zero if can’t get it
          */
-        int findHighestZ ( const Item & item ) ;
+        int findHighestZ ( const DescribedItem & item ) ;
 
         /**
          * Look for an item in the room by its unique name
          */
-        ItemPtr findItemByUniqueName ( const std::string & uniqueName ) ;
+        DescribedItemPtr findItemByUniqueName ( const std::string & uniqueName ) ;
 
         /**
          * Look for an item in the room by its kind
          * When there are several items of this kind, the first found one is returned
          */
-        ItemPtr findItemOfKind ( const std::string & kind ) ;
+        DescribedItemPtr findItemOfKind ( const std::string & kind ) ;
 
         /**
          * Look for an item in the room with the given behavior
          */
-        ItemPtr findItemBehavingAs ( const std::string & behavior ) ;
+        DescribedItemPtr findItemBehavingAs ( const std::string & behavior ) ;
 
         /**
          * Collect collisions between the given item and other items in the active room
@@ -128,33 +128,33 @@ public:
          */
         std::string popCollision () ;
 
-        ItemPtr findCollisionPop () {  return findItemByUniqueName( popCollision() ) ;  }
+        DescribedItemPtr findCollisionPop () {  return findItemByUniqueName( popCollision() ) ;  }
 
         /**
          * Is there a collision with some item of a given kind
          * @return the item with which collision is happened or nil if there’s no collision
          */
-        ItemPtr collisionWithSomeKindOf ( const std::string & kind ) ;
+        DescribedItemPtr collisionWithSomeKindOf ( const std::string & kind ) ;
 
         /**
          * Is there a collision with an item of a given behavior
          * @return the item with which collision is happened or nil if there’s no collision
          */
-        ItemPtr collisionWithBehavingAs ( const std::string & behavior ) ;
+        DescribedItemPtr collisionWithBehavingAs ( const std::string & behavior ) ;
 
-        ItemPtr collisionWithBadBoy () ;
+        DescribedItemPtr collisionWithBadBoy () ;
 
-       /**
-        * Activate the next character in the room
-        * @return true if it’s possible to swap or false if there’s only one character in this room
-        */
+        /**
+         * Activate the next character in the room
+         * @return true if it’s possible to swap or false if there’s only one character in this room
+         */
         bool pickNextCharacter () ;
 
-       /**
-        * Toggle the switch if it is in room, most rooms do not have a switch. If it turns on
-        * then free items stop moving and volatile items are no longer volatile. If it goes off
-        * then such items restore their original behavior
-        */
+        /**
+         * Toggle the switch if it is in room, most rooms don’t have a switch. If it turns on
+         * then free items stop moving and volatile items are no longer volatile. If it goes off
+         * then such items restore their original behavior
+         */
         void toggleSwitchInRoom () ;
 
         void markToSortGridItems () {  this->needToSortGridItems = true ;  }

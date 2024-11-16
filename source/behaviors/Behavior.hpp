@@ -15,9 +15,11 @@
 
 #include "Activity.hpp"
 #include "Motion3D.hpp"
-#include "Item.hpp"
+#include "AbstractItem.hpp"
+#include "FreeItem.hpp"
 
 using activities::Activity ;
+
 
 namespace behaviors
 {
@@ -32,7 +34,7 @@ namespace behaviors
 
 protected:
 
-        Behavior( Item & item, const std::string & behaviorName )
+        Behavior( AbstractItem & item, const std::string & behaviorName )
                 : nameOfBehavior( behaviorName )
                 , itemThatBehaves( item )
                 , currentActivity( activities::Activity::Waiting )
@@ -65,8 +67,9 @@ public:
 
         virtual void setCurrentActivity ( const Activity & newActivity )
         {
-                if ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving )
-                        setCurrentActivity( newActivity, getItem().getHeading() );
+                if ( ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving )
+                                && ( getItem().whichItemClass() == "free item" || getItem().whichItemClass() == "avatar item" ) )
+                        setCurrentActivity( newActivity, dynamic_cast< FreeItem & >( getItem() ).getHeading () );
                 else
                         setCurrentActivity( newActivity, Motion2D::rest() );
         }
@@ -90,15 +93,15 @@ public:
 
         virtual void setCurrentActivity ( const Activity & newActivity, const Motion2D & velocity )
         {
-                changeActivityDueTo( newActivity, velocity, ItemPtr() );
+                changeActivityDueTo( newActivity, velocity, AbstractItemPtr() );
         }
 
-        virtual void changeActivityDueTo ( const Activity & newActivity, const ItemPtr & dueTo )
+        virtual void changeActivityDueTo ( const Activity & newActivity, const AbstractItemPtr & dueTo )
         {
                 changeActivityDueTo( newActivity, Motion2D::rest(), dueTo );
         }
 
-        virtual void changeActivityDueTo ( const Activity & newActivity, const Motion2D & vector, const ItemPtr & dueTo )
+        virtual void changeActivityDueTo ( const Activity & newActivity, const Motion2D & vector, const AbstractItemPtr & dueTo )
         {
                 this->currentActivity = newActivity ;
                 this->velocityVector = vector ;
@@ -108,12 +111,12 @@ public:
         /**
          * The item that behaves
          */
-        Item & getItem () const {  return this->itemThatBehaves ;  }
+        AbstractItem & getItem () const {  return this->itemThatBehaves ;  }
 
         /**
          * Another item that changed activity of this one
          */
-        const ItemPtr & getWhatAffectedThisBehavior () const {  return this->affectedBy ;  }
+        const AbstractItemPtr & getWhatAffectedThisBehavior () const {  return this->affectedBy ;  }
 
         unsigned int getHowLongFalls () const {  return this->howLongFalls ;  }
 
@@ -124,13 +127,13 @@ private:
 
         std::string nameOfBehavior ;
 
-        Item & itemThatBehaves ;
+        AbstractItem & itemThatBehaves ;
 
         Activity currentActivity ;
 
         Motion3D velocityVector ;
 
-        ItemPtr affectedBy ;
+        AbstractItemPtr affectedBy ;
 
         // to accelerate a long fall
         unsigned int howLongFalls ;

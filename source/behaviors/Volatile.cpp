@@ -1,7 +1,7 @@
 
 #include "Volatile.hpp"
 
-#include "Item.hpp"
+#include "AbstractItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
@@ -15,7 +15,7 @@ const float longDelayBeforeDisappearance = delayBeforeDisappearance * 20 ;
 namespace behaviors
 {
 
-Volatile::Volatile( Item & item, const std::string & behavior )
+Volatile::Volatile( DescribedItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , solid( false )
         , disappearanceTimer( new Timer() )
@@ -25,7 +25,7 @@ Volatile::Volatile( Item & item, const std::string & behavior )
 
 bool Volatile::update ()
 {
-        Item & volatileItem = getItem ();
+        DescribedItem & volatileItem = dynamic_cast< DescribedItem & >( getItem () );
         Mediator * mediator = volatileItem.getMediator() ;
 
         bool present = true ;
@@ -45,12 +45,12 @@ bool Volatile::update ()
                         {
                                 bool gone = false ;
 
-                                std::stack< ItemPtr > itemsAbove ;
+                                std::stack< DescribedItemPtr > itemsAbove ;
 
                                 // look for every item above it
                                 while ( mediator->isThereAnyCollision() )
                                 {
-                                        ItemPtr atopItem = mediator->findCollisionPop( );
+                                        DescribedItemPtr atopItem = mediator->findCollisionPop( );
 
                                         // is it free item
                                         if ( atopItem != nilPointer &&
@@ -72,7 +72,7 @@ bool Volatile::update ()
 
                                 if ( gone )
                                 {
-                                        ItemPtr atopItem = itemsAbove.top();
+                                        DescribedItemPtr atopItem = itemsAbove.top();
                                         itemsAbove.pop();
                                         atopItem->canAdvanceTo( 0, 0, -1 );
 
@@ -80,7 +80,7 @@ bool Volatile::update ()
                                         if ( mediator->howManyCollisions() > 1 ) {
                                                 while ( mediator->isThereAnyCollision() )
                                                 {
-                                                        ItemPtr belowItem = mediator->findCollisionPop( );
+                                                        DescribedItemPtr belowItem = mediator->findCollisionPop( );
 
                                                         if ( belowItem != nilPointer ) {
                                                                 // a volatile doesn’t vanish if it is leaning~

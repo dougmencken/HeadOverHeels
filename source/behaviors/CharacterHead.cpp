@@ -50,10 +50,10 @@ CharacterHead::CharacterHead( AvatarItem & item )
 bool CharacterHead::update ()
 {
         // change the height for climbing bars easier
-        getItem().changeHeightTo (
-                ( getCurrentActivity() == activities::Activity::Gliding ||
-                                getCurrentActivity() == activities::Activity::Falling )
-                ? 23 : 24 );
+        dynamic_cast< ::DescribedItem & >( getItem() ).changeHeightTo (
+                        ( getCurrentActivity() == activities::Activity::Gliding ||
+                                        getCurrentActivity() == activities::Activity::Falling )
+                        ? 23 : 24 );
 
         switch ( getCurrentActivity () )
         {

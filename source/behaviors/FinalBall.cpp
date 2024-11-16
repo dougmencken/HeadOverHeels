@@ -20,7 +20,7 @@ FinalBall::FinalBall( FreeItem & item, const std::string & behavior )
 
 bool FinalBall::update ()
 {
-        Item & thisBall = getItem() ;
+        FreeItem & thisBall = dynamic_cast< FreeItem & >( getItem () );
 
         switch ( getCurrentActivity () )
         {

@@ -6,22 +6,12 @@
 
 
 GridItem::GridItem( const DescriptionOfItem & description, int cx, int cy, int z, const std::string & where )
-        : Item( description, z, where )
+        : DescribedItem( description )
         , cell( std::pair< int, int >( cx, cy ) )
+        , theZ( z )
+        , orientation( where )
         , imageOffset( std::pair< int, int >( 0, 0 ) )
-{
-        // the free coordinates of this grid item
-        // the widths of a grid item are equal to the room’s getSizeOfOneTile() = Room::Single_Tile_Size
-        setX( cx * getWidthX() );
-        setY( ( cy + 1 ) * getWidthY() - 1 );
-
-        // look for collisions
-        setIgnoreCollisions( false );
-}
-
-GridItem::~GridItem( )
-{
-}
+{}
 
 void GridItem::updateImageOffset ()
 {
@@ -57,7 +47,7 @@ void GridItem::updateImage ()
 
         std::pair< int, int > imageOffsetBefore = this->imageOffset ;
 
-        Item::updateImage ();
+        DescribedItem::updateImage ();
 
         setWantShadow( true );
 
@@ -70,7 +60,7 @@ void GridItem::updateImage ()
 
 void GridItem::updateShadow ()
 {
-        Item::updateShadow ();
+        DescribedItem::updateShadow ();
 
         // reshade items
         getMediator()->wantShadowFromGridItem( *this );

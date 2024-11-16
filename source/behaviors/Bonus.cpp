@@ -28,7 +28,7 @@ bool Bonus::update ()
 {
         bool present = true ;
 
-        Item & bonusItem = getItem ();
+        FreeItem & bonusItem = dynamic_cast< FreeItem & >( getItem () );
         Mediator * mediator = bonusItem.getMediator() ;
 
         switch ( getCurrentActivity () )
@@ -37,10 +37,12 @@ bool Bonus::update ()
                         // is there an item above this one
                         if ( ! bonusItem.canAdvanceTo( 0, 0, 1 ) )
                         {
-                                ItemPtr itemAbove = mediator->findCollisionPop( );
+                                DescribedItemPtr itemAbove = mediator->findCollisionPop( );
 
                                 // can that above item take this bonus
-                                if ( itemAbove != nilPointer && mayTake( * itemAbove ) ) {
+                                if ( itemAbove != nilPointer
+                                                && itemAbove->whichItemClass() == "avatar item"
+                                                        && mayTake( dynamic_cast< AvatarItem & >( *itemAbove ) ) ) {
                                         changeActivityDueTo( activities::Activity::Vanishing, itemAbove );
                                         disappearanceTimer->go() ;
                                 }
@@ -57,10 +59,12 @@ bool Bonus::update ()
                 case activities::Activity::Pushed:
                 case activities::Activity::PushedUp:
                 {
-                        const ItemPtr & taker = getWhatAffectedThisBehavior ();
+                        const AbstractItemPtr & taker = getWhatAffectedThisBehavior ();
 
                         // if may take it
-                        if ( taker != nilPointer && mayTake( * taker ) ) {
+                        if ( taker != nilPointer
+                                        && taker->whichItemClass() == "avatar item"
+                                                && mayTake( dynamic_cast< AvatarItem & >( *taker ) ) ) {
                                 changeActivityDueTo( activities::Activity::Vanishing, taker );
                         }
                         // otherwise some other item is pushing the bonus
@@ -108,11 +112,12 @@ bool Bonus::update ()
                                 // look if the bonus falls on a character
                                 if ( ! bonusItem.canAdvanceTo( 0, 0, -1 ) )
                                 {
-                                        ItemPtr itemBelow = mediator->findCollisionPop( );
+                                        DescribedItemPtr itemBelow = mediator->findCollisionPop( );
 
                                         // can that below item take this bonus
-                                        if ( itemBelow != nilPointer && mayTake( * itemBelow ) )
-                                        {
+                                        if ( itemBelow != nilPointer
+                                                        && itemBelow->whichItemClass() == "avatar item"
+                                                                && mayTake( dynamic_cast< AvatarItem & >( *itemBelow ) ) ) {
                                                 // get collisions with the bonus and other items above
                                                 itemBelow->canAdvanceTo( 0, 0, 1 );
 
@@ -126,7 +131,7 @@ bool Bonus::update ()
                                         }
                                 }
                         }
-                        break;
+                        break ;
 
                 case activities::Activity::Vanishing:
                         if ( disappearanceTimer->getValue() > 0.100 )
@@ -141,7 +146,7 @@ bool Bonus::update ()
                                                 bonusItem.getMediator()->getRoom()->getNameOfRoomDescriptionFile ()
                                         ) );
 
-                                const ItemPtr & taker = getWhatAffectedThisBehavior ();
+                                const AbstractItemPtr & taker = getWhatAffectedThisBehavior ();
                                 if ( taker != nilPointer && taker->whichItemClass() == "avatar item" )
                                         takeIt( dynamic_cast< AvatarItem & >( * taker ) );
 
@@ -165,14 +170,12 @@ bool Bonus::update ()
         return present ;
 }
 
-bool Bonus::mayTake( const Item & taker )
+bool Bonus::mayTake( const AvatarItem & taker )
 {
         // only a character can take a bonus
-        if ( taker.whichItemClass() != "avatar item" ) return false ;
+        /* if ( taker.whichItemClass() != "avatar item" ) return false ; */ // guaranteed by the class of taker
 
-        const AvatarItem & character = dynamic_cast< const AvatarItem & >( taker );
-
-        const std::string & magicItem = getItem().getOriginalKind ();
+        const std::string & magicItem = dynamic_cast< DescribedItem & >( getItem() ).getOriginalKind ();
 
         if ( magicItem == "extra-life" || magicItem == "shield" ||
                 magicItem == "reincarnation-fish" || magicItem == "crown" )
@@ -180,20 +183,14 @@ bool Bonus::mayTake( const Item & taker )
                 return true ;
         }
 
-        return     ( character.isHead() && ( magicItem == "quick-steps" ||
-                                             magicItem == "horn" ||
-                                             magicItem == "donuts" ) )
-                || ( character.isHeels()  && ( magicItem == "high-jumps" ||
-                                               magicItem == "handbag" ) )
-                || ( character.isHeadOverHeels() && ( magicItem == "handbag" ||
-                                                      magicItem == "horn" ||
-                                                      magicItem == "donuts" ) ) ;
+        return ( taker.isHead() && ( magicItem == "quick-steps" || magicItem == "horn" || magicItem == "donuts" ) )
+                        || ( taker.isHeels()  && ( magicItem == "high-jumps" || magicItem == "handbag" ) )
+                || ( taker.isHeadOverHeels() && ( magicItem == "handbag" || magicItem == "horn" || magicItem == "donuts" ) ) ;
 }
 
 void Bonus::takeIt( AvatarItem & whoTakes )
 {
-        Item & it = getItem() ;
-        const std::string & whichItem = it.getOriginalKind ();
+        const std::string & whichItem = dynamic_cast< DescribedItem & >( getItem() ).getOriginalKind ();
 
         if ( whichItem == "donuts" ) {
                 const unsigned short DonutsPerBox = 6 ;

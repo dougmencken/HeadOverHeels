@@ -2,6 +2,8 @@
 #include "ShadowCaster.hpp"
 
 #include "Color.hpp"
+#include "DescribedItem.hpp"
+#include "FloorTile.hpp"
 #include "FreeItem.hpp"
 #include "GridItem.hpp"
 
@@ -9,7 +11,7 @@
 
 
 /* static */
-void ShadowCaster::castShadowOnItem( Item & item, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnItem( DescribedItem & item, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency )
 {
         if ( shading >= 256 ) return ;
 

@@ -534,7 +534,7 @@ void AvatarItem::metamorphInto( const std::string & newKind, const std::string &
 {
         // when the composite character morphs into bubbles, it’s actually double bubbles
         bool doubleBubbles = ( isHeadOverHeels() && newKind == "bubbles" );
-        Item::metamorphInto( doubleBubbles ? "double-bubbles" : newKind, initiatedBy );
+        DescribedItem::metamorphInto( doubleBubbles ? "double-bubbles" : newKind, initiatedBy );
 }
 
 bool AvatarItem::hasTool( const std::string & tool ) const

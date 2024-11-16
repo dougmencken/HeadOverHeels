@@ -1,12 +1,13 @@
 
 #include "Displacing.hpp"
 
+#include "Activity.hpp"
 #include "Falling.hpp"
+#include "PropagateActivity.hpp"
+#include "DescribedItem.hpp"
 #include "Behavior.hpp"
-#include "Item.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
-#include "PropagateActivity.hpp"
 
 
 namespace activities
@@ -24,7 +25,7 @@ Displacing& Displacing::getInstance()
 
 bool Displacing::displace( behaviors::Behavior & behavior, bool canFall )
 {
-        Item & item = behavior.getItem ();
+        DescribedItem & item = dynamic_cast< DescribedItem & >( behavior.getItem() );
 
         bool displaced = false ;
 

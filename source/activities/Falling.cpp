@@ -26,7 +26,7 @@ Falling & Falling::getInstance()
 
 bool Falling::fall( behaviors::Behavior & behavior )
 {
-        Item & whatFalls = behavior.getItem() ;
+        DescribedItem & whatFalls = dynamic_cast< DescribedItem & >( behavior.getItem () );
 
         if ( whatFalls.whichItemClass() == "avatar item"
                 && GameManager::getInstance().charactersFly()
@@ -62,7 +62,7 @@ bool Falling::fall( behaviors::Behavior & behavior )
                         std::string nameOfItemBelow = itemsBelow.back();
                         itemsBelow.pop_back();
 
-                        ItemPtr itemBelow = mediator.findItemByUniqueName( nameOfItemBelow );
+                        DescribedItemPtr itemBelow = mediator.findItemByUniqueName( nameOfItemBelow );
 
                         if ( itemBelow != nilPointer )
                         {
@@ -155,7 +155,7 @@ void Falling::assignAnchor( const std::string & uniqueNameOfItem, Mediator * med
 
         for ( std::vector< std::string >::const_iterator it = itemsBelow.begin () ; it != itemsBelow.end () ; ++ it )
         {
-                ItemPtr itemBelow = mediator->findItemByUniqueName( *it );
+                DescribedItemPtr itemBelow = mediator->findItemByUniqueName( *it );
 
                 if ( itemBelow != nilPointer && itemBelow->getUniqueName() == existingAnchor ) {
                         // already anchored
@@ -195,7 +195,7 @@ void Falling::assignAnchor( const std::string & uniqueNameOfItem, Mediator * med
                                         // the current anchor is harmless too
                                         else
                                         {       // then the anchor is an item with the larger sum of X and Y coordinates
-                                                ItemPtr anchorItem = mediator->findItemByUniqueName( anchor );
+                                                DescribedItemPtr anchorItem = mediator->findItemByUniqueName( anchor );
 
                                                 if ( anchorItem->getX() + anchorItem->getY() < itemBelow->getX() + itemBelow->getY() )
                                                 {

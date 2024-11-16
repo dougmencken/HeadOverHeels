@@ -27,7 +27,7 @@ Conveyor::Conveyor( GridItem & item, const std::string & behavior )
 
 bool Conveyor::update ()
 {
-        Item & conveyorItem = getItem() ;
+        GridItem & conveyorItem = dynamic_cast< GridItem & >( getItem() );
         Mediator * mediator = conveyorItem.getMediator ();
 
         if ( getCurrentActivity() != activities::Activity::Waiting ) setCurrentActivity( activities::Activity::Waiting );
@@ -43,7 +43,7 @@ bool Conveyor::update ()
 
                         while ( ! itemsAbove.empty () ) // for each such item
                         {
-                                ItemPtr collision = mediator->findItemByUniqueName( itemsAbove.top() );
+                                DescribedItemPtr collision = mediator->findItemByUniqueName( itemsAbove.top() );
                                 itemsAbove.pop() ;
 
                                 // is it free item
@@ -71,7 +71,7 @@ bool Conveyor::update ()
                                                                                         || activityOfItemAbove == activities::Activity::Vanishing ) ;
                                                         if ( ! outOfGravity )
                                                         {
-                                                                const std::string & conveyorHeading = conveyorItem.getHeading() ;
+                                                                const std::string & conveyorHeading = conveyorItem.getOrientation() ;
                                                                 Motion2D conveyingVelocity = Motion2D::rest() ;
 
                                                                 if ( conveyorHeading == "south" )

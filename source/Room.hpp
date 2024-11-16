@@ -20,7 +20,7 @@
 #include "Picture.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
-#include "Item.hpp"
+#include "DescribedItem.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
@@ -250,7 +250,7 @@ private:
 
         void copyAnotherCharacterAsEntered ( const std::string& name ) ;
 
-        void dumpItemInsideThisRoom ( const Item & item ) ;
+        void dumpItemInsideThisRoom ( const DescribedItem & item ) ;
 
 protected:
 

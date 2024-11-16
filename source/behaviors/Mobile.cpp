@@ -39,7 +39,7 @@ bool Mobile::update ()
                 case activities::Activity::Pushed :
                         // is it time to move
                         if ( speedTimer->getValue() > mobileItem.getSpeed() ) {
-                                const ItemPtr & otherItem = getWhatAffectedThisBehavior ();
+                                const AbstractItemPtr & otherItem = getWhatAffectedThisBehavior ();
                                 if ( otherItem == nilPointer || otherItem->getUniqueName() != mobileItem.getUniqueName() )
                                         SoundManager::getInstance().play( mobileItem.getKind(), "push" );
 

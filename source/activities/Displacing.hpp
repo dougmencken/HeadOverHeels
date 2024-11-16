@@ -11,7 +11,6 @@
 #ifndef Displacing_hpp_
 #define Displacing_hpp_
 
-#include "Activity.hpp"
 #include "Behavior.hpp"
 
 

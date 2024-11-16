@@ -21,8 +21,8 @@ Switch::Switch( FreeItem & item, const std::string & behavior )
 
 bool Switch::update ()
 {
-        Item & switchItem = getItem () ;
-        Mediator * mediator = switchItem.getMediator();
+        FreeItem & theSwitch = dynamic_cast< FreeItem & >( getItem () );
+        Mediator * mediator = theSwitch.getMediator();
 
         switch ( getCurrentActivity() )
         {
@@ -36,7 +36,7 @@ bool Switch::update ()
                                 for ( std::set< std::string >::iterator s = this->switchers.begin (), e = this->switchers.end () ; s != e ; )
                                 {
                                         const std::string & switcher = *s ;
-                                        ItemPtr switcherItem = mediator->findItemByUniqueName( switcher );
+                                        DescribedItemPtr switcherItem = mediator->findItemByUniqueName( switcher );
 
                                         // when an item that did the switch went away from it (is not near),
                                         // or disappeared from the room,
@@ -55,10 +55,10 @@ bool Switch::update ()
                                 this->switchers.clear ();
 
                         // is there anything above the switch?
-                        if ( ! switchItem.canAdvanceTo( 0, 0, 1 ) ) {
+                        if ( ! theSwitch.canAdvanceTo( 0, 0, 1 ) ) {
                                 while ( mediator->isThereAnyCollision() ) // there’s something
                                 {
-                                        ItemPtr switcherAbove = mediator->findCollisionPop () ;
+                                        DescribedItemPtr switcherAbove = mediator->findCollisionPop () ;
                                         if ( switcherAbove == nilPointer || switcherAbove->getBehavior() == nilPointer
                                                 || switcherAbove->canAdvanceTo( 0, 0, -1 ) ) continue ;
 
@@ -84,7 +84,7 @@ bool Switch::update ()
                         break ;
 
                 case activities::Activity::Pushed :
-                        const ItemPtr & pusher = getWhatAffectedThisBehavior() ;
+                        const AbstractItemPtr & pusher = getWhatAffectedThisBehavior() ;
                         if ( pusher != nilPointer ) {
                                 bool isNewPusher = this->switchers.insert( pusher->getUniqueName () ).second ;
 
@@ -105,39 +105,39 @@ void Switch::toggleIt ()
         // switching again only after a second
         if ( this->whenToggledTimer->getValue() < 1.0 ) return ;
 
-        Item & switchItem = getItem() ;
+        AbstractItem & theSwitch = getItem() ;
 
-        switchItem.animate ();
-        switchItem.getMediator()->toggleSwitchInRoom () ;
+        theSwitch.animate ();
+        theSwitch.getMediator()->toggleSwitchInRoom () ;
 
         this->whenToggledTimer->go() ;
 
         // play the sound of switching
-        SoundManager::getInstance().play( switchItem.getKind(), "switch" );
+        SoundManager::getInstance().play( dynamic_cast< DescribedItem & >( theSwitch ).getKind(), "switch" );
 }
 
 void Switch::lookForItemsNearby ( std::set< std::string > & itemsNearby )
 {
-        Item & switchItem = getItem() ;
-        Mediator* mediator = switchItem.getMediator();
+        DescribedItem & theSwitch = dynamic_cast< DescribedItem & >( getItem() );
+        Mediator* mediator = theSwitch.getMediator();
 
         // is there an item at north
-        if ( ! switchItem.canAdvanceTo( -1, 0, 0 ) )
+        if ( ! theSwitch.canAdvanceTo( -1, 0, 0 ) )
                 while ( mediator->isThereAnyCollision() )
                         itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 
         // is there an item at south
-        if ( ! switchItem.canAdvanceTo( 1, 0, 0 ) )
+        if ( ! theSwitch.canAdvanceTo( 1, 0, 0 ) )
                 while ( mediator->isThereAnyCollision() )
                         itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 
         // is there an item at east
-        if ( ! switchItem.canAdvanceTo( 0, -1, 0 ) )
+        if ( ! theSwitch.canAdvanceTo( 0, -1, 0 ) )
                 while ( mediator->isThereAnyCollision() )
                         itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 
         // is there an item at west
-        if ( ! switchItem.canAdvanceTo( 0, 1, 0 ) )
+        if ( ! theSwitch.canAdvanceTo( 0, 1, 0 ) )
                 while ( mediator->isThereAnyCollision() )
                         itemsNearby.insert( mediator->findCollisionPop()->getUniqueName () );
 }

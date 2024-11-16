@@ -29,7 +29,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
 {
         bool moved = false ;
 
-        Item & whatMoves = behavior.getItem() ;
+        DescribedItem & whatMoves = dynamic_cast< DescribedItem & >( behavior.getItem() );
         Mediator * mediator = whatMoves.getMediator();
 
         Activity toItemsNearby = activities::Activity::Waiting ;
@@ -41,25 +41,30 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
         {
                 case activities::Activity::Moving :
                 case activities::Activity::Automoving :
-                        if ( velocity.isMovingOnlyNorth() || velocity.isMovingOnlySouth() ) {
-                                if ( velocity.isMovingOnlyNorth() )
-                                        whatMoves.changeHeading( "north" );
-                                else if ( velocity.isMovingOnlySouth() )
-                                        whatMoves.changeHeading( "south" );
+                        if ( whatMoves.whichItemClass() == "free item" || whatMoves.whichItemClass() == "avatar item" )
+                        {
+                                FreeItem & itMoves = dynamic_cast< FreeItem & >( whatMoves );
 
-                                moved = whatMoves.addToX( velocity.getMotionAlongX() );
-                        }
-                        else
-                        if ( velocity.isMovingOnlyEast() || velocity.isMovingOnlyWest() ) {
-                                if ( velocity.isMovingOnlyEast() )
-                                        whatMoves.changeHeading( "east" );
-                                else if ( velocity.isMovingOnlyWest() )
-                                        whatMoves.changeHeading( "west" );
+                                if ( velocity.isMovingOnlyNorth() || velocity.isMovingOnlySouth() ) {
+                                        if ( velocity.isMovingOnlyNorth() )
+                                                itMoves.changeHeading( "north" );
+                                        else if ( velocity.isMovingOnlySouth() )
+                                                itMoves.changeHeading( "south" );
 
-                                moved = whatMoves.addToY( velocity.getMotionAlongY() );
+                                        moved = whatMoves.addToX( velocity.getMotionAlongX() );
+                                }
+                                else
+                                if ( velocity.isMovingOnlyEast() || velocity.isMovingOnlyWest() ) {
+                                        if ( velocity.isMovingOnlyEast() )
+                                                itMoves.changeHeading( "east" );
+                                        else if ( velocity.isMovingOnlyWest() )
+                                                itMoves.changeHeading( "west" );
+
+                                        moved = whatMoves.addToY( velocity.getMotionAlongY() );
+                                }
+                                else
+                                        moved = whatMoves.addToPosition( velocity.getMotionAlongX(), velocity.getMotionAlongY(), 0 );
                         }
-                        else
-                                moved = whatMoves.addToPosition( velocity.getMotionAlongX(), velocity.getMotionAlongY(), 0 );
 
                         toItemsNearby = activities::Activity::Pushed ;
 
@@ -73,7 +78,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
                         {
                                 while ( mediator->isThereAnyCollision() )
                                 {
-                                        ItemPtr aboveItem = mediator->findCollisionPop ();
+                                        DescribedItemPtr aboveItem = mediator->findCollisionPop ();
 
                                         // when there’s something above
                                         if ( aboveItem != nilPointer
@@ -108,7 +113,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
                         if ( moved && loaded ) {
                                 while ( ! itemsAbove.empty() )
                                 {
-                                        ItemPtr onTop = mediator->findItemByUniqueName( itemsAbove.top() );
+                                        DescribedItemPtr onTop = mediator->findItemByUniqueName( itemsAbove.top() );
                                         itemsAbove.pop() ;
 
                                         if ( onTop->whichItemClass() == "free item" || onTop->whichItemClass() == "avatar item" )
@@ -185,7 +190,7 @@ void Moving::ascend( FreeItem & freeItem, int dz )
                         continue ;
                 }
 
-                ItemPtr aboveItem = mediator->findItemByUniqueName( collision );
+                DescribedItemPtr aboveItem = mediator->findItemByUniqueName( collision );
 
                 // when there’s something above
                 if ( aboveItem != nilPointer
@@ -232,7 +237,7 @@ void Moving::descend( FreeItem & freeItem, int dz )
                 // for each item below
                 while ( ! itemsBelow.empty() )
                 {
-                        ItemPtr belowItem = mediator->findItemByUniqueName( itemsBelow.top () );
+                        DescribedItemPtr belowItem = mediator->findItemByUniqueName( itemsBelow.top () );
                         itemsBelow.pop ();
 
                         if ( belowItem != nilPointer

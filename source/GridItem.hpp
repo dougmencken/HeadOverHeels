@@ -16,7 +16,7 @@
 #include "WrappersAllegro.hpp"
 
 #include "Picture.hpp"
-#include "Item.hpp"
+#include "DescribedItem.hpp"
 #include "Drawable.hpp"
 
 
@@ -25,10 +25,10 @@ class DescriptionOfItem ;
 /**
  * The grid items are those which are placed in a single grid cell. They have the same
  * widths as the grid cells have. Grid items are mostly static. Only the Z coordinate
- * of a grid item can be changed, but not the position on X and Y
+ * of a grid item can be changed, but not the position along X and Y
  */
 
-class GridItem : public Item, public Drawable
+class GridItem : public DescribedItem, public Drawable
 {
 
 public:
@@ -41,7 +41,7 @@ public:
          */
         GridItem( const DescriptionOfItem & description, int cx, int cy, int z, const std::string & where = "" ) ;
 
-        virtual ~GridItem( ) ;
+        virtual ~GridItem( ) {}
 
         virtual std::string whichItemClass () const {  return "grid item" ;  }
 
@@ -52,6 +52,8 @@ public:
         {
                 return ( getZ() < other.getZ() + other.getHeight() );
         }
+
+        const std::string & getOrientation () const {  return this->orientation ;  }
 
         virtual int getImageOffsetX () const {  return imageOffset.first ;  }
         virtual int getImageOffsetY () const {  return imageOffset.second ;  }
@@ -64,14 +66,29 @@ public:
         virtual bool addToPosition ( int x, int y, int z ) ;
 
         /**
-         * The X of the cell in the room where this item is
+         * Position along X of the room’s grid cell where this item is placed
          */
         int getCellX () const {  return cell.first ;  }
 
+        /** Position along X in free units (cannot be changed)
+         */
+        virtual int getX () const {  return getCellX() * getWidthX() ;  }  // the widths of a grid item are equal to the size of a single room’s tile
+        virtual void setX ( int newX ) {  /* do nothing here */  }
+
         /**
-         * The Y of the cell in the room where this item is
+         * Position along Y of the room’s grid cell where this item is placed
          */
         int getCellY () const {  return cell.second ;  }
+
+        /** Position along Y in free units (cannot be changed)
+         */
+        virtual int getY () const {  return ( getCellY() + 1 ) * getWidthY() - 1 ;  }
+        virtual void setY ( int newY ) {  /* don’t do anything here */  }
+
+        /** Position along Z in free units
+         */
+        virtual int getZ () const {  return this->theZ ;  }
+        virtual void setZ ( int newZ ) {  this->theZ = newZ ;  }
 
         unsigned int getColumnOfGrid () const ;
 
@@ -83,6 +100,13 @@ private:
          * Position ( X, Y ) of the cell in the room where this item is
          */
         std::pair < int, int > cell ;
+
+        /** Position on Z, or how far is the floor, in free isometric units
+         */
+        int theZ ;
+
+        // the angular orientation
+        std::string orientation ;
 
         /**
          * The offset on ( X, Y ) of processed image from the room’s origin

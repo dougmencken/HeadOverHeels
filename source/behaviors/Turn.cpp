@@ -98,14 +98,14 @@ bool Turn::update ()
 
 void Turn::turn ()
 {
-        Item & item = getItem() ;
-        const std::string & heading = item.getHeading ();
+        FreeItem & itemThatTurns = dynamic_cast< FreeItem & >( getItem() );
+        const std::string & heading = itemThatTurns.getHeading ();
         bool turnLeft = ( getNameOfBehavior().find( "turn left" ) != std::string::npos );
 
-             if ( heading == "north" ) item.changeHeading( turnLeft ? "west" : "east" );
-        else if ( heading == "south" ) item.changeHeading( turnLeft ? "east" : "west" );
-        else if ( heading ==  "east" ) item.changeHeading( turnLeft ? "north" : "south" );
-        else if ( heading == "west"  ) item.changeHeading( turnLeft ? "south" : "north" );
+             if ( heading == "north" ) itemThatTurns.changeHeading( turnLeft ? "west" : "east" );
+        else if ( heading == "south" ) itemThatTurns.changeHeading( turnLeft ? "east" : "west" );
+        else if ( heading ==  "east" ) itemThatTurns.changeHeading( turnLeft ? "north" : "south" );
+        else if ( heading == "west"  ) itemThatTurns.changeHeading( turnLeft ? "south" : "north" );
 
         // will move where it is heading
         setCurrentActivity( activities::Activity::Moving );

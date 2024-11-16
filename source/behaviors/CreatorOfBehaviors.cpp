@@ -35,7 +35,7 @@
 namespace behaviors
 {
 
-autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( Item & item, const std::string & behavior )
+autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem & item, const std::string & behavior )
 {
         Behavior * behaviorToReturn = nilPointer ;
 
@@ -124,19 +124,20 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( Item & item,
                 if ( behavior == "behavior of teletransport" )
                         behaviorToReturn = new Teleport( onGrid, behavior );
         }
+        else if ( item.whichItemClass() == "described item" )
+        {
+                if ( behavior.find( "disappearance" ) != std::string::npos )
+                        behaviorToReturn = new Volatile( dynamic_cast< ::DescribedItem & >( item ), behavior );
+        }
 
         if ( behaviorToReturn == nilPointer ) // none of the above
         {
-                if ( behavior.find( "disappearance" ) != std::string::npos )
-                {
-                        behaviorToReturn = new Volatile( item, behavior );
-                }
-                else if ( behavior.empty () || behavior == "still" || behavior == "behavior of bubbles" )
+                if ( behavior.empty () || behavior == "still" || behavior == "behavior of bubbles" )
                 {
                         // no behavior, return nil
                 }
                 else {
-                        std::cout << "unknown behavior \"" << behavior << "\" for "
+                        std::cerr << "unknown behavior \"" << behavior << "\" for "
                                         << item.whichItemClass() << " \"" << item.getUniqueName()
                                                 << "\" in CreatorOfBehaviors::createBehaviorByName" << std::endl ;
                 }

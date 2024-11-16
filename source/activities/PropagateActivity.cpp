@@ -14,19 +14,19 @@ namespace activities
 {
 
 /* static */
-void PropagateActivity::spreadEasily( const Item & sender, const Activity & activity, const Motion2D & velocity )
+void PropagateActivity::spreadEasily( const AbstractItem & sender, const Activity & activity, const Motion2D & velocity )
 {
         Mediator* mediator = sender.getMediator() ;
         while ( mediator->isThereAnyCollision () ) // there are items collided with the sender
         {
-                ItemPtr collidedItem = mediator->findCollisionPop() ;
+                DescribedItemPtr collidedItem = mediator->findCollisionPop() ;
                 if ( collidedItem != nilPointer && collidedItem->getBehavior() != nilPointer )
                         collidedItem->getBehavior()->setCurrentActivity( activity, velocity );
         }
 }
 
 /* static */
-void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activity, const Motion2D & velocity )
+void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity & activity, const Motion2D & velocity )
 {
         Mediator* mediator = sender.getMediator() ;
 
@@ -36,7 +36,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                 const std::string & nameOfCollision = mediator->popCollision();
                 // not mediator->findCollisionPop() because a collision may be not only with an item,
                 // to look at the collision name further
-                ItemPtr itemMeetsSender = mediator->findItemByUniqueName( nameOfCollision );
+                DescribedItemPtr itemMeetsSender = mediator->findItemByUniqueName( nameOfCollision );
 
                 if ( itemMeetsSender != nilPointer ) // a collision with an item
                 {
@@ -71,7 +71,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                                                 }
                                                 if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, velocity, ItemPtr( &sender ) );
+                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, velocity, DescribedItemPtr( &sender ) );
                                                 }
                                         }
                                         // if not, just propagate activity to that item
@@ -79,7 +79,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
                                         {
                                                 if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, velocity, ItemPtr( &sender ) );
+                                                        itemMeetsSender->getBehavior()->changeActivityDueTo( activity, velocity, DescribedItemPtr( &sender ) );
                                                 }
                                         }
                                 }
@@ -114,7 +114,7 @@ void PropagateActivity::toAdjacentItems( Item & sender, const Activity & activit
 }
 
 /* static */
-void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity, const Motion2D & velocity )
+void PropagateActivity::toItemsAbove( DescribedItem & sender, const Activity & activity, const Motion2D & velocity )
 {
         Mediator* mediator = sender.getMediator();
 
@@ -132,7 +132,7 @@ void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity, 
                         std::string uniqueName = itemsAbove.top();
                         itemsAbove.pop();
 
-                        ItemPtr itemAbove = mediator->findItemByUniqueName( uniqueName );
+                        DescribedItemPtr itemAbove = mediator->findItemByUniqueName( uniqueName );
                         if ( itemAbove == nilPointer ) continue ;
 
                         // is it free item
@@ -158,7 +158,7 @@ void PropagateActivity::toItemsAbove( Item & sender, const Activity & activity, 
                                                         else {
                                                                 Activity currentActivity = freeItemAbove.getBehavior()->getCurrentActivity();
                                                                 if ( currentActivity != activities::Activity::Pushed )
-                                                                        freeItemAbove.getBehavior()->changeActivityDueTo( activity, velocity, ItemPtr( &sender ) );
+                                                                        freeItemAbove.getBehavior()->changeActivityDueTo( activity, velocity, DescribedItemPtr( &sender ) );
                                                         }
                                                 }
                                         }

@@ -12,29 +12,31 @@
 
 
 FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & where )
-        : Item ( description, z, where )
+        : DescribedItem( description )
+        , theX( x )
+        , theY( y >= 0 ? y : 0 )
+        , theZ( z )
         , initialCellX( farFarAway )
         , initialCellY( farFarAway )
         , initialCellZ( farFarAway )
+        , heading( where )
         , wantMask ( tritrue )
         , frozen ( false )
         , partOfDoor ( false )
         , shadedNonmaskedImage( new Picture( getRawImage() ) )
 {
-        setX( x );
-        setY( y >= 0 ? y : 0 );
-
         freshBothProcessedImages ();
-
-        // look for collisions
-        setIgnoreCollisions( false );
 }
 
 FreeItem::FreeItem( const FreeItem & freeItem )
-        : Item( freeItem ), Drawable()
+        : DescribedItem( freeItem ), Drawable()
+        , theX( freeItem.theX )
+        , theY( freeItem.theY )
+        , theZ( freeItem.theZ )
         , initialCellX( freeItem.initialCellX )
         , initialCellY( freeItem.initialCellY )
         , initialCellZ( freeItem.initialCellZ )
+        , heading( freeItem.heading )
         , wantMask( freeItem.wantMask )
         , frozen( freeItem.frozen )
         , partOfDoor( freeItem.partOfDoor )
@@ -117,7 +119,7 @@ void FreeItem::updateImage ()
 
 void FreeItem::updateShadow ()
 {
-        Item::updateShadow ();
+        DescribedItem::updateShadow ();
 
         // reshade items
         getMediator()->wantShadowFromFreeItem( *this );
@@ -125,14 +127,10 @@ void FreeItem::updateShadow ()
 
 void FreeItem::requestShadow()
 {
-        if ( getWantShadow() )
-        {
+        if ( getWantShadow() ) {
                 getMediator()->castShadowOnFreeItem( *this );
 
-                if ( ! getWantShadow() )
-                {
-                        setWantMaskTrue();
-                }
+                if ( ! getWantShadow() ) setWantMaskTrue() ;
         }
 }
 
@@ -220,6 +218,22 @@ bool FreeItem::addToPosition( int x, int y, int z )
         }
 
         return ! collisionFound;
+}
+
+void FreeItem::changeHeading( const std::string & where )
+{
+        if ( this->heading != where ) {
+                this->heading = where ;
+                changeFrame( firstFrame() );
+        }
+}
+
+void FreeItem::reverseHeading ()
+{
+             if ( this->heading == "north" ) changeHeading( "south" );
+        else if ( this->heading == "south" ) changeHeading( "north" );
+        else if ( this->heading ==  "east" ) changeHeading( "west" );
+        else if ( this->heading == "west"  ) changeHeading( "east" );
 }
 
 bool FreeItem::isCollidingWithJamb( const std::string & at, const std::string & collision, const int previousX, const int previousY )

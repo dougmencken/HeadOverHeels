@@ -109,7 +109,7 @@ bool ThereAndBack::update ()
 void ThereAndBack::turnBack ()
 {
         setCurrentActivity( activities::Activity::Moving, get2DVelocityVector().reverse() );
-        getItem().reverseHeading() ;
+        dynamic_cast< FreeItem & >( getItem() ).reverseHeading() ;
 }
 
 }

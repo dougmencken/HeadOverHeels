@@ -76,22 +76,23 @@ bool RemoteControl::update ()
                         if ( getNameOfBehavior() == "behavior of remote control" )
                         {
                                 // what to move by the remote control
-                                ItemPtr controlledItem = thisItem.getMediator()->findItemBehavingAs( "behavior of remotely controlled one" );
-                                if ( controlledItem != nilPointer )
+                                DescribedItemPtr controlledItem = getItem().getMediator()->findItemBehavingAs( "behavior of remotely controlled one" );
+                                if ( controlledItem != nilPointer && controlledItem->whichItemClass() == "free item" )
                                 {
                                         Motion2D pushVector = get2DVelocityVector() ;
 
                                         Activity toRemotelyControlled = pushVector.isRest() ? activities::Activity::Waiting : activities::Activity::Pushed ;
 
                                         // since ‘toRemotelyControlled’ is not Moving but Pushed, a displacement itself doesn’t change the heading
+                                        FreeItem & puppet = dynamic_cast< FreeItem & >( *controlledItem );
                                         if ( pushVector.isMovingOnlySouth() )
-                                                controlledItem->changeHeading( "south" );
+                                                puppet.changeHeading( "south" );
                                         else if ( pushVector.isMovingOnlyNorth() )
-                                                controlledItem->changeHeading( "north" );
+                                                puppet.changeHeading( "north" );
                                         else if ( pushVector.isMovingOnlyWest() )
-                                                controlledItem->changeHeading( "west" );
+                                                puppet.changeHeading( "west" );
                                         else if ( pushVector.isMovingOnlyEast() )
-                                                controlledItem->changeHeading( "east" );
+                                                puppet.changeHeading( "east" );
 
                                         controlledItem->getBehavior()->setCurrentActivity( toRemotelyControlled, pushVector );
                                 }

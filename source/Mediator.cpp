@@ -329,7 +329,7 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int
         }
 }
 
-void Mediator::shadeFreeItemsBeneathItemAt( const Item & item, int x, int y, int z )
+void Mediator::shadeFreeItemsBeneathItemAt( const DescribedItem & item, int x, int y, int z )
 {
         const std::vector < FreeItemPtr > & freeItems = room->getFreeItems ();
         for ( unsigned int i = 0 ; i < freeItems.size (); ++ i )
@@ -749,7 +749,7 @@ void Mediator::maskFreeItem( FreeItem & freeItem )
         }
 }
 
-ItemPtr Mediator::findItemByUniqueName( const std::string & uniqueName )
+DescribedItemPtr Mediator::findItemByUniqueName( const std::string & uniqueName )
 {
         // first look for a free item
         const std::vector < FreeItemPtr > & allFreeItems = room->getFreeItems ();
@@ -757,7 +757,7 @@ ItemPtr Mediator::findItemByUniqueName( const std::string & uniqueName )
         {
                 const FreeItemPtr & item = allFreeItems[ f ];
                 if ( item != nilPointer && item->getUniqueName() == uniqueName )
-                        return ItemPtr( item ) ;
+                        return DescribedItemPtr( item ) ;
         }
 
         // then look for a grid item
@@ -766,14 +766,14 @@ ItemPtr Mediator::findItemByUniqueName( const std::string & uniqueName )
                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
                 {
                         if ( *g != nilPointer && ( *g )->getUniqueName() == uniqueName )
-                                return ItemPtr( *g ) ;
+                                return DescribedItemPtr( *g ) ;
                 }
         }
 
-        return ItemPtr() ;
+        return DescribedItemPtr() ;
 }
 
-ItemPtr Mediator::findItemOfKind( const std::string & kind )
+DescribedItemPtr Mediator::findItemOfKind( const std::string & kind )
 {
         // look for a free item
         const std::vector < FreeItemPtr > & allFreeItems = room->getFreeItems ();
@@ -781,7 +781,7 @@ ItemPtr Mediator::findItemOfKind( const std::string & kind )
         {
                 const FreeItemPtr & item = allFreeItems[ f ];
                 if ( item != nilPointer && item->getKind () == kind )
-                        return ItemPtr( item ) ;
+                        return DescribedItemPtr( item ) ;
         }
 
         // look for a grid item
@@ -790,14 +790,14 @@ ItemPtr Mediator::findItemOfKind( const std::string & kind )
                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
                 {
                         if ( *g != nilPointer && ( *g )->getKind () == kind )
-                                return ItemPtr( *g ) ;
+                                return DescribedItemPtr( *g ) ;
                 }
         }
 
-        return ItemPtr() ;
+        return DescribedItemPtr() ;
 }
 
-ItemPtr Mediator::findItemBehavingAs( const std::string & behavior )
+DescribedItemPtr Mediator::findItemBehavingAs( const std::string & behavior )
 {
         // look for a free item
         const std::vector < FreeItemPtr > & allFreeItems = room->getFreeItems ();
@@ -805,7 +805,7 @@ ItemPtr Mediator::findItemBehavingAs( const std::string & behavior )
         {
                 const FreeItemPtr & item = allFreeItems[ f ];
                 if ( item != nilPointer && item->getBehavior() != nilPointer && item->getBehavior()->getNameOfBehavior() == behavior )
-                        return ItemPtr( item ) ;
+                        return DescribedItemPtr( item ) ;
         }
 
         // look for a grid item
@@ -814,32 +814,32 @@ ItemPtr Mediator::findItemBehavingAs( const std::string & behavior )
                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
                 {
                         if ( *g != nilPointer && ( *g )->getBehavior() != nilPointer && ( *g )->getBehavior()->getNameOfBehavior() == behavior )
-                                return ItemPtr( *g ) ;
+                                return DescribedItemPtr( *g ) ;
                 }
         }
 
-        return ItemPtr() ;
+        return DescribedItemPtr() ;
 }
 
 bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
 {
-        const ItemPtr item = findItemByUniqueName( uniqueNameOfItem ) ;
+        this->collisions.clear () ;
+
+        const DescribedItemPtr item = findItemByUniqueName( uniqueNameOfItem ) ;
         if ( item == nilPointer ) return false ;
         if ( item->isIgnoringCollisions () ) return false ;
 
-        bool collisionFound = false ;
-
         // look for collisions with free items
         const std::vector < FreeItemPtr > & allFreeItems = room->getFreeItems ();
+
         for ( unsigned int f = 0 ; f < allFreeItems.size () ; ++ f )
         {
+                if ( allFreeItems[ f ] == nilPointer ) continue ;
+
                 const FreeItem & freeItem = * allFreeItems[ f ];
-                if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isNotIgnoringCollisions () ) {
-                        if ( item->overlapsWith( freeItem ) ) {
+                if ( freeItem.isNotIgnoringCollisions() && freeItem.getUniqueName() != uniqueNameOfItem )
+                        if ( freeItem.overlapsWith( * item ) )
                                 collisions.push_back( freeItem.getUniqueName() );
-                                collisionFound = true ;
-                        }
-                }
         }
 
         // look for collisions with grid items
@@ -855,12 +855,9 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
                 {
                         const GridItem & gridItem = *( *g ) ;
 
-                        if ( gridItem.getUniqueName() != item->getUniqueName() ) {
-                                if ( item->overlapsWith( gridItem ) ) {
+                        if ( gridItem.getUniqueName() != item->getUniqueName() )
+                                if ( item->overlapsWith( gridItem ) )
                                         collisions.push_back( gridItem.getUniqueName() );
-                                        collisionFound = true ;
-                                }
-                        }
                 }
         }
         // a free item collides with grid items
@@ -889,20 +886,17 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
                                         const GridItem & gridItem = *( *g );
 
                                         if ( ( item->getZ() < gridItem.getZ() + gridItem.getHeight() ) &&
-                                                ( gridItem.getZ() < item->getZ() + item->getHeight() ) )
-                                        {
+                                                        ( gridItem.getZ() < item->getZ() + item->getHeight() ) )
                                                 collisions.push_back( gridItem.getUniqueName() );
-                                                collisionFound = true ;
-                                        }
                                 }
                         }
                 }
         }
 
-        return collisionFound ;
+        return this->collisions.size() > 0 ;
 }
 
-int Mediator::findHighestZ( const Item & item )
+int Mediator::findHighestZ( const DescribedItem & item )
 {
         int z = 0 ;
 
@@ -1004,36 +998,36 @@ std::string Mediator::popCollision()
         return name ;
 }
 
-ItemPtr Mediator::collisionWithSomeKindOf( const std::string & kind )
+DescribedItemPtr Mediator::collisionWithSomeKindOf( const std::string & kind )
 {
         for ( unsigned int i = 0; i < collisions.size(); i ++ ) {
-                ItemPtr item = findItemByUniqueName( collisions[ i ] );
+                DescribedItemPtr item = findItemByUniqueName( collisions[ i ] );
 
                 if ( item != nilPointer && item->getKind () == kind )
                         return item ;
         }
 
-        return ItemPtr ();
+        return DescribedItemPtr ();
 }
 
-ItemPtr Mediator::collisionWithBehavingAs( const std::string & behavior )
+DescribedItemPtr Mediator::collisionWithBehavingAs( const std::string & behavior )
 {
         for ( unsigned int i = 0; i < collisions.size(); i ++ ) {
-                ItemPtr item = findItemByUniqueName( collisions[ i ] );
+                DescribedItemPtr item = findItemByUniqueName( collisions[ i ] );
 
                 if ( item != nilPointer && item->getBehavior() != nilPointer &&
                                 item->getBehavior()->getNameOfBehavior () == behavior )
                         return item ;
         }
 
-        return ItemPtr ();
+        return DescribedItemPtr () ;
 }
 
-ItemPtr Mediator::collisionWithBadBoy()
+DescribedItemPtr Mediator::collisionWithBadBoy()
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
-                ItemPtr item = findItemByUniqueName( collisions[ i ] );
+                DescribedItemPtr item = findItemByUniqueName( collisions[ i ] );
 
                 if ( item != nilPointer && item->getBehavior() != nilPointer && item->isMortal()
                         && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getNameOfBehavior () ) != badBoys.end() )
@@ -1042,7 +1036,7 @@ ItemPtr Mediator::collisionWithBadBoy()
                 }
         }
 
-        return ItemPtr ();
+        return DescribedItemPtr ();
 }
 
 bool Mediator::activateCharacterByName( const std::string & name )
