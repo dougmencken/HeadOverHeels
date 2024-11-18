@@ -84,7 +84,14 @@ public:
          */
         bool automapTyped () const ;
 
-        void releaseKeyFor ( const std::string& keyAction ) const ;
+        /**
+         * Is any of the custom keys typed or not
+         */
+        bool userKeyTyped () const ;
+
+        bool isOneOfTheUserKeys ( const std::string & key ) const ;
+
+        void releaseKeyFor ( const std::string & action ) const ;
 
 } ;
 

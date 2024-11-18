@@ -96,6 +96,21 @@ public:
                 theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
         }
 
+        std::string toString () const
+        {
+                std::string whichMoment = "the key moment :" ;
+
+                if ( theMomentOfGameOver ) whichMoment += " game over" ;
+                if ( theMomentOfEatenFish ) whichMoment += " ate fish" ;
+                if ( theMomentOfSavingGame ) whichMoment += " saving" ;
+                if ( theMomentOfCrownWasTaken ) whichMoment += " taken crown" ;
+                if ( theMomentOfArrivalInFreedomNotWithAllCrowns ) whichMoment += " in Freedom without all crowns" ;
+                if ( theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ) whichMoment += " Head and Heels in Freedom with all crowns" ;
+                if ( ! isThereAny() ) whichMoment += " none" ;
+
+                return whichMoment ;
+        }
+
 } ;
 
 #endif

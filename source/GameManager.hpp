@@ -72,6 +72,11 @@ public:
 
         void resume () ;
 
+        /**
+         * Eat fish, that is, begin the process to save the game
+         */
+        void eatFish ( const AvatarItem & character, Room * room ) ;
+
         void loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom );
 
         GameInfo & getGameInfo() {  return theInfo ;  }
@@ -129,11 +134,6 @@ public:
          * How many planets are already liberated
          */
         unsigned short howManyFreePlanets () const ;
-
-        /**
-         * Eat fish, that is, begin the process to save the game
-         */
-        void eatFish ( const AvatarItem & character, Room * room ) ;
 
         const std::string & getChosenGraphicsSet () const {  return chosenGraphicsSet ;  }
 

@@ -94,8 +94,15 @@ public :
         /**
          * The distance of the processed image from the room’s origin
          */
-        virtual int getImageOffsetX () const ;
-        virtual int getImageOffsetY () const ;
+        virtual int getImageOffsetX () const
+        {
+                return ( ( getX() - getY() ) << 1 ) + getWidthX() + getWidthY() - ( getRawImage().getWidth() >> 1 ) - 1 ;
+        }
+
+        virtual int getImageOffsetY () const
+        {
+                return getX() + getY() + getWidthX() - getRawImage().getHeight() - getZ() ;
+        }
 
         /**
          * Request to shade item

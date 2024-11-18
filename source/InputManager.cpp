@@ -124,9 +124,25 @@ bool InputManager::automapTyped() const
         return allegro::isKeyPushed( getUserKeyFor( "automap" ) );
 }
 
-void InputManager::releaseKeyFor( const std::string & keyAction ) const
+bool InputManager::userKeyTyped () const
 {
-        const std::string & key = getUserKeyFor( keyAction ) ;
+        for ( std::map< std::string, std::string >::const_iterator ci = userKeys.begin() ; ci != userKeys.end() ; ++ ci )
+                if ( allegro::isKeyPushed( ci->second ) ) return true ;
+
+        return false ;
+}
+
+bool InputManager::isOneOfTheUserKeys ( const std::string & key ) const
+{
+        for ( std::map< std::string, std::string >::const_iterator ci = userKeys.begin() ; ci != userKeys.end() ; ++ ci )
+                if ( ci->second == key ) return true ;
+
+        return false ;
+}
+
+void InputManager::releaseKeyFor( const std::string & action ) const
+{
+        const std::string & key = getUserKeyFor( action ) ;
         if ( key != "none" )
                 allegro::releaseKey( key ) ;
 }

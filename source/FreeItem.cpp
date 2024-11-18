@@ -41,18 +41,7 @@ FreeItem::FreeItem( const FreeItem & freeItem )
         , frozen( freeItem.frozen )
         , partOfDoor( freeItem.partOfDoor )
         , shadedNonmaskedImage( new Picture( * freeItem.shadedNonmaskedImage ) )
-{
-}
-
-int FreeItem::getImageOffsetX () const
-{
-        return ( ( getX() - getY() ) << 1 ) + getWidthX() + getWidthY() - ( getRawImage().getWidth() >> 1 ) - 1 ;
-}
-
-int FreeItem::getImageOffsetY () const
-{
-        return getX() + getY() + getWidthX() - getRawImage().getHeight() - getZ() ;
-}
+{}
 
 void FreeItem::draw ()
 {

@@ -124,14 +124,12 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
                 if ( behavior == "behavior of teletransport" )
                         behaviorToReturn = new Teleport( onGrid, behavior );
         }
-        else if ( item.whichItemClass() == "described item" )
-        {
-                if ( behavior.find( "disappearance" ) != std::string::npos )
-                        behaviorToReturn = new Volatile( dynamic_cast< ::DescribedItem & >( item ), behavior );
-        }
 
         if ( behaviorToReturn == nilPointer ) // none of the above
         {
+                if ( behavior.find( "disappearance" ) != std::string::npos /* && item.whichItemClass() == "described item" */ )
+                        behaviorToReturn = new Volatile( dynamic_cast< ::DescribedItem & >( item ), behavior );
+                else
                 if ( behavior.empty () || behavior == "still" || behavior == "behavior of bubbles" )
                 {
                         // no behavior, return nil
@@ -141,7 +139,6 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
                                         << item.whichItemClass() << " \"" << item.getUniqueName()
                                                 << "\" in CreatorOfBehaviors::createBehaviorByName" << std::endl ;
                 }
-
         }
 
         return autouniqueptr< Behavior >( behaviorToReturn );

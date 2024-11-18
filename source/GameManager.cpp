@@ -86,8 +86,6 @@ void GameManager::cleanUp ()
 /* static */
 PicturePtr GameManager::refreshPicture ( const std::string & nameOfPicture )
 {
-        ///////IF_DEBUG( std::cout << "refreshing picture \"" << nameOfPicture << "\"" << std::endl )
-
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
                 ospaths::pathToFile( ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), nameOfPicture )
         ) ) ;
@@ -143,12 +141,13 @@ void GameManager::begin ()
 
 void GameManager::update ()
 {
+        IF_DEBUG( fprintf( stdout, "GameManager::update ()\n" ) )
+
         if ( getKeyMoments().isThereAny() ) resetKeyMoments() ;
 
         while ( ! getKeyMoments().isThereAny () )
         {
-                if ( InputManager::getInstance().pauseTyped()
-                                || keyMoments.isGameOver() || keyMoments.wasCrownTaken() )
+                if ( InputManager::getInstance().pauseTyped() )
                         this->pause ();
                 else
                 {
@@ -198,6 +197,8 @@ void GameManager::update ()
 
 void GameManager::keyMoment ()
 {
+        IF_DEBUG( fprintf( stdout, "GameManager::keyMoment () /* %s */\n", getKeyMoments().toString().c_str () ) )
+
         if ( getKeyMoments().wasCrownTaken () ) {
                 // when some planet is liberated, show the slide with planets
                 gui::ShowSlideWithPlanets * planetsAction = new gui::ShowSlideWithPlanets( true );
@@ -229,9 +230,10 @@ void GameManager::keyMoment ()
 
 void GameManager::pause ()
 {
-        IF_DEBUG( fprintf ( stdout, "GameManager::pause ()\n" ) )
+        IF_DEBUG( fprintf( stdout, "GameManager::pause () /* %s */ // isomot.isPaused() : %s\n",
+                        getKeyMoments().toString().c_str (), ( isomot.isPaused() ? "true" : "false" ) ) )
 
-        if ( isomot.isPaused () ) return ; //////// really?
+        /////if ( isomot.isPaused () ) return ; //////// really?
 
         // pause the isometric engine
         /* if ( ! isomot.isPaused () ) */ isomot.pauseMe() ;
@@ -325,30 +327,17 @@ void GameManager::pause ()
                         ateFishText.draw ();
                         resumeText.draw ();
 
-                        if ( allegro::areKeypushesWaiting() )
-                        {
-                                InputManager& inputManager = InputManager::getInstance();
+                        if ( allegro::areKeypushesWaiting() ) {
+                                InputManager & inputManager = InputManager::getInstance();
 
                                 std::string key = allegro::nextKey();
 
                                 // save the game by touching Space, or another key to don’t save
-                                if ( key == "Space" )
-                                {
+                                if ( key == "Space" ) {
                                         saveit = true ;
                                         keyMoments.saveGame() ;
                                 }
-                                else if ( key != inputManager.getUserKeyFor( "movenorth" ) &&
-                                          key != inputManager.getUserKeyFor( "movesouth" ) &&
-                                          key != inputManager.getUserKeyFor( "moveeast" ) &&
-                                          key != inputManager.getUserKeyFor( "movewest" ) &&
-                                          key != inputManager.getUserKeyFor( "jump" ) &&
-                                          key != inputManager.getUserKeyFor( "take" ) &&
-                                          key != inputManager.getUserKeyFor( "take&jump" ) &&
-                                          key != inputManager.getUserKeyFor( "swap" ) &&
-                                          key != inputManager.getUserKeyFor( "doughnut" ) &&
-                                          key != inputManager.getUserKeyFor( "pause" ) &&
-                                          key != "Escape" )
-                                {
+                                else if ( ! inputManager.isOneOfTheUserKeys( key ) && key != "Escape" ) {
                                         resume = true ;
                                         keyMoments.resetAll() ;
                                         isomot.resumeMe() ;
@@ -373,6 +362,51 @@ void GameManager::resume ()
         isomot.resumeMe() ;
 
         this->update ();
+}
+
+void GameManager::eatFish ( const AvatarItem & character, Room* room )
+{
+        std::cout << "GameManager::eatFish ("
+                        << " by character \"" << character.getOriginalKind() << "\""
+                        << " in room " << room->getNameOfRoomDescriptionFile() << " )" << std::endl ;
+
+        if ( getKeyMoments().wasFishEaten() ) return ; // already ate
+
+        if ( room == nilPointer ) {
+                std::cout << "><((((o> ate fish without room <o))))><" << std::endl ;
+                return ;
+        }
+
+        keyMoments.fishEaten () /* <>< */ ;
+        this->pause () ;
+
+        DescribedItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
+
+        int x = character.getX ();
+        int y = character.getY ();
+        int z = character.getZ ();
+
+        std::string whereLooks = character.getHeading() ;
+
+        if ( fish != nilPointer && fish->whichItemClass() == "free item" ) {
+                const FreeItem & freeFish = dynamic_cast< const FreeItem & >( *fish );
+                int oneCell = room->getSizeOfOneTile ();
+
+                // get the initial location o’ fish in the room
+                x = freeFish.getInitialCellX() * oneCell ;
+                y = ( freeFish.getInitialCellY() + 1 ) * oneCell - 1 ;
+                z = freeFish.getZ ();
+
+                whereLooks = freeFish.getHeading() ;
+        }
+
+        if ( whereLooks.empty() ) whereLooks = "south" ;
+
+        saverAndLoader.ateFish (
+                room->getNameOfRoomDescriptionFile (),
+                character.getOriginalKind (),
+                x, y, z, whereLooks
+        );
 }
 
 void GameManager::loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom )
@@ -748,51 +782,6 @@ unsigned short GameManager::howManyFreePlanets () const
         }
 
         return count ;
-}
-
-void GameManager::eatFish ( const AvatarItem & character, Room* room )
-{
-        std::cout << "GameManager::eatFish ( "
-                        << "character \"" << character.getOriginalKind() << "\", "
-                        << "room " << room->getNameOfRoomDescriptionFile() << " )" << std::endl ;
-
-        if ( getKeyMoments().wasFishEaten() ) return ; // already ate
-
-        if ( room == nilPointer ) {
-                std::cout << "><((((o> ate fish without room <o))))><" << std::endl ;
-                return ;
-        }
-
-        keyMoments.fishEaten () /* <>< */ ;
-        this->pause () ;
-
-        DescribedItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
-
-        int x = character.getX ();
-        int y = character.getY ();
-        int z = character.getZ ();
-
-        std::string whereLooks = character.getHeading() ;
-
-        if ( fish != nilPointer && fish->whichItemClass() == "free item" ) {
-                const FreeItem & freeFish = dynamic_cast< const FreeItem & >( *fish );
-                int oneCell = room->getSizeOfOneTile ();
-
-                // get the initial location o’ fish in the room
-                x = freeFish.getInitialCellX() * oneCell ;
-                y = ( freeFish.getInitialCellY() + 1 ) * oneCell - 1 ;
-                z = freeFish.getZ ();
-
-                whereLooks = freeFish.getHeading() ;
-        }
-
-        if ( whereLooks.empty() ) whereLooks = "south" ;
-
-        saverAndLoader.ateFish (
-                room->getNameOfRoomDescriptionFile (),
-                character.getOriginalKind (),
-                x, y, z, whereLooks
-        );
 }
 
 void GameManager::inFreedomWithSoManyCrowns( unsigned int crowns )
