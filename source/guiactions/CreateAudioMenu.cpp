@@ -5,7 +5,7 @@
 #include "GameManager.hpp"
 #include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "Label.hpp"
 #include "CreateOptionsMenu.hpp"
 
@@ -14,7 +14,7 @@
 
 void gui::CreateAudioMenu::act ()
 {
-        Slide & slideWithAudioMenu = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & slideWithAudioMenu = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         if ( slideWithAudioMenu.isNewAndEmpty() ) {
                 slideWithAudioMenu.setEscapeAction( new CreateOptionsMenu() );

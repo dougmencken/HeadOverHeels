@@ -1,15 +1,12 @@
 
 #include "Slide.hpp"
 
-#include "Menu.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
-#include "Label.hpp"
-#include "TextField.hpp"
-#include "PictureWidget.hpp"
-#include "AnimatedPictureWidget.hpp"
 #include "Color.hpp"
+#include "Label.hpp"
+#include "Menu.hpp"
 
 #include "sleep.hpp"
 #include "ospaths.hpp"
@@ -17,9 +14,6 @@
 #include "MayNotBePossible.hpp"
 
 #include <iostream>
-
-
-const float delayBetweenFrames = 0.1 ;
 
 
 namespace gui
@@ -94,13 +88,9 @@ Slide::Slide() :
         noTransitionTo( false ),
         drawSpectrumColors( false ),
         escapeAction( nilPointer ),
-        keyHandler( nilPointer ),
-        pictureOfHead( nilPointer ),
-        pictureOfHeels( nilPointer )
+        keyHandler( nilPointer )
 {
-        if ( Slide::backgroundPicture == nilPointer ) Slide::refreshBackground () ;
-
-        refreshPicturesOfHeadAndHeels ();
+        refresh () ;
 }
 
 Slide::~Slide( )
@@ -108,84 +98,41 @@ Slide::~Slide( )
         removeAllWidgets() ;
 }
 
-void Slide::addPictureOfHeadAt ( int x, int y )
-{
-        if ( this->pictureOfHead == nilPointer ) {
-                const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
-                this->pictureOfHead = new AnimatedPictureWidget(
-                                                x, y,
-                                                Picture::loadAnimation( ospaths::pathToFile( pathToPictures, "head.gif" ) ),
-                                                delayBetweenFrames,
-                                                "animated Head" );
-        } else
-                this->pictureOfHead->moveTo( x, y );
-
-        addWidget( this->pictureOfHead );
-}
-
-void Slide::addPictureOfHeelsAt ( int x, int y )
-{
-        if ( this->pictureOfHeels == nilPointer ) {
-                const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
-                this->pictureOfHeels = new AnimatedPictureWidget(
-                                                x, y,
-                                                Picture::loadAnimation( ospaths::pathToFile( pathToPictures, "heels.gif" ) ),
-                                                delayBetweenFrames,
-                                                "animated Heels" );
-        } else
-                this->pictureOfHeels->moveTo( x, y );
-
-        addWidget( this->pictureOfHeels );
-}
-
-void Slide::refreshPicturesOfHeadAndHeels ()
-{
-        if ( this->pictureOfHead != nilPointer )
-        {
-                int xHead = this->pictureOfHead->getX ();
-                int yHead = this->pictureOfHead->getY ();
-
-                if ( this->pictureOfHead->isOnSomeSlide () )
-                        removeWidget( this->pictureOfHead );
-
-                delete this->pictureOfHead ;
-                this->pictureOfHead = nilPointer ;
-
-                addPictureOfHeadAt( xHead, yHead );
-        }
-
-        if ( this->pictureOfHeels != nilPointer )
-        {
-                int xHeels = this->pictureOfHeels->getX ();
-                int yHeels = this->pictureOfHeels->getY ();
-
-                if ( this->pictureOfHeels->isOnSomeSlide () )
-                        removeWidget( this->pictureOfHeels );
-
-                delete this->pictureOfHeels ;
-                this->pictureOfHeels = nilPointer ;
-
-                addPictureOfHeelsAt( xHeels, yHeels );
-        }
-}
-
 void Slide::draw ()
 {
-        refresh ();
-        drawOnGlobalScreen( );
-}
-
-void Slide::refresh () const
-{
-        if ( imageOfSlide == nilPointer ) return ; // nothing to refresh
+        if ( this->imageOfSlide == nilPointer ) return ; // nothing to draw
 
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( imageOfSlide->getAllegroPict() );
 
         imageOfSlide->fillWithColor( Color::byName( "red" ) ); // the red background is so red
 
-        // draw background
+        // draw scaled background picture
+        allegro::bitBlit( Slide::scaledBackgroundPicture->getAllegroPict() );
 
+        if ( drawSpectrumColors )
+                Slide::draw2x8colors( *this ) ;
+
+        // draw each widget
+        for ( std::vector< Widget * >::const_iterator wi = widgets.begin () ; wi != widgets.end () ; ++ wi )
+                ( *wi )->draw ();
+
+        allegro::Pict::setWhereToDraw( previousWhere );
+
+        drawOnGlobalScreen( );
+}
+
+void Slide::drawOnGlobalScreen ()
+{
+        if ( GameManager::isThreadRunning () ) return ;
+        if ( this->imageOfSlide == nilPointer ) return ; // nothing to draw
+
+        allegro::bitBlit( this->imageOfSlide->getAllegroPict(), allegro::Pict::theScreen() );
+        allegro::update ();
+}
+
+void Slide::refresh ()
+{
         if ( Slide::backgroundPicture == nilPointer )
                 Slide::refreshBackground ();
 
@@ -244,7 +191,8 @@ void Slide::refresh () const
                                                                         scaledWidth, screenHeight );
 
                                         delete uniformlyScaledBackground ;
-                                } else {
+                                }
+                                else {
                                         unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
                                         unsigned int offsetX = ( screenWidth - proportionalWidth ) >> 1 ;
 
@@ -267,25 +215,8 @@ void Slide::refresh () const
                 }
         }
 
-        // draw scaled background picture
-        allegro::bitBlit( Slide::scaledBackgroundPicture->getAllegroPict() );
-
-        if ( drawSpectrumColors /* || GameManager::getInstance().isSimpleGraphicsSet() */ )
-                Slide::draw2x8colors( *this ) ;
-
-        // draw each component
-        for ( std::vector< Widget * >::const_iterator wi = widgets.begin () ; wi != widgets.end () ; ++ wi )
-                ( *wi )->draw ();
-
-        allegro::Pict::setWhereToDraw( previousWhere );
-}
-
-void Slide::drawOnGlobalScreen( )
-{
-        if ( GameManager::isThreadRunning () ) return ;
-
-        allegro::bitBlit( imageOfSlide->getAllegroPict(), allegro::Pict::theScreen() );
-        allegro::update ();
+        if ( Slide::scaledBackgroundPicture == nilPointer )
+                throw MayNotBePossible( "Slide::scaledBackgroundPicture is nil at the end of Slide::refresh()" ) ;
 }
 
 /* static */
@@ -358,77 +289,7 @@ bool Slide::removeWidget( Widget* widget )
 
 void Slide::removeAllWidgets ()
 {
-        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide() ) {
-                delete pictureOfHead ;
-                this->pictureOfHead = nilPointer ;
-        }
-
-        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnSomeSlide() ) {
-                delete pictureOfHeels ;
-                this->pictureOfHeels = nilPointer ;
-        }
-
         this->widgets.clear() ;
-}
-
-void Slide::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
-{
-        const unsigned int screenWidth = GamePreferences::getScreenWidth();
-        const unsigned int space = ( screenWidth / 20 ) - 10;
-
-        Label* Head = new Label( "Head", new Font( "yellow", true ) );
-        Label* over = new Label( "over", new Font( "white" ), /* multicolor */ true );
-        Label* Heels = new Label( "Heels", new Font( "yellow", true ) );
-
-        over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
-        addWidget( over );
-
-        unsigned int widthOfSpace = over->getFont().getWidthOfLetter( " " );
-        int spaceWithoutSpacing = widthOfSpace - over->getSpacing ();
-
-        Head->moveTo( over->getX() - Head->getWidth() - spaceWithoutSpacing, space );
-        addWidget( Head );
-
-        Heels->moveTo( over->getX() + over->getWidth() + spaceWithoutSpacing, space );
-        addWidget( Heels );
-
-        TextField* JonRitman = new TextField( screenWidth >> 2, "center" ) ;
-        JonRitman->appendLine( "Jon", false, "multicolor" );
-        JonRitman->appendLine( "Ritman", false, "multicolor" );
-        JonRitman->moveTo( Head->getX() - JonRitman->getWidthOfField() - space, space );
-        addWidget( JonRitman );
-
-        TextField* BernieDrummond = new TextField( screenWidth >> 2, "center" ) ;
-        BernieDrummond->appendLine( "Bernie", false, "multicolor" );
-        BernieDrummond->appendLine( "Drummond", false, "multicolor" );
-        BernieDrummond->moveTo( Heels->getX() + Heels->getWidth() + space, space );
-        addWidget( BernieDrummond );
-
-        if ( picturesToo )
-        {
-                const unsigned int widthOfSprite = 48;
-                addPictureOfHeadAt( Head->getX() + ( ( Head->getWidth() - widthOfSprite ) >> 1 ), Head->getY() + Head->getHeight() );
-                addPictureOfHeelsAt( Heels->getX() + ( ( Heels->getWidth() - widthOfSprite ) >> 1 ), Heels->getY() + Heels->getHeight() );
-        }
-
-        if ( copyrightsToo )
-        {
-                Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", new Font( "orange" ) );
-                Label* Douglas = new Label( "{ 2024 Douglas Mencken", new Font( "yellow" ) );
-
-                const unsigned int screenHeight = GamePreferences::getScreenHeight();
-                const int leading = 28;
-                const int whereY = screenHeight - space - leading + 4;
-                const int whereX = ( screenWidth - Jorge->getWidth() ) >> 1 ;
-
-                // Jorge Rodríguez Santos
-                Jorge->moveTo( whereX, whereY );
-                addWidget( Jorge );
-
-                // Douglas Mencken
-                Douglas->moveTo( whereX, whereY - leading );
-                addWidget( Douglas );
-        }
 }
 
 /* static */
@@ -442,7 +303,6 @@ void Slide::scrollHorizontally( const Slide & oldSlide, const Slide & newSlide, 
         autouniqueptr < Timer > drawTimer( new Timer() );
         drawTimer->go ();
 
-        newSlide.refresh ();
         Picture& newPicture = * newSlide.imageOfSlide ;
 
         unsigned int step = ( ( ( GamePreferences::getScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
@@ -480,7 +340,6 @@ void Slide::wipeHorizontally( const Slide & oldSlide, const Slide & newSlide, bo
         autouniqueptr < Timer > drawTimer( new Timer() );
         drawTimer->go ();
 
-        newSlide.refresh ();
         Picture& newPicture = * newSlide.imageOfSlide ;
 
         unsigned int step = ( ( ( GamePreferences::getScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
@@ -516,7 +375,6 @@ void Slide::barWipeHorizontally( const Slide & oldSlide, const Slide & newSlide,
         autouniqueptr < Timer > drawTimer( new Timer() );
         drawTimer->go ();
 
-        newSlide.refresh ();
         Picture& newPicture = * newSlide.imageOfSlide ;
 
         unsigned int pieces = GamePreferences::getScreenWidth() >> 6 ;
@@ -550,10 +408,7 @@ void Slide::barWipeHorizontally( const Slide & oldSlide, const Slide & newSlide,
 /* static */
 void Slide::randomPixelFade( bool fadeIn, const Slide & slide, const Color & color )
 {
-        if ( slide.imageOfSlide == nilPointer ) return;
-
-        // refresh the slide before fading
-        slide.refresh();
+        if ( slide.imageOfSlide == nilPointer ) return ;
 
         AllegroColor aColor = color.toAllegroColor() ;
 

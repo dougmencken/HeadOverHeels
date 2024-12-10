@@ -390,7 +390,7 @@ void Isomot::handleMagicKeys ()
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "s" ) )
         {
                 if ( activeRoom->getMediator()->getActiveCharacter() != nilPointer )
-                        gameManager.eatFish ( * activeRoom->getMediator()->getActiveCharacter(), activeRoom );
+                        gameManager.eatFish( * activeRoom->getMediator()->getActiveCharacter(), activeRoom->getNameOfRoomDescriptionFile() );
 
                 allegro::releaseKey( "s" );
         }

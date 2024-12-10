@@ -4,7 +4,7 @@
 #include "GamePreferences.hpp"
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 
 #include "sleep.hpp"
 
@@ -12,7 +12,7 @@
 /* public */ /* static */
 std::vector< std::pair< unsigned int, unsigned int > > gui::CreateGraphicsAreaSizeMenu::popularScreenSizes ;
 
-void gui::CreateGraphicsAreaSizeMenu::fillSlide ( Slide & slideToFill )
+void gui::CreateGraphicsAreaSizeMenu::fillSlide ( SlideWithHeadAndHeels & slideToFill )
 {
         if ( ! slideToFill.isNewAndEmpty() ) return ;
         ////////this->menuOfScreenSizes.deleteAllOptions() ; slideToFill.removeAllWidgets() ;
@@ -53,7 +53,7 @@ void gui::CreateGraphicsAreaSizeMenu::act ()
                 popularScreenSizes.push_back( std::pair< unsigned int, unsigned int >( 1920, 1080 ) );
         }
 
-        Slide & slideToPickScreenSize = gui::GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & slideToPickScreenSize = gui::GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         fillSlide( slideToPickScreenSize );
 

@@ -3,10 +3,9 @@
 
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "Label.hpp"
 #include "CreateVideoMenu.hpp"
-#include "CreateMainMenu.hpp"
 
 #include "sleep.hpp"
 
@@ -29,7 +28,7 @@ CreateMenuOfGraphicsSets::CreateMenuOfGraphicsSets( Action* previous ) :
 
 void CreateMenuOfGraphicsSets::act ()
 {
-        Slide & slideOfGraphicsSets = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & slideOfGraphicsSets = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         if ( slideOfGraphicsSets.isNewAndEmpty() )
         {

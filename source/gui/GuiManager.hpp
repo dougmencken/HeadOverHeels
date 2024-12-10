@@ -14,14 +14,16 @@
 #include <string>
 #include <map>
 
-#include "Slide.hpp"
+#include "util.hpp"
+
 #include "LanguageStrings.hpp"
 
 
 namespace gui
 {
 
-class LanguageStrings ;
+class Slide ;
+class SlideWithHeadAndHeels ;
 
 
 class GuiManager
@@ -46,13 +48,17 @@ public:
          */
         void loop () ;
 
-        void changeSlide ( const std::string & newAction, bool dive /* it becomes rightToLeft for barWipeHorizontally */ = false ) ;
+        void changeSlide ( Slide * newSlide, bool dive /* it becomes rightToLeft for barWipeHorizontally */ = false ) ;
+        void changeSlide ( const std::string & forAction, bool dive = false ) ;
+
+        void setSlideForAction( Slide * theSlide, const std::string & nameOfAction ) ;
 
         /**
          * Find among all the slides the one that is associated with this action.
          * And if there’s no such slide, create a new one
          */
         Slide & findOrCreateSlideForAction ( const std::string & nameOfAction ) ;
+        SlideWithHeadAndHeels & findOrCreateSlideWithHeadAndHeelsForAction ( const std::string & nameOfAction ) ;
 
         void freeSlides () ;
 

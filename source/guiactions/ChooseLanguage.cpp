@@ -1,7 +1,7 @@
 
 #include "ChooseLanguage.hpp"
 
-#include "CreateMainMenu.hpp"
+#include "PresentTheMainMenu.hpp"
 #include "GuiManager.hpp"
 
 
@@ -12,6 +12,5 @@ void gui::ChooseLanguage::act ()
 
         GuiManager::getInstance().setLanguage( language );
 
-        CreateMainMenu * mainMenu = new CreateMainMenu();
-        mainMenu->doIt ();
+        ( new PresentTheMainMenu() )->doIt ();
 }

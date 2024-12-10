@@ -58,6 +58,14 @@ public:
 
         Label * getActiveOption () const {  return this->activeOption ;  }
 
+        Label * getNthOption ( unsigned int n )
+        {
+                if ( n < howManyOptions() )
+                        return this->options[ n ] ;
+                else
+                        return nilPointer ;
+        }
+
         void setNthOptionAsActive ( unsigned int n )
         {
                 if ( n < howManyOptions () )

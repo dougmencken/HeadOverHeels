@@ -8,16 +8,17 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef CreateListOfSavedGames_hpp_
-#define CreateListOfSavedGames_hpp_
-
-#include "Action.hpp"
+#ifndef TheListOfSavedGames_hpp_
+#define TheListOfSavedGames_hpp_
 
 #include "Menu.hpp"
 
 
 namespace gui
 {
+
+class Label ;
+
 
 class SavedGameInfo
 {
@@ -52,49 +53,35 @@ public:
 
 } ;
 
-/**
- * Creates the menu to pick a saved game slot to load or save to
- */
 
-class CreateListOfSavedGames : public gui::Action
+class TheListOfSavedGames : public Menu
 {
 
-public:
+public :
 
         /**
-         * @param isLoadMenu true for "load game", false for "save game"
+         * @param forLoading true for loading a saved game, false for saving the current progress
          */
-        explicit CreateListOfSavedGames( bool isLoadMenu )
-                : Action( )
-                , isMenuForLoad( isLoadMenu )
-                , menu( )
-        {
-                menu.setVerticalOffset( 112 );
-        }
+        TheListOfSavedGames( bool forLoading ) ;
 
-        bool isLoadMenu () {  return this->isMenuForLoad ;  }
+        virtual ~TheListOfSavedGames( ) {}
 
-protected:
+        bool isForLoading () {  return this->isListForLoading ;  }
 
-        /**
-         * Show the saved games
-         */
-        virtual void act () ;
+        void updateTheList () ;
 
-private:
+private :
 
         /**
          * Read the number of visited rooms and the number of liberated planets from a saved game file to show
          */
-        SavedGameInfo readSomeInfoFromASavedGame( const std::string & fileName ) ;
+        static SavedGameInfo readSomeInfoFromASavedGame( const std::string & fileName ) ;
 
-        bool isMenuForLoad ;
+        const bool isListForLoading ;
 
-        Menu menu ;
+        static const unsigned int how_many_slots = 10 ;
 
-        static const unsigned int howManySaves = 10 ;
-
-};
+} ;
 
 }
 

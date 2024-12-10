@@ -29,8 +29,6 @@ class Color ;
 namespace gui
 {
 
-class AnimatedPictureWidget ;
-
 /**
  * A container for other user interface elements
  */
@@ -44,11 +42,11 @@ public:
 
         virtual ~Slide( ) ;
 
-        void draw () ;
-
-        void refresh () const ;
+        virtual void draw () ;
 
         void drawOnGlobalScreen () ;
+
+        virtual void refresh () ;
 
         void handleKey ( const std::string & key ) ;
 
@@ -69,17 +67,9 @@ public:
 
         bool isNewAndEmpty () {  return this->widgets.size() == 0 ;  }
 
-        void placeHeadAndHeels ( bool imagesToo, bool copyrightsToo ) ;
-
         static void refreshBackground () ;
 
         static void toBlackBackground () ;
-
-        void addPictureOfHeadAt ( int x, int y ) ;
-
-        void addPictureOfHeelsAt ( int x, int y ) ;
-
-        void refreshPicturesOfHeadAndHeels () ;
 
         const Picture & getImageOfSlide () const {  return * this->imageOfSlide ;  }
 
@@ -136,10 +126,6 @@ private:
         Action * escapeAction ;
 
         KeyHandler * keyHandler ;
-
-        AnimatedPictureWidget * pictureOfHead ;
-
-        AnimatedPictureWidget * pictureOfHeels ;
 
         static void randomPixelFade( bool fadeIn, const Slide & slide, const Color & color ) ;
 

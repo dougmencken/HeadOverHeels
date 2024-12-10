@@ -410,7 +410,7 @@ void AvatarItem::addLives( unsigned char lives )
 void AvatarItem::loseLife ()
 {
         GameManager::getInstance().loseLifeAndContinue( getOriginalKind() // the current kind is "bubbles"
-                                                        , getMediator()->getRoom() );
+                                                        , getMediator()->getRoom()->getNameOfRoomDescriptionFile() );
 }
 
 void AvatarItem::takeMagicTool( const std::string & tool )
@@ -527,7 +527,7 @@ void AvatarItem::emptyBag ()
 
 void AvatarItem::saveGame ()
 {
-        GameManager::getInstance().eatFish( *this, getMediator()->getRoom() );
+        GameManager::getInstance().eatFish( *this, getMediator()->getRoom()->getNameOfRoomDescriptionFile() );
 }
 
 void AvatarItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )

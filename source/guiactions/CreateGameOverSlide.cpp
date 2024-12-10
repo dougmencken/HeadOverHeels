@@ -7,11 +7,11 @@
 #include "LanguageStrings.hpp"
 #include "SoundManager.hpp"
 #include "Font.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "Menu.hpp"
 #include "Label.hpp"
 #include "TextField.hpp"
-#include "CreateMainMenu.hpp"
+#include "PresentTheMainMenu.hpp"
 
 
 void gui::CreateGameOverSlide::act ()
@@ -19,11 +19,11 @@ void gui::CreateGameOverSlide::act ()
         if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Slide::refreshBackground () ; // get the background back
 
-        Slide & gameOverSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & gameOverSlide = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
         if ( ! gameOverSlide.isNewAndEmpty() )
                 gameOverSlide.removeAllWidgets() ;
         else
-                gameOverSlide.setEscapeAction( new CreateMainMenu() );
+                gameOverSlide.setEscapeAction( new PresentTheMainMenu() );
 
         gameOverSlide.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 

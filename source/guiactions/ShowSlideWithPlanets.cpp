@@ -10,7 +10,6 @@
 #include "Slide.hpp"
 #include "PictureWidget.hpp"
 #include "Label.hpp"
-#include "CreateMainMenu.hpp"
 #include "ContinueGame.hpp"
 
 #include "ospaths.hpp"

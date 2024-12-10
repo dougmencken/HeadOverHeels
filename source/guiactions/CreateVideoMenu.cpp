@@ -7,7 +7,7 @@
 #include "GameManager.hpp"
 #include "GamePreferences.hpp"
 #include "LanguageStrings.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "Label.hpp"
 #include "CreateOptionsMenu.hpp"
 
@@ -16,7 +16,7 @@
 
 void gui::CreateVideoMenu::act ()
 {
-        Slide & slideWithVideoMenu = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & slideWithVideoMenu = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         if ( slideWithVideoMenu.isNewAndEmpty() ) {
                 slideWithVideoMenu.setEscapeAction( new CreateOptionsMenu() );

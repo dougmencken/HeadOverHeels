@@ -6,13 +6,13 @@
 #include "RedefineKey.hpp"
 #include "Font.hpp"
 #include "Label.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "CreateOptionsMenu.hpp"
 
 
 void gui::CreateKeysMenu::act ()
 {
-        Slide & gameKeysSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & gameKeysSlide = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         if ( gameKeysSlide.isNewAndEmpty() )
         {

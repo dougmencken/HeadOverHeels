@@ -14,7 +14,7 @@
 #include "PictureWidget.hpp"
 #include "LanguageText.hpp"
 #include "TextField.hpp"
-#include "CreateMainMenu.hpp"
+#include "PresentTheMainMenu.hpp"
 
 #include <tinyxml2.h>
 
@@ -133,7 +133,7 @@ void ShowAuthors::act ()
 
         alignRandom () ;
 
-        credits.setEscapeAction( new CreateMainMenu() );
+        credits.setEscapeAction( new PresentTheMainMenu() );
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
 

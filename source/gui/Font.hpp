@@ -41,7 +41,7 @@ public:
          * @param color the color of letters
          * @param doubleHeightStretching true for the double height stretching of letters
          */
-        Font( const std::string & color, bool doubleHeightStretching = false ) ;
+        Font( const std::string & color = "", bool doubleHeightStretching = false ) ;
 
         Font( const Font & toCopy )
                 : fontColor( toCopy.getColor() )
@@ -52,7 +52,7 @@ public:
         Picture * getPictureOfLetter ( const std::string & letter ) const ;
 
         const std::string & getColor () const {  return this->fontColor ;  }
-        void setColor ( const std::string & newColor ) {  this->fontColor = newColor ;  }
+        void setColor ( const std::string & newColor ) {  this->fontColor = newColor.empty() ? "white" : newColor ;  }
 
         bool isDoubleHeight () const {  return this->doubleHeight ;  }
         void setDoubleHeight ( bool new2xHeight ) {  this->doubleHeight = new2xHeight ;  }

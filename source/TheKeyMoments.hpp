@@ -25,7 +25,6 @@ private:
         bool theMomentOfGameOver ;   /* all lives are lost or the player quit the game */
 
         bool theMomentOfEatenFish ;        /* a chance to save the current progress */
-        bool theMomentOfSavingGame ;       /* the player wishes to save the game progress */
 
         bool theMomentOfCrownWasTaken ;    /* a crown is taken and one more planet was liberated this way */
 
@@ -40,7 +39,6 @@ public:
         TheKeyMoments()
                 : theMomentOfGameOver( false )
                 , theMomentOfEatenFish( false )
-                , theMomentOfSavingGame( false )
                 , theMomentOfCrownWasTaken( false )
                 , theMomentOfArrivalInFreedomNotWithAllCrowns( false )
                 , theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns( false )
@@ -55,11 +53,6 @@ public:
         void fishEaten() {  resetAll() ; theMomentOfEatenFish = true ;  }
 
         bool wasFishEaten () const {  return theMomentOfEatenFish ;  }
-
-        // the player chose to save the game
-        void saveGame() {  resetAll() ; theMomentOfSavingGame = true ;  }
-
-        bool isSavingGame () const {  return theMomentOfSavingGame ;  }
 
         // the player just got the crown of a planet
         void crownTaken() {  resetAll() ; theMomentOfCrownWasTaken = true ;  }
@@ -80,7 +73,7 @@ public:
         bool isThereAny() const
         {
                 return ( theMomentOfGameOver
-                         || theMomentOfEatenFish || theMomentOfSavingGame
+                         || theMomentOfEatenFish
                             || theMomentOfCrownWasTaken
                                || theMomentOfArrivalInFreedomNotWithAllCrowns
                                   || theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ) ;
@@ -90,7 +83,6 @@ public:
         {
                 theMomentOfGameOver = false ;
                 theMomentOfEatenFish = false ;
-                theMomentOfSavingGame = false ;
                 theMomentOfCrownWasTaken = false ;
                 theMomentOfArrivalInFreedomNotWithAllCrowns = false ;
                 theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
@@ -102,7 +94,6 @@ public:
 
                 if ( theMomentOfGameOver ) whichMoment += " game over" ;
                 if ( theMomentOfEatenFish ) whichMoment += " ate fish" ;
-                if ( theMomentOfSavingGame ) whichMoment += " saving" ;
                 if ( theMomentOfCrownWasTaken ) whichMoment += " taken crown" ;
                 if ( theMomentOfArrivalInFreedomNotWithAllCrowns ) whichMoment += " in Freedom without all crowns" ;
                 if ( theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ) whichMoment += " Head and Heels in Freedom with all crowns" ;

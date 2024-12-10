@@ -23,6 +23,7 @@
 namespace gui
 {
 
+/* abstract */
 class Action
 {
 

@@ -14,7 +14,7 @@ Label::Label( const std::string & theText )
         : Widget( )
         , text( theText )
         , howManyLetters( utf8StringLength( theText ) )
-        , font( new Font( "white" ) )
+        , font( )
         , cyclicallyColoredLetters( false )
         , spacing( 0 )
         , myAction( nilPointer )
@@ -25,17 +25,14 @@ Label::Label( const std::string & theText, Font * theFont, bool multicolor )
         : Widget( )
         , text( theText )
         , howManyLetters( utf8StringLength( theText ) )
-        , font( theFont != nilPointer ? theFont : new Font( "white" ) )
+        , font( theFont != nilPointer ? *theFont : Font() )
         , cyclicallyColoredLetters( multicolor )
         , spacing( 0 )
         , myAction( nilPointer )
 {
 }
 
-Label::~Label( )
-{
-        delete font ;
-}
+Label::~Label( ) {}
 
 void Label::draw ()
 {

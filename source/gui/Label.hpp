@@ -56,8 +56,8 @@ public:
 
         unsigned int getTextLength () const {  return this->howManyLetters ;  }
 
-        const Font & getFont () const {  return * this->font ;  }
-        Font & getFontToChange () {  return * this->font ;  }
+        const Font & getFont () const {  return this->font ;  }
+        Font & getFontToChange () {  return this->font ;  }
 
         virtual bool areLettersCyclicallyColored () const {  return this->cyclicallyColoredLetters ;  }
 
@@ -97,7 +97,7 @@ private:
 
         unsigned int howManyLetters ;
 
-        Font * font ;
+        Font font ;
 
         // if true the letters are colored in a cycle
         bool cyclicallyColoredLetters ;

@@ -5,7 +5,7 @@
 #include "GuiManager.hpp"
 #include "LanguageStrings.hpp"
 #include "GamePreferences.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "PictureWidget.hpp"
 #include "TextField.hpp"
 #include "CreateGameOverSlide.hpp"
@@ -15,7 +15,7 @@
 
 void gui::ShowCongratulations::act ()
 {
-        Slide & theFinSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & theFinSlide = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         if ( theFinSlide.isNewAndEmpty() )
                 theFinSlide.setEscapeAction( new CreateGameOverSlide( rooms, planets ) );

@@ -3,10 +3,10 @@
 
 #include "GuiManager.hpp"
 #include "Font.hpp"
-#include "Slide.hpp"
 #include "Label.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "ChooseLanguage.hpp"
-#include "CreateMainMenu.hpp"
+#include "PresentTheMainMenu.hpp"
 #include "GamePreferences.hpp"
 
 #include "ospaths.hpp"
@@ -34,11 +34,11 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::act ()
 {
-        Slide & languagesSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & languagesSlide = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         if ( ! languagesSlide.isNewAndEmpty() ) languagesSlide.removeAllWidgets() ;
 
-        languagesSlide.setEscapeAction( new CreateMainMenu() );
+        languagesSlide.setEscapeAction( new PresentTheMainMenu() );
 
         const unsigned int screenWidth = GamePreferences::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;

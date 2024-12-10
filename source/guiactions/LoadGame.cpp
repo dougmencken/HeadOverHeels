@@ -6,7 +6,7 @@
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
 #include "ShowSlideWithPlanets.hpp"
-#include "CreateMainMenu.hpp"
+#include "PresentTheMainMenu.hpp"
 
 
 void gui::LoadGame::act ()
@@ -20,7 +20,7 @@ void gui::LoadGame::act ()
                 SoundManager::getInstance().stopEverySound ();
                 SoundManager::getInstance().play( "menus", "mistake", /* loop */ false );
 
-                ( new CreateMainMenu() )->doIt () ;
+                ( new PresentTheMainMenu() )->doIt () ;
                 return ;
         }
 

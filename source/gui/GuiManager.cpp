@@ -5,11 +5,12 @@
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 #include "Color.hpp"
-#include "Menu.hpp"
-#include "PictureWidget.hpp"
 #include "Label.hpp"
+#include "Menu.hpp"
+#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 #include "CreateLanguageMenu.hpp"
-#include "CreateMainMenu.hpp"
+#include "PresentTheMainMenu.hpp"
 
 #include "MayNotBePossible.hpp"
 
@@ -76,7 +77,7 @@ void GuiManager::firstMenu ()
 {
         // if the language isn’t set, show the menu of languages, or the main menu otherwise
         Action * firstMenu = this->chosenLanguage.empty() ? static_cast< Action * >( new CreateLanguageMenu() )
-                                                          : static_cast< Action * >( new CreateMainMenu() ) ;
+                                                          : static_cast< Action * >( new PresentTheMainMenu() ) ;
         if ( firstMenu != nilPointer )
                 firstMenu->doIt ();
         else
@@ -109,29 +110,37 @@ void GuiManager::loop ()
         }
 }
 
-void GuiManager::changeSlide( const std::string & newAction, bool dive )
+void GuiManager::changeSlide( Slide * newSlide, bool dive )
 {
-        std::map< std::string, Slide * >::const_iterator inewslide = this->slides.find( newAction );
-        if ( inewslide != this->slides.end () && inewslide->second != nilPointer ) {
-                const Slide & newSlide = * inewslide->second ;
-                Slide * oldSlide = getActiveSlide () ;
+        if ( newSlide == nilPointer ) return ;
 
-                // show transition effect between slides
-                if ( oldSlide != nilPointer ) {
-                        if ( ! oldSlide->isTransitionFromThisSlideOff() && ! newSlide.isTransitionToThisSlideOff() )
-                                Slide::barWipeHorizontally( * oldSlide, newSlide, dive );
-                } else
-                        // this is the first slide ever shown
-                        Slide::randomPixelFadeIn( Color::blackColor(), newSlide );
+        // redraw the slide
+        newSlide->draw () ;
 
-                setActiveSlide( inewslide->second );
+        Slide * oldSlide = getActiveSlide () ;
 
-                allegro::emptyKeyboardBuffer() ;
-                redraw() ;
-        }
+        // show transition effect between slides
+        if ( oldSlide != nilPointer ) {
+                if ( ! oldSlide->isTransitionFromThisSlideOff() && ! newSlide->isTransitionToThisSlideOff() )
+                        Slide::barWipeHorizontally( *oldSlide, *newSlide, dive );
+        } else
+                // this is the first slide ever shown
+                Slide::randomPixelFadeIn( Color::blackColor(), *newSlide );
+
+        setActiveSlide( newSlide );
+
+        allegro::emptyKeyboardBuffer() ;
+        redraw() ;
+}
+
+void GuiManager::changeSlide( const std::string & forAction, bool dive )
+{
+        std::map< std::string, Slide * >::const_iterator inewslide = this->slides.find( forAction );
+        if ( inewslide != this->slides.end () && inewslide->second != nilPointer )
+                changeSlide( inewslide->second, dive );
         else {
-                std::cerr << "there’s no slide for action " << newAction << ", please create it before use" << std::endl ;
-                throw MayNotBePossible( "the slide for action " + newAction + " is absent" ) ;
+                std::cerr << "there’s no slide for action " << forAction << ", please create it before use" << std::endl ;
+                throw MayNotBePossible( "the slide for action " + forAction + " is absent" ) ;
         }
 }
 
@@ -144,6 +153,17 @@ void GuiManager::setActiveSlide ( Slide * newSlide )
                         return ;
                 }
         }
+
+        if ( newSlide != nilPointer ) {
+                std::cout << "( activating a slide that is not in the map of all slides )" << std::endl ;
+                this->activeSlide = newSlide ;
+                IF_DEBUG( throw MayNotBePossible( "activating a slide that is not in the map of all slides" ) )
+        }
+}
+
+void GuiManager::setSlideForAction( Slide * theSlide, const std::string & nameOfAction )
+{
+        this->slides[ nameOfAction ] = theSlide ;
 }
 
 Slide & GuiManager::findOrCreateSlideForAction ( const std::string & nameOfAction )
@@ -151,13 +171,29 @@ Slide & GuiManager::findOrCreateSlideForAction ( const std::string & nameOfActio
         if ( this->slides.find( nameOfAction ) == this->slides.end () ) {
                 std::cout << "making a new slide for action " << nameOfAction << std::endl ;
 
-                this->slides[ nameOfAction ] = new Slide() ;
-
-                if ( this->slides[ nameOfAction ] == nilPointer )
+                Slide * newSlide = new Slide() ;
+                if ( newSlide == nilPointer )
                         throw MayNotBePossible( "can't make a slide for action " + nameOfAction ) ;
+
+                this->slides[ nameOfAction ] = newSlide ;
         }
 
-        return * this->slides[ nameOfAction ];
+        return * this->slides[ nameOfAction ] ;
+}
+
+SlideWithHeadAndHeels & GuiManager::findOrCreateSlideWithHeadAndHeelsForAction ( const std::string & nameOfAction )
+{
+        if ( this->slides.find( nameOfAction ) == this->slides.end () ) {
+                std::cout << "making a new slide for action " << nameOfAction << std::endl ;
+
+                SlideWithHeadAndHeels * newSlide = new SlideWithHeadAndHeels() ;
+                if ( newSlide == nilPointer )
+                        throw MayNotBePossible( "can't make a slide for action " + nameOfAction ) ;
+
+                this->slides[ nameOfAction ] = newSlide ;
+        }
+
+        return dynamic_cast< SlideWithHeadAndHeels & >( * this->slides[ nameOfAction ] );
 }
 
 void GuiManager::freeSlides ()
@@ -177,12 +213,10 @@ void GuiManager::freeSlides ()
 
 void GuiManager::refreshSlides ()
 {
-        for ( std::map< std::string, Slide * >::iterator it = this->slides.begin (); it != this->slides.end (); ++ it ) {
-                if ( it->second != nilPointer )
-                        it->second->refreshPicturesOfHeadAndHeels () ;
-        }
-
         Slide::refreshBackground () ;
+
+        for ( std::map< std::string, Slide * >::iterator it = this->slides.begin (); it != this->slides.end (); ++ it )
+                if ( it->second != nilPointer ) it->second->refresh() ;
 }
 
 void GuiManager::redraw() const

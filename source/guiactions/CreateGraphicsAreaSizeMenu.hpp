@@ -24,6 +24,9 @@
 namespace gui
 {
 
+class SlideWithHeadAndHeels ;
+
+
 class CreateGraphicsAreaSizeMenu : public ActionWithHandlingKeys
 {
 
@@ -49,7 +52,7 @@ protected:
 
 private:
 
-        void fillSlide ( Slide & slideToFill ) ;
+        void fillSlide ( SlideWithHeadAndHeels & slideToFill ) ;
 
         void pickCustomSize () ;
 

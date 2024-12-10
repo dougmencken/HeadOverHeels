@@ -75,15 +75,13 @@ public:
         /**
          * Eat fish, that is, begin the process to save the game
          */
-        void eatFish ( const AvatarItem & character, Room * room ) ;
+        void eatFish ( const AvatarItem & character, const std::string & inRoom ) ;
 
-        void loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom );
+        void saveTheGame () ;
+
+        void loseLifeAndContinue( const std::string & nameOfCharacter, const std::string & inRoom );
 
         GameInfo & getGameInfo() {  return theInfo ;  }
-
-        const TheKeyMoments & getKeyMoments () const {  return this->keyMoments ;  }
-
-        void resetKeyMoments () {  this->keyMoments.resetAll() ;  }
 
         const std::string & getHeadRoom () const {  return headRoom ;  }
 
@@ -163,6 +161,10 @@ private:
 
         void refreshSceneryBackgrounds () ;
 
+        const TheKeyMoments & getKeyMoments () const {  return this->keyMoments ;  }
+
+        void resetKeyMoments () {  this->keyMoments.resetAll() ;  }
+
 public:
 
         bool areLivesInexhaustible () const {  return vidasInfinitas ;  }
@@ -213,7 +215,7 @@ private:
 
         GameInfo theInfo ;
 
-        Room * roomWhereLifeWasLost ;
+        std::string roomWhereLifeWasLost ;
 
         std::string headRoom ;
 

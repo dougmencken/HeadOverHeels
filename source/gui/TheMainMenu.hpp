@@ -8,41 +8,35 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef CreateMainMenu_hpp_
-#define CreateMainMenu_hpp_
+#ifndef TheMainMenu_hpp_
+#define TheMainMenu_hpp_
 
-#include "Action.hpp"
 #include "Menu.hpp"
-
 
 namespace gui
 {
 
-/**
- * Show the main menu of the game
- */
+class Label ;
 
-class CreateMainMenu : public Action
+
+class TheMainMenu : public Menu
 {
 
-public:
+public :
 
-        CreateMainMenu( )
-                : Action()
-                , mainMenu( )
-        {
-                mainMenu.setVerticalOffset( 12 );
-        }
+        TheMainMenu( ) ;
 
-protected:
+        virtual ~TheMainMenu( ) {}
 
-        virtual void act () ;
+private :
 
-private:
+        Label *const newGame ;
+        Label *const loadGame ;
+        Label *const optionsMenu ;
+        Label *const showCredits ;
+        Label *const quitGame ;
 
-        Menu mainMenu ;
-
-};
+} ;
 
 }
 

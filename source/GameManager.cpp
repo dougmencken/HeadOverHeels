@@ -20,7 +20,7 @@
 #include "PoolOfPictures.hpp"
 
 #include "CreateGameOverSlide.hpp"
-#include "CreateListOfSavedGames.hpp"
+#include "PresentTheListOfSavedGames.hpp"
 #include "ShowCongratulations.hpp"
 #include "ShowSlideWithPlanets.hpp"
 
@@ -40,7 +40,7 @@ bool GameManager::threadIsRunning = false ;
 
 GameManager::GameManager( )
         : theInfo( )
-        , roomWhereLifeWasLost( nilPointer )
+        , roomWhereLifeWasLost( "" )
         , headRoom( "blacktooth1head.xml" )
         , heelsRoom( "blacktooth23heels.xml" )
         , numberOfCapture( 0 )
@@ -155,20 +155,20 @@ void GameManager::update ()
                         {
                                 GameMap & map = GameMap::getInstance() ;
 
-                                if ( this->roomWhereLifeWasLost != nilPointer )
+                                if ( ! this->roomWhereLifeWasLost.empty() )
                                 {
-                                        if ( map.getActiveRoom() == this->roomWhereLifeWasLost ) {
-                                                const std::string & character = this->roomWhereLifeWasLost->getMediator()->getNameOfActiveCharacter ();
+                                        if ( map.getActiveRoom()->getNameOfRoomDescriptionFile() == this->roomWhereLifeWasLost ) {
+                                                const std::string & character = map.getActiveRoom()->getMediator()->getNameOfActiveCharacter ();
                                                 if ( getGameInfo().getLivesByName( character ) > 0 )
                                                         map.rebuildRoom() ;
-                                                else if ( ! this->roomWhereLifeWasLost->continueWithAliveCharacter () )
+                                                else if ( ! map.getActiveRoom()->continueWithAliveCharacter () )
                                                         map.noLivesSwap() ;
                                         }
 
-                                        this->roomWhereLifeWasLost = nilPointer ;
+                                        this->roomWhereLifeWasLost = "" ;
                                 }
 
-                                if ( map.getActiveRoom() != nilPointer )
+                                if ( map.getActiveRoom() != nilPointer && ! isomot.isPaused() )
                                 {
                                         // update the isometric view
                                         Picture* view = isomot.updateMe ();
@@ -204,12 +204,6 @@ void GameManager::keyMoment ()
                 gui::ShowSlideWithPlanets * planetsAction = new gui::ShowSlideWithPlanets( true );
                 planetsAction->doIt ();
         }
-        else if ( getKeyMoments().isSavingGame () )
-        {
-                // show the save game screen
-                gui::CreateListOfSavedGames * listOfGamesAction = new gui::CreateListOfSavedGames( false );
-                listOfGamesAction->doIt ();
-        }
         else if ( getKeyMoments().isGameOver () || getKeyMoments().arrivedInFreedomNotWithAllCrowns () )
         {
                 gui::CreateGameOverSlide * gameOverScoreAction =
@@ -233,14 +227,13 @@ void GameManager::pause ()
         IF_DEBUG( fprintf( stdout, "GameManager::pause () /* %s */ // isomot.isPaused() : %s\n",
                         getKeyMoments().toString().c_str (), ( isomot.isPaused() ? "true" : "false" ) ) )
 
-        /////if ( isomot.isPaused () ) return ; //////// really?
+        if ( isomot.isPaused () ) return ;
 
         // pause the isometric engine
-        /* if ( ! isomot.isPaused () ) */ isomot.pauseMe() ;
+        isomot.pauseMe() ;
 
         Picture* view = isomot.updateMe ();
         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
-        allegro::update ();
 
         allegro::emptyKeyboardBuffer();
 
@@ -295,7 +288,7 @@ void GameManager::pause ()
         }
         else if ( getKeyMoments().wasFishEaten() )
         {
-                std::cout << "the key moment “the player ate the reincarnation fish” @ GameManager::pause()" << std::endl ;
+                std::cout << "the key moment ><> the player ate the reincarnation fish <>< @ GameManager::pause()" << std::endl ;
 
                 gui::LanguageStrings & languageStrings = gui::GuiManager::getInstance().getOrMakeLanguageStrings() ;
 
@@ -313,12 +306,12 @@ void GameManager::pause ()
                 resumeText.setInterlignePercentage( 80 );
                 resumeText.fillWithLanguageText( languageStrings.getTranslatedTextByAlias( "confirm-resume" ) );
 
-                allegro::emptyKeyboardBuffer();
+                allegro::emptyKeyboardBuffer() ;
 
                 bool saveit = false ;
                 bool resume = false ;
 
-                // as long as the player doesn’t pick one of the two options, to save or not to save
+                // until the player chooses between saving or not saving
                 while ( ! saveit && ! resume )
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
@@ -335,17 +328,20 @@ void GameManager::pause ()
                                 // save the game by touching Space, or another key to don’t save
                                 if ( key == "Space" ) {
                                         saveit = true ;
-                                        keyMoments.saveGame() ;
+                                        this->saveTheGame() ;
+                                        break ;
                                 }
                                 else if ( ! inputManager.isOneOfTheUserKeys( key ) && key != "Escape" ) {
                                         resume = true ;
-                                        keyMoments.resetAll() ;
-                                        isomot.resumeMe() ;
+                                        break ;
                                 }
                         }
 
                         somn::milliSleep( 100 );
                 }
+
+                keyMoments.resetAll() ;
+                isomot.resumeMe() ;
         }
 
         allegro::Pict::setWhereToDraw( previousWhere );
@@ -364,29 +360,44 @@ void GameManager::resume ()
         this->update ();
 }
 
-void GameManager::eatFish ( const AvatarItem & character, Room* room )
+void GameManager::eatFish ( const AvatarItem & character, const std::string & room )
 {
-        std::cout << "GameManager::eatFish ("
-                        << " by character \"" << character.getOriginalKind() << "\""
-                        << " in room " << room->getNameOfRoomDescriptionFile() << " )" << std::endl ;
-
         if ( getKeyMoments().wasFishEaten() ) return ; // already ate
 
-        if ( room == nilPointer ) {
-                std::cout << "><((((o> ate fish without room <o))))><" << std::endl ;
-                return ;
-        }
+        Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
+        if ( activeRoom == nilPointer || activeRoom->getMediator() == nilPointer ) return ;
+        if ( activeRoom->getNameOfRoomDescriptionFile() != room ) return ; // save only in the active room
 
-        keyMoments.fishEaten () /* <>< */ ;
-        this->pause () ;
+        const AvatarItem & activeCharacter = * activeRoom->getMediator()->getActiveCharacter() ;
+        if ( activeCharacter.getUniqueName() != character.getUniqueName() ) return ; // only the active character can save
 
-        DescribedItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
+        std::cout << "GameManager::eatFish ~"
+                        << " character \"" << character.getOriginalKind() << "\""
+                        << " ate <o))))>< the reincarnation fish ><((((o>"
+                        << " in room " << room << std::endl ;
+
+        this->keyMoments.fishEaten () /* <>< */ ;
+}
+
+void GameManager::saveTheGame ()
+{
+        Room * room = GameMap::getInstance().getActiveRoom() ;
+
+        if ( room == nilPointer || room->getMediator() == nilPointer
+                        || room->getMediator()->getActiveCharacter() == nilPointer )
+                throw MayNotBePossible( "saving the game without room or character" ) ;
+
+        std::cout << "saving the game" << std::endl ;
+
+        const AvatarItem & character = * room->getMediator()->getActiveCharacter() ;
 
         int x = character.getX ();
         int y = character.getY ();
         int z = character.getZ ();
 
         std::string whereLooks = character.getHeading() ;
+
+        DescribedItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
 
         if ( fish != nilPointer && fish->whichItemClass() == "free item" ) {
                 const FreeItem & freeFish = dynamic_cast< const FreeItem & >( *fish );
@@ -407,9 +418,13 @@ void GameManager::eatFish ( const AvatarItem & character, Room* room )
                 character.getOriginalKind (),
                 x, y, z, whereLooks
         );
+
+        // choose where to save
+        gui::PresentTheListOfSavedGames * listOfGamesAction = new gui::PresentTheListOfSavedGames( false );
+        listOfGamesAction->doIt ();
 }
 
-void GameManager::loseLifeAndContinue( const std::string & nameOfCharacter, Room * inRoom )
+void GameManager::loseLifeAndContinue( const std::string & nameOfCharacter, const std::string & inRoom )
 {
         if ( ! areLivesInexhaustible () )
                 getGameInfo().loseLifeByName( nameOfCharacter );

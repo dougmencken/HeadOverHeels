@@ -217,8 +217,16 @@ headoverheels_SOURCES = main.cpp \
 			gui/MenuWithValues.hpp \
 			gui/MenuWithTwoColumns.cpp \
 			gui/MenuWithTwoColumns.hpp \
+			gui/TheMainMenu.cpp \
+			gui/TheMainMenu.hpp \
+			gui/TheListOfSavedGames.cpp \
+			gui/TheListOfSavedGames.hpp \
 			gui/Slide.cpp \
 			gui/Slide.hpp \
+			gui/SlideWithHeadAndHeels.cpp \
+			gui/SlideWithHeadAndHeels.hpp \
+			gui/TheMainMenuSlide.hpp \
+			gui/TheListOfSavedGamesSlide.hpp \
 			gui/TextField.cpp \
 			gui/TextField.hpp \
 			guiactions/Action.hpp \
@@ -244,16 +252,16 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/CreateMenuOfGraphicsSets.cpp \
 			guiactions/CreateGameOverSlide.cpp \
 			guiactions/CreateGameOverSlide.hpp \
-			guiactions/CreateListOfSavedGames.cpp \
-			guiactions/CreateListOfSavedGames.hpp \
+			guiactions/PresentTheListOfSavedGames.cpp \
+			guiactions/PresentTheListOfSavedGames.hpp \
 			guiactions/CreateKeysMenu.cpp \
 			guiactions/CreateKeysMenu.hpp \
 			guiactions/RedefineKey.cpp \
 			guiactions/RedefineKey.hpp \
 			guiactions/CreateLanguageMenu.cpp \
 			guiactions/CreateLanguageMenu.hpp \
-			guiactions/CreateMainMenu.cpp \
-			guiactions/CreateMainMenu.hpp \
+			guiactions/PresentTheMainMenu.cpp \
+			guiactions/PresentTheMainMenu.hpp \
 			guiactions/CreateOptionsMenu.cpp \
 			guiactions/CreateOptionsMenu.hpp \
 			guiactions/ShowSlideWithPlanets.cpp \

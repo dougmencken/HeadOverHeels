@@ -3,18 +3,18 @@
 
 #include "GuiManager.hpp"
 #include "Label.hpp"
-#include "Slide.hpp"
+#include "SlideWithHeadAndHeels.hpp"
 
 #include "CreateKeysMenu.hpp"
 #include "CreateAudioMenu.hpp"
 #include "CreateVideoMenu.hpp"
 #include "CreateLanguageMenu.hpp"
-#include "CreateMainMenu.hpp"
+#include "PresentTheMainMenu.hpp"
 
 
 void gui::CreateOptionsMenu::act ()
 {
-        Slide & optionsSlide = GuiManager::getInstance().findOrCreateSlideForAction( getNameOfAction() );
+        SlideWithHeadAndHeels & optionsSlide = GuiManager::getInstance().findOrCreateSlideWithHeadAndHeelsForAction( getNameOfAction() );
 
         if ( optionsSlide.isNewAndEmpty() )
         {
@@ -35,7 +35,7 @@ void gui::CreateOptionsMenu::act ()
                 optionsSlide.addWidget( & optionsMenu );
                 optionsSlide.setKeyHandler( & optionsMenu );
 
-                optionsSlide.setEscapeAction( new CreateMainMenu() );
+                optionsSlide.setEscapeAction( new PresentTheMainMenu() );
         }
 
         GuiManager::getInstance().changeSlide( getNameOfAction(), true );
