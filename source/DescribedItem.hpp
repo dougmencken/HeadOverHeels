@@ -180,22 +180,20 @@ public :
 
         unsigned int firstFrameWhenHeading ( const std::string & where ) const ;
 
-        /**
-         * An item with more than one frame per orientation is animated
-         */
-        virtual bool isAnimated () const
+        virtual void animate () ;
+
+        bool isAnimated () const
         {
+                // an item with more than one frame per orientation is animated
                 return getDescriptionOfItem().howManyFramesPerOrientation() > 1 ;
         }
 
-        void animate() ;
-
-        bool isAnimationFinished() const ;
+        bool isAnimationFinished () const ;
 
         /**
          * Animate from the first to the last frame, which is by default
          */
-        virtual void doForthMotion ()
+        void doForthMotion ()
         {
                 this->backwardsMotion = false ;
                 changeFrame( firstFrame() );
@@ -204,17 +202,25 @@ public :
         /**
          * Animate from the last to the first frame, backwards
          */
-        virtual void doBackwardsMotion ()
+        void doBackwardsMotion ()
         {
                 this->backwardsMotion = true ;
                 changeFrame( firstFrame() + getDescriptionOfItem().howManyFramesPerOrientation() - 1 );
         }
 
-        virtual bool isAnimatedBackwards () const {  return this->backwardsMotion ;  }
+        bool isAnimatedBackwards () const {  return this->backwardsMotion ;  }
 
         bool atExtraFrame () const ;
 
 private :
+
+        void setupAnimation ()
+        {
+                if ( isAnimatedBackwards () )
+                        doBackwardsMotion() ;
+                else
+                        doForthMotion() ;
+        }
 
         void readGraphicsOfItem () ;
 

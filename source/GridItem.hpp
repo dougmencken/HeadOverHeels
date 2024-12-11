@@ -94,6 +94,8 @@ public:
 
         void updateImageOffset () ;
 
+        virtual unsigned int firstFrame () const {  return firstFrameWhenHeading( getOrientation() ) ;  }
+
 private:
 
         /**

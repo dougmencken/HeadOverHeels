@@ -19,10 +19,7 @@ void DescribedItem::metamorphInto( const std::string & newKind, const std::strin
 
         readGraphicsOfItem ();
 
-        if ( isAnimatedBackwards () )
-                doBackwardsMotion() ;
-        else
-                doForthMotion() ;
+        setupAnimation () ;
 }
 
 bool DescribedItem::canAdvanceTo( int dx, int dy, int dz )

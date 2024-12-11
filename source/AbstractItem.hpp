@@ -87,23 +87,7 @@ public :
 
         const autouniqueptr< Behavior > & getBehavior () const {  return behavior ;  }
 
-        virtual bool isAnimated () const = 0 ;
-
         virtual void animate () = 0 ;
-
-        /**
-         * Animate from the first to the last frame, which is by default
-         */
-        virtual void doForthMotion () = 0 ;
-
-        /**
-         * Animate from the last to the first frame, backwards
-         */
-        virtual void doBackwardsMotion () = 0 ;
-
-        virtual bool isAnimatedBackwards () const = 0 ;
-
-        virtual bool isAnimationFinished () const = 0 ;
 
         /**
          * Changes the current frame. Frames usually change when the angular orientation changes
