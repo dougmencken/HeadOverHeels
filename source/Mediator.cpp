@@ -254,6 +254,10 @@ void Mediator::wantShadowFromGridItem( const GridItem & item )
 {
         if ( room->getTransparencyOfShadows() >= 256 ) return ;
 
+#if defined( DEBUG_SHADOWS ) && DEBUG_SHADOWS
+        std::cout << "Mediator::wantShadowFromGridItem( from item \"" << item.getUniqueName() << "\" )" << std::endl ;
+#endif
+
         shadeFreeItemsBeneathItemAt( item, item.getX (), item.getY (), item.getZ () );
 
         unsigned int column = item.getColumnOfGrid ();
@@ -263,11 +267,15 @@ void Mediator::wantShadowFromGridItem( const GridItem & item )
         // shade grid items below
         if ( ! gridItems[ column ].empty() ) {
                 std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin() ;
-                while ( g != gridItems[ column ].end() && item.getUniqueName() != ( *g )->getUniqueName() + " copy" )
+                while ( g != gridItems[ column ].end() )
                 {
                         GridItem & gridItem = *( *g );
 
                         gridItem.freshProcessedImage();
+
+                        // because grid items are sorted by location, reaching that item means “there’s nothing below it”
+                        if ( gridItem.getUniqueName() == item.getUniqueName() ) break ;
+
                         gridItem.setWantShadow( true );
 
                         ++ g ;
@@ -282,14 +290,18 @@ void Mediator::wantShadowFromGridItem( const GridItem & item )
         }
 }
 
-void Mediator::wantShadowFromFreeItem( const FreeItem& item )
+void Mediator::wantShadowFromFreeItem( const FreeItem & item )
 {
         wantShadowFromFreeItemAt( item, item.getX (), item.getY (), item.getZ () );
 }
 
-void Mediator::wantShadowFromFreeItemAt( const FreeItem& item, int x, int y, int z )
+void Mediator::wantShadowFromFreeItemAt( const FreeItem & item, int x, int y, int z )
 {
         if ( room->getTransparencyOfShadows() >= 256 ) return ;
+
+#if defined( DEBUG_SHADOWS ) && DEBUG_SHADOWS
+        std::cout << "Mediator::wantShadowFromFreeItemAt( from item \"" << item.getUniqueName() << "\" at x=" << x << " y=" << y << " z=" << z << " )" << std::endl ;
+#endif
 
         shadeFreeItemsBeneathItemAt( item, x, y, z );
 
