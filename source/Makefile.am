@@ -54,8 +54,9 @@ headoverheels_SOURCES = main.cpp \
 			pointers.hpp \
 			ospaths.cpp \
 			ospaths.hpp \
-                        version.hpp \
+			version.hpp \
 			MayNotBePossible.hpp \
+			NoSuchPictureException.hpp \
 			UnicodeUtilities.hpp \
 			WrappersAllegro.cpp \
 			WrappersAllegro.hpp \

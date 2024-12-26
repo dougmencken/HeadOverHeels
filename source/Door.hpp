@@ -40,6 +40,57 @@ public:
 
         virtual ~Door( ) ;
 
+        const std::string & getWhereIsDoor () const {  return this->whereIsDoor ;  }
+
+        const FreeItemPtr & getLeftJamb () ;
+
+        const FreeItemPtr & getRightJamb () ;
+
+        const FreeItemPtr & getLintel () ;
+
+        int getCellX () const {  return this->cellX ;  }
+
+        int getCellY () const {  return this->cellY ;  }
+
+        int getZ () const {  return this->theZ ;  }
+
+        const std::string & getKind () const {  return this->kindOfDoor ;  }
+
+        bool isUnderDoor ( int x, int y, int z ) const ;
+
+        bool isUnderDoor ( const FreeItem & item ) const
+        {
+                return isUnderDoor( item.getX(), item.getY(), item.getZ() );
+        }
+
+private:
+
+        std::string kindOfDoor ;
+
+        int cellX ;
+
+        int cellY ;
+
+        int theZ ;
+
+        std::string whereIsDoor ;
+
+        int rightLimit ;
+
+        int leftLimit ;
+
+        Picture * leftJambImage ;
+
+        Picture * rightJambImage ;
+
+        Picture * lintelImage ;
+
+        FreeItemPtr leftJamb ;
+
+        FreeItemPtr rightJamb ;
+
+        FreeItemPtr lintel ;
+
         /**
          * Get the image of lintel from the image of door
          */
@@ -61,57 +112,6 @@ public:
         static Picture * cutOutRightJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                                 unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                                 const std::string& at ) ;
-
-        bool isUnderDoor ( int x, int y, int z ) const ;
-
-        bool isUnderDoor ( const FreeItem & item ) const
-        {
-                return isUnderDoor( item.getX(), item.getY(), item.getZ() );
-        }
-
-        const std::string & getWhereIsDoor () const {  return this->whereIsDoor ;  }
-
-        const FreeItemPtr & getLeftJamb () ;
-
-        const FreeItemPtr & getRightJamb () ;
-
-        const FreeItemPtr & getLintel () ;
-
-        int getCellX () const {  return cellX ;  }
-
-        int getCellY () const {  return cellY ;  }
-
-        int getZ () const {  return z ;  }
-
-        const std::string & getKind () const {  return this->kindOfDoor ;  }
-
-private:
-
-        std::string kindOfDoor ;
-
-        int cellX ;
-
-        int cellY ;
-
-        int z ;
-
-        int rightLimit ;
-
-        int leftLimit ;
-
-        std::string whereIsDoor ;
-
-        Picture * leftJambImage ;
-
-        Picture * rightJambImage ;
-
-        Picture * lintelImage ;
-
-        FreeItemPtr leftJamb ;
-
-        FreeItemPtr rightJamb ;
-
-        FreeItemPtr lintel ;
 
 } ;
 

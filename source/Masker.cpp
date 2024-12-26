@@ -11,7 +11,7 @@
 /* static */
 void Masker::maskFreeItemBehindItem( FreeItem & itemToMask, const DescribedItem & upwardItem )
 {
-        const Picture& upwardImage = upwardItem.getRawImage() ;
+        const Picture & upwardImage = upwardItem.getCurrentRawImage() ;
 
         int iniX = upwardItem.getImageOffsetX() - itemToMask.getImageOffsetX(); // initial X
         int endX = iniX + upwardImage.getWidth();                               // final X

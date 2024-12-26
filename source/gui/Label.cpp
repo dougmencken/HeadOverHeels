@@ -43,7 +43,7 @@ void Label::draw ()
 
 void Label::handleKey( const std::string & key )
 {
-        IF_DEBUG( std::cout << "label \"" << this->text << "\" handles key \"" << key << "\"" << std::endl )
+        IF_DEBUG( std::cout << "label \"" << this->text << "\" handles \"" << key << "\" key" << std::endl )
 
         if ( myAction != nilPointer && ( key == "Enter" || key == "Space" ) )
                 myAction->doIt ();

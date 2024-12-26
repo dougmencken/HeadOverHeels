@@ -5,11 +5,18 @@
 #include "Mediator.hpp"
 #include "PoolOfPictures.hpp"
 
+#include <sstream>
+
 
 void DescribedItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
 {
         const DescriptionOfItem * description = ItemDescriptions::descriptions().getDescriptionByKind( newKind );
-        if ( description == nilPointer ) return ;
+        if ( description == nilPointer ) {
+                std::cerr << "item \"" << getUniqueName() << "\" doesn’t metamorph"
+                                << " to the non-existent kind \"" << newKind
+                                << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
+                return ;
+        }
 
         this->descriptionOfItem = description ;
 
@@ -30,8 +37,9 @@ bool DescribedItem::canAdvanceTo( int dx, int dy, int dz )
         int originalZ = getZ() ;
 
         assert( getMediator() != nilPointer );
-        getMediator()->clearCollisions ();
+        Mediator & mediator = * getMediator() ;
 
+        mediator.clearCollisions ();
         bool collisionFound = false ;
 
         // the new coordinates
@@ -40,28 +48,28 @@ bool DescribedItem::canAdvanceTo( int dx, int dy, int dz )
         setZ( originalZ + dz );
 
         // look for collisions with walls
-        if ( this->getX() < getMediator()->getRoom()->getLimitAt( "north" ) ) {
-                getMediator()->addCollisionWith( "some segment of the north wall" );
+        if ( this->getX() < mediator.getRoom()->getLimitAt( "north" ) ) {
+                mediator.addCollisionWith( "some segment of the north wall" );
         }
-        else if ( this->getX() + this->getWidthX() > getMediator()->getRoom()->getLimitAt( "south" ) ) {
-                getMediator()->addCollisionWith( "some segment of the south wall" );
+        else if ( this->getX() + this->getWidthX() > mediator.getRoom()->getLimitAt( "south" ) ) {
+                mediator.addCollisionWith( "some segment of the south wall" );
         }
-        if ( this->getY() >= getMediator()->getRoom()->getLimitAt( "west" ) ) {
-                getMediator()->addCollisionWith( "some segment of the west wall" );
+        if ( this->getY() >= mediator.getRoom()->getLimitAt( "west" ) ) {
+                mediator.addCollisionWith( "some segment of the west wall" );
         }
-        else if ( this->getY() - this->getWidthY() + 1 < getMediator()->getRoom()->getLimitAt( "east" ) ) {
-                getMediator()->addCollisionWith( "some segment of the east wall" );
+        else if ( this->getY() - this->getWidthY() + 1 < mediator.getRoom()->getLimitAt( "east" ) ) {
+                mediator.addCollisionWith( "some segment of the east wall" );
         }
 
         // look for a collision with the floor
-        if ( this->getZ() < 0 && getMediator()->getRoom()->hasFloor() ) {
-                getMediator()->addCollisionWith( "some tile of floor" );
+        if ( this->getZ() < 0 && mediator.getRoom()->hasFloor() ) {
+                mediator.addCollisionWith( "some tile of floor" );
         }
 
-        collisionFound = getMediator()->isThereAnyCollision ();
+        collisionFound = mediator.isThereAnyCollision ();
         if ( ! collisionFound ) {
                 // look for collisions with other items in the room
-                collisionFound = getMediator()->collectCollisionsWith( this->getUniqueName() );
+                collisionFound = mediator.collectCollisionsWith( this->getUniqueName() );
         }
 
         // restore the original coordinates
@@ -85,18 +93,8 @@ bool DescribedItem::overlapsWith( const DescribedItem & anotherItem ) const
 void DescribedItem::freshProcessedImage()
 {
         this->processedImage->fillWithColor( Color::keyColor () );
-        allegro::bitBlit( /* from */ getRawImage().getAllegroPict(), /* to */ this->processedImage->getAllegroPict() );
-        this->processedImage->setName( "processed " + getRawImage().getName() );
-}
-
-unsigned int DescribedItem::firstFrameWhenHeading ( const std::string & where ) const
-{
-        if ( getDescriptionOfItem().howManyOrientations() > 1 ) {
-                unsigned int orientOccident = where.empty() ? 0 : Way( where ).getIntegerOfWay() ;
-                return getDescriptionOfItem().howManyFramesPerOrientation() * orientOccident ;
-        }
-
-        return AbstractItem::firstFrame() ;
+        allegro::bitBlit( /* from */ getCurrentRawImage().getAllegroPict(), /* to */ this->processedImage->getAllegroPict() );
+        this->processedImage->setName( "processed " + getCurrentRawImage().getName() );
 }
 
 void DescribedItem::animate()
@@ -129,21 +127,6 @@ void DescribedItem::animate()
         }
 }
 
-bool DescribedItem::isAnimationFinished() const
-{
-        if ( atExtraFrame() ) return true ;
-
-        if ( isAnimatedBackwards () )
-                return getCurrentFrame() == firstFrame() ;
-        else
-                return getCurrentFrame() + 1 == firstFrame() + getDescriptionOfItem().howManyFramesPerOrientation() ;
-}
-
-bool DescribedItem::atExtraFrame() const
-{
-        return getCurrentFrame() >= howManyFrames() - getDescriptionOfItem().howManyExtraFrames() ;
-}
-
 /* private */
 void DescribedItem::readGraphicsOfItem ()
 {
@@ -156,8 +139,21 @@ void DescribedItem::readGraphicsOfItem ()
                         createShadowFrames() ;
         }
 
-        if ( howManyFrames() == 0 )
-                addFrame( new Picture( getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() ) );
+        size_t howManyFrames = howManyFramesAtAll() ;
+
+        std::ostringstream readOrAbsent ;
+        readOrAbsent << "graphics for item \"" << getUniqueName() << "\" " ;
+        if ( getKind() != getOriginalKind() ) readOrAbsent << "(\"" << getKind() << "\") " ;
+        if ( howManyFrames > 0 )
+                readOrAbsent << "consisting of " << howManyFrames << " frame" << ( howManyFrames == 1 ? " " : "s " ) << "were read" ;
+        else
+                readOrAbsent << "are absent" ;
+
+        readOrAbsent << ", the current frame sequence is \"" << getCurrentFrameSequence() << "\"" ;
+        std::cout << readOrAbsent.str() << std::endl ;
+
+        if ( howManyFrames == 0 )
+                addFrameTo( "", new Picture( getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() ) );
 }
 
 #ifdef DEBUG
@@ -178,12 +174,28 @@ void DescribedItem::createFrames ()
                                         getDescriptionOfItem().getNameOfPicturesFile(),
                                                 getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() );
 
-        // decompose image into frames
+        // decompose the image into frames
         // they are
         //    frames of animation ( 1 or more )
         //    frames of animation
         //    ... ( × "orientations": 1, 2, or 4 times )
         //    extra frames ( 0 or more )
+
+        std::vector< std::string > orientations ;
+        unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+        if ( ! getCurrentFrameSequence().empty() && howManyOrientations == 1 )
+                orientations.push_back( getCurrentFrameSequence() );
+        else
+                orientations.push_back( "south" );
+
+        if ( howManyOrientations > 1 ) /* south and west */ {
+                orientations.push_back( "west" );
+
+                if ( howManyOrientations > 2 ) /* south, west, north, east */ {
+                        orientations.push_back( "north" );
+                        orientations.push_back( "east" );
+                }
+        }
 
         std::vector< Picture* > rawFrames;
 
@@ -200,32 +212,32 @@ void DescribedItem::createFrames ()
                 }
         }
 
-        unsigned int rawRow = ( rawFrames.size() - getDescriptionOfItem().howManyExtraFrames() ) / getDescriptionOfItem().howManyOrientations();
+        unsigned int rawRow = ( rawFrames.size() - getDescriptionOfItem().howManyExtraFrames() ) / howManyOrientations ;
 
-        for ( unsigned int o = 0 ; o < getDescriptionOfItem().howManyOrientations() ; o ++ ) {
+        for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
                 for ( unsigned int f = 0 ; f < getDescriptionOfItem().howManyFramesPerOrientation() ; f ++ )
                 {
                         Picture * animationFrame = new Picture( * rawFrames[ ( o * rawRow ) + getDescriptionOfItem().getFrameAt( f ) ] );
                         animationFrame->setName( getDescriptionOfItem().getKind () + " " +
-                                                        util::toStringWithOrdinalSuffix( o ) + " orientation " +
+                                                        orientations[ o ] + " orientation " +
                                                         util::toStringWithOrdinalSuffix( f ) + " frame" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         animationFrame->saveAsPNG( ospaths::homePath() );
                 # endif
 
-                        addFrame( animationFrame );
+                        addFrameTo( orientations[ o ], animationFrame );
                 }
         }
 
         for ( unsigned int ex = 0 ; ex < getDescriptionOfItem().howManyExtraFrames() ; ex ++ )
         {
-                Picture * extraFrame = new Picture( * rawFrames[ ex + ( rawRow * getDescriptionOfItem().howManyOrientations() ) ] );
+                Picture * extraFrame = new Picture( * rawFrames[ ex + ( rawRow * howManyOrientations ) ] );
                 extraFrame->setName( getDescriptionOfItem().getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra frame" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraFrame->saveAsPNG( ospaths::homePath() );
         # endif
-                addFrame( extraFrame );
+                addFrameTo( "extra", extraFrame );
         }
 
         std::for_each( rawFrames.begin (), rawFrames.end (), DeleteIt() );
@@ -245,7 +257,23 @@ void DescribedItem::createShadowFrames ()
                                         getDescriptionOfItem().getNameOfShadowsFile(),
                                                 getDescriptionOfItem().getWidthOfShadow(), getDescriptionOfItem().getHeightOfShadow() );
 
-        // decompose image into frames
+        // decompose the image of shadow into frames
+
+        std::vector< std::string > orientations ;
+        unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+        if ( ! getCurrentFrameSequence().empty() && howManyOrientations == 1 )
+                orientations.push_back( getCurrentFrameSequence() );
+        else
+                orientations.push_back( "south" );
+
+        if ( howManyOrientations > 1 ) /* south and west */ {
+                orientations.push_back( "west" );
+
+                if ( howManyOrientations > 2 ) /* south, west, north, east */ {
+                        orientations.push_back( "north" );
+                        orientations.push_back( "east" );
+                }
+        }
 
         std::vector< Picture* > rawShadows;
 
@@ -262,32 +290,32 @@ void DescribedItem::createShadowFrames ()
                 }
         }
 
-        unsigned int rawRow = ( rawShadows.size() - getDescriptionOfItem().howManyExtraFrames() ) / getDescriptionOfItem().howManyOrientations();
+        unsigned int rawRow = ( rawShadows.size() - getDescriptionOfItem().howManyExtraFrames() ) / howManyOrientations ;
 
-        for ( unsigned int o = 0 ; o < getDescriptionOfItem().howManyOrientations() ; o ++ ) {
+        for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
                 for ( unsigned int f = 0 ; f < getDescriptionOfItem().howManyFramesPerOrientation() ; f ++ )
                 {
                         Picture * shadowFrame = new Picture( * rawShadows[ ( o * rawRow ) + getDescriptionOfItem().getFrameAt( f ) ] );
                         shadowFrame->setName( getDescriptionOfItem().getKind () + " " +
-                                                util::toStringWithOrdinalSuffix( o ) + " orientation " +
+                                                orientations[ o ] + " orientation " +
                                                 util::toStringWithOrdinalSuffix( f ) + " shadow" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         shadowFrame->saveAsPNG( ospaths::homePath() );
                 # endif
 
-                        addFrameOfShadow( shadowFrame );
+                        addFrameOfShadowTo( orientations[ o ], shadowFrame );
                 }
         }
 
         for ( unsigned int ex = 0 ; ex < getDescriptionOfItem().howManyExtraFrames() ; ex ++ )
         {
-                Picture * extraShadow = new Picture( * rawShadows[ ex + ( rawRow * getDescriptionOfItem().howManyOrientations() ) ] );
+                Picture * extraShadow = new Picture( * rawShadows[ ex + ( rawRow * howManyOrientations ) ] );
                 extraShadow->setName( getDescriptionOfItem().getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra shadow" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraShadow->saveAsPNG( ospaths::homePath() );
         # endif
-                addFrameOfShadow( extraShadow );
+                addFrameOfShadowTo( "extra", extraShadow );
         }
 
         std::for_each( rawShadows.begin(), rawShadows.end(), DeleteIt () );

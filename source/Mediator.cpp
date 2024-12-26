@@ -407,12 +407,12 @@ void Mediator::castShadowOnFloor( FloorTile & floorTile )
                 ShadowCaster::castShadowOnFloor (
                         floorTile,
                         /* x */ ( tileSize << 1 ) * ( xCell - yCell )
-                                                - ( static_cast< int >( gridItem.getImageOfShadow().getWidth() ) >> 1 )
+                                                - ( static_cast< int >( gridItem.getCurrentImageOfShadow().getWidth() ) >> 1 )
                                                 + room->getX0() + 1,
                         /* y */ tileSize * ( xCell + yCell + 1 )
-                                                - ( static_cast< int >( gridItem.getImageOfShadow().getHeight() ) >> 1 )
+                                                - ( static_cast< int >( gridItem.getCurrentImageOfShadow().getHeight() ) >> 1 )
                                                 + room->getY0() - 1,
-                        /* shadow */ gridItem.getImageOfShadow(),
+                        /* shadow */ gridItem.getCurrentImageOfShadow(),
                         /* shading */ room->getTransparencyOfShadows()
                         /* transparency = 0 */
                 ) ;
@@ -447,11 +447,11 @@ void Mediator::castShadowOnFloor( FloorTile & floorTile )
                                 floorTile,
                                 /* x */ ( ( freeItem.getX() - freeItem.getY() ) << 1 ) + room->getX0()
                                                 + freeItem.getWidthX() + freeItem.getWidthY()
-                                                - ( static_cast< int >( freeItem.getImageOfShadow().getWidth() ) >> 1 ) - 1,
+                                                - ( static_cast< int >( freeItem.getCurrentImageOfShadow().getWidth() ) >> 1 ) - 1,
                                 /* y */ freeItem.getX() + freeItem.getY() + room->getY0()
                                                 + ( ( freeItem.getWidthX() - freeItem.getWidthY() + 1 ) >> 1 )
-                                                - ( static_cast< int >( freeItem.getImageOfShadow().getHeight() ) >> 1 ),
-                                /* shadow */ freeItem.getImageOfShadow(),
+                                                - ( static_cast< int >( freeItem.getCurrentImageOfShadow().getHeight() ) >> 1 ),
+                                /* shadow */ freeItem.getCurrentImageOfShadow(),
                                 /* shading */ room->getTransparencyOfShadows(),
                                 /* transparency */ freeItem.getTransparency()
                         ) ;
@@ -487,11 +487,11 @@ void Mediator::castShadowOnGridItem( GridItem & gridItem )
                                         " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                 # endif
 
-                        int  widthOfItemImage = gridItem.getRawImage().getWidth() ;
-                        int heightOfItemImage = gridItem.getRawImage().getHeight() ;
+                        int  widthOfItemImage = gridItem.getCurrentRawImage().getWidth() ;
+                        int heightOfItemImage = gridItem.getCurrentRawImage().getHeight() ;
 
-                        int  widthOfAboveShadow = aboveItem.getImageOfShadow().getWidth() ;
-                        int heightOfAboveShadow = aboveItem.getImageOfShadow().getHeight() ;
+                        int  widthOfAboveShadow = aboveItem.getCurrentImageOfShadow().getWidth() ;
+                        int heightOfAboveShadow = aboveItem.getCurrentImageOfShadow().getHeight() ;
 
                         ShadowCaster::castShadowOnItem (
                                 gridItem,
@@ -500,7 +500,7 @@ void Mediator::castShadowOnGridItem( GridItem & gridItem )
                                 /* y */ gridItem.getImageOffsetY()
                                                 + heightOfItemImage - tileSize - gridItem.getHeight()
                                                 - ( heightOfAboveShadow >> 1 ),
-                                /* shadow */ aboveItem.getImageOfShadow(),
+                                /* shadow */ aboveItem.getCurrentImageOfShadow(),
                                 /* shading */ room->getTransparencyOfShadows()
                                 /* transparency = 0 */
                         ) ;
@@ -536,8 +536,8 @@ void Mediator::castShadowOnGridItem( GridItem & gridItem )
                                                 " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
-                                int  widthOfAboveShadow = freeItem.getImageOfShadow().getWidth() ;
-                                int heightOfAboveShadow = freeItem.getImageOfShadow().getHeight() ;
+                                int  widthOfAboveShadow = freeItem.getCurrentImageOfShadow().getWidth() ;
+                                int heightOfAboveShadow = freeItem.getCurrentImageOfShadow().getHeight() ;
 
                                 ShadowCaster::castShadowOnItem (
                                         gridItem,
@@ -548,7 +548,7 @@ void Mediator::castShadowOnGridItem( GridItem & gridItem )
                                                         + ( ( freeItem.getWidthX() - freeItem.getWidthY() + 1 ) >> 1 )
                                                         - ( heightOfAboveShadow >> 1 )
                                                         - gridItem.getZ() - gridItem.getHeight(),
-                                        /* shadow */ freeItem.getImageOfShadow(),
+                                        /* shadow */ freeItem.getCurrentImageOfShadow(),
                                         /* shading */ room->getTransparencyOfShadows(),
                                         /* transparency */ freeItem.getTransparency()
                                 ) ;
@@ -595,8 +595,8 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
                                                         " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                                 # endif
 
-                                        int  widthOfAboveShadow = gridItem.getImageOfShadow().getWidth() ;
-                                        int heightOfAboveShadow = gridItem.getImageOfShadow().getHeight() ;
+                                        int  widthOfAboveShadow = gridItem.getCurrentImageOfShadow().getWidth() ;
+                                        int heightOfAboveShadow = gridItem.getCurrentImageOfShadow().getHeight() ;
 
                                         ShadowCaster::castShadowOnItem (
                                                 freeItem,
@@ -605,7 +605,7 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
                                                 /* y */ tileSize * ( xCell + yCell + 1 )
                                                                 - freeItem.getZ() - freeItem.getHeight()
                                                                 - ( heightOfAboveShadow >> 1 ) - 1,
-                                                /* shadow */ gridItem.getImageOfShadow(),
+                                                /* shadow */ gridItem.getCurrentImageOfShadow(),
                                                 /* shading */ room->getTransparencyOfShadows()
                                                 /* transparency = 0 */
                                         ) ;
@@ -642,8 +642,8 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
                                         " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
-                                int  widthOfAboveShadow = aboveItem.getImageOfShadow().getWidth() ;
-                                int heightOfAboveShadow = aboveItem.getImageOfShadow().getHeight() ;
+                                int  widthOfAboveShadow = aboveItem.getCurrentImageOfShadow().getWidth() ;
+                                int heightOfAboveShadow = aboveItem.getCurrentImageOfShadow().getHeight() ;
 
                                 ShadowCaster::castShadowOnItem (
                                         freeItem,
@@ -653,7 +653,7 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
                                         /* y */ aboveItem.getX() + aboveItem.getY() - freeItem.getZ() - freeItem.getHeight()
                                                         + ( ( aboveItem.getWidthX() - aboveItem.getWidthY()
                                                                 - heightOfAboveShadow ) >> 1 ),
-                                        /* shadow */ aboveItem.getImageOfShadow(),
+                                        /* shadow */ aboveItem.getCurrentImageOfShadow(),
                                         /* shading */ room->getTransparencyOfShadows(),
                                         /* transparency */ freeItem.getTransparency()
                                 );

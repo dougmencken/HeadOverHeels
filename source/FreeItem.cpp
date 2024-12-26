@@ -6,6 +6,8 @@
 #include "SoundManager.hpp"
 #include "Color.hpp"
 
+#include "NoSuchPictureException.hpp"
+
 #ifdef DEBUG
 #  define DEBUG_SHADOWS_AND_MASKS       0
 #endif
@@ -19,12 +21,13 @@ FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, 
         , initialCellX( farFarAway )
         , initialCellY( farFarAway )
         , initialCellZ( farFarAway )
-        , heading( where )
+        , heading( "" )
         , wantMask ( tritrue )
         , frozen ( false )
         , partOfDoor ( false )
-        , shadedNonmaskedImage( new Picture( getRawImage() ) )
+        , shadedNonmaskedImage( new Picture( getCurrentRawImage() ) )
 {
+        changeHeading( where );
         freshBothProcessedImages ();
 }
 
@@ -80,8 +83,14 @@ void FreeItem::freshProcessedImage ()
 void FreeItem::freshBothProcessedImages ()
 {
         shadedNonmaskedImage->fillWithColor( Color::keyColor () );
-        allegro::bitBlit( /* from */ getRawImage().getAllegroPict(), /* to */ shadedNonmaskedImage->getAllegroPict() );
-        shadedNonmaskedImage->setName( "shaded " + getRawImage().getName() );
+
+        try {
+                const Picture & currentRawImage = getCurrentRawImage() ;
+                allegro::bitBlit( /* from */ currentRawImage.getAllegroPict(), /* to */ this->shadedNonmaskedImage->getAllegroPict() );
+                this->shadedNonmaskedImage->setName( "shaded " + currentRawImage.getName() );
+        } catch ( NoSuchPictureException const& e ) {
+                this->shadedNonmaskedImage->setName( "empty shaded nonmasked image" );
+        }
 
 #if defined( DEBUG_SHADOWS_AND_MASKS ) && DEBUG_SHADOWS_AND_MASKS
         if ( getUniqueName().find( "bars" ) != std::string::npos ) {
@@ -213,6 +222,7 @@ void FreeItem::changeHeading( const std::string & where )
 {
         if ( this->heading != where ) {
                 this->heading = where ;
+                setCurrentFrameSequence( this->heading );
                 changeFrame( firstFrame() );
         }
 }

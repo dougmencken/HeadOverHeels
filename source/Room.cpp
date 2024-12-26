@@ -623,9 +623,6 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 return ;
         }
 
-        // update the offset of the item’s image from the room’s origin
-        gridItem->updateImageOffset() ;
-
         getMediator()->wantShadowFromGridItem( *gridItem );
         getMediator()->wantToMaskWithGridItem( *gridItem );
 
@@ -1177,11 +1174,11 @@ void Room::dontDisappearOnJump ()
                                         gridItem.setBehaviorOf( "still" );
 
                                         if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
-                                                gridItem.getRawImageToChangeIt().multiplyWithColor (
+                                                gridItem.getCurrentRawImageToChangeIt().multiplyWithColor (
                                                         ( behavior == "behavior of slow disappearance on jump into" ) ?
                                                                 Color::byName( "magenta" ) : Color::byName( "red" ) );
                                         else
-                                                gridItem.getRawImageToChangeIt().invertColors() ;
+                                                gridItem.getCurrentRawImageToChangeIt().invertColors() ;
 
                                         gridItem.freshProcessedImage();
                                         gridItem.setWantShadow( true );
@@ -1202,11 +1199,11 @@ void Room::dontDisappearOnJump ()
                                 freeItem.setBehaviorOf( "still" );
 
                                 if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
-                                        freeItem.getRawImageToChangeIt().multiplyWithColor (
+                                        freeItem.getCurrentRawImageToChangeIt().multiplyWithColor (
                                                 ( behavior == "behavior of slow disappearance on jump into" ) ?
                                                         Color::byName( "magenta" ) : Color::byName( "red" ) );
                                 else
-                                        freeItem.getRawImageToChangeIt().invertColors() ;
+                                        freeItem.getCurrentRawImageToChangeIt().invertColors() ;
 
                                 freeItem.freshBothProcessedImages();
                                 freeItem.setWantShadow( true );

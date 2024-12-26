@@ -7,7 +7,8 @@
 #include "Color.hpp"
 #include "Way.hpp"
 
-#include <util.hpp>
+#include "util.hpp"
+#include "NoSuchPictureException.hpp"
 
 #include <algorithm> // std::for_each
 
@@ -18,6 +19,7 @@ AbstractItem::AbstractItem( )
         : Mediated()
         , uniqueName( util::makeRandomString( 22 ) )
         , currentFrame( firstFrame() )
+        , backwardsMotion( false )
         , behavior( nilPointer )
         , carrier( "" )
         , transparency( 0 )
@@ -27,19 +29,20 @@ AbstractItem::AbstractItem( const AbstractItem & itemToCopy )
         : Mediated( itemToCopy )
         , uniqueName( itemToCopy.uniqueName + " copy" )
         , currentFrame( itemToCopy.currentFrame )
+        , backwardsMotion( itemToCopy.backwardsMotion )
         , behavior( nilPointer )
         , carrier( itemToCopy.carrier )
         , transparency( itemToCopy.transparency )
 {
-        for ( std::vector< PicturePtr >::const_iterator it = itemToCopy.frames.begin (); it != itemToCopy.frames.end (); ++ it )
-        {
-                this->frames.push_back( PicturePtr( new Picture( ( *it )->getAllegroPict () ) ) );
-        }
+        IF_DEBUG( std::cout << "copying item \"" << itemToCopy.uniqueName << "\"" << std::endl )
 
-        for ( std::vector< PicturePtr >::const_iterator it = itemToCopy.shadows.begin (); it != itemToCopy.shadows.end (); ++ it )
-        {
-                this->shadows.push_back( PicturePtr( new Picture( ( *it )->getAllegroPict () ) ) );
-        }
+        for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator mi = itemToCopy.frames.begin() ; mi != itemToCopy.frames.end() ; ++ mi )
+                for ( std::vector< PicturePtr >::const_iterator pi = mi->second.begin() ; pi != mi->second.end() ; ++ pi )
+                        this->frames[ mi->first ].push_back( PicturePtr( new Picture( ( * pi )->getAllegroPict () ) ) );
+
+        for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator mi = itemToCopy.shadows.begin(); mi != itemToCopy.shadows.end() ; ++ mi )
+                for ( std::vector< PicturePtr >::const_iterator pi = mi->second.begin() ; pi != mi->second.end() ; ++ pi )
+                        this->shadows[ mi->first ].push_back( PicturePtr( new Picture( ( * pi )->getAllegroPict () ) ) );
 }
 
 AbstractItem::~AbstractItem( )
@@ -52,26 +55,50 @@ bool AbstractItem::updateItem ()
         return ( this->behavior != nilPointer ) ? this->behavior->update() : true ;
 }
 
+Picture & AbstractItem::getNthFrameIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */
+{
+        std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->frames.begin() ;
+        for ( ; it != this->frames.end() ; ++ it )
+                if ( it->first == sequence && n < it->second.size() )
+                        return *( it->second[ n ] );
+
+        std::string message = "there’s no " + util::toStringWithOrdinalSuffix( n ) + " frame in \"" + sequence + "\" for \"" + getUniqueName() + "\"" ;
+        std::cerr << message << std::endl ;
+        throw NoSuchPictureException( message );
+}
+
+Picture & AbstractItem::getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */
+{
+        std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->shadows.begin() ;
+        for ( ; it != this->shadows.end() ; ++ it )
+                if ( it->first == sequence && n < it->second.size() )
+                        return *( it->second[ n ] );
+
+        std::string message = "there’s no " + util::toStringWithOrdinalSuffix( n ) + " shadow in \"" + sequence + "\" for \"" + getUniqueName() + "\"" ;
+        std::cerr << message << std::endl ;
+        throw NoSuchPictureException( message );
+}
+
 void AbstractItem::changeFrame( unsigned int newFrame )
 {
         if ( newFrame == this->currentFrame ) return ;
 
-        if ( newFrame < howManyFrames() )
+        if ( newFrame < howManyFramesInTheCurrentSequence() )
         {
                 this->currentFrame = newFrame ;
 
                 updateImage() ;
 
-                if ( ! shadows.empty() ) updateShadow ();
+                if ( hasShadow() ) updateShadow ();
         }
 }
 
 bool AbstractItem::doGraphicsOverlapAt( const AbstractItem & item, int x, int y ) const
 {
-        int thisImageWidth = this->getRawImage().getWidth() ;
-        int thisImageHeight = this->getRawImage().getHeight() ;
-        int thatImageWidth = item.getRawImage().getWidth() ;
-        int thatImageHeight = item.getRawImage().getHeight() ;
+        int thisImageWidth = this->getCurrentRawImage().getWidth() ;
+        int thisImageHeight = this->getCurrentRawImage().getHeight() ;
+        int thatImageWidth = item.getCurrentRawImage().getWidth() ;
+        int thatImageHeight = item.getCurrentRawImage().getHeight() ;
 
         return  ( this->getImageOffsetX() < x + thatImageWidth ) && ( x < this->getImageOffsetX() + thisImageWidth )
                         && ( this->getImageOffsetY() < y + thatImageHeight ) && ( y < this->getImageOffsetY() + thisImageHeight ) ;

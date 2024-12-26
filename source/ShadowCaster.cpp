@@ -23,7 +23,7 @@ void ShadowCaster::castShadowOnItem( DescribedItem & item, int x, int y, const P
 
         if ( ! isFreeItem && ! isGridItem ) return;
 
-        const Picture& rawImage = item.getRawImage() ;
+        const Picture & rawImage = item.getCurrentRawImage() ;
 
         int height = item.getHeight () ;
         int width = std::max( item.getWidthX (), item.getWidthY () );

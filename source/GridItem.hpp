@@ -31,7 +31,7 @@ class DescriptionOfItem ;
 class GridItem : public DescribedItem, public Drawable
 {
 
-public:
+public :
 
         /**
          * @param cx The X of the room grid cell where this item is
@@ -92,11 +92,20 @@ public:
 
         unsigned int getColumnOfGrid () const ;
 
-        void updateImageOffset () ;
+        /**
+         * Update the offset of the item’s image from the room’s origin
+         */
+        void updateImageOffset ()
+        {
+                updateImageOffset( /* getCurrentRawImage().getWidth() */ getDescriptionOfItem().getWidthOfFrame(),
+                                        /* getCurrentRawImage().getHeight() */ getDescriptionOfItem().getHeightOfFrame() );
+        }
 
-        virtual unsigned int firstFrame () const {  return firstFrameWhenHeading( getOrientation() ) ;  }
+protected :
 
-private:
+        void updateImageOffset ( unsigned int imageWidth, unsigned int imageHeight ) ;
+
+private :
 
         /**
          * Position ( X, Y ) of the cell in the room where this item is

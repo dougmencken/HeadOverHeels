@@ -22,7 +22,7 @@ Door::Door( const std::string & kind, int cx, int cy, int z, const std::string &
         : kindOfDoor( kind )
         , cellX( cx )
         , cellY( cy )
-        , z( z )
+        , theZ( z )
         , whereIsDoor( where )
         , leftJambImage( nilPointer )
         , rightJambImage( nilPointer )
@@ -273,9 +273,9 @@ const FreeItemPtr & Door::getLeftJamb()
                 }
 
                 leftJamb = FreeItemPtr( new FreeItem( whatIsLeftJamb, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                leftJamb->getRawImageToChangeIt().expandOrCropTo( leftJambImage->getWidth (), leftJambImage->getHeight () );
-                allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getRawImageToChangeIt ().getAllegroPict() );
-                leftJamb->getRawImageToChangeIt().setName( leftJambImage->getName() );
+                leftJamb->addFrameTo( getWhereIsDoor(), new Picture( leftJambImage->getWidth(), leftJambImage->getHeight() ) );
+                allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
+                leftJamb->getCurrentRawImageToChangeIt().setName( leftJambImage->getName() );
                 leftJamb->freshBothProcessedImages ();
                 leftJamb->setUniqueName( leftJamb->getKind () + " " + util::makeRandomString( 8 ) );
         }
@@ -335,9 +335,9 @@ const FreeItemPtr & Door::getRightJamb()
                 }
 
                 rightJamb = FreeItemPtr( new FreeItem( whatIsRightJamb, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                rightJamb->getRawImageToChangeIt().expandOrCropTo( rightJambImage->getWidth (), rightJambImage->getHeight () );
-                allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getRawImageToChangeIt ().getAllegroPict() );
-                rightJamb->getRawImageToChangeIt().setName( rightJambImage->getName() );
+                rightJamb->addFrameTo( getWhereIsDoor(), new Picture( rightJambImage->getWidth(), rightJambImage->getHeight() ) );
+                allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
+                rightJamb->getCurrentRawImageToChangeIt().setName( rightJambImage->getName() );
                 rightJamb->freshBothProcessedImages ();
                 rightJamb->setUniqueName( rightJamb->getKind () + " " + util::makeRandomString( 8 ) );
         }
@@ -393,9 +393,9 @@ const FreeItemPtr & Door::getLintel()
                 }
 
                 lintel = FreeItemPtr( new FreeItem( whatIsLintel, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                lintel->getRawImageToChangeIt().expandOrCropTo( lintelImage->getWidth (), lintelImage->getHeight () );
-                allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getRawImageToChangeIt ().getAllegroPict() );
-                lintel->getRawImageToChangeIt().setName( lintelImage->getName() );
+                lintel->addFrameTo( getWhereIsDoor(), new Picture( lintelImage->getWidth(), lintelImage->getHeight() ) );
+                allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getCurrentRawImageToChangeIt ().getAllegroPict() );
+                lintel->getCurrentRawImageToChangeIt().setName( lintelImage->getName() );
                 lintel->freshBothProcessedImages ();
                 lintel->setUniqueName( lintel->getKind () + " " + util::makeRandomString( 8 ) );
         }

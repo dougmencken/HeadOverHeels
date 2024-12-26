@@ -89,19 +89,17 @@ public :
 
         void freshBothProcessedImages () ;
 
-        virtual unsigned int firstFrame () const {  return firstFrameWhenHeading( getHeading() ) ;  }
-
         /**
          * The distance of the processed image from the room’s origin
          */
         virtual int getImageOffsetX () const
         {
-                return ( ( getX() - getY() ) << 1 ) + getWidthX() + getWidthY() - ( getRawImage().getWidth() >> 1 ) - 1 ;
+                return ( ( getX() - getY() ) << 1 ) + getWidthX() + getWidthY() - ( getCurrentRawImage().getWidth() >> 1 ) - 1 ;
         }
 
         virtual int getImageOffsetY () const
         {
-                return getX() + getY() + getWidthX() - getRawImage().getHeight() - getZ() ;
+                return getX() + getY() + getWidthX() - getCurrentRawImage().getHeight() - getZ() ;
         }
 
         /**

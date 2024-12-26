@@ -122,7 +122,7 @@ bool Volatile::update ()
                         {
                                 volatileItem.animate() ;
 
-                                if ( disappearanceTimer->getValue() > volatileItem.getDelayBetweenFrames() * volatileItem.howManyFrames() )
+                                if ( disappearanceTimer->getValue() > volatileItem.getDelayBetweenFrames() * volatileItem.howManyFramesInTheCurrentSequence() )
                                         present = false ;
                         }
                         break;

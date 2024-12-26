@@ -557,7 +557,7 @@ void PlayerControlled::takeItem ()
                                 std::cout << "taking item \"" << itemToTake->getUniqueName() << "\"" << std::endl ;
 
                                 character.placeItemInBag( itemToTake->getKind (), itemToTake->getBehavior()->getNameOfBehavior () );
-                                GameManager::getInstance().setImageOfItemInBag (PicturePtr( new Picture( itemToTake->getRawImage() ) ));
+                                GameManager::getInstance().setImageOfItemInBag (PicturePtr( new Picture( itemToTake->getCurrentRawImage() ) ));
 
                                 itemToTake->getBehavior()->setCurrentActivity( activities::Activity::Vanishing );
 

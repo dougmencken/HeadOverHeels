@@ -89,6 +89,14 @@ public :
 
         virtual void animate () = 0 ;
 
+        virtual bool isAnimationFinished () const
+        {
+                if ( isAnimatedBackwards () )
+                        return getCurrentFrame() == firstFrame() ;
+                else
+                        return getCurrentFrame() == lastFrame() ;
+        }
+
         /**
          * Changes the current frame. Frames usually change when the angular orientation changes
          * or when looping in a sequence of animation. However there’re some cases when frames
@@ -97,27 +105,72 @@ public :
          */
         void changeFrame ( unsigned int newFrame ) ;
 
-        const Picture & getRawImage () const {  return * getFrameAt( getCurrentFrame() ) ;  }
+        void addFrameTo ( const std::string & sequence, Picture *const frame )
+        {
+                this->frames[ sequence ].push_back( PicturePtr( frame ) ) ;
 
-        Picture & getRawImageToChangeIt () const {  return * getFrameAt( getCurrentFrame() ) ;  }
+                if ( getCurrentFrameSequence().empty() && ! sequence.empty() )
+                        setCurrentFrameSequence( sequence );
+        }
+
+        void addFrameOfShadowTo ( const std::string & sequence, Picture *const frame )
+        {
+                this->shadows[ sequence ].push_back( PicturePtr( frame ) ) ;
+        }
 
         bool hasShadow () const {  return ! shadows.empty() ;  }
 
-        const Picture & getImageOfShadow () const {  return * getShadowAt( getCurrentFrame() ) ;  }
-
-        size_t howManyFrames () const {  return this->frames.size () ;  }
-
-        const PicturePtr getFrameAt( unsigned int at ) const
+        size_t howManyFramesIn ( const std::string & sequence ) const
         {
-                return ( at < howManyFrames() ) ? this->frames[ at ] : PicturePtr() ;
+                for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->frames.begin() ; it != this->frames.end() ; ++ it )
+                        if ( it->first == sequence ) return it->second.size() ;
+
+                return 0 ;
         }
 
-        size_t howManyShadows () const {  return this->shadows.size () ;  }
+        size_t howManyFramesInTheCurrentSequence () const {  return howManyFramesIn( getCurrentFrameSequence() ) ;  }
 
-        const PicturePtr getShadowAt( unsigned int at ) const
+        size_t howManyFramesAtAll () const
         {
-                return ( at < howManyShadows() ) ? this->shadows[ at ] : PicturePtr() ;
+                size_t howManyFrames = 0 ;
+
+                for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->frames.begin() ; it != this->frames.end() ; ++ it )
+                        howManyFrames += it->second.size() ;
+
+                return howManyFrames ;
         }
+
+        const Picture & getCurrentRawImageIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
+
+        const Picture & getCurrentRawImage () const {  return getCurrentRawImageIn( getCurrentFrameSequence() ) ;  }
+
+        Picture & getCurrentRawImageToChangeItIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
+
+        Picture & getCurrentRawImageToChangeIt () const {  return getCurrentRawImageToChangeItIn( getCurrentFrameSequence() ) ;  }
+
+        const Picture & getCurrentImageOfShadowIn ( const std::string & sequence ) const {  return getNthShadowIn( sequence, getCurrentFrame() ) ;  }
+
+        const Picture & getCurrentImageOfShadow () const {  return getCurrentImageOfShadowIn( getCurrentFrameSequence() ) ;  }
+
+        /**
+         * Animate from the first to the last frame, which is by default
+         */
+        void doForthMotion ()
+        {
+                this->backwardsMotion = false ;
+                changeFrame( firstFrame() );
+        }
+
+        /**
+         * Animate from the last to the first frame, backwards
+         */
+        void doBackwardsMotion ()
+        {
+                this->backwardsMotion = true ;
+                changeFrame( lastFrame() );
+        }
+
+        bool isAnimatedBackwards () const {  return this->backwardsMotion ;  }
 
         /**
          * The distance of the processed image from the room’s origin
@@ -142,19 +195,29 @@ public :
 
 protected :
 
-        void addFrame ( Picture *const frame )
-        {
-                this->frames.push_back( PicturePtr( frame ) ) ;
-        }
-
-        void addFrameOfShadow ( Picture *const frame )
-        {
-                this->shadows.push_back( PicturePtr( frame ) ) ;
-        }
-
+        // in the current sequence
         virtual unsigned int firstFrame () const {  return 0 ;  }
 
+        virtual unsigned int lastFrame () const
+        {
+                unsigned int howManyFrames = howManyFramesIn( getCurrentFrameSequence() );
+                return ( howManyFrames > 0 ) ? howManyFrames - 1 : 0 ;
+        }
+
+        Picture & getNthFrameIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
+
+        Picture & getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
+
+        const std::string & getCurrentFrameSequence () const {  return this->currentSequence ;  }
+
+        void setCurrentFrameSequence ( const std::string & sequence ) {  this->currentSequence = sequence ; setupAnimation() ;  }
+
         unsigned int getCurrentFrame () const {  return this->currentFrame ;  }
+
+        void setupAnimation ()
+        {
+                changeFrame( isAnimatedBackwards() ? lastFrame() : firstFrame() );
+        }
 
         void clearFrames ()
         {
@@ -170,14 +233,20 @@ private :
 
         std::string uniqueName ;
 
-        // current frame for item
+        // the current sequence of frames
+        std::string currentSequence ;
+
+        // the current frame in the sequence
         unsigned int currentFrame ;
 
-        // the pictures of item
-        std::vector< PicturePtr > frames ;
+        // true to reverse the animation sequence
+        bool backwardsMotion ;
 
-        // the pictures of item’s shadow
-        std::vector< PicturePtr > shadows ;
+        // the sequences of pictures of item
+        std::map< std::string, std::vector< PicturePtr > > frames ;
+
+        // the sequences of pictures of item’s shadow
+        std::map< std::string, std::vector< PicturePtr > > shadows ;
 
         // the behaviour of item
         autouniqueptr< Behavior > behavior ;

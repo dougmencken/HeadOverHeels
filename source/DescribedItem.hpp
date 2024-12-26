@@ -45,9 +45,6 @@ private :
          */
         autouniqueptr< Picture > processedImage ;
 
-        // true to reverse the animation sequence
-        bool backwardsMotion ;
-
         Timer animationTimer ;
 
 protected :
@@ -59,7 +56,6 @@ protected :
                 , height( description.getHeight() )
                 , ignoreCollisions( false )
                 , processedImage( new Picture( description.getWidthOfFrame(), description.getHeightOfFrame() ) )
-                , backwardsMotion( false )
         {
                 setUniqueName( this->originalKind + "." + util::makeRandomString( 12 ) );
 
@@ -75,7 +71,6 @@ protected :
                 , height( replicateMe.height )
                 , ignoreCollisions( replicateMe.ignoreCollisions )
                 , processedImage( new Picture( * replicateMe.processedImage ) )
-                , backwardsMotion( replicateMe.backwardsMotion )
         {
                 this->animationTimer.go() ;
         }
@@ -178,49 +173,20 @@ public :
 
         virtual void freshProcessedImage () ;
 
-        unsigned int firstFrameWhenHeading ( const std::string & where ) const ;
-
         virtual void animate () ;
 
-        bool isAnimated () const
+        virtual bool isAnimated () const
         {
                 // an item with more than one frame per orientation is animated
                 return getDescriptionOfItem().howManyFramesPerOrientation() > 1 ;
         }
 
-        bool isAnimationFinished () const ;
-
-        /**
-         * Animate from the first to the last frame, which is by default
-         */
-        void doForthMotion ()
+        virtual bool isAnimationFinished () const
         {
-                this->backwardsMotion = false ;
-                changeFrame( firstFrame() );
+                return isAtExtraFrame() ? true : AbstractItem::isAnimationFinished() ;
         }
-
-        /**
-         * Animate from the last to the first frame, backwards
-         */
-        void doBackwardsMotion ()
-        {
-                this->backwardsMotion = true ;
-                changeFrame( firstFrame() + getDescriptionOfItem().howManyFramesPerOrientation() - 1 );
-        }
-
-        bool isAnimatedBackwards () const {  return this->backwardsMotion ;  }
-
-        bool atExtraFrame () const ;
 
 private :
-
-        void setupAnimation ()
-        {
-                if ( isAnimatedBackwards () )
-                        doBackwardsMotion() ;
-                else
-                        doForthMotion() ;
-        }
 
         void readGraphicsOfItem () ;
 
@@ -233,6 +199,8 @@ private :
          * Extract frames for the shadow of this item from the picture file
          */
         void createShadowFrames () ;
+
+        bool isAtExtraFrame () const {  return getCurrentFrameSequence() == "extra" ;  }
 
 } ;
 
