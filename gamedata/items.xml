@@ -880,7 +880,7 @@
         <height>48</height>
     </picture>
     <betweenFrames>90</betweenFrames>
-    <shadow file="head-shadows.png">
+    <shadow file="head-shadow.png">
         <width>48</width>
         <height>25</height>
     </shadow>
@@ -904,7 +904,7 @@
         <height>48</height>
     </picture>
     <betweenFrames>90</betweenFrames>
-    <shadow file="heels-shadows.png">
+    <shadow file="heels-shadow.png">
         <width>48</width>
         <height>25</height>
     </shadow>
@@ -927,7 +927,7 @@
         <height>80</height>
     </picture>
     <betweenFrames>100</betweenFrames>
-    <shadow file="headoverheels-shadows.png">
+    <shadow file="headoverheels-shadow.png">
         <width>48</width>
         <height>25</height>
     </shadow>

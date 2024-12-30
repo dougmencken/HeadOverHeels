@@ -434,8 +434,8 @@ void Pict::unlock() const
         al_lock_bitmap( image, al_get_bitmap_format( image ), ALLEGRO_LOCK_READONLY );
         al_lock_bitmap( pict->it, al_get_bitmap_format( pict->it ), ALLEGRO_LOCK_WRITEONLY );
 
-        for ( unsigned int y = 0; y < imageHeight; y++ ) {
-                for ( unsigned int x = 0; x < imageWidth; x++ )
+        for ( unsigned int y = 0; y < imageHeight; ++ y ) {
+                for ( unsigned int x = 0; x < imageWidth; ++ x )
                 {
                         AllegroColor pixel = al_get_pixel( image, x, y );
 
@@ -443,13 +443,9 @@ void Pict::unlock() const
                         al_unmap_rgba( pixel, &red, &green, &blue, &alpha );
 
                         if ( red == 255 && green == 0 && blue == 255 )
-                        {
                                 al_put_pixel( x, y, transparent );
-                        }
-                        else /* if ( ! ( red == 255 && green == 0 && blue == 255 ) ) */
-                        {
+                        else
                                 al_put_pixel( x, y, al_map_rgba( red, green, blue, alpha ) );
-                        }
                 }
         }
 
@@ -469,8 +465,7 @@ void Pict::unlock() const
 
         Pict* pict = newPict( imageWidth, imageHeight );
 
-        for ( unsigned int y = 0; y < imageHeight; y++ )
-        {
+        for ( unsigned int y = 0; y < imageHeight; y++ ) {
                 for ( unsigned int x = 0; x < imageWidth; x++ )
                 {
                         AllegroColor pixel = getpixel( image, x, y );

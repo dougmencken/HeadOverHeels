@@ -98,10 +98,9 @@ public :
         }
 
         /**
-         * Changes the current frame. Frames usually change when the angular orientation changes
-         * or when looping in a sequence of animation. However there’re some cases when frames
-         * are changed manually. As example, in the behavior of a spring stool one frame is for
-         * resting and the other is for being fold
+         * Changes the current frame. Frames usually change when looping in the sequence of animation.
+         * However there’re some cases when frames are changed manually. As example, in the behavior
+         * of a spring stool the one frame is for resting and the other is for being fold
          */
         void changeFrame ( unsigned int newFrame ) ;
 
@@ -200,7 +199,7 @@ protected :
 
         virtual unsigned int lastFrame () const
         {
-                unsigned int howManyFrames = howManyFramesIn( getCurrentFrameSequence() );
+                unsigned int howManyFrames = howManyFramesInTheCurrentSequence() ;
                 return ( howManyFrames > 0 ) ? howManyFrames - 1 : 0 ;
         }
 
@@ -210,6 +209,9 @@ protected :
 
         const std::string & getCurrentFrameSequence () const {  return this->currentSequence ;  }
 
+        /**
+         * The sequence of frames usually changes when the heading, aka angular orientation, changes
+         */
         void setCurrentFrameSequence ( const std::string & sequence ) {  this->currentSequence = sequence ; setupAnimation() ;  }
 
         unsigned int getCurrentFrame () const {  return this->currentFrame ;  }
