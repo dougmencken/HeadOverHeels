@@ -4,6 +4,7 @@
 #include "ItemDescriptions.hpp"
 #include "Mediator.hpp"
 #include "PoolOfPictures.hpp"
+#include "MayNotBePossible.hpp"
 
 #include <sstream>
 
@@ -163,16 +164,16 @@ void DescribedItem::readGraphicsOfItem ()
 /* private */
 void DescribedItem::createFrames ()
 {
-        if ( getDescriptionOfItem().getWidthOfFrame() == 0 || getDescriptionOfItem().getHeightOfFrame() == 0 ) {
-                std::cerr << "zero width or height of frame at AbstractItem::createFrames" << std::endl ;
-                return ;
-        }
+        const DescriptionOfItem & description = getDescriptionOfItem() ;
 
-        assert( ! getDescriptionOfItem().getNameOfPicturesFile().empty() );
+        if ( description.getWidthOfFrame() == 0 || description.getHeightOfFrame() == 0 )
+                throw MayNotBePossible( "zero width or height of frame for item \"" + getKind() + "\"" );
+        if ( description.getNameOfPicturesFile().empty() )
+                throw MayNotBePossible( "empty file name with graphics for item \"" + getKind() + "\"" );
 
         PicturePtr picture = PoolOfPictures::getPoolOfPictures().getOrLoadAndGetOrMakeAndGet(
-                                        getDescriptionOfItem().getNameOfPicturesFile(),
-                                                getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() );
+                                        description.getNameOfPicturesFile(),
+                                                description.getWidthOfFrame(), description.getHeightOfFrame() );
 
         // decompose the image into frames
         // they are
@@ -182,7 +183,7 @@ void DescribedItem::createFrames ()
         //    extra frames ( 0 or more )
 
         std::vector< std::string > orientations ;
-        unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+        unsigned int howManyOrientations = description.howManyOrientations() ;
         if ( ! getCurrentFrameSequence().empty() && howManyOrientations == 1 )
                 orientations.push_back( getCurrentFrameSequence() );
         else
@@ -199,12 +200,12 @@ void DescribedItem::createFrames ()
 
         std::vector< Picture* > rawFrames;
 
-        for ( unsigned int y = 0; y < picture->getHeight(); y += getDescriptionOfItem().getHeightOfFrame() ) {
-                for ( unsigned int x = 0; x < picture->getWidth(); x += getDescriptionOfItem().getWidthOfFrame() )
+        for ( unsigned int y = 0; y < picture->getHeight(); y += description.getHeightOfFrame() ) {
+                for ( unsigned int x = 0; x < picture->getWidth(); x += description.getWidthOfFrame() )
                 {
-                        Picture* rawFrame = new Picture( getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() );
+                        Picture* rawFrame = new Picture( description.getWidthOfFrame(), description.getHeightOfFrame() );
                         allegro::bitBlit( picture->getAllegroPict(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
-                        rawFrame->setName( getDescriptionOfItem().getKind () + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
+                        rawFrame->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         rawFrame->saveAsPNG( ospaths::homePath() );
                 # endif
@@ -212,13 +213,13 @@ void DescribedItem::createFrames ()
                 }
         }
 
-        unsigned int rawRow = ( rawFrames.size() - getDescriptionOfItem().howManyExtraFrames() ) / howManyOrientations ;
+        unsigned int rawRow = ( rawFrames.size() - description.howManyExtraFrames() ) / howManyOrientations ;
 
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
-                for ( unsigned int f = 0 ; f < getDescriptionOfItem().howManyFramesPerOrientation() ; f ++ )
+                for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
-                        Picture * animationFrame = new Picture( * rawFrames[ ( o * rawRow ) + getDescriptionOfItem().getFrameAt( f ) ] );
-                        animationFrame->setName( getDescriptionOfItem().getKind () + " " +
+                        Picture * animationFrame = new Picture( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        animationFrame->setName( description.getKind () + " " +
                                                         orientations[ o ] + " orientation " +
                                                         util::toStringWithOrdinalSuffix( f ) + " frame" );
 
@@ -230,10 +231,10 @@ void DescribedItem::createFrames ()
                 }
         }
 
-        for ( unsigned int ex = 0 ; ex < getDescriptionOfItem().howManyExtraFrames() ; ex ++ )
+        for ( unsigned int ex = 0 ; ex < description.howManyExtraFrames() ; ex ++ )
         {
                 Picture * extraFrame = new Picture( * rawFrames[ ex + ( rawRow * howManyOrientations ) ] );
-                extraFrame->setName( getDescriptionOfItem().getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra frame" );
+                extraFrame->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra frame" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraFrame->saveAsPNG( ospaths::homePath() );
         # endif
@@ -246,21 +247,21 @@ void DescribedItem::createFrames ()
 /* private */
 void DescribedItem::createShadowFrames ()
 {
-        if ( getDescriptionOfItem().getWidthOfShadow() == 0 || getDescriptionOfItem().getHeightOfShadow() == 0 ) {
-                std::cerr << "zero width or height of shadow at AbstractItem::createShadowFrames" << std::endl ;
-                return ;
-        }
+        const DescriptionOfItem & description = getDescriptionOfItem() ;
 
-        assert( ! getDescriptionOfItem().getNameOfShadowsFile().empty() );
+        if ( description.getWidthOfShadow() == 0 || description.getHeightOfShadow() == 0 )
+                throw MayNotBePossible( "zero width or height of shadow for item \"" + getKind() + "\"" );
+        if ( description.getNameOfShadowsFile().empty() )
+                throw MayNotBePossible( "empty file name with graphics of shadow for item \"" + getKind() + "\"" );
 
         PicturePtr picture = PoolOfPictures::getPoolOfPictures().getOrLoadAndGetOrMakeAndGet(
-                                        getDescriptionOfItem().getNameOfShadowsFile(),
-                                                getDescriptionOfItem().getWidthOfShadow(), getDescriptionOfItem().getHeightOfShadow() );
+                                        description.getNameOfShadowsFile(),
+                                                description.getWidthOfShadow(), description.getHeightOfShadow() );
 
         // decompose the image of shadow into frames
 
         std::vector< std::string > orientations ;
-        unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+        unsigned int howManyOrientations = description.howManyOrientations() ;
         if ( ! getCurrentFrameSequence().empty() && howManyOrientations == 1 )
                 orientations.push_back( getCurrentFrameSequence() );
         else
@@ -277,12 +278,12 @@ void DescribedItem::createShadowFrames ()
 
         std::vector< Picture* > rawShadows;
 
-        for ( unsigned int y = 0; y < picture->getHeight(); y += getDescriptionOfItem().getHeightOfShadow() ) {
-                for ( unsigned int x = 0; x < picture->getWidth(); x += getDescriptionOfItem().getWidthOfShadow() )
+        for ( unsigned int y = 0; y < picture->getHeight(); y += description.getHeightOfShadow() ) {
+                for ( unsigned int x = 0; x < picture->getWidth(); x += description.getWidthOfShadow() )
                 {
-                        Picture* rawShadow = new Picture( getDescriptionOfItem().getWidthOfShadow(), getDescriptionOfItem().getHeightOfShadow() );
+                        Picture* rawShadow = new Picture( description.getWidthOfShadow(), description.getHeightOfShadow() );
                         allegro::bitBlit( picture->getAllegroPict(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
-                        rawShadow->setName( getDescriptionOfItem().getKind () + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
+                        rawShadow->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         rawShadow->saveAsPNG( ospaths::homePath() );
                 # endif
@@ -290,13 +291,13 @@ void DescribedItem::createShadowFrames ()
                 }
         }
 
-        unsigned int rawRow = ( rawShadows.size() - getDescriptionOfItem().howManyExtraFrames() ) / howManyOrientations ;
+        unsigned int rawRow = ( rawShadows.size() - description.howManyExtraFrames() ) / howManyOrientations ;
 
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
-                for ( unsigned int f = 0 ; f < getDescriptionOfItem().howManyFramesPerOrientation() ; f ++ )
+                for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
-                        Picture * shadowFrame = new Picture( * rawShadows[ ( o * rawRow ) + getDescriptionOfItem().getFrameAt( f ) ] );
-                        shadowFrame->setName( getDescriptionOfItem().getKind () + " " +
+                        Picture * shadowFrame = new Picture( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        shadowFrame->setName( description.getKind () + " " +
                                                 orientations[ o ] + " orientation " +
                                                 util::toStringWithOrdinalSuffix( f ) + " shadow" );
 
@@ -308,10 +309,10 @@ void DescribedItem::createShadowFrames ()
                 }
         }
 
-        for ( unsigned int ex = 0 ; ex < getDescriptionOfItem().howManyExtraFrames() ; ex ++ )
+        for ( unsigned int ex = 0 ; ex < description.howManyExtraFrames() ; ex ++ )
         {
                 Picture * extraShadow = new Picture( * rawShadows[ ex + ( rawRow * howManyOrientations ) ] );
-                extraShadow->setName( getDescriptionOfItem().getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra shadow" );
+                extraShadow->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra shadow" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraShadow->saveAsPNG( ospaths::homePath() );
         # endif

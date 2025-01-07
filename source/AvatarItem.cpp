@@ -19,6 +19,7 @@ AvatarItem::AvatarItem( const DescriptionOfItem & description, int x, int y, int
         , wayOfExit( "" )
         , wayOfEntry( "" )
         , descriptionOfTakenItem( nilPointer )
+        , behaviorOfTakenItem( "" )
 {
         characterToBehaviour ();
 }
@@ -27,20 +28,21 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
         : FreeItem( toCopy )
         , wayOfExit( toCopy.wayOfExit )
         , wayOfEntry( toCopy.wayOfEntry )
-        , descriptionOfTakenItem( nilPointer )
+        , descriptionOfTakenItem( nilPointer ) // avatar is copied without the taken item
+        , behaviorOfTakenItem( "" )
 {
         characterToBehaviour ();
 }
 
 /* private */ void AvatarItem::characterToBehaviour ()
 {
-        if ( getOriginalKind() == "head" )
+        if ( isHead() )
                 setBehaviorOf( "behavior of Head" );
         else
-        if ( getOriginalKind() == "heels" )
+        if ( isHeels() )
                 setBehaviorOf( "behavior of Heels" );
         else
-        if ( getOriginalKind() == "headoverheels" )
+        if ( isHeadOverHeels() )
                 setBehaviorOf( "behavior of Head over Heels" );
 }
 
@@ -389,22 +391,20 @@ void AvatarItem::wait ()
 
 bool AvatarItem::isActiveCharacter () const
 {
-        if ( getMediator()->getActiveCharacter() == nilPointer ) return false ;
-        return getMediator()->getActiveCharacter()->getUniqueName() == this->getUniqueName() ;
+        if ( getMediator() == nilPointer || getMediator()->getActiveCharacter() == nilPointer ) return false ;
+        return getMediator()->getActiveCharacter()->getUniqueName() == getUniqueName() ;
 }
 
 unsigned char AvatarItem::getLives() const
 {
-        const std::string & character = this->getOriginalKind() ;
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        return gameInfo.getLivesByName( character ) ;
+        return gameInfo.getLivesByName( getOriginalKind() ) ;
 }
 
 void AvatarItem::addLives( unsigned char lives )
 {
-        const std::string & character = this->getOriginalKind() ;
         GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
-        gameInfo.addLivesByName( character, lives );
+        gameInfo.addLivesByName( getOriginalKind(), lives );
 }
 
 void AvatarItem::loseLife ()
@@ -513,13 +513,13 @@ void AvatarItem::liberateCurrentPlanet ()
         }
 }
 
-void AvatarItem::placeItemInBag ( const std::string & kindOfItem, const std::string & behavior )
+void AvatarItem::putItemInTheBag ( const std::string & itsKind, const std::string & itsBehavior )
 {
-        this->descriptionOfTakenItem = ItemDescriptions::descriptions ().getDescriptionByKind( kindOfItem ) ;
-        this->behaviorOfTakenItem = behavior ;
+        this->descriptionOfTakenItem = ItemDescriptions::descriptions ().getDescriptionByKind( itsKind ) ;
+        this->behaviorOfTakenItem = itsBehavior ;
 }
 
-void AvatarItem::emptyBag ()
+void AvatarItem::emptyTheBag ()
 {
         this->descriptionOfTakenItem = nilPointer ;
         this->behaviorOfTakenItem = "" ;

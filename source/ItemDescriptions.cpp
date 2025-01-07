@@ -224,13 +224,13 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
 
 const DescriptionOfItem* ItemDescriptions::getDescriptionByKind ( const std::string & kind ) /* const */
 {
-	// auto-read the items file if it hasn't been done before
+	// auto-read the item descriptions file if it hasn’t been done before
         if ( ! this->alreadyRead )
                 readDescriptionsFromFile( The_File_Full_Of_Item_Descriptions ) ; // yep, it makes the function non-const
 
         if ( descriptionsOfItems.find( kind ) == descriptionsOfItems.end () )
         {
-                std::cerr << "the description of item of kind \"" << kind << "\" is absent" << std::endl ;
+                std::cout << "the description of the item kind \"" << kind << "\" is absent" << std::endl ;
                 return nilPointer ;
         }
 

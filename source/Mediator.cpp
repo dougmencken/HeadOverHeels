@@ -1133,7 +1133,7 @@ bool Mediator::pickNextCharacter ()
                                 {
                                         std::cout << "item \"" << descriptionOfItemInBag->getKind ()
                                                         << "\" goes into the bag of \"" << getActiveCharacter()->getKind () << "\"" << std::endl ;
-                                        getActiveCharacter()->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
+                                        getActiveCharacter()->putItemInTheBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                                 }
 
                                 unlockFreeItemsMutex ();
@@ -1171,7 +1171,7 @@ bool Mediator::pickNextCharacter ()
                 if ( descriptionOfItemInBag != nilPointer )
                 {
                         std::cout << "item \"" << descriptionOfItemInBag->getKind() << "\" goes into the bag of Heels" << std::endl ;
-                        getActiveCharacter()->placeItemInBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
+                        getActiveCharacter()->putItemInTheBag( descriptionOfItemInBag->getKind (), behaviorOfItemInBag );
                 }
 
                 this->room->placeCharacterInRoom( "head", false, x, y, z + Room::LayerHeight, heading );

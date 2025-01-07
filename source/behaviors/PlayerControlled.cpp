@@ -556,7 +556,7 @@ void PlayerControlled::takeItem ()
                         {
                                 std::cout << "taking item \"" << itemToTake->getUniqueName() << "\"" << std::endl ;
 
-                                character.placeItemInBag( itemToTake->getKind (), itemToTake->getBehavior()->getNameOfBehavior () );
+                                character.putItemInTheBag( itemToTake->getKind (), itemToTake->getBehavior()->getNameOfBehavior () );
                                 GameManager::getInstance().setImageOfItemInBag (PicturePtr( new Picture( itemToTake->getCurrentRawImage() ) ));
 
                                 itemToTake->getBehavior()->setCurrentActivity( activities::Activity::Vanishing );
@@ -597,7 +597,7 @@ void PlayerControlled::dropItem ()
                         character.getMediator()->getRoom()->addFreeItem( freeItem );
 
                         GameManager::getInstance().emptyHandbag () ;
-                        character.emptyBag ();
+                        character.emptyTheBag ();
 
                         setCurrentActivity ( // update activity
                                 ( getCurrentActivity() == activities::Activity::DropAndJump )

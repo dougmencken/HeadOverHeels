@@ -20,7 +20,7 @@
 
 
 /**
- * All the descriptions of the game's items as read from items.xml
+ * All the descriptions of the game items, read from items.xml
  */
 
 class ItemDescriptions

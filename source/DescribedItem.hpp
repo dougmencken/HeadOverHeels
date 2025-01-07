@@ -29,7 +29,7 @@ private :
         const DescriptionOfItem * descriptionOfItem ;
 
         /**
-         * The original kind of item, the current kind may change via metamorphosis
+         * The original kind of item, while the current kind may change via metamorphosis
          */
         std::string originalKind ;
 

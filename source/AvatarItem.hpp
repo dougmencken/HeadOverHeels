@@ -25,7 +25,7 @@
 class AvatarItem : public FreeItem
 {
 
-public:
+public :
 
         AvatarItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & heading ) ;
 
@@ -42,7 +42,7 @@ public:
         bool isHeadOverHeels () const {  return getOriginalKind() == "headoverheels" ;  }
 
         /**
-         * Updates the character’s behavior according to the player’s controls
+         * Updates the character’s behavior according to the player’s actions
          */
         virtual void behaveCharacter () ;
 
@@ -99,11 +99,11 @@ public:
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
-        void placeItemInBag ( const std::string & kindOfItem, const std::string & behavior ) ;
+        void putItemInTheBag ( const std::string & itsKind, const std::string & itsBehavior ) ;
 
-        void emptyBag () ;
+        void emptyTheBag () ;
 
-        const DescriptionOfItem * getDescriptionOfTakenItem () const {  return descriptionOfTakenItem ;  }
+        const DescriptionOfItem * getDescriptionOfTakenItem () const {  return this->descriptionOfTakenItem ;  }
 
         const std::string & getBehaviorOfTakenItem () const {  return this->behaviorOfTakenItem ;  }
 
@@ -132,9 +132,9 @@ public:
 
         bool isWalkingThroughDoorAt( const std::string & where ) ;
 
-private:
+private :
 
-        // set the behavior according to the kind of character
+        // set the behavior according to the name of character
         void characterToBehaviour () ;
 
         void autoMoveOnEntry () ;
@@ -158,6 +158,9 @@ private:
          */
         std::string wayOfEntry ;
 
+        /**
+         * When a character takes some item, the description of that item is stored here
+         */
         const DescriptionOfItem * descriptionOfTakenItem ;
 
         std::string behaviorOfTakenItem ;
