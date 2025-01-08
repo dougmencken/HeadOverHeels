@@ -186,6 +186,52 @@ public :
                 return isAtExtraFrame() ? true : AbstractItem::isAnimationFinished() ;
         }
 
+        virtual void addFrameTo ( const std::string & sequence, Picture *const frame )
+        {
+                if ( sequence == "extra" )
+                        AbstractItem::addFrameTo( "extra", frame );
+                else {
+                        unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+                        if ( howManyOrientations == 1 ) {
+                                AbstractItem::addFrameTo( "south", frame );
+                                AbstractItem::addFrameTo( "west", frame );
+                                AbstractItem::addFrameTo( "north", frame );
+                                AbstractItem::addFrameTo( "east", frame );
+                        }
+                        else {
+                                AbstractItem::addFrameTo( sequence, frame );
+
+                                if ( howManyOrientations == 2 ) {
+                                             if ( sequence == "south" ) AbstractItem::addFrameTo( "north", frame );
+                                        else if ( sequence == "west"  ) AbstractItem::addFrameTo( "east", frame );
+                                }
+                        }
+                }
+        }
+
+        virtual void addFrameOfShadowTo ( const std::string & sequence, Picture *const frame )
+        {
+                if ( sequence == "extra" )
+                        AbstractItem::addFrameOfShadowTo( "extra", frame );
+                else {
+                        unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+                        if ( howManyOrientations == 1 ) {
+                                AbstractItem::addFrameOfShadowTo( "south", frame );
+                                AbstractItem::addFrameOfShadowTo( "west", frame );
+                                AbstractItem::addFrameOfShadowTo( "north", frame );
+                                AbstractItem::addFrameOfShadowTo( "east", frame );
+                        }
+                        else {
+                                AbstractItem::addFrameOfShadowTo( sequence, frame );
+
+                                if ( howManyOrientations == 2 ) {
+                                             if ( sequence == "south" ) AbstractItem::addFrameOfShadowTo( "north", frame );
+                                        else if ( sequence == "west"  ) AbstractItem::addFrameOfShadowTo( "east", frame );
+                                }
+                        }
+                }
+        }
+
 private :
 
         void readGraphicsOfItem () ;
@@ -199,6 +245,29 @@ private :
          * Extract frames for the shadow of this item from the picture file
          */
         void createShadowFrames () ;
+
+        // returns the various orientations of this item’s graphics
+        //
+        std::vector< std::string > whatOrientations () const
+        {
+                unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+                std::vector< std::string > orientations ;
+
+                if ( howManyOrientations > 0 ) {
+                        orientations.push_back( "south" );
+
+                        if ( howManyOrientations > 1 ) /* south and west */ {
+                                orientations.push_back( "west" );
+
+                                if ( howManyOrientations > 2 ) /* south, west, north, east */ {
+                                        orientations.push_back( "north" );
+                                        orientations.push_back( "east" );
+                                }
+                        }
+                }
+
+                return orientations ;
+        }
 
         bool isAtExtraFrame () const {  return getCurrentFrameSequence() == "extra" ;  }
 

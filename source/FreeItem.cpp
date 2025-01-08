@@ -25,7 +25,7 @@ FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, 
         , wantMask ( tritrue )
         , frozen ( false )
         , partOfDoor ( false )
-        , shadedNonmaskedImage( new Picture( getCurrentRawImage() ) )
+        , shadedNonmaskedImage( nilPointer )
 {
         changeHeading( where );
         freshBothProcessedImages ();
@@ -43,7 +43,7 @@ FreeItem::FreeItem( const FreeItem & freeItem )
         , wantMask( freeItem.wantMask )
         , frozen( freeItem.frozen )
         , partOfDoor( freeItem.partOfDoor )
-        , shadedNonmaskedImage( new Picture( * freeItem.shadedNonmaskedImage ) )
+        , shadedNonmaskedImage( ( freeItem.shadedNonmaskedImage != nilPointer ) ? new Picture( * freeItem.shadedNonmaskedImage ) : nilPointer )
 {}
 
 void FreeItem::draw ()
@@ -82,7 +82,10 @@ void FreeItem::freshProcessedImage ()
 
 void FreeItem::freshBothProcessedImages ()
 {
-        shadedNonmaskedImage->fillWithColor( Color::keyColor () );
+        if ( this->shadedNonmaskedImage == nilPointer )
+                this->shadedNonmaskedImage.reset( new Picture( getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() ) );
+
+        this->shadedNonmaskedImage->fillWithColor( Color::keyColor () );
 
         try {
                 const Picture & currentRawImage = getCurrentRawImage() ;

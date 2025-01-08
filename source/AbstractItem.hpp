@@ -16,6 +16,8 @@
 
 #include <WrappersAllegro.hpp>
 
+#include "util.hpp"
+
 #include "Mediated.hpp"
 #include "Picture.hpp"
 
@@ -104,17 +106,21 @@ public :
          */
         void changeFrame ( unsigned int newFrame ) ;
 
-        void addFrameTo ( const std::string & sequence, Picture *const frame )
+        virtual void addFrameTo ( const std::string & sequence, Picture *const frame )
         {
+                if ( sequence.empty() ) return ; // don’t add to ""
+
+                IF_DEBUG( fprintf( stdout, "adding frame to \"%s\" for item %s\n" , sequence.c_str(), getUniqueName().c_str() ) )
                 this->frames[ sequence ].push_back( PicturePtr( frame ) ) ;
 
-                if ( getCurrentFrameSequence().empty() && ! sequence.empty() )
+                if ( getCurrentFrameSequence().empty() /* && ! sequence.empty() */ )
                         setCurrentFrameSequence( sequence );
         }
 
-        void addFrameOfShadowTo ( const std::string & sequence, Picture *const frame )
+        virtual void addFrameOfShadowTo ( const std::string & sequence, Picture *const frame )
         {
-                this->shadows[ sequence ].push_back( PicturePtr( frame ) ) ;
+                if ( ! sequence.empty() )
+                        this->shadows[ sequence ].push_back( PicturePtr( frame ) ) ;
         }
 
         bool hasShadow () const {  return ! shadows.empty() ;  }

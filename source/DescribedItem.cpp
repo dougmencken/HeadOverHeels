@@ -152,9 +152,6 @@ void DescribedItem::readGraphicsOfItem ()
 
         readOrAbsent << ", the current frame sequence is \"" << getCurrentFrameSequence() << "\"" ;
         std::cout << readOrAbsent.str() << std::endl ;
-
-        if ( howManyFrames == 0 )
-                addFrameTo( "", new Picture( getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() ) );
 }
 
 #ifdef DEBUG
@@ -176,27 +173,6 @@ void DescribedItem::createFrames ()
                                                 description.getWidthOfFrame(), description.getHeightOfFrame() );
 
         // decompose the image into frames
-        // they are
-        //    frames of animation ( 1 or more )
-        //    frames of animation
-        //    ... ( × "orientations": 1, 2, or 4 times )
-        //    extra frames ( 0 or more )
-
-        std::vector< std::string > orientations ;
-        unsigned int howManyOrientations = description.howManyOrientations() ;
-        if ( ! getCurrentFrameSequence().empty() && howManyOrientations == 1 )
-                orientations.push_back( getCurrentFrameSequence() );
-        else
-                orientations.push_back( "south" );
-
-        if ( howManyOrientations > 1 ) /* south and west */ {
-                orientations.push_back( "west" );
-
-                if ( howManyOrientations > 2 ) /* south, west, north, east */ {
-                        orientations.push_back( "north" );
-                        orientations.push_back( "east" );
-                }
-        }
 
         std::vector< Picture* > rawFrames;
 
@@ -213,6 +189,11 @@ void DescribedItem::createFrames ()
                 }
         }
 
+        // split frames by orientations
+
+        unsigned int howManyOrientations = description.howManyOrientations() ;
+        std::vector< std::string > orientations = whatOrientations() ;
+
         unsigned int rawRow = ( rawFrames.size() - description.howManyExtraFrames() ) / howManyOrientations ;
 
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
@@ -220,7 +201,7 @@ void DescribedItem::createFrames ()
                 {
                         Picture * animationFrame = new Picture( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
                         animationFrame->setName( description.getKind () + " " +
-                                                        orientations[ o ] + " orientation " +
+                                                        "\"" + orientations[ o ] + "\" orientation " +
                                                         util::toStringWithOrdinalSuffix( f ) + " frame" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
@@ -231,10 +212,12 @@ void DescribedItem::createFrames ()
                 }
         }
 
-        for ( unsigned int ex = 0 ; ex < description.howManyExtraFrames() ; ex ++ )
+        // add extra frames, if any
+
+        for ( unsigned int extra = 0 ; extra < description.howManyExtraFrames() ; extra ++ )
         {
-                Picture * extraFrame = new Picture( * rawFrames[ ex + ( rawRow * howManyOrientations ) ] );
-                extraFrame->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra frame" );
+                Picture * extraFrame = new Picture( * rawFrames[ extra + ( rawRow * howManyOrientations ) ] );
+                extraFrame->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( extra ) + " extra frame" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraFrame->saveAsPNG( ospaths::homePath() );
         # endif
@@ -260,22 +243,6 @@ void DescribedItem::createShadowFrames ()
 
         // decompose the image of shadow into frames
 
-        std::vector< std::string > orientations ;
-        unsigned int howManyOrientations = description.howManyOrientations() ;
-        if ( ! getCurrentFrameSequence().empty() && howManyOrientations == 1 )
-                orientations.push_back( getCurrentFrameSequence() );
-        else
-                orientations.push_back( "south" );
-
-        if ( howManyOrientations > 1 ) /* south and west */ {
-                orientations.push_back( "west" );
-
-                if ( howManyOrientations > 2 ) /* south, west, north, east */ {
-                        orientations.push_back( "north" );
-                        orientations.push_back( "east" );
-                }
-        }
-
         std::vector< Picture* > rawShadows;
 
         for ( unsigned int y = 0; y < picture->getHeight(); y += description.getHeightOfShadow() ) {
@@ -291,6 +258,11 @@ void DescribedItem::createShadowFrames ()
                 }
         }
 
+        // split frames of shadow by orientations
+
+        unsigned int howManyOrientations = description.howManyOrientations() ;
+        std::vector< std::string > orientations = whatOrientations() ;
+
         unsigned int rawRow = ( rawShadows.size() - description.howManyExtraFrames() ) / howManyOrientations ;
 
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
@@ -298,7 +270,7 @@ void DescribedItem::createShadowFrames ()
                 {
                         Picture * shadowFrame = new Picture( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
                         shadowFrame->setName( description.getKind () + " " +
-                                                orientations[ o ] + " orientation " +
+                                                "\"" + orientations[ o ] + "\" orientation " +
                                                 util::toStringWithOrdinalSuffix( f ) + " shadow" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
@@ -309,10 +281,12 @@ void DescribedItem::createShadowFrames ()
                 }
         }
 
-        for ( unsigned int ex = 0 ; ex < description.howManyExtraFrames() ; ex ++ )
+        // add extra shadow frames, if any
+
+        for ( unsigned int extra = 0 ; extra < description.howManyExtraFrames() ; extra ++ )
         {
-                Picture * extraShadow = new Picture( * rawShadows[ ex + ( rawRow * howManyOrientations ) ] );
-                extraShadow->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( ex ) + " extra shadow" );
+                Picture * extraShadow = new Picture( * rawShadows[ extra + ( rawRow * howManyOrientations ) ] );
+                extraShadow->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( extra ) + " extra shadow" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraShadow->saveAsPNG( ospaths::homePath() );
         # endif
