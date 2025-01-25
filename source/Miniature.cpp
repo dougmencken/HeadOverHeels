@@ -10,6 +10,10 @@
 #include "Mediator.hpp"
 #include "DescriptionOfItem.hpp"
 
+#ifdef DEBUG
+#  define DEBUG_MINIATURES      1
+#endif
+
 
 Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigned int sizeOfTileForMiniature )
         : room( roomForMiniature )
@@ -17,6 +21,13 @@ Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigne
         , offset( std::pair< int, int >( leftX, topY ) )
 {
         if ( sizeOfTile < 2 ) sizeOfTile = 2 ;
+
+# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+        std::cout << "constructed Miniature( room \"" << roomForMiniature.getNameOfRoomDescriptionFile() << "\", "
+                        << "leftX=" << leftX << ", topY=" << topY
+                        << ", sizeOfTile=" << sizeOfTileForMiniature << " )"
+                        << std::endl ;
+# endif
 }
 
 void Miniature::draw ()
@@ -583,7 +594,7 @@ void Miniature::drawEastDoorOnMiniature( const allegro::Pict& where, int x0, int
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, color, false, true, false, false );
+        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, color, false, /* loY */ true, false, false );
 
         {
                 int x = x0 + ( ( tilesX - 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
@@ -592,7 +603,7 @@ void Miniature::drawEastDoorOnMiniature( const allegro::Pict& where, int x0, int
                 where.drawPixelAt( x + 1, y, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, false, true );
+        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, false, /* hiY */ true );
 
         {
                 int x = x0 + ( ( tilesX + 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
@@ -606,7 +617,7 @@ void Miniature::drawWestDoorOnMiniature( const allegro::Pict& where, int x0, int
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, color, false, true, false, false );
+        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, color, false, /* loY */ true, false, false );
 
         {
                 int x = x0 + ( ( tilesX - 1 ) - tilesY ) * ( sizeOfTile << 1 ) ;
@@ -615,7 +626,7 @@ void Miniature::drawWestDoorOnMiniature( const allegro::Pict& where, int x0, int
                 where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, false, true );
+        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, false, /* hiY */ true );
 
         {
                 int x = x0 + ( ( tilesX + 1 ) - tilesY ) * ( sizeOfTile << 1 ) ;
@@ -629,7 +640,7 @@ void Miniature::drawNorthDoorOnMiniature( const allegro::Pict& where, int x0, in
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, color, true, false, false, false );
+        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, color, /* loX */ true, false, false, false );
 
         {
                 int x = x0 + ( ( tilesX + 1 ) - ( tilesY - 1 ) ) * ( sizeOfTile << 1 ) ;
@@ -638,7 +649,7 @@ void Miniature::drawNorthDoorOnMiniature( const allegro::Pict& where, int x0, in
                 where.drawPixelAt( x + 1, y, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, true, false );
+        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, /* hiX */ true, false );
 
         {
                 int x = x0 + ( ( tilesX + 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
@@ -652,7 +663,7 @@ void Miniature::drawSouthDoorOnMiniature( const allegro::Pict& where, int x0, in
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, color, true, false, false, false );
+        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, color, /* loX */ true, false, false, false );
 
         {
                 int x = x0 + ( tilesX - ( tilesY - 1 ) ) * ( sizeOfTile << 1 ) ;
@@ -661,7 +672,7 @@ void Miniature::drawSouthDoorOnMiniature( const allegro::Pict& where, int x0, in
                 where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, true, false );
+        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, /* hiX */ true, false );
 
         {
                 int x = x0 + ( tilesX - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
@@ -678,9 +689,8 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
         unsigned int posX = x0 ;
         unsigned int posY = y0 ;
 
-        for ( unsigned int tile = 0 ; tile < tilesX ; tile ++ )
-        {
-                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+        for ( unsigned int tile = 0 ; tile < tilesX ; ++ tile ) {
+                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
                 {
                         where.drawPixelAt( posX++, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX++, posY++, color.toAllegroColor() );
@@ -689,9 +699,8 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
 
         posX--; posY--;
 
-        for ( unsigned int tile = 0 ; tile < tilesY ; tile ++ )
-        {
-                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+        for ( unsigned int tile = 0 ; tile < tilesY ; ++ tile ) {
+                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
                 {
                         where.drawPixelAt( posX--, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX--, posY++, color.toAllegroColor() );
@@ -701,9 +710,8 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
         posX = x0 + 1 ;
         posY = y0 ;
 
-        for ( unsigned int tile = 0 ; tile < tilesY ; tile ++ )
-        {
-                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+        for ( unsigned int tile = 0 ; tile < tilesY ; ++ tile ) {
+                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
                 {
                         where.drawPixelAt( posX--, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX--, posY++, color.toAllegroColor() );
@@ -712,9 +720,8 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
 
         posX++; posY--;
 
-        for ( unsigned int tile = 0 ; tile < tilesX ; tile ++ )
-        {
-                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+        for ( unsigned int tile = 0 ; tile < tilesX ; ++ tile ) {
+                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
                 {
                         where.drawPixelAt( posX++, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX++, posY++, color.toAllegroColor() );
@@ -722,7 +729,11 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
         }
 }
 
-void Miniature::drawIsoTile( const allegro::Pict& where, int x0, int y0, int tileX, int tileY, const Color& color, bool loX, bool loY, bool hiX, bool hiY )
+void Miniature::drawIsoTile( const allegro::Pict& where,
+                                int x0, int y0,
+                                int tileX, int tileY,
+                                const Color& color,
+                                bool loX, bool loY, bool hiX, bool hiY )
 {
         if ( color.isFullyTransparent () ) return ;
 

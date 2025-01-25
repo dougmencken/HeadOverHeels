@@ -115,6 +115,7 @@ headoverheels_SOURCES = main.cpp \
 			InputManager.hpp \
 			Miniature.cpp \
 			Miniature.hpp \
+			NamedMiniatures.hpp \
 			Isomot.cpp \
 			Isomot.hpp \
 			DescriptionOfItem.cpp \

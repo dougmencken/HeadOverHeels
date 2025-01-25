@@ -14,6 +14,8 @@
 #include "Timer.hpp"
 #include "Picture.hpp"
 
+#include "NamedMiniatures.hpp"
+
 #include <string>
 
 
@@ -72,6 +74,8 @@ private:
          * Where to draw isometric view
          */
         Picture * view ;
+
+        NamedMiniatures miniatures ;
 
         bool paused ;
 

@@ -12,7 +12,6 @@
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
-#include "Miniature.hpp"
 #include "AvatarItem.hpp"
 #include "ItemDescriptions.hpp"
 #include "Behavior.hpp"
@@ -224,50 +223,33 @@ Picture* Isomot::updateMe ()
                 allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), 12, 8, roomColor.toAllegroColor() );
                 allegro::textOut( roomTiles.str(), 12, 20, roomColor.toAllegroColor() );
 
-                Miniature miniatureOfRoom( *activeRoom, 24, 24, sizeOfTileForMiniature );
-
-                std::string roomAtSouth = activeRoom->getConnections()->getConnectedRoomAt( "south" );
-                std::string roomAtNorth = activeRoom->getConnections()->getConnectedRoomAt( "north" );
-                std::string roomAtEast = activeRoom->getConnections()->getConnectedRoomAt( "east" );
-                std::string roomAtWest = activeRoom->getConnections()->getConnectedRoomAt( "west" );
-
-                if ( ! roomAtSouth.empty () )
-                {
-                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "south", 0 );
-                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtSouth ),
-                                                                secondRoomOffset.first, secondRoomOffset.second,
-                                                                sizeOfTileForMiniature );
-                        miniatureOfConnectedRoom.draw ();
+                bool sameRoom = true ;
+                Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
+                if ( ofThisRoom == nilPointer || ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile() ) {
+                        ofThisRoom = new Miniature( *activeRoom, 24, 24, this->sizeOfTileForMiniature );
+                        this->miniatures.setMiniatureForName( "this", ofThisRoom );
+                        sameRoom = false ;
                 }
 
-                if ( ! roomAtNorth.empty() )
-                {
-                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "north", 0 );
-                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtNorth ),
-                                                                secondRoomOffset.first, secondRoomOffset.second,
-                                                                sizeOfTileForMiniature );
-                        miniatureOfConnectedRoom.draw ();
+                static std::string sides [] = { "south", "north", "east", "west" };
+                for ( unsigned int s = 0 ; s < 4 ; ++ s ) {
+                        const std::string & roomThere = activeRoom->getConnections()->getConnectedRoomAt( sides[ s ] );
+                        if ( ! roomThere.empty () )
+                        {
+                                if ( ! sameRoom ) {
+                                        std::pair< int, int > secondRoomOffset = ofThisRoom->calculatePositionOfConnectedMiniature( sides[ s ], 0 );
+                                        this->miniatures.setMiniatureForName( sides[ s ],
+                                                                                new Miniature( * map.getOrBuildRoomByFile( roomThere ),
+                                                                                                secondRoomOffset.first, secondRoomOffset.second,
+                                                                                                sizeOfTileForMiniature ) );
+                                }
+
+                                Miniature * ofRoomThere = this->miniatures.getMiniatureByName( sides[ s ] ) ;
+                                if ( ofRoomThere != nilPointer ) ofRoomThere->draw ();
+                        }
                 }
 
-                if ( ! roomAtEast.empty() )
-                {
-                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "east", 0 );
-                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtEast ),
-                                                                secondRoomOffset.first, secondRoomOffset.second,
-                                                                sizeOfTileForMiniature );
-                        miniatureOfConnectedRoom.draw ();
-                }
-
-                if ( ! roomAtWest.empty() )
-                {
-                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "west", 0 );
-                        Miniature miniatureOfConnectedRoom( * map.getOrBuildRoomByFile( roomAtWest ),
-                                                                secondRoomOffset.first, secondRoomOffset.second,
-                                                                sizeOfTileForMiniature );
-                        miniatureOfConnectedRoom.draw ();
-                }
-
-                miniatureOfRoom.draw ();
+                if ( ofThisRoom != nilPointer ) ofThisRoom->draw ();
         }
 
         // show text when the infinite lives and inviolability cheats are enabled

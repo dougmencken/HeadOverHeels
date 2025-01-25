@@ -54,7 +54,7 @@ public:
 
         std::pair < int, int > calculatePositionOfConnectedMiniature ( const std::string & where, unsigned short gap = 1 ) ;
 
-        unsigned int getSizeOfTile () const {  return sizeOfTile ;  }
+        unsigned int getSizeOfTile () const {  return this->sizeOfTile ;  }
 
         void setSizeOfTile ( unsigned int newSize ) {  sizeOfTile = ( newSize >= 2 ) ? newSize : 2 ;  }
 
