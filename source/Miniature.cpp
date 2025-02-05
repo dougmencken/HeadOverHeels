@@ -59,8 +59,7 @@ void Miniature::composeMiniature ()
 {
         if ( this->theMiniature == nilPointer ) {
                 std::pair < unsigned int, unsigned int > dimensions = calculateSize() ;
-                ///Color background( /* r */ 0, /* g */ 0xff, /* b */ 0xff, /* a */ 0 );
-                this->theMiniature = new Picture( dimensions.first, dimensions.second /*, background*/ );
+                this->theMiniature = new Picture( dimensions.first, dimensions.second );
 
                 std::ostringstream theNameOfMiniature ;
                 theNameOfMiniature << "Miniature of room " << this->room.getNameOfRoomDescriptionFile() << " with " << getSizeOfTile() << " pixel long tiles" ;
@@ -555,7 +554,7 @@ void Miniature::draw ()
 
                 /* for ( int x = xBegin ; x <= xEnd ; ++ x )
                         for ( int y = yBegin ; y <= yEnd ; ++ y )
-                                drawIsoTile( theScreen, originX + xOnScreen, originY + yOnScreen, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
+                                drawIsoTile( theScreen, xOriginOnScreen, yOriginOnScreen, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
 
                 int deltaWx = ( roomTileSize - character.getWidthX() ) >> 1 ;
                 int deltaWy = ( roomTileSize - character.getWidthY() ) >> 1 ;
