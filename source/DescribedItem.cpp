@@ -150,7 +150,7 @@ void DescribedItem::readGraphicsOfItem ()
         else
                 readOrAbsent << "are absent" ;
 
-        readOrAbsent << ", the current frame sequence is \"" << getCurrentFrameSequence() << "\"" ;
+        /* readOrAbsent << ", the current frame sequence is \"" << getCurrentFrameSequence() << "\"" ; */////////
         std::cout << readOrAbsent.str() << std::endl ;
 }
 

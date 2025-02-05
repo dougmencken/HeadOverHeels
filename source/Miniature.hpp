@@ -29,15 +29,15 @@ class ConnectedRooms ;
 class Miniature : public Drawable
 {
 
-public:
+public :
 
         Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned int sizeOfTileForMiniature ) ;
 
-        virtual ~Miniature( ) { }
+        virtual ~Miniature( ) ;
 
         virtual void draw () ;
 
-        void drawVignetteForRoomAboveOrBelow ( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, const std::string& roomAbove, const std::string& roomBelow ) ;
+        void drawVignetteForRoomAboveOrBelow ( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow ) ;
 
         void drawEastDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
         void drawSouthDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
@@ -54,13 +54,28 @@ public:
 
         std::pair < int, int > calculatePositionOfConnectedMiniature ( const std::string & where, unsigned short gap = 1 ) ;
 
+        std::pair < unsigned int, unsigned int > getImageSize () const
+        {
+                if ( theMiniature == nilPointer ) return std::pair < unsigned int, unsigned int >( 0, 0 ) ;
+
+                return std::pair < unsigned int, unsigned int >( this->theMiniature->getWidth(), this->theMiniature->getHeight() ) ;
+        }
+
         unsigned int getSizeOfTile () const {  return this->sizeOfTile ;  }
 
-        void setSizeOfTile ( unsigned int newSize ) {  sizeOfTile = ( newSize >= 2 ) ? newSize : 2 ;  }
+        void setSizeOfTile ( unsigned int newSize ) {  this->sizeOfTile = ( newSize >= 2 ) ? newSize : 2 ;  }
 
         const Room & getRoom () const {  return room ;  }
 
-private:
+protected :
+
+        std::pair < unsigned int, unsigned int > calculateSize () const ;
+
+        void composeMiniature () ;
+
+private :
+
+        Picture * theMiniature ;
 
         const Room & room ;
 

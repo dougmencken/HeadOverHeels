@@ -226,7 +226,7 @@ Picture* Isomot::updateMe ()
                 bool sameRoom = true ;
                 Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
                 if ( ofThisRoom == nilPointer || ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile() ) {
-                        ofThisRoom = new Miniature( *activeRoom, 24, 24, this->sizeOfTileForMiniature );
+                        ofThisRoom = new Miniature( *activeRoom, 24, 24 + ( this->sizeOfTileForMiniature << 1 ), this->sizeOfTileForMiniature );
                         this->miniatures.setMiniatureForName( "this", ofThisRoom );
                         sameRoom = false ;
                 }
@@ -237,10 +237,10 @@ Picture* Isomot::updateMe ()
                         if ( ! roomThere.empty () )
                         {
                                 if ( ! sameRoom ) {
-                                        std::pair< int, int > secondRoomOffset = ofThisRoom->calculatePositionOfConnectedMiniature( sides[ s ], 0 );
+                                        std::pair< int, int > nextRoomOffset = ofThisRoom->calculatePositionOfConnectedMiniature( sides[ s ], 0 );
                                         this->miniatures.setMiniatureForName( sides[ s ],
                                                                                 new Miniature( * map.getOrBuildRoomByFile( roomThere ),
-                                                                                                secondRoomOffset.first, secondRoomOffset.second,
+                                                                                                nextRoomOffset.first, nextRoomOffset.second,
                                                                                                 sizeOfTileForMiniature ) );
                                 }
 
@@ -249,7 +249,7 @@ Picture* Isomot::updateMe ()
                         }
                 }
 
-                if ( ofThisRoom != nilPointer ) ofThisRoom->draw ();
+                if ( ofThisRoom != nilPointer ) ofThisRoom->draw() ;
         }
 
         // show text when the infinite lives and inviolability cheats are enabled
