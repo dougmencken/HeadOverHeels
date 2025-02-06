@@ -5,7 +5,6 @@
 #include "FlickeringColor.hpp"
 #include "GameManager.hpp"
 #include "GameMap.hpp"
-#include "Room.hpp"
 #include "ConnectedRooms.hpp"
 #include "Mediator.hpp"
 #include "DescriptionOfItem.hpp"
@@ -79,9 +78,6 @@ void Miniature::composeMiniature ()
         const unsigned int tilesX = this->room.getTilesOnX() ;
         const unsigned int tilesY = this->room.getTilesOnY() ;
 
-        const int originX = tilesY * ( getSizeOfTile() << 1 ) ;
-        const int originY = 0 ;
-
         unsigned int firstTileX = 0 ;
         unsigned int firstTileY = 0 ;
         unsigned int lastTileX = tilesX - 1 ;
@@ -126,7 +122,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int eastDoorXmid = eastDoor->getCellX() + 1 ;
                 drawEastDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         eastDoorXmid, eastDoor->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -134,7 +129,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int eastnorthDoorXmid = eastnorthDoor->getCellX() + 1 ;
                 drawEastDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         eastnorthDoorXmid, eastnorthDoor->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -142,7 +136,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int eastsouthDoorXmid = eastsouthDoor->getCellX() + 1 ;
                 drawEastDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         eastsouthDoorXmid, eastsouthDoor->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -151,7 +144,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int northDoorYmid = northDoor->getCellY() + 1 ;
                 drawNorthDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         northDoor->getCellX(), northDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -159,7 +151,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int northeastDoorYmid = northeastDoor->getCellY() + 1 ;
                 drawNorthDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         northeastDoor->getCellX(), northeastDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -167,7 +158,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int northwestDoorYmid = northwestDoor->getCellY() + 1 ;
                 drawNorthDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         northwestDoor->getCellX(), northwestDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -176,7 +166,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int westDoorXmid = westDoor->getCellX() + 1 ;
                 drawWestDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         westDoorXmid, westDoor->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -184,7 +173,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int westnorthDoorXmid = westnorthDoor->getCellX() + 1 ;
                 drawWestDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         westnorthDoorXmid, westnorthDoor->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -192,7 +180,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int westsouthDoorXmid = westsouthDoor->getCellX() + 1 ;
                 drawWestDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         westsouthDoorXmid, westsouthDoor->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -201,7 +188,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int southDoorYmid = southDoor->getCellY() + 1 ;
                 drawSouthDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         southDoor->getCellX(), southDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -209,7 +195,6 @@ void Miniature::composeMiniature ()
         {
                 unsigned int southeastDoorYmid = southeastDoor->getCellY() + 1 ;
                 drawSouthDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         southeastDoor->getCellX(), southeastDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
@@ -217,14 +202,13 @@ void Miniature::composeMiniature ()
         {
                 unsigned int southwestDoorYmid = southwestDoor->getCellY() + 1 ;
                 drawSouthDoorOnMiniature( toDrawHere,
-                        originX, originY,
                         southwestDoor->getCellX(), southwestDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
 
         // draw the boundaries of room
 
-        drawIsoSquare( toDrawHere, originX, originY, tilesX, tilesY, roomColor.multiply( Color::byName( "gray" ) ) );
+        drawIsoSquare( toDrawHere, tilesX, tilesY, roomColor.multiply( Color::byName( "gray" ) ) );
 
         // draw walls
 
@@ -280,7 +264,7 @@ void Miniature::composeMiniature ()
                                 ! ( eastsouthDoor != nilPointer && ( tileX == eastsouthDoor->getCellX() + 1 || tileX == eastsouthDoor->getCellX() ) ) )
                         {
                                 drawIsoTile (
-                                        toDrawHere, originX, originY,
+                                        toDrawHere,
                                         unsignedTileX, firstTileY,
                                         roomColor.multiply( Color::whiteColor() ),
                                         /* loX */ true, false, false, false );
@@ -294,7 +278,7 @@ void Miniature::composeMiniature ()
                                 ! ( westsouthDoor != nilPointer && ( tileX == westsouthDoor->getCellX() + 1 || tileX == westsouthDoor->getCellX() ) ) )
                         {
                                 drawIsoTile (
-                                        toDrawHere, originX, originY,
+                                        toDrawHere,
                                         unsignedTileX, lastTileY,
                                         roomColor.multiply( Color::whiteColor() ),
                                         false, false, /* hiX */ true, false );
@@ -305,22 +289,22 @@ void Miniature::composeMiniature ()
                 {
                         if ( northDoor != nilPointer )
                         {
-                                drawIsoTile ( toDrawHere, originX, originY, 0, firstTileY,
+                                drawIsoTile ( toDrawHere, 0, firstTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 /* loX */ true, false, false, false );
 
-                                drawIsoTile ( toDrawHere, originX, originY, 0, lastTileY,
+                                drawIsoTile ( toDrawHere, 0, lastTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, /* hiX */ true, false );
                         }
 
                         if ( southDoor != nilPointer )
                         {
-                                drawIsoTile ( toDrawHere, originX, originY, tilesX - 1, firstTileY,
+                                drawIsoTile ( toDrawHere, tilesX - 1, firstTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 /* loX */ true, false, false, false );
 
-                                drawIsoTile ( toDrawHere, originX, originY, tilesX - 1, lastTileY,
+                                drawIsoTile ( toDrawHere, tilesX - 1, lastTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, /* hiX */ true, false );
                         }
@@ -338,7 +322,7 @@ void Miniature::composeMiniature ()
                                 ! ( southwestDoor != nilPointer && ( tileY == southwestDoor->getCellY() + 1 || tileY == southwestDoor->getCellY() ) ) )
                         {
                                 drawIsoTile (
-                                        toDrawHere, originX, originY,
+                                        toDrawHere,
                                         lastTileX, unsignedTileY,
                                         roomColor.multiply( Color::whiteColor() ),
                                         false, false, false, /* hiY */ true );
@@ -352,7 +336,7 @@ void Miniature::composeMiniature ()
                                 ! ( northwestDoor != nilPointer && ( tileY == northwestDoor->getCellY() + 1 || tileY == northwestDoor->getCellY() ) ) )
                         {
                                 drawIsoTile (
-                                        toDrawHere, originX, originY,
+                                        toDrawHere,
                                         firstTileX, unsignedTileY,
                                         roomColor.multiply( Color::whiteColor() ),
                                         false, /* loY */ true, false, false );
@@ -363,22 +347,22 @@ void Miniature::composeMiniature ()
                 {
                         if ( eastDoor != nilPointer )
                         {
-                                drawIsoTile ( toDrawHere, originX, originY, firstTileX, 0,
+                                drawIsoTile ( toDrawHere, firstTileX, 0,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, /* loY */ true, false, false );
 
-                                drawIsoTile ( toDrawHere, originX, originY, lastTileX, 0,
+                                drawIsoTile ( toDrawHere, lastTileX, 0,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, false, /* hiY */ true );
                         }
 
                         if ( westDoor != nilPointer )
                         {
-                                drawIsoTile ( toDrawHere, originX, originY, firstTileX, tilesY - 1,
+                                drawIsoTile ( toDrawHere, firstTileX, tilesY - 1,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, /* loY */ true, false, false );
 
-                                drawIsoTile ( toDrawHere, originX, originY, lastTileX, tilesY - 1,
+                                drawIsoTile ( toDrawHere, lastTileX, tilesY - 1,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, false, /* hiY */ true );
                         }
@@ -406,10 +390,10 @@ void Miniature::composeMiniature ()
                         const std::string & roomToTeleportToo = connections->getConnectedRoomAt( "via second teleport" );
 
                         if ( kind == "teleport" && ! roomToTeleport.empty() )
-                                fillIsoTile( toDrawHere, originX, originY, tileX, tileY, Color::byName( "yellow" ) );
+                                fillIsoTile( toDrawHere, tileX, tileY, Color::byName( "yellow" ) );
                         else
                         if ( kind == "teleport-too" && ! roomToTeleportToo.empty() )
-                                fillIsoTile( toDrawHere, originX, originY, tileX, tileY, Color::byName( "magenta" ) );
+                                fillIsoTile( toDrawHere, tileX, tileY, Color::byName( "magenta" ) );
 
                         // show triple room’s walls
 
@@ -417,13 +401,11 @@ void Miniature::composeMiniature ()
                         {
                                 if ( kind.find( "invisible-wall" ) != std::string::npos )
                                         drawIsoTile( toDrawHere,
-                                                        originX, originY,
                                                         tileX, tileY,
                                                         roomColor.multiply( Color::whiteColor() ),
                                                         true, false, false, false );
                                 else
                                         drawIsoTile( toDrawHere,
-                                                        originX, originY,
                                                         tileX, tileY,
                                                         roomColor.multiply( Color::whiteColor() ),
                                                         false, false, true, false );
@@ -432,13 +414,11 @@ void Miniature::composeMiniature ()
                         {
                                 if ( kind.find( "invisible-wall" ) != std::string::npos )
                                         drawIsoTile( toDrawHere,
-                                                        originX, originY,
                                                         tileX, tileY,
                                                         roomColor.multiply( Color::whiteColor() ),
                                                         false, true, false, false );
                                 else
                                         drawIsoTile( toDrawHere,
-                                                        originX, originY,
                                                         tileX, tileY,
                                                         roomColor.multiply( Color::whiteColor() ),
                                                         false, false, false, true );
@@ -453,8 +433,8 @@ void Miniature::composeMiniature ()
                 for ( unsigned int x = 0 ; x < tilesX ; ++ x ) {
                         for ( unsigned int y = 0 ; y < tilesY ; ++ y )
                         {
-                                drawIsoTile( toDrawHere, originX, originY, x, y, Color::byName( "green" ), true, true, true, true ) ;
-                                fillIsoTileInside( toDrawHere, originX, originY, x, y, Color::byName( "yellow" ), true ) ;
+                                drawIsoTile( toDrawHere, x, y, Color::byName( "green" ), true, true, true, true ) ;
+                                fillIsoTileInside( toDrawHere, x, y, Color::byName( "yellow" ), true ) ;
                         }
                 }
         }
@@ -476,10 +456,8 @@ void Miniature::draw ()
         // draw the image of miniature on the screen
         allegro::drawSprite( this->theMiniature->getAllegroPict(), xOnScreen, yOnScreen );
 
-        const int originX = this->room.getTilesOnY() * ( getSizeOfTile() << 1 ) ;
-        const int originY = 0 ;
-        const int xOriginOnScreen = originX + xOnScreen ;
-        const int yOriginOnScreen = originY + yOnScreen ;
+        const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
+        std::pair< int, int > roomOriginOnScreen( roomOrigin.first + xOnScreen, roomOrigin.second + yOnScreen );
 
         const allegro::Pict & theScreen = allegro::Pict::getWhereToDraw() ;
 
@@ -505,7 +483,7 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem.getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem.getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        fillIsoTile( theScreen, xOriginOnScreen, yOriginOnScreen, tileX, tileY, Color::byName( "orange" ) );
+                        fillIsoTile( theScreen, roomOriginOnScreen, tileX, tileY, Color::byName( "orange" ) );
                 }
 
                 // the bonus rabbits
@@ -518,7 +496,7 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem.getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem.getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        fillIsoTile( theScreen, xOriginOnScreen, yOriginOnScreen, tileX, tileY, Color::byName( "cyan" ) );
+                        fillIsoTile( theScreen, roomOriginOnScreen, tileX, tileY, Color::byName( "cyan" ) );
                 }
 
                 // the reincarnation fish or the mortal fish
@@ -531,9 +509,7 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem.getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem.getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        fillIsoTile( theScreen,
-                                        xOriginOnScreen, yOriginOnScreen,
-                                        tileX, tileY,
+                        fillIsoTile( theScreen, roomOriginOnScreen, tileX, tileY,
                                         ( kind == "reincarnation-fish" ) ? Color::byName( "green" ) : /* kind == "mortal-fish" */ Color::byName( "red" ) );
                 }
         }
@@ -556,7 +532,7 @@ void Miniature::draw ()
 
                 /* for ( int x = xBegin ; x <= xEnd ; ++ x )
                         for ( int y = yBegin ; y <= yEnd ; ++ y )
-                                drawIsoTile( theScreen, xOriginOnScreen, yOriginOnScreen, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
+                                drawIsoTile( theScreen, roomOriginOnScreen, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
 
                 int deltaWx = ( roomTileSize - character.getWidthX() ) >> 1 ;
                 int deltaWy = ( roomTileSize - character.getWidthY() ) >> 1 ;
@@ -577,8 +553,7 @@ void Miniature::draw ()
                         else if ( tileY > yEnd ) tileY = yEnd ;
                 }
 
-                fillIsoTileInside( theScreen,
-                        xOriginOnScreen, yOriginOnScreen, tileX, tileY,
+                fillIsoTileInside( theScreen, roomOriginOnScreen, tileX, tileY,
                         character.isActiveCharacter() ? FlickeringColor::flickerWhiteAndTransparent() : FlickeringColor::flickerGray75AndTransparent(),
                         true );
         }
@@ -595,7 +570,7 @@ void Miniature::draw ()
 
                 drawVignetteForRoomAboveOrBelow( theScreen,
                                                 miniatureMidX + xOnScreen,
-                                                aboveY + yOriginOnScreen, belowY + yOriginOnScreen,
+                                                aboveY + roomOriginOnScreen.second, belowY + roomOriginOnScreen.second,
                                                 Color::byName( "green" ).toAllegroColor(),
                                                 ! roomAbove.empty(), ! roomBelow.empty() );
         }
@@ -639,112 +614,123 @@ void Miniature::drawVignetteForRoomAboveOrBelow( const allegro::Pict& where, int
         allegro::Pict::setWhereToDraw( previousWhere );
 }
 
-void Miniature::drawEastDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
+void Miniature::drawEastDoorOnMiniature( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tileX - 1, tileY, color, false, /* loY */ true, false, false );
+        const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
+
+        drawIsoTile( where, tileX - 1, tileY, color, false, /* loY */ true, false, false );
 
         {
-                int x = x0 + ( ( tileX - 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tileY + 1 ) + ( tileX - 1 ) ) * sizeOfTile ;
+                int x = roomOrigin.first + ( ( tileX - 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( ( tileY + 1 ) + ( tileX - 1 ) ) * sizeOfTile ;
 
                 setEastDoorNorthernCorner( x, y );
                 where.drawPixelAt( x, y, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, false, /* hiY */ true );
+        drawIsoTile( where, tileX, tileY, color, false, false, false, /* hiY */ true );
 
         {
-                int x = x0 + ( ( tileX + 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tileY + 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
+                int x = roomOrigin.first + ( ( tileX + 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( ( tileY + 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
                 where.drawPixelAt( x - 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
         }
 }
 
-void Miniature::drawWestDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
+void Miniature::drawWestDoorOnMiniature( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tileX - 1, tileY, color, false, /* loY */ true, false, false );
+        const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
+
+        drawIsoTile( where, tileX - 1, tileY, color, false, /* loY */ true, false, false );
 
         {
-                int x = x0 + ( ( tileX - 1 ) - tileY ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( tileY + ( tileX - 1 ) ) * sizeOfTile ;
+                int x = roomOrigin.first + ( ( tileX - 1 ) - tileY ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( tileY + ( tileX - 1 ) ) * sizeOfTile ;
 
                 setWestDoorNorthernCorner( x + 2, y - 1 );
                 where.drawPixelAt( x + 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, false, /* hiY */ true );
+        drawIsoTile( where, tileX, tileY, color, false, false, false, /* hiY */ true );
 
         {
-                int x = x0 + ( ( tileX + 1 ) - tileY ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( tileY + ( tileX + 1 ) ) * sizeOfTile ;
+                int x = roomOrigin.first + ( ( tileX + 1 ) - tileY ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( tileY + ( tileX + 1 ) ) * sizeOfTile ;
                 where.drawPixelAt( x, y - 2, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
         }
 }
 
-void Miniature::drawNorthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
+void Miniature::drawNorthDoorOnMiniature( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tileX, tileY - 1, color, /* loX */ true, false, false, false );
+        const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
+
+        drawIsoTile( where, tileX, tileY - 1, color, /* loX */ true, false, false, false );
 
         {
-                int x = x0 + ( ( tileX + 1 ) - ( tileY - 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tileY - 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
+                int x = roomOrigin.first + ( ( tileX + 1 ) - ( tileY - 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( ( tileY - 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
 
                 setNorthDoorEasternCorner( x, y );
                 where.drawPixelAt( x, y, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, /* hiX */ true, false );
+        drawIsoTile( where, tileX, tileY, color, false, false, /* hiX */ true, false );
 
         {
-                int x = x0 + ( ( tileX + 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tileY + 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
+                int x = roomOrigin.first + ( ( tileX + 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( ( tileY + 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
                 where.drawPixelAt( x + 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
         }
 }
 
-void Miniature::drawSouthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
+void Miniature::drawSouthDoorOnMiniature( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tileX, tileY - 1, color, /* loX */ true, false, false, false );
+        const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
+
+        drawIsoTile( where, tileX, tileY - 1, color, /* loX */ true, false, false, false );
 
         {
-                int x = x0 + ( tileX - ( tileY - 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tileY - 1 ) + tileX ) * sizeOfTile ;
+                int x = roomOrigin.first + ( tileX - ( tileY - 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( ( tileY - 1 ) + tileX ) * sizeOfTile ;
 
                 setSouthDoorEasternCorner( x - 2, y - 1 );
                 where.drawPixelAt( x - 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, /* hiX */ true, false );
+        drawIsoTile( where, tileX, tileY, color, false, false, /* hiX */ true, false );
 
         {
-                int x = x0 + ( tileX - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tileY + 1 ) + tileX ) * sizeOfTile ;
+                int x = roomOrigin.first + ( tileX - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = roomOrigin.second + ( ( tileY + 1 ) + tileX ) * sizeOfTile ;
                 where.drawPixelAt( x, y - 2, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
         }
 }
 
-void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color )
+void Miniature::drawIsoSquare( const allegro::Pict & where,
+                                std::pair< int, int > origin,
+                                unsigned int tilesX, unsigned int tilesY,
+                                const Color & color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        unsigned int posX = x0 ;
-        unsigned int posY = y0 ;
+        unsigned int posX = origin.first ;
+        unsigned int posY = origin.second ;
 
         for ( unsigned int tile = 0 ; tile < tilesX ; ++ tile ) {
                 for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
@@ -754,7 +740,7 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
                 }
         }
 
-        posX--; posY--;
+        -- posX ; -- posY ;
 
         for ( unsigned int tile = 0 ; tile < tilesY ; ++ tile ) {
                 for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
@@ -764,8 +750,8 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
                 }
         }
 
-        posX = x0 + 1 ;
-        posY = y0 ;
+        posX = origin.first + 1 ;
+        posY = origin.second ;
 
         for ( unsigned int tile = 0 ; tile < tilesY ; ++ tile ) {
                 for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
@@ -775,7 +761,7 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
                 }
         }
 
-        posX++; posY--;
+        ++ posX ; -- posY ;
 
         for ( unsigned int tile = 0 ; tile < tilesX ; ++ tile ) {
                 for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
@@ -787,7 +773,7 @@ void Miniature::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsig
 }
 
 void Miniature::drawIsoTile( const allegro::Pict& where,
-                                int x0, int y0,
+                                std::pair< int, int > origin,
                                 int tileX, int tileY,
                                 const Color& color,
                                 bool loX, bool loY, bool hiX, bool hiY )
@@ -795,8 +781,8 @@ void Miniature::drawIsoTile( const allegro::Pict& where,
         if ( color.isFullyTransparent () ) return ;
 
         if ( loX ) {
-                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( tileY + tileX ) * sizeOfTile ;
+                int x = origin.first  + ( tileX - tileY ) * ( sizeOfTile << 1 ) ;
+                int y = origin.second + ( tileY + tileX ) * sizeOfTile ;
 
                 for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ ) {
                         where.drawPixelAt( x++, y, color.toAllegroColor() );
@@ -805,8 +791,8 @@ void Miniature::drawIsoTile( const allegro::Pict& where,
         }
 
         if ( loY ) {
-                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) + 1 ;
-                int y = y0 + ( tileY + tileX ) * sizeOfTile ;
+                int x = origin.first  + ( tileX - tileY ) * ( sizeOfTile << 1 ) + 1 ;
+                int y = origin.second + ( tileY + tileX ) * sizeOfTile ;
 
                 for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ ) {
                         where.drawPixelAt( x--, y, color.toAllegroColor() );
@@ -815,8 +801,8 @@ void Miniature::drawIsoTile( const allegro::Pict& where,
         }
 
         if ( hiX ) {
-                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( ( sizeOfTile - 1 ) << 1 ) ;
-                int y = y0 + ( tileY + tileX ) * sizeOfTile + ( sizeOfTile - 1 ) ;
+                int x = origin.first  + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( ( sizeOfTile - 1 ) << 1 ) ;
+                int y = origin.second + ( tileY + tileX ) * sizeOfTile + ( sizeOfTile - 1 ) ;
 
                 for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ ) {
                         where.drawPixelAt( x++, y, color.toAllegroColor() );
@@ -825,8 +811,8 @@ void Miniature::drawIsoTile( const allegro::Pict& where,
         }
 
         if ( hiY ) {
-                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) + ( ( sizeOfTile - 1 ) << 1 ) + 1 ;
-                int y = y0 + ( tileY + tileX ) * sizeOfTile + ( sizeOfTile - 1 ) ;
+                int x = origin.first  + ( tileX - tileY ) * ( sizeOfTile << 1 ) + ( ( sizeOfTile - 1 ) << 1 ) + 1 ;
+                int y = origin.second + ( tileY + tileX ) * sizeOfTile + ( sizeOfTile - 1 ) ;
 
                 for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ ) {
                         where.drawPixelAt( x--, y, color.toAllegroColor() );
@@ -835,14 +821,14 @@ void Miniature::drawIsoTile( const allegro::Pict& where,
         }
 }
 
-void Miniature::fillIsoTile( const allegro::Pict& where, int x0, int y0, int tileX, int tileY, const Color& color )
+void Miniature::fillIsoTile( const allegro::Pict& where, std::pair< int, int > origin, int tileX, int tileY, const Color& color )
 {
         if ( color.isFullyTransparent () ) return ;
 
         for ( unsigned int piw = 0 ; piw < sizeOfTile ; piw ++ )
         {
-                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) ;
-                int y = y0 + ( tileY + tileX ) * sizeOfTile + piw ;
+                int x =  origin.first + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) ;
+                int y = origin.second + ( tileY + tileX ) * sizeOfTile + piw ;
 
                 for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
                 {
@@ -852,14 +838,14 @@ void Miniature::fillIsoTile( const allegro::Pict& where, int x0, int y0, int til
         }
 }
 
-void Miniature::fillIsoTileInside( const allegro::Pict& where, int x0, int y0, int tileX, int tileY, const Color& color, bool fullFill )
+void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, int > origin, int tileX, int tileY, const Color& color, bool fullFill )
 {
         if ( color.isFullyTransparent () ) return ;
 
         if ( sizeOfTile == 2 )
         {
-                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( tileY + tileX ) * sizeOfTile + 1 ;
+                int x =  origin.first + ( tileX - tileY ) * ( sizeOfTile << 1 ) ;
+                int y = origin.second + ( tileY + tileX ) * sizeOfTile + 1 ;
 
                 where.drawPixelAt( x++, y, color.toAllegroColor() );
                 where.drawPixelAt( x++, y++, color.toAllegroColor() );
@@ -868,8 +854,8 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, int x0, int y0, i
         {
                 for ( unsigned int piw = 1 ; piw < ( sizeOfTile - 1 ) ; piw ++ )
                 {
-                        int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) + 2 ;
-                        int y = y0 + ( tileY + tileX ) * sizeOfTile + piw + 1 ;
+                        int x =  origin.first + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) + 2 ;
+                        int y = origin.second + ( tileY + tileX ) * sizeOfTile + piw + 1 ;
 
                         for ( unsigned int pix = 1 ; pix < ( sizeOfTile - 1 ) ; pix ++ )
                         {
