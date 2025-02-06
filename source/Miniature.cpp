@@ -17,7 +17,7 @@
 #endif
 
 
-Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigned short sizeOfTileForMiniature )
+Miniature::Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned short sizeOfTileForMiniature )
         : theImage( nilPointer )
         , room( roomForMiniature )
         , sizeOfTile( sizeOfTileForMiniature )
@@ -27,7 +27,18 @@ Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigne
         , southDoorEasternCorner( -1, -1 )
         , westDoorNorthernCorner( -1, -1 )
 {
-        if ( sizeOfTile < 2 ) sizeOfTile = 2 ;
+        if ( sizeOfTileForMiniature < 2 ) this->sizeOfTile = 2 ;
+
+        {
+                const ConnectedRooms * connections = roomForMiniature.getConnections() ;
+                if ( connections == nilPointer ) throw MayNotBePossible( "nil connections for room " + roomForMiniature.getNameOfRoomDescriptionFile() );
+
+                int newOffsetY = this->offsetOnScreen.second + 4 ;
+                if ( ! connections->getConnectedRoomAt( "above" ).empty() )
+                        newOffsetY = this->offsetOnScreen.second + ( 3 * getSizeOfTile() ) ;
+
+                setOffsetOnScreen( this->offsetOnScreen.first, newOffsetY );
+        }
 
 # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
         std::cout << "constructed Miniature( room \"" << roomForMiniature.getNameOfRoomDescriptionFile() << "\", "
@@ -46,7 +57,7 @@ std::pair < unsigned int, unsigned int > Miniature::calculateSize () const
         unsigned int height = ( tilesX + tilesY ) * this->sizeOfTile ;
         unsigned int width = height << 1 ;
 
-        return std::pair < unsigned int, unsigned int >( width, height ) ;
+        return std::pair< unsigned int, unsigned int >( width, height ) ;
 }
 
 /* protected */
@@ -436,20 +447,11 @@ void Miniature::draw ()
 {
         if ( this->theImage == nilPointer ) composeMiniature () ;
 
-        const ConnectedRooms * connections = room.getConnections() ;
-        if ( connections == nilPointer ) throw MayNotBePossible( "nil connections for room " + room.getNameOfRoomDescriptionFile() );
-
-        const std::string & roomAbove = connections->getConnectedRoomAt( "above" );
-        const std::string & roomBelow = connections->getConnectedRoomAt( "below" );
-
-        const int xOnScreen = this->offsetOnScreen.first ;
-        const int yOnScreen = this->offsetOnScreen.second + ( roomAbove.empty() ? 4 : ( 3 * getSizeOfTile() ) ) ;
-
         // draw the image of miniature on the screen
-        allegro::drawSprite( this->theImage->getAllegroPict(), xOnScreen, yOnScreen );
+        allegro::drawSprite( this->theImage->getAllegroPict(), this->offsetOnScreen.first, this->offsetOnScreen.second );
 
         const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
-        std::pair< int, int > roomOriginOnScreen( roomOrigin.first + xOnScreen, roomOrigin.second + yOnScreen );
+        std::pair< int, int > roomOriginOnScreen( roomOrigin.first + this->offsetOnScreen.first, roomOrigin.second + this->offsetOnScreen.second );
 
         const allegro::Pict & theScreen = allegro::Pict::getWhereToDraw() ;
 
@@ -552,6 +554,12 @@ void Miniature::draw ()
 
         // show when there’s a room above or below
 
+        const ConnectedRooms * connections = getRoom().getConnections() ;
+        if ( connections == nilPointer ) throw MayNotBePossible( "nil connections for room " + getRoom().getNameOfRoomDescriptionFile() );
+
+        const std::string & roomAbove = connections->getConnectedRoomAt( "above" );
+        const std::string & roomBelow = connections->getConnectedRoomAt( "below" );
+
         if ( ! roomAbove.empty() || ! roomBelow.empty() )
         {
                 int miniatureMidX = this->theImage->getWidth() >> 1 ;
@@ -561,7 +569,7 @@ void Miniature::draw ()
                 belowY += getSizeOfTile() << 1 ;
 
                 drawVignetteForRoomAboveOrBelow( theScreen,
-                                                miniatureMidX + xOnScreen,
+                                                miniatureMidX + this->offsetOnScreen.first,
                                                 aboveY + roomOriginOnScreen.second, belowY + roomOriginOnScreen.second,
                                                 Color::byName( "green" ).toAllegroColor(),
                                                 ! roomAbove.empty(), ! roomBelow.empty() );
