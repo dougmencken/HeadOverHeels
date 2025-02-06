@@ -58,17 +58,19 @@ public :
         void fillIsoTileInside ( const allegro::Pict & where, int tileX, int tileY, const Color & color, bool fullFill )
                 {  fillIsoTileInside( where, getOriginOfRoom(), tileX, tileY, color, fullFill ) ;  }
 
-        const std::pair< int, int > & getEastDoorNorthernCorner () const {  return this->eastDoorNorthernCorner ;  }
-        const std::pair< int, int > & getWestDoorNorthernCorner () const {  return this->westDoorNorthernCorner ;  }
-        const std::pair< int, int > & getNorthDoorEasternCorner () const {  return this->northDoorEasternCorner ;  }
-        const std::pair< int, int > & getSouthDoorEasternCorner () const {  return this->southDoorEasternCorner ;  }
+        const std::pair< int, int > & getEastDoorNorthernCorner ()
+                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->eastDoorNorthernCorner ;  }
+        const std::pair< int, int > & getWestDoorNorthernCorner ()
+                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->westDoorNorthernCorner ;  }
+        const std::pair< int, int > & getNorthDoorEasternCorner ()
+                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->northDoorEasternCorner ;  }
+        const std::pair< int, int > & getSouthDoorEasternCorner ()
+                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->southDoorEasternCorner ;  }
 
         void setEastDoorNorthernCorner( int x, int y ) {  this->eastDoorNorthernCorner = std::pair< int, int >( x, y ) ;  }
         void setWestDoorNorthernCorner( int x, int y ) {  this->westDoorNorthernCorner = std::pair< int, int >( x, y ) ;  }
         void setNorthDoorEasternCorner( int x, int y ) {  this->northDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
         void setSouthDoorEasternCorner( int x, int y ) {  this->southDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
-
-        void connectMiniature ( Miniature * that, const std::string & where, short gap = 0 ) ;
 
         std::pair < unsigned int, unsigned int > getImageSize () const
         {
@@ -100,6 +102,8 @@ public :
 
         void setOffsetOnScreen ( const std::pair< int, int > & newOffset ) {  this->offsetOnScreen = newOffset ;  }
         void setOffsetOnScreen ( int offsetX, int offsetY ) {  setOffsetOnScreen( std::pair< int, int >( offsetX, offsetY ) ) ;  }
+
+        bool connectMiniature ( Miniature * that, const std::string & where, short gap = 0 ) ;
 
 protected :
 

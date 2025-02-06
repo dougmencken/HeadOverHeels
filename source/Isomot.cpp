@@ -241,8 +241,13 @@ Picture* Isomot::updateMe ()
                         {
                                 if ( ! sameRoom ) {
                                         Miniature * ofThatRoom = new Miniature( * map.getOrBuildRoomByFile( roomThere ) );
-                                        ofThisRoom->connectMiniature( ofThatRoom, sides[ s ], -2 );
-                                        this->miniatures.setMiniatureForName( sides[ s ], ofThatRoom );
+                                        if ( ofThisRoom->connectMiniature( ofThatRoom, sides[ s ] ) )
+                                                this->miniatures.setMiniatureForName( sides[ s ], ofThatRoom );
+                                        else
+                                                std::cout << "can’t connect the miniature of room " << ofThisRoom->getRoom().getNameOfRoomDescriptionFile()
+                                                                << " and the miniature of adjacent to the " << sides[ s ]
+                                                                << " room " << ofThatRoom->getRoom().getNameOfRoomDescriptionFile()
+                                                                << std::endl ;
                                 }
 
                                 Miniature * ofRoomThere = this->miniatures.getMiniatureByName( sides[ s ] ) ;

@@ -631,6 +631,11 @@ void Miniature::drawEastDoorOnMiniature( const allegro::Pict & where, unsigned i
                 where.drawPixelAt( x - 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
         }
+
+# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+        const std::pair< int, int > & corner = getEastDoorNorthernCorner() ;
+        where.drawPixelAt( corner.first, corner.second, Color::byName( "blue" ).toAllegroColor() );
+# endif
 }
 
 void Miniature::drawWestDoorOnMiniature( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color )
@@ -658,6 +663,11 @@ void Miniature::drawWestDoorOnMiniature( const allegro::Pict & where, unsigned i
                 where.drawPixelAt( x, y - 2, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
         }
+
+# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+        const std::pair< int, int > & corner = getWestDoorNorthernCorner() ;
+        where.drawPixelAt( corner.first, corner.second, Color::byName( "red" ).toAllegroColor() );
+# endif
 }
 
 void Miniature::drawNorthDoorOnMiniature( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color )
@@ -685,6 +695,11 @@ void Miniature::drawNorthDoorOnMiniature( const allegro::Pict & where, unsigned 
                 where.drawPixelAt( x + 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
         }
+
+# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+        const std::pair< int, int > & corner = getNorthDoorEasternCorner() ;
+        where.drawPixelAt( corner.first, corner.second, Color::byName( "blue" ).toAllegroColor() );
+# endif
 }
 
 void Miniature::drawSouthDoorOnMiniature( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color )
@@ -712,6 +727,11 @@ void Miniature::drawSouthDoorOnMiniature( const allegro::Pict & where, unsigned 
                 where.drawPixelAt( x, y - 2, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
         }
+
+# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+        const std::pair< int, int > & corner = getSouthDoorEasternCorner() ;
+        where.drawPixelAt( corner.first, corner.second, Color::byName( "red" ).toAllegroColor() );
+# endif
 }
 
 void Miniature::drawIsoSquare( const allegro::Pict & where,
@@ -873,80 +893,67 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, i
         }
 }
 
-void Miniature::connectMiniature ( Miniature * that, const std::string & where, short gap )
+bool Miniature::connectMiniature ( Miniature * that, const std::string & where, short gap )
 {
-        if ( that == nilPointer ) return ;
+        if ( that == nilPointer ) return false ;
 
         that->setSizeOfTile( this->sizeOfTile ) ;
 
-        const ConnectedRooms * connections = this->room.getConnections() ;
-        assert( connections != nilPointer );
+        /* const ConnectedRooms * connections = this->room.getConnections() ;
+        if ( connections == nilPointer ) return false ; */
 
-        std::string fileOfConnectedRoom = connections->getConnectedRoomAt( where );
-
-        if ( fileOfConnectedRoom.empty () ) return ;
-
-        const Room* connectedRoom = GameMap::getInstance().getOrBuildRoomByFile( fileOfConnectedRoom );
-        assert( connectedRoom != nilPointer );
+        /* const std::string & fileOfConnectedRoom = connections->getConnectedRoomAt( where );
+        if ( fileOfConnectedRoom.empty () ) return false ; */
 
         int adjacentDifferenceX = 0 ;
         int adjacentDifferenceY = 0 ;
 
-        int gapY = - 1 + gap ;
-        int gapX = gapY << 1 ;
+        int shiftY = ( this->sizeOfTile << 1 ) + gap ;
+        int shiftX = shiftY << 1 ;
 
-        if ( where == "south" )
-        {
-                Door* southDoor = room.getDoorOn( "south" );
-                assert( southDoor != nilPointer );
-                Door* connectedNorthDoor = connectedRoom->getDoorOn( "north" );
-                if ( connectedNorthDoor == nilPointer ) connectedNorthDoor = connectedRoom->getDoorOn( "northeast" );
-                if ( connectedNorthDoor == nilPointer ) connectedNorthDoor = connectedRoom->getDoorOn( "northwest" );
-                assert( connectedNorthDoor != nilPointer );
+        if ( where == "south" ) {
+                if ( room.getDoorOn( "south" ) == nilPointer ) return false ;
 
-                int deltaCellY = southDoor->getCellY() - connectedNorthDoor->getCellY() ;
-                adjacentDifferenceX = ( room.getTilesOnX () + deltaCellY ) * ( sizeOfTile << 1 ) + gapX ;
-                adjacentDifferenceY = ( room.getTilesOnX () + deltaCellY ) * sizeOfTile + gapY ;
+                std::pair< int, int > doorCornerOfThis = this->getSouthDoorEasternCorner() ;
+                std::pair< int, int > doorCornerOfThat = that->getNorthDoorEasternCorner() ;
+                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
+                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
         }
-        else if ( where == "north" )
-        {
-                Door* northDoor = room.getDoorOn( "north" );
-                assert( northDoor != nilPointer );
-                Door* connectedSouthDoor = connectedRoom->getDoorOn( "south" );
-                if ( connectedSouthDoor == nilPointer ) connectedSouthDoor = connectedRoom->getDoorOn( "southeast" );
-                if ( connectedSouthDoor == nilPointer ) connectedSouthDoor = connectedRoom->getDoorOn( "southwest" );
-                assert( connectedSouthDoor != nilPointer );
+        else
+        if ( where == "north" ) {
+                if ( room.getDoorOn( "north" ) == nilPointer ) return false ;
 
-                int deltaCellY = northDoor->getCellY() - connectedSouthDoor->getCellY() ;
-                adjacentDifferenceX = ( - connectedRoom->getTilesOnX () + deltaCellY ) * ( sizeOfTile << 1 ) - gapX ;
-                adjacentDifferenceY = ( - connectedRoom->getTilesOnX () + deltaCellY ) * sizeOfTile - gapY ;
+                std::pair< int, int > doorCornerOfThis = this->getNorthDoorEasternCorner() ;
+                std::pair< int, int > doorCornerOfThat = that->getSouthDoorEasternCorner() ;
+                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
+                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
+
+                shiftX = - shiftX ;
+                shiftY = - shiftY ;
         }
-        else if ( where == "east" )
-        {
-                Door* eastDoor = room.getDoorOn( "east" );
-                assert( eastDoor != nilPointer );
-                Door* connectedWestDoor = connectedRoom->getDoorOn( "west" );
-                if ( connectedWestDoor == nilPointer ) connectedWestDoor = connectedRoom->getDoorOn( "westnorth" );
-                if ( connectedWestDoor == nilPointer ) connectedWestDoor = connectedRoom->getDoorOn( "westsouth" );
-                assert( connectedWestDoor != nilPointer );
+        else
+        if ( where == "east" ) {
+                if ( room.getDoorOn( "east" ) == nilPointer ) return false ;
 
-                int deltaCellX = eastDoor->getCellX() - connectedWestDoor->getCellX() ;
-                adjacentDifferenceX = ( room.getTilesOnY () + deltaCellX ) * ( sizeOfTile << 1 ) + gapX ;
-                adjacentDifferenceY = ( - connectedRoom->getTilesOnY () + deltaCellX ) * sizeOfTile - gapY ;
+                std::pair< int, int > doorCornerOfThis = this->getEastDoorNorthernCorner() ;
+                std::pair< int, int > doorCornerOfThat = that->getWestDoorNorthernCorner() ;
+                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
+                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
+
+                shiftY = - shiftY ;
         }
-        else if ( where == "west" )
-        {
-                Door* westDoor = room.getDoorOn( "west" );
-                assert( westDoor != nilPointer );
-                Door* connectedEastDoor = connectedRoom->getDoorOn( "east" );
-                if ( connectedEastDoor == nilPointer ) connectedEastDoor = connectedRoom->getDoorOn( "eastnorth" );
-                if ( connectedEastDoor == nilPointer ) connectedEastDoor = connectedRoom->getDoorOn( "eastsouth" );
-                assert( connectedEastDoor != nilPointer );
+        else
+        if ( where == "west" ) {
+                if ( room.getDoorOn( "west" ) == nilPointer ) return false ;
 
-                int deltaCellX = westDoor->getCellX() - connectedEastDoor->getCellX() ;
-                adjacentDifferenceX = ( - connectedRoom->getTilesOnY () + deltaCellX ) * ( sizeOfTile << 1 ) - gapX ;
-                adjacentDifferenceY = ( room.getTilesOnY () + deltaCellX ) * sizeOfTile + gapY ;
+                std::pair< int, int > doorCornerOfThis = this->getWestDoorNorthernCorner() ;
+                std::pair< int, int > doorCornerOfThat = that->getEastDoorNorthernCorner() ;
+                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
+                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
+
+                shiftX = - shiftX ;
         }
 
-        that->setOffsetOnScreen( this->offsetOnScreen.first + adjacentDifferenceX , this->offsetOnScreen.second + adjacentDifferenceY ) ;
+        that->setOffsetOnScreen( this->offsetOnScreen.first + adjacentDifferenceX + shiftX, this->offsetOnScreen.second + adjacentDifferenceY + shiftY ) ;
+        return true ;
 }
