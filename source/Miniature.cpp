@@ -23,6 +23,10 @@ Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigne
         , room( roomForMiniature )
         , sizeOfTile( sizeOfTileForMiniature )
         , offset( std::pair< int, int >( leftX, topY ) )
+        , northDoorEasternCorner( -1, -1 )
+        , eastDoorNorthernCorner( -1, -1 )
+        , southDoorEasternCorner( -1, -1 )
+        , westDoorNorthernCorner( -1, -1 )
 {
         if ( sizeOfTile < 2 ) sizeOfTile = 2 ;
 
@@ -466,12 +470,8 @@ void Miniature::draw ()
         const std::string & roomAbove = connections->getConnectedRoomAt( "above" );
         const std::string & roomBelow = connections->getConnectedRoomAt( "below" );
 
-        const int yOffset = roomAbove.empty() ? 4 : ( 3 * getSizeOfTile() ) ;
-
-        const allegro::Pict & theScreen = allegro::Pict::getWhereToDraw() ;
-
         const int xOnScreen = this->offset.first ;
-        const int yOnScreen = this->offset.second + yOffset ;
+        const int yOnScreen = this->offset.second + ( roomAbove.empty() ? 4 : ( 3 * getSizeOfTile() ) ) ;
 
         // draw the image of miniature on the screen
         allegro::drawSprite( this->theMiniature->getAllegroPict(), xOnScreen, yOnScreen );
@@ -480,6 +480,8 @@ void Miniature::draw ()
         const int originY = 0 ;
         const int xOriginOnScreen = originX + xOnScreen ;
         const int yOriginOnScreen = originY + yOnScreen ;
+
+        const allegro::Pict & theScreen = allegro::Pict::getWhereToDraw() ;
 
         // items the player can take
 
@@ -637,93 +639,101 @@ void Miniature::drawVignetteForRoomAboveOrBelow( const allegro::Pict& where, int
         allegro::Pict::setWhereToDraw( previousWhere );
 }
 
-void Miniature::drawEastDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color )
+void Miniature::drawEastDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, color, false, /* loY */ true, false, false );
+        drawIsoTile( where, x0, y0, tileX - 1, tileY, color, false, /* loY */ true, false, false );
 
         {
-                int x = x0 + ( ( tilesX - 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tilesY + 1 ) + ( tilesX - 1 ) ) * sizeOfTile ;
+                int x = x0 + ( ( tileX - 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tileY + 1 ) + ( tileX - 1 ) ) * sizeOfTile ;
+
+                setEastDoorNorthernCorner( x, y );
                 where.drawPixelAt( x, y, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, false, /* hiY */ true );
+        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, false, /* hiY */ true );
 
         {
-                int x = x0 + ( ( tilesX + 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tilesY + 1 ) + ( tilesX + 1 ) ) * sizeOfTile ;
+                int x = x0 + ( ( tileX + 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tileY + 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
                 where.drawPixelAt( x - 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
         }
 }
 
-void Miniature::drawWestDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color )
+void Miniature::drawWestDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, color, false, /* loY */ true, false, false );
+        drawIsoTile( where, x0, y0, tileX - 1, tileY, color, false, /* loY */ true, false, false );
 
         {
-                int x = x0 + ( ( tilesX - 1 ) - tilesY ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( tilesY + ( tilesX - 1 ) ) * sizeOfTile ;
+                int x = x0 + ( ( tileX - 1 ) - tileY ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( tileY + ( tileX - 1 ) ) * sizeOfTile ;
+
+                setWestDoorNorthernCorner( x + 2, y - 1 );
                 where.drawPixelAt( x + 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, false, /* hiY */ true );
+        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, false, /* hiY */ true );
 
         {
-                int x = x0 + ( ( tilesX + 1 ) - tilesY ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( tilesY + ( tilesX + 1 ) ) * sizeOfTile ;
+                int x = x0 + ( ( tileX + 1 ) - tileY ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( tileY + ( tileX + 1 ) ) * sizeOfTile ;
                 where.drawPixelAt( x, y - 2, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
         }
 }
 
-void Miniature::drawNorthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color )
+void Miniature::drawNorthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, color, /* loX */ true, false, false, false );
+        drawIsoTile( where, x0, y0, tileX, tileY - 1, color, /* loX */ true, false, false, false );
 
         {
-                int x = x0 + ( ( tilesX + 1 ) - ( tilesY - 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tilesY - 1 ) + ( tilesX + 1 ) ) * sizeOfTile ;
+                int x = x0 + ( ( tileX + 1 ) - ( tileY - 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tileY - 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
+
+                setNorthDoorEasternCorner( x, y );
                 where.drawPixelAt( x, y, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, /* hiX */ true, false );
+        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, /* hiX */ true, false );
 
         {
-                int x = x0 + ( ( tilesX + 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tilesY + 1 ) + ( tilesX + 1 ) ) * sizeOfTile ;
+                int x = x0 + ( ( tileX + 1 ) - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tileY + 1 ) + ( tileX + 1 ) ) * sizeOfTile ;
                 where.drawPixelAt( x + 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
         }
 }
 
-void Miniature::drawSouthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color )
+void Miniature::drawSouthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color )
 {
         if ( color.isFullyTransparent () ) return ;
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, color, /* loX */ true, false, false, false );
+        drawIsoTile( where, x0, y0, tileX, tileY - 1, color, /* loX */ true, false, false, false );
 
         {
-                int x = x0 + ( tilesX - ( tilesY - 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tilesY - 1 ) + tilesX ) * sizeOfTile ;
+                int x = x0 + ( tileX - ( tileY - 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tileY - 1 ) + tileX ) * sizeOfTile ;
+
+                setSouthDoorEasternCorner( x - 2, y - 1 );
                 where.drawPixelAt( x - 2, y - 1, color.toAllegroColor() );
                 where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
         }
 
-        drawIsoTile( where, x0, y0, tilesX, tilesY, color, false, false, /* hiX */ true, false );
+        drawIsoTile( where, x0, y0, tileX, tileY, color, false, false, /* hiX */ true, false );
 
         {
-                int x = x0 + ( tilesX - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
-                int y = y0 + ( ( tilesY + 1 ) + tilesX ) * sizeOfTile ;
+                int x = x0 + ( tileX - ( tileY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tileY + 1 ) + tileX ) * sizeOfTile ;
                 where.drawPixelAt( x, y - 2, color.toAllegroColor() );
                 where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
         }
@@ -900,8 +910,8 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
         int adjacentDifferenceX = 0 ;
         int adjacentDifferenceY = 0 ;
 
-        int gapX = - 2 + ( gap << 1 ) ;
         int gapY = - 1 + gap ;
+        int gapX = gapY << 1 ;
 
         if ( where == "south" )
         {

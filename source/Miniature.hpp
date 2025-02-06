@@ -39,10 +39,10 @@ public :
 
         void drawVignetteForRoomAboveOrBelow ( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow ) ;
 
-        void drawEastDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
-        void drawSouthDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
-        void drawNorthDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
-        void drawWestDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawEastDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color ) ;
+        void drawSouthDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color ) ;
+        void drawNorthDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color ) ;
+        void drawWestDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tileX, unsigned int tileY, const Color& color ) ;
 
         void drawIsoSquare ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
 
@@ -51,6 +51,16 @@ public :
         void fillIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color ) ;
 
         void fillIsoTileInside ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color, bool fullFill ) ;
+
+        const std::pair< int, int > & getEastDoorNorthernCorner () const {  return this->eastDoorNorthernCorner ;  }
+        const std::pair< int, int > & getWestDoorNorthernCorner () const {  return this->westDoorNorthernCorner ;  }
+        const std::pair< int, int > & getNorthDoorEasternCorner () const {  return this->northDoorEasternCorner ;  }
+        const std::pair< int, int > & getSouthDoorEasternCorner () const {  return this->southDoorEasternCorner ;  }
+
+        void setEastDoorNorthernCorner( int x, int y ) {  this->eastDoorNorthernCorner = std::pair< int, int >( x, y ) ;  }
+        void setWestDoorNorthernCorner( int x, int y ) {  this->westDoorNorthernCorner = std::pair< int, int >( x, y ) ;  }
+        void setNorthDoorEasternCorner( int x, int y ) {  this->northDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
+        void setSouthDoorEasternCorner( int x, int y ) {  this->southDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
 
         std::pair < int, int > calculatePositionOfConnectedMiniature ( const std::string & where, unsigned short gap = 1 ) ;
 
@@ -82,6 +92,11 @@ private :
         unsigned int sizeOfTile ;
 
         std::pair < int, int > offset ;
+
+        std::pair < int, int > northDoorEasternCorner ;
+        std::pair < int, int > eastDoorNorthernCorner ;
+        std::pair < int, int > southDoorEasternCorner ;
+        std::pair < int, int > westDoorNorthernCorner ;
 
 } ;
 

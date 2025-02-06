@@ -225,7 +225,10 @@ Picture* Isomot::updateMe ()
 
                 bool sameRoom = true ;
                 Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
-                if ( ofThisRoom == nilPointer || ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile() ) {
+                if ( ofThisRoom == nilPointer ||
+                                ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
+                                || ofThisRoom->getSizeOfTile() != this->sizeOfTileForMiniature )
+                {
                         ofThisRoom = new Miniature( *activeRoom, 24, 24 + ( this->sizeOfTileForMiniature << 1 ), this->sizeOfTileForMiniature );
                         this->miniatures.setMiniatureForName( "this", ofThisRoom );
                         sameRoom = false ;
@@ -547,21 +550,25 @@ void Isomot::handleMagicKeys ()
                 cameraFollowsCharacter = true ;
         }
 
-        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad -" ) )
+        if ( allegro::isShiftKeyPushed() && ( allegro::isKeyPushed( "Pad -" ) || allegro::isKeyPushed( "," ) ) )
         {
-                if ( sizeOfTileForMiniature > 2 ) sizeOfTileForMiniature --;
-                allegro::releaseKey( "Pad -" );
+                if ( sizeOfTileForMiniature > 2 ) sizeOfTileForMiniature -- ;
+
+                if ( allegro::isKeyPushed( "," ) ) allegro::releaseKey( "," );
+                if ( allegro::isKeyPushed( "Pad -" ) ) allegro::releaseKey( "Pad -" );
         }
-        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad +" ) )
+        if ( allegro::isShiftKeyPushed() && ( allegro::isKeyPushed( "Pad +" ) || allegro::isKeyPushed( "." ) ) )
         {
-                if ( sizeOfTileForMiniature < 10 ) sizeOfTileForMiniature ++;
-                allegro::releaseKey( "Pad +" );
+                if ( sizeOfTileForMiniature < 10 ) sizeOfTileForMiniature ++ ;
+
+                if ( allegro::isKeyPushed( "." ) ) allegro::releaseKey( "." );
+                if ( allegro::isKeyPushed( "Pad +" ) ) allegro::releaseKey( "Pad +" );
         }
 
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "." ) )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "/" ) )
         {
                 drawOnChequerboard = ! drawOnChequerboard ;
-                allegro::releaseKey( "." );
+                allegro::releaseKey( "/" );
         }
 }
 
