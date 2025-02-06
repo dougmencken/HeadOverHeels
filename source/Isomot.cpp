@@ -240,11 +240,9 @@ Picture* Isomot::updateMe ()
                         if ( ! roomThere.empty () )
                         {
                                 if ( ! sameRoom ) {
-                                        std::pair< int, int > nextRoomOffset = ofThisRoom->calculatePositionOfConnectedMiniature( sides[ s ], 0 );
-                                        this->miniatures.setMiniatureForName( sides[ s ],
-                                                                                new Miniature( * map.getOrBuildRoomByFile( roomThere ),
-                                                                                                nextRoomOffset.first, nextRoomOffset.second,
-                                                                                                sizeOfTileForMiniature ) );
+                                        Miniature * ofThatRoom = new Miniature( * map.getOrBuildRoomByFile( roomThere ) );
+                                        ofThisRoom->connectMiniature( ofThatRoom, sides[ s ], -2 );
+                                        this->miniatures.setMiniatureForName( sides[ s ], ofThatRoom );
                                 }
 
                                 Miniature * ofRoomThere = this->miniatures.getMiniatureByName( sides[ s ] ) ;

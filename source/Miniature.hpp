@@ -29,9 +29,9 @@ class Miniature : public Drawable
 
 public :
 
-        Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned int sizeOfTileForMiniature ) ;
+        Miniature( const Room & roomForMiniature, int leftX = 0, int topY = 0, unsigned short sizeOfTileForMiniature = 3 ) ;
 
-        virtual ~Miniature( ) ;
+        virtual ~Miniature( ) {  binTheImage() ;  }
 
         virtual void draw () ;
 
@@ -68,18 +68,14 @@ public :
         void setNorthDoorEasternCorner( int x, int y ) {  this->northDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
         void setSouthDoorEasternCorner( int x, int y ) {  this->southDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
 
-        std::pair < int, int > calculatePositionOfConnectedMiniature ( const std::string & where, unsigned short gap = 1 ) ;
+        void connectMiniature ( Miniature * that, const std::string & where, short gap = 0 ) ;
 
         std::pair < unsigned int, unsigned int > getImageSize () const
         {
-                if ( theMiniature == nilPointer ) return std::pair < unsigned int, unsigned int >( 0, 0 ) ;
+                if ( theImage == nilPointer ) return std::pair < unsigned int, unsigned int >( 0, 0 ) ;
 
-                return std::pair < unsigned int, unsigned int >( this->theMiniature->getWidth(), this->theMiniature->getHeight() ) ;
+                return std::pair < unsigned int, unsigned int >( this->theImage->getWidth(), this->theImage->getHeight() ) ;
         }
-
-        unsigned int getSizeOfTile () const {  return this->sizeOfTile ;  }
-
-        void setSizeOfTile ( unsigned int newSize ) {  this->sizeOfTile = ( newSize >= 2 ) ? newSize : 2 ;  }
 
         const Room & getRoom () const {  return room ;  }
 
@@ -87,6 +83,23 @@ public :
         {
                 return std::pair< int, int >( this->room.getTilesOnY() * ( getSizeOfTile() << 1 ), 0 ) ;
         }
+
+        unsigned short getSizeOfTile () const {  return this->sizeOfTile ;  }
+
+        void setSizeOfTile ( unsigned short newSize )
+        {
+                if ( newSize < 2 ) newSize = 2 ;
+
+                if ( newSize == this->sizeOfTile ) return ;
+
+                this->sizeOfTile = newSize ;
+                binTheImage() ;
+        }
+
+        std::pair< int, int > getOffsetOnScreen () const {  return this->offsetOnScreen ;  }
+
+        void setOffsetOnScreen ( const std::pair< int, int > & newOffset ) {  this->offsetOnScreen = newOffset ;  }
+        void setOffsetOnScreen ( int offsetX, int offsetY ) {  setOffsetOnScreen( std::pair< int, int >( offsetX, offsetY ) ) ;  }
 
 protected :
 
@@ -96,13 +109,21 @@ protected :
 
 private :
 
-        Picture * theMiniature ;
+        Picture * theImage ;
+
+        void binTheImage ()
+        {
+                if ( this->theImage == nilPointer ) return ;
+
+                delete this->theImage ;
+                this->theImage = nilPointer ;
+        }
 
         const Room & room ;
 
-        unsigned int sizeOfTile ;
+        unsigned short sizeOfTile ;
 
-        std::pair < int, int > offset ;
+        std::pair < int, int > offsetOnScreen ;
 
         std::pair < int, int > northDoorEasternCorner ;
         std::pair < int, int > eastDoorNorthernCorner ;

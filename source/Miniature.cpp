@@ -17,11 +17,11 @@
 #endif
 
 
-Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigned int sizeOfTileForMiniature )
-        : theMiniature( nilPointer )
+Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigned short sizeOfTileForMiniature )
+        : theImage( nilPointer )
         , room( roomForMiniature )
         , sizeOfTile( sizeOfTileForMiniature )
-        , offset( std::pair< int, int >( leftX, topY ) )
+        , offsetOnScreen( std::pair< int, int >( leftX, topY ) )
         , northDoorEasternCorner( -1, -1 )
         , eastDoorNorthernCorner( -1, -1 )
         , southDoorEasternCorner( -1, -1 )
@@ -35,14 +35,6 @@ Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigne
                         << ", sizeOfTile=" << sizeOfTileForMiniature << " )"
                         << std::endl ;
 # endif
-}
-
-Miniature::~Miniature( )
-{
-        if ( this->theMiniature == nilPointer ) return ;
-
-        delete this->theMiniature ;
-        this->theMiniature = nilPointer ;
 }
 
 /* protected */
@@ -60,17 +52,17 @@ std::pair < unsigned int, unsigned int > Miniature::calculateSize () const
 /* protected */
 void Miniature::composeMiniature ()
 {
-        if ( this->theMiniature == nilPointer ) {
+        if ( this->theImage == nilPointer ) {
                 std::pair < unsigned int, unsigned int > dimensions = calculateSize() ;
-                this->theMiniature = new Picture( dimensions.first, dimensions.second );
+                this->theImage = new Picture( dimensions.first, dimensions.second );
 
                 std::ostringstream theNameOfMiniature ;
                 theNameOfMiniature << "Miniature of room " << this->room.getNameOfRoomDescriptionFile() << " with " << getSizeOfTile() << " pixel long tiles" ;
-                this->theMiniature->setName( theNameOfMiniature.str () );
+                this->theImage->setName( theNameOfMiniature.str () );
 
         # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
-                std::cout << "the picture \"" << this->theMiniature->getName() << "\""
-                                << " has a size of " << this->theMiniature->getWidth() << " x " << this->theMiniature->getHeight()
+                std::cout << "the picture \"" << this->theImage->getName() << "\""
+                                << " has a size of " << this->theImage->getWidth() << " x " << this->theImage->getHeight()
                                 << std::endl ;
         # endif
         }
@@ -114,7 +106,7 @@ void Miniature::composeMiniature ()
 
         const Color& roomColor = Color::byName( room.getColor () );
 
-        const allegro::Pict & toDrawHere = this->theMiniature->getAllegroPict ();
+        const allegro::Pict & toDrawHere = this->theImage->getAllegroPict ();
 
         // draw doors
 
@@ -442,7 +434,7 @@ void Miniature::composeMiniature ()
 
 void Miniature::draw ()
 {
-        if ( this->theMiniature == nilPointer ) composeMiniature () ;
+        if ( this->theImage == nilPointer ) composeMiniature () ;
 
         const ConnectedRooms * connections = room.getConnections() ;
         if ( connections == nilPointer ) throw MayNotBePossible( "nil connections for room " + room.getNameOfRoomDescriptionFile() );
@@ -450,11 +442,11 @@ void Miniature::draw ()
         const std::string & roomAbove = connections->getConnectedRoomAt( "above" );
         const std::string & roomBelow = connections->getConnectedRoomAt( "below" );
 
-        const int xOnScreen = this->offset.first ;
-        const int yOnScreen = this->offset.second + ( roomAbove.empty() ? 4 : ( 3 * getSizeOfTile() ) ) ;
+        const int xOnScreen = this->offsetOnScreen.first ;
+        const int yOnScreen = this->offsetOnScreen.second + ( roomAbove.empty() ? 4 : ( 3 * getSizeOfTile() ) ) ;
 
         // draw the image of miniature on the screen
-        allegro::drawSprite( this->theMiniature->getAllegroPict(), xOnScreen, yOnScreen );
+        allegro::drawSprite( this->theImage->getAllegroPict(), xOnScreen, yOnScreen );
 
         const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
         std::pair< int, int > roomOriginOnScreen( roomOrigin.first + xOnScreen, roomOrigin.second + yOnScreen );
@@ -562,9 +554,9 @@ void Miniature::draw ()
 
         if ( ! roomAbove.empty() || ! roomBelow.empty() )
         {
-                int miniatureMidX = this->theMiniature->getWidth() >> 1 ;
+                int miniatureMidX = this->theImage->getWidth() >> 1 ;
                 int aboveY = -2 ;
-                int belowY = this->theMiniature->getHeight() ;
+                int belowY = this->theImage->getHeight() ;
                 aboveY -= getSizeOfTile() << 1 ;
                 belowY += getSizeOfTile() << 1 ;
 
@@ -852,12 +844,12 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, i
         }
         else
         {
-                for ( unsigned int piw = 1 ; piw < ( sizeOfTile - 1 ) ; piw ++ )
+                for ( unsigned short piw = 1 ; piw < ( sizeOfTile - 1 ) ; piw ++ )
                 {
                         int x =  origin.first + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) + 2 ;
                         int y = origin.second + ( tileY + tileX ) * sizeOfTile + piw + 1 ;
 
-                        for ( unsigned int pix = 1 ; pix < ( sizeOfTile - 1 ) ; pix ++ )
+                        for ( unsigned short pix = 1 ; pix < ( sizeOfTile - 1 ) ; pix ++ )
                         {
                                 if ( fullFill )
                                 {
@@ -881,14 +873,18 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, i
         }
 }
 
-std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const std::string& where, unsigned short gap )
+void Miniature::connectMiniature ( Miniature * that, const std::string & where, short gap )
 {
-        const ConnectedRooms * connections = room.getConnections() ;
+        if ( that == nilPointer ) return ;
+
+        that->setSizeOfTile( this->sizeOfTile ) ;
+
+        const ConnectedRooms * connections = this->room.getConnections() ;
         assert( connections != nilPointer );
 
         std::string fileOfConnectedRoom = connections->getConnectedRoomAt( where );
 
-        if ( fileOfConnectedRoom.empty () ) return this->offset ;
+        if ( fileOfConnectedRoom.empty () ) return ;
 
         const Room* connectedRoom = GameMap::getInstance().getOrBuildRoomByFile( fileOfConnectedRoom );
         assert( connectedRoom != nilPointer );
@@ -952,5 +948,5 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
                 adjacentDifferenceY = ( room.getTilesOnY () + deltaCellX ) * sizeOfTile + gapY ;
         }
 
-        return std::pair< int, int >( this->offset.first + adjacentDifferenceX , this->offset.second + adjacentDifferenceY ) ;
+        that->setOffsetOnScreen( this->offsetOnScreen.first + adjacentDifferenceX , this->offsetOnScreen.second + adjacentDifferenceY ) ;
 }
