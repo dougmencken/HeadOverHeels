@@ -222,8 +222,7 @@ void Miniature::composeMiniature ()
 
         const std::vector< std::vector< GridItemPtr > > & gridItemsInRoom = room.getGridItems();
 
-        for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
-        {
+        for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ ) {
                 for ( std::vector< GridItemPtr >::const_iterator gi = gridItemsInRoom[ column ].begin (); gi != gridItemsInRoom[ column ].end (); ++ gi )
                 {
                         const GridItem & item = *( *gi ) ;
@@ -255,6 +254,8 @@ void Miniature::composeMiniature ()
                         }
                 }
         }
+
+        const std::pair< int, int > & origin = getOriginOfRoom() ;
 
         for ( unsigned int unsignedTileX = firstTileX ; unsignedTileX <= lastTileX ; unsignedTileX ++ )
         {
@@ -299,6 +300,15 @@ void Miniature::composeMiniature ()
                                 drawIsoTile ( toDrawHere, 0, lastTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, /* hiX */ true, false );
+
+                                int cornerX = origin.first  + ( 1 - firstTileY ) * ( getSizeOfTile() << 1 ) ;
+                                int cornerY = origin.second + ( 1 + firstTileY ) * getSizeOfTile() ;
+                                setNorthDoorEasternCorner( cornerX, cornerY ) ;
+
+                        # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+                                const std::pair< int, int > & corner = getNorthDoorEasternCorner() ;
+                                toDrawHere.drawPixelAt( corner.first, corner.second, Color::byName( "blue" ).toAllegroColor() );
+                        # endif
                         }
 
                         if ( southDoor != nilPointer )
@@ -310,6 +320,15 @@ void Miniature::composeMiniature ()
                                 drawIsoTile ( toDrawHere, tilesX - 1, lastTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, /* hiX */ true, false );
+
+                                int cornerX = origin.first + ( tilesX - 1 - firstTileY ) * ( getSizeOfTile() << 1 ) - 2 ;
+                                int cornerY = origin.second + ( tilesX - 1 + firstTileY ) * getSizeOfTile() - 1 ;
+                                setSouthDoorEasternCorner( cornerX, cornerY );
+
+                        # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+                                const std::pair< int, int > & corner = getSouthDoorEasternCorner() ;
+                                toDrawHere.drawPixelAt( corner.first, corner.second, Color::byName( "red" ).toAllegroColor() );
+                        # endif
                         }
                 }
         }
@@ -357,6 +376,15 @@ void Miniature::composeMiniature ()
                                 drawIsoTile ( toDrawHere, lastTileX, 0,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, false, /* hiY */ true );
+
+                                int cornerX = origin.first  + ( firstTileX - 1 ) * ( getSizeOfTile() << 1 ) ;
+                                int cornerY = origin.second + ( firstTileX + 1 ) * getSizeOfTile() ;
+                                setEastDoorNorthernCorner( cornerX, cornerY );
+
+                        # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+                                const std::pair< int, int > & corner = getEastDoorNorthernCorner() ;
+                                toDrawHere.drawPixelAt( corner.first, corner.second, Color::byName( "blue" ).toAllegroColor() );
+                        # endif
                         }
 
                         if ( westDoor != nilPointer )
@@ -368,6 +396,15 @@ void Miniature::composeMiniature ()
                                 drawIsoTile ( toDrawHere, lastTileX, tilesY - 1,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
                                                 false, false, false, /* hiY */ true );
+
+                                int cornerX = origin.first + ( firstTileX - ( tilesY - 1 ) ) * ( getSizeOfTile() << 1 ) + 2 ;
+                                int cornerY = origin.second + ( firstTileX + tilesY - 1 ) * getSizeOfTile() - 1 ;
+                                setWestDoorNorthernCorner( cornerX, cornerY );
+
+                        # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+                                const std::pair< int, int > & corner = getWestDoorNorthernCorner() ;
+                                toDrawHere.drawPixelAt( corner.first, corner.second, Color::byName( "red" ).toAllegroColor() );
+                        # endif
                         }
                 }
         }
@@ -908,33 +945,27 @@ bool Miniature::connectMiniature ( Miniature * that, const std::string & where, 
         that->setSizeOfTile( this->sizeOfTile ) ;
 
         /* const ConnectedRooms * connections = this->room.getConnections() ;
-        if ( connections == nilPointer ) return false ; */
-
-        /* const std::string & fileOfConnectedRoom = connections->getConnectedRoomAt( where );
+        if ( connections == nilPointer ) return false ;
+        const std::string & fileOfConnectedRoom = connections->getConnectedRoomAt( where );
         if ( fileOfConnectedRoom.empty () ) return false ; */
-
-        int adjacentDifferenceX = 0 ;
-        int adjacentDifferenceY = 0 ;
 
         int shiftY = ( this->sizeOfTile << 1 ) + gap ;
         int shiftX = shiftY << 1 ;
 
+        std::pair< int, int > doorCornerOfThis, doorCornerOfThat ;
+
         if ( where == "south" ) {
                 if ( room.getDoorOn( "south" ) == nilPointer ) return false ;
 
-                std::pair< int, int > doorCornerOfThis = this->getSouthDoorEasternCorner() ;
-                std::pair< int, int > doorCornerOfThat = that->getNorthDoorEasternCorner() ;
-                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
-                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
+                doorCornerOfThis = this->getSouthDoorEasternCorner() ;
+                doorCornerOfThat = that->getNorthDoorEasternCorner() ;
         }
         else
         if ( where == "north" ) {
                 if ( room.getDoorOn( "north" ) == nilPointer ) return false ;
 
-                std::pair< int, int > doorCornerOfThis = this->getNorthDoorEasternCorner() ;
-                std::pair< int, int > doorCornerOfThat = that->getSouthDoorEasternCorner() ;
-                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
-                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
+                doorCornerOfThis = this->getNorthDoorEasternCorner() ;
+                doorCornerOfThat = that->getSouthDoorEasternCorner() ;
 
                 shiftX = - shiftX ;
                 shiftY = - shiftY ;
@@ -943,10 +974,8 @@ bool Miniature::connectMiniature ( Miniature * that, const std::string & where, 
         if ( where == "east" ) {
                 if ( room.getDoorOn( "east" ) == nilPointer ) return false ;
 
-                std::pair< int, int > doorCornerOfThis = this->getEastDoorNorthernCorner() ;
-                std::pair< int, int > doorCornerOfThat = that->getWestDoorNorthernCorner() ;
-                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
-                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
+                doorCornerOfThis = this->getEastDoorNorthernCorner() ;
+                doorCornerOfThat = that->getWestDoorNorthernCorner() ;
 
                 shiftY = - shiftY ;
         }
@@ -954,13 +983,14 @@ bool Miniature::connectMiniature ( Miniature * that, const std::string & where, 
         if ( where == "west" ) {
                 if ( room.getDoorOn( "west" ) == nilPointer ) return false ;
 
-                std::pair< int, int > doorCornerOfThis = this->getWestDoorNorthernCorner() ;
-                std::pair< int, int > doorCornerOfThat = that->getEastDoorNorthernCorner() ;
-                adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
-                adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
+                doorCornerOfThis = this->getWestDoorNorthernCorner() ;
+                doorCornerOfThat = that->getEastDoorNorthernCorner() ;
 
                 shiftX = - shiftX ;
         }
+
+        int adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
+        int adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
 
         that->setOffsetOnScreen( this->offsetOnScreen.first + adjacentDifferenceX + shiftX, this->offsetOnScreen.second + adjacentDifferenceY + shiftY ) ;
         return true ;
