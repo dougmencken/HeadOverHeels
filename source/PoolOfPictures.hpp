@@ -14,7 +14,7 @@
 #include <map>
 #include <string>
 
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 
 
 class PoolOfPictures
@@ -30,15 +30,15 @@ public:
 
         bool hasPicture ( const std::string & imageFile ) const ;
 
-        PicturePtr getPicture ( const std::string & imageFile ) const ;
+        NamedPicturePtr getPicture ( const std::string & imageFile ) const ;
 
-        PicturePtr getOrLoadAndGet ( const std::string & imageFile ) ;
+        NamedPicturePtr getOrLoadAndGet ( const std::string & imageFile ) ;
 
-        PicturePtr getOrLoadAndGetOrMakeAndGet ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
+        NamedPicturePtr getOrLoadAndGetOrMakeAndGet ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
 
-        PicturePtr makePicture ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
+        NamedPicturePtr makePicture ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
 
-        void putPicture ( const std::string & imageFile, const PicturePtr & picture ) ;
+        void putPicture ( const std::string & imageFile, const NamedPicturePtr & picture ) ;
 
         static bool isPictureThere ( const std::string & imageFile ) ;
 
@@ -46,7 +46,7 @@ public:
 
 private:
 
-        std::map < std::string /* imageFile */, PicturePtr /* image */ > pictures ;
+        std::map < std::string /* imageFile */, NamedPicturePtr /* image */ > pictures ;
 
         static PoolOfPictures * thePoolOfPictures ;
 

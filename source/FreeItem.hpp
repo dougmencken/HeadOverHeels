@@ -127,7 +127,7 @@ public :
 
         bool isFrozen () const {  return frozen ;  }
 
-        Picture & getShadedNonmaskedImage () const {  return * shadedNonmaskedImage ;  }
+        NamedPicture & getShadedNonmaskedImage () const {  return * shadedNonmaskedImage ;  }
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
@@ -175,7 +175,7 @@ private :
         /**
          * Current frame of this item shaded but not masked yet
          */
-        autouniqueptr< Picture > shadedNonmaskedImage ;
+        autouniqueptr< NamedPicture > shadedNonmaskedImage ;
 
 };
 

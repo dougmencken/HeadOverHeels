@@ -19,7 +19,7 @@
 #include "util.hpp"
 
 #include "Mediated.hpp"
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 
 namespace behaviors {  class Behavior ;  }
 using behaviors::Behavior ;
@@ -106,28 +106,28 @@ public :
          */
         void changeFrame ( unsigned int newFrame ) ;
 
-        virtual void addFrameTo ( const std::string & sequence, Picture *const frame )
+        virtual void addFrameTo ( const std::string & sequence, NamedPicture *const frame )
         {
                 if ( sequence.empty() ) return ; // don’t add to ""
 
                 /* IF_DEBUG( fprintf( stdout, "adding frame to \"%s\" for item %s\n" , sequence.c_str(), getUniqueName().c_str() ) ) */////////
-                this->frames[ sequence ].push_back( PicturePtr( frame ) ) ;
+                this->frames[ sequence ].push_back( NamedPicturePtr( frame ) ) ;
 
                 if ( getCurrentFrameSequence().empty() /* && ! sequence.empty() */ )
                         setCurrentFrameSequence( sequence );
         }
 
-        virtual void addFrameOfShadowTo ( const std::string & sequence, Picture *const frame )
+        virtual void addFrameOfShadowTo ( const std::string & sequence, NamedPicture *const frame )
         {
                 if ( ! sequence.empty() )
-                        this->shadows[ sequence ].push_back( PicturePtr( frame ) ) ;
+                        this->shadows[ sequence ].push_back( NamedPicturePtr( frame ) ) ;
         }
 
         bool hasShadow () const {  return ! shadows.empty() ;  }
 
         size_t howManyFramesIn ( const std::string & sequence ) const
         {
-                for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->frames.begin() ; it != this->frames.end() ; ++ it )
+                for ( std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator it = this->frames.begin() ; it != this->frames.end() ; ++ it )
                         if ( it->first == sequence ) return it->second.size() ;
 
                 return 0 ;
@@ -139,23 +139,23 @@ public :
         {
                 size_t howManyFrames = 0 ;
 
-                for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->frames.begin() ; it != this->frames.end() ; ++ it )
+                for ( std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator it = this->frames.begin() ; it != this->frames.end() ; ++ it )
                         howManyFrames += it->second.size() ;
 
                 return howManyFrames ;
         }
 
-        const Picture & getCurrentRawImageIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
+        const NamedPicture & getCurrentRawImageIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
 
-        const Picture & getCurrentRawImage () const {  return getCurrentRawImageIn( getCurrentFrameSequence() ) ;  }
+        const NamedPicture & getCurrentRawImage () const {  return getCurrentRawImageIn( getCurrentFrameSequence() ) ;  }
 
-        Picture & getCurrentRawImageToChangeItIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
+        NamedPicture & getCurrentRawImageToChangeItIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
 
-        Picture & getCurrentRawImageToChangeIt () const {  return getCurrentRawImageToChangeItIn( getCurrentFrameSequence() ) ;  }
+        NamedPicture & getCurrentRawImageToChangeIt () const {  return getCurrentRawImageToChangeItIn( getCurrentFrameSequence() ) ;  }
 
-        const Picture & getCurrentImageOfShadowIn ( const std::string & sequence ) const {  return getNthShadowIn( sequence, getCurrentFrame() ) ;  }
+        const NamedPicture & getCurrentImageOfShadowIn ( const std::string & sequence ) const {  return getNthShadowIn( sequence, getCurrentFrame() ) ;  }
 
-        const Picture & getCurrentImageOfShadow () const {  return getCurrentImageOfShadowIn( getCurrentFrameSequence() ) ;  }
+        const NamedPicture & getCurrentImageOfShadow () const {  return getCurrentImageOfShadowIn( getCurrentFrameSequence() ) ;  }
 
         /**
          * Animate from the first to the last frame, which is by default
@@ -209,9 +209,9 @@ protected :
                 return ( howManyFrames > 0 ) ? howManyFrames - 1 : 0 ;
         }
 
-        Picture & getNthFrameIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
+        NamedPicture & getNthFrameIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
 
-        Picture & getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
+        NamedPicture & getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
 
         const std::string & getCurrentFrameSequence () const {  return this->currentSequence ;  }
 
@@ -251,10 +251,10 @@ private :
         bool backwardsMotion ;
 
         // the sequences of pictures of item
-        std::map< std::string, std::vector< PicturePtr > > frames ;
+        std::map< std::string, std::vector< NamedPicturePtr > > frames ;
 
         // the sequences of pictures of item’s shadow
-        std::map< std::string, std::vector< PicturePtr > > shadows ;
+        std::map< std::string, std::vector< NamedPicturePtr > > shadows ;
 
         // the behaviour of item
         autouniqueptr< Behavior > behavior ;

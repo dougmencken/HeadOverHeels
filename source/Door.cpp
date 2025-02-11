@@ -89,36 +89,36 @@ Door::Door( const std::string & kind, int cx, int cy, int z, const std::string &
 
 Door::~Door()
 {
-        delete leftJambImage ;
-        delete rightJambImage ;
-        delete lintelImage ;
+        delete this->leftJambImage ;
+        delete this->rightJambImage ;
+        delete this->lintelImage ;
 }
 
 /* static */
-Picture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
+NamedPicture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                         unsigned int leftJambWidthX, unsigned int leftJambWidthY,
                                         unsigned int rightJambWidthX, unsigned int rightJambWidthY,
                                         const std::string& at )
 {
         bool ns = ( at == "north" || at == "south" || at == "northeast" || at == "northwest" || at == "southeast" || at == "southwest" );
 
-        unsigned int topWidth = ( widthX << 1 ) + ( widthY << 1 );
-        unsigned int topHeight = height + widthY + widthX;
+        unsigned int lintelWidth = ( widthX << 1 ) + ( widthY << 1 );
+        unsigned int lintelHeight = height + widthY + widthX;
 
-        Picture* top = new Picture( topWidth, topHeight );
+        NamedPicture * lintel = new NamedPicture( lintelWidth, lintelHeight );
 
         if ( ns )
         {
-                allegro::bitBlit( door, top->getAllegroPict(), 0, 0, 0, 0, topWidth, height + widthX );
+                allegro::bitBlit( door, lintel->getAllegroPict(), 0, 0, 0, 0, lintelWidth, height + widthX );
 
-                unsigned int delta = topWidth;
-                int noPixel = topWidth - ( ( rightJambWidthX + rightJambWidthY ) << 1 ) + 1;
+                unsigned int delta = lintelWidth;
+                int noPixel = lintelWidth - ( ( rightJambWidthX + rightJambWidthY ) << 1 ) + 1;
                 int yStart = noPixel;
                 int yEnd = noPixel - 1;
 
-                /////top->getAllegroPict().lockWriteOnly() ;
+                /////lintel->getAllegroPict().lockWriteOnly() ;
 
-                for ( unsigned int yPic = height + widthX; yPic < topHeight; yPic++ ) {
+                for ( unsigned int yPic = height + widthX; yPic < lintelHeight; yPic++ ) {
                         for ( unsigned int xPic = delta; xPic > 0; xPic-- )
                         {
                                 if ( yPic != height + widthX && ( static_cast< int >( xPic ) - 1 ) == noPixel )
@@ -133,28 +133,28 @@ Picture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, uns
                                 }
                                 else if ( yPic < height + ( widthX << 1 ) || ( static_cast< int >( xPic ) - 1 ) < yEnd )
                                 {
-                                        top->getAllegroPict().putPixelAt( xPic - 1, yPic, door.getPixelAt( xPic - 1, yPic ) );
+                                        lintel->getAllegroPict().putPixelAt( xPic - 1, yPic, door.getPixelAt( xPic - 1, yPic ) );
                                 }
                         }
 
                         delta -= 2;
                 }
 
-                /////top->getAllegroPict().unlock() ;
+                /////lintel->getAllegroPict().unlock() ;
         }
         else
         {
-                allegro::bitBlit( door, top->getAllegroPict(), 0, 0, 0, 0, topWidth, height + widthY );
+                allegro::bitBlit( door, lintel->getAllegroPict(), 0, 0, 0, 0, lintelWidth, height + widthY );
 
                 unsigned int delta = 0;
                 int noPixel = ( ( leftJambWidthX + leftJambWidthY ) << 1 ) - 2;
                 int yStart = noPixel;
                 int yEnd = noPixel + 1;
 
-                /////top->getAllegroPict().lockWriteOnly() ;
+                /////lintel->getAllegroPict().lockWriteOnly() ;
 
-                for ( unsigned int yPic = height + widthY; yPic < topHeight; yPic++ ) {
-                        for ( unsigned int xPic = delta; xPic < topWidth; xPic++ )
+                for ( unsigned int yPic = height + widthY; yPic < lintelHeight; yPic++ ) {
+                        for ( unsigned int xPic = delta; xPic < lintelWidth; xPic++ )
                         {
                                 if ( yPic != height + widthY && static_cast< int >( xPic ) == noPixel )
                                 {
@@ -168,21 +168,21 @@ Picture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, uns
                                 }
                                 else if ( yPic < height + ( widthY << 1 ) || static_cast< int >( xPic ) > yEnd )
                                 {
-                                        top->getAllegroPict().putPixelAt( xPic, yPic, door.getPixelAt( xPic, yPic ) );
+                                        lintel->getAllegroPict().putPixelAt( xPic, yPic, door.getPixelAt( xPic, yPic ) );
                                 }
                         }
 
                         delta += 2;
                 }
 
-                /////top->getAllegroPict().unlock() ;
+                /////lintel->getAllegroPict().unlock() ;
         }
 
-        return top;
+        return lintel ;
 }
 
 /* static */
-Picture* Door::cutOutLeftJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
+NamedPicture* Door::cutOutLeftJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                         /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
                                         const std::string& at )
 {
@@ -190,19 +190,22 @@ Picture* Door::cutOutLeftJamb( const allegro::Pict& door, unsigned int widthX, u
         unsigned int fixWidth = ( ns ? 7 : 0 );
         int fixY = ( ns ? -1 : 0 );
 
-        Picture* left = new Picture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
+        NamedPicture * leftJamb = new NamedPicture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
 
-        allegro::bitBlit( door, left->getAllegroPict(), fixY, lintelHeight + lintelWidthY - widthY + fixY, 0, 0, left->getWidth(), left->getHeight() );
+        allegro::bitBlit( door, leftJamb->getAllegroPict(),
+                                fixY, lintelHeight + lintelWidthY - widthY + fixY,
+                                0, 0,
+                                leftJamb->getWidth(), leftJamb->getHeight() );
 
 # if defined( GRAYSCALE_JAMBS ) && GRAYSCALE_JAMBS
-        Color::pictureToGrayscale( left );
+        Color::pictureToGrayscale( leftJamb );
 # endif
 
-        return left;
+        return leftJamb ;
 }
 
 /* static */
-Picture* Door::cutOutRightJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
+NamedPicture* Door::cutOutRightJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                         unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                         const std::string& at )
 {
@@ -210,15 +213,18 @@ Picture* Door::cutOutRightJamb( const allegro::Pict& door, unsigned int widthX, 
         unsigned int fixWidth = ( ns ? 0 : 7 );
         int fixY = ( ns ? 0 : -2 );
 
-        Picture* right = new Picture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
+        NamedPicture * rightJamb = new NamedPicture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
 
-        allegro::bitBlit( door, right->getAllegroPict(), door.getW() - right->getWidth(), lintelHeight + lintelWidthX - widthY + fixY, 0, 0, right->getWidth(), right->getHeight() );
+        allegro::bitBlit( door, rightJamb->getAllegroPict(),
+                                door.getW() - rightJamb->getWidth(), lintelHeight + lintelWidthX - widthY + fixY,
+                                0, 0,
+                                rightJamb->getWidth(), rightJamb->getHeight() );
 
 # if defined( GRAYSCALE_JAMBS ) && GRAYSCALE_JAMBS
-        Color::pictureToGrayscale( right );
+        Color::pictureToGrayscale( rightJamb );
 # endif
 
-        return right;
+        return rightJamb ;
 }
 
 const FreeItemPtr & Door::getLeftJamb()
@@ -273,7 +279,7 @@ const FreeItemPtr & Door::getLeftJamb()
                 }
 
                 leftJamb = FreeItemPtr( new FreeItem( whatIsLeftJamb, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                leftJamb->addFrameTo( getWhereIsDoor(), new Picture( leftJambImage->getWidth(), leftJambImage->getHeight() ) );
+                leftJamb->addFrameTo( getWhereIsDoor(), new NamedPicture( leftJambImage->getWidth(), leftJambImage->getHeight() ) );
                 allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
                 leftJamb->getCurrentRawImageToChangeIt().setName( leftJambImage->getName() );
                 leftJamb->freshBothProcessedImages ();
@@ -335,7 +341,7 @@ const FreeItemPtr & Door::getRightJamb()
                 }
 
                 rightJamb = FreeItemPtr( new FreeItem( whatIsRightJamb, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                rightJamb->addFrameTo( getWhereIsDoor(), new Picture( rightJambImage->getWidth(), rightJambImage->getHeight() ) );
+                rightJamb->addFrameTo( getWhereIsDoor(), new NamedPicture( rightJambImage->getWidth(), rightJambImage->getHeight() ) );
                 allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
                 rightJamb->getCurrentRawImageToChangeIt().setName( rightJambImage->getName() );
                 rightJamb->freshBothProcessedImages ();
@@ -393,7 +399,7 @@ const FreeItemPtr & Door::getLintel()
                 }
 
                 lintel = FreeItemPtr( new FreeItem( whatIsLintel, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                lintel->addFrameTo( getWhereIsDoor(), new Picture( lintelImage->getWidth(), lintelImage->getHeight() ) );
+                lintel->addFrameTo( getWhereIsDoor(), new NamedPicture( lintelImage->getWidth(), lintelImage->getHeight() ) );
                 allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getCurrentRawImageToChangeIt ().getAllegroPict() );
                 lintel->getCurrentRawImageToChangeIt().setName( lintelImage->getName() );
                 lintel->freshBothProcessedImages ();

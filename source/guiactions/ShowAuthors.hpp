@@ -12,7 +12,7 @@
 #define ShowAuthors_hpp_
 
 #include "Action.hpp"
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 
 
 namespace gui
@@ -51,7 +51,7 @@ private:
         unsigned int initialX ;
         unsigned int initialY ;
 
-        PicturePtr loadingScreen ;
+        autouniqueptr< NamedPicture > loadingScreen ;
 
         void alignLeft () ;
         void alignCenter () ;

@@ -62,8 +62,6 @@ namespace gui
                 Slide::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::byName( "red" ) ) ;
                 std::cout << "there’s no \"background.png\" but I made the red background for you dear" << std::endl ;
         }
-
-        Slide::backgroundPicture->setName( "the background for user interface slides" );
 }
 
 /* static */ void Slide::toBlackBackground ()
@@ -78,7 +76,6 @@ namespace gui
         }
 
         Slide::backgroundPicture = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight(), Color::blackColor() ) ;
-        Slide::backgroundPicture->setName( "the black background for user interface slides" );
 }
 
 Slide::Slide() :

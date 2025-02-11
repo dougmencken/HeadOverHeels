@@ -181,10 +181,6 @@ void DescribedItem::createFrames ()
                 {
                         Picture* rawFrame = new Picture( description.getWidthOfFrame(), description.getHeightOfFrame() );
                         allegro::bitBlit( picture->getAllegroPict(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
-                        rawFrame->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
-                # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        rawFrame->saveAsPNG( ospaths::homePath() );
-                # endif
                         rawFrames.push_back( rawFrame );
                 }
         }
@@ -199,7 +195,7 @@ void DescribedItem::createFrames ()
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
                 for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
-                        Picture * animationFrame = new Picture( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        NamedPicture * animationFrame = new NamedPicture( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
                         animationFrame->setName( description.getKind () + " " +
                                                         "\"" + orientations[ o ] + "\" orientation " +
                                                         util::toStringWithOrdinalSuffix( f ) + " frame" );
@@ -216,7 +212,7 @@ void DescribedItem::createFrames ()
 
         for ( unsigned int extra = 0 ; extra < description.howManyExtraFrames() ; extra ++ )
         {
-                Picture * extraFrame = new Picture( * rawFrames[ extra + ( rawRow * howManyOrientations ) ] );
+                NamedPicture * extraFrame = new NamedPicture( * rawFrames[ extra + ( rawRow * howManyOrientations ) ] );
                 extraFrame->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( extra ) + " extra frame" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraFrame->saveAsPNG( ospaths::homePath() );
@@ -250,10 +246,6 @@ void DescribedItem::createShadowFrames ()
                 {
                         Picture* rawShadow = new Picture( description.getWidthOfShadow(), description.getHeightOfShadow() );
                         allegro::bitBlit( picture->getAllegroPict(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
-                        rawShadow->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
-                # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        rawShadow->saveAsPNG( ospaths::homePath() );
-                # endif
                         rawShadows.push_back( rawShadow );
                 }
         }
@@ -268,7 +260,7 @@ void DescribedItem::createShadowFrames ()
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
                 for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
-                        Picture * shadowFrame = new Picture( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        NamedPicture * shadowFrame = new NamedPicture( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
                         shadowFrame->setName( description.getKind () + " " +
                                                 "\"" + orientations[ o ] + "\" orientation " +
                                                 util::toStringWithOrdinalSuffix( f ) + " shadow" );
@@ -285,7 +277,7 @@ void DescribedItem::createShadowFrames ()
 
         for ( unsigned int extra = 0 ; extra < description.howManyExtraFrames() ; extra ++ )
         {
-                Picture * extraShadow = new Picture( * rawShadows[ extra + ( rawRow * howManyOrientations ) ] );
+                NamedPicture * extraShadow = new NamedPicture( * rawShadows[ extra + ( rawRow * howManyOrientations ) ] );
                 extraShadow->setName( description.getKind () + " " + util::toStringWithOrdinalSuffix( extra ) + " extra shadow" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraShadow->saveAsPNG( ospaths::homePath() );

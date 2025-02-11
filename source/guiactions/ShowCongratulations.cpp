@@ -26,10 +26,10 @@ void gui::ShowCongratulations::act ()
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
                 autouniqueptr< Picture > imageDuChapeau( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
 
-                theFinSlide.addWidget( new PictureWidget( 192, 50, PicturePtr( new Picture( *imageDuChapeau ) ), "image du chapeau de Head" ) );
+                theFinSlide.addWidget( new PictureWidget( 192, 50, *imageDuChapeau, "image du chapeau de Head" ) );
                 theFinSlide.addPictureOfHeadAt( 192, 100 );
 
-                theFinSlide.addWidget( new PictureWidget( 400, 50, PicturePtr( new Picture( *imageDuChapeau ) ), "image du chapeau de Heels" ) );
+                theFinSlide.addWidget( new PictureWidget( 400, 50, *imageDuChapeau, "image du chapeau de Heels" ) );
                 theFinSlide.addPictureOfHeelsAt( 400, 100 );
         }
 

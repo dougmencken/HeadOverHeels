@@ -90,7 +90,7 @@ PicturePtr GameManager::refreshPicture ( const std::string & nameOfPicture )
                 ospaths::pathToFile( ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), nameOfPicture )
         ) ) ;
 
-        PicturePtr newPicture( new Picture( *pict ) );
+        NamedPicturePtr newPicture( new NamedPicture( *pict ) );
         newPicture->setName( nameOfPicture );
 
         return newPicture ;

@@ -402,15 +402,15 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                                                         if ( GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003"
                                                                 || GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
-                                                        const PicturePtr& imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
-                                                        PicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
+                                                        const NamedPicturePtr & imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
+                                                        NamedPicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
                                                         floorImages.putPicture( fileOfTile, imageOfPartialTile );
                                                 }
                                         }
 
                                         if ( floorImages.hasPicture( fileOfTile ) )
                                         {
-                                                const PicturePtr & image = floorImages.getPicture( fileOfTile ) ;
+                                                const NamedPicturePtr & image = floorImages.getPicture( fileOfTile ) ;
                                                 image->setName( nameOfPicture );
 
                                                 if ( image->getHeight() < 40 )

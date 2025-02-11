@@ -55,8 +55,8 @@ Picture* Label::createImageOfString ( const std::string & text, unsigned int tex
 {
         if ( text.empty() ) return new Picture( font.getWidthOfLetter(), font.getHeightOfLetter() ) ;
 
-        Picture* imageOfString = new Picture( textLength * ( font.getWidthOfLetter() + spacing ) - spacing,
-                                                font.getHeightOfLetter() );
+        NamedPicture* imageOfString = new NamedPicture( textLength * ( font.getWidthOfLetter() + spacing ) - spacing,
+                                                        font.getHeightOfLetter() );
 
         std::string kindOFont = font.isDoubleHeight() ? "double-height font" : "font" ;
         std::string nameOfImage = "image of label \"" + text + "\" using the game’s " + kindOFont + " colored " + font.getColor() ;

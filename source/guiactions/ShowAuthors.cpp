@@ -206,7 +206,7 @@ void ShowAuthors::act ()
                                 autouniqueptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
                                         ospaths::pathToFile( ospaths::sharePath(), "loading-screen.png" )
                                 ) );
-                                this->loadingScreen = PicturePtr( new Picture( * png ) );
+                                this->loadingScreen.reset( new NamedPicture( * png ) );
                                 this->loadingScreen->setName( "snap of the original speccy version’s tape loading screen" );
                         }
 
@@ -214,7 +214,7 @@ void ShowAuthors::act ()
                         {
                                 widgetForLoadingScreen = new PictureWidget (
                                                 ( widthOfSlide - loadingScreen->getWidth() ) >> 1, heightOfSlide,
-                                                this->loadingScreen,
+                                                * this->loadingScreen,
                                                 "PictureWidget for the tape loading screen"
                                 ) ;
                                 credits.addWidget( widgetForLoadingScreen );

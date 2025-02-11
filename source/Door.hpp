@@ -13,7 +13,7 @@
 
 #include "Way.hpp"
 #include "Mediated.hpp"
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 #include "FreeItem.hpp"
 
 
@@ -79,11 +79,11 @@ private:
 
         int leftLimit ;
 
-        Picture * leftJambImage ;
+        NamedPicture * leftJambImage ;
 
-        Picture * rightJambImage ;
+        NamedPicture * rightJambImage ;
 
-        Picture * lintelImage ;
+        NamedPicture * lintelImage ;
 
         FreeItemPtr leftJamb ;
 
@@ -94,22 +94,22 @@ private:
         /**
          * Get the image of lintel from the image of door
          */
-        static Picture * cutOutLintel ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
-                                        unsigned int leftJambWidthX, unsigned int leftJambWidthY,
-                                        unsigned int rightJambWidthX, unsigned int rightJambWidthY,
-                                        const std::string& at ) ;
+        static NamedPicture * cutOutLintel ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                                unsigned int leftJambWidthX, unsigned int leftJambWidthY,
+                                                unsigned int rightJambWidthX, unsigned int rightJambWidthY,
+                                                const std::string& at ) ;
 
         /**
          * Get the image of left jamb from the image of door
          */
-        static Picture * cutOutLeftJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        static NamedPicture * cutOutLeftJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                                 /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
                                                 const std::string& at ) ;
 
         /**
          * Get the image of right jamb from the image of door
          */
-        static Picture * cutOutRightJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        static NamedPicture * cutOutRightJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                                 unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                                 const std::string& at ) ;
 

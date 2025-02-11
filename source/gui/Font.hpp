@@ -18,7 +18,7 @@
 #include "WrappersAllegro.hpp"
 
 #include "Color.hpp"
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 
 
 namespace gui
@@ -83,7 +83,7 @@ private:
         bool doubleHeight ;
 
         // the letters drawn in the font, read from the font's picture file once for all font instances
-        static Picture * imageOfFont ;
+        static NamedPicture * imageOfFont ;
 
         static unsigned int howManyLetters ;
 

@@ -68,8 +68,6 @@ void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offse
                 allegro::Pict::setWhereToDraw( pictureBeforeOption->getAllegroPict() );
                 allegro::drawSprite( beforeOptionWhite->getAllegroPict(), 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
-
-                pictureBeforeOption->setName( "the picture to show before a menu option" );
         }
 
         if ( pictureBeforeChosenOptionSingle == nilPointer )
@@ -104,8 +102,6 @@ void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offse
                 allegro::Pict::setWhereToDraw( pictureBeforeChosenOptionSingle->getAllegroPict() );
                 allegro::drawSprite( beforeChosenOptionWhite->getAllegroPict(), 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
-
-                pictureBeforeChosenOptionSingle->setName( "the picture to show before a chosen but not double height menu option" );
         }
 
         if ( pictureBeforeChosenOption == nilPointer )
@@ -116,8 +112,6 @@ void Menu::makePicturesBeforeOptions ( const int offsetForTintX, const int offse
                 allegro::stretchBlit( pictureBeforeChosenOptionSingle->getAllegroPict(), pictureBeforeChosenOption->getAllegroPict(),
                                         0, 0, pictureBeforeChosenOptionSingle->getWidth(), pictureBeforeChosenOptionSingle->getHeight(),
                                         0, 0, pictureBeforeChosenOption->getWidth(), pictureBeforeChosenOption->getHeight() );
-
-                pictureBeforeChosenOption->setName( "the picture to show before a chosen menu option" );
         }
 
         pictureBeforeChosenOptionSingle->colorizeWhite( Color::byName( "orange" ) );

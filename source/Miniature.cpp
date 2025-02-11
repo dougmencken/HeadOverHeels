@@ -17,17 +17,17 @@
 #endif
 
 
-Miniature::Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned short sizeOfTileForMiniature )
+Miniature::Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned short singleTileSize )
         : theImage( nilPointer )
         , room( roomForMiniature )
-        , sizeOfTile( sizeOfTileForMiniature )
-        , offsetOnScreen( std::pair< int, int >( leftX, topY ) )
-        , northDoorEasternCorner( -1, -1 )
-        , eastDoorNorthernCorner( -1, -1 )
-        , southDoorEasternCorner( -1, -1 )
-        , westDoorNorthernCorner( -1, -1 )
+        , sizeOfTile( Miniature::the_default_size_of_tile )
+        , northDoorEasternCorner( Miniature::corner_not_set, Miniature::corner_not_set )
+        , eastDoorNorthernCorner( Miniature::corner_not_set, Miniature::corner_not_set )
+        , southDoorEasternCorner( Miniature::corner_not_set, Miniature::corner_not_set )
+        , westDoorNorthernCorner( Miniature::corner_not_set, Miniature::corner_not_set )
 {
-        if ( sizeOfTileForMiniature < 2 ) this->sizeOfTile = 2 ;
+        setSizeOfTile( singleTileSize );
+        setOffsetOnScreen( leftX, topY );
 
         {
                 const ConnectedRooms * connections = roomForMiniature.getConnections() ;
@@ -43,7 +43,7 @@ Miniature::Miniature( const Room & roomForMiniature, int leftX, int topY, unsign
 # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
         std::cout << "constructed Miniature( room \"" << roomForMiniature.getNameOfRoomDescriptionFile() << "\", "
                         << "leftX=" << leftX << ", topY=" << topY
-                        << ", sizeOfTile=" << sizeOfTileForMiniature << " )"
+                        << ", singleTileSize=" << singleTileSize << " )"
                         << std::endl ;
 # endif
 }
@@ -61,11 +61,11 @@ std::pair < unsigned int, unsigned int > Miniature::calculateSize () const
 }
 
 /* protected */
-void Miniature::composeMiniature ()
+void Miniature::composeImage ()
 {
         if ( this->theImage == nilPointer ) {
                 std::pair < unsigned int, unsigned int > dimensions = calculateSize() ;
-                this->theImage = new Picture( dimensions.first, dimensions.second );
+                this->theImage = new NamedPicture( dimensions.first, dimensions.second );
 
                 std::ostringstream theNameOfMiniature ;
                 theNameOfMiniature << "Miniature of room " << this->room.getNameOfRoomDescriptionFile() << " with " << getSizeOfTile() << " pixel long tiles" ;
@@ -86,30 +86,31 @@ void Miniature::composeMiniature ()
         unsigned int lastTileX = tilesX - 1 ;
         unsigned int lastTileY = tilesY - 1 ;
 
-        Door* eastDoor = room.getDoorOn( "east" );
-        Door* southDoor = room.getDoorOn( "south" );
-        Door* northDoor = room.getDoorOn( "north" );
-        Door* westDoor = room.getDoorOn( "west" );
+        std::map< std::string, Door* > doors ;
 
-        Door* eastnorthDoor = room.getDoorOn( "eastnorth" );
-        Door* eastsouthDoor = room.getDoorOn( "eastsouth" );
-        Door* southeastDoor = room.getDoorOn( "southeast" );
-        Door* southwestDoor = room.getDoorOn( "southwest" );
-        Door* northeastDoor = room.getDoorOn( "northeast" );
-        Door* northwestDoor = room.getDoorOn( "northwest" );
-        Door* westnorthDoor = room.getDoorOn( "westnorth" );
-        Door* westsouthDoor = room.getDoorOn( "westsouth" );
+        static std::string sides [] = { "south", "west", "north", "east" };
+        for ( unsigned int s = 0 ; s < 4 ; ++ s ) {
+                const std::string & side = sides[ s ] ;
+                doors[ side ] = getRoom().getDoorOn( side );
+        }
 
-        if ( northDoor != nilPointer || northeastDoor != nilPointer || northwestDoor != nilPointer )
+        static std::string bigroomsides [] = { "northeast", "northwest", "eastnorth", "eastsouth",
+                                                        "southeast", "southwest", "westnorth", "westsouth" };
+        for ( unsigned int s = 0 ; s < 8 ; ++ s ) {
+                const std::string & side = bigroomsides[ s ] ;
+                doors[ side ] = getRoom().getDoorOn( side );
+        }
+
+        if ( doors[ "north" ] != nilPointer || doors[ "northeast" ] != nilPointer || doors[ "northwest" ] != nilPointer )
                 firstTileX ++ ;
 
-        if ( eastDoor != nilPointer || eastnorthDoor != nilPointer || eastsouthDoor != nilPointer )
+        if ( doors[ "east" ] != nilPointer || doors[ "eastnorth" ] != nilPointer || doors[ "eastsouth" ] != nilPointer )
                 firstTileY ++ ;
 
-        if ( southDoor != nilPointer || southeastDoor != nilPointer || southwestDoor != nilPointer )
+        if ( doors[ "south" ] != nilPointer || doors[ "southeast" ] != nilPointer || doors[ "southwest" ] != nilPointer )
                 -- lastTileX ;
 
-        if ( westDoor != nilPointer || westnorthDoor != nilPointer || westsouthDoor != nilPointer )
+        if ( doors[ "west" ] != nilPointer || doors[ "westnorth" ] != nilPointer || doors[ "westsouth" ] != nilPointer )
                 -- lastTileY ;
 
         bool narrowRoomAlongX = ( lastTileY == firstTileY + 1 ) ;
@@ -121,91 +122,91 @@ void Miniature::composeMiniature ()
 
         // draw doors
 
-        if ( eastDoor != nilPointer && ! narrowRoomAlongY )
+        if ( doors[ "east" ] != nilPointer && ! narrowRoomAlongY )
         {
-                unsigned int eastDoorXmid = eastDoor->getCellX() + 1 ;
+                unsigned int eastDoorXmid = doors[ "east" ]->getCellX() + 1 ;
                 drawEastDoorOnMiniature( toDrawHere,
-                        eastDoorXmid, eastDoor->getCellY(),
+                        eastDoorXmid, doors[ "east" ]->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( eastnorthDoor != nilPointer )
+        if ( doors[ "eastnorth" ] != nilPointer )
         {
-                unsigned int eastnorthDoorXmid = eastnorthDoor->getCellX() + 1 ;
+                unsigned int eastnorthDoorXmid = doors[ "eastnorth" ]->getCellX() + 1 ;
                 drawEastDoorOnMiniature( toDrawHere,
-                        eastnorthDoorXmid, eastnorthDoor->getCellY(),
+                        eastnorthDoorXmid, doors[ "eastnorth" ]->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( eastsouthDoor != nilPointer )
+        if ( doors[ "eastsouth" ] != nilPointer )
         {
-                unsigned int eastsouthDoorXmid = eastsouthDoor->getCellX() + 1 ;
+                unsigned int eastsouthDoorXmid = doors[ "eastsouth" ]->getCellX() + 1 ;
                 drawEastDoorOnMiniature( toDrawHere,
-                        eastsouthDoorXmid, eastsouthDoor->getCellY(),
+                        eastsouthDoorXmid, doors[ "eastsouth" ]->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
 
-        if ( northDoor != nilPointer && ! narrowRoomAlongX )
+        if ( doors[ "north" ] != nilPointer && ! narrowRoomAlongX )
         {
-                unsigned int northDoorYmid = northDoor->getCellY() + 1 ;
+                unsigned int northDoorYmid = doors[ "north" ]->getCellY() + 1 ;
                 drawNorthDoorOnMiniature( toDrawHere,
-                        northDoor->getCellX(), northDoorYmid,
+                        doors[ "north" ]->getCellX(), northDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( northeastDoor != nilPointer )
+        if ( doors[ "northeast" ] != nilPointer )
         {
-                unsigned int northeastDoorYmid = northeastDoor->getCellY() + 1 ;
+                unsigned int northeastDoorYmid = doors[ "northeast" ]->getCellY() + 1 ;
                 drawNorthDoorOnMiniature( toDrawHere,
-                        northeastDoor->getCellX(), northeastDoorYmid,
+                        doors[ "northeast" ]->getCellX(), northeastDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( northwestDoor != nilPointer )
+        if ( doors[ "northwest" ] != nilPointer )
         {
-                unsigned int northwestDoorYmid = northwestDoor->getCellY() + 1 ;
+                unsigned int northwestDoorYmid = doors[ "northwest" ]->getCellY() + 1 ;
                 drawNorthDoorOnMiniature( toDrawHere,
-                        northwestDoor->getCellX(), northwestDoorYmid,
+                        doors[ "northwest" ]->getCellX(), northwestDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
 
-        if ( westDoor != nilPointer && ! narrowRoomAlongY )
+        if ( doors[ "west" ] != nilPointer && ! narrowRoomAlongY )
         {
-                unsigned int westDoorXmid = westDoor->getCellX() + 1 ;
+                unsigned int westDoorXmid = doors[ "west" ]->getCellX() + 1 ;
                 drawWestDoorOnMiniature( toDrawHere,
-                        westDoorXmid, westDoor->getCellY(),
+                        westDoorXmid, doors[ "west" ]->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( westnorthDoor != nilPointer )
+        if ( doors[ "westnorth" ] != nilPointer )
         {
-                unsigned int westnorthDoorXmid = westnorthDoor->getCellX() + 1 ;
+                unsigned int westnorthDoorXmid = doors[ "westnorth" ]->getCellX() + 1 ;
                 drawWestDoorOnMiniature( toDrawHere,
-                        westnorthDoorXmid, westnorthDoor->getCellY(),
+                        westnorthDoorXmid, doors[ "westnorth" ]->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( westsouthDoor != nilPointer )
+        if ( doors[ "westsouth" ] != nilPointer )
         {
-                unsigned int westsouthDoorXmid = westsouthDoor->getCellX() + 1 ;
+                unsigned int westsouthDoorXmid = doors[ "westsouth" ]->getCellX() + 1 ;
                 drawWestDoorOnMiniature( toDrawHere,
-                        westsouthDoorXmid, westsouthDoor->getCellY(),
+                        westsouthDoorXmid, doors[ "westsouth" ]->getCellY(),
                         roomColor.multiply( Color::whiteColor() ) );
         }
 
-        if ( southDoor != nilPointer && ! narrowRoomAlongX )
+        if ( doors[ "south" ] != nilPointer && ! narrowRoomAlongX )
         {
-                unsigned int southDoorYmid = southDoor->getCellY() + 1 ;
+                unsigned int southDoorYmid = doors[ "south" ]->getCellY() + 1 ;
                 drawSouthDoorOnMiniature( toDrawHere,
-                        southDoor->getCellX(), southDoorYmid,
+                        doors[ "south" ]->getCellX(), southDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( southeastDoor != nilPointer )
+        if ( doors[ "southeast" ] != nilPointer )
         {
-                unsigned int southeastDoorYmid = southeastDoor->getCellY() + 1 ;
+                unsigned int southeastDoorYmid = doors[ "southeast" ]->getCellY() + 1 ;
                 drawSouthDoorOnMiniature( toDrawHere,
-                        southeastDoor->getCellX(), southeastDoorYmid,
+                        doors[ "southeast" ]->getCellX(), southeastDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
-        if ( southwestDoor != nilPointer )
+        if ( doors[ "southwest" ] != nilPointer )
         {
-                unsigned int southwestDoorYmid = southwestDoor->getCellY() + 1 ;
+                unsigned int southwestDoorYmid = doors[ "southwest" ]->getCellY() + 1 ;
                 drawSouthDoorOnMiniature( toDrawHere,
-                        southwestDoor->getCellX(), southwestDoorYmid,
+                        doors[ "southwest" ]->getCellX(), southwestDoorYmid,
                         roomColor.multiply( Color::whiteColor() ) );
         }
 
@@ -263,9 +264,12 @@ void Miniature::composeMiniature ()
 
                 if ( tileX >= minXne )
                 {
-                        if ( ! ( eastDoor != nilPointer && ( tileX == eastDoor->getCellX() + 1 || tileX == eastDoor->getCellX() ) ) &&
-                                ! ( eastnorthDoor != nilPointer && ( tileX == eastnorthDoor->getCellX() + 1 || tileX == eastnorthDoor->getCellX() ) ) &&
-                                ! ( eastsouthDoor != nilPointer && ( tileX == eastsouthDoor->getCellX() + 1 || tileX == eastsouthDoor->getCellX() ) ) )
+                        if ( ! ( doors[ "east" ] != nilPointer
+                                        && ( tileX == doors[ "east" ]->getCellX() + 1 || tileX == doors[ "east" ]->getCellX() ) ) &&
+                                ! ( doors[ "eastnorth" ] != nilPointer
+                                        && ( tileX == doors[ "eastnorth" ]->getCellX() + 1 || tileX == doors[ "eastnorth" ]->getCellX() ) ) &&
+                                ! ( doors[ "eastsouth" ] != nilPointer
+                                        && ( tileX == doors[ "eastsouth" ]->getCellX() + 1 || tileX == doors[ "eastsouth" ]->getCellX() ) ) )
                         {
                                 drawIsoTile (
                                         toDrawHere,
@@ -277,9 +281,12 @@ void Miniature::composeMiniature ()
 
                 if ( tileX <= maxXsw )
                 {
-                        if ( ! ( westDoor != nilPointer && ( tileX == westDoor->getCellX() + 1 || tileX == westDoor->getCellX() ) ) &&
-                                ! ( westnorthDoor != nilPointer && ( tileX == westnorthDoor->getCellX() + 1 || tileX == westnorthDoor->getCellX() ) ) &&
-                                ! ( westsouthDoor != nilPointer && ( tileX == westsouthDoor->getCellX() + 1 || tileX == westsouthDoor->getCellX() ) ) )
+                        if ( ! ( doors[ "west" ] != nilPointer
+                                        && ( tileX == doors[ "west" ]->getCellX() + 1 || tileX == doors[ "west" ]->getCellX() ) ) &&
+                                ! ( doors[ "westnorth" ] != nilPointer
+                                        && ( tileX == doors[ "westnorth" ]->getCellX() + 1 || tileX == doors[ "westnorth" ]->getCellX() ) ) &&
+                                ! ( doors[ "westsouth" ] != nilPointer
+                                        && ( tileX == doors[ "westsouth" ]->getCellX() + 1 || tileX == doors[ "westsouth" ]->getCellX() ) ) )
                         {
                                 drawIsoTile (
                                         toDrawHere,
@@ -291,7 +298,7 @@ void Miniature::composeMiniature ()
 
                 if ( narrowRoomAlongX )
                 {
-                        if ( northDoor != nilPointer )
+                        if ( doors[ "north" ] != nilPointer )
                         {
                                 drawIsoTile ( toDrawHere, 0, firstTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
@@ -311,7 +318,7 @@ void Miniature::composeMiniature ()
                         # endif
                         }
 
-                        if ( southDoor != nilPointer )
+                        if ( doors[ "south" ] != nilPointer )
                         {
                                 drawIsoTile ( toDrawHere, tilesX - 1, firstTileY,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
@@ -339,9 +346,12 @@ void Miniature::composeMiniature ()
 
                 if ( tileY <= maxYsw )
                 {
-                        if ( ! ( southDoor != nilPointer && ( tileY == southDoor->getCellY() + 1 || tileY == southDoor->getCellY() ) ) &&
-                                ! ( southeastDoor != nilPointer && ( tileY == southeastDoor->getCellY() + 1 || tileY == southeastDoor->getCellY() ) ) &&
-                                ! ( southwestDoor != nilPointer && ( tileY == southwestDoor->getCellY() + 1 || tileY == southwestDoor->getCellY() ) ) )
+                        if ( ! ( doors[ "south" ] != nilPointer
+                                        && ( tileY == doors[ "south" ]->getCellY() + 1 || tileY == doors[ "south" ]->getCellY() ) ) &&
+                                ! ( doors[ "southeast" ] != nilPointer
+                                        && ( tileY == doors[ "southeast" ]->getCellY() + 1 || tileY == doors[ "southeast" ]->getCellY() ) ) &&
+                                ! ( doors[ "southwest" ] != nilPointer
+                                        && ( tileY == doors[ "southwest" ]->getCellY() + 1 || tileY == doors[ "southwest" ]->getCellY() ) ) )
                         {
                                 drawIsoTile (
                                         toDrawHere,
@@ -353,9 +363,12 @@ void Miniature::composeMiniature ()
 
                 if ( tileY >= minYne )
                 {
-                        if ( ! ( northDoor != nilPointer && ( tileY == northDoor->getCellY() + 1 || tileY == northDoor->getCellY() ) ) &&
-                                ! ( northeastDoor != nilPointer && ( tileY == northeastDoor->getCellY() + 1 || tileY == northeastDoor->getCellY() ) ) &&
-                                ! ( northwestDoor != nilPointer && ( tileY == northwestDoor->getCellY() + 1 || tileY == northwestDoor->getCellY() ) ) )
+                        if ( ! ( doors[ "north" ] != nilPointer
+                                        && ( tileY == doors[ "north" ]->getCellY() + 1 || tileY == doors[ "north" ]->getCellY() ) ) &&
+                                ! ( doors[ "northeast" ] != nilPointer
+                                        && ( tileY == doors[ "northeast" ]->getCellY() + 1 || tileY == doors[ "northeast" ]->getCellY() ) ) &&
+                                ! ( doors[ "northwest" ] != nilPointer
+                                        && ( tileY == doors[ "northwest" ]->getCellY() + 1 || tileY == doors[ "northwest" ]->getCellY() ) ) )
                         {
                                 drawIsoTile (
                                         toDrawHere,
@@ -367,7 +380,7 @@ void Miniature::composeMiniature ()
 
                 if ( narrowRoomAlongY )
                 {
-                        if ( eastDoor != nilPointer )
+                        if ( doors[ "east" ] != nilPointer )
                         {
                                 drawIsoTile ( toDrawHere, firstTileX, 0,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
@@ -387,7 +400,7 @@ void Miniature::composeMiniature ()
                         # endif
                         }
 
-                        if ( westDoor != nilPointer )
+                        if ( doors[ "west" ] != nilPointer )
                         {
                                 drawIsoTile ( toDrawHere, firstTileX, tilesY - 1,
                                                 roomColor.multiply( Color::byName( "gray 75% white" ) ),
@@ -482,7 +495,7 @@ void Miniature::composeMiniature ()
 
 void Miniature::draw ()
 {
-        if ( this->theImage == nilPointer ) composeMiniature () ;
+        if ( this->theImage == nilPointer ) composeImage () ;
 
         // draw the image of miniature on the screen
         allegro::drawSprite( this->theImage->getAllegroPict(), this->offsetOnScreen.first, this->offsetOnScreen.second );

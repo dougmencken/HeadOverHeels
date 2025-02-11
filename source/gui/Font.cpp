@@ -10,7 +10,7 @@
 namespace gui
 {
 
-/* static */ Picture * Font::imageOfFont = nilPointer ;
+/* static */ NamedPicture * Font::imageOfFont = nilPointer ;
 
 /* static */ unsigned int Font::howManyLetters = 0 ;
 
@@ -43,7 +43,7 @@ Font::Font( const std::string & color, bool doubleHeightStretching )
 
                 unsigned int width  = fontFromFile->getW ();
                 unsigned int height = fontFromFile->getH ();
-                Font::imageOfFont = new Picture( width, height );
+                Font::imageOfFont = new NamedPicture( width, height );
 
                 const unsigned int offsetOfTint = 1 ;
                 allegro::bitBlit(
@@ -173,9 +173,6 @@ Picture* Font::getPictureOfLetter( const std::string & letter ) const
                                                         0, 0, letterWidth, letterHeight );
 
                         letter->colorizeWhite( Color::byName( getColor() ) );
-
-                        letter->setName( "image of letter “" + letterInTable + "” for the "
-                                                + ( isDoubleHeight() ? "double-height " : "" ) + "game’s font colored " + getColor() );
 
                         return letter ;
                 }

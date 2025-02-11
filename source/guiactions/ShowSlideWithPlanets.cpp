@@ -44,8 +44,8 @@ void gui::ShowSlideWithPlanets::act ()
 
         const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
 
-        PicturePtr chapeau( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
-        PicturePtr chapeauTriste( new Picture( *chapeau ) );
+        autouniqueptr< Picture > chapeau ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
+        autouniqueptr< Picture > chapeauTriste ( new Picture( *chapeau ) );
 
         if ( ! GameManager::getInstance().isSimpleGraphicsSet () )
                 chapeauTriste->toGrayscale ();
@@ -61,19 +61,19 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Blacktooth
 
-        PicturePtr planetBlacktooth( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "blacktooth.png" ) ) );
-        if ( planetBlacktooth->getAllegroPict().isNotNil() )
+        autouniqueptr< Picture > planetBlacktooth ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "blacktooth.png" ) ) );
+        if ( planetBlacktooth != nilPointer && planetBlacktooth->getAllegroPict().isNotNil() )
         {
                 const int blacktoothX = ( screenWidth - planetBlacktooth->getWidth() ) >> 1 ;
                 const int blacktoothY = ( ( screenHeight - planetBlacktooth->getHeight() ) >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                PictureWidget* imageOfBlacktooth = new PictureWidget( blacktoothX, blacktoothY, planetBlacktooth, "planet Blacktooth" );
+                PictureWidget* imageOfBlacktooth = new PictureWidget( blacktoothX, blacktoothY, * planetBlacktooth, "planet Blacktooth" );
                 planets.addWidget( imageOfBlacktooth );
 
                 PictureWidget* blacktoothChapeau = new PictureWidget(
                         blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - halfOfChapeauWidth,
                         blacktoothY + chapeauOffsetY,
-                        GameManager::getInstance().isFreePlanet( "blacktooth" ) ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "blacktooth" ) ? *chapeau : *chapeauTriste,
                         "image of chapeau for blacktooth"
                 );
                 planets.addWidget( blacktoothChapeau );
@@ -85,19 +85,19 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Egyptus
 
-        PicturePtr planetEgyptus( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "egyptus.png" ) ) );
-        if ( planetEgyptus->getAllegroPict().isNotNil() )
+        autouniqueptr< Picture > planetEgyptus ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "egyptus.png" ) ) );
+        if ( planetEgyptus != nilPointer && planetEgyptus->getAllegroPict().isNotNil() )
         {
                 const int egyptusX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetEgyptus->getWidth() >> 1 ) ;
                 const int egyptusY = ( screenHeight >> 2 ) - ( planetEgyptus->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                PictureWidget* imageOfEgyptus = new PictureWidget( egyptusX, egyptusY, planetEgyptus, "planet Egyptus" );
+                PictureWidget* imageOfEgyptus = new PictureWidget( egyptusX, egyptusY, * planetEgyptus, "planet Egyptus" );
                 planets.addWidget( imageOfEgyptus );
 
                 PictureWidget* egyptusChapeau = new PictureWidget(
                         egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - halfOfChapeauWidth,
                         egyptusY + chapeauOffsetY,
-                        GameManager::getInstance().isFreePlanet( "egyptus" ) ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "egyptus" ) ? *chapeau : *chapeauTriste,
                         "image of chapeau for egyptus"
                 );
                 planets.addWidget( egyptusChapeau );
@@ -109,19 +109,19 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Penitentiary
 
-        PicturePtr planetPenitentiary( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "penitentiary.png" ) ) );
-        if ( planetPenitentiary->getAllegroPict().isNotNil() )
+        autouniqueptr< Picture > planetPenitentiary ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "penitentiary.png" ) ) );
+        if ( planetPenitentiary != nilPointer && planetPenitentiary->getAllegroPict().isNotNil() )
         {
                 const int penitentiaryX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetPenitentiary->getWidth() >> 1 );
                 const int penitentiaryY = ( screenHeight >> 2 ) - ( planetPenitentiary->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                PictureWidget* imageOfPenitentiary = new PictureWidget( penitentiaryX, penitentiaryY, planetPenitentiary, "planet Penitentiary" );
+                PictureWidget* imageOfPenitentiary = new PictureWidget( penitentiaryX, penitentiaryY, * planetPenitentiary, "planet Penitentiary" );
                 planets.addWidget( imageOfPenitentiary );
 
                 PictureWidget* penitentiaryChapeau = new PictureWidget(
                         penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - halfOfChapeauWidth,
                         penitentiaryY + chapeauOffsetY,
-                        GameManager::getInstance().isFreePlanet( "penitentiary" ) ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "penitentiary" ) ? *chapeau : *chapeauTriste,
                         "image of chapeau for penitentiary"
                 );
                 planets.addWidget( penitentiaryChapeau );
@@ -133,19 +133,19 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Byblos
 
-        PicturePtr planetByblos( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "byblos.png" ) ) );
-        if ( planetByblos->getAllegroPict().isNotNil() )
+        autouniqueptr< Picture > planetByblos ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "byblos.png" ) ) );
+        if ( planetByblos != nilPointer && planetByblos->getAllegroPict().isNotNil() )
         {
                 const int byblosX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetByblos->getWidth() >> 1 ) ;
                 const int byblosY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetByblos->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                PictureWidget* imageOfByblos = new PictureWidget( byblosX, byblosY, planetByblos, "planet Bookworld" );
+                PictureWidget* imageOfByblos = new PictureWidget( byblosX, byblosY, * planetByblos, "planet Bookworld" );
                 planets.addWidget( imageOfByblos );
 
                 PictureWidget* byblosChapeau = new PictureWidget(
                         byblosX + ( imageOfByblos->getWidth() >> 1 ) - halfOfChapeauWidth,
                         byblosY + chapeauOffsetY,
-                        GameManager::getInstance().isFreePlanet( "byblos" ) ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "byblos" ) ? *chapeau : *chapeauTriste,
                         "image of chapeau for byblos"
                 );
                 planets.addWidget( byblosChapeau );
@@ -157,19 +157,19 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Safari
 
-        PicturePtr planetSafari( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "safari.png" ) ) );
-        if ( planetSafari->getAllegroPict().isNotNil() )
+        autouniqueptr< Picture > planetSafari ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "safari.png" ) ) );
+        if ( planetSafari != nilPointer && planetSafari->getAllegroPict().isNotNil() )
         {
                 const int safariX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetSafari->getWidth() >> 1 );
                 const int safariY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetSafari->getHeight() >> 1 ) + ( topOffsetY >> 1 );
 
-                PictureWidget* imageOfSafari = new PictureWidget( safariX, safariY, planetSafari, "planet Safari" );
+                PictureWidget* imageOfSafari = new PictureWidget( safariX, safariY, * planetSafari, "planet Safari" );
                 planets.addWidget( imageOfSafari );
 
                 PictureWidget* safariChapeau = new PictureWidget(
                         safariX + ( imageOfSafari->getWidth() >> 1 ) - halfOfChapeauWidth,
                         safariY + chapeauOffsetY,
-                        GameManager::getInstance().isFreePlanet( "safari" ) ? chapeau : chapeauTriste,
+                        GameManager::getInstance().isFreePlanet( "safari" ) ? *chapeau : *chapeauTriste,
                         "image of chapeau for safari"
                 );
                 planets.addWidget( safariChapeau );

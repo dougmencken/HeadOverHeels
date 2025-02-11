@@ -14,7 +14,7 @@
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 #include "Shady.hpp"
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 
 
 /**
@@ -26,7 +26,7 @@ class FloorTile : public Drawable, public Mediated, public Shady
 
 public:
 
-        FloorTile( int cellX, int cellY, const Picture & graphicsOfTile ) ;
+        FloorTile( int cellX, int cellY, const NamedPicture & graphicsOfTile ) ;
 
         virtual ~FloorTile( ) { }
 
@@ -55,12 +55,12 @@ private:
         /**
          * Picture of the tile
          */
-        autouniqueptr< Picture > rawImage ;
+        autouniqueptr< NamedPicture > rawImage ;
 
         /**
          * Picture of the shaded tile
          */
-        autouniqueptr< Picture > shadyImage ;
+        autouniqueptr< NamedPicture > shadyImage ;
 
 public:
 
@@ -79,15 +79,15 @@ public:
 
         int getOffsetY () const {  return offset.second ;  }
 
-        const Picture & getRawImage () const {  return * this->rawImage ;  }
+        const NamedPicture & getRawImage () const {  return * this->rawImage ;  }
 
-        const Picture & getShadyImage () const {  return * this->shadyImage ;  }
+        const NamedPicture & getShadyImage () const {  return * this->shadyImage ;  }
 
         void setAsShadyImage ( const Picture & toCopy ) ;
 
         void freshShadyImage () ;
 
-        static PicturePtr fullTileToPartialTile ( const Picture & fullTile, const std::string & whichPart, bool darkenPlane = true ) ;
+        static NamedPicturePtr fullTileToPartialTile ( const NamedPicture & fullTile, const std::string & whichPart, bool darkenPlane = true ) ;
 
 };
 

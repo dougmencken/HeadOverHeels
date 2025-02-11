@@ -70,6 +70,7 @@ headoverheels_SOURCES = main.cpp \
 			FlickeringColor.hpp \
 			Picture.cpp \
 			Picture.hpp \
+			NamedPicture.hpp \
 			PoolOfPictures.cpp \
 			PoolOfPictures.hpp \
 			Drawable.hpp \
@@ -202,7 +203,6 @@ headoverheels_SOURCES = main.cpp \
 			gui/GuiManager.hpp \
 			gui/KeyHandler.hpp \
 			gui/Widget.hpp \
-			gui/PictureWidget.cpp \
 			gui/PictureWidget.hpp \
 			gui/AnimatedPictureWidget.cpp \
 			gui/AnimatedPictureWidget.hpp \

@@ -30,16 +30,16 @@ bool PoolOfPictures::hasPicture ( const std::string & imageFile ) const
         return ( pictures.find( key ) != pictures.end () );
 }
 
-PicturePtr PoolOfPictures::getPicture( const std::string & imageFile ) const
+NamedPicturePtr PoolOfPictures::getPicture( const std::string & imageFile ) const
 {
         const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
-        std::map< std::string, PicturePtr >::const_iterator pi = pictures.find( key ) ;
-        return ( pi != pictures.end () ) ? ( *pi ).second : PicturePtr () ;
+        std::map< std::string, NamedPicturePtr >::const_iterator pi = pictures.find( key ) ;
+        return ( pi != pictures.end () ) ? ( *pi ).second : NamedPicturePtr () ;
 }
 
-PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string & imageFile )
+NamedPicturePtr PoolOfPictures::getOrLoadAndGet( const std::string & imageFile )
 {
         const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
@@ -50,7 +50,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string & imageFile )
 
                 if ( picture->isNotNil() )
                 {
-                        pictures[ key ] = PicturePtr( new Picture( *picture ) );
+                        pictures[ key ] = NamedPicturePtr( new NamedPicture( *picture ) );
                         pictures[ key ]->setName( imageFile );
                 }
                 else
@@ -58,14 +58,14 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string & imageFile )
                 #if defined( DEBUG_POOL_OF_PICTURES ) && DEBUG_POOL_OF_PICTURES
                         std::cout << CONSOLE_COLOR_RED << " picture " << CONSOLE_COLOR_BOLD_RED << key << CONSOLE_COLOR_RED << " is absent" << CONSOLE_COLOR_OFF << std::endl ;
                 #endif
-                        pictures[ key ] = PicturePtr ();
+                        pictures[ key ] = NamedPicturePtr ();
                 }
         }
 
         return pictures[ key ] ;
 }
 
-PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight )
+NamedPicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight )
 {
         const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
@@ -76,7 +76,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string & imag
 
                 if ( picture->isNotNil() )
                 {
-                        pictures[ key ] = PicturePtr( new Picture( *picture ) );
+                        pictures[ key ] = NamedPicturePtr( new NamedPicture( *picture ) );
                         pictures[ key ]->setName( imageFile );
                 }
                 else
@@ -91,12 +91,12 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string & imag
         return pictures[ key ] ;
 }
 
-PicturePtr PoolOfPictures::makePicture( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight )
+NamedPicturePtr PoolOfPictures::makePicture( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight )
 {
         const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
-        pictures[ key ] = PicturePtr( new Picture( imageWidth, imageHeight ) ) ;
+        pictures[ key ] = NamedPicturePtr( new NamedPicture( imageWidth, imageHeight ) ) ;
         pictures[ key ]->fillWithTransparencyChequerboard ();
         pictures[ key ]->setName( "transparency chequerboard for absent " + key );
 
@@ -107,7 +107,7 @@ PicturePtr PoolOfPictures::makePicture( const std::string & imageFile, unsigned 
         return pictures[ key ] ;
 }
 
-void PoolOfPictures::putPicture( const std::string & imageFile, const PicturePtr & picture )
+void PoolOfPictures::putPicture( const std::string & imageFile, const NamedPicturePtr & picture )
 {
         const std::string & gfxPrefix = GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;

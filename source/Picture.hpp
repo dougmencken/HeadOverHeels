@@ -36,11 +36,7 @@ public:
 
         Picture( const Picture & pic ) ;  // the copy constructor
 
-        virtual ~Picture( ) ;
-
-        const std::string & getName () const {  return name ;  }
-
-        void setName( const std::string & newName ) ;
+        virtual ~Picture( ) {}
 
         unsigned int getWidth () const {  return this->apicture->getW() ;  }
 
@@ -90,9 +86,9 @@ public:
 
         static Picture * difference ( const Picture & first, const Picture & second ) ;
 
-        void saveAsPCX ( const std::string & path ) ;
+        void saveAsPCX ( const std::string & path, const std::string & name ) ;
 
-        void saveAsPNG ( const std::string & path ) ;
+        void saveAsPNG ( const std::string & path, const std::string & name ) ;
 
         static Picture * loadPicture ( const std::string & pathToPicture ) ;
 
@@ -101,8 +97,6 @@ public:
 private:
 
         multiptr < allegro::Pict > apicture ;
-
-        std::string name ;
 
 } ;
 

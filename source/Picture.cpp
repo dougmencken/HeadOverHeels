@@ -1,7 +1,6 @@
 
 #include "Picture.hpp"
 
-#include "util.hpp"
 #include "ospaths.hpp"
 
 #include <cmath> // for std::sqrt
@@ -14,7 +13,6 @@
 
 Picture::Picture( unsigned int width, unsigned int height )
         : apicture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + util::makeRandomString( 12 ) )
 {
         fillWithColor( Color::keyColor() );
 
@@ -23,9 +21,8 @@ Picture::Picture( unsigned int width, unsigned int height )
 #endif
 }
 
-Picture::Picture( unsigned int width, unsigned int height, const Color& color )
+Picture::Picture( unsigned int width, unsigned int height, const Color & color )
         : apicture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + util::makeRandomString( 12 ) )
 {
         fillWithColor( color );
 
@@ -36,7 +33,6 @@ Picture::Picture( unsigned int width, unsigned int height, const Color& color )
 
 Picture::Picture( const allegro::Pict & pict )
         : apicture( allegro::Pict::asCloneOf( pict.ptr() ) )
-        , name( "Picture." + util::makeRandomString( 12 ) )
 {
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " as copy of allegro::Pict" << std::endl ;
@@ -45,27 +41,10 @@ Picture::Picture( const allegro::Pict & pict )
 
 Picture::Picture( const Picture & pic )
         : apicture( allegro::Pict::asCloneOf( pic.getAllegroPict().ptr() ) )
-        , name( "copy of " + pic.name )
 {
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " as copy of Picture" << std::endl ;
 #endif
-}
-
-Picture::~Picture( )
-{
-#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "bye bye " << getName() << std::endl ;
-#endif
-}
-
-void Picture::setName( const std::string& newName )
-{
-#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "rename Picture \"" << getName() << "\" to \"" << newName << "\"" << std::endl ;
-#endif
-
-        name = newName ;
 }
 
 void Picture::putPixelAt( int x, int y, const Color& color ) const
@@ -390,14 +369,14 @@ Picture * Picture::difference ( const Picture & first, const Picture & second )
         return result ;
 }
 
-void Picture::saveAsPCX( const std::string & path )
+void Picture::saveAsPCX( const std::string & path, const std::string & name )
 {
-        allegro::savePictAsPCX( ospaths::pathToFile( path, getName() ), getAllegroPict() );
+        allegro::savePictAsPCX( ospaths::pathToFile( path, name ), getAllegroPict() );
 }
 
-void Picture::saveAsPNG( const std::string & path )
+void Picture::saveAsPNG( const std::string & path, const std::string & name )
 {
-        allegro::savePictAsPNG( ospaths::pathToFile( path, getName() ), getAllegroPict() );
+        allegro::savePictAsPNG( ospaths::pathToFile( path, name ), getAllegroPict() );
 }
 
 /* static */

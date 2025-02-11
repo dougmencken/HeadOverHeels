@@ -36,13 +36,13 @@ AbstractItem::AbstractItem( const AbstractItem & itemToCopy )
 {
         IF_DEBUG( std::cout << "copying item \"" << itemToCopy.uniqueName << "\"" << std::endl )
 
-        for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator mi = itemToCopy.frames.begin() ; mi != itemToCopy.frames.end() ; ++ mi )
-                for ( std::vector< PicturePtr >::const_iterator pi = mi->second.begin() ; pi != mi->second.end() ; ++ pi )
-                        this->frames[ mi->first ].push_back( PicturePtr( new Picture( ( * pi )->getAllegroPict () ) ) );
+        for ( std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator mi = itemToCopy.frames.begin() ; mi != itemToCopy.frames.end() ; ++ mi )
+                for ( std::vector< NamedPicturePtr >::const_iterator pi = mi->second.begin() ; pi != mi->second.end() ; ++ pi )
+                        this->frames[ mi->first ].push_back( NamedPicturePtr( new NamedPicture( ( * pi )->getAllegroPict () ) ) );
 
-        for ( std::map< std::string, std::vector< PicturePtr > >::const_iterator mi = itemToCopy.shadows.begin(); mi != itemToCopy.shadows.end() ; ++ mi )
-                for ( std::vector< PicturePtr >::const_iterator pi = mi->second.begin() ; pi != mi->second.end() ; ++ pi )
-                        this->shadows[ mi->first ].push_back( PicturePtr( new Picture( ( * pi )->getAllegroPict () ) ) );
+        for ( std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator mi = itemToCopy.shadows.begin(); mi != itemToCopy.shadows.end() ; ++ mi )
+                for ( std::vector< NamedPicturePtr >::const_iterator pi = mi->second.begin() ; pi != mi->second.end() ; ++ pi )
+                        this->shadows[ mi->first ].push_back( NamedPicturePtr( new NamedPicture( ( * pi )->getAllegroPict () ) ) );
 }
 
 AbstractItem::~AbstractItem( )
@@ -55,9 +55,9 @@ bool AbstractItem::updateItem ()
         return ( this->behavior != nilPointer ) ? this->behavior->update() : true ;
 }
 
-Picture & AbstractItem::getNthFrameIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */
+NamedPicture & AbstractItem::getNthFrameIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */
 {
-        std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->frames.begin() ;
+        std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator it = this->frames.begin() ;
         for ( ; it != this->frames.end() ; ++ it )
                 if ( it->first == sequence && n < it->second.size() )
                         return *( it->second[ n ] );
@@ -67,9 +67,9 @@ Picture & AbstractItem::getNthFrameIn ( const std::string & sequence, unsigned i
         throw NoSuchPictureException( message );
 }
 
-Picture & AbstractItem::getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */
+NamedPicture & AbstractItem::getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */
 {
-        std::map< std::string, std::vector< PicturePtr > >::const_iterator it = this->shadows.begin() ;
+        std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator it = this->shadows.begin() ;
         for ( ; it != this->shadows.end() ; ++ it )
                 if ( it->first == sequence && n < it->second.size() )
                         return *( it->second[ n ] );

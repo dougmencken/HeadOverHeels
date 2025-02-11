@@ -7,13 +7,13 @@
 #include "WrappersAllegro.hpp"
 
 
-FloorTile::FloorTile( int cellX, int cellY, const Picture & graphicsOfTile )
+FloorTile::FloorTile( int cellX, int cellY, const NamedPicture & graphicsOfTile )
         : Mediated (), Shady ()
         , uniqueName( "floor tile at cx=" + util::number2string( cellX ) + " cy=" + util::number2string( cellY ) )
         , coordinates( std::pair< int, int >( cellX, cellY ) )
         , offset( std::pair< int, int >( 0, 0 ) )
-        , rawImage( new Picture( graphicsOfTile ) )
-        , shadyImage( new Picture( graphicsOfTile ) )
+        , rawImage( new NamedPicture( graphicsOfTile ) )
+        , shadyImage( new NamedPicture( graphicsOfTile ) )
 {
         rawImage->setName( graphicsOfTile.getName() );
         shadyImage->setName( graphicsOfTile.getName() );
@@ -66,7 +66,7 @@ unsigned int FloorTile::getIndexOfColumn () const
 }
 
 /* static */
-PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std::string & whichPart, bool darkenPlane )
+NamedPicturePtr FloorTile::fullTileToPartialTile( const NamedPicture & fullTile, const std::string & whichPart, bool darkenPlane )
 {
         unsigned int tileWidth = fullTile.getWidth ();
         unsigned int tileHeight = fullTile.getHeight ();
@@ -198,7 +198,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
 
         fullTile.getAllegroPict().unlock() ;
 
-        PicturePtr plane( new Picture( *planeOfTile ) );
+        NamedPicturePtr plane( new NamedPicture( *planeOfTile ) );
         plane->expandOrCropTo( planeOfTile->getW() , maxHeight );
         plane->setName( fullTile.getName() + "-" + whichPart + "~plane" );
 
@@ -264,7 +264,7 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 allegro::bitBlit( rightDepthWest->getAllegroPict(), rightDepth->getAllegroPict(), 0, 0, quarterOfWidth, 0, quarterOfWidth, rightDepth->getHeight() );
         }
 
-        PicturePtr result( new Picture( tileWidth, tileHeight ) );
+        NamedPicturePtr result( new NamedPicture( tileWidth, tileHeight ) );
         result->setName( fullTile.getName() + "-" + whichPart );
 
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw ();

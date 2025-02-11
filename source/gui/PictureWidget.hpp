@@ -11,12 +11,10 @@
 #ifndef PictureWidget_hpp_
 #define PictureWidget_hpp_
 
-#include <string>
-
 #include "WrappersAllegro.hpp"
 
 #include "Widget.hpp"
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 
 
 namespace gui
@@ -27,25 +25,31 @@ class PictureWidget : public Widget
 
 public:
 
-        PictureWidget( int x, int y, const PicturePtr & image, const std::string & name ) ;
+        PictureWidget( int x, int y, const Picture & image, const std::string & nameOfPicture )
+                : Widget( x, y )
+                , picture( image )
+        {
+                this->picture.setName( nameOfPicture );
+        }
 
         virtual ~PictureWidget( ) { }
 
-        virtual void draw () ;
+        virtual void draw ()
+        {
+                allegro::drawSprite( picture.getAllegroPict(), getX(), getY() );
+        }
 
         void handleKey ( const std::string& /* key */ ) {  /* do nothing */  }
 
-        PicturePtr & getPicture () {  return picture ;  }
+        const NamedPicture & getPicture () const {  return this->picture ;  }
 
-        unsigned int getWidth () const {  return this->picture->getWidth() ;  }
+        unsigned int getWidth () const {  return this->picture.getWidth() ;  }
 
-        unsigned int getHeight () const {  return this->picture->getHeight() ;  }
+        unsigned int getHeight () const {  return this->picture.getHeight() ;  }
 
 private:
 
-        PicturePtr picture ;
-
-        std::string nameOfPicture ;
+        NamedPicture picture ;
 
 };
 

@@ -43,7 +43,7 @@ FreeItem::FreeItem( const FreeItem & freeItem )
         , wantMask( freeItem.wantMask )
         , frozen( freeItem.frozen )
         , partOfDoor( freeItem.partOfDoor )
-        , shadedNonmaskedImage( ( freeItem.shadedNonmaskedImage != nilPointer ) ? new Picture( * freeItem.shadedNonmaskedImage ) : nilPointer )
+        , shadedNonmaskedImage( ( freeItem.shadedNonmaskedImage != nilPointer ) ? new NamedPicture( * freeItem.shadedNonmaskedImage ) : nilPointer )
 {}
 
 void FreeItem::draw ()
@@ -83,12 +83,12 @@ void FreeItem::freshProcessedImage ()
 void FreeItem::freshBothProcessedImages ()
 {
         if ( this->shadedNonmaskedImage == nilPointer )
-                this->shadedNonmaskedImage.reset( new Picture( getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() ) );
+                this->shadedNonmaskedImage.reset( new NamedPicture( getDescriptionOfItem().getWidthOfFrame(), getDescriptionOfItem().getHeightOfFrame() ) );
 
         this->shadedNonmaskedImage->fillWithColor( Color::keyColor () );
 
         try {
-                const Picture & currentRawImage = getCurrentRawImage() ;
+                const NamedPicture & currentRawImage = getCurrentRawImage() ;
                 allegro::bitBlit( /* from */ currentRawImage.getAllegroPict(), /* to */ this->shadedNonmaskedImage->getAllegroPict() );
                 this->shadedNonmaskedImage->setName( "shaded " + currentRawImage.getName() );
         } catch ( NoSuchPictureException const& e ) {

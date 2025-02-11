@@ -43,7 +43,7 @@ private :
          * The image of this item which is okay to draw together with other items.
          * It has shadows coming from the items around, and for a free item it is also masked
          */
-        autouniqueptr< Picture > processedImage ;
+        autouniqueptr< NamedPicture > processedImage ;
 
         Timer animationTimer ;
 
@@ -55,7 +55,7 @@ protected :
                 , originalKind( description.getKind () )
                 , height( description.getHeight() )
                 , ignoreCollisions( false )
-                , processedImage( new Picture( description.getWidthOfFrame(), description.getHeightOfFrame() ) )
+                , processedImage( new NamedPicture( description.getWidthOfFrame(), description.getHeightOfFrame() ) )
         {
                 setUniqueName( this->originalKind + "." + util::makeRandomString( 12 ) );
 
@@ -70,7 +70,7 @@ protected :
                 , originalKind( replicateMe.originalKind )
                 , height( replicateMe.height )
                 , ignoreCollisions( replicateMe.ignoreCollisions )
-                , processedImage( new Picture( * replicateMe.processedImage ) )
+                , processedImage( new NamedPicture( * replicateMe.processedImage ) )
         {
                 this->animationTimer.go() ;
         }
@@ -169,7 +169,7 @@ public :
         bool isIgnoringCollisions () const {  return this->ignoreCollisions ;  }
         bool isNotIgnoringCollisions () const {  return ! this->ignoreCollisions ;  }
 
-        Picture & getProcessedImage () const {  return * this->processedImage ;  }
+        NamedPicture & getProcessedImage () const {  return * this->processedImage ;  }
 
         virtual void freshProcessedImage () ;
 
@@ -186,7 +186,7 @@ public :
                 return isAtExtraFrame() ? true : AbstractItem::isAnimationFinished() ;
         }
 
-        virtual void addFrameTo ( const std::string & sequence, Picture *const frame )
+        virtual void addFrameTo ( const std::string & sequence, NamedPicture *const frame )
         {
                 if ( sequence == "extra" )
                         AbstractItem::addFrameTo( "extra", frame );
@@ -209,7 +209,7 @@ public :
                 }
         }
 
-        virtual void addFrameOfShadowTo ( const std::string & sequence, Picture *const frame )
+        virtual void addFrameOfShadowTo ( const std::string & sequence, NamedPicture *const frame )
         {
                 if ( sequence == "extra" )
                         AbstractItem::addFrameOfShadowTo( "extra", frame );

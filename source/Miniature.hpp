@@ -14,22 +14,25 @@
 #include "WrappersAllegro.hpp"
 
 #include "Drawable.hpp"
-#include "Picture.hpp"
+#include "NamedPicture.hpp"
 #include "Room.hpp"
 
 #include <map>
 #include <string>
 
-
 class Color ;
 
+
+/**
+ * A miniature of game’s room
+ */
 
 class Miniature : public Drawable
 {
 
 public :
 
-        Miniature( const Room & roomForMiniature, int leftX = 0, int topY = 0, unsigned short sizeOfTileForMiniature = 3 ) ;
+        Miniature( const Room & roomForMiniature, int leftX = 0, int topY = 0, unsigned short singleTileSize = the_default_size_of_tile ) ;
 
         virtual ~Miniature( ) {  binTheImage() ;  }
 
@@ -59,13 +62,13 @@ public :
                 {  fillIsoTileInside( where, getOriginOfRoom(), tileX, tileY, color, fullFill ) ;  }
 
         const std::pair< int, int > & getEastDoorNorthernCorner ()
-                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->eastDoorNorthernCorner ;  }
+                {  if ( this->theImage == nilPointer ) composeImage () ;  return this->eastDoorNorthernCorner ;  }
         const std::pair< int, int > & getWestDoorNorthernCorner ()
-                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->westDoorNorthernCorner ;  }
+                {  if ( this->theImage == nilPointer ) composeImage () ;  return this->westDoorNorthernCorner ;  }
         const std::pair< int, int > & getNorthDoorEasternCorner ()
-                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->northDoorEasternCorner ;  }
+                {  if ( this->theImage == nilPointer ) composeImage () ;  return this->northDoorEasternCorner ;  }
         const std::pair< int, int > & getSouthDoorEasternCorner ()
-                {  if ( this->theImage == nilPointer ) composeMiniature () ;  return this->southDoorEasternCorner ;  }
+                {  if ( this->theImage == nilPointer ) composeImage () ;  return this->southDoorEasternCorner ;  }
 
         void setEastDoorNorthernCorner( int x, int y ) {  this->eastDoorNorthernCorner = std::pair< int, int >( x, y ) ;  }
         void setWestDoorNorthernCorner( int x, int y ) {  this->westDoorNorthernCorner = std::pair< int, int >( x, y ) ;  }
@@ -90,7 +93,8 @@ public :
 
         void setSizeOfTile ( unsigned short newSize )
         {
-                if ( newSize < 2 ) newSize = 2 ;
+                     if ( newSize < 2 ) newSize = 2 ;
+                else if ( newSize > 16 ) newSize = 16 ;
 
                 if ( newSize == this->sizeOfTile ) return ;
 
@@ -109,11 +113,11 @@ protected :
 
         std::pair < unsigned int, unsigned int > calculateSize () const ;
 
-        void composeMiniature () ;
+        void composeImage () ;
 
 private :
 
-        Picture * theImage ;
+        NamedPicture * theImage ;
 
         void binTheImage ()
         {
@@ -125,7 +129,9 @@ private :
 
         const Room & room ;
 
-        unsigned short sizeOfTile ;
+        unsigned short sizeOfTile ; // 2...16
+
+        static const short the_default_size_of_tile = 3 ;
 
         std::pair < int, int > offsetOnScreen ;
 
@@ -133,6 +139,8 @@ private :
         std::pair < int, int > eastDoorNorthernCorner ;
         std::pair < int, int > southDoorEasternCorner ;
         std::pair < int, int > westDoorNorthernCorner ;
+
+        static const int corner_not_set = 0x55555000 ;
 
 } ;
 
