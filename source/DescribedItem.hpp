@@ -36,6 +36,9 @@ private :
         // the height, or width along the z, of this item in free units
         unsigned int height ;
 
+        // the sequences of pictures of item’s shadow
+        std::map< std::string, std::vector< NamedPicturePtr > > shadows ;
+
         // whether to ignore that this item collides with something
         bool ignoreCollisions ;
 
@@ -72,12 +75,22 @@ protected :
                 , ignoreCollisions( replicateMe.ignoreCollisions )
                 , processedImage( new NamedPicture( * replicateMe.processedImage ) )
         {
+                for ( std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator mi = replicateMe.shadows.begin(); mi != replicateMe.shadows.end() ; ++ mi )
+                        for ( std::vector< NamedPicturePtr >::const_iterator pi = mi->second.begin() ; pi != mi->second.end() ; ++ pi )
+                                this->shadows[ mi->first ].push_back( NamedPicturePtr( new NamedPicture( ( * pi )->getAllegroPict () ) ) );
+
                 this->animationTimer.go() ;
         }
 
-        virtual void updateImage () {  freshProcessedImage() ;  }
+        NamedPicture & getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
 
-        virtual void updateShadow () { }
+        virtual void clearFrames ()
+        {
+                AbstractItem::clearFrames() ;
+                this->shadows.clear ();
+        }
+
+        virtual void updateImage () {  freshProcessedImage() ;  }
 
 public :
 
@@ -186,6 +199,12 @@ public :
                 return isAtExtraFrame() ? true : AbstractItem::isAnimationFinished() ;
         }
 
+        const NamedPicture & getCurrentImageOfShadowIn ( const std::string & sequence ) const
+                {  return getNthShadowIn( sequence, getCurrentFrame() ) ;  }
+
+        const NamedPicture & getCurrentImageOfShadow () const
+                {  return getCurrentImageOfShadowIn( getCurrentFrameSequence() ) ;  }
+
         virtual void addFrameTo ( const std::string & sequence, NamedPicture *const frame )
         {
                 if ( sequence == "extra" )
@@ -212,25 +231,29 @@ public :
         virtual void addFrameOfShadowTo ( const std::string & sequence, NamedPicture *const frame )
         {
                 if ( sequence == "extra" )
-                        AbstractItem::addFrameOfShadowTo( "extra", frame );
+                        addShadowTo( "extra", frame );
                 else {
                         unsigned int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
                         if ( howManyOrientations == 1 ) {
-                                AbstractItem::addFrameOfShadowTo( "south", frame );
-                                AbstractItem::addFrameOfShadowTo( "west", frame );
-                                AbstractItem::addFrameOfShadowTo( "north", frame );
-                                AbstractItem::addFrameOfShadowTo( "east", frame );
+                                addShadowTo( "south", frame );
+                                addShadowTo( "west", frame );
+                                addShadowTo( "north", frame );
+                                addShadowTo( "east", frame );
                         }
-                        else {
-                                AbstractItem::addFrameOfShadowTo( sequence, frame );
+                        else if ( ! sequence.empty() ) {
+                                addShadowTo( sequence, frame );
 
                                 if ( howManyOrientations == 2 ) {
-                                             if ( sequence == "south" ) AbstractItem::addFrameOfShadowTo( "north", frame );
-                                        else if ( sequence == "west"  ) AbstractItem::addFrameOfShadowTo( "east", frame );
+                                             if ( sequence == "south" ) addShadowTo( "north", frame );
+                                        else if ( sequence == "west"  ) addShadowTo( "east", frame );
                                 }
                         }
                 }
         }
+
+        bool hasShadow () const {  return ! this->shadows.empty() ;  }
+
+        ///virtual void changeFrame ( unsigned int newFrame ) {  AbstractItem::changeFrame( newFrame );  }
 
 private :
 
@@ -267,6 +290,11 @@ private :
                 }
 
                 return orientations ;
+        }
+
+        void addShadowTo ( const std::string & sequence, NamedPicture *const frame )
+        {
+                this->shadows[ sequence ].push_back( NamedPicturePtr( frame ) ) ;
         }
 
         bool isAtExtraFrame () const {  return getCurrentFrameSequence() == "extra" ;  }

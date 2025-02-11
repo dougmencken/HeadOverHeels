@@ -126,8 +126,6 @@ private :
 
         virtual void updateImage () ;
 
-        virtual void updateShadow () ;
-
 };
 
 typedef multiptr < GridItem > GridItemPtr ;

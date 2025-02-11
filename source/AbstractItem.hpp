@@ -104,7 +104,7 @@ public :
          * However there’re some cases when frames are changed manually. As example, in the behavior
          * of a spring stool the one frame is for resting and the other is for being fold
          */
-        void changeFrame ( unsigned int newFrame ) ;
+        virtual void changeFrame ( unsigned int newFrame ) ;
 
         virtual void addFrameTo ( const std::string & sequence, NamedPicture *const frame )
         {
@@ -116,14 +116,6 @@ public :
                 if ( getCurrentFrameSequence().empty() /* && ! sequence.empty() */ )
                         setCurrentFrameSequence( sequence );
         }
-
-        virtual void addFrameOfShadowTo ( const std::string & sequence, NamedPicture *const frame )
-        {
-                if ( ! sequence.empty() )
-                        this->shadows[ sequence ].push_back( NamedPicturePtr( frame ) ) ;
-        }
-
-        bool hasShadow () const {  return ! shadows.empty() ;  }
 
         size_t howManyFramesIn ( const std::string & sequence ) const
         {
@@ -152,10 +144,6 @@ public :
         NamedPicture & getCurrentRawImageToChangeItIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
 
         NamedPicture & getCurrentRawImageToChangeIt () const {  return getCurrentRawImageToChangeItIn( getCurrentFrameSequence() ) ;  }
-
-        const NamedPicture & getCurrentImageOfShadowIn ( const std::string & sequence ) const {  return getNthShadowIn( sequence, getCurrentFrame() ) ;  }
-
-        const NamedPicture & getCurrentImageOfShadow () const {  return getCurrentImageOfShadowIn( getCurrentFrameSequence() ) ;  }
 
         /**
          * Animate from the first to the last frame, which is by default
@@ -211,8 +199,6 @@ protected :
 
         NamedPicture & getNthFrameIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
 
-        NamedPicture & getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
-
         const std::string & getCurrentFrameSequence () const {  return this->currentSequence ;  }
 
         /**
@@ -227,15 +213,12 @@ protected :
                 changeFrame( isAnimatedBackwards() ? lastFrame() : firstFrame() );
         }
 
-        void clearFrames ()
+        virtual void clearFrames ()
         {
                 this->frames.clear ();
-                this->shadows.clear ();
         }
 
         virtual void updateImage () = 0 ;
-
-        virtual void updateShadow () = 0 ;
 
 private :
 
@@ -252,9 +235,6 @@ private :
 
         // the sequences of pictures of item
         std::map< std::string, std::vector< NamedPicturePtr > > frames ;
-
-        // the sequences of pictures of item’s shadow
-        std::map< std::string, std::vector< NamedPicturePtr > > shadows ;
 
         // the behaviour of item
         autouniqueptr< Behavior > behavior ;

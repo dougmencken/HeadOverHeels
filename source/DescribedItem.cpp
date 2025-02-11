@@ -4,7 +4,9 @@
 #include "ItemDescriptions.hpp"
 #include "Mediator.hpp"
 #include "PoolOfPictures.hpp"
+
 #include "MayNotBePossible.hpp"
+#include "NoSuchPictureException.hpp"
 
 #include <sstream>
 
@@ -152,6 +154,18 @@ void DescribedItem::readGraphicsOfItem ()
 
         /* readOrAbsent << ", the current frame sequence is \"" << getCurrentFrameSequence() << "\"" ; */////////
         std::cout << readOrAbsent.str() << std::endl ;
+}
+
+NamedPicture & DescribedItem::getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */
+{
+        std::map< std::string, std::vector< NamedPicturePtr > >::const_iterator it = this->shadows.begin() ;
+        for ( ; it != this->shadows.end() ; ++ it )
+                if ( it->first == sequence && n < it->second.size() )
+                        return *( it->second[ n ] );
+
+        std::string message = "there’s no " + util::toStringWithOrdinalSuffix( n ) + " shadow in \"" + sequence + "\" for \"" + getUniqueName() + "\"" ;
+        std::cerr << message << std::endl ;
+        throw NoSuchPictureException( message );
 }
 
 #ifdef DEBUG

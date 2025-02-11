@@ -139,8 +139,6 @@ protected :
 
         virtual void updateImage () ;
 
-        virtual void updateShadow () ;
-
         /**
          * See if this item hits a door’s jamb, if yes it moves
          * @param at the door mentioned by its location in the room

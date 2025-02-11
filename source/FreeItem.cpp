@@ -118,14 +118,6 @@ void FreeItem::updateImage ()
         getMediator()->wantToMaskWithFreeItem( *this );
 }
 
-void FreeItem::updateShadow ()
-{
-        DescribedItem::updateShadow ();
-
-        // reshade items
-        getMediator()->wantShadowFromFreeItem( *this );
-}
-
 void FreeItem::requestShadow()
 {
         if ( getWantShadow() ) {

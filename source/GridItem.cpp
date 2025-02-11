@@ -61,14 +61,6 @@ void GridItem::updateImage ()
         getMediator()->wantToMaskWithGridItem( *this );
 }
 
-void GridItem::updateShadow ()
-{
-        DescribedItem::updateShadow ();
-
-        // reshade items
-        getMediator()->wantShadowFromGridItem( *this );
-}
-
 bool GridItem::addToPosition( int x, int y, int z )
 {
         getMediator()->clearCollisions() ;
