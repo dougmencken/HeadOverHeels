@@ -359,7 +359,7 @@ echo "   allegro 5"
 echo "   cross-platform library for video game and multimedia programming"
 echo
 
-allegro5version="5.2.9.1"
+allegro5version="5.2.10.1"
 allegro5name=allegro-"$allegro5version"
 allegro5installpath="${installPath}"/"$allegro5name"
 
