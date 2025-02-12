@@ -42,6 +42,17 @@ public:
 
         const std::string & getWhereIsDoor () const {  return this->whereIsDoor ;  }
 
+        // useful for doors in big rooms
+        std::string onWhichSideOfTheFour () const
+        {
+                if ( this->whereIsDoor == "northeast" || this->whereIsDoor == "northwest" ) return "north" ;
+                if ( this->whereIsDoor == "southeast" || this->whereIsDoor == "southwest" ) return "south" ;
+                if ( this->whereIsDoor == "eastnorth" || this->whereIsDoor == "eastsouth" ) return "east" ;
+                if ( this->whereIsDoor == "westnorth" || this->whereIsDoor == "westsouth" ) return "west" ;
+
+                return this->whereIsDoor ;
+        }
+
         const FreeItemPtr & getLeftJamb () ;
 
         const FreeItemPtr & getRightJamb () ;

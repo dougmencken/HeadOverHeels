@@ -278,8 +278,8 @@ const FreeItemPtr & Door::getLeftJamb()
                                 ;
                 }
 
-                leftJamb = FreeItemPtr( new FreeItem( whatIsLeftJamb, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                leftJamb->addFrameTo( getWhereIsDoor(), new NamedPicture( leftJambImage->getWidth(), leftJambImage->getHeight() ) );
+                leftJamb = FreeItemPtr( new FreeItem( whatIsLeftJamb, x, y, Room::FloorZ, onWhichSideOfTheFour() ) );
+                leftJamb->addFrameTo( onWhichSideOfTheFour(), new NamedPicture( leftJambImage->getWidth(), leftJambImage->getHeight() ) );
                 allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
                 leftJamb->getCurrentRawImageToChangeIt().setName( leftJambImage->getName() );
                 leftJamb->freshBothProcessedImages ();
@@ -340,8 +340,8 @@ const FreeItemPtr & Door::getRightJamb()
                                 ;
                 }
 
-                rightJamb = FreeItemPtr( new FreeItem( whatIsRightJamb, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                rightJamb->addFrameTo( getWhereIsDoor(), new NamedPicture( rightJambImage->getWidth(), rightJambImage->getHeight() ) );
+                rightJamb = FreeItemPtr( new FreeItem( whatIsRightJamb, x, y, Room::FloorZ, onWhichSideOfTheFour() ) );
+                rightJamb->addFrameTo( onWhichSideOfTheFour(), new NamedPicture( rightJambImage->getWidth(), rightJambImage->getHeight() ) );
                 allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
                 rightJamb->getCurrentRawImageToChangeIt().setName( rightJambImage->getName() );
                 rightJamb->freshBothProcessedImages ();
@@ -398,8 +398,8 @@ const FreeItemPtr & Door::getLintel()
                                 ;
                 }
 
-                lintel = FreeItemPtr( new FreeItem( whatIsLintel, x, y, Room::FloorZ, getWhereIsDoor() ) );
-                lintel->addFrameTo( getWhereIsDoor(), new NamedPicture( lintelImage->getWidth(), lintelImage->getHeight() ) );
+                lintel = FreeItemPtr( new FreeItem( whatIsLintel, x, y, Room::FloorZ, onWhichSideOfTheFour() ) );
+                lintel->addFrameTo( onWhichSideOfTheFour(), new NamedPicture( lintelImage->getWidth(), lintelImage->getHeight() ) );
                 allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getCurrentRawImageToChangeIt ().getAllegroPict() );
                 lintel->getCurrentRawImageToChangeIt().setName( lintelImage->getName() );
                 lintel->freshBothProcessedImages ();
