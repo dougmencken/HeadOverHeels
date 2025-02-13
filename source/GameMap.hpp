@@ -32,9 +32,9 @@ public:
 
         virtual ~GameMap( ) ;
 
-        void clear () ;
+        void clearMap () ;
 
-        virtual void beginNewGame ( const std::string & headRoom, const std::string & heelsRoom ) ;
+        virtual void beginNewGame ( const std::string & desiredHeadRoom, const std::string & desiredHeelsRoom ) ;
 
         virtual void beginOldGameWithCharacter ( const std::string & roomFile, const std::string & characterName,
                                                  int x, int y, int z, const std::string & heading,
@@ -92,6 +92,12 @@ public:
         Room * findRoomInPlayByFile ( const std::string& roomFile ) const ;
 
         Room * findRoomByFile ( const std::string& roomFile ) const ;
+
+        bool hasRoom ( const std::string & roomFile ) const
+        {
+                return ( this->linksBetweenRooms.find( roomFile ) != this->linksBetweenRooms.end () )
+                        && ( this->gameRooms.find( roomFile ) != this->gameRooms.end () ) ;
+        }
 
         Room * getOrBuildRoomByFile ( const std::string& roomFile ) ;
 

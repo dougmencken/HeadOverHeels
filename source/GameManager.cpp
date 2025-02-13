@@ -78,7 +78,7 @@ void GameManager::cleanUp ()
         ambiancePictures.clear ();
 
         isomot.binView ();
-        GameMap::getInstance().clear ();
+        GameMap::getInstance().clearMap ();
 
         PoolOfPictures::getPoolOfPictures().clear ();
 }

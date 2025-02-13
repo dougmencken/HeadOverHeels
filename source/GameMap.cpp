@@ -38,10 +38,10 @@ GameMap & GameMap::getInstance ()
 
 GameMap::~GameMap( )
 {
-        clear() ;
+        clearMap() ;
 }
 
-/* private */ void GameMap::clear ()
+/* private */ void GameMap::clearMap ()
 {
         forgetVisitedRooms () ;
 
@@ -60,16 +60,14 @@ GameMap::~GameMap( )
         linksBetweenRooms.clear() ;
 }
 
-void GameMap::readMap ( const std::string& fileName )
+void GameMap::readMap ( const std::string & fileName )
 {
-        clear();
+        clearMap() ;
 
         tinyxml2::XMLDocument mapXml ;
         tinyxml2::XMLError result = mapXml.LoadFile( fileName.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS ) {
-                std::cerr << "can’t load file \"" << fileName << "\" with the map of the game" << std::endl ;
-                return;
-        }
+        if ( result != tinyxml2::XML_SUCCESS )
+                throw MayNotBePossible( "can’t load file \"" + fileName + "\" with the map of the game" );
 
 # if defined( GENERATE_ROOM_DESCRIPTIONS ) && GENERATE_ROOM_DESCRIPTIONS
 
@@ -111,7 +109,7 @@ void GameMap::readMap ( const std::string& fileName )
                                 connections->setConnectedRoomAt( howLinked[ h ], linkedRoom->FirstChild()->ToText()->Value() );
                 }
 
-                linksBetweenRooms[ fileOfRoom ] = connections ;
+                this->linksBetweenRooms[ fileOfRoom ] = connections ;
 
                 if ( GameMap::buildEveryRoomAtOnce )
                 {
@@ -171,23 +169,26 @@ void GameMap::readMap ( const std::string& fileName )
         std::cout << "read the map from " << fileName << std::endl ;
 }
 
-void GameMap::beginNewGame( const std::string & headRoom, const std::string & heelsRoom )
+void GameMap::beginNewGame( const std::string & desiredHeadRoom, const std::string & desiredHeelsRoom )
 {
-        std::cout << "GameMap::beginNewGame( \"" << headRoom << "\", \"" << heelsRoom << "\" )" << std::endl ;
+        std::cout << "GameMap::beginNewGame( \"" << desiredHeadRoom << "\", \"" << desiredHeelsRoom << "\" )" << std::endl ;
 
-        clear () ;
+        clearMap () ;
 
         GameManager & gameManager = GameManager::getInstance () ;
 
         // reset the number of lives and other info
         gameManager.getGameInfo().resetForANewGame () ;
 
-        if ( linksBetweenRooms.empty() )
+        if ( this->linksBetweenRooms.empty() )
                 readMap( ospaths::pathToFile( ospaths::sharePath() + "map", "map.xml" ) );
+
+        std::string headRoom( hasRoom( desiredHeadRoom ) ? desiredHeadRoom : "blacktooth1head.xml" );
+        std::string heelsRoom( hasRoom( desiredHeelsRoom ) ? desiredHeelsRoom : "blacktooth23heels.xml" );
 
         // head’s room
 
-        if ( linksBetweenRooms.find( headRoom ) != linksBetweenRooms.end () )
+        if ( hasRoom( headRoom ) )
         {
                 Room* firstRoom = getOrBuildRoomByFile( headRoom );
 
@@ -223,7 +224,7 @@ void GameMap::beginNewGame( const std::string & headRoom, const std::string & he
         {
                 // heels’ room
 
-                if ( linksBetweenRooms.find( heelsRoom ) != linksBetweenRooms.end () )
+                if ( hasRoom( heelsRoom ) )
                 {
                         Room* secondRoom = getOrBuildRoomByFile( heelsRoom );
 
@@ -581,15 +582,12 @@ void GameMap::addRoomInPlay( Room* whichRoom )
 {
         if ( whichRoom == nilPointer ) return ;
 
-        std::string roomFile = whichRoom->getNameOfRoomDescriptionFile();
+        const std::string & roomFile = whichRoom->getNameOfRoomDescriptionFile();
 
         if ( isRoomInPlay( whichRoom ) || findRoomInPlayByFile( roomFile ) != nilPointer )
-        {
                 std::cout << "room " << roomFile << " is already in play" << std::endl ;
-                return ;
-        }
-
-        roomsInPlay.push_back( whichRoom );
+        else
+                roomsInPlay.push_back( whichRoom );
 }
 
 void GameMap::removeRoomInPlay( Room* whichRoom )
@@ -647,7 +645,7 @@ Room* GameMap::findRoomInPlayByFile( const std::string& roomFile ) const
 
 Room* GameMap::findRoomByFile( const std::string& roomFile ) const
 {
-        for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
+        for ( std::map< std::string, Room * >::const_iterator ri = this->gameRooms.begin () ; ri != this->gameRooms.end () ; ++ ri )
         {
                 if ( ri->first == roomFile ) return ri->second ;
         }
@@ -657,16 +655,16 @@ Room* GameMap::findRoomByFile( const std::string& roomFile ) const
 
 Room* GameMap::getOrBuildRoomByFile( const std::string & roomFile )
 {
-        if ( gameRooms.empty() || linksBetweenRooms.empty() )
+        if ( this->gameRooms.empty() || this->linksBetweenRooms.empty() )
                 readMap( ospaths::pathToFile( ospaths::sharePath() + "map", "map.xml" ) );
 
-        if ( gameRooms.find( roomFile ) != gameRooms.end () )
+        if ( hasRoom( roomFile ) )
         {
                 if ( gameRooms[ roomFile ] == nilPointer )
                 {
                         Room* theRoom = RoomMaker::makeRoom( roomFile );
                         if ( theRoom != nilPointer ) {
-                                theRoom->setConnections( linksBetweenRooms[ roomFile ] );
+                                theRoom->setConnections( this->linksBetweenRooms[ roomFile ] );
                                 gameRooms[ roomFile ] = theRoom ;
                         }
                 }
