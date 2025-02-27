@@ -13,6 +13,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 
 /**
@@ -50,6 +51,26 @@ public:
                 else if ( where == "teleport2" ) at = "via second teleport" ;
 
                 this->connections[ at ] = room ;
+        }
+
+        unsigned int howManyConnections () const
+        {
+                unsigned int howMany = 0 ;
+
+                for ( std::map< std::string, std::string >::const_iterator it = this->connections.begin() ; it != this->connections.end() ; ++ it )
+                        if ( ! it->second.empty() ) howMany ++ ;
+
+                return howMany ;
+        }
+
+        std::vector< std::string > getConnectedWays () const
+        {
+                std::vector< std::string > ways ;
+
+                for ( std::map< std::string, std::string >::const_iterator it = this->connections.begin() ; it != this->connections.end() ; ++ it )
+                        if ( ! it->second.empty() ) ways.push_back( it->first ) ;
+
+                return ways ;
         }
 
 private:

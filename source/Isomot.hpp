@@ -70,6 +70,8 @@ private:
 
         void updateFinalRoom () ;
 
+        void drawMiniature () ;
+
         /**
          * Where to draw isometric view
          */

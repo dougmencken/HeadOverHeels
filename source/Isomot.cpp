@@ -201,10 +201,10 @@ Picture* Isomot::updateMe ()
         const int cameraDeltaX = activeRoom->getCamera()->getOffset().getX ();
         const int cameraDeltaY = activeRoom->getCamera()->getOffset().getY ();
 
-        const Color & roomColor = Color::byName( activeRoom->getColor() );
-
-        if ( gameManager.isSimpleGraphicsSet() )
+        if ( gameManager.isSimpleGraphicsSet() ) {
+                const Color & roomColor = Color::byName( activeRoom->getColor() );
                 activeRoom->getWhereToDraw()->multiplyWithColor( roomColor );
+        }
 
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
@@ -213,50 +213,7 @@ Picture* Isomot::updateMe ()
                 - cameraDeltaX, - cameraDeltaY
         );
 
-        if ( gameManager.drawRoomMiniatures () )
-        {
-                // show information about the current room and draw the miniature
-
-                std::ostringstream roomTiles;
-                roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY();
-
-                allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), 12, 8, roomColor.toAllegroColor() );
-                allegro::textOut( roomTiles.str(), 12, 20, roomColor.toAllegroColor() );
-
-                bool sameRoom = true ;
-                Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
-                if ( ofThisRoom == nilPointer ||
-                                ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
-                                || ofThisRoom->getSizeOfTile() != this->sizeOfTileForMiniature )
-                {
-                        ofThisRoom = new Miniature( *activeRoom, 24, 24 + ( this->sizeOfTileForMiniature << 1 ), this->sizeOfTileForMiniature );
-                        this->miniatures.setMiniatureForName( "this", ofThisRoom );
-                        sameRoom = false ;
-                }
-
-                static std::string sides [] = { "south", "north", "east", "west" };
-                for ( unsigned int s = 0 ; s < 4 ; ++ s ) {
-                        const std::string & roomThere = activeRoom->getConnections()->getConnectedRoomAt( sides[ s ] );
-                        if ( ! roomThere.empty () )
-                        {
-                                if ( ! sameRoom ) {
-                                        Miniature * ofThatRoom = new Miniature( * map.getOrBuildRoomByFile( roomThere ) );
-                                        if ( ofThisRoom->connectMiniature( ofThatRoom, sides[ s ] ) )
-                                                this->miniatures.setMiniatureForName( sides[ s ], ofThatRoom );
-                                        else
-                                                std::cout << "can’t connect the miniature of room " << ofThisRoom->getRoom().getNameOfRoomDescriptionFile()
-                                                                << " and the miniature of adjacent to the " << sides[ s ]
-                                                                << " room " << ofThatRoom->getRoom().getNameOfRoomDescriptionFile()
-                                                                << std::endl ;
-                                }
-
-                                Miniature * ofRoomThere = this->miniatures.getMiniatureByName( sides[ s ] ) ;
-                                if ( ofRoomThere != nilPointer ) ofRoomThere->draw ();
-                        }
-                }
-
-                if ( ofThisRoom != nilPointer ) ofThisRoom->draw() ;
-        }
+        drawMiniature() ;
 
         // show text when the infinite lives and inviolability cheats are enabled
 
@@ -278,6 +235,61 @@ Picture* Isomot::updateMe ()
         allegro::Pict::setWhereToDraw( previousWhere );
 
         return this->view ;
+}
+
+void Isomot::drawMiniature ()
+{
+        if ( ! GameManager::getInstance().drawRoomMiniatures () ) return ;
+
+        GameMap & map = GameMap::getInstance () ;
+        Room * activeRoom = map.getActiveRoom() ;
+        if ( activeRoom == nilPointer ) return ;
+
+        // show information about the current room and draw the miniature
+
+        std::ostringstream roomTiles ;
+        roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY();
+
+        const AllegroColor & roomColor = Color::byName( activeRoom->getColor() ).toAllegroColor() ;
+        allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), 12, 8, roomColor );
+        allegro::textOut( roomTiles.str(), 12, 20, roomColor );
+
+        bool sameRoom = true ;
+        Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
+        if ( ofThisRoom == nilPointer ||
+                        ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
+                        || ofThisRoom->getSizeOfTile() != this->sizeOfTileForMiniature )
+        {
+                ofThisRoom = new Miniature( *activeRoom, 24, 24 + ( this->sizeOfTileForMiniature << 1 ), this->sizeOfTileForMiniature );
+                this->miniatures.setMiniatureForName( "this", ofThisRoom );
+                sameRoom = false ;
+        }
+
+        const std::vector< std::string > & ways = activeRoom->getConnections()->getConnectedWays () ;
+        for ( unsigned int n = 0 ; n < ways.size() ; ++ n ) {
+                const std::string & way = ways[ n ] ;
+                const std::string & roomThere = activeRoom->getConnections()->getConnectedRoomAt( way );
+                if ( ! roomThere.empty () )
+                {
+                        if ( ! sameRoom ) {
+                                std::cout << "hey there’s a miniature connected in " << way << std::endl ;
+
+                                Miniature * ofThatRoom = new Miniature( * map.getOrBuildRoomByFile( roomThere ) );
+                                if ( ofThisRoom->connectMiniature( ofThatRoom, way ) )
+                                        this->miniatures.setMiniatureForName( way, ofThatRoom );
+                                /* else
+                                        std::cout << "can’t connect the miniature of room " << ofThisRoom->getRoom().getNameOfRoomDescriptionFile()
+                                                        << " and the miniature of adjacent to the \"" << way
+                                                        << "\" room " << ofThatRoom->getRoom().getNameOfRoomDescriptionFile()
+                                                        << std::endl ; */
+                        }
+
+                        Miniature * ofRoomThere = this->miniatures.getMiniatureByName( way ) ;
+                        if ( ofRoomThere != nilPointer ) ofRoomThere->draw ();
+                }
+        }
+
+        if ( ofThisRoom != nilPointer ) ofThisRoom->draw() ;
 }
 
 void Isomot::handleMagicKeys ()

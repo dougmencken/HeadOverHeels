@@ -77,7 +77,7 @@ public :
 
         std::pair < unsigned int, unsigned int > getImageSize () const
         {
-                if ( theImage == nilPointer ) return std::pair < unsigned int, unsigned int >( 0, 0 ) ;
+                if ( this->theImage == nilPointer ) return std::pair < unsigned int, unsigned int >( 0, 0 ) ;
 
                 return std::pair < unsigned int, unsigned int >( this->theImage->getWidth(), this->theImage->getHeight() ) ;
         }

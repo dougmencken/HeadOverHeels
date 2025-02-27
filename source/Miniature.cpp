@@ -954,6 +954,13 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, i
 bool Miniature::connectMiniature ( Miniature * that, const std::string & where, short gap )
 {
         if ( that == nilPointer ) return false ;
+        if ( this->theImage == nilPointer ) return false ;
+        if ( that->theImage == nilPointer ) {
+        # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+                std::cerr << "nil image of the miniature to connect to \"" << this->theImage->getName() << "\" in \"" << where << "\"" << std::endl ;
+        # endif
+                return false ;
+        }
 
         that->setSizeOfTile( this->sizeOfTile ) ;
 
@@ -1001,10 +1008,23 @@ bool Miniature::connectMiniature ( Miniature * that, const std::string & where, 
 
                 shiftX = - shiftX ;
         }
+        else {
+        # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+                std::cout << ":(( don’t yet know how to connect miniature \"" << this->theImage->getName() << "\" in \"" << where << "\"" << std::endl ;
+        # endif
+                return false ;
+        }
 
         int adjacentDifferenceX = doorCornerOfThis.first - doorCornerOfThat.first ;
         int adjacentDifferenceY = doorCornerOfThis.second - doorCornerOfThat.second ;
 
         that->setOffsetOnScreen( this->offsetOnScreen.first + adjacentDifferenceX + shiftX, this->offsetOnScreen.second + adjacentDifferenceY + shiftY ) ;
+
+# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+        std::cout << "\"" << this->theImage->getName() << "\" is connected to \""
+                                << that->theImage->getName() << "\" in \"" << where << "\""
+                                << std::endl ;
+# endif
+
         return true ;
 }
