@@ -24,5 +24,5 @@ void gui::LoadGame::act ()
                 return ;
         }
 
-        ( new ShowSlideWithPlanets( true ) )->doIt ();
+        ( new ShowSlideWithPlanets() )->doIt ();
 }

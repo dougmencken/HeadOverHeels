@@ -35,7 +35,7 @@ public :
 
                 setEscapeAction( this->menuOfSavedGames.isForLoading()
                                         ? static_cast< Action * >( /* to the main menu */ new PresentTheMainMenu() )
-                                        : static_cast< Action * >( /* back to the game */ new ContinueGame( true ) ) );
+                                        : static_cast< Action * >( /* back to the game */ new ContinueGame() ) );
 
                 addWidget( & this->menuOfSavedGames );
                 setKeyHandler( & this->menuOfSavedGames );

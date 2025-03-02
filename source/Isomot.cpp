@@ -69,7 +69,7 @@ void Isomot::beginNewGame ()
 
         GameMap::getInstance().beginNewGame( GameManager::getInstance().getHeadRoom(), GameManager::getInstance().getHeelsRoom() );
 
-        std::cout << "play new game" << std::endl ;
+        std::cout << "playing the new game" << std::endl ;
         SoundManager::getInstance().playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
@@ -122,8 +122,7 @@ Picture* Isomot::updateMe ()
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-        if ( this->chequerboard == nilPointer )
-        {
+        if ( this->chequerboard == nilPointer ) {
                 chequerboard = PicturePtr( new Picture( view->getWidth(), view->getHeight() ) );
                 chequerboard->fillWithTransparencyChequerboard ();
         }
@@ -590,10 +589,7 @@ void Isomot::handleMagicKeys ()
 void Isomot::playTuneForScenery ( const std::string& scenery )
 {
         if ( scenery != "" && GameManager::getInstance().playMelodyOfScenery () )
-        {
                 SoundManager::getInstance().playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
-        } else
-                std::cout << "( ignore melody for scenery \"" << scenery << "\" )" << std::endl ;
 }
 
 void Isomot::updateFinalRoom ()

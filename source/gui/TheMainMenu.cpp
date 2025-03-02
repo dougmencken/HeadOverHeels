@@ -21,7 +21,7 @@ TheMainMenu::TheMainMenu( )
         , showCredits( addOptionByLanguageTextAlias( "show-credits" ) )
         , quitGame( addOptionByLanguageTextAlias( "exit-game" ) )
 {
-        newGame->setAction( new ShowSlideWithPlanets( false ) );
+        newGame->setAction( new ShowSlideWithPlanets() );
         loadGame->setAction( new PresentTheListOfSavedGames( true ) );
         optionsMenu->setAction( new CreateOptionsMenu() );
         showCredits->setAction( new ShowAuthors() );

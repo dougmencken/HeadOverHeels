@@ -20,30 +20,18 @@ namespace gui
 class ContinueGame : public Action
 {
 
-public:
+public :
 
-        /**
-         * @param inProgress false for a completely new game
-         */
-        explicit ContinueGame( bool inProgress )
-                : Action( )
-                , gameInProgress( inProgress ) {}
+        ContinueGame( ) : Action( ) {}
 
-protected:
+protected :
 
         /**
          * continue or begin the game
          */
         virtual void act () ;
 
-private:
-
-        /**
-         * is game already in progress (true) or (false) it is a new game that's beginning
-         */
-        bool gameInProgress ;
-
-};
+} ;
 
 }
 

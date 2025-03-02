@@ -31,7 +31,7 @@ void SaveGame::act ()
         }
 
         // back to the game
-        ( new ContinueGame( true ) )->doIt ();
+        ( new ContinueGame() )->doIt ();
 }
 
 }

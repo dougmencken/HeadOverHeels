@@ -39,7 +39,8 @@ bool GameManager::threadIsRunning = false ;
 
 
 GameManager::GameManager( )
-        : theInfo( )
+        : gameIsRunning( false )
+        , theInfo( )
         , roomWhereLifeWasLost( "" )
         , headRoom( "blacktooth1head.xml" )
         , heelsRoom( "blacktooth23heels.xml" )
@@ -134,6 +135,7 @@ void GameManager::begin ()
         refreshAmbianceImages ();
         refreshSceneryBackgrounds ();
 
+        this->gameIsRunning = true ;
         isomot.beginNewGame ();
 
         this->update ();
@@ -201,11 +203,12 @@ void GameManager::keyMoment ()
 
         if ( getKeyMoments().wasCrownTaken () ) {
                 // when some planet is liberated, show the slide with planets
-                gui::ShowSlideWithPlanets * planetsAction = new gui::ShowSlideWithPlanets( true );
-                planetsAction->doIt ();
+                ( new gui::ShowSlideWithPlanets() )->doIt ();
         }
         else if ( getKeyMoments().isGameOver () || getKeyMoments().arrivedInFreedomNotWithAllCrowns () )
         {
+                this->gameIsRunning = false ;
+
                 gui::CreateGameOverSlide * gameOverScoreAction =
                         new gui::CreateGameOverSlide ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );
 
@@ -213,6 +216,8 @@ void GameManager::keyMoment ()
         }
         else if ( getKeyMoments().isFinalSuccess () )
         {
+                this->gameIsRunning = false ;
+
                 gui::ShowCongratulations * congratulationsAction =
                         new gui::ShowCongratulations ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );
 
@@ -354,8 +359,8 @@ void GameManager::resume ()
         refreshAmbianceImages ();
         refreshSceneryBackgrounds ();
 
-        // resume the isometric engine
-        isomot.resumeMe() ;
+        this->gameIsRunning = true ;
+        isomot.resumeMe() ; // resume the isometric engine
 
         this->update ();
 }
@@ -750,12 +755,13 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
 
 bool GameManager::loadGame ( const std::string & fileName )
 {
-        return saverAndLoader.loadGame( fileName );
+        this->gameIsRunning = true ;
+        return this->saverAndLoader.loadGame( fileName );
 }
 
 bool GameManager::saveGame ( const std::string & fileName )
 {
-        return saverAndLoader.saveGame( fileName );
+        return this->saverAndLoader.saveGame( fileName );
 }
 
 void GameManager::resetPlanets ()

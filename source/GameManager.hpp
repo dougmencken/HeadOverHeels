@@ -60,6 +60,8 @@ public:
 
         static bool isThreadRunning () {  return GameManager::threadIsRunning ;  }
 
+        bool isGameRunning () {  return this->gameIsRunning ;  }
+
         /**
          * The game begins here
          */
@@ -212,6 +214,8 @@ private:
         static pthread_t theThread ;
 
         static bool threadIsRunning ;
+
+        bool gameIsRunning ;
 
         GameInfo theInfo ;
 

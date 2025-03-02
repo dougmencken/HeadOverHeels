@@ -20,27 +20,17 @@ namespace gui
 class ShowSlideWithPlanets : public Action
 {
 
-public:
+public :
 
-        /**
-         * @param notNewGame true for a game in progress or false when a new game begins
-         */
-        explicit ShowSlideWithPlanets( bool notNewGame )
+        ShowSlideWithPlanets( )
                 : Action( )
-                , gameInProgress( notNewGame ) {}
+        {}
 
         virtual ~ShowSlideWithPlanets( ) {}
 
-protected:
+protected :
 
         virtual void act () ;
-
-private:
-
-        /**
-         * false if a new game begins, true for a game already in progress
-         */
-        bool gameInProgress ;
 
 } ;
 
