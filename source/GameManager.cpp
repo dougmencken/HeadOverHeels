@@ -98,24 +98,22 @@ PicturePtr GameManager::refreshPicture ( const std::string & nameOfPicture )
 }
 
 /* static */
-void * GameManager::beginOrResume ( void * pointerToBoolean )
+void * GameManager::beginOrResume ( void * )
 {
-        GameManager::getInstance().resetKeyMoments() ;
+        GameManager & theManager = GameManager::getInstance() ;
 
-        bool* pointer = reinterpret_cast< bool* >( pointerToBoolean );
-        bool resume = ( pointer != nilPointer ) ? *pointer : false ;
-        delete pointer ;
+        theManager.resetKeyMoments() ;
 
         GameManager::threadIsRunning = true ;
 
-        if ( resume )
-                GameManager::getInstance().resume () ;
+        if ( theManager.isGameRunning() )
+                theManager.resume () ;
         else
-                GameManager::getInstance().begin () ;
+                theManager.begin () ;
 
         GameManager::threadIsRunning = false ;
 
-        pthread_exit( nilPointer );
+        return nilPointer ; // pthread_exit( nilPointer );
 }
 
 void GameManager::begin ()

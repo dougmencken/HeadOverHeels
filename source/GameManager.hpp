@@ -52,9 +52,8 @@ public:
 
         void cleanUp () ;
 
-        // if *pointerToBoolean is true it does resume(), otherwise begin()
-        // it’s for use with pthread_create
-        static void * beginOrResume ( void * pointerToBoolean ) ;
+        // it’s used for pthread_create
+        static void * beginOrResume ( void * unused ) ;
 
         static pthread_t * getThread () {  return & GameManager::theThread ;  }
 
