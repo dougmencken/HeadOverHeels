@@ -36,7 +36,7 @@ void PresentTheListOfSavedGames::act ()
                 slideWithSavedGames->getMenu().updateTheList ();
 
                 GuiManager::getInstance().setSlideForAction( slideWithSavedGames, getNameOfAction() );
-                GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+                GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
         }
         else
                 throw MayNotBePossible( std::string( "there’s nil slide for " ) + ( isForLoading ? "loading a saved game" : "saving a game" ) ) ;

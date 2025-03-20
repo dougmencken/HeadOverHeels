@@ -39,7 +39,7 @@ void gui::CreateAudioMenu::act ()
 
         slideWithAudioMenu.setKeyHandler( this );
 
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }
 
 void gui::CreateAudioMenu::handleKey ( const std::string & theKey )

@@ -61,7 +61,7 @@ void gui::CreateGraphicsAreaSizeMenu::act ()
 
         slideToPickScreenSize.setKeyHandler( this );
 
-        gui::GuiManager::getInstance().changeSlide( getNameOfAction(), false );
+        gui::GuiManager::getInstance().changeToSlideFor( getNameOfAction(), false );
 }
 
 void gui::CreateGraphicsAreaSizeMenu::handleKey ( const std::string & theKey )

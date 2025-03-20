@@ -48,5 +48,5 @@ void gui::CreateKeysMenu::act ()
 
         gameKeysSlide.setKeyHandler( & this->menuOfKeys );
 
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }

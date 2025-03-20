@@ -101,6 +101,11 @@ void GuiManager::loop ()
                                 if ( allegro::areKeypushesWaiting() )
                                         this->activeSlide->handleKey( allegro::nextKey() );
                         }
+                        else if ( countSlides() == 1 ) {
+                                // the first slide becomes active
+                                std::map< std::string, Slide * >::iterator firstSlide = this->slides.begin () ;
+                                setActiveSlide( firstSlide->second );
+                        }
                         else throw MayNotBePossible( "there’s no active slide" ) ;
                 }
 
@@ -119,8 +124,8 @@ void GuiManager::changeSlide( Slide * newSlide, bool dive )
 
         Slide * oldSlide = getActiveSlide () ;
 
-        // show transition effect between slides
-        if ( oldSlide != nilPointer ) {
+        // show a transition effect between slides
+        if ( oldSlide != nilPointer && countSlides() > 1 ) {
                 if ( ! oldSlide->isTransitionFromThisSlideOff() && ! newSlide->isTransitionToThisSlideOff() )
                         Slide::barWipeHorizontally( *oldSlide, *newSlide, dive );
         } else
@@ -133,7 +138,7 @@ void GuiManager::changeSlide( Slide * newSlide, bool dive )
         redraw() ;
 }
 
-void GuiManager::changeSlide( const std::string & forAction, bool dive )
+void GuiManager::changeToSlideFor( const std::string & forAction, bool dive )
 {
         std::map< std::string, Slide * >::const_iterator inewslide = this->slides.find( forAction );
         if ( inewslide != this->slides.end () && inewslide->second != nilPointer )

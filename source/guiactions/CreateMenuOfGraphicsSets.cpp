@@ -56,7 +56,7 @@ void CreateMenuOfGraphicsSets::act ()
 
         slideOfGraphicsSets.setKeyHandler( this );
 
-        gui::GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        gui::GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }
 
 void CreateMenuOfGraphicsSets::handleKey ( const std::string & theKey )

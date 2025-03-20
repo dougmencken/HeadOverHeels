@@ -7,10 +7,12 @@
 
 void gui::ChooseLanguage::act ()
 {
-        if ( GuiManager::getInstance().countSlides() > 1 ) // not the very first slide
-                GuiManager::getInstance().freeSlides() ;
+        GuiManager & uiManager = GuiManager::getInstance() ;
 
-        GuiManager::getInstance().setLanguage( language );
+        if ( uiManager.countSlides() > 1 ) // not the very first slide
+                uiManager.freeSlides() ;
+
+        uiManager.setLanguage( language );
 
         ( new PresentTheMainMenu() )->doIt ();
 }

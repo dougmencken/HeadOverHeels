@@ -49,7 +49,7 @@ public:
         void loop () ;
 
         void changeSlide ( Slide * newSlide, bool dive /* it becomes rightToLeft for barWipeHorizontally */ = false ) ;
-        void changeSlide ( const std::string & forAction, bool dive = false ) ;
+        void changeToSlideFor ( const std::string & forAction, bool dive = false ) ;
 
         void setSlideForAction( Slide * theSlide, const std::string & nameOfAction ) ;
 

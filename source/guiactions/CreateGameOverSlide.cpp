@@ -93,5 +93,5 @@ void gui::CreateGameOverSlide::act ()
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
         gameOverSlide.setTransitionToThisSlideOff() ;
-        GuiManager::getInstance().changeSlide( getNameOfAction(), false );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), false );
 }

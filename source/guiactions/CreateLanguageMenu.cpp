@@ -81,7 +81,7 @@ void CreateLanguageMenu::act ()
         languagesSlide.addWidget( & languageMenu );
         languagesSlide.setKeyHandler( & languageMenu );
 
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }
 
 /* public static */

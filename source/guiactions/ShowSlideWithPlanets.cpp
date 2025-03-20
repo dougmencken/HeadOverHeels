@@ -180,5 +180,5 @@ void gui::ShowSlideWithPlanets::act ()
         }
 
         planets.setTransitionFromThisSlideOff() ; // no transition because after this slide the game begins
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }

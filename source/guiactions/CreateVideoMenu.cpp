@@ -52,7 +52,7 @@ void gui::CreateVideoMenu::act ()
 
         slideWithVideoMenu.setKeyHandler( this );
 
-        gui::GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        gui::GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }
 
 void gui::CreateVideoMenu::handleKey ( const std::string & theKey )

@@ -42,5 +42,5 @@ void gui::ShowCongratulations::act ()
         theFinSlide.addWidget( finalTextField );
 
         theFinSlide.setTransitionToThisSlideOff() ;
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }

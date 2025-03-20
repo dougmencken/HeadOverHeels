@@ -38,5 +38,5 @@ void gui::CreateOptionsMenu::act ()
                 optionsSlide.setEscapeAction( new PresentTheMainMenu() );
         }
 
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 }

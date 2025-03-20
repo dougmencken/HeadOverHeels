@@ -135,7 +135,7 @@ void ShowAuthors::act ()
 
         credits.setEscapeAction( new PresentTheMainMenu() );
 
-        GuiManager::getInstance().changeSlide( getNameOfAction(), true );
+        GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
 
         const unsigned int widthOfSlide = credits.getImageOfSlide().getWidth() ;
         const unsigned int heightOfSlide = credits.getImageOfSlide().getHeight() ;
