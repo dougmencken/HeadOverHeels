@@ -73,7 +73,7 @@ GuiManager& GuiManager::getInstance ()
         return *instance ;
 }
 
-void GuiManager::firstMenu ()
+void GuiManager::theVeryFirstMenu ()
 {
         // if the language isn’t set, show the menu of languages, or the main menu otherwise
         Action * firstMenu = this->chosenLanguage.empty() ? static_cast< Action * >( new CreateLanguageMenu() )

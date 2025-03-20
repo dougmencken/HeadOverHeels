@@ -202,7 +202,7 @@ int main( int argc, char** argv )
         if ( newGameNoGui )
                 GameManager::getInstance().begin () ;
         else
-                gui::GuiManager::getInstance().firstMenu () ;
+                gui::GuiManager::getInstance().theVeryFirstMenu () ;
 
         GameManager::getInstance().cleanUp () ;
         gui::GuiManager::getInstance().freeSlides () ;

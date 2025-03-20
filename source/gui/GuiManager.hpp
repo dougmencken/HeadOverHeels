@@ -41,7 +41,7 @@ public:
 
         static GuiManager & getInstance () ;
 
-        void firstMenu () ;
+        void theVeryFirstMenu () ;
 
         /**
          * Draw the user interface and handle keys

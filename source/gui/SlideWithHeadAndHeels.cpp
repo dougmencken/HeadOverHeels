@@ -27,13 +27,12 @@ SlideWithHeadAndHeels::SlideWithHeadAndHeels( )
 
 SlideWithHeadAndHeels::~SlideWithHeadAndHeels( )
 {
-        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnSomeSlide() ) {
-                delete pictureOfHead ;
+        if ( this->pictureOfHead != nilPointer ) {
+                delete this->pictureOfHead ;
                 this->pictureOfHead = nilPointer ;
         }
-
-        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnSomeSlide() ) {
-                delete pictureOfHeels ;
+        if ( this->pictureOfHeels != nilPointer ) {
+                delete this->pictureOfHeels ;
                 this->pictureOfHeels = nilPointer ;
         }
 }
