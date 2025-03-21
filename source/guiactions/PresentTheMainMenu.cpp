@@ -4,7 +4,7 @@
 #include "GuiManager.hpp"
 #include "SoundManager.hpp"
 
-#include "MayNotBePossible.hpp"
+#include "NoSuchSlideException.hpp"
 
 
 /* private static */
@@ -20,7 +20,7 @@ void gui::PresentTheMainMenu::act ()
         try {
                 GuiManager::getInstance().changeToSlideFor( nameOfThisAction, false );
         }
-        catch ( MayNotBePossible const& e ) {
+        catch ( NoSuchSlideException const& e ) {
                 // don’t delete main_menu_slide again (this is already done in GuiManager::freeSlides)
                 /* if ( gui::PresentTheMainMenu::main_menu_slide != nilPointer ) delete gui::PresentTheMainMenu::main_menu_slide ; */
 

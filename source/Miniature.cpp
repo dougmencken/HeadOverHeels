@@ -16,6 +16,10 @@
 #  define DEBUG_MINIATURES      1
 #endif
 
+#if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+#  include "ospaths.hpp"
+#endif
+
 
 Miniature::Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned short singleTileSize )
         : theImage( nilPointer )
@@ -496,6 +500,10 @@ void Miniature::composeImage ()
 void Miniature::draw ()
 {
         if ( this->theImage == nilPointer ) composeImage () ;
+
+# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+        this->theImage->saveAsPNG( ospaths::homePath() );
+# endif
 
         // draw the image of miniature on the screen
         allegro::drawSprite( this->theImage->getAllegroPict(), this->offsetOnScreen.first, this->offsetOnScreen.second );

@@ -13,6 +13,7 @@
 #include "PresentTheMainMenu.hpp"
 
 #include "MayNotBePossible.hpp"
+#include "NoSuchSlideException.hpp"
 
 #include "ospaths.hpp"
 #include "sleep.hpp"
@@ -145,7 +146,7 @@ void GuiManager::changeToSlideFor( const std::string & forAction, bool dive )
                 changeSlide( inewslide->second, dive );
         else {
                 std::cerr << "there’s no slide for action " << forAction << ", please create it before use" << std::endl ;
-                throw MayNotBePossible( "the slide for action " + forAction + " is absent" ) ;
+                throw NoSuchSlideException( "the slide for action " + forAction + " is absent" ) ;
         }
 }
 

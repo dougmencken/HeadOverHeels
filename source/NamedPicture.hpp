@@ -72,6 +72,9 @@ public:
                 this->name = newName ;
         }
 
+        void saveAsPCX ( const std::string & path ) {  Picture::saveAsPCX( path, getName() ) ;  }
+        void saveAsPNG ( const std::string & path ) {  Picture::saveAsPNG( path, getName() ) ;  }
+
 private:
 
         std::string name ;
