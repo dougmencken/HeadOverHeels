@@ -2151,13 +2151,16 @@ void savePictAsPCX( const std::string& where, const Pict& what )
         if ( ! initialized ) {  std::cerr << "allegro::savePictAsPCX before allegro::init" << std::endl ; return ;  }
 #endif
 
+        bool has_pcx_suffix = ( where.length() > 4 && where.rfind( ".pcx" ) == ( where.length() - 4 ) );
+        std::string where_with_pcx = has_pcx_suffix ? where : ( where + ".pcx" ) ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        al_save_bitmap( ( where + ".pcx" ).c_str (), what.ptr () );
+        al_save_bitmap( where_with_pcx.c_str (), what.ptr () );
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        save_bitmap( ( where + ".pcx" ).c_str (), what.ptr (), NULL );
+        save_bitmap( where_with_pcx.c_str (), what.ptr (), NULL );
 
 #endif
 }
@@ -2168,13 +2171,16 @@ void savePictAsPNG( const std::string& where, const Pict& what )
         if ( ! initialized ) {  std::cerr << "allegro::savePictAsPNG before allegro::init" << std::endl ; return ;  }
 #endif
 
+        bool has_png_suffix = ( where.length() > 4 && where.rfind( ".png" ) == ( where.length() - 4 ) );
+        std::string where_with_png = has_png_suffix ? where : ( where + ".png" ) ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        al_save_bitmap( ( where + ".png" ).c_str (), what.ptr () );
+        al_save_bitmap( where_with_png.c_str (), what.ptr () );
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        save_png( ( where + ".png" ).c_str (), what.ptr (), NULL );
+        save_png( where_with_png.c_str (), what.ptr (), NULL );
 
 #endif
 }

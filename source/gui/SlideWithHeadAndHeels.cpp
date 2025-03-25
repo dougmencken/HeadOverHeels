@@ -103,7 +103,7 @@ void SlideWithHeadAndHeels::addPictureOfHeadAt ( int x, int y )
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
                 this->pictureOfHead = new AnimatedPictureWidget(
                                                 x, y,
-                                                Picture::loadAnimation( ospaths::pathToFile( pathToPictures, "head.gif" ) ),
+                                                Picture::loadAnimation( pathToPictures, "head.gif" ),
                                                 delayBetweenFrames,
                                                 "animated Head" );
         } else
@@ -118,7 +118,7 @@ void SlideWithHeadAndHeels::addPictureOfHeelsAt ( int x, int y )
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
                 this->pictureOfHeels = new AnimatedPictureWidget(
                                                 x, y,
-                                                Picture::loadAnimation( ospaths::pathToFile( pathToPictures, "heels.gif" ) ),
+                                                Picture::loadAnimation( pathToPictures, "heels.gif" ),
                                                 delayBetweenFrames,
                                                 "animated Heels" );
         } else

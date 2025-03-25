@@ -3,48 +3,30 @@
 
 #include "ospaths.hpp"
 
-#include <cmath> // for std::sqrt
+#include "NoSuchPictureException.hpp"
 
-#ifdef DEBUG
-#  define DEBUG_PICTURES        0
-#  include <iostream>
-#endif
+#include <cmath> // for std::sqrt
 
 
 Picture::Picture( unsigned int width, unsigned int height )
         : apicture( allegro::Pict::newPict( width, height ) )
 {
         fillWithColor( Color::keyColor() );
-
-#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << std::endl ;
-#endif
 }
 
 Picture::Picture( unsigned int width, unsigned int height, const Color & color )
         : apicture( allegro::Pict::newPict( width, height ) )
 {
         fillWithColor( color );
-
-#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << " filled with " << color.toString () << std::endl ;
-#endif
 }
 
-Picture::Picture( const allegro::Pict & pict )
-        : apicture( allegro::Pict::asCloneOf( pict.ptr() ) )
+Picture::Picture( const std::string & path, const std::string & name ) /* throws NoSuchPictureException */
+        : apicture( allegro::Pict::fromPNGFile(
+                ospaths::pathToFile( path, util::stringEndsWith( name, ".png" ) ? name : ( name + ".png" ) )
+          ) )
 {
-#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "created Picture " << getName() << " as copy of allegro::Pict" << std::endl ;
-#endif
-}
-
-Picture::Picture( const Picture & pic )
-        : apicture( allegro::Pict::asCloneOf( pic.getAllegroPict().ptr() ) )
-{
-#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "created Picture " << getName() << " as copy of Picture" << std::endl ;
-#endif
+        if ( this->apicture == nilPointer || this->apicture->ptr() == nilPointer )
+                throw NoSuchPictureException( "can’t read picture from file \"" + name + "\" in " + path );
 }
 
 void Picture::putPixelAt( int x, int y, const Color& color ) const
@@ -371,32 +353,22 @@ Picture * Picture::difference ( const Picture & first, const Picture & second )
 
 void Picture::saveAsPCX( const std::string & path, const std::string & name )
 {
-        allegro::savePictAsPCX( ospaths::pathToFile( path, name ), getAllegroPict() );
+        std::string nameWithoutPCX = util::stringEndsWith( name, ".pcx" ) ? name.substr( 0, name.length() - 4 ) : name ;
+        allegro::savePictAsPCX( ospaths::pathToFile( path, nameWithoutPCX ), getAllegroPict() );
 }
 
 void Picture::saveAsPNG( const std::string & path, const std::string & name )
 {
-        allegro::savePictAsPNG( ospaths::pathToFile( path, name ), getAllegroPict() );
+        std::string nameWithoutPNG = util::stringEndsWith( name, ".png" ) ? name.substr( 0, name.length() - 4 ) : name ;
+        allegro::savePictAsPNG( ospaths::pathToFile( path, nameWithoutPNG ), getAllegroPict() );
 }
 
 /* static */
-Picture * Picture::loadPicture ( const std::string & pathToPicture )
-{
-        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile( pathToPicture ) );
-
-        if ( pict != nilPointer && pict->isNotNil () )
-                return new Picture( *pict ) ;
-
-        IF_DEBUG( std::cout << "can’t load picture \"" << pathToPicture << "\"" << std::endl )
-        return nilPointer ;
-}
-
-/* static */
-std::vector< allegro::Pict * > Picture::loadAnimation ( const std::string & pathToGif )
+std::vector< allegro::Pict * > Picture::loadAnimation ( const std::string & path, const std::string & name )
 {
         std::vector< allegro::Pict * > animation ;
         std::vector< int > durations ;
-        allegro::loadGIFAnimation( pathToGif, animation, durations );
+        allegro::loadGIFAnimation( ospaths::pathToFile( path, name ), animation, durations );
 
         return animation ;
 }

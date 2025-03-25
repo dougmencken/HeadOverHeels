@@ -32,9 +32,15 @@ public:
 
         Picture( unsigned int width, unsigned int height, const Color & color ) ;
 
-        Picture( const allegro::Pict & pict ) ;
+        Picture( const std::string & path, const std::string & name ) /* throws NoSuchPictureException */ ;
 
-        Picture( const Picture & pic ) ;  // the copy constructor
+        Picture( const allegro::Pict & pict )
+                : apicture( allegro::Pict::asCloneOf( pict.ptr() ) )
+        {}
+
+        Picture( const Picture & pic ) // the copy constructor
+                : apicture( allegro::Pict::asCloneOf( pic.getAllegroPict().ptr() ) )
+        {}
 
         virtual ~Picture( ) {}
 
@@ -90,9 +96,7 @@ public:
 
         void saveAsPNG ( const std::string & path, const std::string & name ) ;
 
-        static Picture * loadPicture ( const std::string & pathToPicture ) ;
-
-        static std::vector < allegro::Pict * > loadAnimation ( const std::string & pathToGif ) ;
+        static std::vector < allegro::Pict * > loadAnimation ( const std::string & path, const std::string & name ) ;
 
 private:
 

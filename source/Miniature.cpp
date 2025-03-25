@@ -503,6 +503,9 @@ void Miniature::draw ()
 
 # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
         this->theImage->saveAsPNG( ospaths::homePath() );
+        std::string imageName = this->theImage->getName() ;
+        delete this->theImage ;
+        this->theImage = new NamedPicture( ospaths::homePath(), imageName );
 # endif
 
         // draw the image of miniature on the screen

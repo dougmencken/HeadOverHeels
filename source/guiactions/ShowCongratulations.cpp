@@ -24,7 +24,7 @@ void gui::ShowCongratulations::act ()
 
         {
                 const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
-                autouniqueptr< Picture > imageDuChapeau( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
+                autouniqueptr< Picture > imageDuChapeau( new Picture( pathToPictures, "crown.png" ) );
 
                 theFinSlide.addWidget( new PictureWidget( 192, 50, *imageDuChapeau, "image du chapeau de Head" ) );
                 theFinSlide.addPictureOfHeadAt( 192, 100 );

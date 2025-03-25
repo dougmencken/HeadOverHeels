@@ -44,7 +44,7 @@ void gui::ShowSlideWithPlanets::act ()
 
         const std::string & pathToPictures = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
 
-        autouniqueptr< Picture > chapeau ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "crown.png" ) ) );
+        autouniqueptr< Picture > chapeau ( new Picture( pathToPictures, "crown.png" ) );
         autouniqueptr< Picture > chapeauTriste ( new Picture( *chapeau ) );
 
         if ( ! GameManager::getInstance().isSimpleGraphicsSet () )
@@ -61,7 +61,7 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Blacktooth
 
-        autouniqueptr< Picture > planetBlacktooth ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "blacktooth.png" ) ) );
+        autouniqueptr< Picture > planetBlacktooth ( new Picture( pathToPictures, "blacktooth.png" ) );
         if ( planetBlacktooth != nilPointer && planetBlacktooth->getAllegroPict().isNotNil() )
         {
                 const int blacktoothX = ( screenWidth - planetBlacktooth->getWidth() ) >> 1 ;
@@ -85,7 +85,7 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Egyptus
 
-        autouniqueptr< Picture > planetEgyptus ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "egyptus.png" ) ) );
+        autouniqueptr< Picture > planetEgyptus ( new Picture( pathToPictures, "egyptus.png" ) );
         if ( planetEgyptus != nilPointer && planetEgyptus->getAllegroPict().isNotNil() )
         {
                 const int egyptusX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetEgyptus->getWidth() >> 1 ) ;
@@ -109,7 +109,7 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Penitentiary
 
-        autouniqueptr< Picture > planetPenitentiary ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "penitentiary.png" ) ) );
+        autouniqueptr< Picture > planetPenitentiary ( new Picture( pathToPictures, "penitentiary.png" ) );
         if ( planetPenitentiary != nilPointer && planetPenitentiary->getAllegroPict().isNotNil() )
         {
                 const int penitentiaryX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetPenitentiary->getWidth() >> 1 );
@@ -133,7 +133,7 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Byblos
 
-        autouniqueptr< Picture > planetByblos ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "byblos.png" ) ) );
+        autouniqueptr< Picture > planetByblos ( new Picture( pathToPictures, "byblos.png" ) );
         if ( planetByblos != nilPointer && planetByblos->getAllegroPict().isNotNil() )
         {
                 const int byblosX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetByblos->getWidth() >> 1 ) ;
@@ -157,7 +157,7 @@ void gui::ShowSlideWithPlanets::act ()
 
         // Safari
 
-        autouniqueptr< Picture > planetSafari ( Picture::loadPicture( ospaths::pathToFile( pathToPictures, "safari.png" ) ) );
+        autouniqueptr< Picture > planetSafari ( new Picture( pathToPictures, "safari.png" ) );
         if ( planetSafari != nilPointer && planetSafari->getAllegroPict().isNotNil() )
         {
                 const int safariX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetSafari->getWidth() >> 1 );

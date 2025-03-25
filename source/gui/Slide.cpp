@@ -41,8 +41,8 @@ namespace gui
                 Color backgroundColor( /* red */ 0x4e, /* green */ 0xbe, /* blue */ 0xef, /* alpha */ 0xff );
                 Picture * solidColoredBackground = new Picture( 1920, 1440, backgroundColor );
 
-                Picture * leftLensFlare = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background-left-difference.png" ) );
-                Picture * rightLensFlare = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background-right-difference.png" ) );
+                Picture * leftLensFlare = new Picture( pathToPictures, "background-left-difference.png" );
+                Picture * rightLensFlare = new Picture( pathToPictures, "background-right-difference.png" );
 
                 if ( leftLensFlare != nilPointer && rightLensFlare != nilPointer ) {
                         Picture * colorPlusLeft = Picture::summation( *solidColoredBackground, *leftLensFlare );
@@ -55,7 +55,7 @@ namespace gui
                 if ( leftLensFlare != nilPointer ) delete leftLensFlare ;
                 if ( rightLensFlare != nilPointer ) delete rightLensFlare ;
         } else
-                Slide::backgroundPicture = Picture::loadPicture( ospaths::pathToFile( pathToPictures, "background.png" ) );
+                Slide::backgroundPicture = new Picture( pathToPictures, "background.png" );
 
         if ( Slide::backgroundPicture == nilPointer )
         {       // don't crash, just present the red one like in the original game

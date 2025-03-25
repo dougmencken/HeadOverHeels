@@ -85,19 +85,6 @@ void GameManager::cleanUp ()
 }
 
 /* static */
-PicturePtr GameManager::refreshPicture ( const std::string & nameOfPicture )
-{
-        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                ospaths::pathToFile( ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), nameOfPicture )
-        ) ) ;
-
-        NamedPicturePtr newPicture( new NamedPicture( *pict ) );
-        newPicture->setName( nameOfPicture );
-
-        return newPicture ;
-}
-
-/* static */
 void * GameManager::beginOrResume ( void * )
 {
         GameManager & theManager = GameManager::getInstance() ;
@@ -439,20 +426,24 @@ void GameManager::loseLifeAndContinue( const std::string & nameOfCharacter, cons
 
 void GameManager::refreshSceneryBackgrounds ()
 {
-        sceneryBackgrounds[ "jail" ] = refreshPicture( "jail-frame.png" );
-        sceneryBackgrounds[ "blacktooth" ] = refreshPicture( "blacktooth-frame.png" );
-        sceneryBackgrounds[ "market" ] = refreshPicture( "market-frame.png" );
-        sceneryBackgrounds[ "moon" ] = refreshPicture( "moon-frame.png" );
-        sceneryBackgrounds[ "safari" ] = refreshPicture( "safari-frame.png" );
-        sceneryBackgrounds[ "byblos" ] = refreshPicture( "byblos-frame.png" );
-        sceneryBackgrounds[ "penitentiary" ] = refreshPicture( "penitentiary-frame.png" );
-        sceneryBackgrounds[ "egyptus" ] = refreshPicture( "egyptus-frame.png" );
+        std::string path = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
+
+        sceneryBackgrounds[ "jail" ] = PicturePtr( new Picture( path, "jail-frame.png" ) );
+        sceneryBackgrounds[ "blacktooth" ] = PicturePtr( new Picture( path, "blacktooth-frame.png" ) );
+        sceneryBackgrounds[ "market" ] = PicturePtr( new Picture( path, "market-frame.png" ) );
+        sceneryBackgrounds[ "moon" ] = PicturePtr( new Picture( path, "moon-frame.png" ) );
+        sceneryBackgrounds[ "safari" ] = PicturePtr( new Picture( path, "safari-frame.png" ) );
+        sceneryBackgrounds[ "byblos" ] = PicturePtr( new Picture( path, "byblos-frame.png" ) );
+        sceneryBackgrounds[ "penitentiary" ] = PicturePtr( new Picture( path, "penitentiary-frame.png" ) );
+        sceneryBackgrounds[ "egyptus" ] = PicturePtr( new Picture( path, "egyptus-frame.png" ) );
 }
 
 void GameManager::refreshAmbianceImages ()
 {
-        ambiancePictures[ "head" ] = refreshPicture( "gui-head.png" );
-        ambiancePictures[ "heels" ] = refreshPicture( "gui-heels.png" );
+        std::string path = ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
+
+        ambiancePictures[ "head" ] = PicturePtr( new Picture( path, "gui-head.png" ) );
+        ambiancePictures[ "heels" ] = PicturePtr( new Picture( path, "gui-heels.png" ) );
 
         ambiancePictures[ "gray head" ] = PicturePtr( new Picture( * ambiancePictures[ "head" ] ) );
         ambiancePictures[ "gray heels" ] = PicturePtr( new Picture( * ambiancePictures[ "heels" ] ) );
@@ -468,9 +459,9 @@ void GameManager::refreshAmbianceImages ()
                 ambiancePictures[ "gray heels" ]->colorizeWhite( Color::byName( "reduced magenta" ) );
         }
 
-        ambiancePictures[ "handbag" ] = refreshPicture( "gui-handbag.png" );
-        ambiancePictures[ "horn" ] = refreshPicture( "gui-horn.png" );
-        ambiancePictures[ "donuts" ] = refreshPicture( "gui-donuts.png" );
+        ambiancePictures[ "handbag" ] = PicturePtr( new Picture( path, "gui-handbag.png" ) );
+        ambiancePictures[ "horn" ] = PicturePtr( new Picture( path, "gui-horn.png" ) );
+        ambiancePictures[ "donuts" ] = PicturePtr( new Picture( path, "gui-donuts.png" ) );
 
         ambiancePictures[ "gray handbag" ] = PicturePtr( new Picture( * ambiancePictures[ "handbag" ] ) );
         ambiancePictures[ "gray horn" ] = PicturePtr( new Picture( * ambiancePictures[ "horn" ] ) );
@@ -493,9 +484,9 @@ void GameManager::refreshAmbianceImages ()
                 ambiancePictures[ "donuts" ]->colorizeWhite( Color::byName( "yellow" ) );
         }
 
-        ambiancePictures[ "grandes saltos" ] = refreshPicture( "high-jumps.png" );
-        ambiancePictures[ "gran velocidad" ] = refreshPicture( "quick-steps.png" );
-        ambiancePictures[ "escudo" ] = refreshPicture( "shield.png" );
+        ambiancePictures[ "grandes saltos" ] = PicturePtr( new Picture( path, "high-jumps.png" ) );
+        ambiancePictures[ "gran velocidad" ] = PicturePtr( new Picture( path, "quick-steps.png" ) );
+        ambiancePictures[ "escudo" ] = PicturePtr( new Picture( path, "shield.png" ) );
 
         ambiancePictures[ "gray grandes saltos" ] = PicturePtr( new Picture( * ambiancePictures[ "grandes saltos" ] ) );
         ambiancePictures[ "gray gran velocidad" ] = PicturePtr( new Picture( * ambiancePictures[ "gran velocidad" ] ) );

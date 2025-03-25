@@ -39,11 +39,6 @@ private:
 
         GameManager( const GameManager & ) { }
 
-protected:
-
-        /////// here?
-        static PicturePtr refreshPicture ( const std::string & nameOfPicture ) ;
-
 public:
 
         static GameManager & getInstance () {  return GameManager::instance ;  }

@@ -39,6 +39,11 @@ public:
                 , name( "Picture." + util::makeRandomString( 12 ) )
         {}
 
+        NamedPicture( const std::string & path, const std::string & fileName )
+                : Picture( path, fileName )
+                , name( fileName )
+        {}
+
         NamedPicture( const allegro::Pict & pict )
                 : Picture( pict )
                 , name( "Picture." + util::makeRandomString( 12 ) )
