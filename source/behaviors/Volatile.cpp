@@ -10,6 +10,7 @@
 
 const float delayBeforeDisappearance = 0.04 ;
 const float longDelayBeforeDisappearance = delayBeforeDisappearance * 20 ;
+const float reactionTimeToHeadAppearance = 0.5 ;
 
 
 namespace behaviors
@@ -35,7 +36,7 @@ bool Volatile::update ()
                 case activities::Activity::Waiting:
                 case activities::Activity::WakeUp:
                         // for such activity it is always volatile
-                        this->solid = false;
+                        this->solid = false ;
 
                         // if it is volatile by contact and has an item above it
                         if ( ( getNameOfBehavior () == "behavior of disappearance on touch" ||
@@ -150,7 +151,7 @@ bool Volatile::update ()
                                         getNameOfBehavior () != "behavior of disappearance as soon as Head appears" ) ||
                                 ( getNameOfBehavior () == "behavior of disappearance on jump into" && disappearanceTimer->getValue() > delayBeforeDisappearance ) ||
                                 ( getNameOfBehavior () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
-                                ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.5 ) )
+                                ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > reactionTimeToHeadAppearance ) )
                         {
                                 SoundManager::getInstance().play( volatileItem.getKind (), "vanish" );
 

@@ -14,9 +14,10 @@
 
 #ifdef DEBUG
 #  define DEBUG_MINIATURES      1
+#  define WRITE_MINIATURES      0
 #endif
 
-#if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+#if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
 #  include "ospaths.hpp"
 #endif
 
@@ -501,7 +502,7 @@ void Miniature::draw ()
 {
         if ( this->theImage == nilPointer ) composeImage () ;
 
-# if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
+# if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
         this->theImage->saveAsPNG( ospaths::homePath() );
         std::string imageName = this->theImage->getName() ;
         delete this->theImage ;
