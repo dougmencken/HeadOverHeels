@@ -46,7 +46,7 @@ bool FinalBall::update ()
                                         thisBall.setIgnoreCollisions( true );
 
                                         thisBall.metamorphInto( "bubbles", "vanishing final ball" );
-                                        thisBall.setBehaviorOf( "behavior of disappearance in time" );
+                                        thisBall.setBehaviorOf( "vanishing after a while" );
                                 }
                         }
                         break;

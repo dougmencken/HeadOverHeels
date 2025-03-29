@@ -156,7 +156,7 @@ bool Bonus::update ()
 
                                         bonusItem.changeHeightTo( 0 );
                                         bonusItem.metamorphInto( "bubbles", "vanishing bonus item" );
-                                        bonusItem.setBehaviorOf( "behavior of disappearance in time" );
+                                        bonusItem.setBehaviorOf( "vanishing after a while" );
                                 }
                                 else
                                         present = false ; // no bubbles for a crown, just disappear

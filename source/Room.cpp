@@ -1168,14 +1168,14 @@ void Room::dontDisappearOnJump ()
                         if ( gridItem.getBehavior() != nilPointer )
                         {
                                 std::string behavior = gridItem.getBehavior()->getNameOfBehavior();
-                                if ( behavior == "behavior of disappearance on jump into" ||
-                                                behavior == "behavior of slow disappearance on jump into" )
+                                if ( behavior == "vanishing when something is above" ||
+                                                behavior == "slowly vanishing when something is above" )
                                 {
                                         gridItem.setBehaviorOf( "still" );
 
                                         if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                                 gridItem.getCurrentRawImageToChangeIt().multiplyWithColor (
-                                                        ( behavior == "behavior of slow disappearance on jump into" ) ?
+                                                        ( behavior == "slowly vanishing when something is above" ) ?
                                                                 Color::byName( "magenta" ) : Color::byName( "red" ) );
                                         else
                                                 gridItem.getCurrentRawImageToChangeIt().invertColors() ;
@@ -1193,14 +1193,14 @@ void Room::dontDisappearOnJump ()
                 if ( freeItem.getBehavior() != nilPointer )
                 {
                         std::string behavior = freeItem.getBehavior()->getNameOfBehavior();
-                        if ( behavior == "behavior of disappearance on jump into" ||
-                                        behavior == "behavior of slow disappearance on jump into" )
+                        if ( behavior == "vanishing when something is above" ||
+                                        behavior == "slowly vanishing when something is above" )
                         {
                                 freeItem.setBehaviorOf( "still" );
 
                                 if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                         freeItem.getCurrentRawImageToChangeIt().multiplyWithColor (
-                                                ( behavior == "behavior of slow disappearance on jump into" ) ?
+                                                ( behavior == "slowly vanishing when something is above" ) ?
                                                         Color::byName( "magenta" ) : Color::byName( "red" ) );
                                 else
                                         freeItem.getCurrentRawImageToChangeIt().invertColors() ;

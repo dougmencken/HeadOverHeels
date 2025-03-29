@@ -76,7 +76,7 @@
         </item>
         <item x="3" y="1" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">
@@ -85,7 +85,7 @@
         </item>
         <item x="7" y="1" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="1" z="0">

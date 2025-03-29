@@ -113,7 +113,7 @@ void Jumping::lift( FreeItem & sender, DescribedItem & item, int z )
         if ( behavior != nilPointer )
         {
                 // when item is volatile
-                if ( behavior->getNameOfBehavior () == "behavior of disappearance on touch" ||
+                if ( behavior->getNameOfBehavior () == "vanishing on contact" ||
                                 behavior->getNameOfBehavior () == "behavior of bonus" )
                 {
                         behavior->changeActivityDueTo( activities::Activity::PushedUp, DescribedItemPtr( &sender ) );

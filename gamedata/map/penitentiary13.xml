@@ -68,7 +68,7 @@
         </item>
         <item x="3" y="0" z="2">
             <kind>brick1</kind>
-            <behavior>behavior of slow disappearance on jump into</behavior>
+            <behavior>slowly vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="3">
@@ -93,7 +93,7 @@
         </item>
         <item x="5" y="3" z="1">
             <kind>brick1</kind>
-            <behavior>behavior of slow disappearance on jump into</behavior>
+            <behavior>slowly vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="6" y="3" z="0">
@@ -102,7 +102,7 @@
         </item>
         <item x="6" y="3" z="1">
             <kind>brick1</kind>
-            <behavior>behavior of slow disappearance on jump into</behavior>
+            <behavior>slowly vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="7">

@@ -64,47 +64,47 @@
     <items>
         <item x="1" y="0" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="1" y="0" z="1">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="1" y="0" z="2">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="6" y="0" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="6" y="0" z="1">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="6" y="0" z="2">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="2" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="2" z="1">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="2" z="2">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="0" y="3" z="0">
@@ -161,17 +161,17 @@
         </item>
         <item x="8" y="7" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="1">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="2">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="4" y="8" z="4">

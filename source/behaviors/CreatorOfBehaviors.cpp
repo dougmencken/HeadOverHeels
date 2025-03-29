@@ -127,7 +127,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
 
         if ( behaviorToReturn == nilPointer ) // none of the above
         {
-                if ( behavior.find( "disappearance" ) != std::string::npos /* && item.whichItemClass() == "described item" */ )
+                if ( behavior.find( "vanishing" ) != std::string::npos /* && item.whichItemClass() == "described item" */ )
                         behaviorToReturn = new Volatile( dynamic_cast< ::DescribedItem & >( item ), behavior );
                 else
                 if ( behavior.empty () || behavior == "still" || behavior == "behavior of bubbles" )

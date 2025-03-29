@@ -93,19 +93,19 @@
         <item x="0" y="7" z="2">
             <kind>puppy</kind>
             <orientation>west</orientation>
-            <behavior>behavior of disappearance as soon as Head appears</behavior>
+            <behavior>vanishing as soon as Head appears</behavior>
             <class>griditem</class>
         </item>
         <item x="1" y="7" z="1">
             <kind>puppy</kind>
             <orientation>west</orientation>
-            <behavior>behavior of disappearance as soon as Head appears</behavior>
+            <behavior>vanishing as soon as Head appears</behavior>
             <class>griditem</class>
         </item>
         <item x="2" y="7" z="0">
             <kind>puppy</kind>
             <orientation>west</orientation>
-            <behavior>behavior of disappearance as soon as Head appears</behavior>
+            <behavior>vanishing as soon as Head appears</behavior>
             <class>griditem</class>
         </item>
         <item x="2" y="7" z="3">

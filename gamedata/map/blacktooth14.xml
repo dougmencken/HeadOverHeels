@@ -132,7 +132,7 @@
         </item>
         <item x="3" y="4" z="1">
             <kind>bars-ns</kind>
-            <behavior>behavior of disappearance on touch</behavior>
+            <behavior>vanishing on contact</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="4" z="2">

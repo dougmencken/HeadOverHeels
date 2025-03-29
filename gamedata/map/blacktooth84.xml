@@ -96,12 +96,12 @@
         </item>
         <item x="4" y="4" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="4" y="4" z="1">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="4" z="3">
@@ -114,7 +114,7 @@
         </item>
         <item x="4" y="7" z="0">
             <kind>brick2</kind>
-            <behavior>behavior of disappearance on jump into</behavior>
+            <behavior>vanishing when something is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="0">
