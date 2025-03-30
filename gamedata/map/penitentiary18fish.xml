@@ -98,7 +98,7 @@
         <item x="2" y="1" z="3">
             <kind>brick2</kind>
             <class>griditem</class>
-            <behavior>vanishing when something is above</behavior>
+            <behavior>vanishing when some free dude is above</behavior>
         </item>
         <item x="3" y="1" z="3">
             <kind>brick2</kind>
@@ -131,7 +131,7 @@
         <item x="10" y="1" z="3">
             <kind>brick2</kind>
             <class>griditem</class>
-            <behavior>vanishing when something is above</behavior>
+            <behavior>vanishing when some free dude is above</behavior>
         </item>
         <item x="11" y="1" z="3">
             <kind>brick2</kind>

@@ -8,13 +8,20 @@
 
 #include <stack>
 
+
+namespace behaviors
+{
+
+/* static */ const std::string Volatile::on_contact = "vanishing on contact" ;
+/* static */ const std::string Volatile::when_above = "vanishing when some free dude is above" ;
+/* static */ const std::string Volatile::when_above_slower = "slowly " + when_above ;
+/* static */ const std::string Volatile::as_Head_appears = "vanishing as soon as Head appears" ;
+/* static */ const std::string Volatile::after_a_while = "vanishing after a while" ;
+
 const float delayBeforeDisappearance = 0.04 ;
 const float longDelayBeforeDisappearance = delayBeforeDisappearance * 20 ;
 const float reactionTimeToHeadAppearance = 0.5 ;
 
-
-namespace behaviors
-{
 
 Volatile::Volatile( DescribedItem & item, const std::string & behavior )
         : Behavior( item, behavior )
@@ -39,9 +46,9 @@ bool Volatile::update ()
                         this->solid = false ;
 
                         // if it is volatile by contact and has an item above it
-                        if ( ( getNameOfBehavior () == "vanishing on contact" ||
-                                        getNameOfBehavior () == "vanishing when something is above" ||
-                                                getNameOfBehavior () == "slowly vanishing when something is above" )
+                        if ( ( getNameOfBehavior() == Volatile::on_contact ||
+                                        getNameOfBehavior() == Volatile::when_above ||
+                                                getNameOfBehavior() == Volatile::when_above_slower )
                                 && ! volatileItem.canAdvanceTo( 0, 0, 1 ) )
                         {
                                 bool gone = false ;
@@ -60,9 +67,9 @@ bool Volatile::update ()
                                                 // look at whether an item above is volatile or bonus
                                                 // because that item would disappear unless it is leaning on another one
                                                 if ( atopItem->getBehavior() != nilPointer &&
-                                                        atopItem->getBehavior()->getNameOfBehavior () != "vanishing when something is above" &&
-                                                        atopItem->getBehavior()->getNameOfBehavior () != "slowly vanishing when something is above" &&
-                                                        atopItem->getBehavior()->getNameOfBehavior () != "vanishing on contact" &&
+                                                        atopItem->getBehavior()->getNameOfBehavior() != Volatile::when_above &&
+                                                        atopItem->getBehavior()->getNameOfBehavior() != Volatile::when_above_slower &&
+                                                        atopItem->getBehavior()->getNameOfBehavior() != Volatile::on_contact &&
                                                         atopItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
                                                 {
                                                         gone = true ;
@@ -90,8 +97,8 @@ bool Volatile::update ()
                                                                 //     on another item that is vanishing
                                                                 if ( ( belowItem->getBehavior() == nilPointer )
                                                                         || ( belowItem->getBehavior() != nilPointer
-                                                                                && belowItem->getBehavior()->getNameOfBehavior () != "vanishing when something is above"
-                                                                                && belowItem->getBehavior()->getNameOfBehavior () != "vanishing on contact"
+                                                                                && belowItem->getBehavior()->getNameOfBehavior() != Volatile::when_above
+                                                                                && belowItem->getBehavior()->getNameOfBehavior() != Volatile::on_contact
                                                                                 && belowItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
                                                                         || ( belowItem->getBehavior() != nilPointer
                                                                                 && belowItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanishing ) )
@@ -108,8 +115,8 @@ bool Volatile::update ()
                                         disappearanceTimer->go() ;
                                 }
                         }
-                        // if it's a puppy which disappears when Head or the composite character is in the room
-                        else if ( getNameOfBehavior () == "vanishing as soon as Head appears" )
+                        // if it’s a puppy which disappears when Head or the composite character is in the room
+                        else if ( getNameOfBehavior() == Volatile::as_Head_appears )
                         {
                                 if ( mediator->findItemOfKind( "head" ) != nilPointer ||
                                         mediator->findItemOfKind( "headoverheels" ) != nilPointer )
@@ -118,8 +125,8 @@ bool Volatile::update ()
                                         disappearanceTimer->go() ;
                                 }
                         }
-                        // is it volatile in time
-                        else if ( getNameOfBehavior () == "vanishing after a while" )
+                        // is it vanishing over time
+                        else if ( getNameOfBehavior() == Volatile::after_a_while )
                         {
                                 volatileItem.animate() ;
 
@@ -130,11 +137,11 @@ bool Volatile::update ()
 
                 case activities::Activity::Pushed :
                         if ( ! solid ) {
-                                if ( getNameOfBehavior () == "vanishing on contact" )
+                                if ( getNameOfBehavior() == Volatile::on_contact )
                                         // pushing an item which is volatile on contact
                                         setCurrentActivity( activities::Activity::Vanishing );
                                 else
-                                if ( getNameOfBehavior () == "vanishing as soon as Head appears" ) {
+                                if ( getNameOfBehavior() == Volatile::as_Head_appears ) {
                                         if ( mediator->findItemOfKind( "head" ) != nilPointer
                                                         || mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                                 setCurrentActivity( activities::Activity::Vanishing );
@@ -145,13 +152,12 @@ bool Volatile::update ()
 
                         break ;
 
-                case activities::Activity::Vanishing:
-                        if ( ( getNameOfBehavior () != "vanishing when something is above" &&
-                                        getNameOfBehavior () != "slowly vanishing when something is above" &&
-                                        getNameOfBehavior () != "vanishing as soon as Head appears" ) ||
-                                ( getNameOfBehavior () == "vanishing when something is above" && disappearanceTimer->getValue() > delayBeforeDisappearance ) ||
-                                ( getNameOfBehavior () == "slowly vanishing when something is above" && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
-                                ( getNameOfBehavior () == "vanishing as soon as Head appears" && disappearanceTimer->getValue() > reactionTimeToHeadAppearance ) )
+                case activities::Activity::Vanishing :
+                        if ( ( getNameOfBehavior() != Volatile::when_above && getNameOfBehavior() != Volatile::when_above_slower &&
+                                        getNameOfBehavior() != Volatile::as_Head_appears ) ||
+                                ( getNameOfBehavior() == Volatile::when_above && disappearanceTimer->getValue() > delayBeforeDisappearance ) ||
+                                ( getNameOfBehavior() == Volatile::when_above_slower && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
+                                ( getNameOfBehavior() == Volatile::as_Head_appears && disappearanceTimer->getValue() > reactionTimeToHeadAppearance ) )
                         {
                                 SoundManager::getInstance().play( volatileItem.getKind (), "vanish" );
 
@@ -159,7 +165,7 @@ bool Volatile::update ()
                                 volatileItem.setIgnoreCollisions( true );
                                 volatileItem.changeHeightTo( 0 );
                                 volatileItem.metamorphInto( "bubbles", "vanishing volatile item" );
-                                volatileItem.setBehaviorOf( "vanishing after a while" );
+                                volatileItem.setBehaviorOf( Volatile::after_a_while );
                         }
                         break;
 

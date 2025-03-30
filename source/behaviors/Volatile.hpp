@@ -34,6 +34,14 @@ public :
 
         virtual bool update () ;
 
+        // string constants found in room description files
+
+        static const std::string on_contact ; // "vanishing on contact"
+        static const std::string when_above ; // "vanishing when some free dude is above"
+        static const std::string when_above_slower ; // "slowly vanishing when some free dude is above"
+        static const std::string as_Head_appears ; // "vanishing as soon as Head appears"
+        static const std::string after_a_while ; // "vanishing after a while"
+
 private :
 
         /**

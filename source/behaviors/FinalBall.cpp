@@ -6,6 +6,7 @@
 #include "Moving.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
+#include "Volatile.hpp"
 
 
 namespace behaviors
@@ -46,7 +47,7 @@ bool FinalBall::update ()
                                         thisBall.setIgnoreCollisions( true );
 
                                         thisBall.metamorphInto( "bubbles", "vanishing final ball" );
-                                        thisBall.setBehaviorOf( "vanishing after a while" );
+                                        thisBall.setBehaviorOf( behaviors::Volatile::after_a_while );
                                 }
                         }
                         break;

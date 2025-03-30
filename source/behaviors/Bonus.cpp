@@ -8,6 +8,7 @@
 #include "Mediator.hpp"
 #include "BonusManager.hpp"
 #include "SoundManager.hpp"
+#include "Volatile.hpp"
 
 
 namespace behaviors
@@ -156,7 +157,7 @@ bool Bonus::update ()
 
                                         bonusItem.changeHeightTo( 0 );
                                         bonusItem.metamorphInto( "bubbles", "vanishing bonus item" );
-                                        bonusItem.setBehaviorOf( "vanishing after a while" );
+                                        bonusItem.setBehaviorOf( behaviors::Volatile::after_a_while );
                                 }
                                 else
                                         present = false ; // no bubbles for a crown, just disappear

@@ -90,7 +90,7 @@
         <item x="3" y="0" z="0">
             <kind>conveyor</kind>
             <orientation>south</orientation>
-            <behavior>vanishing when something is above</behavior>
+            <behavior>vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="4" y="0" z="0">
@@ -176,7 +176,7 @@
         <item x="8" y="2" z="0">
             <kind>conveyor</kind>
             <orientation>west</orientation>
-            <behavior>vanishing when something is above</behavior>
+            <behavior>vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="13" y="2" z="2">
@@ -249,7 +249,7 @@
         <item x="10" y="5" z="0">
             <kind>conveyor</kind>
             <orientation>south</orientation>
-            <behavior>vanishing when something is above</behavior>
+            <behavior>vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="11" y="5" z="0">

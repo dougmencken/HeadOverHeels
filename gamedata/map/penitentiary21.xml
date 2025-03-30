@@ -184,7 +184,7 @@
         </item>
         <item x="7" y="7" z="0">
             <kind>brick2</kind>
-            <behavior>vanishing when something is above</behavior>
+            <behavior>vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="8" y="7" z="0">

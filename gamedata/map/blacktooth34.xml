@@ -80,7 +80,7 @@
         </item>
         <item x="3" y="1" z="0">
             <kind>brick2</kind>
-            <behavior>slowly vanishing when something is above</behavior>
+            <behavior>slowly vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="5" y="1" z="0">

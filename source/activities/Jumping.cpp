@@ -2,11 +2,12 @@
 #include "Jumping.hpp"
 
 #include "AvatarItem.hpp"
-#include "FreeItem.hpp"
 #include "DescribedItem.hpp"
+#include "FreeItem.hpp"
+#include "GameManager.hpp"
 #include "Mediator.hpp"
 #include "PropagateActivity.hpp"
-#include "GameManager.hpp"
+#include "Volatile.hpp"
 
 
 namespace activities
@@ -113,13 +114,13 @@ void Jumping::lift( FreeItem & sender, DescribedItem & item, int z )
         if ( behavior != nilPointer )
         {
                 // when item is volatile
-                if ( behavior->getNameOfBehavior () == "vanishing on contact" ||
-                                behavior->getNameOfBehavior () == "behavior of bonus" )
+                if ( behavior->getNameOfBehavior() == behaviors::Volatile::on_contact ||
+                                behavior->getNameOfBehavior() == "behavior of bonus" )
                 {
                         behavior->changeActivityDueTo( activities::Activity::PushedUp, DescribedItemPtr( &sender ) );
                 }
                 // raise if the item isn’t an elevator
-                else if ( behavior->getNameOfBehavior () != "behavior of elevator" )
+                else if ( behavior->getNameOfBehavior() != "behavior of elevator" )
                 {
                         // is there something above
                         if ( ! item.addToZ( z ) )

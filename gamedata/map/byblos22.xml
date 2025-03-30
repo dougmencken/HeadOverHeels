@@ -68,7 +68,7 @@
         </item>
         <item x="1" y="8" z="2">
             <kind>book</kind>
-            <behavior>vanishing when something is above</behavior>
+            <behavior>vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="1" y="3" z="0">

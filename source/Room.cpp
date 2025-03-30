@@ -11,6 +11,7 @@
 #include "GameManager.hpp"
 #include "Behavior.hpp"
 #include "Elevator.hpp"
+#include "Volatile.hpp"
 
 # define SHOW_ORIGIN_OF_ROOM    0
 
@@ -1168,14 +1169,12 @@ void Room::dontDisappearOnJump ()
                         if ( gridItem.getBehavior() != nilPointer )
                         {
                                 std::string behavior = gridItem.getBehavior()->getNameOfBehavior();
-                                if ( behavior == "vanishing when something is above" ||
-                                                behavior == "slowly vanishing when something is above" )
-                                {
+                                if ( behavior.find( behaviors::Volatile::when_above ) != std::string::npos ) {
                                         gridItem.setBehaviorOf( "still" );
 
                                         if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                                 gridItem.getCurrentRawImageToChangeIt().multiplyWithColor (
-                                                        ( behavior == "slowly vanishing when something is above" ) ?
+                                                        ( behavior == behaviors::Volatile::when_above_slower ) ?
                                                                 Color::byName( "magenta" ) : Color::byName( "red" ) );
                                         else
                                                 gridItem.getCurrentRawImageToChangeIt().invertColors() ;
@@ -1193,14 +1192,12 @@ void Room::dontDisappearOnJump ()
                 if ( freeItem.getBehavior() != nilPointer )
                 {
                         std::string behavior = freeItem.getBehavior()->getNameOfBehavior();
-                        if ( behavior == "vanishing when something is above" ||
-                                        behavior == "slowly vanishing when something is above" )
-                        {
+                        if ( behavior.find( behaviors::Volatile::when_above ) != std::string::npos ) {
                                 freeItem.setBehaviorOf( "still" );
 
                                 if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                         freeItem.getCurrentRawImageToChangeIt().multiplyWithColor (
-                                                ( behavior == "slowly vanishing when something is above" ) ?
+                                                ( behavior == behaviors::Volatile::when_above_slower ) ?
                                                         Color::byName( "magenta" ) : Color::byName( "red" ) );
                                 else
                                         freeItem.getCurrentRawImageToChangeIt().invertColors() ;

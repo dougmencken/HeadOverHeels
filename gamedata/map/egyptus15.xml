@@ -64,7 +64,7 @@
         </item>
         <item x="2" y="0" z="4">
             <kind>brick2</kind>
-            <behavior>slowly vanishing when something is above</behavior>
+            <behavior>slowly vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="3">
@@ -85,7 +85,7 @@
         </item>
         <item x="5" y="0" z="2">
             <kind>brick2</kind>
-            <behavior>slowly vanishing when something is above</behavior>
+            <behavior>slowly vanishing when some free dude is above</behavior>
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="6">

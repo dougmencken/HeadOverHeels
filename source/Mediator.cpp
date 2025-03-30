@@ -10,6 +10,7 @@
 #include "Masker.hpp"
 #include "Behavior.hpp"
 #include "Timer.hpp"
+#include "Volatile.hpp"
 #include "MayNotBePossible.hpp"
 
 #include "sleep.hpp"
@@ -1203,8 +1204,8 @@ void Mediator::toggleSwitchInRoom ()
                 {
                         std::string behavior = freeItem.getBehavior()->getNameOfBehavior ();
 
-                        if ( behavior == "vanishing on contact" ||
-                                        behavior.find( "vanishing when something is above" ) != std::string::npos ||
+                        if ( behavior == behaviors::Volatile::on_contact ||
+                                        behavior.find( behaviors::Volatile::when_above ) != std::string::npos ||
                                                 std::find( badBoys.begin (), badBoys.end (), behavior ) != badBoys.end () )
                         {
                                 freeItem.getBehavior()->setCurrentActivity( this->switchInRoomIsOn
@@ -1226,7 +1227,8 @@ void Mediator::toggleSwitchInRoom ()
                         {
                                 std::string behavior = gridItem.getBehavior()->getNameOfBehavior ();
 
-                                if ( behavior == "vanishing on contact" || behavior.find( "vanishing when something is above" ) != std::string::npos )
+                                if ( behavior == behaviors::Volatile::on_contact
+                                        || behavior.find( behaviors::Volatile::when_above ) != std::string::npos )
                                 {
                                         gridItem.getBehavior()->setCurrentActivity(
                                                 this->switchInRoomIsOn ?
