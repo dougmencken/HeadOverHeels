@@ -45,31 +45,45 @@ bool CharacterHeels::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
+        #if defined( DEBUG_WAITING ) && DEBUG_WAITING
+                        std::cout << "Heels is waiting on update()" << std::endl ;
+        #endif
                         wait ();
                         break;
 
                 case activities::Activity::Automoving:
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Heels is automoving on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                         automove ();
                         break;
 
                 case activities::Activity::Moving:
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Heels is moving on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                         move ();
                         break;
 
                 case activities::Activity::Pushed :
                 case activities::Activity::Dragged :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Heels is pushed or dragged on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                         displace ();
                         break ;
 
-                case activities::Activity::CancelDragging:
-                        cancelDragging ();
-                        break;
-
                 case activities::Activity::Falling:
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Heels is falling on update()" << std::endl ;
+        #endif
                         fall ();
                         break;
 
                 case activities::Activity::Jumping :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Heels is jumping on update()" << std::endl ;
+        #endif
                         jump ();
                         break;
 
@@ -118,6 +132,9 @@ void CharacterHeels::behave ()
         // when waiting
         if ( whatDoing == activities::Activity::Waiting /* || whatDoing == activities::Activity::Blinking */ )
         {
+        #if defined( DEBUG_WAITING ) && DEBUG_WAITING
+                std::cout << "Heels is waiting on behave()" << std::endl ;
+        #endif
                 if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
                                                 ? activities::Activity::TakingItem
@@ -140,6 +157,9 @@ void CharacterHeels::behave ()
         // already moving
         else if ( whatDoing == activities::Activity::Moving )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Heels is moving on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                 if ( input.jumpTyped() ) {
                         toJumpOrTeleport ();
                 }
@@ -164,6 +184,9 @@ void CharacterHeels::behave ()
         // being pushed
         else if ( whatDoing == activities::Activity::Pushed )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Heels is pushed on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                 if ( input.jumpTyped() ) {
                         setCurrentActivity( activities::Activity::Jumping );
                 }
@@ -186,6 +209,9 @@ void CharacterHeels::behave ()
         // dragged by a conveyor
         else if ( whatDoing == activities::Activity::Dragged )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Heels is dragged on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                 if ( input.jumpTyped() ) {
                         setCurrentActivity( activities::Activity::Jumping );
                 }
@@ -195,6 +221,9 @@ void CharacterHeels::behave ()
         }
         else if ( whatDoing == activities::Activity::Jumping || whatDoing == activities::Activity::Falling )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Heels is jumping or falling on behave()" << std::endl ;
+        #endif
                 // take or drop an item when jumping or falling
                 if ( input.takeTyped() ) {
                         setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer

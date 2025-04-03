@@ -57,32 +57,46 @@ bool CharacterHead::update ()
 
         switch ( getCurrentActivity () )
         {
-                case activities::Activity::Waiting:
+                case activities::Activity::Waiting :
+        #if defined( DEBUG_WAITING ) && DEBUG_WAITING
+                        std::cout << "Head is waiting on update()" << std::endl ;
+        #endif
                         wait ();
                         break;
 
-                case activities::Activity::Automoving:
+                case activities::Activity::Automoving :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Head is automoving on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                         automove ();
                         break;
 
-                case activities::Activity::Moving:
+                case activities::Activity::Moving :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Head is moving on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                         move ();
                         break;
 
                 case activities::Activity::Pushed :
                 case activities::Activity::Dragged :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Head is pushed or dragged on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                         displace ();
                         break ;
 
-                case activities::Activity::CancelDragging:
-                        cancelDragging ();
-                        break;
-
-                case activities::Activity::Falling:
+                case activities::Activity::Falling :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Head is falling on update()" << std::endl ;
+        #endif
                         fall ();
                         break;
 
                 case activities::Activity::Jumping :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Head is jumping on update()" << std::endl ;
+        #endif
                         jump ();
                         break;
 
@@ -98,11 +112,17 @@ bool CharacterHead::update ()
                         collideWithALethalItem ();
                         break;
 
-                case activities::Activity::Gliding:
+                case activities::Activity::Gliding :
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                        std::cout << "Head is gliding on update()" << std::endl ;
+        #endif
                         glide ();
                         break;
 
-                case activities::Activity::Blinking:
+                case activities::Activity::Blinking :
+        #if defined( DEBUG_WAITING ) && DEBUG_WAITING
+                        std::cout << "Head is blinking on update()" << std::endl ;
+        #endif
                         blink ();
                         break;
 
@@ -129,6 +149,9 @@ void CharacterHead::behave ()
         // when waiting or blinking
         if ( whatDoing == activities::Activity::Waiting || whatDoing == activities::Activity::Blinking )
         {
+        #if defined( DEBUG_WAITING ) && DEBUG_WAITING
+                std::cout << "Head is waiting or blinking on behave()" << std::endl ;
+        #endif
                 if ( input.jumpTyped() ) {
                         toJumpOrTeleport ();
                 }
@@ -143,6 +166,9 @@ void CharacterHead::behave ()
         // already moving
         else if ( whatDoing == activities::Activity::Moving )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Head is moving on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                 if ( input.jumpTyped() ) {
                         toJumpOrTeleport ();
                 }
@@ -159,6 +185,9 @@ void CharacterHead::behave ()
         // being pushed
         else if ( whatDoing == activities::Activity::Pushed )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Head is pushed on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                 if ( input.jumpTyped() ) {
                         setCurrentActivity( activities::Activity::Jumping );
                 }
@@ -173,6 +202,9 @@ void CharacterHead::behave ()
         // dragged by a conveyor
         else if ( whatDoing == activities::Activity::Dragged )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Head is dragged on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+        #endif
                 if ( input.jumpTyped() ) {
                         setCurrentActivity( activities::Activity::Jumping );
                 }
@@ -182,6 +214,9 @@ void CharacterHead::behave ()
         }
         else if ( whatDoing == activities::Activity::Jumping )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Head is jumping on behave()" << std::endl ;
+        #endif
                 if ( input.doughnutTyped() ) {
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
@@ -192,6 +227,9 @@ void CharacterHead::behave ()
         }
         else if ( whatDoing == activities::Activity::Falling )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Head is falling on behave()" << std::endl ;
+        #endif
                 if ( input.doughnutTyped() ) {
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
@@ -208,6 +246,9 @@ void CharacterHead::behave ()
         // waiting for the next cycle may take away the chance of entering the gap between two items
         if ( getCurrentActivity() == activities::Activity::Gliding )
         {
+        #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+                std::cout << "Head is gliding on behave()" << std::endl ;
+        #endif
                 if ( input.doughnutTyped() ) {
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );

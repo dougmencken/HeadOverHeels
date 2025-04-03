@@ -241,43 +241,39 @@ void PlayerControlled::handleMoveKeyWhenDragged ()
 
         if ( input.movenorthTyped() ) {
                 avatar.changeHeading( "north" );
-                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlySouth()
-                                        ? activities::Activity::CancelDragging
-                                        : activities::Activity::Moving );
+
+                setCurrentActivity(
+                        activities::Activity::Moving,
+                        ( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlySouth() )
+                                ? /* cancel draggin’ */ Motion2D::rest()
+                                : whereMoving.add( Motion2D::movingNorth() ) );
         }
         else if ( input.movesouthTyped() ) {
                 avatar.changeHeading( "south" );
-                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyNorth()
-                                        ? activities::Activity::CancelDragging
-                                        : activities::Activity::Moving );
+
+                setCurrentActivity(
+                        activities::Activity::Moving,
+                        ( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyNorth() )
+                                ? /* cancel draggin’ */ Motion2D::rest()
+                                : whereMoving.add( Motion2D::movingSouth() ) );
         }
         else if ( input.moveeastTyped() ) {
                 avatar.changeHeading( "east" );
-                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyWest()
-                                        ? activities::Activity::CancelDragging
-                                        : activities::Activity::Moving );
+
+                setCurrentActivity(
+                        activities::Activity::Moving,
+                        ( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyWest() )
+                                ? /* cancel draggin’ */ Motion2D::rest()
+                                : whereMoving.add( Motion2D::movingEast() ) );
         }
         else if ( input.movewestTyped() ) {
                 avatar.changeHeading( "west" );
-                setCurrentActivity( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyEast()
-                                        ? activities::Activity::CancelDragging
-                                        : activities::Activity::Moving );
-        }
-}
 
-void PlayerControlled::cancelDragging ()
-{
-        ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
-
-        if ( ! character.isFrozen() )
-        {
-                if ( speedTimer->getValue() > character.getSpeed() ) {
-                        activities::Moving::getInstance().move( *this, false );
-
-                        speedTimer->go() ;
-
-                        character.animate ();
-                }
+                setCurrentActivity(
+                        activities::Activity::Moving,
+                        ( whatDoing == activities::Activity::Dragged && whereMoving.isMovingOnlyEast() )
+                                ? /* cancel draggin’ */ Motion2D::rest()
+                                : whereMoving.add( Motion2D::movingWest() ) );
         }
 }
 

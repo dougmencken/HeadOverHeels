@@ -19,6 +19,11 @@
 
 class AvatarItem ;
 
+#ifdef DEBUG
+#  define DEBUG_ACTIVITIES      1
+#  define DEBUG_WAITING         0
+#endif
+
 
 namespace behaviors
 {
@@ -86,12 +91,6 @@ protected:
          * The character moves while being dragged by a conveyor, moving in the opposite way cancels dragging
          */
         virtual void handleMoveKeyWhenDragged () ;
-
-        /**
-         * Moving in the opposite direction of dragging leaves the character at the current place.
-         * Happens when a moving character is dragged by a conveyor
-         */
-        virtual void cancelDragging () ;
 
         /**
          * The character is falling down

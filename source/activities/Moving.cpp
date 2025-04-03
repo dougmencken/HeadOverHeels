@@ -125,10 +125,6 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
                 }
                         break ;
 
-                case activities::Activity::CancelDragging :
-                        // not moving
-                        break ;
-
                 default:
                         ;
         }

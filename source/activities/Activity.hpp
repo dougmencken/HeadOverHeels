@@ -54,8 +54,6 @@ public: /* constants */
 
         static const unsigned int Dragged                       = 180 ;
 
-        static const unsigned int CancelDragging                = 190 ;
-
         static const unsigned int BeginTeletransportation       = 222 ;
         static const unsigned int EndTeletransportation         = 234 ;
 

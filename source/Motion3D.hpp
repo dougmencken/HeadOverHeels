@@ -37,6 +37,11 @@ public:
                 , alongZ( 0 )
         {}
 
+        Motion3D( const std::string & way )
+                : Motion2D( way )
+                , alongZ( 0 )
+        {}
+
         virtual ~Motion3D( ) {}
 
         static Motion3D restWithGravity () {  return Motion3D( 0, 0, -1 ) ;  }
@@ -108,6 +113,13 @@ public:
         }
 
         void resetZ () {  this->alongZ = 0 ;  }
+
+        std::string toString () const
+        {
+                return "( alongX=" + util::number2string( getMotionAlongX () )
+                                + " alongY=" + util::number2string( getMotionAlongY () )
+                                + " alongZ=" + util::number2string( this->alongZ ) + " )" ;
+        }
 
 } ;
 

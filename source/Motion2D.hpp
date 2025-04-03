@@ -11,6 +11,10 @@
 #ifndef Motion2D_hpp_
 #define Motion2D_hpp_
 
+#include <string>
+#include "util.hpp" // for number2string
+
+
 class Motion2D
 {
 
@@ -24,6 +28,11 @@ public:
         Motion2D( int dx, int dy )
                 : alongX( dx )
                 , alongY( dy )
+        {}
+
+        Motion2D( const std::string & way )
+                : alongX( way == "south" ? 1 : ( way == "north" ? -1 : 0 ) )
+                , alongY( way == "west" ? 1 : ( way == "east" ? -1 : 0 ) )
         {}
 
         Motion2D( const Motion2D & that )
@@ -100,6 +109,12 @@ public:
 
         void resetX () {  this->alongX = 0 ;  }
         void resetY () {  this->alongY = 0 ;  }
+
+        std::string toString () const
+        {
+                return "( alongX=" + util::number2string( this->alongX )
+                                + " alongY=" + util::number2string( this->alongY ) + " )" ;
+        }
 
 } ;
 

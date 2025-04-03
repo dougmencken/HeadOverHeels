@@ -48,8 +48,6 @@ public:
 
                         case Activity::Dragged : return "dragged" ;
 
-                        case Activity::CancelDragging : return "cancel dragging" ;
-
                         case ActivityOfElevator::GoingDown : return "elevator is going down" ;
                         case ActivityOfElevator::GoingUp : return "elevator is going up" ;
                         case ActivityOfElevator::ReachedBottom : return "elevator reached bottom" ;

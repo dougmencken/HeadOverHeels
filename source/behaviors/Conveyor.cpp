@@ -12,6 +12,10 @@
 
 #include <stack>
 
+#ifdef DEBUG
+#  define DEBUG_CONVEYOR        1
+#endif
+
 
 namespace behaviors
 {
@@ -83,17 +87,14 @@ bool Conveyor::update ()
                                                                 else if ( conveyorHeading == "east" )
                                                                         conveyingVelocity = Motion2D::movingEast() ;
 
+                                                        #if defined( DEBUG_CONVEYOR ) && DEBUG_CONVEYOR
+                                                                std::cout << "Conveyor::update() sums conveying velocity " << conveyingVelocity.toString()
+                                                                                << " with the velocity " << velocityOfItemAbove.toString()
+                                                                                << " of above item \"" << itemAbove.getUniqueName() << "\"" << std::endl ;
+                                                        #endif
                                                                 Motion2D sumOfVelocities = velocityOfItemAbove.add( conveyingVelocity ) ;
 
-                                                                if ( sumOfVelocities.isRest() )
-                                                                        activityOfItemAbove = activities::Activity::Waiting ;
-                                                                else {
-                                                                        if ( velocityOfItemAbove.isRest() )
-                                                                                activityOfItemAbove = activities::Activity::Dragged ;
-                                                                        else
-                                                                                activityOfItemAbove = activities::Activity::Pushed ;
-                                                                }
-
+                                                                activityOfItemAbove = activities::Activity::Dragged ;
                                                                 behaviorAbove.setCurrentActivity( activityOfItemAbove, sumOfVelocities );
                                                         }
 

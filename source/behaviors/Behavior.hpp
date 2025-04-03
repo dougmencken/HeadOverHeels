@@ -79,14 +79,7 @@ public:
                 if ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving
                                 || newActivity == activities::Activity::Pushed || newActivity == activities::Activity::Dragged
                 ) {
-                        if ( way == "south" )
-                                setCurrentActivity( newActivity, Motion2D::movingSouth() );
-                        else if ( way == "north" )
-                                setCurrentActivity( newActivity, Motion2D::movingNorth() );
-                        else if ( way == "west" )
-                                setCurrentActivity( newActivity, Motion2D::movingWest() );
-                        else if ( way == "east" )
-                                setCurrentActivity( newActivity, Motion2D::movingEast() );
+                        setCurrentActivity( newActivity, Motion2D( way ) );
                 } else
                         setCurrentActivity( newActivity, Motion2D::rest() );
         }

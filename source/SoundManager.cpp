@@ -211,8 +211,6 @@ std::string SoundManager::activityToNameOfSound ( const activities::Activity & a
 
                 case activities::Activity::Dragged : return "dragged" ;
 
-                case activities::Activity::CancelDragging: return "move" ;
-
                 case activities::Activity::BeginTeletransportation : return "teleport-out" ;
                 case activities::Activity::EndTeletransportation : return "teleport-in" ;
 
