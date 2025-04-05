@@ -1,5 +1,5 @@
 
-#include "Trampoline.hpp"
+#include "SpringStool.hpp"
 
 #include "FreeItem.hpp"
 #include "Displacing.hpp"
@@ -12,7 +12,7 @@
 namespace behaviors
 {
 
-Trampoline::Trampoline( FreeItem & item, const std::string & behavior )
+SpringStool::SpringStool( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , folded( false )
         , rebounding( false )
@@ -27,7 +27,7 @@ Trampoline::Trampoline( FreeItem & item, const std::string & behavior )
         reboundTimer->go() ;
 }
 
-bool Trampoline::update ()
+bool SpringStool::update ()
 {
         FreeItem & springItem = dynamic_cast< FreeItem & >( getItem () );
 
@@ -72,7 +72,7 @@ bool Trampoline::update ()
                         if ( activities::Falling::getInstance().fall( *this ) ) {
                                 // it falls down
                                 fallTimer->go() ;
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
                         }
 
                         break;
@@ -86,7 +86,7 @@ bool Trampoline::update ()
                                 activities::Displacing::getInstance().displace( *this, true );
 
                                 if ( getCurrentActivity() != activities::Activity::Falling )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 speedTimer->go() ;
                         }
@@ -103,16 +103,16 @@ bool Trampoline::update ()
                                 if ( ! activities::Falling::getInstance().fall( *this ) ) {
                                         // play the end of falling sound
                                         SoundManager::getInstance().play( springItem.getKind (), "fall" );
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
                                 }
 
                                 fallTimer->go() ;
                         }
                         break;
 
-                case activities::Activity::Vanishing:
-                        present = false ;
-                        break;
+                ////case activities::Activity::Vanishing:
+                        ////present = false ;
+                        ////break;
 
                 default:
                         ;

@@ -54,16 +54,6 @@ bool PlayerControlled::isInvulnerableToLethalItems () const
                         || GameManager::getInstance().isImmuneToCollisionsWithMortalItems () ;
 }
 
-void PlayerControlled::setCurrentActivity ( const Activity & newActivity )
-{
-        // nullify “changed due to” item
-        Behavior::setCurrentActivity( getCurrentActivity() );
-
-        if ( newActivity == activities::Activity::MetLethalItem && isInvulnerableToLethalItems () ) return ;
-
-        Behavior::setCurrentActivity( newActivity );
-}
-
 void PlayerControlled::setCurrentActivity ( const Activity & newActivity, const Motion2D & velocity )
 {
         // nullify “changed due to” item
@@ -91,7 +81,7 @@ void PlayerControlled::wait ()
         {
                 speedTimer->go() ;
 
-                setCurrentActivity( activities::Activity::Falling );
+                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
                 if ( character.isHead ()
                                 && character.getQuickSteps() > 0
@@ -154,8 +144,8 @@ void PlayerControlled::automove ()
                         -- this->automoveStepsRemained ;
                 }
                 else {  // done auto~moving
-                        this->automoveStepsRemained = automatic_steps ; // reset remained steps
-                        setCurrentActivity( activities::Activity::Waiting );
+                        this->automoveStepsRemained = automatic_steps ; // reset remaining steps
+                        beWaiting() ;
                 }
         }
 
@@ -224,7 +214,7 @@ void PlayerControlled::displace ()
                 // when the displacement couldn’t be performed due to a collision
                 // then the activity is propagated to the collided items
 
-                setCurrentActivity( activities::Activity::Waiting );
+                beWaiting() ;
 
                 speedTimer->go() ;
         }
@@ -288,7 +278,7 @@ void PlayerControlled::fall ()
                                 character.changeFrame( fallFrames[ character.getHeading () ] );
                 }
                 else if ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() )
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
 
                 fallTimer->go() ;
         }
@@ -307,7 +297,7 @@ void PlayerControlled::glide ()
                         ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() ) )
                 {
                         // not falling, back to waiting
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                 }
 
                 glideTimer->go() ;
@@ -315,12 +305,13 @@ void PlayerControlled::glide ()
 
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
-                Activity priorActivity = getCurrentActivity() ;
+                const Activity & priorActivity = getCurrentActivity() ;
+                const Motion2D & priorMotion = get2DVelocityVector() ;
 
-                setCurrentActivity( activities::Activity::Moving );
+                setCurrentActivity( activities::Activity::Moving, character.getHeading() );
                 activities::Moving::getInstance().move( *this, false );
 
-                setCurrentActivity( priorActivity );
+                setCurrentActivity( priorActivity, priorMotion );
 
                 // may turn while gliding so update the frame of falling
                 character.changeFrame( fallFrames[ character.getHeading() ] );
@@ -339,10 +330,14 @@ void PlayerControlled::toJumpOrTeleport ()
 {
         ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
-        character.canAdvanceTo( 0, 0, -1 ); // is there a device underneath the character
-        setCurrentActivity( character.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer
+        // is there a device underneath the character
+        character.canAdvanceTo( 0, 0, -1 );
+        Activity jumpOrTeleport =
+                        ( character.getMediator()->collisionWithBehavingAs( "behavior of teletransport" ) != nilPointer )
                                         ? activities::Activity::BeginTeletransportation
-                                        : activities::Activity::Jumping );
+                                        : activities::Activity::Jumping ;
+
+        setCurrentActivity( jumpOrTeleport, Motion2D::rest() );
 }
 
 void PlayerControlled::jump ()
@@ -435,7 +430,7 @@ void PlayerControlled::exitTeletransport ()
         // back to the original appearance of character
         character.metamorphInto( character.getOriginalKind(), "end teletransportation" );
 
-        setCurrentActivity( activities::Activity::Waiting );
+        beWaiting() ;
 }
 
 void PlayerControlled::collideWithALethalItem ()
@@ -451,9 +446,9 @@ void PlayerControlled::collideWithALethalItem ()
                                 character.metamorphInto( "bubbles", "met something lethal" );
 
                                 this->isLosingLife = true ;
-                                setCurrentActivity( activities::Activity::Vanishing );
+                                setCurrentActivity( activities::Activity::Vanishing, Motion2D::rest() );
                         } else
-                                setCurrentActivity( activities::Activity::Waiting );
+                                beWaiting() ;
 
                         break;
 
@@ -555,12 +550,12 @@ void PlayerControlled::takeItem ()
                                 character.putItemInTheBag( itemToTake->getKind (), itemToTake->getBehavior()->getNameOfBehavior () );
                                 GameManager::getInstance().setImageOfItemInBag (PicturePtr( new Picture( itemToTake->getCurrentRawImage() ) ));
 
-                                itemToTake->getBehavior()->setCurrentActivity( activities::Activity::Vanishing );
+                                itemToTake->getBehavior()->setCurrentActivity( activities::Activity::Vanishing, Motion2D::rest() );
 
-                                setCurrentActivity ( // update activity
-                                        ( getCurrentActivity() == activities::Activity::TakeAndJump )
-                                                ? activities::Activity::Jumping
-                                                : activities::Activity::Falling );
+                                Activity jumpOrFall = ( getCurrentActivity() == activities::Activity::TakeAndJump )
+                                                                ? activities::Activity::Jumping
+                                                                : activities::Activity::Falling ;
+                                setCurrentActivity( jumpOrFall, Motion2D::rest() );
 
                                 SoundManager::getInstance().play( character.getOriginalKind(), "take" );
                         }
@@ -569,7 +564,7 @@ void PlayerControlled::takeItem ()
 
         if ( getCurrentActivity() == activities::Activity::TakingItem || getCurrentActivity() == activities::Activity::TakeAndJump )
                 // wait if can’t take
-                setCurrentActivity( activities::Activity::Waiting );
+                beWaiting() ;
                 // moreover, the original game plays a yucky sound for that
 }
 
@@ -595,10 +590,10 @@ void PlayerControlled::dropItem ()
                         GameManager::getInstance().emptyHandbag () ;
                         character.emptyTheBag ();
 
-                        setCurrentActivity ( // update activity
-                                ( getCurrentActivity() == activities::Activity::DropAndJump )
-                                        ? activities::Activity::Jumping
-                                        : activities::Activity::Waiting );
+                        Activity jumpOrWait = ( getCurrentActivity() == activities::Activity::DropAndJump )
+                                                        ? activities::Activity::Jumping
+                                                        : activities::Activity::Waiting ;
+                        setCurrentActivity( jumpOrWait, Motion2D::rest() ) ;
 
                         SoundManager::getInstance().stop( character.getOriginalKind(), "fall" );
                         SoundManager::getInstance().play( character.getOriginalKind(), "drop" );
@@ -611,5 +606,5 @@ void PlayerControlled::dropItem ()
 
         if ( getCurrentActivity() == activities::Activity::DroppingItem || getCurrentActivity() == activities::Activity::DropAndJump )
                 // wait if can’t drop
-                setCurrentActivity( activities::Activity::Waiting );
+                beWaiting() ;
 }

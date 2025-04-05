@@ -128,6 +128,7 @@ void CharacterHeels::behave ()
                 return ; // moving by inertia, teleporting, or vanishing is not controlled by the player
 
         const InputManager & input = InputManager::getInstance ();
+        bool noItemTaken = ( avatar.getDescriptionOfTakenItem() == nilPointer );
 
         // when waiting
         if ( whatDoing == activities::Activity::Waiting /* || whatDoing == activities::Activity::Blinking */ )
@@ -136,15 +137,11 @@ void CharacterHeels::behave ()
                 std::cout << "Heels is waiting on behave()" << std::endl ;
         #endif
                 if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeAndJump
-                                                : activities::Activity::DropAndJump );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump, Motion2D::rest() );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( input.jumpTyped() ) {
@@ -164,21 +161,17 @@ void CharacterHeels::behave ()
                         toJumpOrTeleport ();
                 }
                 else if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeAndJump
-                                                : activities::Activity::DropAndJump );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump, Motion2D::rest() );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( ! moveKeySetsActivity () ) {
                         // not moving is waiting
                         SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                 }
         }
         // being pushed
@@ -188,18 +181,14 @@ void CharacterHeels::behave ()
                 std::cout << "Heels is pushed on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
         #endif
                 if ( input.jumpTyped() ) {
-                        setCurrentActivity( activities::Activity::Jumping );
+                        setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
                 }
                 else if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeAndJump
-                                                : activities::Activity::DropAndJump );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump, Motion2D::rest() );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else {
@@ -212,12 +201,10 @@ void CharacterHeels::behave ()
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
                 std::cout << "Heels is dragged on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
         #endif
-                if ( input.jumpTyped() ) {
-                        setCurrentActivity( activities::Activity::Jumping );
-                }
-                else {
+                if ( input.jumpTyped() )
+                        setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
+                else
                         handleMoveKeyWhenDragged () ;
-                }
         }
         else if ( whatDoing == activities::Activity::Jumping || whatDoing == activities::Activity::Falling )
         {
@@ -226,9 +213,7 @@ void CharacterHeels::behave ()
         #endif
                 // take or drop an item when jumping or falling
                 if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
         }

@@ -34,7 +34,7 @@ bool Conveyor::update ()
         GridItem & conveyorItem = dynamic_cast< GridItem & >( getItem() );
         Mediator * mediator = conveyorItem.getMediator ();
 
-        if ( getCurrentActivity() != activities::Activity::Waiting ) setCurrentActivity( activities::Activity::Waiting );
+        if ( getCurrentActivity() != activities::Activity::Waiting ) beWaiting() ;
 
         if ( dragTimer->getValue() >= conveyorItem.getSpeed() )
         {

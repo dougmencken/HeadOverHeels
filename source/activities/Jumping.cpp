@@ -40,7 +40,7 @@ bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, cons
                 if ( deltaZ < 0 ) deltaZ = 0;
                 else deltaZ = 2;
 
-                behavior.setCurrentActivity( activities::Activity::Falling );
+                behavior.setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
         }
 
         // let’s move up
@@ -64,7 +64,7 @@ bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, cons
 
                                 if ( item->isMortal() ) {
                                         // a lethal thing is above
-                                        character.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
+                                        character.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                 }
                                 else {  // a harmless free item
                                         if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
@@ -103,7 +103,7 @@ bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, cons
 
         // end jump when it’s the last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
-                behavior.setCurrentActivity( activities::Activity::Falling );
+                behavior.setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
         return jumped ;
 }

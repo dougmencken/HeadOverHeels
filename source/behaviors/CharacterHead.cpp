@@ -179,7 +179,7 @@ void CharacterHead::behave ()
                 else if ( ! moveKeySetsActivity () ) {
                         // not moving is waiting
                         SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                 }
         }
         // being pushed
@@ -189,7 +189,7 @@ void CharacterHead::behave ()
                 std::cout << "Head is pushed on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
         #endif
                 if ( input.jumpTyped() ) {
-                        setCurrentActivity( activities::Activity::Jumping );
+                        setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
                 }
                 else if ( input.doughnutTyped() ) {
                         useHooter ();
@@ -206,7 +206,7 @@ void CharacterHead::behave ()
                 std::cout << "Head is dragged on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
         #endif
                 if ( input.jumpTyped() ) {
-                        setCurrentActivity( activities::Activity::Jumping );
+                        setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
                 }
                 else {
                         handleMoveKeyWhenDragged () ;
@@ -236,7 +236,7 @@ void CharacterHead::behave ()
                 }
                 // entonces Head planea
                 else if ( moveKeyChangesHeading() ) {
-                        setCurrentActivity( activities::Activity::Gliding );
+                        setCurrentActivity( activities::Activity::Gliding, Motion2D::rest() );
                 }
                 else
                         resetHowLongFalls (); // don’t accelerate falling
@@ -254,7 +254,7 @@ void CharacterHead::behave ()
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( ! moveKeyChangesHeading () ) {
-                        setCurrentActivity( activities::Activity::Falling );
+                        setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
                 }
         }
 }
@@ -267,7 +267,7 @@ void CharacterHead::wait ()
                 if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
                 {
                         timerForBlinking->go() ;
-                        setCurrentActivity( activities::Activity::Blinking );
+                        setCurrentActivity( activities::Activity::Blinking, Motion2D::rest() );
                 }
         }
 }
@@ -287,7 +287,7 @@ void CharacterHead::blink ()
         // end of blinking
         else if ( time > 0.800 ) {
                 timerForBlinking->go() ;
-                setCurrentActivity( activities::Activity::Waiting );
+                beWaiting() ;
         }
 }
 

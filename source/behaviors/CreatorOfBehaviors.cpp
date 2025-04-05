@@ -16,7 +16,7 @@
 #include "Bonus.hpp"
 #include "Switch.hpp"
 #include "Teleport.hpp"
-#include "Trampoline.hpp"
+#include "SpringStool.hpp"
 #include "Turn.hpp"
 #include "Volatile.hpp"
 #include "FinalBall.hpp"
@@ -105,7 +105,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
                         behaviorToReturn = new ThereAndBack( free, behavior, true );
                 else
                 if ( behavior == "behavior of spring stool" )
-                        behaviorToReturn = new Trampoline( free, behavior );
+                        behaviorToReturn = new SpringStool( free, behavior );
                 else
                 if ( behavior == "behavior of move then turn left and move"
                                 || behavior == "behavior of move then turn right and move" )

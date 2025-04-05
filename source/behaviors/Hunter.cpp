@@ -130,13 +130,13 @@ bool Hunter::update ()
                         if ( speedTimer->getValue() > hunterItem.getSpeed() )
                         {
                                 activities::Displacing::getInstance().displace( *this, false );
-                                setCurrentActivity( activities::Activity::Waiting );
+                                beWaiting() ;
                                 speedTimer->go() ;
                         }
 
                         // preserve inactivity for the frozen item
                         if ( hunterItem.isFrozen() )
-                                setCurrentActivity( activities::Activity::Freeze );
+                                setCurrentActivity( activities::Activity::Freeze, Motion2D::rest() );
 
                         break;
 
@@ -146,7 +146,7 @@ bool Hunter::update ()
 
                 case activities::Activity::WakeUp:
                         hunterItem.setFrozen( false );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                         break;
 
                 default:
@@ -179,7 +179,7 @@ void Hunter::updateDirection ()
                 }
         }
 
-        setCurrentActivity( activities::Activity::Waiting );
+        beWaiting () ;
 }
 
 void Hunter::updateDirection4 ()

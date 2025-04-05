@@ -65,13 +65,9 @@ public:
 
         Motion2D get2DVelocityVector () const {  return this->velocityVector.to2D() ;  }
 
-        virtual void setCurrentActivity ( const Activity & newActivity )
+        virtual void beWaiting ()
         {
-                if ( ( newActivity == activities::Activity::Moving || newActivity == activities::Activity::Automoving )
-                                && ( getItem().whichItemClass() == "free item" || getItem().whichItemClass() == "avatar item" ) )
-                        setCurrentActivity( newActivity, dynamic_cast< FreeItem & >( getItem() ).getHeading () );
-                else
-                        setCurrentActivity( newActivity, Motion2D::rest() );
+                setCurrentActivity( activities::Activity::Waiting, Motion2D::rest() );
         }
 
         virtual void setCurrentActivity ( const Activity & newActivity, const std::string & way )

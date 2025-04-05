@@ -14,6 +14,8 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
+#include <string>
+
 class FreeItem ;
 
 
@@ -37,7 +39,7 @@ public:
 
 private:
 
-        bool moving ;
+        std::string whereGoing ;
 
         // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;

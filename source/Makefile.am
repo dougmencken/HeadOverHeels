@@ -179,14 +179,14 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/RemoteControl.hpp \
 			behaviors/Sink.cpp \
 			behaviors/Sink.hpp \
+			behaviors/SpringStool.cpp \
+			behaviors/SpringStool.hpp \
 			behaviors/Switch.cpp \
 			behaviors/Switch.hpp \
 			behaviors/Teleport.cpp \
 			behaviors/Teleport.hpp \
 			behaviors/ThereAndBack.cpp \
 			behaviors/ThereAndBack.hpp \
-			behaviors/Trampoline.cpp \
-			behaviors/Trampoline.hpp \
 			behaviors/Turn.cpp \
 			behaviors/Turn.hpp \
 			behaviors/Volatile.cpp \

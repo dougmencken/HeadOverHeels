@@ -151,6 +151,7 @@ void CharacterHeadAndHeels::behave ()
                 return ; // moving by inertia, teleporting, or vanishing is not controlled by the player
 
         const InputManager & input = InputManager::getInstance ();
+        bool noItemTaken = ( avatar.getDescriptionOfTakenItem() == nilPointer );
 
         // when waiting or blinking
         if ( whatDoing == activities::Activity::Waiting || whatDoing == activities::Activity::Blinking )
@@ -166,15 +167,11 @@ void CharacterHeadAndHeels::behave ()
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeAndJump
-                                                : activities::Activity::DropAndJump );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump, Motion2D::rest() );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else {
@@ -195,21 +192,17 @@ void CharacterHeadAndHeels::behave ()
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeAndJump
-                                                : activities::Activity::DropAndJump );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump, Motion2D::rest() );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else if ( ! moveKeySetsActivity () ) {
                         // not moving is waiting
                         SoundManager::getInstance().stop( avatar.getOriginalKind(), SoundManager::activityToNameOfSound( whatDoing ) );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                 }
         }
         // being pushed
@@ -219,22 +212,18 @@ void CharacterHeadAndHeels::behave ()
                 std::cout << "Head over Heels is pushed on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
         #endif
                 if ( input.jumpTyped() ) {
-                        setCurrentActivity( activities::Activity::Jumping );
+                        setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
                 }
                 else if ( input.doughnutTyped() ) {
                         useHooter ();
                         input.releaseKeyFor( "doughnut" );
                 }
                 else if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( input.takeAndJumpTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakeAndJump
-                                                : activities::Activity::DropAndJump );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakeAndJump : activities::Activity::DropAndJump, Motion2D::rest() );
                         input.releaseKeyFor( "take&jump" );
                 }
                 else {
@@ -247,12 +236,10 @@ void CharacterHeadAndHeels::behave ()
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
                 std::cout << "Head over Heels is dragged on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
         #endif
-                if ( input.jumpTyped() ) {
-                        setCurrentActivity( activities::Activity::Jumping );
-                }
-                else {
+                if ( input.jumpTyped() )
+                        setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
+                else
                         handleMoveKeyWhenDragged () ;
-                }
         }
         else if ( whatDoing == activities::Activity::Jumping )
         {
@@ -278,14 +265,12 @@ void CharacterHeadAndHeels::behave ()
                 }
                 // pick or drop an item when falling
                 else if ( input.takeTyped() ) {
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 // entonces Head y Heels planean
                 else if ( moveKeyChangesHeading() ) {
-                        setCurrentActivity( activities::Activity::Gliding );
+                        setCurrentActivity( activities::Activity::Gliding, Motion2D::rest() );
                 }
                 else
                         resetHowLongFalls (); // don’t accelerate falling
@@ -304,13 +289,11 @@ void CharacterHeadAndHeels::behave ()
                 }
                 else if ( input.takeTyped() ) {
                         // pick or drop an item when gliding
-                        setCurrentActivity( avatar.getDescriptionOfTakenItem() == nilPointer
-                                                ? activities::Activity::TakingItem
-                                                : activities::Activity::DroppingItem );
+                        setCurrentActivity( noItemTaken ? activities::Activity::TakingItem : activities::Activity::DroppingItem, Motion2D::rest() );
                         input.releaseKeyFor( "take" );
                 }
                 else if ( ! moveKeyChangesHeading () ) {
-                        setCurrentActivity( activities::Activity::Falling );
+                        setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
                 }
         }
 }
@@ -323,7 +306,7 @@ void CharacterHeadAndHeels::wait ()
                 if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
                 {
                         timerForBlinking->go() ;
-                        setCurrentActivity( activities::Activity::Blinking );
+                        setCurrentActivity( activities::Activity::Blinking, Motion2D::rest() );
                 }
         }
 }
@@ -343,7 +326,7 @@ void CharacterHeadAndHeels::blink ()
         // end of blinking
         else if ( time > 0.800 ) {
                 timerForBlinking->go() ;
-                setCurrentActivity( activities::Activity::Waiting );
+                beWaiting() ;
         }
 }
 

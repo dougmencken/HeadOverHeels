@@ -53,7 +53,7 @@ bool Bonus::update ()
 
                         // fall if it’s not taken
                         if ( getCurrentActivity() != activities::Activity::Vanishing )
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
                         break;
 
@@ -74,7 +74,7 @@ bool Bonus::update ()
                                 activities::Displacing::getInstance().displace( *this, true );
 
                                 // to falling
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
                                 speedTimer->go() ;
                         }
@@ -88,7 +88,7 @@ bool Bonus::update ()
                                 activities::Displacing::getInstance().displace( *this, true );
 
                                 // to falling
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
                                 speedTimer->go() ;
                         }
@@ -103,10 +103,7 @@ bool Bonus::update ()
                         else if ( fallTimer->getValue() > bonusItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( *this ) )
-                                {
-                                        // to waiting
-                                        setCurrentActivity( activities::Activity::Waiting );
-                                }
+                                        beWaiting() ;
 
                                 fallTimer->go() ;
 

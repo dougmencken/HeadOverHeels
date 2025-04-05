@@ -55,9 +55,7 @@ void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity 
                                                 {
                                                         // is the contact direct
                                                         if ( mediator->howManyCollisions() <= 1 )
-                                                        {
-                                                                itemMeetsSender->getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
-                                                        }
+                                                                itemMeetsSender->getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                                 }
                                         }
                                         // if the sender is the character and the colliding one is mortal, then the character loses one life
@@ -67,7 +65,7 @@ void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity 
                                                 if ( activityOfSender != activities::Activity::MetLethalItem
                                                                 && activityOfSender != activities::Activity::Vanishing )
                                                 {
-                                                        sender.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
+                                                        sender.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                                 }
                                                 if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
                                                 {
@@ -89,9 +87,7 @@ void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity 
                                         const Activity & activityOfSender = sender.getBehavior()->getCurrentActivity() ;
                                         if ( activityOfSender != activities::Activity::MetLethalItem
                                                         && activityOfSender != activities::Activity::Vanishing )
-                                        {
-                                                sender.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
-                                        }
+                                                sender.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                 }
                         }
                 }
@@ -152,7 +148,7 @@ void PropagateActivity::toItemsAbove( DescribedItem & sender, const Activity & a
                                                         // if it’s the character above the mortal sender, then the character loses its life
                                                         if ( freeItemAbove.whichItemClass() == "avatar item" && sender.isMortal() )
                                                         {
-                                                                freeItemAbove.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem );
+                                                                freeItemAbove.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                                         }
                                                         // if not, propagate activity to that item above
                                                         else {

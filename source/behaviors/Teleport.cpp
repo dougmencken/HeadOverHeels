@@ -76,8 +76,8 @@ bool Teleport::update ()
 
                         break;
 
-                default:
-                        setCurrentActivity( activities::Activity::Waiting );
+                default :
+                        beWaiting() ;
         }
 
         // teleports are eternal

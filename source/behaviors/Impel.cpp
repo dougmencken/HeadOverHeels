@@ -36,7 +36,7 @@ bool Impel::update ()
                         if ( speedTimer->getValue() > impelItem.getSpeed() )
                         {
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 speedTimer->go() ;
                         }
@@ -53,7 +53,7 @@ bool Impel::update ()
                         else if ( fallTimer->getValue() > impelItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( *this ) )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 fallTimer->go() ;
                         }

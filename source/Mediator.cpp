@@ -1208,9 +1208,9 @@ void Mediator::toggleSwitchInRoom ()
                                         behavior.find( behaviors::Volatile::when_above ) != std::string::npos ||
                                                 std::find( badBoys.begin (), badBoys.end (), behavior ) != badBoys.end () )
                         {
-                                freeItem.getBehavior()->setCurrentActivity( this->switchInRoomIsOn
-                                                                                ? activities::Activity::Freeze
-                                                                                : activities::Activity::WakeUp );
+                                Activity freezeOrWakeUp = this->switchInRoomIsOn ? activities::Activity::Freeze
+                                                                                 : activities::Activity::WakeUp ;
+                                freeItem.getBehavior()->setCurrentActivity( freezeOrWakeUp, Motion2D::rest() );
                         }
                 }
         }
@@ -1230,10 +1230,10 @@ void Mediator::toggleSwitchInRoom ()
                                 if ( behavior == behaviors::Volatile::on_contact
                                         || behavior.find( behaviors::Volatile::when_above ) != std::string::npos )
                                 {
-                                        gridItem.getBehavior()->setCurrentActivity(
-                                                this->switchInRoomIsOn ?
-                                                        activities::Activity::Freeze :
-                                                        activities::Activity::Waiting );
+                                        Activity freezeOrWait = this->switchInRoomIsOn ?
+                                                                        activities::Activity::Freeze :
+                                                                        activities::Activity::Waiting ;
+                                        gridItem.getBehavior()->setCurrentActivity( freezeOrWait, Motion2D::rest() );
                                 }
                         }
                 }

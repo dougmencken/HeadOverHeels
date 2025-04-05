@@ -89,19 +89,20 @@ bool Volatile::update ()
                                                 while ( mediator->isThereAnyCollision() )
                                                 {
                                                         DescribedItemPtr belowItem = mediator->findCollisionPop( );
+                                                        const autouniqueptr< Behavior > & belowBehavior = belowItem->getBehavior() ;
 
                                                         if ( belowItem != nilPointer ) {
                                                                 // a volatile doesn’t vanish if it is leaning~
                                                                 //     on an item without behavior, or
                                                                 //     on a non-volatile item, or
                                                                 //     on another item that is vanishing
-                                                                if ( ( belowItem->getBehavior() == nilPointer )
-                                                                        || ( belowItem->getBehavior() != nilPointer
-                                                                                && belowItem->getBehavior()->getNameOfBehavior() != Volatile::when_above
-                                                                                && belowItem->getBehavior()->getNameOfBehavior() != Volatile::on_contact
-                                                                                && belowItem->getBehavior()->getNameOfBehavior () != "behavior of bonus" )
-                                                                        || ( belowItem->getBehavior() != nilPointer
-                                                                                && belowItem->getBehavior()->getCurrentActivity() == activities::Activity::Vanishing ) )
+                                                                if ( ( belowBehavior == nilPointer )
+                                                                        || ( belowBehavior != nilPointer
+                                                                                && belowBehavior->getNameOfBehavior() != Volatile::when_above
+                                                                                && belowBehavior->getNameOfBehavior() != Volatile::on_contact
+                                                                                && belowBehavior->getNameOfBehavior () != "behavior of bonus" )
+                                                                        || ( belowBehavior != nilPointer
+                                                                                && belowBehavior->getCurrentActivity() == activities::Activity::Vanishing ) )
                                                                 {
                                                                         gone = false ;
                                                                 }
@@ -111,7 +112,7 @@ bool Volatile::update ()
                                 }
 
                                 if ( gone ) {
-                                        setCurrentActivity( activities::Activity::Vanishing );
+                                        vanish () ;
                                         disappearanceTimer->go() ;
                                 }
                         }
@@ -121,7 +122,7 @@ bool Volatile::update ()
                                 if ( mediator->findItemOfKind( "head" ) != nilPointer ||
                                         mediator->findItemOfKind( "headoverheels" ) != nilPointer )
                                 {
-                                        setCurrentActivity( activities::Activity::Vanishing );
+                                        vanish () ;
                                         disappearanceTimer->go() ;
                                 }
                         }
@@ -139,16 +140,17 @@ bool Volatile::update ()
                         if ( ! solid ) {
                                 if ( getNameOfBehavior() == Volatile::on_contact )
                                         // pushing an item which is volatile on contact
-                                        setCurrentActivity( activities::Activity::Vanishing );
+                                        vanish () ;
                                 else
                                 if ( getNameOfBehavior() == Volatile::as_Head_appears ) {
                                         if ( mediator->findItemOfKind( "head" ) != nilPointer
                                                         || mediator->findItemOfKind( "headoverheels" ) != nilPointer )
-                                                setCurrentActivity( activities::Activity::Vanishing );
+                                                // puppies teleport themselves away when they see Head
+                                                vanish () ;
                                 } else
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
                         } else
-                                setCurrentActivity( activities::Activity::Freeze );
+                                setCurrentActivity( activities::Activity::Freeze, Motion2D::rest() );
 
                         break ;
 

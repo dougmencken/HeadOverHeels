@@ -32,7 +32,7 @@ bool ThereAndBack::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        setCurrentActivity( activities::Activity::Moving );
+                        setCurrentActivity( activities::Activity::Moving, thisItem.getHeading() );
                         break ;
 
                 case activities::Activity::Moving:
@@ -55,6 +55,7 @@ bool ThereAndBack::update ()
                         break ;
 
                 case activities::Activity::Pushed :
+                {
                         if ( ! this->isFlying ) {
                                 SoundManager::getInstance().play( thisItem.getKind(), "push" );
 
@@ -62,9 +63,11 @@ bool ThereAndBack::update ()
                                 activities::Displacing::getInstance().displace( *this, true );
                         }
 
-                        setCurrentActivity( thisItem.isFrozen() // a frozen item remains frozen
-                                                        ? activities::Activity::Freeze
-                                                        : activities::Activity::Waiting );
+                        Activity freezeOrWait = thisItem.isFrozen()
+                                                        ? activities::Activity::Freeze // a frozen item remains frozen
+                                                        : activities::Activity::Waiting ;
+                        setCurrentActivity( freezeOrWait, Motion2D::rest() );
+                }
                         break ;
 
                 case activities::Activity::Falling:
@@ -80,13 +83,13 @@ bool ThereAndBack::update ()
                                                 // emit the sound of falling
                                                 SoundManager::getInstance().play( thisItem.getKind (), "fall" );
 
-                                                setCurrentActivity( activities::Activity::Waiting );
+                                                beWaiting() ;
                                         }
 
                                         fallTimer->go() ;
                                 }
                         } else
-                                setCurrentActivity( activities::Activity::Waiting );
+                                beWaiting() ;
 
                         break;
 
@@ -96,11 +99,8 @@ bool ThereAndBack::update ()
 
                 case activities::Activity::WakeUp:
                         thisItem.setFrozen( false );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                         break;
-
-                default:
-                        ;
         }
 
         return present ;

@@ -34,6 +34,11 @@ public :
 
         virtual bool update () ;
 
+        virtual void vanish ()
+        {
+                Behavior::setCurrentActivity( activities::Activity::Vanishing, Motion2D::rest() );
+        }
+
         // string constants found in room description files
 
         static const std::string on_contact ; // "vanishing on contact"

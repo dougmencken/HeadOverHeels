@@ -53,7 +53,7 @@ bool Displacing::displace( behaviors::Behavior & behavior, bool canFall )
 
         if ( canFall ) {
                 if ( Falling::getInstance().fall( behavior ) ) {
-                        behavior.setCurrentActivity( activities::Activity::Falling );
+                        behavior.setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
                         displaced = true ;
                 }
         }

@@ -78,15 +78,11 @@ AvatarItem::AvatarItem( const AvatarItem & toCopy )
 
                 case Way::ByTeleport:
                 case Way::ByTeleportToo:
-                        getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
+                        getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation, Motion2D::rest() );
                         break;
 
-                /* case Way::Above: // will fall without this anyhow
-                        getBehavior()->setCurrentActivity( activities::Activity::Falling );
-                        break; */
-
                 default:
-                        getBehavior()->setCurrentActivity( activities::Activity::Waiting );
+                        getBehavior()->beWaiting() ;
                         break;
         }
 }
@@ -385,7 +381,7 @@ void AvatarItem::wait ()
                 // set waiting frame by angular orientation
                 changeFrame( firstFrame () );
 
-                getBehavior()->setCurrentActivity( activities::Activity::Waiting );
+                getBehavior()->beWaiting() ;
         }
 }
 

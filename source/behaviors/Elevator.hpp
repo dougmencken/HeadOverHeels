@@ -22,12 +22,16 @@ namespace activities
 class ActivityOfElevator : public Activity
 {
 
+public :
+
+        ActivityOfElevator( unsigned int whatDoing ) : Activity( whatDoing ) {}
+
 public: /* constants */
 
         static const unsigned int GoingDown             = 200 ;
         static const unsigned int ReachedBottom         = 202 ;
-        static const unsigned int GoingUp               = 210 ;
-        static const unsigned int ReachedTop            = 211 ;
+        static const unsigned int GoingUp               = 220 ;
+        static const unsigned int ReachedTop            = 222 ;
 
 } ;
 
@@ -63,6 +67,9 @@ public:
 
         void setAscending ( bool ascend ) {  this->ascending = ascend ;  }
 
+        void setActivityOfElevator ( const activities::ActivityOfElevator & newActivity )
+                {  Behavior::setCurrentActivity( newActivity, Motion2D::rest() );  }
+
 #ifdef __Cxx11__ /* when complier supports c++11 */
         static constexpr double Delay_Before_Reversing = 0.333 ; // in seconds
 #else
@@ -89,7 +96,7 @@ private:
         /**
          * used to retain the previous activity
          */
-        Activity lastActivity ;
+        activities::ActivityOfElevator lastActivity ;
 
         // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;

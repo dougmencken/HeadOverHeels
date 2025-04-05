@@ -87,7 +87,7 @@ public :
 
         void setBehaviorOf ( const std::string & nameOfBehavior ) ;
 
-        const autouniqueptr< Behavior > & getBehavior () const {  return behavior ;  }
+        const autouniqueptr< Behavior > & getBehavior () const {  return this->behavior ;  }
 
         virtual void animate () = 0 ;
 

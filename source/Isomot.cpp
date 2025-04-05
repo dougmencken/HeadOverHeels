@@ -451,7 +451,7 @@ void Isomot::handleMagicKeys ()
                                 ) );
 
                                 activeRoom->placeCharacterInRoom( joinedCharacter, true );
-                                joinedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
+                                joinedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation, Motion2D::rest() );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
                                 map.removeRoomInPlay( roomWithInactiveCharacter );
@@ -519,7 +519,7 @@ void Isomot::handleMagicKeys ()
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = map.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
                                 roomWithTeleportToFinalScene->placeCharacterInRoom( teleportedCharacter, true );
-                                teleportedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation );
+                                teleportedCharacter->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation, Motion2D::rest() );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 

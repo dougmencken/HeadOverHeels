@@ -15,7 +15,7 @@ namespace behaviors
 
 Driven::Driven( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , moving( false )
+        , whereGoing( "" )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
@@ -32,9 +32,9 @@ bool Driven::update ()
 
         switch ( getCurrentActivity() )
         {
-                case activities::Activity::Waiting:
-                        if ( this->moving )
-                                setCurrentActivity( activities::Activity::Moving );
+                case activities::Activity::Waiting :
+                        if ( ! this->whereGoing.empty() )
+                                setCurrentActivity( activities::Activity::Moving, this->whereGoing );
                         // when it doesn’t move see if there’s a character over it and move where that character is heading
                         else {
                                 if ( ! drivenItem.canAdvanceTo( 0, 0, 1 ) )
@@ -47,10 +47,9 @@ bool Driven::update ()
 
                                                 if ( itemAbove->whichItemClass() == "avatar item" ) {
                                                         foundCharacter = true ;
-                                                        this->moving = true ;
 
-                                                        const std::string & whereToMove = dynamic_cast< FreeItem & >( *itemAbove ).getHeading() ;
-                                                        setCurrentActivity( activities::Activity::Moving, whereToMove );
+                                                        this->whereGoing = dynamic_cast< FreeItem & >( *itemAbove ).getHeading() ;
+                                                        /////setCurrentActivity( activities::Activity::Moving, this->whereGoing );
                                                 }
                                         }
                                 }
@@ -64,8 +63,8 @@ bool Driven::update ()
                                 {
                                         if ( ! activities::Moving::getInstance().move( *this, true ) ) {
                                                 // when can’t move
-                                                this->moving = false ;
-                                                setCurrentActivity( activities::Activity::Waiting );
+                                                this->whereGoing = "" ;
+                                                beWaiting() ;
 
                                                 SoundManager::getInstance().play( drivenItem.getKind(), "collision" );
                                         }
@@ -81,14 +80,14 @@ bool Driven::update ()
                         if ( speedTimer->getValue() > drivenItem.getSpeed() ) // is it time to move
                         {
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 speedTimer->go() ;
                         }
 
                         // frozen item continues to be frozen
                         if ( drivenItem.isFrozen() )
-                                setCurrentActivity( activities::Activity::Freeze );
+                                setCurrentActivity( activities::Activity::Freeze, Motion2D::rest() );
 
                         break;
 
@@ -101,7 +100,7 @@ bool Driven::update ()
                         else if ( fallTimer->getValue() > drivenItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( *this ) )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 fallTimer->go() ;
                         }
@@ -113,7 +112,7 @@ bool Driven::update ()
 
                 case activities::Activity::WakeUp:
                         drivenItem.setFrozen( false );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                         break;
 
                 default:

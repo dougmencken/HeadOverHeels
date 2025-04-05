@@ -45,7 +45,7 @@ bool RemoteControl::update ()
                                         activities::Moving::getInstance().move( *this, true );
 
                                         if ( getCurrentActivity() != activities::Activity::Falling )
-                                                setCurrentActivity( activities::Activity::Waiting );
+                                                beWaiting() ;
 
                                         speedTimer->go() ;
                                 }
@@ -65,7 +65,7 @@ bool RemoteControl::update ()
                                         activities::Displacing::getInstance().displace( *this, true );
 
                                         if ( getCurrentActivity() != activities::Activity::Falling )
-                                                setCurrentActivity( activities::Activity::Waiting );
+                                                beWaiting() ;
 
                                         speedTimer->go() ;
                                 }
@@ -97,7 +97,7 @@ bool RemoteControl::update ()
                                         controlledItem->getBehavior()->setCurrentActivity( toRemotelyControlled, pushVector );
                                 }
 
-                                setCurrentActivity( activities::Activity::Waiting );
+                                beWaiting() ;
                         }
 
                         break ;
@@ -114,7 +114,7 @@ bool RemoteControl::update ()
                                         // emit the sound for the end of falling down
                                         SoundManager::getInstance().play( thisItem.getKind (), "fall" );
 
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
                                 }
 
                                 fallTimer->go() ;

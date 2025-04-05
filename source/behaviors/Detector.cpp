@@ -34,7 +34,7 @@ bool Detector::update ()
 
         switch ( getCurrentActivity() )
         {
-                case activities::Activity::Waiting:
+                case activities::Activity::Waiting :
                         // meet the character on the X way
                         if ( detectorItem.getX() >= activeCharacter->getX() - 1 && detectorItem.getX() <= activeCharacter->getX() + 1 )
                         {
@@ -66,7 +66,7 @@ bool Detector::update ()
                                 if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() ) {
                                         if ( ! activities::Moving::getInstance().move( *this, true ) )
                                                 // to waiting when can’t move
-                                                setCurrentActivity( activities::Activity::Waiting );
+                                                beWaiting() ;
 
                                         speedTimer->go() ;
                                 }
@@ -79,14 +79,14 @@ bool Detector::update ()
                         if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() )
                         {
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 speedTimer->go() ;
                         }
 
                         // retain a frozen item’s inactivity
                         if ( detectorItem.isFrozen() )
-                                setCurrentActivity( activities::Activity::Freeze );
+                                setCurrentActivity( activities::Activity::Freeze, Motion2D::rest() );
 
                         break;
 
@@ -99,7 +99,7 @@ bool Detector::update ()
                         else if ( fallTimer->getValue() > detectorItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( * this ) )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 fallTimer->go() ;
                         }
@@ -111,7 +111,7 @@ bool Detector::update ()
 
                 case activities::Activity::WakeUp:
                         detectorItem.setFrozen( false );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                         break;
 
                 default:

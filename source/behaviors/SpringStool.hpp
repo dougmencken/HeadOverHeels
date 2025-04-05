@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Trampoline_hpp_
-#define Trampoline_hpp_
+#ifndef SpringStool_hpp_
+#define SpringStool_hpp_
 
 #include "Behavior.hpp"
 #include "Timer.hpp"
@@ -20,14 +20,14 @@ class FreeItem ;
 namespace behaviors
 {
 
-class Trampoline : public Behavior
+class SpringStool : public Behavior
 {
 
 public:
 
-        Trampoline( FreeItem & item, const std::string & behavior ) ;
+        SpringStool( FreeItem & item, const std::string & behavior ) ;
 
-        virtual ~Trampoline( ) {}
+        virtual ~SpringStool( ) {}
 
         virtual bool update () ;
 

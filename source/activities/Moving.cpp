@@ -150,7 +150,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
         if ( itFalls /* doesn’t fly */ && activity != activities::Activity::Waiting )
         {
                 if ( Falling::getInstance().fall( behavior ) ) {
-                        behavior.setCurrentActivity( activities::Activity::Falling );
+                        behavior.setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
                         moved = true ;
                 }
         }

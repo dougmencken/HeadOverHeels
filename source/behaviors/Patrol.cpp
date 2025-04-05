@@ -65,14 +65,17 @@ bool Patrol::update ()
                         break;
 
                 case activities::Activity::Pushed :
+                {
                         SoundManager::getInstance().play( patrolItem.getKind (), "push" );
 
                         // displace this item when it’s pushed by some other one
                         activities::Displacing::getInstance().displace( *this, true );
 
-                        setCurrentActivity( patrolItem.isFrozen() // frozen item remains frozen
-                                                        ? activities::Activity::Freeze
-                                                        : activities::Activity::Waiting );
+                        Activity freezeOrWait = patrolItem.isFrozen()
+                                                        ? activities::Activity::Freeze // a frozen item remains frozen
+                                                        : activities::Activity::Waiting ;
+                        setCurrentActivity( freezeOrWait, Motion2D::rest() );
+                }
                         break ;
 
                 case activities::Activity::Falling:
@@ -83,10 +86,9 @@ bool Patrol::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > patrolItem.getWeight() )
                         {
-                                if ( ! activities::Falling::getInstance().fall( * this ) )
-                                {
+                                if ( ! activities::Falling::getInstance().fall( * this ) ) {
                                         SoundManager::getInstance().play( patrolItem.getKind (), "fall" );
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
                                 }
 
                                 fallTimer->go() ;
@@ -99,11 +101,8 @@ bool Patrol::update ()
 
                 case activities::Activity::WakeUp:
                         patrolItem.setFrozen( false );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                         break;
-
-                default:
-                        ;
         }
 
         return present ;

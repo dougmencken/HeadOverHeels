@@ -91,7 +91,7 @@ bool Switch::update ()
                                 if ( isNewPusher ) toggleIt() ;
                         }
 
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
 
                         break ;
         }

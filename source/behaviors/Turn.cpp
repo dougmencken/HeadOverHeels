@@ -31,7 +31,7 @@ bool Turn::update ()
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting:
-                        setCurrentActivity( activities::Activity::Moving );
+                        setCurrentActivity( activities::Activity::Moving, turningItem.getHeading() );
                         break ;
 
                 case activities::Activity::Moving:
@@ -54,13 +54,16 @@ bool Turn::update ()
                         break ;
 
                 case activities::Activity::Pushed :
+                {
                         SoundManager::getInstance().play( turningItem.getKind (), "push" );
 
                         activities::Displacing::getInstance().displace( *this, true );
 
-                        setCurrentActivity( turningItem.isFrozen() // a frozen item remains to be frozen
-                                                        ? activities::Activity::Freeze
-                                                        : activities::Activity::Waiting );
+                        Activity freezeOrWait = turningItem.isFrozen()
+                                                        ? activities::Activity::Freeze // a frozen item remains to be frozen
+                                                        : activities::Activity::Waiting ;
+                        setCurrentActivity( freezeOrWait, Motion2D::rest() );
+                }
                         break ;
 
                 case activities::Activity::Falling:
@@ -73,7 +76,7 @@ bool Turn::update ()
                         {
                                 if ( ! activities::Falling::getInstance().fall( * this ) ) {
                                         SoundManager::getInstance().play( turningItem.getKind (), "fall" );
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
                                 }
 
                                 fallTimer->go() ;
@@ -86,11 +89,8 @@ bool Turn::update ()
 
                 case activities::Activity::WakeUp:
                         turningItem.setFrozen( false );
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
                         break;
-
-                default:
-                        ;
         }
 
         return present ;
@@ -107,8 +107,8 @@ void Turn::turn ()
         else if ( heading ==  "east" ) itemThatTurns.changeHeading( turnLeft ? "north" : "south" );
         else if ( heading == "west"  ) itemThatTurns.changeHeading( turnLeft ? "south" : "north" );
 
-        // will move where it is heading
-        setCurrentActivity( activities::Activity::Moving );
+        // move where it is heading
+        setCurrentActivity( activities::Activity::Moving, itemThatTurns.getHeading() );
 }
 
 }

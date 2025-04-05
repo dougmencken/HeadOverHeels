@@ -21,7 +21,7 @@ public:
 
         Activity( unsigned int business ) : activity( business ) {}
 
-        Activity( const Activity & copyMe ) : activity( copyMe.activity ) {}
+        Activity( const Activity & that ) : activity( that.activity ) {}
 
         operator unsigned int() const {  return this->activity ;  }
 
@@ -54,11 +54,11 @@ public: /* constants */
 
         static const unsigned int Dragged                       = 180 ;
 
-        static const unsigned int BeginTeletransportation       = 222 ;
-        static const unsigned int EndTeletransportation         = 234 ;
+        static const unsigned int BeginTeletransportation       = 250 ;
+        static const unsigned int EndTeletransportation         = 260 ;
 
-        static const unsigned int Freeze                        = 271 ;
-        static const unsigned int WakeUp                        = 272 ;
+        static const unsigned int Freeze                        = 280 ;
+        static const unsigned int WakeUp                        = 290 ;
 
         static const unsigned int MetLethalItem                 = 303 ;
 

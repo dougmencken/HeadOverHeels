@@ -25,7 +25,7 @@ bool Sink::update ()
                 case activities::Activity::Waiting:
                         // begin to fall when there’s an item above
                         if ( ! sinkingItem.canAdvanceTo( 0, 0, 1 ) )
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
                         break;
 
@@ -34,14 +34,14 @@ bool Sink::update ()
                         if ( fallTimer->getValue() > sinkingItem.getWeight() ) {
                                 // when can’t fall or when there’s no item above it any more
                                 if ( ! activities::Falling::getInstance().fall( *this ) || sinkingItem.canAdvanceTo( 0, 0, 1 ) )
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
 
                                 fallTimer->go() ;
                         }
                         break;
 
                 default:
-                        setCurrentActivity( activities::Activity::Waiting );
+                        beWaiting() ;
         }
 
         SoundManager::getInstance().play( sinkingItem.getKind(), SoundManager::activityToNameOfSound( getCurrentActivity() ) );

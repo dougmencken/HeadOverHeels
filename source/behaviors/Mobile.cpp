@@ -32,7 +32,7 @@ bool Mobile::update ()
                 case activities::Activity::Waiting :
                         if ( activities::Falling::getInstance().fall( *this ) ) {
                                 fallTimer->go() ;
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
                         }
                         break;
 
@@ -45,7 +45,7 @@ bool Mobile::update ()
 
                                 activities::Displacing::getInstance().displace( *this, true );
 
-                                setCurrentActivity( activities::Activity::Waiting );
+                                beWaiting() ;
 
                                 speedTimer->go() ;
                         }
@@ -58,7 +58,7 @@ bool Mobile::update ()
                         if ( speedTimer->getValue() > mobileItem.getSpeed() ) {
                                 activities::Displacing::getInstance().displace( *this, true );
 
-                                setCurrentActivity( activities::Activity::Falling );
+                                setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
                                 speedTimer->go() ;
                         }
@@ -75,7 +75,7 @@ bool Mobile::update ()
                                         // play the end of the fall sound
                                         SoundManager::getInstance().play( mobileItem.getKind(), "fall" );
 
-                                        setCurrentActivity( activities::Activity::Waiting );
+                                        beWaiting() ;
                                 }
 
                                 fallTimer->go() ;

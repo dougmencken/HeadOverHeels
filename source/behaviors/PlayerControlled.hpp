@@ -49,7 +49,6 @@ public:
          */
         virtual void behave () = 0 ;
 
-        virtual void setCurrentActivity ( const Activity & newActivity ) ;
         virtual void setCurrentActivity ( const Activity & newActivity, const Motion2D & velocity ) ;
 
         virtual void changeActivityDueTo ( const Activity & newActivity, const AbstractItemPtr & dueTo )
