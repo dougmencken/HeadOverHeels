@@ -76,11 +76,11 @@ public :
 
         void decrementBonusQuickSteps () ;
 
-        unsigned short getHighJumps () const ;
+        unsigned short getBonusBigJumps () const ;
 
-        void addBonusHighJumps ( unsigned char howMany ) ;
+        void addBonusBigJumps ( unsigned char howMany ) ;
 
-        void decrementBonusHighJumps () ;
+        void decrementBonusBigJumps () ;
 
         short getShieldPoints () const ;
         double getShieldSeconds () const ;

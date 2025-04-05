@@ -484,9 +484,9 @@ void GameManager::refreshAmbianceImages ()
                 ambiancePictures[ "donuts" ]->colorizeWhite( Color::byName( "yellow" ) );
         }
 
-        ambiancePictures[ "grandes saltos" ] = PicturePtr( new Picture( path, "high-jumps.png" ) );
-        ambiancePictures[ "gran velocidad" ] = PicturePtr( new Picture( path, "quick-steps.png" ) );
-        ambiancePictures[ "escudo" ] = PicturePtr( new Picture( path, "shield.png" ) );
+        ambiancePictures[ "grandes saltos" ] = PicturePtr( new Picture( path, "gui-big-jumps.png" ) );
+        ambiancePictures[ "gran velocidad" ] = PicturePtr( new Picture( path, "gui-quick-steps.png" ) );
+        ambiancePictures[ "escudo" ] = PicturePtr( new Picture( path, "gui-shield.png" ) );
 
         ambiancePictures[ "gray grandes saltos" ] = PicturePtr( new Picture( * ambiancePictures[ "grandes saltos" ] ) );
         ambiancePictures[ "gray gran velocidad" ] = PicturePtr( new Picture( * ambiancePictures[ "gran velocidad" ] ) );
@@ -594,29 +594,27 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 }
 
                 // grandes saltos
-                unsigned int highJumps = this->theInfo.getBonusHighJumps () ;
+                unsigned int bigJumps = this->theInfo.getBonusBigJumps () ;
                 allegro::drawSprite(
-                        ( highJumps > 0 ? ambiancePictures[ "grandes saltos" ] : ambiancePictures[ "gray grandes saltos" ] )->getAllegroPict(),
-                        rightAmbianceX, bonusAmbianceY );
-                if ( highJumps > 0 )
-                {
-                        gui::Label highJumpsLabel( util::number2string( highJumps ), new gui::Font( colorOfLabels ) );
-                        highJumpsLabel.setSpacing( -2 );
-                        highJumpsLabel.moveTo( ( highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
-                        highJumpsLabel.draw ();
+                        ( bigJumps > 0 ? ambiancePictures[ "grandes saltos" ] : ambiancePictures[ "gray grandes saltos" ] )->getAllegroPict()
+                        , rightAmbianceX, bonusAmbianceY );
+                if ( bigJumps > 0 ) {
+                        gui::Label howManyBigJumps( util::number2string( bigJumps ), new gui::Font( colorOfLabels ) );
+                        howManyBigJumps.setSpacing( -2 );
+                        howManyBigJumps.moveTo( ( bigJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
+                        howManyBigJumps.draw ();
                 }
 
                 // gran velocidad
                 unsigned int quickSteps = this->theInfo.getBonusQuickSteps () ;
                 allegro::drawSprite(
-                        ( quickSteps > 0 ? ambiancePictures[ "gran velocidad" ] : ambiancePictures[ "gray gran velocidad" ] )->getAllegroPict(),
-                        leftAmbianceX, bonusAmbianceY );
-                if ( quickSteps > 0 )
-                {
-                        gui::Label quickSpeedLabel( util::number2string( quickSteps ), new gui::Font( colorOfLabels ) );
-                        quickSpeedLabel.setSpacing( -2 );
-                        quickSpeedLabel.moveTo( ( quickSteps > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
-                        quickSpeedLabel.draw ();
+                        ( quickSteps > 0 ? ambiancePictures[ "gran velocidad" ] : ambiancePictures[ "gray gran velocidad" ] )->getAllegroPict()
+                        , leftAmbianceX, bonusAmbianceY );
+                if ( quickSteps > 0 ) {
+                        gui::Label howManyQuickSteps( util::number2string( quickSteps ), new gui::Font( colorOfLabels ) );
+                        howManyQuickSteps.setSpacing( -2 );
+                        howManyQuickSteps.moveTo( ( quickSteps > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
+                        howManyQuickSteps.draw ();
                 }
 
                 // escudo de Head

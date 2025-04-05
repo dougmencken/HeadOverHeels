@@ -50,17 +50,17 @@ void GameInfo::loseLifeByName ( const std::string & character )
                 setHeelsLives( newHeelsLives ) ;
 }
 
-void GameInfo::addQuickStepsByName ( const std::string & character, unsigned short moreBonusQuickSteps )
+void GameInfo::addBonusQuickStepsByName ( const std::string & character, unsigned short moreQuickSteps )
 {
         if ( character == "head" || character == "headoverheels" )
         {
-                unsigned short howManyBonusQuickSteps = this->bonusQuickSteps + moreBonusQuickSteps ;
+                unsigned short howManyBonusQuickSteps = this->bonusQuickSteps + moreQuickSteps ;
                 if ( howManyBonusQuickSteps > 99 ) howManyBonusQuickSteps = 99 ;
                 setBonusQuickSteps( howManyBonusQuickSteps ) ;
         }
 }
 
-void GameInfo::decrementQuickStepsByName ( const std::string & character )
+void GameInfo::decrementBonusQuickStepsByName ( const std::string & character )
 {
         if ( character == "head" || character == "headoverheels" )
         {
@@ -70,23 +70,23 @@ void GameInfo::decrementQuickStepsByName ( const std::string & character )
         }
 }
 
-void GameInfo::addHighJumpsByName ( const std::string & character, unsigned short moreBonusHighJumps )
+void GameInfo::addBonusBigJumpsByName ( const std::string & character, unsigned short moreBonusJumps )
 {
         if ( character == "heels" || character == "headoverheels" )
         {
-                unsigned short howManyBonusHighJumps = this->bonusHighJumps + moreBonusHighJumps ;
-                if ( howManyBonusHighJumps > 99 ) howManyBonusHighJumps = 99 ;
-                setBonusHighJumps( howManyBonusHighJumps ) ;
+                unsigned short howManyBonusBigJumps = this->bonusBigJumps + moreBonusJumps ;
+                if ( howManyBonusBigJumps > 99 ) howManyBonusBigJumps = 99 ;
+                setBonusBigJumps( howManyBonusBigJumps ) ;
         }
 }
 
-void GameInfo::decrementHighJumpsByName ( const std::string & character )
+void GameInfo::decrementBonusBigJumpsByName ( const std::string & character )
 {
         if ( character == "heels" || character == "headoverheels" )
         {
-                unsigned short howManyBonusHighJumps = this->bonusHighJumps ;
-                if ( howManyBonusHighJumps > 0 )
-                        setBonusHighJumps( howManyBonusHighJumps - 1 ) ;
+                unsigned short howManyBonusBigJumps = this->bonusBigJumps ;
+                if ( howManyBonusBigJumps > 0 )
+                        setBonusBigJumps( howManyBonusBigJumps - 1 ) ;
         }
 }
 
@@ -136,7 +136,7 @@ void GameInfo::resetForANewGame ()
         this->headLives = 8 ;
         this->heelsLives = 8 ;
         this->bonusQuickSteps = 0 ;
-        this->bonusHighJumps = 0 ;
+        this->bonusBigJumps = 0 ;
         this->headShieldSeconds = 0.0 ;
         this->heelsShieldSeconds = 0.0 ;
         this->horn = false ;

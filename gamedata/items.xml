@@ -306,8 +306,8 @@
     <orientations>2</orientations>
 </item>
 
-<!-- a rabbit with the bonus high jumps -->
-<item kind="high-jumps">
+<!-- a rabbit with the bonus big jumps -->
+<item kind="big-jumps">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>

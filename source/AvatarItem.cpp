@@ -440,32 +440,32 @@ void AvatarItem::activateBonusQuickSteps ()
         {
                 GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
 
-                static const unsigned short bonusHighSpeedSteps = 99 ;
-                gameInfo.addQuickStepsByName( this->getOriginalKind(), bonusHighSpeedSteps );
+                static const unsigned short bonusQuickSteps = 99 ;
+                gameInfo.addBonusQuickStepsByName( this->getOriginalKind(), bonusQuickSteps );
         }
 }
 
 void AvatarItem::decrementBonusQuickSteps ()
 {
-        GameManager::getInstance().getGameInfo().decrementQuickStepsByName( this->getOriginalKind() );
+        GameManager::getInstance().getGameInfo().decrementBonusQuickStepsByName( this->getOriginalKind() );
 }
 
-unsigned short AvatarItem::getHighJumps () const
+unsigned short AvatarItem::getBonusBigJumps () const
 {
-        return GameManager::getInstance().getGameInfo ().getBonusHighJumps () ;
+        return GameManager::getInstance().getGameInfo ().getBonusBigJumps () ;
 }
 
-void AvatarItem::addBonusHighJumps( unsigned char howMany )
+void AvatarItem::addBonusBigJumps( unsigned char howMany )
 {
         if ( getOriginalKind() == "heels" )
         {
-                GameManager::getInstance().getGameInfo().addHighJumpsByName( this->getOriginalKind(), howMany );
+                GameManager::getInstance().getGameInfo().addBonusBigJumpsByName( this->getOriginalKind(), howMany );
         }
 }
 
-void AvatarItem::decrementBonusHighJumps ()
+void AvatarItem::decrementBonusBigJumps ()
 {
-        GameManager::getInstance().getGameInfo().decrementHighJumpsByName( this->getOriginalKind() );
+        GameManager::getInstance().getGameInfo().decrementBonusBigJumpsByName( this->getOriginalKind() );
 }
 
 short AvatarItem::getShieldPoints () const

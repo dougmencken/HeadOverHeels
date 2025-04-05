@@ -79,7 +79,7 @@
     <sound on="vanish" play="bonus.wav"/>
 </for>
 
-<for item="high-jumps">
+<for item="big-jumps">
     <sound on="vanish" play="bonus.wav"/>
 </for>
 

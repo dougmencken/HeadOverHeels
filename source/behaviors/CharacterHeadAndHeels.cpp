@@ -23,11 +23,11 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( AvatarItem & item )
         }
 
         // salto largo
-        const unsigned int highJumpPhases = 28 ;
-        for ( unsigned int i = 0; i < highJumpPhases; i++ )
+        const unsigned int bigJumpPhases = 28 ;
+        for ( unsigned int i = 0; i < bigJumpPhases; i++ )
         {
                 std::pair< int /* xy */, int /* z */ > jumpPhase( 1, 3 );
-                highJumpVector.push_back( jumpPhase );
+                bigJumpVector.push_back( jumpPhase );
         }
 
         // fotogramas de caída (falling)

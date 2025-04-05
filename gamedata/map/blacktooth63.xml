@@ -133,7 +133,7 @@
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="3">
-            <kind>high-jumps</kind>
+            <kind>big-jumps</kind>
             <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>

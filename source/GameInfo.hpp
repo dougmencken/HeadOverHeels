@@ -26,7 +26,7 @@ public:
                 : headLives( 0 )
                 , heelsLives( 0 )
                 , bonusQuickSteps( 0 )
-                , bonusHighJumps( 0 )
+                , bonusBigJumps( 0 )
                 , headShieldSeconds( 0.0 )
                 , heelsShieldSeconds( 0.0 )
                 , horn( false )
@@ -53,24 +53,24 @@ public:
         void loseLifeByName ( const std::string & character ) ;
 
         /**
-         * quick steps and high jumps
+         * quick steps and big jumps
          */
 
         void setBonusQuickSteps ( unsigned short quickSteps ) {  this->bonusQuickSteps = quickSteps ;  }
 
         unsigned short getBonusQuickSteps () const {  return this->bonusQuickSteps ;  }
 
-        void addQuickStepsByName ( const std::string & character, unsigned short moreBonusQuickSteps ) ;
+        void addBonusQuickStepsByName ( const std::string & character, unsigned short moreQuickSteps ) ;
 
-        void decrementQuickStepsByName ( const std::string & character ) ;
+        void decrementBonusQuickStepsByName ( const std::string & character ) ;
 
-        void setBonusHighJumps ( unsigned short highJumps ) {  this->bonusHighJumps = highJumps ;  }
+        void setBonusBigJumps ( unsigned short bigJumps ) {  this->bonusBigJumps = bigJumps ;  }
 
-        unsigned short getBonusHighJumps () const {  return this->bonusHighJumps ;  }
+        unsigned short getBonusBigJumps () const {  return this->bonusBigJumps ;  }
 
-        void addHighJumpsByName ( const std::string & character, unsigned short moreBonusHighJumps ) ;
+        void addBonusBigJumpsByName ( const std::string & character, unsigned short moreBonusJumps ) ;
 
-        void decrementHighJumpsByName ( const std::string & character ) ;
+        void decrementBonusBigJumpsByName ( const std::string & character ) ;
 
         /**
          * temporary invulnerability
@@ -147,16 +147,16 @@ private:
 
         unsigned char heelsLives ;
 
-        // the number (between 0 and 99) of remaining bonus steps of moving at double speed for Head
-         /* 1. If the character goes step by step, it does not spend
-          * 2. If the character moves but collides, it does not spend
-          * 3. Consumes a unit of time every 8 steps, as long as 4 steps are taken in a row
-          * 4. When the character jumps it does not consume
-          */
+        // the number between 0 and 99 of remaining bonus quick steps for Head
+        /* ‣ If the character goes step by step it doesn’t spend
+         * ‣ If the character moves but collides it doesn’t spend
+         * ‣ When the character jumps it doesn’t spend
+         * ‣ Consumes a unit of time every 8 steps, as long as 4 steps are taken in a row
+         */
         unsigned short bonusQuickSteps ;
 
-        // the number (between 0 and 10) of remaining bonus high jumps for Heels
-        unsigned short bonusHighJumps ;
+        // the number between 0 and 10 of remaining bonus big jumps for Heels
+        unsigned short bonusBigJumps ;
 
         // the time remaining while Head is inviolable
         double headShieldSeconds ;

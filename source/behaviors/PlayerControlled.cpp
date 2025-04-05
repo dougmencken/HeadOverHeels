@@ -21,7 +21,7 @@ using behaviors::PlayerControlled ;
 PlayerControlled::PlayerControlled( AvatarItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , jumpPhase( -1 )
-        , highJump( false )
+        , bigJump( false )
         , automoveStepsRemained( automatic_steps )
         , quickSteps( 0 )
         , speedTimer( new Timer () )
@@ -35,8 +35,8 @@ PlayerControlled::PlayerControlled( AvatarItem & item, const std::string & behav
 
 PlayerControlled::~PlayerControlled( )
 {
-        jumpVector.clear() ;
-        highJumpVector.clear() ;
+        this->jumpVector.clear() ;
+        this->bigJumpVector.clear() ;
 }
 
 bool PlayerControlled::update ()
@@ -352,24 +352,24 @@ void PlayerControlled::jump ()
                         character.canAdvanceTo( 0, 0, -1 );
 
                         bool onASpringStool = ( character.getMediator()->collisionWithBehavingAs( "behavior of spring stool" ) != nilPointer );
-                        bool willJumpHigher = ( character.isHeels() && character.getHighJumps() > 0 ) ;
+                        bool willJumpHigher = ( character.isHeels() && character.getBonusBigJumps() > 0 ) ;
 
                         if ( onASpringStool )
                                 SoundManager::getInstance().play( "spring-stool", "bounce" );
                         else
                         if ( willJumpHigher ) {
                                 SoundManager::getInstance().play( "heels", "bigjump" );
-                                character.decrementBonusHighJumps () ;
+                                character.decrementBonusBigJumps () ;
                         }
 
                         this->jumpPhase = 0 ;
-                        this->highJump = onASpringStool || willJumpHigher ;
+                        this->bigJump = onASpringStool || willJumpHigher ;
                 }
 
                 // is it time to jump
                 if ( speedTimer->getValue() > character.getSpeed() )
                 {
-                        activities::Jumping::getInstance().jump( *this, this->jumpPhase, this->highJump ? this->highJumpVector : this->jumpVector );
+                        activities::Jumping::getInstance().jump( *this, this->jumpPhase, this->bigJump ? this->bigJumpVector : this->jumpVector );
 
                         // to the next phase of jump
                         ++ this->jumpPhase ;

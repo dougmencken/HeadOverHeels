@@ -182,13 +182,14 @@ bool Bonus::mayTake( const AvatarItem & taker )
         }
 
         return ( taker.isHead() && ( magicItem == "quick-steps" || magicItem == "horn" || magicItem == "donuts" ) )
-                        || ( taker.isHeels()  && ( magicItem == "high-jumps" || magicItem == "handbag" ) )
+                        || ( taker.isHeels()  && ( magicItem == "big-jumps" || magicItem == "handbag" ) )
                 || ( taker.isHeadOverHeels() && ( magicItem == "handbag" || magicItem == "horn" || magicItem == "donuts" ) ) ;
 }
 
 void Bonus::takeIt( AvatarItem & whoTakes )
 {
         const std::string & whichItem = dynamic_cast< DescribedItem & >( getItem() ).getOriginalKind ();
+        std::cout << "taking bonus \"" << whichItem << "\"" << std::endl ;
 
         if ( whichItem == "donuts" ) {
                 const unsigned short DonutsPerBox = 6 ;
@@ -200,8 +201,8 @@ void Bonus::takeIt( AvatarItem & whoTakes )
         else if ( whichItem == "quick-steps" ) {
                 whoTakes.activateBonusQuickSteps () ;
         }
-        else if ( whichItem == "high-jumps" ) {
-                whoTakes.addBonusHighJumps( 10 );
+        else if ( whichItem == "big-jumps" ) {
+                whoTakes.addBonusBigJumps( 10 );
         }
         else if ( whichItem == "shield" ) {
                 whoTakes.activateShield () ;

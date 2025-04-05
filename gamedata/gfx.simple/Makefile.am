@@ -92,23 +92,23 @@ gamedatagfxsimple_DATA = blacktooth.png/blacktooth-column-capital-east.png \
 			gui.gfx/byblos.png \
 			gui.gfx/egyptus-frame.png \
 			gui.gfx/egyptus.png \
+			gui.gfx/gui-big-jumps.png \
 			gui.gfx/gui-donuts.png \
 			gui.gfx/gui-handbag.png \
 			gui.gfx/gui-head.png \
 			gui.gfx/gui-heels.png \
 			gui.gfx/gui-horn.png \
+			gui.gfx/gui-quick-steps.png \
+			gui.gfx/gui-shield.png \
 			gui.gfx/head.gif \
 			gui.gfx/heels.gif \
-			gui.gfx/high-jumps.png \
 			gui.gfx/jail-frame.png \
 			gui.gfx/market-frame.png \
 			gui.gfx/moon-frame.png \
 			gui.gfx/penitentiary-frame.png \
 			gui.gfx/penitentiary.png \
-			gui.gfx/quick-steps.png \
 			gui.gfx/safari-frame.png \
 			gui.gfx/safari.png \
-			gui.gfx/shield.png \
 			items/ball.png \
 			items/ball-shadows.png \
 			items/bars-ew.png \

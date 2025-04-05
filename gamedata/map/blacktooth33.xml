@@ -79,7 +79,7 @@
             <class>freeitem</class>
         </item>
         <item x="7" y="0" z="0">
-            <kind>high-jumps</kind>
+            <kind>big-jumps</kind>
             <behavior>behavior of bonus</behavior>
             <class>freeitem</class>
         </item>

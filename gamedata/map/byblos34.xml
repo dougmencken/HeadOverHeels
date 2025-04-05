@@ -173,7 +173,7 @@
             <class>freeitem</class>
         </item>
         <item x="0" y="7" z="0">
-            <kind>high-jumps</kind>
+            <kind>big-jumps</kind>
             <orientation>west</orientation>
             <behavior>behavior of bonus</behavior>
             <class>freeitem</class>

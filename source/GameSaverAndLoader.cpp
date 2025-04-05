@@ -228,7 +228,7 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 gameInfo.setDoughnuts( howManyDoughnuts );
                                 gameInfo.setHandbag( hasHandbag );
                                 gameInfo.setBonusQuickSteps( 0 );
-                                gameInfo.setBonusHighJumps( 0 );
+                                gameInfo.setBonusBigJumps( 0 );
                                 gameInfo.setHeadShieldPoints( 0 );
                                 gameInfo.setHeelsShieldPoints( 0 );
                         }
@@ -244,7 +244,7 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                         {
                                 gameInfo.setHeelsLives( howManyLives );
                                 gameInfo.setHandbag( hasHandbag );
-                                gameInfo.setBonusHighJumps( 0 );
+                                gameInfo.setBonusBigJumps( 0 );
                                 gameInfo.setHeelsShieldPoints( 0 );
                         }
 

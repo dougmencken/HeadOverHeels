@@ -544,7 +544,7 @@ void Miniature::draw ()
 
                 // the bonus rabbits
 
-                if ( kind == "extra-life" || kind == "high-jumps" || kind == "quick-steps" || kind == "shield" )
+                if ( kind == "extra-life" || kind == "big-jumps" || kind == "quick-steps" || kind == "shield" )
                 {
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 

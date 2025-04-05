@@ -143,13 +143,13 @@ protected:
         // defines the character’s jump via the pairs of horizontal and vertical offsets on each cycle
         std::vector < std::pair< int /* xy */, int /* z */ > > jumpVector ;
 
-        // defines the long jump from a spring or with a bunny’s bonus
-        std::vector < std::pair< int /* xy */, int /* z */ > > highJumpVector ;
+        // defines the big jump from a spring stool or with a bonus
+        std::vector < std::pair< int /* xy */, int /* z */ > > bigJumpVector ;
 
         int jumpPhase ;
 
-        // true when on a spring stool or has a bonus high jump
-        bool highJump ;
+        // true when on a spring stool or has a bonus big jump
+        bool bigJump ;
 
         // pasos automáticos
         // the number of steps to take when character moves automatically after entering a room through door
