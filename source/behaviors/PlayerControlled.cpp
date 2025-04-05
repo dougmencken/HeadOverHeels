@@ -348,22 +348,22 @@ void PlayerControlled::jump ()
         {
                 if ( this->jumpPhase < 0 )
                 {
-                        this->highJump = false ;
-
                         // look for an item below
                         character.canAdvanceTo( 0, 0, -1 );
 
                         bool onASpringStool = ( character.getMediator()->collisionWithBehavingAs( "behavior of spring stool" ) != nilPointer );
-                        this->highJump = onASpringStool || ( character.isHeels() && character.getHighJumps() > 0 ) ;
+                        bool willJumpHigher = ( character.isHeels() && character.getHighJumps() > 0 ) ;
 
-                        if ( this->highJump ) {
-                                if ( character.isHeels () )
-                                        character.decrementBonusHighJumps () ;
-
-                                SoundManager::getInstance().play( character.getOriginalKind(), "rebound" );
+                        if ( onASpringStool )
+                                SoundManager::getInstance().play( "spring-stool", "bounce" );
+                        else
+                        if ( willJumpHigher ) {
+                                SoundManager::getInstance().play( "heels", "bigjump" );
+                                character.decrementBonusHighJumps () ;
                         }
 
                         this->jumpPhase = 0 ;
+                        this->highJump = onASpringStool || willJumpHigher ;
                 }
 
                 // is it time to jump

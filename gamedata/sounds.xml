@@ -146,10 +146,10 @@
     <sound on="collision" play="gamusino.wav"/>
 </for>
 
-<for item="trampoline">
+<for item="spring-stool">
     <sound on="fall" play="fall.wav"/>
     <sound on="push" play="push.wav"/>
-    <sound on="function" play="spring.wav"/>
+    <sound on="bounce" play="boing.wav"/>
 </for>
 
 <for item="bighead-robot">
@@ -198,7 +198,6 @@
     <sound on="fall" play="head-falling.wav"/>
     <sound on="vanish" play="lose-life.wav"/>
     <sound on="donut" play="fire.wav"/>
-    <sound on="rebound" play="trampoline.wav"/>
     <sound on="teleport-in" play="teleport-in.wav"/>
     <sound on="teleport-out" play="teleport-out.wav"/>
 </for>
@@ -208,7 +207,7 @@
     <sound on="jump" play="heels-jumping.wav"/>
     <sound on="fall" play="heels-falling.wav"/>
     <sound on="vanish" play="lose-life.wav"/>
-    <sound on="rebound" play="trampoline.wav"/>
+    <sound on="bigjump" play="spring.wav"/>
     <sound on="teleport-in" play="teleport-in.wav"/>
     <sound on="teleport-out" play="teleport-out.wav"/>
     <sound on="take" play="take.wav"/>
@@ -222,7 +221,6 @@
     <sound on="fall" play="head-falling.wav"/>
     <sound on="vanish" play="lose-life.wav"/>
     <sound on="donut" play="fire.wav"/>
-    <sound on="rebound" play="trampoline.wav"/>
     <sound on="teleport-in" play="teleport-in.wav"/>
     <sound on="teleport-out" play="teleport-out.wav"/>
     <sound on="take" play="take.wav"/>

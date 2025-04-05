@@ -133,12 +133,12 @@
             <class>griditem</class>
         </item>
         <item x="3" y="11" z="0">
-            <kind>trampoline</kind>
+            <kind>spring-stool</kind>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="13" z="0">
-            <kind>trampoline</kind>
+            <kind>spring-stool</kind>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>

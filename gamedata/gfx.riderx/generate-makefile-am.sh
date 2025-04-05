@@ -16,7 +16,7 @@ items=`find $listOfSubfolders -type f -print`
 howManyLines=`printf "${items}" | wc -l`
 currentLine=0
 
-echo "${items}" | while read line; do
+echo "${items}" | sort | while read line; do
         if [ $currentLine -gt 0 ]; then
                 printf "\t\t\t"
         fi

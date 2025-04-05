@@ -644,18 +644,18 @@
     <orientations>4</orientations>
 </item>
 
-<item kind="trampoline">
+<item kind="spring-stool">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
     <weight>10</weight>
     <speed>40</speed>
-    <picture file="trampoline.png">
+    <picture file="spring-stool.png">
         <width>48</width>
         <height>56</height>
     </picture>
     <betweenFrames>80</betweenFrames>
-    <shadow file="trampoline-shadows.png">
+    <shadow file="spring-stool-shadows.png">
         <width>48</width>
         <height>25</height>
     </shadow>

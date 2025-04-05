@@ -4,6 +4,7 @@ gamedatasounddir = $(datadir)/@PACKAGE@/sound
 gamedatasound_DATA = adjust.wav \
 			bighead-robot.wav \
 			blades.wav \
+			boing.wav \
 			bonus.wav \
 			bubbles-bug.wav \
 			conveyor.wav \
@@ -39,5 +40,4 @@ gamedatasound_DATA = adjust.wav \
 			teleport-out.wav \
 			teleport.wav \
 			tools.wav \
-			trampoline.wav \
 			trumpet.wav

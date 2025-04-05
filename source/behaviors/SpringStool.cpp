@@ -52,10 +52,9 @@ bool SpringStool::update ()
 
                                         // play the sound of bouncing
                                         if ( reboundTimer->getValue() > 0.100 )
-                                                SoundManager::getInstance().play( springItem.getKind(), "function" );
+                                                SoundManager::getInstance().play( springItem.getKind(), "bounce" );
                                 }
-                                else
-                                {
+                                else {
                                         // begin bouncing when an item above moves away
                                         if ( this->folded ) {
                                                 this->rebounding = true ;

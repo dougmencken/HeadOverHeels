@@ -97,7 +97,7 @@
             <class>freeitem</class>
         </item>
         <item x="6" y="3" z="0">
-            <kind>trampoline</kind>
+            <kind>spring-stool</kind>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>

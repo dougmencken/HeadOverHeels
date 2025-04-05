@@ -106,7 +106,7 @@
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="7">
-            <kind>trampoline</kind>
+            <kind>spring-stool</kind>
             <behavior>behavior of spring stool</behavior>
             <class>freeitem</class>
         </item>
