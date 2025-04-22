@@ -896,7 +896,7 @@
 
     <room file="penitentiary31.xml">
         <below>penitentiary32.xml</below>
-        <above>penitentiary30.xml</above>
+        <above>penitentiary29.xml</above>
     </room>
 
     <room file="penitentiary32.xml">
