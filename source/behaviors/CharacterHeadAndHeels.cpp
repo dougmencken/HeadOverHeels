@@ -6,6 +6,7 @@
 #include "Falling.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
+#include "ActivityToString.hpp"
 
 
 namespace behaviors
@@ -51,32 +52,37 @@ CharacterHeadAndHeels::CharacterHeadAndHeels( AvatarItem & item )
 
 bool CharacterHeadAndHeels::update ()
 {
+#if defined( DEBUG_ACTIVITIES ) || defined( DEBUG_WAITING )
+        std::string aboutActivity = "Head over Heels is " + activities::ActivityToString::toString( getCurrentActivity() ) + " on update()" ;
+        std::string aboutActivityAndMotionVector = aboutActivity + " and the motion vector is " + get2DVelocityVector().toString() ;
+#endif
+
         switch ( getCurrentActivity () )
         {
                 case activities::Activity::Waiting :
         #if defined( DEBUG_WAITING ) && DEBUG_WAITING
-                        std::cout << "Head over Heels is waiting on update()" << std::endl ;
+                        std::cout << aboutActivity << std::endl ;
         #endif
                         wait ();
                         break;
 
                 case activities::Activity::Blinking :
         #if defined( DEBUG_WAITING ) && DEBUG_WAITING
-                        std::cout << "Head over Heels is blinking on update()" << std::endl ;
+                        std::cout << aboutActivity << std::endl ;
         #endif
                         blink ();
                         break;
 
                 case activities::Activity::Automoving :
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                        std::cout << "Head over Heels is automoving on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+                        std::cout << aboutActivityAndMotionVector << std::endl ;
         #endif
                         automove ();
                         break;
 
                 case activities::Activity::Moving :
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                        std::cout << "Head over Heels is moving on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+                        std::cout << aboutActivityAndMotionVector << std::endl ;
         #endif
                         move ();
                         break;
@@ -84,28 +90,28 @@ bool CharacterHeadAndHeels::update ()
                 case activities::Activity::Pushed :
                 case activities::Activity::Dragged :
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                        std::cout << "Head over Heels is pushed or dragged on update()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+                        std::cout << aboutActivityAndMotionVector << std::endl ;
         #endif
                         displace ();
                         break ;
 
                 case activities::Activity::Falling :
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                        std::cout << "Head over Heels is falling on update()" << std::endl ;
+                        std::cout << aboutActivity << std::endl ;
         #endif
                         fall ();
                         break;
 
                 case activities::Activity::Gliding :
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                        std::cout << "Head over Heels is gliding on update()" << std::endl ;
+                        std::cout << aboutActivity << std::endl ;
         #endif
                         glide ();
                         break;
 
                 case activities::Activity::Jumping :
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                        std::cout << "Head over Heels is jumping on update()" << std::endl ;
+                        std::cout << aboutActivity << std::endl ;
         #endif
                         jump ();
                         break;
@@ -150,6 +156,11 @@ void CharacterHeadAndHeels::behave ()
                                 || whatDoing == activities::Activity::MetLethalItem || whatDoing == activities::Activity::Vanishing )
                 return ; // moving by inertia, teleporting, or vanishing is not controlled by the player
 
+#if defined( DEBUG_ACTIVITIES ) || defined( DEBUG_WAITING )
+        std::string aboutActivity = "Head over Heels is " + activities::ActivityToString::toString( getCurrentActivity() ) + " on behave()" ;
+        std::string aboutActivityAndMotionVector = aboutActivity + " with the motion vector " + get2DVelocityVector().toString() ;
+#endif
+
         const InputManager & input = InputManager::getInstance ();
         bool noItemTaken = ( avatar.getDescriptionOfTakenItem() == nilPointer );
 
@@ -157,7 +168,7 @@ void CharacterHeadAndHeels::behave ()
         if ( whatDoing == activities::Activity::Waiting || whatDoing == activities::Activity::Blinking )
         {
         #if defined( DEBUG_WAITING ) && DEBUG_WAITING
-                std::cout << "Head over Heels is waiting or blinking on behave()" << std::endl ;
+                std::cout << aboutActivity << std::endl ;
         #endif
                 if ( input.jumpTyped() ) {
                         toJumpOrTeleport ();
@@ -182,7 +193,7 @@ void CharacterHeadAndHeels::behave ()
         else if ( whatDoing == activities::Activity::Moving )
         {
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                std::cout << "Head over Heels is moving on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+                std::cout << aboutActivityAndMotionVector << std::endl ;
         #endif
                 if ( input.jumpTyped() ) {
                         toJumpOrTeleport ();
@@ -209,7 +220,7 @@ void CharacterHeadAndHeels::behave ()
         else if ( whatDoing == activities::Activity::Pushed )
         {
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                std::cout << "Head over Heels is pushed on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+                std::cout << aboutActivityAndMotionVector << std::endl ;
         #endif
                 if ( input.jumpTyped() ) {
                         setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
@@ -234,7 +245,7 @@ void CharacterHeadAndHeels::behave ()
         else if ( whatDoing == activities::Activity::Dragged )
         {
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                std::cout << "Head over Heels is dragged on behave()" << ", the velocity vector is " << get2DVelocityVector().toString() << std::endl ;
+                std::cout << aboutActivityAndMotionVector << std::endl ;
         #endif
                 if ( input.jumpTyped() )
                         setCurrentActivity( activities::Activity::Jumping, Motion2D::rest() );
@@ -244,7 +255,7 @@ void CharacterHeadAndHeels::behave ()
         else if ( whatDoing == activities::Activity::Jumping )
         {
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                std::cout << "Head over Heels is jumping on behave()" << std::endl ;
+                std::cout << aboutActivity << std::endl ;
         #endif
                 if ( input.doughnutTyped() ) {
                         useHooter ();
@@ -257,7 +268,7 @@ void CharacterHeadAndHeels::behave ()
         else if ( whatDoing == activities::Activity::Falling )
         {
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                std::cout << "Head over Heels is falling on behave()" << std::endl ;
+                std::cout << aboutActivity << std::endl ;
         #endif
                 if ( input.doughnutTyped() ) {
                         useHooter ();
@@ -281,7 +292,7 @@ void CharacterHeadAndHeels::behave ()
         if ( getCurrentActivity() == activities::Activity::Gliding )
         {
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
-                std::cout << "Head over Heels is gliding on behave()" << std::endl ;
+                std::cout << aboutActivity << std::endl ;
         #endif
                 if ( input.doughnutTyped() ) {
                         useHooter ();

@@ -84,7 +84,7 @@ void PlayerControlled::wait ()
                 setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
 
                 if ( character.isHead ()
-                                && character.getQuickSteps() > 0
+                                && character.howManyBonusQuickSteps() > 0
                                         && this->quickSteps < 4 )
                         this->quickSteps = 0 ; // reset the quick steps counter
         }
@@ -97,7 +97,7 @@ void PlayerControlled::move ()
         if ( character.isFrozen() ) return ;
 
         // apply the effect of quick steps bonus bunny
-        double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
+        double speed = character.getSpeed() / ( character.howManyBonusQuickSteps() > 0 ? 2 : 1 );
 
         // is it time to move
         if ( speedTimer->getValue() > speed )
@@ -105,7 +105,7 @@ void PlayerControlled::move ()
                 bool moved = activities::Moving::getInstance().move( *this, true );
 
                 // decrement the quick steps
-                if ( character.getQuickSteps() > 0
+                if ( character.howManyBonusQuickSteps() > 0
                                 && moved && getCurrentActivity() != activities::Activity::Falling )
                 {
                         this->quickSteps ++ ;
@@ -127,7 +127,7 @@ void PlayerControlled::automove ()
         ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
         // apply the effect of quick steps bonus bunny
-        double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
+        double speed = character.getSpeed() / ( character.howManyBonusQuickSteps() > 0 ? 2 : 1 );
 
         // is it time to move
         if ( speedTimer->getValue() > speed )
@@ -186,22 +186,36 @@ bool PlayerControlled::moveKeyChangesHeading ()
         const InputManager & input = InputManager::getInstance ();
         ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( getItem () );
 
+        std::string headingBefore = avatar.getHeading() ;
+        std::string headingAfter = headingBefore ;
+
         if ( input.movenorthTyped() ) {
                 anyMoveTyped = true ;
-                avatar.changeHeading( "north" );
+                headingAfter = "north" ;
         }
         else if ( input.movesouthTyped() ) {
                 anyMoveTyped = true ;
-                avatar.changeHeading( "south" );
+                headingAfter = "south" ;
         }
         else if ( input.moveeastTyped() ) {
                 anyMoveTyped = true ;
-                avatar.changeHeading( "east" );
+                headingAfter = "east" ;
         }
         else if ( input.movewestTyped() ) {
                 anyMoveTyped = true ;
-                avatar.changeHeading( "west" );
+                headingAfter = "west" ;
         }
+
+        if ( anyMoveTyped && headingBefore != headingAfter )
+                avatar.changeHeading( headingAfter );
+
+#if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
+        if ( anyMoveTyped && headingBefore != avatar.getHeading() )
+                std::cout << "in PlayerControlled::moveKeyChangesHeading() "
+                                << avatar.getOriginalKind() << "’s heading changed"
+                                << " from \"" << headingBefore << "\" to \"" << avatar.getHeading() << "\""
+                                << std::endl ;
+#endif
 
         return anyMoveTyped ;
 }
@@ -352,7 +366,7 @@ void PlayerControlled::jump ()
                         character.canAdvanceTo( 0, 0, -1 );
 
                         bool onASpringStool = ( character.getMediator()->collisionWithBehavingAs( "behavior of spring stool" ) != nilPointer );
-                        bool willJumpHigher = ( character.isHeels() && character.getBonusBigJumps() > 0 ) ;
+                        bool willJumpHigher = ( character.isHeels() && character.howManyBonusBigJumps() > 0 ) ;
 
                         if ( onASpringStool )
                                 SoundManager::getInstance().play( "spring-stool", "bounce" );

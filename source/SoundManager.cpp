@@ -11,7 +11,7 @@
 #include <tinyxml2.h>
 
 #ifdef DEBUG
-#  define DEBUG_SOUNDS  0
+#  define DEBUG_SOUNDS  1
 #endif
 
 

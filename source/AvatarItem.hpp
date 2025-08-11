@@ -70,13 +70,13 @@ public :
          */
         void useDoughnutHorn () ;
 
-        unsigned short getQuickSteps () const ;
+        unsigned short howManyBonusQuickSteps () const ;
 
         void activateBonusQuickSteps () ;
 
         void decrementBonusQuickSteps () ;
 
-        unsigned short getBonusBigJumps () const ;
+        unsigned short howManyBonusBigJumps () const ;
 
         void addBonusBigJumps ( unsigned char howMany ) ;
 

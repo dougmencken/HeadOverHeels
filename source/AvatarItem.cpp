@@ -429,7 +429,7 @@ void AvatarItem::useDoughnutHorn ()
         GameManager::getInstance().getGameInfo ().consumeOneDoughnut () ;
 }
 
-unsigned short AvatarItem::getQuickSteps () const
+unsigned short AvatarItem::howManyBonusQuickSteps () const
 {
         return GameManager::getInstance().getGameInfo ().getBonusQuickSteps () ;
 }
@@ -450,7 +450,7 @@ void AvatarItem::decrementBonusQuickSteps ()
         GameManager::getInstance().getGameInfo().decrementBonusQuickStepsByName( this->getOriginalKind() );
 }
 
-unsigned short AvatarItem::getBonusBigJumps () const
+unsigned short AvatarItem::howManyBonusBigJumps () const
 {
         return GameManager::getInstance().getGameInfo ().getBonusBigJumps () ;
 }
