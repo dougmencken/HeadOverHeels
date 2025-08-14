@@ -135,24 +135,42 @@ void DescribedItem::readGraphicsOfItem ()
 {
         clearFrames ();
 
-        if ( ! getDescriptionOfItem().getNameOfPicturesFile().empty() && ! getDescriptionOfItem().isPartOfDoor() ) {
+        const DescriptionOfItem & description = getDescriptionOfItem() ;
+
+        if ( ! description.getNameOfPicturesFile().empty() && ! description.isPartOfDoor() ) {
                 createFrames() ;
 
-                if ( getDescriptionOfItem().getWidthOfShadow() > 0 && getDescriptionOfItem().getHeightOfShadow() > 0 )
+                if ( description.getWidthOfShadow() > 0 && description.getHeightOfShadow() > 0 )
                         createShadowFrames() ;
         }
 
-        size_t howManyFrames = howManyFramesAtAll() ;
+        unsigned int framesPerOrientation = howManyFramesInTheCurrentSequence() ;
+
+        if ( ! description.isPartOfDoor() ) {
+                if ( framesPerOrientation != description.howManyFramesPerOrientation() )
+                        throw MayNotBePossible( "the current sequence for item \"" + getKind()
+                                                + "\" has more or less frames (" + util::number2string( framesPerOrientation )
+                                                + ") than the number of frames per each orientation ("
+                                                + util::number2string( description.howManyFramesPerOrientation() ) + ")" );
+        } else
+          if ( framesPerOrientation != 0 ) // images of door lintel and jambs are cut out from the door picture
+                                           // thus no frames are read from file
+                        throw MayNotBePossible( "the number of frames (" + util::number2string( framesPerOrientation )
+                                                + ") for a door part \"" + getKind() + "\" is not zero" );
+
+        size_t soManyFrames = ( framesPerOrientation * description.howManyOrientations() ) + description.howManyExtraFrames() ;
 
         std::ostringstream readOrAbsent ;
         readOrAbsent << "graphics for item \"" << getUniqueName() << "\" " ;
         if ( getKind() != getOriginalKind() ) readOrAbsent << "(\"" << getKind() << "\") " ;
-        if ( howManyFrames > 0 )
-                readOrAbsent << "consisting of " << howManyFrames << " frame" << ( howManyFrames == 1 ? " " : "s " ) << "were read" ;
+        if ( soManyFrames > 0 )
+                readOrAbsent << "consisting of " << soManyFrames << " frame" << ( soManyFrames == 1 ? " " : "s " ) << "were read" ;
+        else
+        if ( description.isPartOfDoor() )
+                readOrAbsent << "will be cut out from the door picture" ;
         else
                 readOrAbsent << "are absent" ;
 
-        /* readOrAbsent << ", the current frame sequence is \"" << getCurrentFrameSequence() << "\"" ; */////////
         std::cout << readOrAbsent.str() << std::endl ;
 }
 

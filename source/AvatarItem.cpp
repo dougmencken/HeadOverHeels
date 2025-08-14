@@ -139,10 +139,9 @@ bool AvatarItem::addToPosition( int x, int y, int z )
 {
         // inactive character automoves when they both enter the same room
         // and couldn’t go out the door with the parent FreeItem’s addToPosition method
-        const activities::Activity & activity = getBehavior()->getCurrentActivity() ;
-        bool autowalksThruDoor = ( activity == activities::Activity::Automoving );
+        bool autowalksThruDoor = ( getBehavior()->getCurrentActivity() == activities::Activity::Automoving );
 
-        ////// can’t get what’s wrong with falling down near a door as uncontrolled FreeItem
+        ////// and what’s wrong with falling down near a door as uncontrolled FreeItem ?
         //////bool fallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
 
         if ( ! this->isActiveCharacter() && ! autowalksThruDoor /* && ! fallsUnderDoor */ )

@@ -465,16 +465,17 @@ void Isomot::handleMagicKeys ()
         // [ option / alt ] & [ shift ] & [ h ] for a hyperspace jump to a random room on the game map
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "h" ) )
         {
-                std::vector< std::string > allRooms ;
-                map.getAllRoomFiles( allRooms );
-
-                const std::string & randomRoom = allRooms[ rand() % allRooms.size() ] ;
-                std::cout << "hyper-jumping to the lucky map \"" << randomRoom << "\"" << std::endl ;
-
                 AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter() ;
                 if ( activeCharacter != nilPointer )
                 {
+                        std::vector< std::string > allRooms ;
+                        map.getAllRoomFiles( allRooms );
+
+                        const std::string & randomRoom = allRooms[ rand() % allRooms.size() ] ;
+                        std::cout << "hyper-jumping to the lucky map \"" << randomRoom << "\"" << std::endl ;
+
                         activeCharacter->getBehavior()->setCurrentActivity( activities::Activity::BeginTeletransportation );
+
                         // ....
                 }
 
