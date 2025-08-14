@@ -41,6 +41,17 @@ PlayerControlled::~PlayerControlled( )
 
 bool PlayerControlled::update ()
 {
+        const Activity & activity = getCurrentActivity() ;
+
+        if ( activity == activities::Activity::BeginTeletransportation )
+                enterTeletransport ();
+        else
+        if ( activity == activities::Activity::EndTeletransportation )
+                exitTeletransport ();
+        else
+        if ( activity == activities::Activity::MetLethalItem || activity == activities::Activity::Vanishing )
+                collideWithALethalItem ();
+
         // play sound for the current activity
         SoundManager::getInstance().play (
                         dynamic_cast< const ::DescribedItem & >( getItem() ).getOriginalKind(),

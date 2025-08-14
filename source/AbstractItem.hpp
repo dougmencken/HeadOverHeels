@@ -110,7 +110,6 @@ public :
         {
                 if ( sequence.empty() ) return ; // don’t add to ""
 
-                /* IF_DEBUG( fprintf( stdout, "adding frame to \"%s\" for item %s\n" , sequence.c_str(), getUniqueName().c_str() ) ) */////////
                 this->frames[ sequence ].push_back( NamedPicturePtr( frame ) ) ;
 
                 if ( getCurrentFrameSequence().empty() /* && ! sequence.empty() */ )

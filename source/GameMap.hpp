@@ -112,6 +112,9 @@ public:
 
         void parseVisitedRooms ( const std::vector< std::string > & visitedRooms ) ;
 
+        /**
+         * since std::map has no keys() method
+         */
         void getAllRoomFiles ( std::vector< std::string > & whereToCollect ) ;
 
         static void setBuildEveryRoomAtOnce ( bool allAtOnce ) {  buildEveryRoomAtOnce = allAtOnce ;  }

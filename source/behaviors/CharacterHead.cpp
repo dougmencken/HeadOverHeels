@@ -106,18 +106,6 @@ bool CharacterHead::update ()
                         jump ();
                         break;
 
-                case activities::Activity::BeginTeletransportation:
-                        enterTeletransport ();
-                        break;
-                case activities::Activity::EndTeletransportation:
-                        exitTeletransport ();
-                        break;
-
-                case activities::Activity::MetLethalItem:
-                case activities::Activity::Vanishing:
-                        collideWithALethalItem ();
-                        break;
-
                 case activities::Activity::Gliding :
         #if defined( DEBUG_ACTIVITIES ) && DEBUG_ACTIVITIES
                         std::cout << aboutActivity << std::endl ;

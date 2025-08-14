@@ -253,8 +253,6 @@ public :
 
         bool hasShadow () const {  return ! this->shadows.empty() ;  }
 
-        ///virtual void changeFrame ( unsigned int newFrame ) {  AbstractItem::changeFrame( newFrame );  }
-
 private :
 
         void readGraphicsOfItem () ;
