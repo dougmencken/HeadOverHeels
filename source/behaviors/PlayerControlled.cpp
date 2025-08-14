@@ -595,8 +595,7 @@ void PlayerControlled::dropItem ()
                 {
                         FreeItemPtr freeItem( new FreeItem( * character.getDescriptionOfTakenItem(),
                                                             character.getX(), character.getY(),
-                                                            character.getZ() - Room::LayerHeight,
-                                                            "none" ) );
+                                                            character.getZ() - Room::LayerHeight ) );
                         freeItem->setBehaviorOf( character.getBehaviorOfTakenItem() );
 
                         character.getMediator()->getRoom()->addFreeItem( freeItem );
