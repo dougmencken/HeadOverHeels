@@ -16,6 +16,8 @@
 #include "ItemDescriptions.hpp"
 #include "Behavior.hpp"
 
+#include "MayNotBePossible.hpp"
+
 
 Isomot::Isomot( ) :
         view( nilPointer ),
@@ -461,26 +463,48 @@ void Isomot::handleMagicKeys ()
                 allegro::releaseKey( "j" );
         }
 
-        /*** THE FUTURE CHEAT /////////
         // [ option / alt ] & [ shift ] & [ h ] for a hyperspace jump to a random room on the game map
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "h" ) )
         {
-                AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter() ;
-                if ( activeCharacter != nilPointer )
+                AvatarItemPtr activeCharacterInOldRoom = activeRoom->getMediator()->getActiveCharacter() ;
+                if ( activeCharacterInOldRoom != nilPointer )
                 {
                         std::vector< std::string > allRooms ;
                         map.getAllRoomFiles( allRooms );
 
                         const std::string & randomRoom = allRooms[ rand() % allRooms.size() ] ;
-                        std::cout << "hyper-jumping to the lucky map \"" << randomRoom << "\"" << std::endl ;
+                        std::cout << "hyper-jumping to a lucky map \"" << randomRoom << "\"" << std::endl ;
 
-                        activeCharacter->getBehavior()->setCurrentActivity( activities::Activity::BeginTeletransportation );
+                        // move the character to the top of old room
+                        const int topOfRoom = Room::LayerHeight * ( Room::MaxLayers - 1 ) ;
+                        activeCharacterInOldRoom->setZ( topOfRoom );
+                        if ( ! gameManager.charactersFly() )
+                                gameManager.setCharactersFly( true );
 
-                        // ....
+                        Room* newRoom = map.getOrBuildRoomByFile( randomRoom );
+                        assert( newRoom != nilPointer );
+
+                        int entryX = newRoom->getXCenterForItem( activeCharacterInOldRoom->getWidthX() );
+                        int entryY = newRoom->getYCenterForItem( activeCharacterInOldRoom->getWidthY() );
+
+                        // enter that random room
+                        map.changeRoom( randomRoom, "via teleport", false, entryX, entryY, -1 );
+                        activeRoom = map.getActiveRoom() ;
+
+                        AvatarItemPtr activeCharacterInNewRoom = activeRoom->getMediator()->getActiveCharacter() ;
+                        if ( activeCharacterInNewRoom == nilPointer )
+                                throw MayNotBePossible( "character \"" + activeCharacterInOldRoom->getOriginalKind()
+                                                        + "\" can’t hyperjump to a new random room" ) ;
+
+                        // move the character to the top of new room
+                        activeCharacterInNewRoom->setZ( topOfRoom );
+
+                        activeCharacterInNewRoom->getBehavior()->setCurrentActivity( activities::Activity::EndTeletransportation, Motion2D::rest() );
+                        activeCharacterInNewRoom->getBehavior()->update() ;
                 }
 
                 allegro::releaseKey( "h" );
-        } ****/
+        }
 
         // [ option / alt ] & [ shift ] & [ l ] to liberate the current planet,
         //      the planet’s crown appears in the active room,

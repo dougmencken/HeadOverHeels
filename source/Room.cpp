@@ -849,7 +849,8 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
                 || ( character->getY() - character->getWidthY() + 1 < 0 )
                         || ( character->getY() > static_cast< int >( this->getTilesOnY() * getSizeOfOneTile() ) - 1 ) )
         {
-                std::cerr << "coordinates for " << character->whichItemClass() << " are out of room" << std::endl ;
+                std::cerr << "coordinates for " << character->whichItemClass() << " are out of room"
+                                << " \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
         }

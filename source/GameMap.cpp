@@ -403,20 +403,25 @@ Room* GameMap::changeRoom ()
 
 Room* GameMap::changeRoom( const std::string & wayOfExit )
 {
-        Room* previousRoom = this->activeRoom ;
-
-        std::string fileOfPreviousRoom = previousRoom->getNameOfRoomDescriptionFile() ;
-        const ConnectedRooms * previousRoomLinks = previousRoom->getConnections() ;
+        const ConnectedRooms * connections = getActiveRoom()->getConnections() ;
 
         // look for the next room
-        std::string fileOfNextRoom = previousRoomLinks->getConnectedRoomAt( wayOfExit );
-        if ( fileOfNextRoom.empty() )
-        {       // no room there, so continue with the current one
-                return previousRoom ;
-        }
+        const std::string & nextRoom = connections->getConnectedRoomAt( wayOfExit );
+        if ( nextRoom.empty() )
+                // no room there, so continue with the current one
+                return getActiveRoom() ;
 
-        activeRoom->deactivate();
-        this->activeRoom = nilPointer;
+        return changeRoom( nextRoom, Way::exitToEntry( wayOfExit ), true );
+}
+
+Room* GameMap::changeRoom ( const std::string & fileOfNextRoom, const std::string & wayOfEntry,
+                                bool calculateEntryPosition, int entryX, int entryY, int entryZ )
+{
+        Room* previousRoom = getActiveRoom() ;
+        std::string fileOfPreviousRoom = previousRoom->getNameOfRoomDescriptionFile() ;
+
+        this->activeRoom->deactivate() ;
+        this->activeRoom = nilPointer ;
 
         SoundManager::getInstance().stopEverySound ();
 
@@ -435,19 +440,18 @@ Room* GameMap::changeRoom( const std::string & wayOfExit )
         int previousSouthBound = previousRoom->getLimitAt( "south" );
         int previousWestBound = previousRoom->getLimitAt( "west" );
 
-        const std::string exitOrientation( oldItemOfRoamer.getHeading() );
+        const std::string headingOnExit( oldItemOfRoamer.getHeading() );
 
         Room* newRoom = getOrBuildRoomByFile( fileOfNextRoom );
         assert( newRoom != nilPointer );
 
-        std::string wayOfEntry( Way::exitToEntry( wayOfExit ) );
-
-        if ( ! newRoom->isSingleRoom () )
-                wayOfEntry = newRoom->getConnections()->clarifyTheWayOfEntryToABigRoom( wayOfEntry, fileOfPreviousRoom );
+        std::string actualWayOfEntry = newRoom->isSingleRoom ()
+                                                ? wayOfEntry
+                                                : newRoom->getConnections()->clarifyTheWayOfEntryToABigRoom( wayOfEntry, fileOfPreviousRoom );
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
-                        << " from the room " << fileOfPreviousRoom << " at \"" << wayOfExit << "\""
-                        << " to the room " << fileOfNextRoom << " at \"" << wayOfEntry << "\"" << std::endl ;
+                        << " from room " << fileOfPreviousRoom << " to room " << fileOfNextRoom
+                        << ( actualWayOfEntry.find( "via" ) != std::string::npos ? " \"" : " on \"" ) << actualWayOfEntry << "\"" << std::endl ;
 
         // remove the active character from the previous room
         previousRoom->removeCharacterFromRoom( oldItemOfRoamer, true );
@@ -467,43 +471,45 @@ Room* GameMap::changeRoom( const std::string & wayOfExit )
         std::cout << "the exit coordinates from room " << fileOfPreviousRoom << " are"
                         << " x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
 
-        // initially the coordinates of exit from the previous room
-        int entryX = exitX ;
-        int entryY = exitY ;
-        int entryZ = exitZ ;
+        // if not given, the entry coordinates are set to the same as the exit coordinates from the previous room
+        if ( entryX < 0 ) entryX = exitX ;
+        if ( entryY < 0 ) entryY = exitY ;
+        if ( entryZ < Room::FloorZ ) entryZ = exitZ ;
 
-        bool okayToEnter = newRoom->calculateEntryCoordinates (
-                wayOfEntry,
-                descriptionOfRoamer->getWidthX(), descriptionOfRoamer->getWidthY(),
-                previousNorthBound, previousEastBound, previousSouthBound, previousWestBound,
-                &entryX, &entryY, &entryZ
-        ) ;
-        if ( ! okayToEnter )
+        bool okayToEnter = true ;
+        if ( calculateEntryPosition )
+                okayToEnter = newRoom->calculateEntryCoordinates (
+                        actualWayOfEntry,
+                        descriptionOfRoamer->getWidthX(), descriptionOfRoamer->getWidthY(),
+                        previousNorthBound, previousEastBound, previousSouthBound, previousWestBound,
+                        &entryX, &entryY, &entryZ
+                ) ;
+
+        if ( okayToEnter )
+                std::cout << "the entry coordinates to room " << fileOfNextRoom << " are"
+                                << " x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
+        else
                 std::cout << "coordinates"
                                 << " x=" << entryX << " y=" << entryY << " z=" << entryZ
                                 << " are not okay to enter room " << fileOfNextRoom << std::endl ;
-        else
-                std::cout << "the entry coordinates to room " << fileOfNextRoom << " are"
-                                << " x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
 
-        // create character
-
-        if ( wayOfEntry == "via teleport" || wayOfEntry == "via second teleport" )
+        if ( actualWayOfEntry.find( "teleport" ) != std::string::npos )
                 entryZ = Room::FloorZ ;
 
-        // no taken item in new room
-        GameManager::getInstance().emptyHandbag();
+        // lose any taken item
+        GameManager::getInstance().emptyHandbag() ;
 
-        newRoom->placeCharacterInRoom( nameOfRoamer, true, entryX, entryY, entryZ, exitOrientation, "" /*///// wayOfEntry //////*/ );
+        // place the character
+        newRoom->placeCharacterInRoom( nameOfRoamer, true, entryX, entryY, entryZ, headingOnExit );
 
         addRoomAsVisited( newRoom->getNameOfRoomDescriptionFile () ) ;
 
         newRoom->getMediator()->activateCharacterByName( nameOfRoamer );
 
-        activeRoom = newRoom;
-        activeRoom->activate();
+        this->activeRoom = newRoom ;
+        this->activeRoom->activate() ;
 
-        return newRoom;
+        return newRoom ;
 }
 
 Room* GameMap::getRoomThenAddItToRoomsInPlay( const std::string& roomFile, bool markVisited )

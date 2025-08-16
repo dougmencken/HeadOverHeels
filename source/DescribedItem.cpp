@@ -146,17 +146,22 @@ void DescribedItem::readGraphicsOfItem ()
 
         unsigned int framesPerOrientation = howManyFramesInTheCurrentSequence() ;
 
-        if ( ! description.isPartOfDoor() ) {
+        if ( ! description.isPartOfDoor() && getKind().find( "invisible" ) == std::string::npos ) {
                 if ( framesPerOrientation != description.howManyFramesPerOrientation() )
                         throw MayNotBePossible( "the current sequence for item \"" + getKind()
                                                 + "\" has more or less frames (" + util::number2string( framesPerOrientation )
                                                 + ") than the number of frames per each orientation ("
                                                 + util::number2string( description.howManyFramesPerOrientation() ) + ")" );
-        } else
-          if ( framesPerOrientation != 0 ) // images of door lintel and jambs are cut out from the door picture
+        } else if ( description.isPartOfDoor() ) {
+                if ( framesPerOrientation != 0 ) // images of door lintel and jambs are cut out from the door picture
                                            // thus no frames are read from file
                         throw MayNotBePossible( "the number of frames (" + util::number2string( framesPerOrientation )
                                                 + ") for a door part \"" + getKind() + "\" is not zero" );
+        } else if ( getKind().find( "invisible" ) != std::string::npos ) {
+                if ( framesPerOrientation != 0 ) // invisible items have no pictures
+                        throw MayNotBePossible( "the number of frames (" + util::number2string( framesPerOrientation )
+                                                + ") for invisible item \"" + getKind() + "\" is not zero" );
+        }
 
         size_t soManyFrames = ( framesPerOrientation * description.howManyOrientations() ) + description.howManyExtraFrames() ;
 
