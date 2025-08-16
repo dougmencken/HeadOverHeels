@@ -45,7 +45,7 @@ public:
         Room * changeRoom ( const std::string & wayOfExit ) ;
 
         Room * changeRoom ( const std::string & fileOfNextRoom, const std::string & wayOfEntry,
-                                bool calculateEntryPosition, int entryX = -1, int entryY = -1, int entryZ = -2 ) ;
+                                bool calculateEntryPosition, int entryX = -1, int entryY = -1, int entryZ = Room::FloorZ - 1 ) ;
 
         void rebuildRoom ( Room * room ) ;
 

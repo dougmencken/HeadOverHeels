@@ -15,6 +15,7 @@
 #include "AvatarItem.hpp"
 #include "ItemDescriptions.hpp"
 #include "Behavior.hpp"
+#include "Bonus.hpp"
 
 #include "MayNotBePossible.hpp"
 
@@ -374,18 +375,19 @@ void Isomot::handleMagicKeys ()
                 allegro::releaseKey( "w" );
         }
 
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "t" ) )
+        // [ option / alt ] & [ shift ] & [ e ] to toggle playing of room entry tunes
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "e" ) )
         {
                 gameManager.togglePlayMelodyOfScenery ();
 
-                std::cout << "room tunes are " ;
+                std::cout << "room entry tunes are " ;
                 if ( gameManager.playMelodyOfScenery() ) {
                         std::cout << "on" << std::endl ;
                         playTuneForScenery( activeRoom->getScenery () );
                 } else
                         std::cout << "off" << std::endl ;
 
-                allegro::releaseKey( "t" );
+                allegro::releaseKey( "e" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "s" ) )
@@ -504,6 +506,48 @@ void Isomot::handleMagicKeys ()
                 }
 
                 allegro::releaseKey( "h" );
+        }
+
+        // [ option / alt ] & [ shift ] & [ t ] to instantly give characters their tools,
+        //      horn (with box of doughnuts) and handbag
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "t" ) )
+        {
+                AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
+                if ( activeCharacter != nilPointer ) {
+                        AvatarItem & dude = * activeCharacter ;
+
+                        if ( dude.isHead() || dude.isHeadOverHeels() ) {
+                                dude.takeMagicTool( "horn" );
+                                dude.addDonuts( behaviors::Bonus::DonutsPerBox );
+                        }
+                        if ( dude.isHeels() || dude.isHeadOverHeels() ) {
+                                dude.takeMagicTool( "handbag" );
+                        }
+
+                        AvatarItemPtr otherCharacter = AvatarItemPtr( ) ;
+                        Room* roomWithInactiveCharacter = map.getRoomOfInactiveCharacter() ;
+                        if ( roomWithInactiveCharacter != nilPointer )
+                                otherCharacter = roomWithInactiveCharacter->getMediator()->getActiveCharacter() ;
+                        else
+                                otherCharacter = activeRoom->getMediator()->getWaitingCharacter() ;
+
+                        if ( otherCharacter != nilPointer ) {
+                                AvatarItem & otherDude = * otherCharacter ;
+
+                                if ( otherDude.isHeadOverHeels() )
+                                        throw MayNotBePossible( "and how did you get the waiting or inactive composite character?" ) ;
+
+                                if ( otherDude.isHeels() ) {
+                                        otherDude.takeMagicTool( "handbag" );
+                                }
+                                if ( otherDude.isHead() ) {
+                                        otherDude.takeMagicTool( "horn" );
+                                        otherDude.addDonuts( behaviors::Bonus::DonutsPerBox );
+                                }
+                        }
+                }
+
+                allegro::releaseKey( "t" );
         }
 
         // [ option / alt ] & [ shift ] & [ l ] to liberate the current planet,

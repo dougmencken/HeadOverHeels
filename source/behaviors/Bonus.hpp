@@ -36,6 +36,8 @@ public:
 
         virtual bool update () ;
 
+        static const unsigned short DonutsPerBox = 6 ;
+
 protected:
 
         /**

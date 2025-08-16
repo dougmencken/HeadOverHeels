@@ -192,8 +192,7 @@ void Bonus::takeIt( AvatarItem & whoTakes )
         std::cout << "taking bonus \"" << whichItem << "\"" << std::endl ;
 
         if ( whichItem == "donuts" ) {
-                const unsigned short DonutsPerBox = 6 ;
-                whoTakes.addDonuts( DonutsPerBox );
+                whoTakes.addDonuts( Bonus::DonutsPerBox );
         }
         else if ( whichItem == "extra-life" ) {
                 whoTakes.addLives( 2 );

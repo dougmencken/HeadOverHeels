@@ -410,7 +410,8 @@ void AvatarItem::loseLife ()
 
 void AvatarItem::takeMagicTool( const std::string & tool )
 {
-        GameManager::getInstance().getGameInfo().takeMagicTool( tool );
+        if ( ! hasTool( tool ) )
+                GameManager::getInstance().getGameInfo().takeMagicTool( tool );
 }
 
 unsigned short AvatarItem::getDonuts () const
