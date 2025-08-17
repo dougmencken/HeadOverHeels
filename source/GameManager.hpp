@@ -166,7 +166,7 @@ private:
 
         bool isGameRunning () {  return this->gameIsRunning ;  }
 
-        void gameOver () {  this->gameIsRunning = false ;  }
+        void itIsGameOver () {  this->gameIsRunning = false ;  }
 
 public:
 

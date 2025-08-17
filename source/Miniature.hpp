@@ -105,11 +105,13 @@ public :
                 binTheImage() ;
         }
 
-        std::pair< int, int > getOffsetOnScreen () const {  return this->offsetOnScreen ;  }
+        const std::pair< int, int > & getOffsetOnScreen () const {  return this->offsetOnScreen ;  }
 
         void setOffsetOnScreen ( int leftX, int topY ) ;
 
         bool connectMiniature ( Miniature * that, const std::string & where, short gap = 0 ) ;
+
+        static const short the_default_size_of_tile = 3 ;
 
 protected :
 
@@ -132,8 +134,6 @@ private :
         const Room & room ;
 
         unsigned short sizeOfTile ; // 2...16
-
-        static const short the_default_size_of_tile = 3 ;
 
         std::pair < int, int > offsetOnScreen ;
 

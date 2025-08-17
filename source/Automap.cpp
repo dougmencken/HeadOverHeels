@@ -12,7 +12,10 @@
 
 Automap::Automap( )
         : automapImage( new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) )
-        , sizeOfMiniatureTile( 3 )
+        , sizeOfMiniatureTile( Miniature::the_default_size_of_tile )
+        , miniatures()
+        , automapOffsetX( 0 )
+        , automapOffsetY( 0 )
 {
         updateImage() ;
 }
@@ -37,7 +40,29 @@ void Automap::updateImage ()
 
 void Automap::handleKeys ()
 {
-        if (allegro::isKeyPushed( "Pad -" ) || allegro::isKeyPushed( "," ) )
+        if ( allegro::isKeyPushed( "Left" ) ) {
+                this->automapOffsetX -- ;
+                allegro::releaseKey( "Left" );
+        }
+        if ( allegro::isKeyPushed( "Right" ) ) {
+                this->automapOffsetX ++ ;
+                allegro::releaseKey( "Right" );
+        }
+        if ( allegro::isKeyPushed( "Up" ) ) {
+                this->automapOffsetY -- ;
+                allegro::releaseKey( "Up" );
+        }
+        if ( allegro::isKeyPushed( "Down" ) ) {
+                this->automapOffsetY ++ ;
+                allegro::releaseKey( "Down" );
+        }
+        if ( allegro::isKeyPushed( "Space" ) ) {
+                this->automapOffsetX = 0 ;
+                this->automapOffsetY = 0 ;
+                allegro::releaseKey( "Space" );
+        }
+
+        if ( allegro::isKeyPushed( "Pad -" ) || allegro::isKeyPushed( "," ) )
         {
                 if ( this->sizeOfMiniatureTile > 2 ) this->sizeOfMiniatureTile -- ;
 
@@ -50,6 +75,13 @@ void Automap::handleKeys ()
 
                 if ( allegro::isKeyPushed( "." ) ) allegro::releaseKey( "." );
                 if ( allegro::isKeyPushed( "Pad +" ) ) allegro::releaseKey( "Pad +" );
+        }
+        if ( allegro::isKeyPushed( "Pad =" ) || allegro::isKeyPushed( "/" ) )
+        {
+                this->sizeOfMiniatureTile = Miniature::the_default_size_of_tile ;
+
+                if ( allegro::isKeyPushed( "/" ) ) allegro::releaseKey( "/" );
+                if ( allegro::isKeyPushed( "Pad =" ) ) allegro::releaseKey( "Pad =" );
         }
 }
 
@@ -72,20 +104,11 @@ void Automap::drawMiniature ()
                        this->sizeOfMiniatureTile );
 }
 
-void Automap::drawMiniature ( int screenX, int screenY, unsigned int sizeOfTile )
+void Automap::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
 {
         GameMap & map = GameMap::getInstance () ;
         Room * activeRoom = map.getActiveRoom() ;
         if ( activeRoom == nilPointer ) return ;
-
-        // show information about the current room and draw the miniature
-
-        std::ostringstream roomTiles ;
-        roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY() ;
-
-        const AllegroColor & roomColor = Color::byName( activeRoom->getColor() ).toAllegroColor() ;
-        allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), screenX - 12, screenY - 16, roomColor );
-        allegro::textOut( roomTiles.str(), screenX - 12, screenY - 4, roomColor );
 
         bool sameRoom = true ;
         Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
@@ -97,7 +120,20 @@ void Automap::drawMiniature ( int screenX, int screenY, unsigned int sizeOfTile 
                 this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 sameRoom = false ;
         }
-        ofThisRoom->setOffsetOnScreen( screenX, screenY + ( sizeOfTile << 1 ) );
+
+        topY += ( sizeOfTile << 1 ) ;
+
+        // add information about the current room
+        std::ostringstream roomTiles ;
+        roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY() ;
+
+        int textX = this->automapOffsetX + leftX - 12 ;
+        int textY = this->automapOffsetY + topY - 12 ;
+        const AllegroColor & roomColor = Color::byName( activeRoom->getColor() ).toAllegroColor() ;
+        allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), textX, textY, roomColor );
+        allegro::textOut( roomTiles.str(), textX, textY + 12, roomColor );
+
+        ofThisRoom->setOffsetOnScreen( this->automapOffsetX + leftX, this->automapOffsetY + topY + 4 );
 
         const std::vector< std::string > & ways = activeRoom->getConnections()->getConnectedWays () ;
         for ( unsigned int n = 0 ; n < ways.size() ; ++ n ) {
@@ -123,5 +159,6 @@ void Automap::drawMiniature ( int screenX, int screenY, unsigned int sizeOfTile 
                 }
         }
 
+        // draw the miniature
         if ( ofThisRoom != nilPointer ) ofThisRoom->draw() ;
 }

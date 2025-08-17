@@ -24,7 +24,7 @@ Isomot::Isomot( ) :
         view( nilPointer ),
         paused( false ),
         finalRoomBuilt( false ),
-        sizeOfTileForMiniature( 3 ),
+        sizeOfTileForMiniature( Miniature::the_default_size_of_tile ),
         cameraFollowsCharacter( false ),
         drawOnChequerboard( false )
 {
@@ -217,7 +217,7 @@ Picture* Isomot::updateMe ()
                 - cameraDeltaX, - cameraDeltaY
         );
 
-        drawMiniature() ;
+        drawMiniature( 24, 24, this->sizeOfTileForMiniature ) ;
 
         // show text when the infinite lives and inviolability cheats are enabled
 
@@ -241,7 +241,7 @@ Picture* Isomot::updateMe ()
         return this->view ;
 }
 
-void Isomot::drawMiniature ()
+void Isomot::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
 {
         if ( ! GameManager::getInstance().drawRoomMiniatures () ) return ;
 
@@ -249,26 +249,28 @@ void Isomot::drawMiniature ()
         Room * activeRoom = map.getActiveRoom() ;
         if ( activeRoom == nilPointer ) return ;
 
-        // show information about the current room and draw the miniature
-
-        std::ostringstream roomTiles ;
-        roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY();
-
-        const AllegroColor & roomColor = Color::byName( activeRoom->getColor() ).toAllegroColor() ;
-        allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), 12, 8, roomColor );
-        allegro::textOut( roomTiles.str(), 12, 20, roomColor );
-
         bool sameRoom = true ;
         Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
         if ( ofThisRoom == nilPointer ||
                         ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
-                        || ofThisRoom->getSizeOfTile() != this->sizeOfTileForMiniature )
+                        || ofThisRoom->getSizeOfTile() != sizeOfTile )
         {
-                ofThisRoom = new Miniature( *activeRoom, this->sizeOfTileForMiniature );
+                ofThisRoom = new Miniature( *activeRoom, sizeOfTile );
                 this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 sameRoom = false ;
         }
-        ofThisRoom->setOffsetOnScreen( 24, 24 + ( this->sizeOfTileForMiniature << 1 ) );
+        topY += ( sizeOfTile << 1 ) ;
+        /* don’t do it twice */ // ofThisRoom->setOffsetOnScreen( leftX, topY );
+
+        // add information about the current room
+        std::ostringstream roomTiles ;
+        roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY() ;
+
+        const AllegroColor & roomColor = Color::byName( activeRoom->getColor() ).toAllegroColor() ;
+        allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), leftX - 12, topY - 12, roomColor );
+        allegro::textOut( roomTiles.str(), leftX - 12, topY, roomColor );
+
+        ofThisRoom->setOffsetOnScreen( leftX, topY + 4 );
 
         const std::vector< std::string > & ways = activeRoom->getConnections()->getConnectedWays () ;
         for ( unsigned int n = 0 ; n < ways.size() ; ++ n ) {
@@ -294,6 +296,7 @@ void Isomot::drawMiniature ()
                 }
         }
 
+        // draw the miniature
         if ( ofThisRoom != nilPointer ) ofThisRoom->draw() ;
 }
 

@@ -27,6 +27,9 @@ private :
 
         NamedMiniatures miniatures ;
 
+        int automapOffsetX ;
+        int automapOffsetY ;
+
 public :
 
         Automap( ) ;
@@ -39,7 +42,7 @@ public :
 
         void drawMiniature () ;
 
-        void drawMiniature ( int screenX, int screenY, unsigned int sizeOfTile ) ;
+        void drawMiniature ( int leftX, int topY, unsigned int sizeOfTile ) ;
 
         Picture * getImage () {  return this->automapImage ;  }
 

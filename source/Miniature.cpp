@@ -954,8 +954,6 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, i
 
 void Miniature::setOffsetOnScreen ( int leftX, int topY )
 {
-        topY += 4 ; ///// ? why ?
-
         const ConnectedRooms * connections = this->room.getConnections() ;
         if ( connections != nilPointer && ! connections->getConnectedRoomAt( "above" ).empty() )
                 topY += 3 * getSizeOfTile() ;

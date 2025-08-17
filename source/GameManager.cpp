@@ -195,7 +195,7 @@ void GameManager::keyMoment ()
         }
         else if ( getKeyMoments().isGameOver () || getKeyMoments().arrivedInFreedomNotWithAllCrowns () )
         {
-                gameOver() ;
+                itIsGameOver() ;
 
                 gui::CreateGameOverSlide * gameOverScoreAction =
                         new gui::CreateGameOverSlide ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );
@@ -204,7 +204,7 @@ void GameManager::keyMoment ()
         }
         else if ( getKeyMoments().isFinalSuccess () )
         {
-                gameOver() ;
+                itIsGameOver() ;
 
                 gui::ShowCongratulations * congratulationsAction =
                         new gui::ShowCongratulations ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );

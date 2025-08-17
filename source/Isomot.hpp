@@ -70,7 +70,7 @@ private:
 
         void updateFinalRoom () ;
 
-        void drawMiniature () ;
+        void drawMiniature ( int leftX, int topY, unsigned int sizeOfTile ) ;
 
         /**
          * Where to draw isometric view
