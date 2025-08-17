@@ -22,7 +22,7 @@
 #endif
 
 
-Miniature::Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned short singleTileSize )
+Miniature::Miniature( const Room & roomForMiniature, unsigned short singleTileSize )
         : theImage( nilPointer )
         , room( roomForMiniature )
         , sizeOfTile( Miniature::the_default_size_of_tile )
@@ -32,18 +32,7 @@ Miniature::Miniature( const Room & roomForMiniature, int leftX, int topY, unsign
         , westDoorNorthernCorner( Miniature::corner_not_set, Miniature::corner_not_set )
 {
         setSizeOfTile( singleTileSize );
-        setOffsetOnScreen( leftX, topY );
-
-        {
-                const ConnectedRooms * connections = roomForMiniature.getConnections() ;
-                if ( connections == nilPointer ) throw MayNotBePossible( "nil connections for room " + roomForMiniature.getNameOfRoomDescriptionFile() );
-
-                int newOffsetY = this->offsetOnScreen.second + 4 ;
-                if ( ! connections->getConnectedRoomAt( "above" ).empty() )
-                        newOffsetY = this->offsetOnScreen.second + ( 3 * getSizeOfTile() ) ;
-
-                setOffsetOnScreen( this->offsetOnScreen.first, newOffsetY );
-        }
+        setOffsetOnScreen( 0, 0 );
 
 # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
         std::cout << "constructed Miniature( room \"" << roomForMiniature.getNameOfRoomDescriptionFile() << "\", "
@@ -961,6 +950,17 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, i
                         }
                 }
         }
+}
+
+void Miniature::setOffsetOnScreen ( int leftX, int topY )
+{
+        topY += 4 ; ///// ? why ?
+
+        const ConnectedRooms * connections = this->room.getConnections() ;
+        if ( connections != nilPointer && ! connections->getConnectedRoomAt( "above" ).empty() )
+                topY += 3 * getSizeOfTile() ;
+
+        this->offsetOnScreen = std::pair< int, int >( leftX, topY ) ;
 }
 
 bool Miniature::connectMiniature ( Miniature * that, const std::string & where, short gap )

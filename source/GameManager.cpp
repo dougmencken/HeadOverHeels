@@ -18,6 +18,7 @@
 #include "LanguageStrings.hpp"
 #include "Color.hpp"
 #include "PoolOfPictures.hpp"
+#include "Automap.hpp"
 
 #include "CreateGameOverSlide.hpp"
 #include "PresentTheListOfSavedGames.hpp"
@@ -136,6 +137,8 @@ void GameManager::update ()
         {
                 if ( InputManager::getInstance().pauseTyped() )
                         this->pause ();
+                else if ( InputManager::getInstance().automapTyped() )
+                        this->showAutomap ();
                 else
                 {
                         if ( theInfo.getHeadLives () > 0 || theInfo.getHeelsLives () > 0 )
@@ -192,7 +195,7 @@ void GameManager::keyMoment ()
         }
         else if ( getKeyMoments().isGameOver () || getKeyMoments().arrivedInFreedomNotWithAllCrowns () )
         {
-                this->gameIsRunning = false ;
+                gameOver() ;
 
                 gui::CreateGameOverSlide * gameOverScoreAction =
                         new gui::CreateGameOverSlide ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );
@@ -201,7 +204,7 @@ void GameManager::keyMoment ()
         }
         else if ( getKeyMoments().isFinalSuccess () )
         {
-                this->gameIsRunning = false ;
+                gameOver() ;
 
                 gui::ShowCongratulations * congratulationsAction =
                         new gui::ShowCongratulations ( GameMap::getInstance().howManyVisitedRooms(), howManyFreePlanets() );
@@ -344,8 +347,42 @@ void GameManager::resume ()
         refreshAmbianceImages ();
         refreshSceneryBackgrounds ();
 
-        this->gameIsRunning = true ;
         isomot.resumeMe() ; // resume the isometric engine
+
+        this->update ();
+}
+
+void GameManager::showAutomap ()
+{
+        std::cout << "presenting automap" << std::endl ;
+
+        if ( isomot.isPaused () ) return ;
+
+        InputManager::getInstance().releaseKeyFor( "automap" );
+
+        // pause the isometric engine
+        isomot.pauseMe() ;
+
+        const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+
+        Automap automap ;
+        allegro::Pict::setWhereToDraw( automap.getImage()->getAllegroPict() );
+
+        while ( ! InputManager::getInstance().automapTyped() )
+        {
+                automap.handleKeys ();
+                automap.updateImage ();
+                allegro::bitBlit( automap.getImage()->getAllegroPict(), allegro::Pict::theScreen() );
+
+                somn::milliSleep( 40 );
+        }
+
+        InputManager::getInstance().releaseKeyFor( "automap" );
+        std::cout << "back to the game" << std::endl ;
+
+        allegro::Pict::setWhereToDraw( previousWhere );
+
+        isomot.resumeMe() ;
 
         this->update ();
 }

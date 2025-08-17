@@ -119,6 +119,8 @@ headoverheels_SOURCES = main.cpp \
 			Miniature.cpp \
 			Miniature.hpp \
 			NamedMiniatures.hpp \
+			Automap.cpp \
+			Automap.hpp \
 			Isomot.cpp \
 			Isomot.hpp \
 			DescriptionOfItem.cpp \

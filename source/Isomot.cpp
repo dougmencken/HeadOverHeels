@@ -37,8 +37,8 @@ Isomot::~Isomot( )
 
 void Isomot::binView ()
 {
-        delete view ;
-        view = nilPointer ;
+        delete this->view ;
+        this->view = nilPointer ;
 
         chequerboard.clear ();
 }
@@ -56,9 +56,9 @@ void Isomot::prepare ()
 
         // image where the isometric view is drawn
         if ( view == nilPointer )
-                view = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() );
+                this->view = new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() );
         else
-                view->fillWithColor( Color::byName( "orange" ) );
+                this->view->fillWithColor( Color::byName( "orange" ) );
 
         GameMap::getInstance().binRoomsInPlay();
 }
@@ -97,6 +97,8 @@ void Isomot::offInviolability ()
 void Isomot::pauseMe ()
 {
         IF_DEBUG( std::cout << "Isomot::pauseMe ()" << std::endl )
+
+        if ( this->paused ) return ;
 
         Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
         if ( activeRoom != nilPointer )
@@ -262,10 +264,11 @@ void Isomot::drawMiniature ()
                         ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
                         || ofThisRoom->getSizeOfTile() != this->sizeOfTileForMiniature )
         {
-                ofThisRoom = new Miniature( *activeRoom, 24, 24 + ( this->sizeOfTileForMiniature << 1 ), this->sizeOfTileForMiniature );
+                ofThisRoom = new Miniature( *activeRoom, this->sizeOfTileForMiniature );
                 this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 sameRoom = false ;
         }
+        ofThisRoom->setOffsetOnScreen( 24, 24 + ( this->sizeOfTileForMiniature << 1 ) );
 
         const std::vector< std::string > & ways = activeRoom->getConnections()->getConnectedWays () ;
         for ( unsigned int n = 0 ; n < ways.size() ; ++ n ) {

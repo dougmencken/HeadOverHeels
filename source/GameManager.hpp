@@ -54,8 +54,6 @@ public:
 
         static bool isThreadRunning () {  return GameManager::threadIsRunning ;  }
 
-        bool isGameRunning () {  return this->gameIsRunning ;  }
-
         /**
          * The game begins here
          */
@@ -67,6 +65,11 @@ public:
         void pause () ;
 
         void resume () ;
+
+        /**
+         * Present the automap
+         */
+        void showAutomap () ;
 
         /**
          * Eat fish, that is, begin the process to save the game
@@ -160,6 +163,10 @@ private:
         const TheKeyMoments & getKeyMoments () const {  return this->keyMoments ;  }
 
         void resetKeyMoments () {  this->keyMoments.resetAll() ;  }
+
+        bool isGameRunning () {  return this->gameIsRunning ;  }
+
+        void gameOver () {  this->gameIsRunning = false ;  }
 
 public:
 

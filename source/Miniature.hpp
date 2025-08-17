@@ -32,7 +32,7 @@ class Miniature : public Drawable
 
 public :
 
-        Miniature( const Room & roomForMiniature, int leftX = 0, int topY = 0, unsigned short singleTileSize = the_default_size_of_tile ) ;
+        Miniature( const Room & roomForMiniature, unsigned short singleTileSize = the_default_size_of_tile ) ;
 
         virtual ~Miniature( ) {  binTheImage() ;  }
 
@@ -75,11 +75,14 @@ public :
         void setNorthDoorEasternCorner( int x, int y ) {  this->northDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
         void setSouthDoorEasternCorner( int x, int y ) {  this->southDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
 
-        std::pair < unsigned int, unsigned int > getImageSize () const
+        unsigned int getImageWidth () const
         {
-                if ( this->theImage == nilPointer ) return std::pair < unsigned int, unsigned int >( 0, 0 ) ;
+                return ( this->theImage != nilPointer ) ? this->theImage->getWidth() : 0 ;
+        }
 
-                return std::pair < unsigned int, unsigned int >( this->theImage->getWidth(), this->theImage->getHeight() ) ;
+        unsigned int getImageHeight () const
+        {
+                return ( this->theImage != nilPointer ) ? this->theImage->getHeight() : 0 ;
         }
 
         const Room & getRoom () const {  return room ;  }
@@ -104,8 +107,7 @@ public :
 
         std::pair< int, int > getOffsetOnScreen () const {  return this->offsetOnScreen ;  }
 
-        void setOffsetOnScreen ( const std::pair< int, int > & newOffset ) {  this->offsetOnScreen = newOffset ;  }
-        void setOffsetOnScreen ( int offsetX, int offsetY ) {  setOffsetOnScreen( std::pair< int, int >( offsetX, offsetY ) ) ;  }
+        void setOffsetOnScreen ( int leftX, int topY ) ;
 
         bool connectMiniature ( Miniature * that, const std::string & where, short gap = 0 ) ;
 
