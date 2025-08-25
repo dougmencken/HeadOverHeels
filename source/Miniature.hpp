@@ -32,13 +32,13 @@ class Miniature : public Drawable
 
 public :
 
-        Miniature( const Room & roomForMiniature, unsigned short singleTileSize = the_default_size_of_tile ) ;
+        Miniature( const Room & roomForMiniature, unsigned short singleTileSize = the_default_size_of_tile, bool withRoomInfo = false ) ;
 
         virtual ~Miniature( ) {  binTheImage() ;  }
 
         virtual void draw () ;
 
-        void drawVignetteForRoomAboveOrBelow ( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow ) ;
+        void drawVignetteAboveOrBelow ( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow ) ;
 
         void drawEastDoorOnMiniature ( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color ) ;
         void drawSouthDoorOnMiniature ( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color ) ;
@@ -113,6 +113,9 @@ public :
 
         static const short the_default_size_of_tile = 3 ;
 
+        static const int room_info_shift_x = 2 ;
+        static const int room_info_shift_y = 18 ;
+
 protected :
 
         std::pair < unsigned int, unsigned int > calculateSize () const ;
@@ -134,6 +137,9 @@ private :
         const Room & room ;
 
         unsigned short sizeOfTile ; // 2...16
+
+        bool withTextAboutRoom ;
+        bool isThereRoomAbove ;
 
         std::pair < int, int > offsetOnScreen ;
 

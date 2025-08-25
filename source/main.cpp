@@ -182,11 +182,17 @@ int main( int argc, char** argv )
                         GamePreferences::keepThisHeight( true );
                 }
 
-                if ( options.count( "head-room" ) > 0 )
-                        GameManager::getInstance().setHeadRoom( options[ "head-room" ] );
+                if ( options.count( "head-room" ) > 0 ) {
+                        std::string headRoom = options[ "head-room" ] ;
+                        if ( ! util::stringEndsWith( headRoom, ".xml" ) ) headRoom += ".xml" ;
+                        GameManager::getInstance().setHeadRoom( headRoom );
+                }
 
-                if ( options.count( "heels-room" ) > 0 )
-                        GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
+                if ( options.count( "heels-room" ) > 0 ) {
+                        std::string heelsRoom = options[ "heels-room" ] ;
+                        if ( ! util::stringEndsWith( heelsRoom, ".xml" ) ) heelsRoom += ".xml" ;
+                        GameManager::getInstance().setHeelsRoom( heelsRoom );
+                }
 
                 if ( options.count( "build-all-rooms" ) > 0 )
                         GameMap::setBuildEveryRoomAtOnce( true );

@@ -255,22 +255,11 @@ void Isomot::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
                         ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
                         || ofThisRoom->getSizeOfTile() != sizeOfTile )
         {
-                ofThisRoom = new Miniature( *activeRoom, sizeOfTile );
+                ofThisRoom = new Miniature( *activeRoom, sizeOfTile, /* with room info */ true );
+                ofThisRoom->setOffsetOnScreen( leftX, topY );
                 this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 sameRoom = false ;
         }
-        topY += ( sizeOfTile << 1 ) ;
-        /* don’t do it twice */ // ofThisRoom->setOffsetOnScreen( leftX, topY );
-
-        // add information about the current room
-        std::ostringstream roomTiles ;
-        roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY() ;
-
-        const AllegroColor & roomColor = Color::byName( activeRoom->getColor() ).toAllegroColor() ;
-        allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), leftX - 12, topY - 12, roomColor );
-        allegro::textOut( roomTiles.str(), leftX - 12, topY, roomColor );
-
-        ofThisRoom->setOffsetOnScreen( leftX, topY + 4 );
 
         const std::vector< std::string > & ways = activeRoom->getConnections()->getConnectedWays () ;
         for ( unsigned int n = 0 ; n < ways.size() ; ++ n ) {
@@ -279,7 +268,9 @@ void Isomot::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
                 if ( ! roomThere.empty () )
                 {
                         if ( ! sameRoom ) {
-                                std::cout << "hey there’s a miniature connected in " << way << std::endl ;
+                                std::cout << "hey there’s a miniature connected"
+                                                << ( way.find( "via" ) != std::string::npos ? " " : " on " ) << way
+                                                << std::endl ;
 
                                 Miniature * ofThatRoom = new Miniature( * map.getOrBuildRoomByFile( roomThere ) );
                                 if ( ofThisRoom->connectMiniature( ofThatRoom, way ) )

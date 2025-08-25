@@ -22,23 +22,30 @@
 #endif
 
 
-Miniature::Miniature( const Room & roomForMiniature, unsigned short singleTileSize )
+Miniature::Miniature( const Room & roomForMiniature, unsigned short singleTileSize, bool withRoomInfo )
         : theImage( nilPointer )
         , room( roomForMiniature )
         , sizeOfTile( Miniature::the_default_size_of_tile )
+        , withTextAboutRoom( withRoomInfo )
+        , isThereRoomAbove( false )
         , northDoorEasternCorner( Miniature::corner_not_set, Miniature::corner_not_set )
         , eastDoorNorthernCorner( Miniature::corner_not_set, Miniature::corner_not_set )
         , southDoorEasternCorner( Miniature::corner_not_set, Miniature::corner_not_set )
         , westDoorNorthernCorner( Miniature::corner_not_set, Miniature::corner_not_set )
 {
         setSizeOfTile( singleTileSize );
+
+        const ConnectedRooms * connections = this->room.getConnections() ;
+        if ( connections != nilPointer && ! connections->getConnectedRoomAt( "above" ).empty() )
+                this->isThereRoomAbove = true ;
+
         setOffsetOnScreen( 0, 0 );
 
 # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
-        std::cout << "constructed Miniature( room \"" << roomForMiniature.getNameOfRoomDescriptionFile() << "\", "
-                        << "leftX=" << leftX << ", topY=" << topY
-                        << ", singleTileSize=" << singleTileSize << " )"
-                        << std::endl ;
+        std::cout << "constructed Miniature( room \"" << roomForMiniature.getNameOfRoomDescriptionFile() << "\""
+                        << ", singleTileSize=" << singleTileSize
+                        << ", withRoomInfo=" << ( withRoomInfo ? "true" : "false" )
+                        << " )" << std::endl ;
 # endif
 }
 
@@ -50,6 +57,9 @@ std::pair < unsigned int, unsigned int > Miniature::calculateSize () const
 
         unsigned int height = ( tilesX + tilesY ) * this->sizeOfTile ;
         unsigned int width = height << 1 ;
+
+        if ( this->isThereRoomAbove )
+                height += ( getSizeOfTile() << 2 );
 
         return std::pair< unsigned int, unsigned int >( width, height ) ;
 }
@@ -63,6 +73,7 @@ void Miniature::composeImage ()
 
                 std::ostringstream theNameOfMiniature ;
                 theNameOfMiniature << "Miniature of room " << this->room.getNameOfRoomDescriptionFile() << " with " << getSizeOfTile() << " pixel long tiles" ;
+                ///if ( isThereRoomAbove ) theNameOfMiniature << " (there is room above)" ;
                 this->theImage->setName( theNameOfMiniature.str () );
 
         # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
@@ -489,20 +500,67 @@ void Miniature::composeImage ()
 
 void Miniature::draw ()
 {
-        if ( this->theImage == nilPointer ) composeImage () ;
+        if ( this->theImage == nilPointer ) {
+                composeImage () ;
 
 # if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
-        this->theImage->saveAsPNG( ospaths::homePath() );
-        std::string imageName = this->theImage->getName() ;
-        delete this->theImage ;
-        this->theImage = new NamedPicture( ospaths::homePath(), imageName );
+                this->theImage->saveAsPNG( ospaths::homePath() );
+
+                // and reload image from file
+                std::string imageName = this->theImage->getName() ;
+                delete this->theImage ;
+                this->theImage = new NamedPicture( ospaths::homePath(), imageName );
 # endif
+        }
 
         // draw the image of miniature on the screen
-        allegro::drawSprite( this->theImage->getAllegroPict(), this->offsetOnScreen.first, this->offsetOnScreen.second );
+
+        int leftX = this->offsetOnScreen.first ;
+        int topY = this->offsetOnScreen.second ;
+
+        if ( this->withTextAboutRoom && this->theImage->getName().find( "with text about room" ) == std::string::npos ) {
+                unsigned int miniatureWidth = this->theImage->getWidth() + Miniature::room_info_shift_x ;
+
+                const std::string & roomFile = this->room.getNameOfRoomDescriptionFile() ;
+                std::string whichRoom = util::stringEndsWith( roomFile, ".xml" ) ? roomFile.substr( 0, roomFile.length() - 4 ) : roomFile ;
+                unsigned int roomFileStringWidth = whichRoom.length() * /* width of a single letter */ 8 ;
+
+                if ( roomFileStringWidth > miniatureWidth ) miniatureWidth = roomFileStringWidth ;
+
+                NamedPicture * imageWithRoomInfo = new NamedPicture( miniatureWidth, this->theImage->getHeight() + Miniature::room_info_shift_y );
+                imageWithRoomInfo->setName( this->theImage->getName() + " (with text about room)" );
+
+                NamedPicture * justMiniature = this->theImage ;
+                this->theImage = imageWithRoomInfo ;
+
+                const allegro::Pict & previousWhere = allegro::Pict::getWhereToDraw() ;
+                allegro::Pict::setWhereToDraw( imageWithRoomInfo->getAllegroPict() );
+
+                allegro::bitBlit( justMiniature->getAllegroPict(), Miniature::room_info_shift_x, Miniature::room_info_shift_y ) ;
+                delete justMiniature ;
+
+                // add information about the current room
+
+                const AllegroColor & roomColor = Color::byName( this->room.getColor() ).toAllegroColor() ;
+
+                std::ostringstream roomTilesText ;
+                roomTilesText << this->room.getTilesOnX() << "x" << this->room.getTilesOnY() ;
+
+                allegro::textOut( whichRoom, 0, 0, roomColor );
+                allegro::textOut( roomTilesText.str(), 0, 12, roomColor );
+
+                allegro::Pict::setWhereToDraw( previousWhere );
+
+# if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
+                this->theImage->saveAsPNG( ospaths::homePath() );
+# endif
+        }
+
+        allegro::drawSprite( this->theImage->getAllegroPict(), leftX, topY );
 
         const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
-        std::pair< int, int > roomOriginOnScreen( roomOrigin.first + this->offsetOnScreen.first, roomOrigin.second + this->offsetOnScreen.second );
+        std::pair< int, int > roomOriginOnScreen( roomOrigin.first + leftX + ( this->withTextAboutRoom ? Miniature::room_info_shift_x : 0 ),
+                                                  roomOrigin.second + topY + ( this->withTextAboutRoom ? Miniature::room_info_shift_y : 0 ) );
 
         const allegro::Pict & theScreen = allegro::Pict::getWhereToDraw() ;
 
@@ -619,21 +677,21 @@ void Miniature::draw ()
                 aboveY -= getSizeOfTile() << 1 ;
                 belowY += getSizeOfTile() << 1 ;
 
-                drawVignetteForRoomAboveOrBelow( theScreen,
-                                                miniatureMidX + this->offsetOnScreen.first,
+                drawVignetteAboveOrBelow( theScreen,
+                                                miniatureMidX + leftX,
                                                 aboveY + roomOriginOnScreen.second, belowY + roomOriginOnScreen.second,
                                                 Color::byName( "green" ).toAllegroColor(),
                                                 ! roomAbove.empty(), ! roomBelow.empty() );
         }
 }
 
-void Miniature::drawVignetteForRoomAboveOrBelow( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow )
+void Miniature::drawVignetteAboveOrBelow( const allegro::Pict & where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow )
 {
         if ( color.isFullyTransparent () ) return ;
 
         if ( ! drawAbove && ! drawBelow ) return ;
 
-        const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+        const allegro::Pict & previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( where );
 
         const unsigned int linesEven = ( ( getSizeOfTile() + 1 ) >> 1 ) << 1 ;
@@ -954,11 +1012,10 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, std::pair< int, i
 
 void Miniature::setOffsetOnScreen ( int leftX, int topY )
 {
-        const ConnectedRooms * connections = this->room.getConnections() ;
-        if ( connections != nilPointer && ! connections->getConnectedRoomAt( "above" ).empty() )
-                topY += 3 * getSizeOfTile() ;
+        int plusX = 0 ;
+        int plusY = this->isThereRoomAbove ? ( getSizeOfTile() << 2 ) : 0 ;
 
-        this->offsetOnScreen = std::pair< int, int >( leftX, topY ) ;
+        this->offsetOnScreen = std::pair< int, int >( leftX + plusX, topY + plusY ) ;
 }
 
 bool Miniature::connectMiniature ( Miniature * that, const std::string & where, short gap )

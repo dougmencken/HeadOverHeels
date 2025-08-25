@@ -88,10 +88,12 @@ void Automap::handleKeys ()
 void Automap::drawMiniature ()
 {
         Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
-        if ( ofThisRoom == nilPointer ) {
+        if ( ofThisRoom == nilPointer
+                        || ofThisRoom->getSizeOfTile() != this->sizeOfMiniatureTile )
+        {
                 Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
                 if ( activeRoom != nilPointer ) {
-                        ofThisRoom = new Miniature( * activeRoom, this->sizeOfMiniatureTile );
+                        ofThisRoom = new Miniature( * activeRoom, this->sizeOfMiniatureTile, /* with room info */ true );
                         this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 }
         }
@@ -116,24 +118,14 @@ void Automap::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
                         ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
                         || ofThisRoom->getSizeOfTile() != sizeOfTile )
         {
-                ofThisRoom = new Miniature( *activeRoom, sizeOfTile );
+                ofThisRoom = new Miniature( *activeRoom, sizeOfTile, /* with room info */ true );
                 this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 sameRoom = false ;
         }
 
-        topY += ( sizeOfTile << 1 ) ;
-
-        // add information about the current room
-        std::ostringstream roomTiles ;
-        roomTiles << activeRoom->getTilesOnX() << "x" << activeRoom->getTilesOnY() ;
-
-        int textX = this->automapOffsetX + leftX - 12 ;
-        int textY = this->automapOffsetY + topY - 12 ;
-        const AllegroColor & roomColor = Color::byName( activeRoom->getColor() ).toAllegroColor() ;
-        allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), textX, textY, roomColor );
-        allegro::textOut( roomTiles.str(), textX, textY + 12, roomColor );
-
-        ofThisRoom->setOffsetOnScreen( this->automapOffsetX + leftX, this->automapOffsetY + topY + 4 );
+        const std::pair< int, int > & currentOffset = ofThisRoom->getOffsetOnScreen();
+        if ( currentOffset.first != this->automapOffsetX + leftX || currentOffset.second != this->automapOffsetY + topY )
+                ofThisRoom->setOffsetOnScreen( this->automapOffsetX + leftX, this->automapOffsetY + topY );
 
         const std::vector< std::string > & ways = activeRoom->getConnections()->getConnectedWays () ;
         for ( unsigned int n = 0 ; n < ways.size() ; ++ n ) {
@@ -142,7 +134,9 @@ void Automap::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
                 if ( ! roomThere.empty () )
                 {
                         if ( ! sameRoom ) {
-                                std::cout << "hey there’s a miniature connected in " << way << std::endl ;
+                                std::cout << "hey there’s a miniature connected"
+                                                << ( way.find( "via" ) != std::string::npos ? " " : " on " ) << way
+                                                << std::endl ;
 
                                 Miniature * ofThatRoom = new Miniature( * map.getOrBuildRoomByFile( roomThere ) );
                                 if ( ofThisRoom->connectMiniature( ofThatRoom, way ) )
