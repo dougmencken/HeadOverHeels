@@ -153,6 +153,6 @@ void Automap::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
                 }
         }
 
-        // draw the miniature
+        // draw miniature of the current room
         if ( ofThisRoom != nilPointer ) ofThisRoom->draw() ;
 }

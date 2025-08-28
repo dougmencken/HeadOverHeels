@@ -75,6 +75,12 @@ public :
         void setNorthDoorEasternCorner( int x, int y ) {  this->northDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
         void setSouthDoorEasternCorner( int x, int y ) {  this->southDoorEasternCorner = std::pair< int, int >( x, y ) ;  }
 
+        NamedPicture & getImage ()
+        {
+                if ( this->theImage == nilPointer ) composeImage () ;
+                return * this->theImage ;
+        }
+
         unsigned int getImageWidth () const
         {
                 return ( this->theImage != nilPointer ) ? this->theImage->getWidth() : 0 ;
@@ -120,6 +126,8 @@ protected :
 
         std::pair < unsigned int, unsigned int > calculateSize () const ;
 
+        void createImage () ;
+
         void composeImage () ;
 
 private :
@@ -139,6 +147,8 @@ private :
         unsigned short sizeOfTile ; // 2...16
 
         bool withTextAboutRoom ;
+        bool textAboutRoomIsWritten ;
+
         bool isThereRoomAbove ;
 
         std::pair < int, int > offsetOnScreen ;

@@ -14,7 +14,7 @@
 
 #ifdef DEBUG
 #  define DEBUG_MINIATURES      1
-#  define WRITE_MINIATURES      0
+#  define WRITE_MINIATURES      1
 #endif
 
 #if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
@@ -27,6 +27,7 @@ Miniature::Miniature( const Room & roomForMiniature, unsigned short singleTileSi
         , room( roomForMiniature )
         , sizeOfTile( Miniature::the_default_size_of_tile )
         , withTextAboutRoom( withRoomInfo )
+        , textAboutRoomIsWritten( false )
         , isThereRoomAbove( false )
         , northDoorEasternCorner( Miniature::corner_not_set, Miniature::corner_not_set )
         , eastDoorNorthernCorner( Miniature::corner_not_set, Miniature::corner_not_set )
@@ -61,11 +62,22 @@ std::pair < unsigned int, unsigned int > Miniature::calculateSize () const
         if ( this->isThereRoomAbove )
                 height += ( getSizeOfTile() << 2 );
 
+        if ( this->withTextAboutRoom ) {
+                width += Miniature::room_info_shift_x ;
+                height += Miniature::room_info_shift_y ;
+
+                const std::string & roomFile = this->room.getNameOfRoomDescriptionFile() ;
+                std::string whichRoom = util::stringEndsWith( roomFile, ".xml" ) ? roomFile.substr( 0, roomFile.length() - 4 ) : roomFile ;
+                unsigned int roomFileStringWidth = whichRoom.length() * /* width of a single letter */ 8 ;
+
+                if ( roomFileStringWidth > width ) width = roomFileStringWidth ;
+        }
+
         return std::pair< unsigned int, unsigned int >( width, height ) ;
 }
 
 /* protected */
-void Miniature::composeImage ()
+void Miniature::createImage ()
 {
         if ( this->theImage == nilPointer ) {
                 std::pair < unsigned int, unsigned int > dimensions = calculateSize() ;
@@ -73,15 +85,20 @@ void Miniature::composeImage ()
 
                 std::ostringstream theNameOfMiniature ;
                 theNameOfMiniature << "Miniature of room " << this->room.getNameOfRoomDescriptionFile() << " with " << getSizeOfTile() << " pixel long tiles" ;
-                ///if ( isThereRoomAbove ) theNameOfMiniature << " (there is room above)" ;
                 this->theImage->setName( theNameOfMiniature.str () );
 
         # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
-                std::cout << "the picture \"" << this->theImage->getName() << "\""
+                std::cout << "\"" << this->theImage->getName() << "\""
                                 << " has a size of " << this->theImage->getWidth() << " x " << this->theImage->getHeight()
                                 << std::endl ;
         # endif
         }
+}
+
+/* protected */
+void Miniature::composeImage ()
+{
+        if ( this->theImage == nilPointer ) createImage() ;
 
         const unsigned int tilesX = this->room.getTilesOnX() ;
         const unsigned int tilesY = this->room.getTilesOnY() ;
@@ -496,66 +513,57 @@ void Miniature::composeImage ()
                         }
                 }
         }
-}
 
-void Miniature::draw ()
-{
-        if ( this->theImage == nilPointer ) {
-                composeImage () ;
+        // add text about the room
 
-# if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
-                this->theImage->saveAsPNG( ospaths::homePath() );
-
-                // and reload image from file
-                std::string imageName = this->theImage->getName() ;
-                delete this->theImage ;
-                this->theImage = new NamedPicture( ospaths::homePath(), imageName );
-# endif
-        }
-
-        // draw the image of miniature on the screen
-
-        int leftX = this->offsetOnScreen.first ;
-        int topY = this->offsetOnScreen.second ;
-
-        if ( this->withTextAboutRoom && this->theImage->getName().find( "with text about room" ) == std::string::npos ) {
-                unsigned int miniatureWidth = this->theImage->getWidth() + Miniature::room_info_shift_x ;
-
-                const std::string & roomFile = this->room.getNameOfRoomDescriptionFile() ;
-                std::string whichRoom = util::stringEndsWith( roomFile, ".xml" ) ? roomFile.substr( 0, roomFile.length() - 4 ) : roomFile ;
-                unsigned int roomFileStringWidth = whichRoom.length() * /* width of a single letter */ 8 ;
-
-                if ( roomFileStringWidth > miniatureWidth ) miniatureWidth = roomFileStringWidth ;
-
-                NamedPicture * imageWithRoomInfo = new NamedPicture( miniatureWidth, this->theImage->getHeight() + Miniature::room_info_shift_y );
+        if ( this->withTextAboutRoom && ! this->textAboutRoomIsWritten ) {
+                NamedPicture * imageWithRoomInfo = new NamedPicture( this->theImage->getWidth(), this->theImage->getHeight() );
                 imageWithRoomInfo->setName( this->theImage->getName() + " (with text about room)" );
 
                 NamedPicture * justMiniature = this->theImage ;
                 this->theImage = imageWithRoomInfo ;
 
-                const allegro::Pict & previousWhere = allegro::Pict::getWhereToDraw() ;
+                const allegro::Pict & previousWhereToDraw = allegro::Pict::getWhereToDraw() ;
                 allegro::Pict::setWhereToDraw( imageWithRoomInfo->getAllegroPict() );
 
                 allegro::bitBlit( justMiniature->getAllegroPict(), Miniature::room_info_shift_x, Miniature::room_info_shift_y ) ;
                 delete justMiniature ;
 
-                // add information about the current room
+                // write it
 
                 const AllegroColor & roomColor = Color::byName( this->room.getColor() ).toAllegroColor() ;
 
+                const std::string & roomFile = this->room.getNameOfRoomDescriptionFile() ;
+                std::string whichRoom = util::stringEndsWith( roomFile, ".xml" ) ? roomFile.substr( 0, roomFile.length() - 4 ) : roomFile ;
+                allegro::textOut( whichRoom, 0, 0, roomColor );
+
                 std::ostringstream roomTilesText ;
                 roomTilesText << this->room.getTilesOnX() << "x" << this->room.getTilesOnY() ;
-
-                allegro::textOut( whichRoom, 0, 0, roomColor );
                 allegro::textOut( roomTilesText.str(), 0, 12, roomColor );
 
-                allegro::Pict::setWhereToDraw( previousWhere );
+                allegro::Pict::setWhereToDraw( previousWhereToDraw );
 
-# if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
-                this->theImage->saveAsPNG( ospaths::homePath() );
-# endif
+                this->textAboutRoomIsWritten = true ;
         }
 
+# if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
+        this->theImage->saveAsPNG( ospaths::homePath() );
+
+        // and reload image from file
+        std::string imageName = this->theImage->getName() ;
+        delete this->theImage ;
+        this->theImage = new NamedPicture( ospaths::homePath(), imageName );
+# endif
+}
+
+void Miniature::draw ()
+{
+        if ( this->theImage == nilPointer ) composeImage() ;
+
+        int leftX = this->offsetOnScreen.first ;
+        int topY = this->offsetOnScreen.second ;
+
+        // draw the image of miniature on the screen
         allegro::drawSprite( this->theImage->getAllegroPict(), leftX, topY );
 
         const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
