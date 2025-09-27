@@ -138,7 +138,7 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
         if ( picture != nilPointer )
         {
                 // the name of file with graphics for this item
-                description.setNameOfPicturesFile( picture->Attribute( "file" ) );
+                description.setNameOfFramesFile( picture->Attribute( "file" ) );
 
                 // the width and height, in pixels, of a single frame
                 const tinyxml2::XMLElement* frameWidth = picture->FirstChildElement( "width" ) ;
@@ -154,7 +154,7 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
                 const std::string & kindOfItem = description.getKind ();
                 if ( kindOfItem == "invisible-wall-x" || kindOfItem == "invisible-wall-y" )
                 {
-                        description.setNameOfPicturesFile( "" );
+                        description.setNameOfFramesFile( "" );
                         description.setWidthOfFrame( 64 );
                         description.setHeightOfFrame( 115 );
                 }

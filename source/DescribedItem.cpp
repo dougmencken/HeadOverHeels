@@ -5,10 +5,14 @@
 #include "Mediator.hpp"
 #include "PoolOfPictures.hpp"
 
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 #include "NoSuchPictureException.hpp"
 
 #include <sstream>
+
+#ifdef DEBUG
+#  define SAVE_ITEM_FRAMES      0
+#endif
 
 
 void DescribedItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
@@ -137,29 +141,36 @@ void DescribedItem::readGraphicsOfItem ()
 
         const DescriptionOfItem & description = getDescriptionOfItem() ;
 
-        if ( ! description.getNameOfPicturesFile().empty() && ! description.isPartOfDoor() ) {
-                createFrames() ;
+        if ( ! description.isPartOfDoor() && ! description.getNameOfFramesFile().empty() ) {
+                makeFrames() ;
 
                 if ( description.getWidthOfShadow() > 0 && description.getHeightOfShadow() > 0 )
-                        createShadowFrames() ;
+                        makeShadowFrames() ;
         }
+
+        checkFrames() ;
+}
+
+void DescribedItem::checkFrames ()
+{
+        const DescriptionOfItem & description = getDescriptionOfItem() ;
 
         unsigned int framesPerOrientation = howManyFramesInTheCurrentSequence() ;
 
         if ( ! description.isPartOfDoor() && getKind().find( "invisible" ) == std::string::npos ) {
                 if ( framesPerOrientation != description.howManyFramesPerOrientation() )
-                        throw MayNotBePossible( "the current sequence for item \"" + getKind()
+                        throw UnlikelyToHappenException( "the current sequence for item \"" + getKind()
                                                 + "\" has more or less frames (" + util::number2string( framesPerOrientation )
                                                 + ") than the number of frames per each orientation ("
                                                 + util::number2string( description.howManyFramesPerOrientation() ) + ")" );
         } else if ( description.isPartOfDoor() ) {
                 if ( framesPerOrientation != 0 ) // images of door lintel and jambs are cut out from the door picture
                                            // thus no frames are read from file
-                        throw MayNotBePossible( "the number of frames (" + util::number2string( framesPerOrientation )
+                        throw UnlikelyToHappenException( "the number of frames (" + util::number2string( framesPerOrientation )
                                                 + ") for a door part \"" + getKind() + "\" is not zero" );
         } else if ( getKind().find( "invisible" ) != std::string::npos ) {
                 if ( framesPerOrientation != 0 ) // invisible items have no pictures
-                        throw MayNotBePossible( "the number of frames (" + util::number2string( framesPerOrientation )
+                        throw UnlikelyToHappenException( "the number of frames (" + util::number2string( framesPerOrientation )
                                                 + ") for invisible item \"" + getKind() + "\" is not zero" );
         }
 
@@ -191,33 +202,34 @@ NamedPicture & DescribedItem::getNthShadowIn ( const std::string & sequence, uns
         throw NoSuchPictureException( message );
 }
 
-#ifdef DEBUG
-#  define SAVE_ITEM_FRAMES      0
-#endif
-
 /* private */
-void DescribedItem::createFrames ()
+void DescribedItem::makeFrames ()
 {
         const DescriptionOfItem & description = getDescriptionOfItem() ;
 
-        if ( description.getWidthOfFrame() == 0 || description.getHeightOfFrame() == 0 )
-                throw MayNotBePossible( "zero width or height of frame for item \"" + getKind() + "\"" );
-        if ( description.getNameOfPicturesFile().empty() )
-                throw MayNotBePossible( "empty file name with graphics for item \"" + getKind() + "\"" );
+        const unsigned int frameWidth = description.getWidthOfFrame() ;
+        const unsigned int frameHeight = description.getHeightOfFrame() ;
+        const std::string & framesFile = description.getNameOfFramesFile() ;
 
-        PicturePtr picture = PoolOfPictures::getPoolOfPictures().getOrLoadAndGetOrMakeAndGet(
-                                        description.getNameOfPicturesFile(),
-                                                description.getWidthOfFrame(), description.getHeightOfFrame() );
+        if ( frameWidth == 0 || frameHeight == 0 )
+                throw UnlikelyToHappenException( "zero frame width or height for item \"" + getKind() + "\"" );
+        if ( framesFile.empty() )
+                throw UnlikelyToHappenException( "empty file name with frames for item \"" + getKind() + "\"" );
 
-        // decompose the image into frames
+        unsigned int framesAtAll = ( description.howManyFramesPerOrientation() * description.howManyOrientations() ) + description.howManyExtraFrames() ;
+        // where there’s no such image file
+        // then a new image with the dimensions of ( frame width * frames at all, frame height ) and filled with the transparency grid will be made
+        PicturePtr allTheFrames = PoolOfPictures::getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( framesFile, frameWidth * framesAtAll, frameHeight );
+
+        // cut the image into frames
 
         std::vector< Picture* > rawFrames;
 
-        for ( unsigned int y = 0; y < picture->getHeight(); y += description.getHeightOfFrame() ) {
-                for ( unsigned int x = 0; x < picture->getWidth(); x += description.getWidthOfFrame() )
+        for ( unsigned int y = 0; y < allTheFrames->getHeight(); y += frameHeight ) {
+                for ( unsigned int x = 0; x < allTheFrames->getWidth(); x += frameWidth )
                 {
-                        Picture* rawFrame = new Picture( description.getWidthOfFrame(), description.getHeightOfFrame() );
-                        allegro::bitBlit( picture->getAllegroPict(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
+                        Picture* rawFrame = new Picture( frameWidth, frameHeight );
+                        allegro::bitBlit( allTheFrames->getAllegroPict(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
                         rawFrames.push_back( rawFrame );
                 }
         }
@@ -261,28 +273,30 @@ void DescribedItem::createFrames ()
 }
 
 /* private */
-void DescribedItem::createShadowFrames ()
+void DescribedItem::makeShadowFrames ()
 {
         const DescriptionOfItem & description = getDescriptionOfItem() ;
 
-        if ( description.getWidthOfShadow() == 0 || description.getHeightOfShadow() == 0 )
-                throw MayNotBePossible( "zero width or height of shadow for item \"" + getKind() + "\"" );
-        if ( description.getNameOfShadowsFile().empty() )
-                throw MayNotBePossible( "empty file name with graphics of shadow for item \"" + getKind() + "\"" );
+        const unsigned int shadowWidth = description.getWidthOfShadow() ;
+        const unsigned int shadowHeight = description.getHeightOfShadow() ;
+        const std::string & shadowsFile = description.getNameOfShadowsFile() ;
 
-        PicturePtr picture = PoolOfPictures::getPoolOfPictures().getOrLoadAndGetOrMakeAndGet(
-                                        description.getNameOfShadowsFile(),
-                                                description.getWidthOfShadow(), description.getHeightOfShadow() );
+        if ( shadowWidth == 0 || shadowHeight == 0 )
+                throw UnlikelyToHappenException( "zero width or height of shadow for item \"" + getKind() + "\"" );
+        if ( shadowsFile.empty() )
+                throw UnlikelyToHappenException( "empty file name with shadows for item \"" + getKind() + "\"" );
 
-        // decompose the image of shadow into frames
+        PicturePtr allTheShadows = PoolOfPictures::getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( shadowsFile, shadowWidth, shadowHeight );
+
+        // cut the image of shadow into frames
 
         std::vector< Picture* > rawShadows;
 
-        for ( unsigned int y = 0; y < picture->getHeight(); y += description.getHeightOfShadow() ) {
-                for ( unsigned int x = 0; x < picture->getWidth(); x += description.getWidthOfShadow() )
+        for ( unsigned int y = 0; y < allTheShadows->getHeight(); y += shadowHeight ) {
+                for ( unsigned int x = 0; x < allTheShadows->getWidth(); x += shadowWidth )
                 {
-                        Picture* rawShadow = new Picture( description.getWidthOfShadow(), description.getHeightOfShadow() );
-                        allegro::bitBlit( picture->getAllegroPict(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
+                        Picture* rawShadow = new Picture( shadowWidth, shadowHeight );
+                        allegro::bitBlit( allTheShadows->getAllegroPict(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
                         rawShadows.push_back( rawShadow );
                 }
         }

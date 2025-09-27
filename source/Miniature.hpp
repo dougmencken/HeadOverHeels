@@ -20,6 +20,8 @@
 #include <map>
 #include <string>
 
+#include <pthread.h>
+
 class Color ;
 
 
@@ -150,6 +152,7 @@ private :
         bool textAboutRoomIsWritten ;
 
         bool isThereRoomAbove ;
+        bool isThereRoomBelow ;
 
         std::pair < int, int > offsetOnScreen ;
 

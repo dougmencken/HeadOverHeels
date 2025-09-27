@@ -12,7 +12,7 @@
 #include "GamePreferences.hpp"
 #include "ItemDescriptions.hpp"
 #include "Color.hpp"
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 #include "ospaths.hpp"
 
@@ -67,7 +67,7 @@ void GameMap::readMap ( const std::string & fileName )
         tinyxml2::XMLDocument mapXml ;
         tinyxml2::XMLError result = mapXml.LoadFile( fileName.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
-                throw MayNotBePossible( "can’t load file \"" + fileName + "\" with the map of the game" );
+                throw UnlikelyToHappenException( "can’t load file \"" + fileName + "\" with the map of the game" );
 
 # if defined( GENERATE_ROOM_DESCRIPTIONS ) && GENERATE_ROOM_DESCRIPTIONS
 
@@ -218,7 +218,7 @@ void GameMap::beginNewGame( const std::string & desiredHeadRoom, const std::stri
                 }
         }
         else
-                throw MayNotBePossible( "room " + headRoom + " doesn’t exist" );
+                throw UnlikelyToHappenException( "room " + headRoom + " doesn’t exist" );
 
         if ( headRoom != heelsRoom )
         {
@@ -244,7 +244,7 @@ void GameMap::beginNewGame( const std::string & desiredHeadRoom, const std::stri
                         }
                 }
                 else
-                        throw MayNotBePossible( "room " + heelsRoom + " doesn’t exist" );
+                        throw UnlikelyToHappenException( "room " + heelsRoom + " doesn’t exist" );
         }
 
         if ( this->activeRoom != nilPointer ) this->activeRoom->activate() ;

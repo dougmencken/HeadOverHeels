@@ -17,6 +17,10 @@
 #include "NamedPicture.hpp"
 
 
+/**
+ * A storage of pictures that are read from files once and can be used later whenever needed
+ */
+
 class PoolOfPictures
 {
 

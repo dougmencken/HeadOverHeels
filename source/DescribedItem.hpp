@@ -257,15 +257,11 @@ private :
 
         void readGraphicsOfItem () ;
 
-        /**
-         * Extract frames for this item from the picture file
-         */
-        void createFrames () ;
+        void checkFrames () ;
 
-        /**
-         * Extract frames for the shadow of this item from the picture file
-         */
-        void createShadowFrames () ;
+        void makeFrames () ;
+
+        void makeShadowFrames () ;
 
         // returns the various orientations of this item’s graphics
         //

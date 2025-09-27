@@ -29,7 +29,7 @@
 #include "ospaths.hpp"
 #include "sleep.hpp"
 
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 
 GameManager GameManager::instance ;
@@ -168,7 +168,7 @@ void GameManager::update ()
                                                 drawOnScreen( view->getAllegroPict() );
                                         }
                                         else
-                                                throw MayNotBePossible( "GameManager::update doesn’t get a canvas to draw on" ) ;
+                                                throw UnlikelyToHappenException( "GameManager::update doesn’t get a canvas to draw on" ) ;
                                 }
 
                                 somn::milliSleep( 1000 / GameManager::updatesPerSecond );
@@ -412,7 +412,7 @@ void GameManager::saveTheGame ()
 
         if ( room == nilPointer || room->getMediator() == nilPointer
                         || room->getMediator()->getActiveCharacter() == nilPointer )
-                throw MayNotBePossible( "saving the game without room or character" ) ;
+                throw UnlikelyToHappenException( "saving the game without room or character" ) ;
 
         std::cout << "saving the game" << std::endl ;
 

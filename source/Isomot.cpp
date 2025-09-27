@@ -17,7 +17,7 @@
 #include "Behavior.hpp"
 #include "Bonus.hpp"
 
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 
 Isomot::Isomot( ) :
@@ -492,7 +492,7 @@ void Isomot::handleMagicKeys ()
 
                         AvatarItemPtr activeCharacterInNewRoom = activeRoom->getMediator()->getActiveCharacter() ;
                         if ( activeCharacterInNewRoom == nilPointer )
-                                throw MayNotBePossible( "character \"" + activeCharacterInOldRoom->getOriginalKind()
+                                throw UnlikelyToHappenException( "character \"" + activeCharacterInOldRoom->getOriginalKind()
                                                         + "\" can’t hyperjump to a new random room" ) ;
 
                         // move the character to the top of new room
@@ -532,7 +532,7 @@ void Isomot::handleMagicKeys ()
                                 AvatarItem & otherDude = * otherCharacter ;
 
                                 if ( otherDude.isHeadOverHeels() )
-                                        throw MayNotBePossible( "and how did you get the waiting or inactive composite character?" ) ;
+                                        throw UnlikelyToHappenException( "and how did you get the waiting or inactive composite character?" ) ;
 
                                 if ( otherDude.isHeels() ) {
                                         otherDude.takeMagicTool( "handbag" );

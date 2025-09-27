@@ -21,7 +21,7 @@ void WallPiece::calculateOffset()
         else
                 this->offset.first += 1 - tileSize * ( ( this->position + 2 ) << 1 ) ;
 
-        PicturePtr image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( this->nameOfImage );
+        PicturePtr image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( this->nameOfImageFile );
         this->offset.second += ( this->position + 1 ) * tileSize - image->getHeight() - 1 ;
 
         if ( isAlongX() && ( room->hasDoorOn( "east" ) ||
@@ -41,7 +41,7 @@ void WallPiece::calculateOffset()
 
 void WallPiece::draw ()
 {
-        PicturePtr image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( this->nameOfImage );
+        PicturePtr image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( this->nameOfImageFile );
         if ( image != nilPointer )
                 allegro::drawSprite( image->getAllegroPict(), this->offset.first, this->offset.second );
 }

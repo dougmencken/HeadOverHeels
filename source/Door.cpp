@@ -7,7 +7,7 @@
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
 #include "GameManager.hpp"
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 #include "util.hpp"
 #include "ospaths.hpp"
@@ -35,7 +35,7 @@ Door::Door( const std::string & kind, int cx, int cy, int z, const std::string &
 
         // load the graphics of this door
 
-        const std::string & graphicsOfDoor = whatIsLintel.getNameOfPicturesFile () ;
+        const std::string & graphicsOfDoor = whatIsLintel.getNameOfFramesFile() ;
         const std::string & chosenSet = GameManager::getInstance().getChosenGraphicsSet() ;
 
         autouniqueptr< allegro::Pict > pictureOfDoor( allegro::Pict::fromPNGFile(
@@ -44,7 +44,7 @@ Door::Door( const std::string & kind, int cx, int cy, int z, const std::string &
         if ( ! pictureOfDoor->isNotNil() ) {
                 std::string message = "the graphics of door \"" + graphicsOfDoor + "\"" + " from set \"" + chosenSet + "\" is absent" ;
                 std::cerr << message << std::endl ;
-                throw MayNotBePossible( message ) ;
+                throw UnlikelyToHappenException( message ) ;
         }
 
         std::string scenery = kindOfDoor.substr( 0, kindOfDoor.find( "-" ) );
@@ -232,7 +232,7 @@ const FreeItemPtr & Door::getLeftJamb()
         if ( this->leftJamb == nilPointer )
         {
                 if ( this->leftJambImage == nilPointer )
-                        throw MayNotBePossible( "nil image for the left jamb of " + getKind() );
+                        throw UnlikelyToHappenException( "nil image for the left jamb of " + getKind() );
 
                 const DescriptionOfItem & whatIsLeftJamb = * ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~leftjamb" );
 
@@ -294,7 +294,7 @@ const FreeItemPtr & Door::getRightJamb()
         if ( this->rightJamb == nilPointer )
         {
                 if ( this->rightJambImage == nilPointer )
-                        throw MayNotBePossible( "nil image for the right jamb of " + getKind() );
+                        throw UnlikelyToHappenException( "nil image for the right jamb of " + getKind() );
 
                 int oneTile = getMediator()->getRoom()->getSizeOfOneTile ();
 
@@ -356,7 +356,7 @@ const FreeItemPtr & Door::getLintel()
         if ( this->lintel == nilPointer )
         {
                 if ( this->lintelImage == nilPointer )
-                        throw MayNotBePossible( "nil image for the lintel of " + getKind() );
+                        throw UnlikelyToHappenException( "nil image for the lintel of " + getKind() );
 
                 int oneTile = getMediator()->getRoom()->getSizeOfOneTile ();
 

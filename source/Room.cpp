@@ -251,7 +251,7 @@ bool Room::saveAsXML( const std::string & file )
                                 wall->InsertEndChild( wallPosition );
 
                                 tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
-                                wallPicture->SetText( piece->getNameOfImage().c_str () );
+                                wallPicture->SetText( piece->getNameOfImageFile().c_str () );
                                 wall->InsertEndChild( wallPicture );
 
                                 walls->InsertEndChild( wall );
@@ -510,7 +510,7 @@ void Room::convertWallsNearDoors ()
                                 ( northeastDoor != nilPointer && segment->getPosition() == northeastDoor->getCellY() + 2 ) ||
                                 ( northwestDoor != nilPointer && segment->getPosition() == northwestDoor->getCellY() + 2 ) )
                         {
-                                std::string imageName = segment->getNameOfImage() ;
+                                std::string imageName = segment->getNameOfImageFile() ;
                                 imageName = imageName.substr( 0, imageName.find_last_of( "." ) );
 
                                 const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
@@ -537,8 +537,8 @@ void Room::convertWallsNearDoors ()
                                 ( eastnorthDoor != nilPointer && segment->getPosition() == eastnorthDoor->getCellX() + 2 ) ||
                                 ( eastsouthDoor != nilPointer && segment->getPosition() == eastsouthDoor->getCellX() + 2 ) )
                         {
-                                std::string imageName = segment->getNameOfImage() ;
-                                imageName = imageName.substr( 0, imageName.find_last_of( "." ) );
+                                std::string imageFileName = segment->getNameOfImageFile() ;
+                                std::string imageName = imageFileName.substr( 0, imageFileName.find_last_of( "." ) );
 
                                 const DescriptionOfItem* descriptionOfWall = ItemDescriptions::descriptions().getDescriptionByKind( imageName );
                                 if ( descriptionOfWall != nilPointer ) {

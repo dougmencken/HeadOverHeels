@@ -55,7 +55,7 @@ headoverheels_SOURCES = main.cpp \
 			ospaths.cpp \
 			ospaths.hpp \
 			version.hpp \
-			MayNotBePossible.hpp \
+			UnlikelyToHappenException.hpp \
 			NoSuchThingException.hpp \
 			NoSuchPictureException.hpp \
 			NoSuchSlideException.hpp \

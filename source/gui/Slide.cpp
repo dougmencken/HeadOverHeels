@@ -11,7 +11,7 @@
 #include "sleep.hpp"
 #include "ospaths.hpp"
 
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 #include <iostream>
 
@@ -135,7 +135,7 @@ void Slide::refresh ()
 
         if ( Slide::backgroundPicture == nilPointer )
                 // it's impossible
-                throw MayNotBePossible( "Slide::backgroundPicture is nil after Slide::refreshBackground()" ) ;
+                throw UnlikelyToHappenException( "Slide::backgroundPicture is nil after Slide::refreshBackground()" ) ;
 
         if ( Slide::scaledBackgroundPicture == nilPointer )
         {
@@ -213,7 +213,7 @@ void Slide::refresh ()
         }
 
         if ( Slide::scaledBackgroundPicture == nilPointer )
-                throw MayNotBePossible( "Slide::scaledBackgroundPicture is nil at the end of Slide::refresh()" ) ;
+                throw UnlikelyToHappenException( "Slide::scaledBackgroundPicture is nil at the end of Slide::refresh()" ) ;
 }
 
 /* static */

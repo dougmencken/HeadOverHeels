@@ -12,7 +12,7 @@
 #include "CreateLanguageMenu.hpp"
 #include "PresentTheMainMenu.hpp"
 
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 #include "NoSuchSlideException.hpp"
 
 #include "ospaths.hpp"
@@ -82,7 +82,7 @@ void GuiManager::theVeryFirstMenu ()
         if ( firstMenu != nilPointer )
                 firstMenu->doIt ();
         else
-                throw MayNotBePossible( "can't create the first menu" );
+                throw UnlikelyToHappenException( "can't create the first menu" );
 
         loop() ;
 
@@ -107,7 +107,7 @@ void GuiManager::loop ()
                                 std::map< std::string, Slide * >::iterator firstSlide = this->slides.begin () ;
                                 setActiveSlide( firstSlide->second );
                         }
-                        else throw MayNotBePossible( "there’s no active slide" ) ;
+                        else throw UnlikelyToHappenException( "there’s no active slide" ) ;
                 }
 
                 // no te comas la CPU
@@ -163,7 +163,7 @@ void GuiManager::setActiveSlide ( Slide * newSlide )
         if ( newSlide != nilPointer ) {
                 std::cout << "( activating a slide that is not in the map of all slides )" << std::endl ;
                 this->activeSlide = newSlide ;
-                IF_DEBUG( throw MayNotBePossible( "activating a slide that is not in the map of all slides" ) )
+                IF_DEBUG( throw UnlikelyToHappenException( "activating a slide that is not in the map of all slides" ) )
         }
 }
 
@@ -179,7 +179,7 @@ Slide & GuiManager::findOrCreateSlideForAction ( const std::string & nameOfActio
 
                 Slide * newSlide = new Slide() ;
                 if ( newSlide == nilPointer )
-                        throw MayNotBePossible( "can't make a slide for action " + nameOfAction ) ;
+                        throw UnlikelyToHappenException( "can't make a slide for action " + nameOfAction ) ;
 
                 this->slides[ nameOfAction ] = newSlide ;
         }
@@ -194,7 +194,7 @@ SlideWithHeadAndHeels & GuiManager::findOrCreateSlideWithHeadAndHeelsForAction (
 
                 SlideWithHeadAndHeels * newSlide = new SlideWithHeadAndHeels() ;
                 if ( newSlide == nilPointer )
-                        throw MayNotBePossible( "can't make a slide for action " + nameOfAction ) ;
+                        throw UnlikelyToHappenException( "can't make a slide for action " + nameOfAction ) ;
 
                 this->slides[ nameOfAction ] = newSlide ;
         }

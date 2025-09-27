@@ -30,13 +30,13 @@ public:
         /**
          * @param trueXfalseY is this a piece of the wall along X or not
          * @param index where’s this piece on the wall, the number from zero onwards
-         * @param pictureFile the name of picture file
+         * @param imageFile the name of file with graphics
          */
-        WallPiece( bool trueXfalseY, int index, const std::string & pictureFile )
+        WallPiece( bool trueXfalseY, int index, const std::string & imageFile )
                 : Mediated()
                 , alongX( trueXfalseY )
                 , position( index )
-                , nameOfImage( pictureFile ) {}
+                , nameOfImageFile( imageFile ) {}
 
         virtual ~WallPiece( ) {}
 
@@ -64,8 +64,8 @@ private:
 
         std::pair < int, int > offset ;
 
-        // name of the picture file for this part of the wall
-        std::string nameOfImage ;
+        // the name of the image file for this part of the wall
+        std::string nameOfImageFile ;
 
 public:
 
@@ -74,7 +74,7 @@ public:
 
         int getPosition () const {  return this->position ;  }
 
-        const std::string & getNameOfImage () const {  return this->nameOfImage ;  }
+        const std::string & getNameOfImageFile () const {  return this->nameOfImageFile ;  }
 
 } ;
 

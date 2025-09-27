@@ -21,7 +21,7 @@ DescriptionOfItem * DescriptionOfItem::clone ()
 
         theClone->setMortal( this->isMortal () );
 
-        theClone->setNameOfPicturesFile( this->getNameOfPicturesFile () );
+        theClone->setNameOfFramesFile( this->getNameOfFramesFile () );
 
         theClone->setWidthOfFrame( this->getWidthOfFrame () );
         theClone->setHeightOfFrame( this->getHeightOfFrame () );

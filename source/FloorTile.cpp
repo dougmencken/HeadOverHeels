@@ -75,7 +75,7 @@ NamedPicturePtr FloorTile::fullTileToPartialTile( const NamedPicture & fullTile,
 
         AllegroColor transparency = AllegroColor::keyColor() ;
 
-        // decompose image of full tile into image of plane and image of depth
+        // decompose the image of full tile into the image of plane and the image of depth
 
         autouniqueptr< allegro::Pict > planeOfTile( allegro::Pict::newPict( tileWidth, tileHeight - heightOfDepth ) );
         planeOfTile->clearToColor( transparency );

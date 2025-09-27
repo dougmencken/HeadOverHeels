@@ -11,7 +11,7 @@
 #include "Behavior.hpp"
 #include "Timer.hpp"
 #include "Volatile.hpp"
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 #include "sleep.hpp"
 
@@ -31,7 +31,7 @@ Mediator::Mediator( Room * whichRoom )
         , currentlyActiveCharacter( nilPointer )
 {
         if ( whichRoom == nilPointer )
-                throw MayNotBePossible( "can’t be mediator for a nil room" );
+                throw UnlikelyToHappenException( "can’t be mediator for a nil room" );
 
         pthread_mutex_init( &gridItemsMutex, nilPointer );
         pthread_mutex_init( &freeItemsMutex, nilPointer );

@@ -68,8 +68,8 @@ public:
         bool isMortal() const {  return mortal ;  }
         void setMortal( bool newMortal ) {  this->mortal = newMortal ;  }
 
-        const std::string & getNameOfPicturesFile () const {  return this->nameOfPicturesFile ;  }
-        void setNameOfPicturesFile ( const std::string & newPicturesFile ) {  this->nameOfPicturesFile = newPicturesFile ;  }
+        const std::string & getNameOfFramesFile () const {  return this->nameOfFramesFile ;  }
+        void setNameOfFramesFile ( const std::string & newFramesFile ) {  this->nameOfFramesFile = newFramesFile ;  }
 
         unsigned int getWidthOfFrame () const {  return widthOfFrame ;  }
         void setWidthOfFrame( unsigned int newWidthOfFrame ) {  this->widthOfFrame = newWidthOfFrame ;  }
@@ -155,7 +155,7 @@ private:
         /**
          * The file with graphics for this item
          */
-        std::string nameOfPicturesFile ;
+        std::string nameOfFramesFile ;
 
         /**
          * The width and height in pixels of a single frame of the item’s image

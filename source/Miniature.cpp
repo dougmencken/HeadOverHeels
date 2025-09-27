@@ -8,13 +8,13 @@
 #include "ConnectedRooms.hpp"
 #include "Mediator.hpp"
 #include "DescriptionOfItem.hpp"
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 #include <sstream>
 
 #ifdef DEBUG
 #  define DEBUG_MINIATURES      1
-#  define WRITE_MINIATURES      1
+#  define WRITE_MINIATURES      0
 #endif
 
 #if defined( WRITE_MINIATURES ) && WRITE_MINIATURES
@@ -29,6 +29,7 @@ Miniature::Miniature( const Room & roomForMiniature, unsigned short singleTileSi
         , withTextAboutRoom( withRoomInfo )
         , textAboutRoomIsWritten( false )
         , isThereRoomAbove( false )
+        , isThereRoomBelow( false )
         , northDoorEasternCorner( Miniature::corner_not_set, Miniature::corner_not_set )
         , eastDoorNorthernCorner( Miniature::corner_not_set, Miniature::corner_not_set )
         , southDoorEasternCorner( Miniature::corner_not_set, Miniature::corner_not_set )
@@ -37,8 +38,12 @@ Miniature::Miniature( const Room & roomForMiniature, unsigned short singleTileSi
         setSizeOfTile( singleTileSize );
 
         const ConnectedRooms * connections = this->room.getConnections() ;
-        if ( connections != nilPointer && ! connections->getConnectedRoomAt( "above" ).empty() )
-                this->isThereRoomAbove = true ;
+        if ( connections != nilPointer ) {
+                if ( ! connections->getConnectedRoomAt( "above" ).empty() )
+                        this->isThereRoomAbove = true ;
+                if ( ! connections->getConnectedRoomAt( "below" ).empty() )
+                        this->isThereRoomBelow = true ;
+        }
 
         setOffsetOnScreen( 0, 0 );
 
@@ -56,11 +61,11 @@ std::pair < unsigned int, unsigned int > Miniature::calculateSize () const
         const unsigned int tilesX = this->room.getTilesOnX ();
         const unsigned int tilesY = this->room.getTilesOnY ();
 
-        unsigned int height = ( tilesX + tilesY ) * this->sizeOfTile ;
+        unsigned int height = ( tilesX + tilesY ) * getSizeOfTile() ;
         unsigned int width = height << 1 ;
 
-        if ( this->isThereRoomAbove )
-                height += ( getSizeOfTile() << 2 );
+        if ( this->isThereRoomAbove ) height += ( getSizeOfTile() << 2 );
+        if ( this->isThereRoomBelow ) height += ( getSizeOfTile() << 2 );
 
         if ( this->withTextAboutRoom ) {
                 width += Miniature::room_info_shift_x ;
@@ -445,7 +450,7 @@ void Miniature::composeImage ()
         }
 
         const ConnectedRooms * connections = room.getConnections() ;
-        if ( connections == nilPointer ) throw MayNotBePossible( "nil connections for room " + room.getNameOfRoomDescriptionFile() );
+        if ( connections == nilPointer ) throw UnlikelyToHappenException( "nil connections for room " + room.getNameOfRoomDescriptionFile() );
 
         for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
         {
@@ -514,6 +519,34 @@ void Miniature::composeImage ()
                 }
         }
 
+        // show when there’s a room above or below
+
+        if ( this->isThereRoomAbove || this->isThereRoomBelow )
+        {
+                int plusYforAbove = this->isThereRoomAbove ? ( getSizeOfTile() << 2 ) : 0 ;
+                int plusYforBelow = this->isThereRoomBelow ? ( getSizeOfTile() << 2 ) : 0 ;
+
+                NamedPicture * imageWithVignettes = new NamedPicture( this->theImage->getWidth(), this->theImage->getHeight() + plusYforAbove + plusYforBelow );
+                imageWithVignettes->setName( this->theImage->getName() + " (with vignettes)" );
+
+                if ( this->isThereRoomAbove ) {
+                        NamedPicture * justMiniature = this->theImage ;
+                        allegro::bitBlit( justMiniature->getAllegroPict(), imageWithVignettes->getAllegroPict(), 0, plusYforAbove ) ;
+                        this->theImage = imageWithVignettes ;
+                        delete justMiniature ;
+                }
+
+                unsigned int height = ( this->room.getTilesOnX() + this->room.getTilesOnY() ) * getSizeOfTile() ;
+                int miniatureMidX = height ; // = width >> 1 where width = height << 1
+                int aboveY = plusYforAbove - ( getSizeOfTile() << 1 ) + 1 ;
+                int belowY = height + getSizeOfTile() ;
+
+                drawVignetteAboveOrBelow( this->theImage->getAllegroPict(),
+                                                miniatureMidX, aboveY, belowY,
+                                                Color::byName( "green" ).toAllegroColor(),
+                                                this->isThereRoomAbove, this->isThereRoomBelow );
+        }
+
         // add text about the room
 
         if ( this->withTextAboutRoom && ! this->textAboutRoomIsWritten ) {
@@ -568,7 +601,8 @@ void Miniature::draw ()
 
         const std::pair< int, int > & roomOrigin = getOriginOfRoom() ;
         std::pair< int, int > roomOriginOnScreen( roomOrigin.first + leftX + ( this->withTextAboutRoom ? Miniature::room_info_shift_x : 0 ),
-                                                  roomOrigin.second + topY + ( this->withTextAboutRoom ? Miniature::room_info_shift_y : 0 ) );
+                                                  roomOrigin.second + topY + ( this->withTextAboutRoom ? Miniature::room_info_shift_y : 0 )
+                                                                                + ( this->isThereRoomAbove ? ( getSizeOfTile() << 2 ) : 0 ) );
 
         const allegro::Pict & theScreen = allegro::Pict::getWhereToDraw() ;
 
@@ -668,29 +702,6 @@ void Miniature::draw ()
                         character.isActiveCharacter() ? FlickeringColor::flickerWhiteAndTransparent() : FlickeringColor::flickerGray75AndTransparent(),
                         true );
         }
-
-        // show when there’s a room above or below
-
-        const ConnectedRooms * connections = getRoom().getConnections() ;
-        if ( connections == nilPointer ) throw MayNotBePossible( "nil connections for room " + getRoom().getNameOfRoomDescriptionFile() );
-
-        const std::string & roomAbove = connections->getConnectedRoomAt( "above" );
-        const std::string & roomBelow = connections->getConnectedRoomAt( "below" );
-
-        if ( ! roomAbove.empty() || ! roomBelow.empty() )
-        {
-                int miniatureMidX = this->theImage->getWidth() >> 1 ;
-                int aboveY = -2 ;
-                int belowY = this->theImage->getHeight() ;
-                aboveY -= getSizeOfTile() << 1 ;
-                belowY += getSizeOfTile() << 1 ;
-
-                drawVignetteAboveOrBelow( theScreen,
-                                                miniatureMidX + leftX,
-                                                aboveY + roomOriginOnScreen.second, belowY + roomOriginOnScreen.second,
-                                                Color::byName( "green" ).toAllegroColor(),
-                                                ! roomAbove.empty(), ! roomBelow.empty() );
-        }
 }
 
 void Miniature::drawVignetteAboveOrBelow( const allegro::Pict & where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow )
@@ -703,10 +714,11 @@ void Miniature::drawVignetteAboveOrBelow( const allegro::Pict & where, int midX,
         allegro::Pict::setWhereToDraw( where );
 
         const unsigned int linesEven = ( ( getSizeOfTile() + 1 ) >> 1 ) << 1 ;
+        const bool minTileSize = ( getSizeOfTile() == 2 );
 
         if ( drawAbove ) {
                 // draw the middle line
-                allegro::drawLine( midX, aboveY - linesEven + 1, midX, aboveY - ( linesEven << 1 ), color.toAllegroColor() );
+                allegro::drawLine( midX, aboveY - linesEven + 1, midX, aboveY - ( linesEven << 1 ) + ( minTileSize ? 0 : 1 ), color.toAllegroColor() );
 
                 int pos = 0;
                 for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
@@ -718,7 +730,7 @@ void Miniature::drawVignetteAboveOrBelow( const allegro::Pict & where, int midX,
 
         if ( drawBelow ) {
                 // the middle line
-                allegro::drawLine( midX, belowY + linesEven - 1, midX, belowY + ( linesEven << 1 ), color.toAllegroColor() );
+                allegro::drawLine( midX, belowY + linesEven - 1, midX, belowY + ( linesEven << 1 ) - ( minTileSize ? 0 : 1 ), color.toAllegroColor() );
 
                 int pos = 0;
                 for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
@@ -870,7 +882,7 @@ void Miniature::drawIsoSquare( const allegro::Pict & where,
         unsigned int posY = origin.second ;
 
         for ( unsigned int tile = 0 ; tile < tilesX ; ++ tile ) {
-                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
+                for ( unsigned int pix = 0 ; pix < getSizeOfTile() ; ++ pix )
                 {
                         where.drawPixelAt( posX++, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX++, posY++, color.toAllegroColor() );
@@ -880,7 +892,7 @@ void Miniature::drawIsoSquare( const allegro::Pict & where,
         -- posX ; -- posY ;
 
         for ( unsigned int tile = 0 ; tile < tilesY ; ++ tile ) {
-                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
+                for ( unsigned int pix = 0 ; pix < getSizeOfTile() ; ++ pix )
                 {
                         where.drawPixelAt( posX--, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX--, posY++, color.toAllegroColor() );
@@ -891,7 +903,7 @@ void Miniature::drawIsoSquare( const allegro::Pict & where,
         posY = origin.second ;
 
         for ( unsigned int tile = 0 ; tile < tilesY ; ++ tile ) {
-                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
+                for ( unsigned int pix = 0 ; pix < getSizeOfTile() ; ++ pix )
                 {
                         where.drawPixelAt( posX--, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX--, posY++, color.toAllegroColor() );
@@ -901,7 +913,7 @@ void Miniature::drawIsoSquare( const allegro::Pict & where,
         ++ posX ; -- posY ;
 
         for ( unsigned int tile = 0 ; tile < tilesX ; ++ tile ) {
-                for ( unsigned int pix = 0 ; pix < this->sizeOfTile ; ++ pix )
+                for ( unsigned int pix = 0 ; pix < getSizeOfTile() ; ++ pix )
                 {
                         where.drawPixelAt( posX++, posY, color.toAllegroColor() );
                         where.drawPixelAt( posX++, posY++, color.toAllegroColor() );
@@ -1037,14 +1049,14 @@ bool Miniature::connectMiniature ( Miniature * that, const std::string & where, 
                 return false ;
         }
 
-        that->setSizeOfTile( this->sizeOfTile ) ;
+        that->setSizeOfTile( getSizeOfTile() ) ;
 
         /* const ConnectedRooms * connections = this->room.getConnections() ;
         if ( connections == nilPointer ) return false ;
         const std::string & fileOfConnectedRoom = connections->getConnectedRoomAt( where );
         if ( fileOfConnectedRoom.empty () ) return false ; */
 
-        int shiftY = ( this->sizeOfTile << 1 ) + gap ;
+        int shiftY = ( getSizeOfTile() << 1 ) + gap ;
         int shiftX = shiftY << 1 ;
 
         std::pair< int, int > doorCornerOfThis, doorCornerOfThat ;
@@ -1085,7 +1097,7 @@ bool Miniature::connectMiniature ( Miniature * that, const std::string & where, 
         }
         else {
         # if defined( DEBUG_MINIATURES ) && DEBUG_MINIATURES
-                std::cout << ":(( don’t yet know how to connect miniature \"" << this->theImage->getName() << "\" in \"" << where << "\"" << std::endl ;
+                std::cout << ":(( don’t yet know how to connect miniature \"" << this->theImage->getName() << "\" on \"" << where << "\"" << std::endl ;
         # endif
                 return false ;
         }

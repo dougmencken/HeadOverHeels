@@ -7,7 +7,7 @@ DescriptionOfDoor::DescriptionOfDoor( const std::string & scene, const std::stri
         , scenery( scene )
         , doorAt( where )
 {
-        setNameOfPicturesFile( getKind() + ".png" );
+        setNameOfFramesFile( getKind() + ".png" );
         setWidthOfFrame( DescriptionOfDoor::WIDTH_OF_DOOR_IMAGE );
         setHeightOfFrame( DescriptionOfDoor::HEIGHT_OF_DOOR_IMAGE );
         setHowManyOrientations( 1 );

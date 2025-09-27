@@ -3,7 +3,7 @@
 
 #include "GuiManager.hpp"
 #include "SlideWithHeadAndHeels.hpp"
-#include "MayNotBePossible.hpp"
+#include "UnlikelyToHappenException.hpp"
 
 
 namespace gui
@@ -39,7 +39,7 @@ void PresentTheListOfSavedGames::act ()
                 GuiManager::getInstance().changeToSlideFor( getNameOfAction(), true );
         }
         else
-                throw MayNotBePossible( std::string( "there’s nil slide for " ) + ( isForLoading ? "loading a saved game" : "saving a game" ) ) ;
+                throw UnlikelyToHappenException( std::string( "there’s nil slide for " ) + ( isForLoading ? "loading a saved game" : "saving a game" ) ) ;
 }
 
 }
