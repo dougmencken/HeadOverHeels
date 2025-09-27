@@ -1,7 +1,7 @@
 #!/bin/sh
 
 [ -d ./m4 ] || mkdir m4
-[ -f ./configure ] || autoreconf -f -i
+[ -f ./configure -a -f source/Makefile.in ] || autoreconf -f -i
 
 gccVersion="8.2p"
 

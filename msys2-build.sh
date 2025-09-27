@@ -26,7 +26,7 @@ cat /ucrt64/include/allegro5/platform/almngw32.h | grep unistd\.h
 
 # autoreconf creates the configure script from configure.ac and Makefile.in from Makefile.am
 
-[ -f ./configure ] || autoreconf -i -f
+[ -f ./configure -a -f source/Makefile.in ] || autoreconf -f -i
 
 # the following fixes " implicit declaration of function '_spawnv'; did you mean 'spawnv'? "
 # which comes from libtool
