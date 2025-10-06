@@ -3,18 +3,18 @@
 
 
 DescriptionOfDoor::DescriptionOfDoor( const std::string & scene, const std::string & where )
-        : DescriptionOfItem( scene + "-door-" + where ) // door's item kind is %scenery%-door-%at%
+        : DescriptionOfItem( scene + "-door-" + where ) // door item’s kind is %scenery%-door-%on%
         , scenery( scene )
-        , doorAt( where )
+        , doorOn( where )
 {
         setNameOfFramesFile( getKind() + ".png" );
         setWidthOfFrame( DescriptionOfDoor::WIDTH_OF_DOOR_IMAGE );
         setHeightOfFrame( DescriptionOfDoor::HEIGHT_OF_DOOR_IMAGE );
         setHowManyOrientations( 1 );
 
-        this->lintel = cloneAsLintelOfDoor() ;
-        this->leftJamb = cloneAsLeftJambOfDoor() ;
-        this->rightJamb = cloneAsRightJambOfDoor() ;
+        this->lintel = cloneAsLintel() ;
+        this->leftJamb = cloneAsLeftJamb() ;
+        this->rightJamb = cloneAsRightJamb() ;
 }
 
 DescriptionOfDoor::~DescriptionOfDoor ()
@@ -24,7 +24,7 @@ DescriptionOfDoor::~DescriptionOfDoor ()
         delete this->rightJamb ;
 }
 
-DescriptionOfItem * DescriptionOfDoor::cloneAsLintelOfDoor ()
+DescriptionOfItem * DescriptionOfDoor::cloneAsLintel ()
 {
         DescriptionOfItem * descriptionOfLintel = clone() ;
         descriptionOfLintel->setKind( getKind () + "~lintel" );
@@ -32,11 +32,11 @@ DescriptionOfItem * DescriptionOfDoor::cloneAsLintelOfDoor ()
 
         const unsigned int lintelSmallerWidth = 9 ;
         const unsigned int lintelBroaderWidth = 32 ;
-        if ( doorAt == "north" || doorAt == "south" ) {
+        if ( doorOn == "north" || doorOn == "south" ) {
                 descriptionOfLintel->setWidthX( lintelSmallerWidth );
                 descriptionOfLintel->setWidthY( lintelBroaderWidth );
         } else
-           if ( doorAt == "west" || doorAt == "east" ) {
+           if ( doorOn == "west" || doorOn == "east" ) {
                 descriptionOfLintel->setWidthX( lintelBroaderWidth );
                 descriptionOfLintel->setWidthY( lintelSmallerWidth );
         }
@@ -45,7 +45,7 @@ DescriptionOfItem * DescriptionOfDoor::cloneAsLintelOfDoor ()
         return descriptionOfLintel ;
 }
 
-DescriptionOfItem * DescriptionOfDoor::cloneAsLeftJambOfDoor ()
+DescriptionOfItem * DescriptionOfDoor::cloneAsLeftJamb ()
 {
         DescriptionOfItem * descriptionOfLeftJamb = clone() ;
         descriptionOfLeftJamb->setKind( getKind () + "~leftjamb" );
@@ -58,7 +58,7 @@ DescriptionOfItem * DescriptionOfDoor::cloneAsLeftJambOfDoor ()
         return descriptionOfLeftJamb ;
 }
 
-DescriptionOfItem * DescriptionOfDoor::cloneAsRightJambOfDoor ()
+DescriptionOfItem * DescriptionOfDoor::cloneAsRightJamb ()
 {
         DescriptionOfItem * descriptionOfRightJamb = clone() ;
         descriptionOfRightJamb->setKind( getKind () + "~rightjamb" );

@@ -79,16 +79,13 @@ echo "    libpng"
 echo "    Portable Network Graphics reference library which supports almost all PNG features"
 echo
 
-libpng_version="1.6.43"
+libpng_version="1.6.50"
 libpngname=libpng-"$libpng_version"
 libpnginstallpath="${installPath}"/"$libpngname"
 
 cd "${pathToExternal}"/libpng
 if [ ! -d "$libpngname" ]; then
     tar xzf "$libpngname".tar.gz
-    cd "$libpngname"
-    patch -p1 < ../no-known-incorrect-warnings.patch
-    cd ..
 fi
 
 cd "$libpngname"
@@ -138,7 +135,7 @@ echo
 echo "    libogg"
 echo
 
-libogg_version="1.3.3"
+libogg_version="1.3.6"
 liboggname=libogg-"$libogg_version"
 libogginstallpath="${installPath}"/"$liboggname"
 
@@ -185,7 +182,7 @@ echo
 echo "    libvorbis"
 echo
 
-libvorbis_version="1.3.6"
+libvorbis_version="1.3.7"
 libvorbisname=libvorbis-"$libvorbis_version"
 libvorbisinstallpath="${installPath}"/"$libvorbisname"
 
@@ -231,7 +228,7 @@ fi
 #echo "    vorbis-tools"
 #echo
 #
-#vorbistools_version="1.4.0"
+#vorbistools_version="1.4.3"
 #vorbistools_name=vorbis-tools-"$vorbistools_version"
 #vorbistoolsinstallpath="${installPath}"/"$vorbistools_name"
 #
@@ -282,7 +279,7 @@ echo "    tinyxml2"
 echo "    simple, small, C++ XML parser that can be easily integrated into other programs"
 echo
 
-tinyxml2_version="10.0.0"
+tinyxml2_version="11.0.0"
 tinyxml2name=tinyxml2-"$tinyxml2_version"
 tinyxml2installpath="${installPath}"/"$tinyxml2name"
 

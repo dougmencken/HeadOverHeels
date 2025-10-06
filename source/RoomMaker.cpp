@@ -595,17 +595,17 @@ Door* RoomMaker::makeDoor( tinyxml2::XMLElement* item )
         // "z" can't be below the floor, that's less than Room::FloorZ = -1
         int freeZ = ( cellZ > Room::FloorZ ) ? cellZ * Room::LayerHeight : Room::FloorZ ;
 
-        // the door's kind is %scenery%-door-%at%
+        // the door item’s kind is %scenery%-door-%on%
         size_t doorInKind = kind.find( "door-" );
         IF_DEBUG( assert( doorInKind != std::string::npos ) )
 
-        std::string whereIsDoor ;
+        std::string doorOn ;
         if ( doorInKind != std::string::npos )
-                whereIsDoor = kind.substr( doorInKind + 5 );
+                doorOn = kind.substr( doorInKind + 5 );
 
         tinyxml2::XMLElement* where = item->FirstChildElement( "where" );
         if ( where != nilPointer )
-                whereIsDoor = where->FirstChild()->ToText()->Value() ;
+                doorOn = where->FirstChild()->ToText()->Value() ;
 
-        return new Door( kind, cellX, cellY, freeZ, whereIsDoor );
+        return new Door( kind, cellX, cellY, freeZ, doorOn );
 }

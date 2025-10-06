@@ -42,14 +42,11 @@ echo "    libpng"
 echo "    Portable Network Graphics reference library which supports almost all PNG features"
 echo
 
-libpng_version="1.6.43"
+libpng_version="1.6.50"
 
 cd "${pathToExternal}"/libpng
 if [ ! -d libpng-"$libpng_version" ]; then
     tar xzf libpng-"$libpng_version".tar.gz
-    cd libpng-"$libpng_version"
-    patch -p1 < ../no-known-incorrect-warnings.patch
-    cd ..
 fi
 
 cd libpng-"$libpng_version"
@@ -78,7 +75,7 @@ echo
 echo "    libogg"
 echo
 
-libogg_version="1.3.3"
+libogg_version="1.3.6"
 
 cd "${pathToExternal}"/ogg-vorbis
 [ -d libogg-"$libogg_version" ] || tar xzf libogg-"$libogg_version".tar.gz
@@ -106,7 +103,7 @@ echo
 echo "    libvorbis"
 echo
 
-libvorbis_version="1.3.6"
+libvorbis_version="1.3.7"
 
 cd "${pathToExternal}"/ogg-vorbis
 [ -d libvorbis-"$libvorbis_version" ] || tar xzf libvorbis-"$libvorbis_version".tar.gz
@@ -134,7 +131,7 @@ echo
 echo "    vorbis-tools"
 echo
 
-vorbistools_version="1.4.0"
+vorbistools_version="1.4.3"
 
 cd "${pathToExternal}"/ogg-vorbis
 [ -d vorbis-tools-"$vorbistools_version" ] || tar xzf vorbis-tools-"$vorbistools_version".tar.gz
@@ -160,7 +157,7 @@ echo "    tinyxml2"
 echo "    simple, small, C++ XML parser that can be easily integrated into other programs"
 echo
 
-tinyxml2_version="10.0.0"
+tinyxml2_version="11.0.0"
 
 if [ -x "$( command -v cmake )" ]; then
 

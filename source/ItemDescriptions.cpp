@@ -72,7 +72,6 @@ void ItemDescriptions::readDescriptionsFromFile( const std::string & nameOfXMLFi
         }
 
         // and now the descriptions of doors
-        // for a door there are three parts, and thus three times three dimensions
 
         for ( tinyxml2::XMLElement* door = root->FirstChildElement( "door" ) ;
                         door != nilPointer ;

@@ -244,16 +244,16 @@ void DescribedItem::makeFrames ()
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
                 for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
-                        NamedPicture * animationFrame = new NamedPicture( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
-                        animationFrame->setName( description.getKind () + " " +
-                                                        "\"" + orientations[ o ] + "\" orientation " +
-                                                        util::toStringWithOrdinalSuffix( f ) + " frame" );
+                        NamedPicture * frame = new NamedPicture( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        frame->setName( description.getKind () + " "
+                                                + "\"" + orientations[ o ] + "\" orientation "
+                                                + util::toStringWithOrdinalSuffix( f ) + " frame" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        animationFrame->saveAsPNG( ospaths::homePath() );
+                        frame->saveAsPNG( ospaths::homePath() );
                 # endif
 
-                        addFrameTo( orientations[ o ], animationFrame );
+                        addFrameTo( orientations[ o ], frame );
                 }
         }
 
@@ -311,20 +311,20 @@ void DescribedItem::makeShadowFrames ()
         for ( unsigned int o = 0 ; o < howManyOrientations ; o ++ ) {
                 for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
-                        NamedPicture * shadowFrame = new NamedPicture( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
-                        shadowFrame->setName( description.getKind () + " " +
-                                                "\"" + orientations[ o ] + "\" orientation " +
-                                                util::toStringWithOrdinalSuffix( f ) + " shadow" );
+                        NamedPicture * shadow = new NamedPicture( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        shadow->setName( description.getKind () + " "
+                                                + "\"" + orientations[ o ] + "\" orientation "
+                                                + util::toStringWithOrdinalSuffix( f ) + " shadow" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        shadowFrame->saveAsPNG( ospaths::homePath() );
+                        shadow->saveAsPNG( ospaths::homePath() );
                 # endif
 
-                        addFrameOfShadowTo( orientations[ o ], shadowFrame );
+                        addFrameOfShadowTo( orientations[ o ], shadow );
                 }
         }
 
-        // add extra shadow frames, if any
+        // add extra frames of shadow, if any
 
         for ( unsigned int extra = 0 ; extra < description.howManyExtraFrames() ; extra ++ )
         {

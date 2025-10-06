@@ -15,6 +15,8 @@
 
 /**
  * The description of a door
+ *
+ * For a door, the item kind is %scenery%-door-%on% with the image file %scenery%-door-%on%.png
  */
 
 class DescriptionOfDoor : public DescriptionOfItem
@@ -33,16 +35,16 @@ private:
 
         std::string scenery ;
 
-        std::string doorAt ;
+        std::string doorOn ;
 
         // the three parts of door are the lintel, the left jamb and the right jamb
         DescriptionOfItem * lintel ;
         DescriptionOfItem * leftJamb ;
         DescriptionOfItem * rightJamb ;
 
-        DescriptionOfItem * cloneAsLintelOfDoor() ;
-        DescriptionOfItem * cloneAsLeftJambOfDoor() ;
-        DescriptionOfItem * cloneAsRightJambOfDoor() ;
+        DescriptionOfItem * cloneAsLintel() ;
+        DescriptionOfItem * cloneAsLeftJamb() ;
+        DescriptionOfItem * cloneAsRightJamb() ;
 
 public:
 
@@ -52,7 +54,7 @@ public:
 
         const std::string & getScenery () const {  return this->scenery ;  }
 
-        const std::string & getWhereIsDoor () const {  return this->doorAt ;  }
+        const std::string & getWhereOn () const {  return this->doorOn ;  }
 
 } ;
 
