@@ -39,6 +39,11 @@ public:
          */
         void readDescriptionsFromFile ( const std::string & nameOfXMLFile, bool reRead = false ) ;
 
+        void readDescriptions ()
+        {
+                readDescriptionsFromFile( The_File_Full_Of_Item_Descriptions ) ;
+        }
+
         /**
          * @return the description of item or nil if there's no description for such an item
          */

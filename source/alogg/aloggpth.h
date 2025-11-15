@@ -66,7 +66,7 @@ int alogg_is_thread_alive( struct alogg_thread *thread );
 void alogg_join_thread( struct alogg_thread *thread );
 void alogg_stop_thread( struct alogg_thread *thread );
 
-struct alogg_stream *alogg_get_thread_stream();
+struct alogg_stream *alogg_get_thread_stream( alogg_thread *thread ) ;
 
 #ifdef __cplusplus
 }
