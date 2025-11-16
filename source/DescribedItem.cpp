@@ -106,7 +106,7 @@ void DescribedItem::freshProcessedImage()
 
 void DescribedItem::animate ()
 {
-        if ( ! isAnimated () ) return ;
+        if ( ! isAnimated() ) return ;
 
         // is it time to change frame
         if ( this->animationTimer.getValue() > getDescriptionOfItem().getDelayBetweenFrames() )
@@ -123,7 +123,7 @@ void DescribedItem::animate ()
                 else // backwards motion
                 {
                         if ( isAnimationFinished() )
-                                newFrame = firstFrame() + getDescriptionOfItem().howManyFramesPerOrientation() - 1 ;
+                                newFrame = lastFrame() ;
                         else
                                 -- newFrame ;
                 }

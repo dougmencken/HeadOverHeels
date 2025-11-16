@@ -82,6 +82,16 @@ protected :
                 this->animationTimer.go() ;
         }
 
+        virtual unsigned int firstFrame () const
+        {
+                return isAtExtraFrame() ? getCurrentFrame() : AbstractItem::firstFrame() ;
+        }
+
+        virtual unsigned int lastFrame () const
+        {
+                return isAtExtraFrame() ? getCurrentFrame() : AbstractItem::lastFrame() ;
+        }
+
         NamedPicture & getNthShadowIn ( const std::string & sequence, unsigned int n ) const /* throws NoSuchPictureException */ ;
 
         virtual void clearFrames ()

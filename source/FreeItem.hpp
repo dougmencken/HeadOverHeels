@@ -83,6 +83,8 @@ public :
 
         void reverseHeading () ;
 
+        void toTheHeadingFrameSequence () {  setCurrentFrameSequence( getHeading() );  }
+
         virtual void draw () ;
 
         virtual void freshProcessedImage () ;

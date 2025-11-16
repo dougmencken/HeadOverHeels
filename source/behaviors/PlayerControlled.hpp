@@ -58,6 +58,14 @@ public:
 
         virtual void changeActivityDueTo ( const Activity & newActivity, const Motion2D & velocity, const AbstractItemPtr & dueTo ) ;
 
+        virtual void beWaiting ()
+        {
+                FreeItem & item = dynamic_cast< FreeItem & >( getItem () );
+                item.toTheHeadingFrameSequence() ;
+
+                Behavior::beWaiting() ;
+        }
+
         bool isInvulnerableToLethalItems () const ;
 
 protected:

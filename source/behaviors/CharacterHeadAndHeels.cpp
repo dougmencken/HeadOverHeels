@@ -322,6 +322,8 @@ void CharacterHeadAndHeels::blink ()
         }
         // eyes open
         else if ( ( time > 0.250 && time < 0.300 ) || ( time > 0.750 && time < 0.800 ) ) {
+                FreeItem & item = dynamic_cast< FreeItem & >( getItem () );
+                item.toTheHeadingFrameSequence() ;
         }
         // end of blinking
         else if ( time > 0.800 ) {

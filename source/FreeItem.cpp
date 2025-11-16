@@ -220,6 +220,8 @@ void FreeItem::changeHeading( const std::string & where )
         if ( this->heading != where ) {
                 this->heading = where ;
                 setCurrentFrameSequence( this->heading );
+
+                IF_DEBUG( std::cout << getUniqueName() << " is now heading " << getHeading() << std::endl )
         }
 }
 
