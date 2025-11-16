@@ -16,8 +16,6 @@ SpringStool::SpringStool( FreeItem & item, const std::string & behavior )
         : Behavior( item, behavior )
         , folded( false )
         , rebounding( false )
-        , unstrainedFrame( 0 )
-        , foldedFrame( 1 )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
         , reboundTimer( new Timer() )
@@ -41,7 +39,7 @@ bool SpringStool::update ()
                         {
                                 this->folded = true ;
                                 this->rebounding = false ;
-                                springItem.changeFrame( this->foldedFrame );
+                                springItem.changeFrameInTheCurrentSequence( folded_frame );
                         }
                         else
                         {
@@ -64,7 +62,7 @@ bool SpringStool::update ()
                                         // folded no longer
                                         this->folded = false ;
 
-                                        springItem.changeFrame( this->unstrainedFrame );
+                                        springItem.changeFrameInTheCurrentSequence( unstrained_frame );
                                 }
                         }
 

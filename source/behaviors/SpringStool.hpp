@@ -39,11 +39,8 @@ private:
         // does the spring bounce
         bool rebounding ;
 
-        // frame for an undeformed spring stool, usually 0th
-        int unstrainedFrame ;
-
-        // frame for a folded spring stool, usually 1st
-        int foldedFrame ;
+        static const int unstrained_frame = 0 ; // frame for an undeformed spring stool
+        static const int folded_frame = 1 ;     // frame for a folded spring stool
 
         // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;

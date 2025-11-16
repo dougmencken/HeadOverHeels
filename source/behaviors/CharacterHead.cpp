@@ -30,16 +30,16 @@ CharacterHead::CharacterHead( AvatarItem & item )
         }
 
         // fotogramas de caída (falling)
-        fallFrames[ "north" ] =  8 ;
-        fallFrames[ "south" ] = 16 ;
-        fallFrames[ "east" ]  = 12 ;
-        fallFrames[ "west" ]  = 17 ;
+        fallFrames[ "south" ] = std::pair< std::string, unsigned int >( "extra", 0 );
+        fallFrames[ "west" ]  = std::pair< std::string, unsigned int >( "extra", 1 );
+        fallFrames[ "north" ] = std::pair< std::string, unsigned int >( "north", 0 );
+        fallFrames[ "east" ]  = std::pair< std::string, unsigned int >( "east", 0 );
 
         // fotogramas de parpadeo (blinking)
-        blinkFrames[ "north" ] =  8 ;
-        blinkFrames[ "south" ] = 19 ;
-        blinkFrames[ "east" ]  = 12 ;
-        blinkFrames[ "west" ]  = 20 ;
+        blinkFrames[ "south" ] = std::pair< std::string, unsigned int >( "extra", 3 );
+        blinkFrames[ "west" ]  = std::pair< std::string, unsigned int >( "extra", 4 );
+        blinkFrames[ "north" ] = std::pair< std::string, unsigned int >( "north", 0 );
+        blinkFrames[ "east" ]  = std::pair< std::string, unsigned int >( "east", 0 );
 
         // activate chronometers
         speedTimer->go ();
@@ -278,7 +278,8 @@ void CharacterHead::blink ()
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {
                 AvatarItem & avatar = dynamic_cast< AvatarItem & >( getItem () );
-                avatar.changeFrame( blinkFrames[ avatar.getHeading() ] );
+                avatar.setSequenceAndFrame( blinkFrames[ avatar.getHeading() ].first,
+                                                blinkFrames[ avatar.getHeading() ].second );
         }
         // eyes open
         else if ( ( time > 0.250 && time < 0.300 ) || ( time > 0.750 && time < 0.800 ) ) {

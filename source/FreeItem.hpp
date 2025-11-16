@@ -133,6 +133,13 @@ public :
 
         void setPartOfDoor ( bool isPart ) {  partOfDoor = isPart ;  }
 
+        /**
+         * When the carrier moves, the item above it (this item) also moves
+         */
+        const std::string & getCarrier () const {  return this->carrier ;  }
+
+        void setCarrier ( const std::string & itemBelow ) {  this->carrier = itemBelow ;  }
+
         static const int farFarAway = -1024 ;
 
 protected :
@@ -170,12 +177,16 @@ private :
 
         bool partOfDoor ;
 
+        // the unique name of item below this one
+        // the item above the carrier moves along with the moving carrier
+        std::string carrier ;
+
         /**
          * Current frame of this item shaded but not masked yet
          */
         autouniqueptr< NamedPicture > shadedNonmaskedImage ;
 
-};
+} ;
 
 typedef multiptr < FreeItem > FreeItemPtr ;
 

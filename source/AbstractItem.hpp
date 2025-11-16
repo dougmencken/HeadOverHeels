@@ -100,11 +100,12 @@ public :
         }
 
         /**
-         * Changes the current frame. Frames usually change when looping in the sequence of animation.
-         * However there’re some cases when frames are changed manually. As example, in the behavior
-         * of a spring stool the one frame is for resting and the other is for being fold
+         * Changes the shown frame (in the current sequence). Frames usually change when looping in
+         * the sequence of animation. However there’re some cases when frames are changed manually.
+         * As example, in the behavior of a spring stool the one frame is for rest and the other is
+         * for being fold
          */
-        virtual void changeFrame ( unsigned int newFrame ) ;
+        virtual void changeFrameInTheCurrentSequence ( unsigned int newFrame ) ;
 
         virtual void addFrameTo ( const std::string & sequence, NamedPicture *const frame )
         {
@@ -147,10 +148,10 @@ public :
         /**
          * Animate from the first to the last frame, which is by default
          */
-        void doForthMotion ()
+        void doForwardsMotion ()
         {
                 this->backwardsMotion = false ;
-                changeFrame( firstFrame() );
+                changeFrameInTheCurrentSequence( firstFrame() );
         }
 
         /**
@@ -159,7 +160,7 @@ public :
         void doBackwardsMotion ()
         {
                 this->backwardsMotion = true ;
-                changeFrame( lastFrame() );
+                changeFrameInTheCurrentSequence( lastFrame() );
         }
 
         bool isAnimatedBackwards () const {  return this->backwardsMotion ;  }
@@ -178,12 +179,11 @@ public :
 
         void setTransparency ( unsigned char newTransparency ) {  this->transparency = newTransparency ;  }
 
-        /**
-         * When the carrier moves, the item above it (this item) also moves
-         */
-        const std::string & getCarrier () const {  return this->carrier ;  }
-
-        void setCarrier ( const std::string & itemBelow ) {  this->carrier = itemBelow ;  }
+        void setSequenceAndFrame ( const std::string & sequence, unsigned int frame )
+        {
+                setCurrentFrameSequence( sequence );
+                changeFrameInTheCurrentSequence( frame );
+        }
 
 protected :
 
@@ -203,13 +203,13 @@ protected :
         /**
          * The sequence of frames usually changes when the heading, aka angular orientation, changes
          */
-        void setCurrentFrameSequence ( const std::string & sequence ) {  this->currentSequence = sequence ; setupAnimation() ;  }
+        void setCurrentFrameSequence ( const std::string & sequence ) {  this->currentSequence = sequence ; resetAnimation() ;  }
 
         unsigned int getCurrentFrame () const {  return this->currentFrame ;  }
 
-        void setupAnimation ()
+        void resetAnimation ()
         {
-                changeFrame( isAnimatedBackwards() ? lastFrame() : firstFrame() );
+                changeFrameInTheCurrentSequence( isAnimatedBackwards() ? lastFrame() : firstFrame() );
         }
 
         virtual void clearFrames ()
@@ -237,10 +237,6 @@ private :
 
         // the behaviour of item
         autouniqueptr< Behavior > behavior ;
-
-        // the unique name of item below this one
-        // the item above the carrier moves along with the moving carrier
-        std::string carrier ;
 
         // the degree of image’s transparency as a percentage from 0 to 100
         unsigned char transparency ;

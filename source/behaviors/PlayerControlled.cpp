@@ -300,7 +300,8 @@ void PlayerControlled::fall ()
         {
                 if ( activities::Falling::getInstance().fall( *this ) ) {
                         if ( character.canAdvanceTo( 0, 0, -1 ) /* there’s nothing below the character */ )
-                                character.changeFrame( fallFrames[ character.getHeading () ] );
+                                character.setSequenceAndFrame( fallFrames[ character.getHeading() ].first,
+                                                                fallFrames[ character.getHeading() ].second );
                 }
                 else if ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() )
                         beWaiting() ;
@@ -339,7 +340,8 @@ void PlayerControlled::glide ()
                 setCurrentActivity( priorActivity, priorMotion );
 
                 // may turn while gliding so update the frame of falling
-                character.changeFrame( fallFrames[ character.getHeading() ] );
+                character.setSequenceAndFrame( fallFrames[ character.getHeading() ].first,
+                                                fallFrames[ character.getHeading() ].second );
 
                 speedTimer->go() ;
         }

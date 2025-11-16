@@ -33,7 +33,7 @@ void DescribedItem::metamorphInto( const std::string & newKind, const std::strin
 
         readGraphicsOfItem ();
 
-        setupAnimation () ;
+        resetAnimation () ;
 }
 
 bool DescribedItem::canAdvanceTo( int dx, int dy, int dz )
@@ -104,7 +104,7 @@ void DescribedItem::freshProcessedImage()
         this->processedImage->setName( "processed " + getCurrentRawImage().getName() );
 }
 
-void DescribedItem::animate()
+void DescribedItem::animate ()
 {
         if ( ! isAnimated () ) return ;
 
@@ -128,7 +128,7 @@ void DescribedItem::animate()
                                 -- newFrame ;
                 }
 
-                changeFrame( newFrame );
+                changeFrameInTheCurrentSequence( newFrame );
 
                 this->animationTimer.go() ; // reset the timer
         }

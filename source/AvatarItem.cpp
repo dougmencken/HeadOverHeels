@@ -377,9 +377,7 @@ void AvatarItem::wait ()
         if ( activity != activities::Activity::BeginTeletransportation && activity != activities::Activity::EndTeletransportation
                         && activity != activities::Activity::MetLethalItem && activity != activities::Activity::Vanishing )
         {
-                // set waiting frame by angular orientation
-                changeFrame( firstFrame () );
-
+                resetAnimation() ;
                 getBehavior()->beWaiting() ;
         }
 }

@@ -25,6 +25,7 @@ FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, 
         , wantMask ( tritrue )
         , frozen ( false )
         , partOfDoor ( false )
+        , carrier( "" )
         , shadedNonmaskedImage( nilPointer )
 {
         changeHeading( where );
@@ -43,6 +44,7 @@ FreeItem::FreeItem( const FreeItem & freeItem )
         , wantMask( freeItem.wantMask )
         , frozen( freeItem.frozen )
         , partOfDoor( freeItem.partOfDoor )
+        , carrier( freeItem.carrier )
         , shadedNonmaskedImage( ( freeItem.shadedNonmaskedImage != nilPointer ) ? new NamedPicture( * freeItem.shadedNonmaskedImage ) : nilPointer )
 {}
 
@@ -218,7 +220,6 @@ void FreeItem::changeHeading( const std::string & where )
         if ( this->heading != where ) {
                 this->heading = where ;
                 setCurrentFrameSequence( this->heading );
-                changeFrame( firstFrame() );
         }
 }
 

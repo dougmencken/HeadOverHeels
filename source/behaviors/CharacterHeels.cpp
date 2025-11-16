@@ -31,10 +31,10 @@ CharacterHeels::CharacterHeels( AvatarItem & item )
         }
 
         // fotogramas de caída (falling)
-        fallFrames[ "north" ] =  8 ;
-        fallFrames[ "south" ] =  0 ;
-        fallFrames[ "east" ]  = 12 ;
-        fallFrames[ "west" ]  =  4 ;
+        fallFrames[ "south" ] = std::pair< std::string, unsigned int >( "south", 0 );
+        fallFrames[ "west" ]  = std::pair< std::string, unsigned int >( "west", 0 );
+        fallFrames[ "north" ] = std::pair< std::string, unsigned int >( "north", 0 );
+        fallFrames[ "east" ]  = std::pair< std::string, unsigned int >( "east", 0 );
 
         // activate chronometers
         speedTimer->go ();

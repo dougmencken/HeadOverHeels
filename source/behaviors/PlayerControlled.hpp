@@ -162,10 +162,12 @@ protected:
         unsigned int quickSteps ;
 
         // the frames of falling, one for each of north south west east
-        std::map < std::string, unsigned int > fallFrames ;
+        std::map < std::string /* heading */,
+                        std::pair< std::string /* sequence */, unsigned int /* frame */ > > fallFrames ;
 
         // the frames of blinking, may be empty if the character doesn’t blink
-        std::map < std::string, unsigned int > blinkFrames ;
+        std::map < std::string /* heading */,
+                        std::pair< std::string /* sequence */, unsigned int /* frame */ > > blinkFrames ;
 
         // timer for the motion speed
         autouniqueptr < Timer > speedTimer ;

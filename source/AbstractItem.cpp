@@ -21,7 +21,6 @@ AbstractItem::AbstractItem( )
         , currentFrame( firstFrame() )
         , backwardsMotion( false )
         , behavior( nilPointer )
-        , carrier( "" )
         , transparency( 0 )
 {}
 
@@ -31,7 +30,6 @@ AbstractItem::AbstractItem( const AbstractItem & itemToCopy )
         , currentFrame( itemToCopy.currentFrame )
         , backwardsMotion( itemToCopy.backwardsMotion )
         , behavior( nilPointer )
-        , carrier( itemToCopy.carrier )
         , transparency( itemToCopy.transparency )
 {
         IF_DEBUG( std::cout << "copying item \"" << itemToCopy.uniqueName << "\"" << std::endl )
@@ -63,14 +61,12 @@ NamedPicture & AbstractItem::getNthFrameIn ( const std::string & sequence, unsig
         throw NoSuchPictureException( message );
 }
 
-void AbstractItem::changeFrame( unsigned int newFrame )
+void AbstractItem::changeFrameInTheCurrentSequence( unsigned int newFrame )
 {
         if ( newFrame == this->currentFrame ) return ;
 
-        if ( newFrame < howManyFramesInTheCurrentSequence() )
-        {
+        if ( newFrame < howManyFramesInTheCurrentSequence() ) {
                 this->currentFrame = newFrame ;
-
                 updateImage() ;
         }
 }
