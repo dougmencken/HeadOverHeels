@@ -526,6 +526,9 @@ void AvatarItem::saveGame ()
 
 void AvatarItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
 {
+        // the new kind may not have extra frames, like for blinking
+        if ( isAtExtraFrame() ) toTheHeadingFrameSequence() ;
+
         // when the composite character morphs into bubbles, it’s actually double bubbles
         bool doubleBubbles = ( isHeadOverHeels() && newKind == "bubbles" );
         DescribedItem::metamorphInto( doubleBubbles ? "double-bubbles" : newKind, initiatedBy );

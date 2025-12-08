@@ -82,6 +82,8 @@ protected :
                 this->animationTimer.go() ;
         }
 
+        bool isAtExtraFrame () const {  return getCurrentFrameSequence() == "extra" ;  }
+
         virtual unsigned int firstFrame () const
         {
                 return isAtExtraFrame() ? getCurrentFrame() : AbstractItem::firstFrame() ;
@@ -300,8 +302,6 @@ private :
         {
                 this->shadows[ sequence ].push_back( NamedPicturePtr( frame ) ) ;
         }
-
-        bool isAtExtraFrame () const {  return getCurrentFrameSequence() == "extra" ;  }
 
 } ;
 
