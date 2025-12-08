@@ -1020,8 +1020,8 @@ static void peekKey( int scancode, bool repeat, ALLEGRO_KEYBOARD_STATE* ks )
                 }
                 else if ( repeat )
                 {
-                        if ( ( firstRepeat && keyRepeatTimer->getValue() > firstRepeatDelay ) ||
-                                ( ! firstRepeat && keyRepeatTimer->getValue() > nextRepeatDelay ) )
+                        if ( ( firstRepeat && keyRepeatTimer->get() > firstRepeatDelay ) ||
+                                ( ! firstRepeat && keyRepeatTimer->get() > nextRepeatDelay ) )
                         {
                                 addScancode( scancode );
                                 keyRepeatTimer->go() ;
@@ -1422,7 +1422,7 @@ void bye()
 
 void update()
 {
-        if ( redrawTimer->getValue() > redrawDelay )
+        if ( redrawTimer->get() > redrawDelay )
         {
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
                 al_flip_display() ;

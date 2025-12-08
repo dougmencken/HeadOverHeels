@@ -219,12 +219,12 @@
             <class>griditem</class>
         </item>
         <item x="6" y="3" z="0">
-            <kind>bighead-robot</kind>
+            <kind>bigheaded-dalek</kind>
             <behavior>behavior of random patroling in four primary directions</behavior>
             <class>freeitem</class>
         </item>
         <item x="3" y="6" z="0">
-            <kind>bighead-robot</kind>
+            <kind>bigheaded-dalek</kind>
             <behavior>behavior of random patroling in four primary directions</behavior>
             <class>freeitem</class>
         </item>

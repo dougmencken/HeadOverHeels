@@ -14,7 +14,7 @@ void Timer::go()
         started = true ;
 }
 
-double Timer::getValue()
+double Timer::get()
 {
         if ( ! this->started ) {
                 go() ;

@@ -147,9 +147,9 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
         // mortal or harmless
         bool isMortal = false ;
 
-        const tinyxml2::XMLElement* mortal = element.FirstChildElement( "mortal" ) ;
-        if ( mortal != nilPointer )
-                if ( std::string( mortal->FirstChild()->ToText()->Value() ) == "yes" )
+        const tinyxml2::XMLElement* mortality = element.FirstChildElement( "is-mortal" ) ;
+        if ( mortality != nilPointer )
+                if ( std::string( mortality->FirstChild()->ToText()->Value() ) == "yes" )
                         isMortal = true ;
 
         description.setMortal( isMortal );

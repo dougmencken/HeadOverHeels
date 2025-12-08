@@ -315,7 +315,7 @@ void Slide::scrollHorizontally( const Slide & oldSlide, const Slide & newSlide, 
                         allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
                                                 newPicture.getWidth() - x, 0, 0, 0, x, GamePreferences::getScreenHeight() );
 
-                if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
+                if ( drawTimer->get() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
                 {
                         allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
@@ -350,7 +350,7 @@ void Slide::wipeHorizontally( const Slide & oldSlide, const Slide & newSlide, bo
                         allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(),
                                                 0, 0, 0, 0, x, GamePreferences::getScreenHeight() );
 
-                if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
+                if ( drawTimer->get() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
                 {
                         allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
@@ -391,7 +391,7 @@ void Slide::barWipeHorizontally( const Slide & oldSlide, const Slide & newSlide,
                                                         pieceX, 0, pieceX, 0, x, GamePreferences::getScreenHeight() );
                 }
 
-                if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
+                if ( drawTimer->get() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
                 {
                         allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
@@ -450,7 +450,7 @@ void Slide::randomPixelFade( bool fadeIn, const Slide & slide, const Color & col
                         if ( yet % chunk == 0 ) // after painting a chunk
                                 somn::milliSleep( 1 ); // wait a millisecond
 
-                        if ( drawTimer->getValue() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
+                        if ( drawTimer->get() > 0.02 ) // every 20 milliseconds, that’s 1/50 of a second
                         {
                                 allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                                 allegro::update ();

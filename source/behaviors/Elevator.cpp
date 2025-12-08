@@ -35,7 +35,7 @@ bool Elevator::update ()
                         break;
 
                 case activities::ActivityOfElevator::GoingUp :
-                        if ( speedTimer->getValue() > elevatorItem.getSpeed() )
+                        if ( speedTimer->get() > elevatorItem.getSpeed() )
                         {
                                 activities::Moving::getInstance().move( *this, false );
 
@@ -53,7 +53,7 @@ bool Elevator::update ()
                         break;
 
                 case activities::ActivityOfElevator::GoingDown :
-                        if ( speedTimer->getValue() > elevatorItem.getSpeed() )
+                        if ( speedTimer->get() > elevatorItem.getSpeed() )
                         {
                                 activities::Moving::getInstance().move( *this, false );
 
@@ -72,7 +72,7 @@ bool Elevator::update ()
 
                 // stop elevator for a moment when it reaches the lowest point
                 case activities::ActivityOfElevator::ReachedBottom :
-                        if ( waitingTimer->getValue() >= Delay_Before_Reversing ) {
+                        if ( waitingTimer->get() >= Delay_Before_Reversing ) {
                                 this->lastActivity = activities::ActivityOfElevator::GoingUp ;
                                 setActivityOfElevator( this->lastActivity );
                         }
@@ -82,7 +82,7 @@ bool Elevator::update ()
 
                 // stop elevator for a moment when it reaches the highest point
                 case activities::ActivityOfElevator::ReachedTop :
-                        if ( waitingTimer->getValue() >= Delay_Before_Reversing ) {
+                        if ( waitingTimer->get() >= Delay_Before_Reversing ) {
                                 this->lastActivity = activities::ActivityOfElevator::GoingDown ;
                                 setActivityOfElevator( this->lastActivity );
                         }

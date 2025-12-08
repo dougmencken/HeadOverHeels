@@ -63,7 +63,7 @@ bool Detector::update ()
                 case activities::Activity::Moving:
                         if ( ! detectorItem.isFrozen() )
                         {
-                                if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() ) {
+                                if ( /* is it time to move */ speedTimer->get() > detectorItem.getSpeed() ) {
                                         if ( ! activities::Moving::getInstance().move( *this, true ) )
                                                 // to waiting when can’t move
                                                 beWaiting() ;
@@ -76,7 +76,7 @@ bool Detector::update ()
                         break;
 
                 case activities::Activity::Pushed:
-                        if ( /* is it time to move */ speedTimer->getValue() > detectorItem.getSpeed() )
+                        if ( /* is it time to move */ speedTimer->get() > detectorItem.getSpeed() )
                         {
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
                                         beWaiting() ;
@@ -96,7 +96,7 @@ bool Detector::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > detectorItem.getWeight() )
+                        else if ( fallTimer->get() > detectorItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( * this ) )
                                         beWaiting() ;

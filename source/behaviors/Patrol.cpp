@@ -39,10 +39,10 @@ bool Patrol::update ()
                 case activities::Activity::Moving:
                         if ( ! patrolItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue () > patrolItem.getSpeed () )
+                                if ( speedTimer->get() > patrolItem.getSpeed() )
                                 {
                                         // ¿ cambio de dirección ?
-                                        if ( patrolTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
+                                        if ( patrolTimer->get() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
                                         {
                                                 randomlyChangeOrientation ();
                                                 patrolTimer->go() ;
@@ -84,7 +84,7 @@ bool Patrol::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > patrolItem.getWeight() )
+                        else if ( fallTimer->get() > patrolItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( * this ) ) {
                                         SoundManager::getInstance().play( patrolItem.getKind (), "fall" );

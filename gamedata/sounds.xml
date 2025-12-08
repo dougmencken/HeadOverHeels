@@ -152,10 +152,10 @@
     <sound on="bounce" play="boing.wav"/>
 </for>
 
-<for item="bighead-robot">
+<for item="bigheaded-dalek">
     <sound on="fall" play="fall.wav"/>
     <sound on="push" play="push.wav"/>
-    <sound on="collision" play="bighead-robot.wav"/>
+    <sound on="collision" play="bigheaded-collision.wav"/>
 </for>
 
 <for item="elephant">
@@ -176,7 +176,7 @@
     <sound on="collision" play="robot-collision.wav"/>
 </for>
 
-<for item="bubble-robot">
+<for item="bubbles-dalek">
     <sound on="fall" play="fall.wav"/>
     <sound on="push" play="push.wav"/>
     <sound on="collision" play="bubbles-bug.wav"/>
@@ -186,10 +186,10 @@
     <sound on="wait" play="imperial-guard.wav"/>
 </for>
 
-<for item="charles-robot">
+<for item="charles-dalek">
     <sound on="fall" play="fall.wav"/>
     <sound on="push" play="push.wav"/>
-    <sound on="move" play="robot.wav"/>
+    <sound on="move" play="charles-move.wav"/>
 </for>
 
 <for item="head">

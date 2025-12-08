@@ -131,7 +131,7 @@ bool Volatile::update ()
                         {
                                 volatileItem.animate() ;
 
-                                if ( disappearanceTimer->getValue() > volatileItem.getDelayBetweenFrames() * volatileItem.howManyFramesInTheCurrentSequence() )
+                                if ( disappearanceTimer->get() > volatileItem.getDelayBetweenFrames() * volatileItem.howManyFramesInTheCurrentSequence() )
                                         present = false ;
                         }
                         break;
@@ -157,9 +157,9 @@ bool Volatile::update ()
                 case activities::Activity::Vanishing :
                         if ( ( getNameOfBehavior() != Volatile::when_above && getNameOfBehavior() != Volatile::when_above_slower &&
                                         getNameOfBehavior() != Volatile::as_Head_appears ) ||
-                                ( getNameOfBehavior() == Volatile::when_above && disappearanceTimer->getValue() > delayBeforeDisappearance ) ||
-                                ( getNameOfBehavior() == Volatile::when_above_slower && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
-                                ( getNameOfBehavior() == Volatile::as_Head_appears && disappearanceTimer->getValue() > reactionTimeToHeadAppearance ) )
+                                ( getNameOfBehavior() == Volatile::when_above && disappearanceTimer->get() > delayBeforeDisappearance ) ||
+                                ( getNameOfBehavior() == Volatile::when_above_slower && disappearanceTimer->get() > longDelayBeforeDisappearance ) ||
+                                ( getNameOfBehavior() == Volatile::as_Head_appears && disappearanceTimer->get() > reactionTimeToHeadAppearance ) )
                         {
                                 SoundManager::getInstance().play( volatileItem.getKind (), "vanish" );
 

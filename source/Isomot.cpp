@@ -740,7 +740,7 @@ void Isomot::updateFinalRoom ()
         }
         else
         {
-                if ( finalRoomTimer.getValue() > 4.0 /* each 4 seconds */ )
+                if ( finalRoomTimer.get() > 4.0 /* each 4 seconds */ )
                 {
                         FreeItemPtr finalBall( new FreeItem (
                                 * ItemDescriptions::descriptions().getDescriptionByKind( "ball" ),

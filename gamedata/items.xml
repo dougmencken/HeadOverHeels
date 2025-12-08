@@ -38,7 +38,7 @@
     <width-x>16</width-x>
     <width-y>16</width-y>
     <height>24</height>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="vulcano.png">
         <frame-width>64</frame-width>
         <frame-height>56</frame-height>
@@ -54,7 +54,7 @@
     <width-x>16</width-x>
     <width-y>16</width-y>
     <height>24</height>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="spikes.png">
         <frame-width>64</frame-width>
         <frame-height>56</frame-height>
@@ -70,7 +70,7 @@
     <width-x>16</width-x>
     <width-y>16</width-y>
     <height>24</height>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="toaster.png">
         <frame-width>64</frame-width>
         <frame-height>56</frame-height>
@@ -376,7 +376,7 @@
     <height>24</height>
     <weight>10</weight>
     <speed>20</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="bomb.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -454,7 +454,7 @@
     <width-y>12</width-y>
     <height>24</height>
     <speed>40</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="imperial-guard-head.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -466,7 +466,7 @@
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>24</height>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="elephant-head.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -478,7 +478,7 @@
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>24</height>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="monkey-head.png">
         <frame-width>48</frame-width>
         <frame-height>50</frame-height>
@@ -510,7 +510,7 @@
     <height>24</height>
     <weight>10</weight>
     <speed>30</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="helicopter-bug.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -547,7 +547,7 @@
     <width-y>12</width-y>
     <height>24</height>
     <weight>10</weight>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="fish.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -565,7 +565,7 @@
     <height>24</height>
     <weight>10</weight>
     <speed>40</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="siren.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -619,7 +619,7 @@
     <height>24</height>
     <weight>10</weight>
     <speed>40</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="turtle.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -694,7 +694,7 @@
     <height>24</height>
     <weight>10</weight>
     <speed>20</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="cap.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>
@@ -723,19 +723,19 @@
     <orientations>1</orientations>
 </item>
 
-<item kind="bighead-robot">
+<item kind="bigheaded-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
-    <mortal>yes</mortal>
-    <graphics file="big-head-robot.png">
+    <is-mortal>yes</is-mortal>
+    <graphics file="bigheaded-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>150</delay-between-frames>
-    <shadows file="big-head-robot-shadows.png">
+    <shadows file="bigheaded-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>
@@ -748,7 +748,7 @@
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="elephant.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
@@ -767,7 +767,7 @@
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="monkey.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
@@ -786,7 +786,7 @@
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="diver.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
@@ -799,19 +799,19 @@
     <orientations>4</orientations>
 </item>
 
-<item kind="bubble-robot">
+<item kind="bubbles-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
-    <mortal>yes</mortal>
-    <graphics file="bubble-robot.png">
+    <is-mortal>yes</is-mortal>
+    <graphics file="bubbles-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>100</delay-between-frames>
-    <shadows file="bubble-robot-shadows.png">
+    <shadows file="bubbles-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>
@@ -824,7 +824,7 @@
     <width-y>12</width-y>
     <height>48</height>
     <speed>40</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="imperial-guard.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
@@ -838,18 +838,18 @@
     <orientations>4</orientations>
 </item>
 
-<item kind="charles-robot">
+<item kind="charles-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
-    <graphics file="charles-robot.png">
+    <graphics file="charles-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>150</delay-between-frames>
-    <shadows file="charles-robot-shadows.png">
+    <shadows file="charles-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>
@@ -927,7 +927,7 @@
     <height>48</height>
     <weight>10</weight>
     <speed>20</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="throne-guard.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
@@ -947,7 +947,7 @@
     <height>24</height>
     <weight>10</weight>
     <speed>20</speed>
-    <mortal>yes</mortal>
+    <is-mortal>yes</is-mortal>
     <graphics file="emperor.png">
         <frame-width>48</frame-width>
         <frame-height>48</frame-height>

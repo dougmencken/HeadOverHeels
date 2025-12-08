@@ -2,7 +2,7 @@
 
 gamedatasounddir = $(datadir)/@PACKAGE@/sound
 gamedatasound_DATA = adjust.wav \
-			bighead-robot.wav \
+			bigheaded-collision.wav \
 			blades.wav \
 			boing.wav \
 			bonus.wav \
@@ -30,7 +30,7 @@ gamedatasound_DATA = adjust.wav \
 			quack.wav \
 			robot-collision-2.wav \
 			robot-collision.wav \
-			robot.wav \
+			charles-move.wav \
 			sink.wav \
 			siren.wav \
 			spring.wav \

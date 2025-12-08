@@ -302,7 +302,7 @@ void CharacterHeadAndHeels::wait ()
         PlayerControlled::wait() ;
 
         if ( getCurrentActivity() == activities::Activity::Waiting ) {
-                if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
+                if ( timerForBlinking->get() >= ( rand() % 4 ) + 5 )
                 {
                         timerForBlinking->go() ;
                         setCurrentActivity( activities::Activity::Blinking, Motion2D::rest() );
@@ -312,7 +312,7 @@ void CharacterHeadAndHeels::wait ()
 
 void CharacterHeadAndHeels::blink ()
 {
-        double time = timerForBlinking->getValue() ;
+        double time = timerForBlinking->get() ;
 
         // eyes closed
         if ( ( time > 0.0 && time < 0.050 ) || ( time > 0.400 && time < 0.450 ) ) {

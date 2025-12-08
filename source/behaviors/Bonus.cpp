@@ -69,7 +69,7 @@ bool Bonus::update ()
                                 changeActivityDueTo( activities::Activity::Vanishing, taker );
                         }
                         // otherwise some other item is pushing the bonus
-                        else if ( speedTimer->getValue() > bonusItem.getSpeed() )
+                        else if ( speedTimer->get() > bonusItem.getSpeed() )
                         {
                                 activities::Displacing::getInstance().displace( *this, true );
 
@@ -83,7 +83,7 @@ bool Bonus::update ()
 
                 case activities::Activity::Dragged:
                         // the bonus item is on a conveyor
-                        if ( speedTimer->getValue() > bonusItem.getSpeed() )
+                        if ( speedTimer->get() > bonusItem.getSpeed() )
                         {
                                 activities::Displacing::getInstance().displace( *this, true );
 
@@ -100,7 +100,7 @@ bool Bonus::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > bonusItem.getWeight() )
+                        else if ( fallTimer->get() > bonusItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( *this ) )
                                         beWaiting() ;
@@ -132,7 +132,7 @@ bool Bonus::update ()
                         break ;
 
                 case activities::Activity::Vanishing:
-                        if ( disappearanceTimer->getValue() > 0.100 )
+                        if ( disappearanceTimer->get() > 0.100 )
                         {
                                 // play the sound of taking
                                 SoundManager::getInstance().play( bonusItem.getKind (), "vanish" );

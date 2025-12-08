@@ -59,7 +59,7 @@ bool Driven::update ()
                 case activities::Activity::Moving:
                         // not frozen and it’s time to move
                         if ( ! drivenItem.isFrozen() ) {
-                                if ( speedTimer->getValue() > drivenItem.getSpeed() )
+                                if ( speedTimer->get() > drivenItem.getSpeed() )
                                 {
                                         if ( ! activities::Moving::getInstance().move( *this, true ) ) {
                                                 // when can’t move
@@ -77,7 +77,7 @@ bool Driven::update ()
                         break ;
 
                 case activities::Activity::Pushed:
-                        if ( speedTimer->getValue() > drivenItem.getSpeed() ) // is it time to move
+                        if ( speedTimer->get() > drivenItem.getSpeed() ) // is it time to move
                         {
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
                                         beWaiting() ;
@@ -97,7 +97,7 @@ bool Driven::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > drivenItem.getWeight() )
+                        else if ( fallTimer->get() > drivenItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( *this ) )
                                         beWaiting() ;

@@ -39,7 +39,7 @@ bool Doughnut::update ()
                         break ;
 
                 case activities::Activity::Moving:
-                        if ( speedTimer->getValue() > donutItem.getSpeed() )
+                        if ( speedTimer->get() > donutItem.getSpeed() )
                         {
                                 Motion2D vector = get2DVelocityVector() ;
 

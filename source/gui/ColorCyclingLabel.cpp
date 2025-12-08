@@ -21,7 +21,7 @@ ColorCyclingLabel::ColorCyclingLabel( const std::string & text, bool doubleHeigh
 
 std::vector< std::string > ColorCyclingLabel::getColorCycle () const
 {
-        double time = this->colorCyclingTimer->getValue() ;
+        double time = this->colorCyclingTimer->get() ;
         unsigned int cycle = static_cast< unsigned int >( time * ( 1 / ColorCyclingLabel::single_interval ) );
 
         // the original speccy sequence “ cyan magenta green ”

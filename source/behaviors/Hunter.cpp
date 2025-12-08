@@ -76,7 +76,7 @@ bool Hunter::update ()
                         else
                         if ( ! hunterItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > hunterItem.getSpeed() )
+                                if ( speedTimer->get() > hunterItem.getSpeed() )
                                 {
                                         // move a hunter
                                         bool moved = activities::Moving::getInstance().move( *this, false );
@@ -127,7 +127,7 @@ bool Hunter::update ()
 
                 case activities::Activity::Pushed:
                         // when item is active and it’s time to move
-                        if ( speedTimer->getValue() > hunterItem.getSpeed() )
+                        if ( speedTimer->get() > hunterItem.getSpeed() )
                         {
                                 activities::Displacing::getInstance().displace( *this, false );
                                 beWaiting() ;

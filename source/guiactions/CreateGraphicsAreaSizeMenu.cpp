@@ -122,10 +122,10 @@ void gui::CreateGraphicsAreaSizeMenu::pickCustomSize ()
 
         std::string key ;
         do {
-                if ( customSizeBlinkTimer.getValue() > 1.5 )
+                if ( customSizeBlinkTimer.get() > 1.5 )
                         customSizeBlinkTimer.go () ;
 
-                if ( customSizeBlinkTimer.getValue() > .9 /* 0.9 to 1.5 */ ) {
+                if ( customSizeBlinkTimer.get() > .9 /* 0.9 to 1.5 */ ) {
                         if ( applyingCustomSize )
                                 this->customSize->setText(
                                         customSizeText + " "

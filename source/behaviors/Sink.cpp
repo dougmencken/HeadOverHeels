@@ -31,7 +31,7 @@ bool Sink::update ()
 
                 case activities::Activity::Falling:
                         // is it time to fall down one unit
-                        if ( fallTimer->getValue() > sinkingItem.getWeight() ) {
+                        if ( fallTimer->get() > sinkingItem.getWeight() ) {
                                 // when can’t fall or when there’s no item above it any more
                                 if ( ! activities::Falling::getInstance().fall( *this ) || sinkingItem.canAdvanceTo( 0, 0, 1 ) )
                                         beWaiting() ;

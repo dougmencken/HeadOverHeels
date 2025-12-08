@@ -103,7 +103,7 @@ bool Switch::update ()
 void Switch::toggleIt ()
 {
         // switching again only after a second
-        if ( this->whenToggledTimer->getValue() < 1.0 ) return ;
+        if ( this->whenToggledTimer->get() < 1.0 ) return ;
 
         AbstractItem & theSwitch = getItem() ;
 

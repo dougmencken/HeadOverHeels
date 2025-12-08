@@ -40,7 +40,7 @@ bool RemoteControl::update ()
                 case activities::Activity::Moving :
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
-                                if ( speedTimer->getValue() > thisItem.getSpeed() )
+                                if ( speedTimer->get() > thisItem.getSpeed() )
                                 {
                                         activities::Moving::getInstance().move( *this, true );
 
@@ -57,7 +57,7 @@ bool RemoteControl::update ()
                 case activities::Activity::Pushed :
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
-                                if ( speedTimer->getValue() > thisItem.getSpeed() )
+                                if ( speedTimer->get() > thisItem.getSpeed() )
                                 {
                                         if ( getWhatAffectedThisBehavior() != nilPointer )
                                                 SoundManager::getInstance().play( thisItem.getKind(), "push" );
@@ -108,7 +108,7 @@ bool RemoteControl::update ()
                                 present = false ;
                         }
                         // is it time to fall for the controlled item
-                        else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > thisItem.getWeight() )
+                        else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->get() > thisItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( * this ) ) {
                                         // emit the sound for the end of falling down

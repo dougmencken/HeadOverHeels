@@ -107,7 +107,7 @@
             <class>griditem</class>
         </item>
         <item x="3" y="0" z="5">
-            <kind>charles-robot</kind>
+            <kind>charles-dalek</kind>
             <orientation>south</orientation>
             <behavior>behavior of remotely controlled one</behavior>
             <class>freeitem</class>

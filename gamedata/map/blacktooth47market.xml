@@ -148,7 +148,7 @@
             <class>freeitem</class>
         </item>
         <item x="7" y="1" z="0">
-            <kind>charles-robot</kind>
+            <kind>charles-dalek</kind>
             <orientation>south</orientation>
             <behavior>behavior of remotely controlled one</behavior>
             <class>freeitem</class>

@@ -37,7 +37,7 @@ bool Turn::update ()
                 case activities::Activity::Moving:
                         if ( ! turningItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > turningItem.getSpeed() )
+                                if ( speedTimer->get() > turningItem.getSpeed() )
                                 {
                                         if ( ! activities::Moving::getInstance().move( *this, true ) ) {
                                                 // if can’t move on
@@ -72,7 +72,7 @@ bool Turn::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > turningItem.getWeight() )
+                        else if ( fallTimer->get() > turningItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( * this ) ) {
                                         SoundManager::getInstance().play( turningItem.getKind (), "fall" );

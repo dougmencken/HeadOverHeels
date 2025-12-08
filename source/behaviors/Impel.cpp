@@ -33,7 +33,7 @@ bool Impel::update ()
 
                 case activities::Activity::Pushed:
                         // is it time to move
-                        if ( speedTimer->getValue() > impelItem.getSpeed() )
+                        if ( speedTimer->get() > impelItem.getSpeed() )
                         {
                                 if ( ! activities::Displacing::getInstance().displace( *this, true ) )
                                         beWaiting() ;
@@ -50,7 +50,7 @@ bool Impel::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > impelItem.getWeight() )
+                        else if ( fallTimer->get() > impelItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( *this ) )
                                         beWaiting() ;

@@ -38,7 +38,7 @@ bool Mobile::update ()
 
                 case activities::Activity::Pushed :
                         // is it time to move
-                        if ( speedTimer->getValue() > mobileItem.getSpeed() ) {
+                        if ( speedTimer->get() > mobileItem.getSpeed() ) {
                                 const AbstractItemPtr & otherItem = getWhatAffectedThisBehavior ();
                                 if ( otherItem == nilPointer || otherItem->getUniqueName() != mobileItem.getUniqueName() )
                                         SoundManager::getInstance().play( mobileItem.getKind(), "push" );
@@ -55,7 +55,7 @@ bool Mobile::update ()
 
                 case activities::Activity::Dragged :
                         // on a conveyor
-                        if ( speedTimer->getValue() > mobileItem.getSpeed() ) {
+                        if ( speedTimer->get() > mobileItem.getSpeed() ) {
                                 activities::Displacing::getInstance().displace( *this, true );
 
                                 setCurrentActivity( activities::Activity::Falling, Motion2D::rest() );
@@ -70,7 +70,7 @@ bool Mobile::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > mobileItem.getWeight() ) {
+                        else if ( fallTimer->get() > mobileItem.getWeight() ) {
                                 if ( ! activities::Falling::getInstance().fall( *this ) ) {
                                         // play the end of the fall sound
                                         SoundManager::getInstance().play( mobileItem.getKind(), "fall" );

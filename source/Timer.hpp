@@ -36,7 +36,7 @@ public:
         /**
          * @return seconds since the last go()
          */
-        double getValue () ;
+        double get () ;
 
         /**
          * Set the timer to the value of that another timer aka synchronise

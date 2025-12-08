@@ -107,12 +107,12 @@
             <class>griditem</class>
         </item>
         <item x="2" y="1" z="0">
-            <kind>bubble-robot</kind>
+            <kind>bubbles-dalek</kind>
             <behavior>behavior of random patroling in eight directions</behavior>
             <class>freeitem</class>
         </item>
         <item x="4" y="1" z="0">
-            <kind>bubble-robot</kind>
+            <kind>bubbles-dalek</kind>
             <behavior>behavior of random patroling in eight directions</behavior>
             <class>freeitem</class>
         </item>

@@ -36,7 +36,7 @@ bool Conveyor::update ()
 
         if ( getCurrentActivity() != activities::Activity::Waiting ) beWaiting() ;
 
-        if ( dragTimer->getValue() >= conveyorItem.getSpeed() )
+        if ( dragTimer->get() >= conveyorItem.getSpeed() )
         {
                 if ( ! conveyorItem.canAdvanceTo( 0, 0, 1 ) )
                 {
@@ -109,7 +109,7 @@ bool Conveyor::update ()
                 dragTimer->go() ;
         }
 
-        if ( animationTimer->getValue() > 2 * conveyorItem.getSpeed() )
+        if ( animationTimer->get() > 2 * conveyorItem.getSpeed() )
         {
                 conveyorItem.animate ();
                 animationTimer->go() ;

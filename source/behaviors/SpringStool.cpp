@@ -44,12 +44,12 @@ bool SpringStool::update ()
                         else
                         {
                                 // the spring continues to bounce after unloading
-                                if ( this->rebounding && reboundTimer->getValue() < 0.600 )
+                                if ( this->rebounding && reboundTimer->get() < 0.600 )
                                 {
                                         springItem.animate() ;
 
                                         // play the sound of bouncing
-                                        if ( reboundTimer->getValue() > 0.100 )
+                                        if ( reboundTimer->get() > 0.100 )
                                                 SoundManager::getInstance().play( springItem.getKind(), "bounce" );
                                 }
                                 else {
@@ -76,7 +76,7 @@ bool SpringStool::update ()
 
                 case activities::Activity::Pushed :
                         // is it time to move
-                        if ( speedTimer->getValue() > springItem.getSpeed() ) {
+                        if ( speedTimer->get() > springItem.getSpeed() ) {
                                 // play the sound of pushing
                                 SoundManager::getInstance().play( springItem.getKind(), "push" );
 
@@ -95,7 +95,7 @@ bool SpringStool::update ()
                                 present = false ;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > springItem.getWeight() )
+                        else if ( fallTimer->get() > springItem.getWeight() )
                         {
                                 if ( ! activities::Falling::getInstance().fall( *this ) ) {
                                         // play the end of falling sound

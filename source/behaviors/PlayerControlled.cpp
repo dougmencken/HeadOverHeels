@@ -111,7 +111,7 @@ void PlayerControlled::move ()
         double speed = character.getSpeed() / ( character.howManyBonusQuickSteps() > 0 ? 2 : 1 );
 
         // is it time to move
-        if ( speedTimer->getValue() > speed )
+        if ( speedTimer->get() > speed )
         {
                 bool moved = activities::Moving::getInstance().move( *this, true );
 
@@ -141,7 +141,7 @@ void PlayerControlled::automove ()
         double speed = character.getSpeed() / ( character.howManyBonusQuickSteps() > 0 ? 2 : 1 );
 
         // is it time to move
-        if ( speedTimer->getValue() > speed )
+        if ( speedTimer->get() > speed )
         {
                 // move it
                 activities::Moving::getInstance().move( *this, true );
@@ -233,7 +233,7 @@ bool PlayerControlled::moveKeyChangesHeading ()
 
 void PlayerControlled::displace ()
 {
-        if ( speedTimer->getValue() > dynamic_cast< const ::DescribedItem & >( getItem() ).getSpeed() )
+        if ( speedTimer->get() > dynamic_cast< const ::DescribedItem & >( getItem() ).getSpeed() )
         {
                 activities::Displacing::getInstance().displace( *this, true );
                 // when the displacement couldn’t be performed due to a collision
@@ -296,7 +296,7 @@ void PlayerControlled::fall ()
 {
         ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
-        if ( fallTimer->getValue() > character.getWeight() )
+        if ( fallTimer->get() > character.getWeight() )
         {
                 if ( activities::Falling::getInstance().fall( *this ) ) {
                         if ( character.canAdvanceTo( 0, 0, -1 ) /* there’s nothing below the character */ )
@@ -317,7 +317,7 @@ void PlayerControlled::glide ()
 {
         ::AvatarItem & character = dynamic_cast< ::AvatarItem & >( getItem () );
 
-        if ( glideTimer->getValue() > character.getWeight() )
+        if ( glideTimer->get() > character.getWeight() )
         {
                 if ( ! activities::Falling::getInstance().fall( * this ) &&
                         ( getCurrentActivity() != activities::Activity::MetLethalItem || isInvulnerableToLethalItems() ) )
@@ -329,7 +329,7 @@ void PlayerControlled::glide ()
                 glideTimer->go() ;
         }
 
-        if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
+        if ( speedTimer->get() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
                 const Activity & priorActivity = getCurrentActivity() ;
                 const Motion2D & priorMotion = get2DVelocityVector() ;
@@ -394,7 +394,7 @@ void PlayerControlled::jump ()
                 }
 
                 // is it time to jump
-                if ( speedTimer->getValue() > character.getSpeed() )
+                if ( speedTimer->get() > character.getSpeed() )
                 {
                         activities::Jumping::getInstance().jump( *this, this->jumpPhase, this->bigJump ? this->bigJumpVector : this->jumpVector );
 

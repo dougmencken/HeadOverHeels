@@ -111,8 +111,8 @@ gamedatagfx_DATA = blacktooth.png/blacktooth-column-capital-east.png \
 			items/bars-ew-shadows.png \
 			items/bars-ns.png \
 			items/bars-ns-shadows.png \
-			items/big-head-robot.png \
-			items/big-head-robot-shadows.png \
+			items/bigheaded-dalek.png \
+			items/bigheaded-dalek-shadows.png \
 			items/bomb.png \
 			items/bomb-shadows.png \
 			items/book.png \
@@ -121,14 +121,14 @@ gamedatagfx_DATA = blacktooth.png/blacktooth-column-capital-east.png \
 			items/brick1-shadows.png \
 			items/brick2.png \
 			items/brick2-shadows.png \
-			items/bubble-robot.png \
-			items/bubble-robot-shadows.png \
+			items/bubbles-dalek.png \
+			items/bubbles-dalek-shadows.png \
 			items/bubbles.png \
 			items/bubbles-shadows.png \
 			items/cap.png \
 			items/cap-shadows.png \
-			items/charles-robot.png \
-			items/charles-robot-shadows.png \
+			items/charles-dalek.png \
+			items/charles-dalek-shadows.png \
 			items/conveyor.png \
 			items/conveyor-shadows.png \
 			items/crown.png \

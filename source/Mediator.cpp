@@ -183,7 +183,7 @@ void* Mediator::updateFromThread( void* mediatorAsVoid )
 
                 mediator->update() ;
 
-                double secondsElapsed = updateTimer.getValue() ;
+                double secondsElapsed = updateTimer.get() ;
                 if ( secondsElapsed < period )
                         somn::microSleep( static_cast< unsigned long >( /* microseconds */ 1.0e6 * ( period - secondsElapsed ) ) );
 

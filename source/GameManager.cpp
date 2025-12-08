@@ -751,7 +751,7 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
         if ( recordCaptures )
         {
                 // record game’s screen
-                if ( recordingTimer->getValue() >= 0.08 /* 12.5 captures per one second */ )
+                if ( recordingTimer->get() >= 0.08 /* 12.5 captures per one second */ )
                 {
                         numberOfCapture ++ ;
 

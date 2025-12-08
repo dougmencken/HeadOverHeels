@@ -30,7 +30,7 @@ void AnimatedPictureWidget::draw ()
         if ( animation.size() > 0 )
                 allegro::drawSprite( *animation[ theFrame ], getX(), getY() );
 
-        if ( animationTimer->getValue() > delayBetweenFrames ) {
+        if ( animationTimer->get() > delayBetweenFrames ) {
                 theFrame ++ ;
                 if ( theFrame >= animation.size() ) theFrame = 0 ;
                 animationTimer->go() ;

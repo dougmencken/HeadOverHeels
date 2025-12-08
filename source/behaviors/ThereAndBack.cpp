@@ -38,7 +38,7 @@ bool ThereAndBack::update ()
                 case activities::Activity::Moving:
                         if ( ! thisItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > thisItem.getSpeed() )
+                                if ( speedTimer->get() > thisItem.getSpeed() )
                                 {
                                         if ( ! activities::Moving::getInstance().move( *this, true ) ) {
                                                 // a collision with something
@@ -77,7 +77,7 @@ bool ThereAndBack::update ()
                                         present = false ;
                                 }
                                 // is it time to fall
-                                else if ( fallTimer->getValue() > thisItem.getWeight() )
+                                else if ( fallTimer->get() > thisItem.getWeight() )
                                 {
                                         if ( ! activities::Falling::getInstance().fall( *this ) ) {
                                                 // emit the sound of falling

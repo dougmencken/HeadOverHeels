@@ -30,7 +30,7 @@ bool FinalBall::update ()
                         break;
 
                 case activities::Activity::Moving:
-                        if ( speedTimer->getValue() > thisBall.getSpeed() )
+                        if ( speedTimer->get() > thisBall.getSpeed() )
                         {
                                 speedTimer->go() ;
 

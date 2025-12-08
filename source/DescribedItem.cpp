@@ -104,12 +104,13 @@ void DescribedItem::freshProcessedImage()
         this->processedImage->setName( "processed " + getCurrentRawImage().getName() );
 }
 
+/* AnimatedItem::animate () */
 void DescribedItem::animate ()
 {
         if ( ! isAnimated() ) return ;
 
         // is it time to change frame
-        if ( this->animationTimer.getValue() > getDescriptionOfItem().getDelayBetweenFrames() )
+        if ( this->animationTimer.get() > getDescriptionOfItem().getDelayBetweenFrames() )
         {
                 unsigned int newFrame = getCurrentFrame() ;
 
