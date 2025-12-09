@@ -158,13 +158,13 @@
     <sound on="collision" play="bigheaded-collision.wav"/>
 </for>
 
-<for item="elephant">
+<for item="elephant-dalek">
     <sound on="fall" play="fall.wav"/>
     <sound on="push" play="push.wav"/>
     <sound on="collision" play="elephant.wav"/>
 </for>
 
-<for item="monkey">
+<for item="monkey-dalek">
     <sound on="fall" play="fall.wav"/>
     <sound on="push" play="push.wav"/>
     <sound on="collision" play="monkey.wav"/>
@@ -173,7 +173,7 @@
 <for item="diver">
     <sound on="fall" play="fall.wav"/>
     <sound on="push" play="push.wav"/>
-    <sound on="collision" play="robot-collision.wav"/>
+    <sound on="collision" play="diver-collision.wav"/>
 </for>
 
 <for item="bubbles-dalek">

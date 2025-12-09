@@ -63,12 +63,12 @@
             <class>griditem</class>
         </item>
         <item x="5" y="0" z="0">
-            <kind>monkey</kind>
+            <kind>monkey-dalek</kind>
             <behavior>behavior of random patroling in four primary directions</behavior>
             <class>freeitem</class>
         </item>
         <item x="4" y="5" z="0">
-            <kind>monkey</kind>
+            <kind>monkey-dalek</kind>
             <behavior>behavior of random patroling in four primary directions</behavior>
             <class>freeitem</class>
         </item>

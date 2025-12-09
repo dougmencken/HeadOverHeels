@@ -28,8 +28,7 @@ gamedatasound_DATA = adjust.wav \
 			puppy-scratch.wav \
 			push.wav \
 			quack.wav \
-			robot-collision-2.wav \
-			robot-collision.wav \
+			diver-collision.wav \
 			charles-move.wav \
 			sink.wav \
 			siren.wav \
@@ -40,4 +39,5 @@ gamedatasound_DATA = adjust.wav \
 			teleport-out.wav \
 			teleport.wav \
 			tools.wav \
-			trumpet.wav
+			trumpet.wav \
+			robot-unused-sound.wav

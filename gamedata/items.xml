@@ -742,38 +742,38 @@
     <orientations>4</orientations>
 </item>
 
-<item kind="elephant">
+<item kind="elephant-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
     <is-mortal>yes</is-mortal>
-    <graphics file="elephant.png">
+    <graphics file="elephant-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>150</delay-between-frames>
-    <shadows file="elephant-shadows.png">
+    <shadows file="elephant-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>
     <orientations>4</orientations>
 </item>
 
-<item kind="monkey">
+<item kind="monkey-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
     <is-mortal>yes</is-mortal>
-    <graphics file="monkey.png">
+    <graphics file="monkey-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>150</delay-between-frames>
-    <shadows file="monkey-shadows.png">
+    <shadows file="monkey-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>

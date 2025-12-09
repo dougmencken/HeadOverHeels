@@ -71,7 +71,7 @@
             <class>griditem</class>
         </item>
         <item x="4" y="3" z="0">
-            <kind>monkey</kind>
+            <kind>monkey-dalek</kind>
             <behavior>behavior of hunter in four directions</behavior>
             <class>freeitem</class>
         </item>

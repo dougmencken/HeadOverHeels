@@ -141,8 +141,8 @@ gamedatagfx2003_DATA = blacktooth.png/blacktooth-column-capital-east.png \
 			items/drum.png \
 			items/drum-shadows.png \
 			items/elephant-head.png \
-			items/elephant.png \
-			items/elephant-shadows.png \
+			items/elephant-dalek.png \
+			items/elephant-dalek-shadows.png \
 			items/elevator.png \
 			items/elevator-shadows.png \
 			items/emperor.png \
@@ -163,8 +163,8 @@ gamedatagfx2003_DATA = blacktooth.png/blacktooth-column-capital-east.png \
 			items/imperial-guard.png \
 			items/imperial-guard-shadows.png \
 			items/monkey-head.png \
-			items/monkey.png \
-			items/monkey-shadows.png \
+			items/monkey-dalek.png \
+			items/monkey-dalek-shadows.png \
 			items/portable-brick2.png \
 			items/portable-brick2-shadows.png \
 			items/portable-brick.png \
