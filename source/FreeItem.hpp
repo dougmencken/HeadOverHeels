@@ -85,6 +85,14 @@ public :
 
         void toTheHeadingFrameSequence () {  setCurrentFrameSequence( getHeading() );  }
 
+        virtual void metamorphInto ( const std::string & newKind, const std::string & causedBy )
+        {
+                // the new kind may not have extra frames, like for blinking
+                if ( isAtExtraFrame() ) toTheHeadingFrameSequence() ;
+
+                DescribedItem::metamorphInto( newKind, causedBy );
+        }
+
         virtual void draw () ;
 
         virtual void freshProcessedImage () ;

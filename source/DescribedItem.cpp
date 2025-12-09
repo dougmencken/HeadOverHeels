@@ -15,24 +15,22 @@
 #endif
 
 
-void DescribedItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
+void DescribedItem::metamorphInto( const std::string & newKind, const std::string & causedBy )
 {
+        std::cout << "metamorphosis of item \"" << getUniqueName()
+                        << "\" into \"" << newKind
+                        << "\" caused by \"" << causedBy << "\"" << std::endl ;
+
         const DescriptionOfItem * description = ItemDescriptions::descriptions().getDescriptionByKind( newKind );
         if ( description == nilPointer ) {
-                std::cerr << "item \"" << getUniqueName() << "\" doesn’t metamorph"
-                                << " to the non-existent kind \"" << newKind
-                                << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
+                std::cerr << "item \"" << getUniqueName() << "\" can’t metamorph"
+                                << " into a non-existent kind \"" << newKind << "\"" << std::endl ;
                 return ;
         }
 
         this->descriptionOfItem = description ;
 
-        std::cout << "metamorphosis of item \"" << getUniqueName()
-                        << "\" into \"" << getDescriptionOfItem().getKind ()
-                        << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
-
         readGraphicsOfItem ();
-
         resetAnimation () ;
 }
 

@@ -110,7 +110,7 @@ public :
         /**
          * Metamorph into another kind of item, such as into bubbles when a character teleports
          */
-        virtual void metamorphInto ( const std::string & newKind, const std::string & initiatedBy ) ;
+        virtual void metamorphInto ( const std::string & newKind, const std::string & causedBy ) ;
 
         /**
          * Does this character have the temporary invulnerability or not

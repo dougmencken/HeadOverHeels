@@ -524,14 +524,11 @@ void AvatarItem::saveGame ()
         GameManager::getInstance().eatFish( *this, getMediator()->getRoom()->getNameOfRoomDescriptionFile() );
 }
 
-void AvatarItem::metamorphInto( const std::string & newKind, const std::string & initiatedBy )
+void AvatarItem::metamorphInto( const std::string & newKind, const std::string & causedBy )
 {
-        // the new kind may not have extra frames, like for blinking
-        if ( isAtExtraFrame() ) toTheHeadingFrameSequence() ;
-
         // when the composite character morphs into bubbles, it’s actually double bubbles
         bool doubleBubbles = ( isHeadOverHeels() && newKind == "bubbles" );
-        DescribedItem::metamorphInto( doubleBubbles ? "double-bubbles" : newKind, initiatedBy );
+        FreeItem::metamorphInto( doubleBubbles ? "double-bubbles" : newKind, causedBy );
 }
 
 bool AvatarItem::hasTool( const std::string & tool ) const
