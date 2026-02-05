@@ -80,7 +80,7 @@ void SlideWithHeadAndHeels::placeHeadAndHeels( bool picturesToo, bool copyrights
         if ( copyrightsToo )
         {
                 Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", new Font( "orange" ) );
-                Label* Douglas = new Label( "{ 2025 Douglas Mencken", new Font( "yellow" ) );
+                Label* Douglas = new Label( "{ 2026 Douglas Mencken", new Font( "yellow" ) );
 
                 const unsigned int screenHeight = GamePreferences::getScreenHeight();
                 const int leading = 28;

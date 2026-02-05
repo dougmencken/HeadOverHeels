@@ -368,7 +368,8 @@ void GameManager::showAutomap ()
         Automap automap ;
         allegro::Pict::setWhereToDraw( automap.getImage()->getAllegroPict() );
 
-        while ( ! InputManager::getInstance().automapTyped() )
+        while ( ! InputManager::getInstance().automapTyped()
+                        && ! InputManager::getInstance().pauseTyped() )
         {
                 automap.handleKeys ();
                 automap.updateImage ();
