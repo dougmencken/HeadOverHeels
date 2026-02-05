@@ -209,12 +209,8 @@ public:
         virtual // inherit as subclass for other sizes but 16
         unsigned int getSizeOfOneTile () const {  return Single_Tile_Size ;  }
 
-        /**
-         * The kind of floor which may be "plain", "mortal", or "absent"
-         */
-        const std::string & getKindOfFloor () const {  return this->kindOfFloor ;  }
-
-        bool hasFloor () const {  return this->kindOfFloor != "absent" ;  }
+        bool hasFloor () const {  return this->floorIsPresent ;  }
+        bool isFloorMortal () const {  return this->floorIsMortal ;  }
 
         short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
@@ -296,7 +292,8 @@ private:
 
         std::string scenery ;
 
-        std::string kindOfFloor ;
+        bool floorIsPresent ; // not "absent" but "plain" or "mortal" floor
+        bool floorIsMortal ; // "mortal" floor
 
         std::string color ;
 

@@ -123,7 +123,7 @@ bool Falling::fall( behaviors::Behavior & behavior )
                                         }
                                 }
                                 else
-                                if ( mediator.getRoom()->getKindOfFloor() == "mortal" )
+                                if ( mediator.getRoom()->isFloorMortal() )
                                 {
                                         characterItem.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                 }

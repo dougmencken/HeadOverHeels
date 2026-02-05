@@ -41,8 +41,9 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
         unsigned int xTiles = std::atoi( xTilesElement->FirstChild()->ToText()->Value() );
         unsigned int yTiles = std::atoi( yTilesElement->FirstChild()->ToText()->Value() );
 
+        // the kind of floor may be "plain", "mortal" or "absent"
         tinyxml2::XMLElement* floorKind = xmlRoot->FirstChildElement( "floorKind" ) ;
-        if ( floorKind == nilPointer ) floorKind = xmlRoot->FirstChildElement( "floorType" ) ;
+        //////if ( floorKind == nilPointer ) floorKind = xmlRoot->FirstChildElement( "floorType" ) ;
         std::string kindOfFloor = floorKind->FirstChild()->ToText()->Value() ;
 
         if ( GameMap::getInstance().findRoomByFile( roomName ) == nilPointer )
@@ -359,11 +360,7 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
 
                                 std::string fileOfFullTile = sceneryPrefix + "floor" ;
 
-                                if ( room->getKindOfFloor() == "mortal" )
-                                {
-                                        fileOfFullTile = sceneryPrefix + "mortalfloor" ;
-                                }
-                                else if ( room->getKindOfFloor() == "absent" )
+                                if ( ! room->hasFloor() )
                                 {
                                         if ( tileX == lastTileX && tileY == lastTileY )
                                                 suffixOfNotFullTile = "sw" ;
@@ -375,6 +372,11 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                                                 continue ;
 
                                         fileOfFullTile = sceneryPrefix + "nofloor" ;
+                                }
+                                else
+                                if ( room->isFloorMortal() )
+                                {
+                                        fileOfFullTile = sceneryPrefix + "mortalfloor" ;
                                 }
 
                                 std::string fileOfTile = suffixOfNotFullTile.empty() ? fileOfFullTile : fileOfFullTile + "-" + suffixOfNotFullTile ;

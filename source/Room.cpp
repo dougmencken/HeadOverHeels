@@ -36,7 +36,8 @@ Room::Room( const std::string & roomFile,
         , howManyTilesOnX( xTiles )
         , howManyTilesOnY( yTiles )
         , scenery( roomScenery )
-        , kindOfFloor( floorKind )
+        , floorIsPresent( floorKind != "absent" )
+        , floorIsMortal( floorKind == "mortal" )
         , color( "white" )
         , connections( nilPointer )
         , drawingSequence( new unsigned int[ xTiles * yTiles ] )
@@ -177,7 +178,14 @@ bool Room::saveAsXML( const std::string & file )
         root->InsertEndChild( roomColor );
 
         tinyxml2::XMLElement* floorKind = roomXml.NewElement( "floorKind" ) ;
-        floorKind->SetText( getKindOfFloor().c_str () );
+        if ( ! hasFloor() )
+                floorKind->SetText( "absent" );
+        else
+        if ( isFloorMortal() )
+                floorKind->SetText( "mortal" );
+        else
+                floorKind->SetText( "plain" );
+
         root->InsertEndChild( floorKind );
 
         // write tiles without floor
