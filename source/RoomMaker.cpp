@@ -59,11 +59,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
                 scenery,
                 kindOfFloor
         );
-
-        if ( theRoom == nilPointer ) {
-                std::cerr << "can’t make room " << roomName << std::endl ;
-                return nilPointer;
-        }
+        assert( theRoom != nilPointer );
 
         std::string roomColor = "white" ;
         tinyxml2::XMLElement* colorElement = xmlRoot->FirstChildElement( "color" ) ;
@@ -188,7 +184,7 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
         Door* westnorthDoor = room->getDoorOn( "westnorth" );
         Door* westsouthDoor = room->getDoorOn( "westsouth" );
 
-        // read about tiles with no floor in a triple room
+        // read the list of floorless tiles (for a triple room)
 
         std::set< std::pair< int, int > > tilesWithoutFloor ;
 
@@ -206,16 +202,14 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
         if ( ! tilesWithoutFloor.empty () )
                 room->setTilesWithoutFloor( tilesWithoutFloor );
 
-        PoolOfPictures floorImages ;
-
         if ( ! room->getScenery ().empty() )
         {
                 // make the floor in the room just by its kind, without listing every tile
 
                 const std::string sceneryPrefix = room->getScenery() + "-" ;
 
-                int lastTileX = room->getTilesOnX() - 1 ;
-                int lastTileY = room->getTilesOnY() - 1 ;
+                int lastTileX = room->getTilesAlongX() - 1 ;
+                int lastTileY = room->getTilesAlongY() - 1 ;
 
                 for ( int tileX = 0 ; tileX <= lastTileX ; ++ tileX ) {
                         for ( int tileY = 0 ; tileY <= lastTileY ; ++ tileY )
@@ -389,14 +383,16 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                                 addTile = addTile && ( tilesWithoutFloor.find( tileXY ) == tilesWithoutFloor.end() );
 
                                 if ( addTile ) {
+                                        PoolOfPictures & imagePool = PoolOfPictures::getPoolOfPictures() ;
+
                                         if ( ! PoolOfPictures::isPictureThere( fileOfTile ) )
                                                 std::cout << "picture \"" << fileOfTile << "\" is *not* there :(" << std::endl ;
 
-                                        if ( floorImages.getOrLoadAndGet( fileOfTile ) == nilPointer )
+                                        if ( imagePool.getOrLoadAndGet( fileOfTile ) == nilPointer )
                                         {
                                                 if ( suffixOfNotFullTile.empty () )
                                                 {
-                                                        floorImages.makePicture( fileOfTile, 64, 40 ) ;
+                                                        imagePool.makePicture( fileOfTile, 64, 40 ) ;
                                                 }
                                                 else
                                                 {
@@ -404,15 +400,15 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                                                         if ( GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003"
                                                                 || GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
-                                                        const NamedPicturePtr & imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
+                                                        const NamedPicturePtr & imageOfFullTile = imagePool.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
                                                         NamedPicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
-                                                        floorImages.putPicture( fileOfTile, imageOfPartialTile );
+                                                        imagePool.putPicture( fileOfTile, imageOfPartialTile );
                                                 }
                                         }
 
-                                        if ( floorImages.hasPicture( fileOfTile ) )
+                                        if ( imagePool.hasPicture( fileOfTile ) )
                                         {
-                                                const NamedPicturePtr & image = floorImages.getPicture( fileOfTile ) ;
+                                                const NamedPicturePtr & image = imagePool.getPicture( fileOfTile ) ;
                                                 image->setName( nameOfPicture );
 
                                                 if ( image->getHeight() < 40 )
@@ -459,9 +455,9 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
 
                                 int tileX = std::atoi( x->FirstChild()->ToText()->Value() );
                                 int tileY = std::atoi( y->FirstChild()->ToText()->Value() );
-                                const std::string & imageFile = picture->FirstChild()->ToText()->Value();
+                                const std::string & imageFile = picture->FirstChild()->ToText()->Value() ;
 
-                                const PicturePtr & image = floorImages.getOrLoadAndGet( imageFile ) ;
+                                const PicturePtr & image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( imageFile ) ;
 
                                 if ( image != nilPointer )
                                         room->addFloorTile( new FloorTile( tileX, tileY, * image ) );

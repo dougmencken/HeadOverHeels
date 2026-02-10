@@ -317,7 +317,7 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem & item, int x, int y, in
         for ( int i = xStart; i < xEnd; ++ i ) {
                 for ( int j = yStart; j < yEnd; ++ j )
                 {
-                        unsigned int column = room->getTilesOnX() * j + i ;
+                        unsigned int column = room->getTilesAlongX() * j + i ;
 
                         // mark to shade grid items in the column
                         for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ]. begin ();
@@ -576,7 +576,7 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
         for ( int yCell = yStart; yCell <= yEnd; yCell++ ) {
                 for ( int xCell = xStart; xCell <= xEnd; xCell++ )
                 {
-                        int column = yCell * room->getTilesOnX() + xCell;
+                        int column = yCell * room->getTilesAlongX() + xCell;
 
                         for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
                         {
@@ -722,9 +722,9 @@ void Mediator::maskFreeItem( FreeItem & freeItem )
                 do {
                         unsigned int i = 0;
 
-                        while ( ( xStart + i < room->getTilesOnX() ) && ( yStart + i < room->getTilesOnY() ) )
+                        while ( ( xStart + i < room->getTilesAlongX() ) && ( yStart + i < room->getTilesAlongY() ) )
                         {
-                                int column = room->getTilesOnX() * ( yStart + i ) + xStart + i ;
+                                int column = room->getTilesAlongX() * ( yStart + i ) + xStart + i ;
 
                                 // behind grid items
                                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
@@ -884,15 +884,15 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
 
                 // there are room limits by the way
                 if ( xStart < 0 ) xStart = 0;
-                if ( xEnd > static_cast< int >( room->getTilesOnX () ) ) xEnd = room->getTilesOnX();
+                if ( xEnd > static_cast< int >( room->getTilesAlongX () ) ) xEnd = room->getTilesAlongX();
                 if ( yStart < 0 ) yStart = 0;
-                if ( yEnd > static_cast< int >( room->getTilesOnY () ) ) yEnd = room->getTilesOnY();
+                if ( yEnd > static_cast< int >( room->getTilesAlongY () ) ) yEnd = room->getTilesAlongY();
 
                 // look for grid items within these cells
                 for ( int i = xStart; i < xEnd; i++ ) {
                         for ( int j = yStart; j < yEnd; j++ )
                         {
-                                std::vector< GridItemPtr > items = gridItems[ room->getTilesOnX() * j + i ] ;
+                                std::vector< GridItemPtr > items = gridItems[ room->getTilesAlongX() * j + i ] ;
 
                                 for ( std::vector< GridItemPtr >::const_iterator g = items.begin (); g != items.end (); ++ g )
                                 {
@@ -963,7 +963,7 @@ int Mediator::findHighestZ( const DescribedItem & item )
                 for ( int i = xStart; i < xEnd; ++ i ) {
                         for ( int j = yStart; j < yEnd; ++ j )
                         {
-                                int column = room->getTilesOnX() * j + i ;
+                                int column = room->getTilesAlongX() * j + i ;
                                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin ();
                                                 g != gridItems[ column ].end (); ++ g )
                                 {

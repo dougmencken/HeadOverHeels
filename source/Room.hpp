@@ -53,12 +53,12 @@ public:
 
         virtual ~Room( ) ;
 
-        bool isSingleRoom () const {  return getTilesOnX() <= maxTilesOfSingleRoom && getTilesOnY() <= maxTilesOfSingleRoom ;  }
+        bool isSingleRoom () const {  return getTilesAlongX() <= maxTilesOfSingleRoom && getTilesAlongY() <= maxTilesOfSingleRoom ;  }
 
-        bool isTripleRoom () const {  return getTilesOnX() > maxTilesOfSingleRoom && getTilesOnY() > maxTilesOfSingleRoom ;  }
+        bool isTripleRoom () const {  return getTilesAlongX() > maxTilesOfSingleRoom && getTilesAlongY() > maxTilesOfSingleRoom ;  }
 
-        bool isDoubleRoomAlongX () const {  return getTilesOnX() > maxTilesOfSingleRoom && getTilesOnY() <= maxTilesOfSingleRoom ;  }
-        bool isDoubleRoomAlongY () const {  return getTilesOnX() <= maxTilesOfSingleRoom && getTilesOnY() > maxTilesOfSingleRoom ;  }
+        bool isDoubleRoomAlongX () const {  return getTilesAlongX() > maxTilesOfSingleRoom && getTilesAlongY() <= maxTilesOfSingleRoom ;  }
+        bool isDoubleRoomAlongY () const {  return getTilesAlongX() <= maxTilesOfSingleRoom && getTilesAlongY() > maxTilesOfSingleRoom ;  }
 
         bool saveAsXML ( const std::string& file ) ;
 
@@ -186,7 +186,7 @@ public:
         /**
          * the X coordinate of the room’s origin point
          */
-        int getX0 () const {  return getTilesOnY () * ( getSizeOfOneTile () << 1 ) ;  }
+        int getX0 () const {  return getTilesAlongY() * ( getSizeOfOneTile () << 1 ) ;  }
 
         /**
          * the Y coordinate of the room’s origin point
@@ -197,9 +197,9 @@ public:
 
         unsigned int getHeightOfRoomImage () const ;
 
-        unsigned short getTilesOnX () const {  return this->howManyTilesOnX ;  }
+        unsigned short getTilesAlongX () const {  return this->howManyTilesAlongX ;  }
 
-        unsigned short getTilesOnY () const {  return this->howManyTilesOnY ;  }
+        unsigned short getTilesAlongY () const {  return this->howManyTilesAlongY ;  }
 
         /**
          * The length of the single tile's side, in isometric units
@@ -215,8 +215,7 @@ public:
         short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
         const std::set < std::pair < int, int > > & getTilesWithoutFloor () const {  return this->tilesWithoutFloor ;  }
-
-        void setTilesWithoutFloor ( const std::set < std::pair < int, int > > & noFloor ) {  this->tilesWithoutFloor = noFloor ;  }
+        void setTilesWithoutFloor ( const std::set < std::pair < int, int > > & floorlessTiles ) {  this->tilesWithoutFloor = floorlessTiles ;  }
 
         const std::vector < std::vector < GridItemPtr > > & getGridItems () const {  return this->gridItems ;  }
 
@@ -287,14 +286,15 @@ private:
         std::string nameOfRoomDescriptionFile ;
 
         // how big is this room in tiles
-        unsigned short howManyTilesOnX ;
-        unsigned short howManyTilesOnY ;
+        unsigned short howManyTilesAlongX ;
+        unsigned short howManyTilesAlongY ;
 
         std::string scenery ;
 
         bool floorIsPresent ; // not "absent" but "plain" or "mortal" floor
         bool floorIsMortal ; // "mortal" floor
 
+        // the color of room in the original ZX Specturm game
         std::string color ;
 
         // the connections of this room with other rooms on the map
@@ -321,6 +321,7 @@ private:
          */
         unsigned short shadingTransparency ;
 
+        // floorless tiles for a triple room
         std::set < std::pair < int, int > > tilesWithoutFloor ;
 
         std::vector < FloorTile * > floorTiles ;

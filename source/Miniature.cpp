@@ -58,8 +58,8 @@ Miniature::Miniature( const Room & roomForMiniature, unsigned short singleTileSi
 /* protected */
 std::pair < unsigned int, unsigned int > Miniature::calculateSize () const
 {
-        const unsigned int tilesX = this->room.getTilesOnX ();
-        const unsigned int tilesY = this->room.getTilesOnY ();
+        const unsigned int tilesX = this->room.getTilesAlongX ();
+        const unsigned int tilesY = this->room.getTilesAlongY ();
 
         unsigned int height = ( tilesX + tilesY ) * getSizeOfTile() ;
         unsigned int width = height << 1 ;
@@ -105,8 +105,8 @@ void Miniature::composeImage ()
 {
         if ( this->theImage == nilPointer ) createImage() ;
 
-        const unsigned int tilesX = this->room.getTilesOnX() ;
-        const unsigned int tilesY = this->room.getTilesOnY() ;
+        const unsigned int tilesX = this->room.getTilesAlongX() ;
+        const unsigned int tilesY = this->room.getTilesAlongY() ;
 
         unsigned int firstTileX = 0 ;
         unsigned int firstTileY = 0 ;
@@ -536,7 +536,7 @@ void Miniature::composeImage ()
                         delete justMiniature ;
                 }
 
-                unsigned int height = ( this->room.getTilesOnX() + this->room.getTilesOnY() ) * getSizeOfTile() ;
+                unsigned int height = ( this->room.getTilesAlongX() + this->room.getTilesAlongY() ) * getSizeOfTile() ;
                 int miniatureMidX = height ; // = width >> 1 where width = height << 1
                 int aboveY = plusYforAbove - ( getSizeOfTile() << 1 ) + 1 ;
                 int belowY = height + getSizeOfTile() ;
@@ -571,7 +571,7 @@ void Miniature::composeImage ()
                 allegro::textOut( whichRoom, 0, 0, roomColor );
 
                 std::ostringstream roomTilesText ;
-                roomTilesText << this->room.getTilesOnX() << "x" << this->room.getTilesOnY() ;
+                roomTilesText << this->room.getTilesAlongX() << "x" << this->room.getTilesAlongY() ;
                 allegro::textOut( roomTilesText.str(), 0, 12, roomColor );
 
                 allegro::Pict::setWhereToDraw( previousWhereToDraw );

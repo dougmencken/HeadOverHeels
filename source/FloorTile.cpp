@@ -62,7 +62,7 @@ void FloorTile::freshShadyImage ()
 unsigned int FloorTile::getIndexOfColumn () const
 {
         assert( getMediator() != nilPointer );
-        return getMediator()->getRoom()->getTilesOnX() * getCellY() + getCellX() ;
+        return getMediator()->getRoom()->getTilesAlongX() * getCellY() + getCellX() ;
 }
 
 /* static */

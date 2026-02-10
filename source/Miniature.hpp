@@ -97,7 +97,7 @@ public :
 
         std::pair< int, int > getOriginOfRoom () const
         {
-                return std::pair< int, int >( this->room.getTilesOnY() * ( getSizeOfTile() << 1 ), 0 ) ;
+                return std::pair< int, int >( this->room.getTilesAlongY() * ( getSizeOfTile() << 1 ), 0 ) ;
         }
 
         unsigned short getSizeOfTile () const {  return this->sizeOfTile ;  }

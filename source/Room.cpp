@@ -33,8 +33,8 @@ Room::Room( const std::string & roomFile,
                         const std::string & roomScenery, const std::string & floorKind )
         : Mediated( )
         , nameOfRoomDescriptionFile( roomFile )
-        , howManyTilesOnX( xTiles )
-        , howManyTilesOnY( yTiles )
+        , howManyTilesAlongX( xTiles )
+        , howManyTilesAlongY( yTiles )
         , scenery( roomScenery )
         , floorIsPresent( floorKind != "absent" )
         , floorIsMortal( floorKind == "mortal" )
@@ -166,11 +166,11 @@ bool Room::saveAsXML( const std::string & file )
                 root->SetAttribute( "scenery", getScenery().c_str () );
 
         tinyxml2::XMLElement* xTiles = roomXml.NewElement( "xTiles" ) ;
-        xTiles->SetText( getTilesOnX() );
+        xTiles->SetText( getTilesAlongX() );
         root->InsertEndChild( xTiles );
 
         tinyxml2::XMLElement* yTiles = roomXml.NewElement( "yTiles" ) ;
-        yTiles->SetText( getTilesOnY() );
+        yTiles->SetText( getTilesAlongY() );
         root->InsertEndChild( yTiles );
 
         tinyxml2::XMLElement* roomColor = roomXml.NewElement( "color" ) ;
@@ -581,8 +581,8 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         if ( gridItem == nilPointer ) return;
 
         if ( ( gridItem->getCellX() < 0 || gridItem->getCellY() < 0 ) ||
-                ( gridItem->getCellX() >= static_cast< int >( this->getTilesOnX() ) ||
-                        gridItem->getCellY() >= static_cast< int >( this->getTilesOnY() ) ) )
+                ( gridItem->getCellX() >= static_cast< int >( this->getTilesAlongX() ) ||
+                        gridItem->getCellY() >= static_cast< int >( this->getTilesAlongY() ) ) )
         {
                 std::cerr << "coordinates for " << gridItem->whichItemClass() << " are out of limits" << std::endl ;
                 return;
@@ -674,9 +674,9 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 return;
         }
 
-        if ( ( freeItem->getX() + freeItem->getWidthX() > static_cast< int >( this->getTilesOnX() * getSizeOfOneTile() ) )
+        if ( ( freeItem->getX() + freeItem->getWidthX() > static_cast< int >( this->getTilesAlongX() * getSizeOfOneTile() ) )
                 || ( freeItem->getY() - freeItem->getWidthY() + 1 < 0 )
-                        || ( freeItem->getY() > static_cast< int >( this->getTilesOnY() * getSizeOfOneTile() ) - 1 ) )
+                        || ( freeItem->getY() > static_cast< int >( this->getTilesAlongY() * getSizeOfOneTile() ) - 1 ) )
         {
                 std::cerr << "coordinates for " << freeItem->whichItemClass() << " are out of room" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
@@ -853,9 +853,9 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
                 return false;
         }
 
-        if ( ( character->getX() + character->getWidthX() > static_cast< int >( this->getTilesOnX() * getSizeOfOneTile() ) )
+        if ( ( character->getX() + character->getWidthX() > static_cast< int >( this->getTilesAlongX() * getSizeOfOneTile() ) )
                 || ( character->getY() - character->getWidthY() + 1 < 0 )
-                        || ( character->getY() > static_cast< int >( this->getTilesOnY() * getSizeOfOneTile() ) - 1 ) )
+                        || ( character->getY() > static_cast< int >( this->getTilesAlongY() * getSizeOfOneTile() ) - 1 ) )
         {
                 std::cerr << "coordinates for " << character->whichItemClass() << " are out of room"
                                 << " \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
@@ -940,7 +940,7 @@ void Room::dumpItemInsideThisRoom( const DescribedItem & item )
                         << " with dimensions " << item.getWidthX() << " x " << item.getWidthY() << " x " << item.getHeight()
                         << std::endl
                         << "   inside room " << getNameOfRoomDescriptionFile()
-                        << " of " << getTilesOnX () << " x " << getTilesOnY () << " tiles"
+                        << " of " << getTilesAlongX () << " x " << getTilesAlongY () << " tiles"
                         << " each tile of " << getSizeOfOneTile () << " pixels"
                         << std::endl ;
 }
@@ -991,7 +991,7 @@ void Room::removeFloorAt( int tileX, int tileY )
 
         if ( tile != nilPointer ) removeFloorTile( tile );
 
-        floorTiles[ tileX + ( getTilesOnX() * tileY ) ] = nilPointer ;
+        floorTiles[ tileX + ( getTilesAlongX() * tileY ) ] = nilPointer ;
 }
 
 void Room::removeFloorTile( FloorTile * floorTile )
@@ -1221,7 +1221,7 @@ void Room::dontDisappearOnJump ()
 
 unsigned int Room::getWidthOfRoomImage () const
 {
-        unsigned int roomW = ( getTilesOnX () + getTilesOnY () ) * ( getSizeOfOneTile () << 1 ) ;
+        unsigned int roomW = ( getTilesAlongX () + getTilesAlongY () ) * ( getSizeOfOneTile () << 1 ) ;
 
         if ( ( ! hasFloor() || ( ! hasDoorOn( "north" ) && ! hasDoorOn( "northeast" ) && ! hasDoorOn( "northwest" ) ) )
                 && ! hasDoorOn( "west" ) && ! hasDoorOn( "westnorth" ) && ! hasDoorOn( "westsouth" ) )
@@ -1239,7 +1239,7 @@ unsigned int Room::getWidthOfRoomImage () const
 
 unsigned int Room::getHeightOfRoomImage () const
 {
-        unsigned int roomH = /* height of plane */ ( getTilesOnX () + getTilesOnY () ) * getSizeOfOneTile ();
+        unsigned int roomH = /* height of plane */ ( getTilesAlongX () + getTilesAlongY () ) * getSizeOfOneTile ();
 
         roomH += /* room’s height in 3D */ ( Room::MaxLayers + 2 ) * Room::LayerHeight ;
         roomH += /* height of floor */ 8 ;
@@ -1271,10 +1271,10 @@ void Room::draw ()
 
         // draw tiles o’floor
 
-        for ( unsigned int xCell = 0; xCell < getTilesOnX(); xCell ++ ) {
-                for ( unsigned int yCell = 0; yCell < getTilesOnY(); yCell ++ )
+        for ( unsigned int xCell = 0; xCell < getTilesAlongX(); xCell ++ ) {
+                for ( unsigned int yCell = 0; yCell < getTilesAlongY(); yCell ++ )
                 {
-                        unsigned int column = getTilesOnX() * yCell + xCell ;
+                        unsigned int column = getTilesAlongX() * yCell + xCell ;
                         FloorTile* tile = floorTiles[ column ];
 
                         if ( tile != nilPointer ) // there’s tile of floor here
@@ -1300,7 +1300,7 @@ void Room::draw ()
 
         // draw grid items
 
-        for ( unsigned int i = 0 ; i < getTilesOnX() * getTilesOnY() ; i ++ )
+        for ( unsigned int i = 0 ; i < getTilesAlongX() * getTilesAlongY() ; i ++ )
         {
                 std::vector < GridItemPtr > columnToDraw = this->gridItems[ this->drawingSequence[ i ] ];
                 for ( std::vector< GridItemPtr >::iterator gi = columnToDraw.begin () ; gi != columnToDraw.end () ; ++ gi )
@@ -1364,8 +1364,8 @@ void Room::calculateBounds()
 
         bounds[ "north" ] = hasDoorOn( "north" ) || hasDoorOn( "northeast" ) || hasDoorOn( "northwest" ) || ! hasFloor() ? oneTileLong : 0 ;
         bounds[ "east" ] = hasDoorOn( "east" ) || hasDoorOn( "eastnorth" ) || hasDoorOn( "eastsouth" ) || ! hasFloor() ? oneTileLong : 0 ;
-        bounds[ "south" ] = oneTileLong * getTilesOnX() - ( hasDoorOn( "south" ) || hasDoorOn( "southeast" ) || hasDoorOn( "southwest" )  ? oneTileLong : 0 );
-        bounds[ "west" ] = oneTileLong * getTilesOnY() - ( hasDoorOn( "west" ) || hasDoorOn( "westnorth" ) || hasDoorOn( "westsouth" )  ? oneTileLong : 0 );
+        bounds[ "south" ] = oneTileLong * getTilesAlongX() - ( hasDoorOn( "south" ) || hasDoorOn( "southeast" ) || hasDoorOn( "southwest" )  ? oneTileLong : 0 );
+        bounds[ "west" ] = oneTileLong * getTilesAlongY() - ( hasDoorOn( "west" ) || hasDoorOn( "westnorth" ) || hasDoorOn( "westsouth" )  ? oneTileLong : 0 );
 
         if ( this->isTripleRoom () ) {
                 // limits for a triple room

@@ -27,7 +27,7 @@
 class Room ;
 
 /**
- * Makes a room by constructing its various parts according to the description from file
+ * Makes a room by constructing its various parts by the description from file
  */
 
 class RoomMaker
