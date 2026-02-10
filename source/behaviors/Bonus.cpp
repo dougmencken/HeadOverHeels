@@ -95,7 +95,7 @@ bool Bonus::update ()
                         break;
 
                 case activities::Activity::Falling:
-                        if ( bonusItem.getZ() == 0 && ! bonusItem.getMediator()->getRoom()->hasFloor() )
+                        if ( bonusItem.getZ() == 0 && ! bonusItem.getMediator()->getRoom().hasFloor() )
                         {       // disappear when at the bottom of a room without floor
                                 present = false ;
                         }
@@ -141,7 +141,7 @@ bool Bonus::update ()
                                 BonusManager::getInstance().markAsAbsent(
                                         BonusInRoom(
                                                 bonusItem.getKind (),
-                                                bonusItem.getMediator()->getRoom()->getNameOfRoomDescriptionFile ()
+                                                bonusItem.getMediator()->getRoom().getNameOfRoomDescriptionFile ()
                                         ) );
 
                                 const AbstractItemPtr & taker = getWhatAffectedThisBehavior ();

@@ -52,7 +52,7 @@ bool Doughnut::update ()
 
                                 // maybe there’s an initial collision with the character who released a doughnut
                                 bool initialCollision = false ;
-                                const std::vector< AvatarItemPtr > & charactersInRoom = mediator->getRoom()->getCharactersYetInRoom() ;
+                                const std::vector< AvatarItemPtr > & charactersInRoom = mediator->getRoom().getCharactersYetInRoom() ;
                                 std::string whoReleased( "" ) ;
 
                                 for ( unsigned int c = 0 ; c < charactersInRoom.size() ; ++ c )

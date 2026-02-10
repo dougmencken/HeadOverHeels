@@ -45,7 +45,7 @@ bool Impel::update ()
                         break;
 
                 case activities::Activity::Falling:
-                        if ( impelItem.getZ() == 0 && ! impelItem.getMediator()->getRoom()->hasFloor() ) {
+                        if ( impelItem.getZ() == 0 && ! impelItem.getMediator()->getRoom().hasFloor() ) {
                                 // disappear if reached the bottom of a room without floor
                                 present = false ;
                         }

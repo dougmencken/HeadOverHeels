@@ -103,7 +103,7 @@ bool RemoteControl::update ()
                         break ;
 
                 case activities::Activity::Falling :
-                        if ( thisItem.getZ() == 0 && ! thisItem.getMediator()->getRoom()->hasFloor() ) {
+                        if ( thisItem.getZ() == 0 && ! thisItem.getMediator()->getRoom().hasFloor() ) {
                                 // disappear when reached bottom of a room without floor
                                 present = false ;
                         }

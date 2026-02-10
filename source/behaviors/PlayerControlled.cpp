@@ -528,7 +528,7 @@ void PlayerControlled::useHooter ()
                         // COMMENT THIS AND THE GAME CRASHES WHAHA ///////////
                         donut->setIgnoreCollisions( true );
 
-                        character.getMediator()->getRoom()->addFreeItem( donut );
+                        character.getMediator()->getRoom().addFreeItem( donut );
 
                         character.useDoughnutHorn () ;
 
@@ -559,8 +559,8 @@ void PlayerControlled::takeItem ()
                                 if ( belowItem != nilPointer && belowItem->getBehavior() != nilPointer
                                         && ( belowItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 belowItem->getBehavior()->getNameOfBehavior() == "behavior of spring stool" )
-                                        && belowItem->getUnsignedWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
-                                        && belowItem->getUnsignedWidthY() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
+                                        && belowItem->getUnsignedWidthX() <= ( mediator->getRoom().getSizeOfOneTile() * 3 ) >> 2
+                                        && belowItem->getUnsignedWidthY() <= ( mediator->getRoom().getSizeOfOneTile() * 3 ) >> 2 )
                                 {
                                         if ( belowItem->getX() + belowItem->getY() > whereIsItemToPick ) {
                                                 whereIsItemToPick = belowItem->getX() + belowItem->getY() ;
@@ -611,7 +611,7 @@ void PlayerControlled::dropItem ()
                                                             character.getZ() - Room::LayerHeight ) );
                         freeItem->setBehaviorOf( character.getBehaviorOfTakenItem() );
 
-                        character.getMediator()->getRoom()->addFreeItem( freeItem );
+                        character.getMediator()->getRoom().addFreeItem( freeItem );
 
                         GameManager::getInstance().emptyHandbag () ;
                         character.emptyTheBag ();

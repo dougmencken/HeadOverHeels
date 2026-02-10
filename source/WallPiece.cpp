@@ -9,12 +9,12 @@ void WallPiece::calculateOffset()
 {
         assert( getMediator() != nilPointer );
 
-        Room * room = getMediator()->getRoom() ;
+        Room & room = getMediator()->getRoom() ;
 
-        this->offset.first  = room->getX0 ();
-        this->offset.second = room->getY0 ();
+        this->offset.first  = room.getX0 ();
+        this->offset.second = room.getY0 ();
 
-        int tileSize = static_cast< int >( room->getSizeOfOneTile() );
+        int tileSize = static_cast< int >( room.getSizeOfOneTile() );
 
         if ( isAlongX() )
                 this->offset.first += ( this->position << 1 ) * tileSize + 1 ;
@@ -24,16 +24,16 @@ void WallPiece::calculateOffset()
         PicturePtr image = PoolOfPictures::getPoolOfPictures().getOrLoadAndGet( this->nameOfImageFile );
         this->offset.second += ( this->position + 1 ) * tileSize - image->getHeight() - 1 ;
 
-        if ( isAlongX() && ( room->hasDoorOn( "east" ) ||
-                                room->hasDoorOn( "eastnorth" ) || room->hasDoorOn( "eastsouth" )
-                                        || ! room->hasFloor() ) ) {
+        if ( isAlongX() && ( room.hasDoorOn( "east" ) ||
+                                room.hasDoorOn( "eastnorth" ) || room.hasDoorOn( "eastsouth" )
+                                        || ! room.hasFloor() ) ) {
                 this->offset.first -= ( tileSize << 1 );
                 this->offset.second += tileSize ;
         }
 
-        if ( isAlongY() && ( room->hasDoorOn( "north" ) ||
-                                room->hasDoorOn( "northeast" ) || room->hasDoorOn( "northwest" )
-                                        || ! room->hasFloor() ) ) {
+        if ( isAlongY() && ( room.hasDoorOn( "north" ) ||
+                                room.hasDoorOn( "northeast" ) || room.hasDoorOn( "northwest" )
+                                        || ! room.hasFloor() ) ) {
                 this->offset.first += ( tileSize << 1 );
                 this->offset.second += tileSize ;
         }

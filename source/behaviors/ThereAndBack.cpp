@@ -72,7 +72,7 @@ bool ThereAndBack::update ()
 
                 case activities::Activity::Falling:
                         if ( ! this->isFlying ) {
-                                if ( thisItem.getZ() == 0 && ! thisItem.getMediator()->getRoom()->hasFloor() ) {
+                                if ( thisItem.getZ() == 0 && ! thisItem.getMediator()->getRoom().hasFloor() ) {
                                         // disappear if on the bottom of a room with no floor
                                         present = false ;
                                 }

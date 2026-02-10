@@ -46,7 +46,7 @@ bool Hunter::update ()
                         else
                         {
                                 const unsigned int sizeOfRectangleInTiles = 3 ;
-                                const int coverage = hunterItem.getMediator()->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles ;
+                                const int coverage = hunterItem.getMediator()->getRoom().getSizeOfOneTile() * sizeOfRectangleInTiles ;
 
                                 if ( whoToHunt != nilPointer  &&
                                         whoToHunt->getX() > hunterItem.getX() - coverage  &&
@@ -316,7 +316,7 @@ bool Hunter::createFullBody ()
                 // otherwise it would be impossible to create a full-bodied guard
                 thisItem.setIgnoreCollisions( true );
 
-                thisItem.getMediator()->getRoom()->addFreeItem( newItem );
+                thisItem.getMediator()->getRoom().addFreeItem( newItem );
         }
 
         return created;

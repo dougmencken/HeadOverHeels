@@ -25,9 +25,9 @@ void FloorTile::calculateOffset ()
 {
         assert( getMediator() != nilPointer );
 
-        Room* room = getMediator()->getRoom();
-        this->offset.first = room->getX0() + ( ( room->getSizeOfOneTile() * ( getCellX() - getCellY() - 1 ) ) << 1 ) + 1;
-        this->offset.second = room->getY0() + room->getSizeOfOneTile() * ( getCellX() + getCellY() );
+        Room & room = getMediator()->getRoom();
+        this->offset.first = room.getX0() + ( ( room.getSizeOfOneTile() * ( getCellX() - getCellY() - 1 ) ) << 1 ) + 1;
+        this->offset.second = room.getY0() + room.getSizeOfOneTile() * ( getCellX() + getCellY() );
 }
 
 void FloorTile::draw ()
@@ -62,7 +62,7 @@ void FloorTile::freshShadyImage ()
 unsigned int FloorTile::getIndexOfColumn () const
 {
         assert( getMediator() != nilPointer );
-        return getMediator()->getRoom()->getTilesAlongX() * getCellY() + getCellX() ;
+        return getMediator()->getRoom().getTilesAlongX() * getCellY() + getCellX() ;
 }
 
 /* static */

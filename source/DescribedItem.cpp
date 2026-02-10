@@ -53,21 +53,21 @@ bool DescribedItem::canAdvanceTo( int dx, int dy, int dz )
         setZ( originalZ + dz );
 
         // look for collisions with walls
-        if ( this->getX() < mediator.getRoom()->getLimitAt( "north" ) ) {
+        if ( this->getX() < mediator.getRoom().getLimitAt( "north" ) ) {
                 mediator.addCollisionWith( "some segment of the north wall" );
         }
-        else if ( this->getX() + this->getWidthX() > mediator.getRoom()->getLimitAt( "south" ) ) {
+        else if ( this->getX() + this->getWidthX() > mediator.getRoom().getLimitAt( "south" ) ) {
                 mediator.addCollisionWith( "some segment of the south wall" );
         }
-        if ( this->getY() >= mediator.getRoom()->getLimitAt( "west" ) ) {
+        if ( this->getY() >= mediator.getRoom().getLimitAt( "west" ) ) {
                 mediator.addCollisionWith( "some segment of the west wall" );
         }
-        else if ( this->getY() - this->getWidthY() + 1 < mediator.getRoom()->getLimitAt( "east" ) ) {
+        else if ( this->getY() - this->getWidthY() + 1 < mediator.getRoom().getLimitAt( "east" ) ) {
                 mediator.addCollisionWith( "some segment of the east wall" );
         }
 
         // look for a collision with the floor
-        if ( this->getZ() < 0 && mediator.getRoom()->hasFloor() ) {
+        if ( this->getZ() < 0 && mediator.getRoom().hasFloor() ) {
                 mediator.addCollisionWith( "some tile of floor" );
         }
 

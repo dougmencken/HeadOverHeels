@@ -236,7 +236,7 @@ const FreeItemPtr & Door::getLeftJamb()
 
                 const DescriptionOfItem & whatIsLeftJamb = * ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~leftjamb" );
 
-                int oneTile = getMediator()->getRoom()->getSizeOfOneTile ();
+                int oneTile = getMediator()->getRoom().getSizeOfOneTile ();
 
                 int x = 0 ; int y = 0 ;
 
@@ -296,7 +296,7 @@ const FreeItemPtr & Door::getRightJamb()
                 if ( this->rightJambImage == nilPointer )
                         throw UnlikelyToHappenException( "nil image for the right jamb of " + getKind() );
 
-                int oneTile = getMediator()->getRoom()->getSizeOfOneTile ();
+                int oneTile = getMediator()->getRoom().getSizeOfOneTile ();
 
                 const DescriptionOfItem & whatIsRightJamb = * ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~rightjamb" );
 
@@ -358,7 +358,7 @@ const FreeItemPtr & Door::getLintel()
                 if ( this->lintelImage == nilPointer )
                         throw UnlikelyToHappenException( "nil image for the lintel of " + getKind() );
 
-                int oneTile = getMediator()->getRoom()->getSizeOfOneTile ();
+                int oneTile = getMediator()->getRoom().getSizeOfOneTile ();
 
                 const DescriptionOfItem & whatIsLintel = * ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~lintel" );
 
@@ -415,7 +415,7 @@ bool Door::isUnderDoor( int x, int y, int z ) const
 
         bool under = ( leftJamb->getZ() <= z && z <= lintel->getZ() );
 
-        const int oneCell = getMediator()->getRoom()->getSizeOfOneTile ();
+        const int oneCell = getMediator()->getRoom().getSizeOfOneTile ();
 
         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
         {

@@ -44,7 +44,7 @@ Room::Room( const std::string & roomFile,
         , camera( new Camera( this ) )
         , whereToDraw( )
 {
-        setMediator( new Mediator( this ) );
+        setMediator( new Mediator( * this ) );
 
         for ( unsigned int i = 0 ; i < Room::Sides ; ++ i ) {
                 bounds[ Room::Sides_Of_Room[ i ] ] = -1 ;

@@ -67,7 +67,7 @@ bool Turn::update ()
                         break ;
 
                 case activities::Activity::Falling:
-                        if ( turningItem.getZ() == 0 && ! turningItem.getMediator()->getRoom()->hasFloor() ) {
+                        if ( turningItem.getZ() == 0 && ! turningItem.getMediator()->getRoom().hasFloor() ) {
                                 // reached the bottom of a room without floor
                                 present = false ;
                         }

@@ -108,7 +108,7 @@ bool Falling::fall( behaviors::Behavior & behavior )
                         {
                                 AvatarItem & characterItem = dynamic_cast< AvatarItem & >( whatFalls );
 
-                                if ( ! mediator.getRoom()->hasFloor() )
+                                if ( ! mediator.getRoom().hasFloor() )
                                 {
                                         characterItem.setWayOfExit( "below" );
 
@@ -123,7 +123,7 @@ bool Falling::fall( behaviors::Behavior & behavior )
                                         }
                                 }
                                 else
-                                if ( mediator.getRoom()->isFloorMortal() )
+                                if ( mediator.getRoom().isFloorMortal() )
                                 {
                                         characterItem.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                 }

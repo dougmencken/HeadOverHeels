@@ -65,7 +65,7 @@ bool Mobile::update ()
                         break;
 
                 case activities::Activity::Falling :
-                        if ( mobileItem.getZ() == 0 && ! mobileItem.getMediator()->getRoom()->hasFloor() ) {
+                        if ( mobileItem.getZ() == 0 && ! mobileItem.getMediator()->getRoom().hasFloor() ) {
                                 // reached the bottom of a room with no floor
                                 present = false ;
                         }

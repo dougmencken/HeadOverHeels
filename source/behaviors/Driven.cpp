@@ -92,7 +92,7 @@ bool Driven::update ()
                         break;
 
                 case activities::Activity::Falling:
-                        if ( drivenItem.getZ() == 0 && ! drivenItem.getMediator()->getRoom()->hasFloor() ) {
+                        if ( drivenItem.getZ() == 0 && ! drivenItem.getMediator()->getRoom().hasFloor() ) {
                                 // disappear when reached the bottom of a room without floor
                                 present = false ;
                         }

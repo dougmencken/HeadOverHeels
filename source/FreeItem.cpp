@@ -55,15 +55,15 @@ void FreeItem::draw ()
         if ( getTransparency() == 0 ) {
                 allegro::drawSprite(
                         getProcessedImage().getAllegroPict(),
-                        getMediator()->getRoom()->getX0 () + getImageOffsetX (),
-                        getMediator()->getRoom()->getY0 () + getImageOffsetY ()
+                        getMediator()->getRoom().getX0 () + getImageOffsetX (),
+                        getMediator()->getRoom().getY0 () + getImageOffsetY ()
                 ) ;
         }
         else {
                 allegro::drawSpriteWithTransparency(
                         getProcessedImage().getAllegroPict(),
-                        getMediator()->getRoom()->getX0 () + getImageOffsetX (),
-                        getMediator()->getRoom()->getY0 () + getImageOffsetY (),
+                        getMediator()->getRoom().getX0 () + getImageOffsetX (),
+                        getMediator()->getRoom().getY0 () + getImageOffsetY (),
                         static_cast < unsigned char > ( 255 - 2.55 * getTransparency() )
                 ) ;
         }
@@ -157,19 +157,19 @@ bool FreeItem::addToPosition( int x, int y, int z )
         setZ( zBefore + z );
 
         // look for a collision with a wall
-        if ( getX() < getMediator()->getRoom()->getLimitAt( "north" ) )
+        if ( getX() < getMediator()->getRoom().getLimitAt( "north" ) )
         {
                 getMediator()->addCollisionWith( "some segment of the north wall" );
         }
-        else if ( getX() + getWidthX() > getMediator()->getRoom()->getLimitAt( "south" ) )
+        else if ( getX() + getWidthX() > getMediator()->getRoom().getLimitAt( "south" ) )
         {
                 getMediator()->addCollisionWith( "some segment of the south wall" );
         }
-        if ( getY() >= getMediator()->getRoom()->getLimitAt( "west" ) )
+        if ( getY() >= getMediator()->getRoom().getLimitAt( "west" ) )
         {
                 getMediator()->addCollisionWith( "some segment of the east wall" );
         }
-        else if ( getY() - getWidthY() + 1 < getMediator()->getRoom()->getLimitAt( "east" ) )
+        else if ( getY() - getWidthY() + 1 < getMediator()->getRoom().getLimitAt( "east" ) )
         {
                 getMediator()->addCollisionWith( "some segment of the west wall" );
         }
@@ -235,7 +235,7 @@ void FreeItem::reverseHeading ()
 
 bool FreeItem::isCollidingWithJamb( const std::string & at, const std::string & collision, const int previousX, const int previousY )
 {
-        Door* door = getMediator()->getRoom()->getDoorOn( at );
+        Door* door = getMediator()->getRoom().getDoorOn( at );
         if ( door == nilPointer ) return false ;
 
         // proceed only when colliding with a door’s jamb

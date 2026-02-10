@@ -91,7 +91,7 @@ bool Detector::update ()
                         break;
 
                 case activities::Activity::Falling:
-                        if ( detectorItem.getZ() == 0 && ! detectorItem.getMediator()->getRoom()->hasFloor() ) {
+                        if ( detectorItem.getZ() == 0 && ! detectorItem.getMediator()->getRoom().hasFloor() ) {
                                 // disappear when at the bottom of a room without floor
                                 present = false ;
                         }

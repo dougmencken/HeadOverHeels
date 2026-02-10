@@ -79,7 +79,7 @@ bool Patrol::update ()
                         break ;
 
                 case activities::Activity::Falling:
-                        if ( patrolItem.getZ() == 0 && ! patrolItem.getMediator()->getRoom()->hasFloor() )
+                        if ( patrolItem.getZ() == 0 && ! patrolItem.getMediator()->getRoom().hasFloor() )
                         {       // disappear when reached floor in a room without floor
                                 present = false ;
                         }

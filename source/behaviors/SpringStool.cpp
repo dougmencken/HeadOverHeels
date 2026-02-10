@@ -90,7 +90,7 @@ bool SpringStool::update ()
                         break ;
 
                 case activities::Activity::Falling:
-                        if ( springItem.getZ() == 0 && ! springItem.getMediator()->getRoom()->hasFloor() ) {
+                        if ( springItem.getZ() == 0 && ! springItem.getMediator()->getRoom().hasFloor() ) {
                                 // disappear when reached the bottom of a room without floor
                                 present = false ;
                         }

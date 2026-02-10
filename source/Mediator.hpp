@@ -39,11 +39,11 @@ public:
         /**
          * @param room the room in which this mediator negotiates
          */
-        Mediator( Room * whichRoom ) ;
+        Mediator( Room & whichRoom ) ;
 
         virtual ~Mediator( ) ;
 
-        Room * getRoom () const {  return this->room ;  }
+        Room & getRoom () const {  return this->room ;  }
 
         /**
          * Update every item’s behavior
@@ -199,7 +199,7 @@ private:
         /**
          * The room where this mediator deals
          */
-        Room * room ;
+        Room & room ;
 
         // for updating of items
         pthread_t updateThread ;
