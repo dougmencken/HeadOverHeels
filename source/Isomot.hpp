@@ -70,7 +70,7 @@ private:
 
         void updateFinalRoom () ;
 
-        void drawMiniature ( int leftX, int topY, unsigned int sizeOfTile ) ;
+        void drawMiniature ( int leftX, int topY, unsigned int squareSize ) ;
 
         /**
          * Where to draw isometric view
@@ -85,7 +85,7 @@ private:
 
         Timer finalRoomTimer ;
 
-        unsigned int sizeOfTileForMiniature ;
+        unsigned int miniatureSquareSize ;
 
         bool cameraFollowsCharacter ;
 

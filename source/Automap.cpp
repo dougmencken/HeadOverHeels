@@ -12,7 +12,7 @@
 
 Automap::Automap( )
         : automapImage( new Picture( GamePreferences::getScreenWidth(), GamePreferences::getScreenHeight() ) )
-        , sizeOfMiniatureTile( Miniature::the_default_size_of_tile )
+        , miniatureSquareSize( Miniature::the_default_square_size )
         , miniatures()
         , automapOffsetX( 0 )
         , automapOffsetY( 0 )
@@ -64,21 +64,21 @@ void Automap::handleKeys ()
 
         if ( allegro::isKeyPushed( "Pad -" ) || allegro::isKeyPushed( "," ) )
         {
-                if ( this->sizeOfMiniatureTile > 2 ) this->sizeOfMiniatureTile -- ;
+                if ( this->miniatureSquareSize > 2 ) this->miniatureSquareSize -- ;
 
                 if ( allegro::isKeyPushed( "," ) ) allegro::releaseKey( "," );
                 if ( allegro::isKeyPushed( "Pad -" ) ) allegro::releaseKey( "Pad -" );
         }
         if ( allegro::isKeyPushed( "Pad +" ) || allegro::isKeyPushed( "." ) )
         {
-                if ( this->sizeOfMiniatureTile < 10 ) this->sizeOfMiniatureTile ++ ;
+                if ( this->miniatureSquareSize < 10 ) this->miniatureSquareSize ++ ;
 
                 if ( allegro::isKeyPushed( "." ) ) allegro::releaseKey( "." );
                 if ( allegro::isKeyPushed( "Pad +" ) ) allegro::releaseKey( "Pad +" );
         }
         if ( allegro::isKeyPushed( "Pad =" ) || allegro::isKeyPushed( "/" ) )
         {
-                this->sizeOfMiniatureTile = Miniature::the_default_size_of_tile ;
+                this->miniatureSquareSize = Miniature::the_default_square_size ;
 
                 if ( allegro::isKeyPushed( "/" ) ) allegro::releaseKey( "/" );
                 if ( allegro::isKeyPushed( "Pad =" ) ) allegro::releaseKey( "Pad =" );
@@ -89,11 +89,11 @@ void Automap::drawMiniature ()
 {
         Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
         if ( ofThisRoom == nilPointer
-                        || ofThisRoom->getSizeOfTile() != this->sizeOfMiniatureTile )
+                        || ofThisRoom->getSquareSize() != this->miniatureSquareSize )
         {
                 Room * activeRoom = GameMap::getInstance().getActiveRoom() ;
                 if ( activeRoom != nilPointer ) {
-                        ofThisRoom = new Miniature( * activeRoom, this->sizeOfMiniatureTile, /* with room info */ true );
+                        ofThisRoom = new Miniature( * activeRoom, this->miniatureSquareSize, /* with room info */ true );
                         this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 }
         }
@@ -103,10 +103,10 @@ void Automap::drawMiniature ()
 
         drawMiniature( ( GamePreferences::getScreenWidth() - miniatureWidth ) >> 1,
                        ( GamePreferences::getScreenHeight() - miniatureHeight ) >> 1,
-                       this->sizeOfMiniatureTile );
+                       this->miniatureSquareSize );
 }
 
-void Automap::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
+void Automap::drawMiniature ( int leftX, int topY, unsigned int squareSize )
 {
         GameMap & map = GameMap::getInstance () ;
         Room * activeRoom = map.getActiveRoom() ;
@@ -116,16 +116,16 @@ void Automap::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
         Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
         if ( ofThisRoom == nilPointer ||
                         ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
-                        || ofThisRoom->getSizeOfTile() != sizeOfTile )
+                        || ofThisRoom->getSquareSize() != squareSize )
         {
-                ofThisRoom = new Miniature( *activeRoom, sizeOfTile, /* with room info */ true );
+                ofThisRoom = new Miniature( *activeRoom, squareSize, /* with room info */ true );
                 this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 sameRoom = false ;
         }
 
-        const std::pair< int, int > & currentOffset = ofThisRoom->getOffsetOnScreen();
+        const std::pair< int, int > & currentOffset = ofThisRoom->getDrawingOffset() ;
         if ( currentOffset.first != this->automapOffsetX + leftX || currentOffset.second != this->automapOffsetY + topY )
-                ofThisRoom->setOffsetOnScreen( this->automapOffsetX + leftX, this->automapOffsetY + topY );
+                ofThisRoom->setDrawingOffset( this->automapOffsetX + leftX, this->automapOffsetY + topY );
 
         const std::vector< std::string > & ways = activeRoom->getConnections()->getConnectedWays () ;
         for ( unsigned int n = 0 ; n < ways.size() ; ++ n ) {

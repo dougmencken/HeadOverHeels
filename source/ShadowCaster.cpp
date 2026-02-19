@@ -308,7 +308,7 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
         if ( iniY >= endY || iniX >= endX ) return;
 
         // the copy of the shaded tile graphics
-        Picture shadyTile( tile.getShadyImage() );
+        Picture shadedTile( tile.getShadedImage() );
 
         shadow.getAllegroPict().lockReadOnly() ;
         tileImage.getAllegroPict().lockReadOnly() ;
@@ -342,7 +342,7 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
                         {
                                 Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
                                 Color tileColor = tileImage.getPixelAt( tilePixel, tileRow );
-                                /////////Color resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
+                                /////////Color resultColor = shadedTile.getPixelAt( tilePixel, tileRow );
 
                                 // when a pixel of shadow isn’t transparent & a pixel of tile isn’t transparent
                                 ///////// and a pixel of result isn’t changed before
@@ -352,7 +352,7 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
                                         unsigned char resultRed = tileColor.getRed() >> rgbDiv ;
                                         unsigned char resultGreen = tileColor.getGreen() >> rgbDiv ;
                                         unsigned char resultBlue = tileColor.getBlue() >> rgbDiv ;
-                                        shadyTile.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
+                                        shadedTile.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
                                 }
                         }
                 }
@@ -368,7 +368,7 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
                         {
                                 Color shadowColor = shadow.getPixelAt( shadowPixel, shadowRow );
                                 Color tileColor = tileImage.getPixelAt( tilePixel, tileRow );
-                                Color resultColor = shadyTile.getPixelAt( tilePixel, tileRow );
+                                Color resultColor = shadedTile.getPixelAt( tilePixel, tileRow );
 
                                 // when a pixel of shadow isn’t transparent & a pixel of tile isn’t transparent
                                 // and a pixel of result isn’t changed before
@@ -381,13 +381,13 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
                                                 unsigned char resultRed = ( tileColor.getRed() * opacity ) >> 8 ;
                                                 unsigned char resultGreen = ( tileColor.getGreen() * opacity ) >> 8 ;
                                                 unsigned char resultBlue = ( tileColor.getBlue() * opacity ) >> 8 ;
-                                                shadyTile.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
+                                                shadedTile.putPixelAt( tilePixel, tileRow, Color( resultRed, resultGreen, resultBlue, tileColor.getAlpha() ) );
                                         }
                                         // zero opacity is full opacity
                                         else
                                         {
                                                 // a pixel of result is pure black
-                                                shadyTile.putPixelAt( tilePixel, tileRow, Color::blackColor() );
+                                                shadedTile.putPixelAt( tilePixel, tileRow, Color::blackColor() );
                                         }
                                 }
                         }
@@ -397,6 +397,6 @@ void ShadowCaster::castShadowOnFloor( FloorTile & tile, int x, int y, const Pict
         tileImage.getAllegroPict().unlock() ;
         shadow.getAllegroPict().unlock() ;
 
-        tile.setAsShadyImage( shadyTile );
+        tile.setShadedImage( shadedTile );
         tile.setWantShadow( false );
 }

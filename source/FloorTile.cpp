@@ -13,10 +13,10 @@ FloorTile::FloorTile( int cellX, int cellY, const NamedPicture & graphicsOfTile 
         , coordinates( std::pair< int, int >( cellX, cellY ) )
         , offset( std::pair< int, int >( 0, 0 ) )
         , rawImage( new NamedPicture( graphicsOfTile ) )
-        , shadyImage( new NamedPicture( graphicsOfTile ) )
+        , shadedImage( new NamedPicture( graphicsOfTile ) )
 {
         rawImage->setName( graphicsOfTile.getName() );
-        shadyImage->setName( graphicsOfTile.getName() );
+        shadedImage->setName( graphicsOfTile.getName() );
 
         setWantShadow( true );
 }
@@ -26,43 +26,43 @@ void FloorTile::calculateOffset ()
         assert( getMediator() != nilPointer );
 
         Room & room = getMediator()->getRoom();
-        this->offset.first = room.getX0() + ( ( room.getSizeOfOneTile() * ( getCellX() - getCellY() - 1 ) ) << 1 ) + 1;
-        this->offset.second = room.getY0() + room.getSizeOfOneTile() * ( getCellX() + getCellY() );
+        this->offset.first = room.getX0() + ( ( room.getSizeOfOneCell() * ( getCellX() - getCellY() - 1 ) ) << 1 ) + 1;
+        this->offset.second = room.getY0() + room.getSizeOfOneCell() * ( getCellX() + getCellY() );
 }
 
 void FloorTile::draw ()
 {
-        assert( this->shadyImage != nilPointer );
+        assert( this->shadedImage != nilPointer );
 
         // draw tile with shadow
-        allegro::drawSprite( this->shadyImage->getAllegroPict(), offset.first, offset.second );
+        allegro::drawSprite( this->shadedImage->getAllegroPict(), offset.first, offset.second );
 
         /* else if ( this->rawImage != nilPointer )
                 // draw tile, just tile
                 allegro::drawSprite( this->rawImage->getAllegroPict(), offset.first, offset.second ); */
 }
 
-void FloorTile::setAsShadyImage ( const Picture & toCopy )
+void FloorTile::setShadedImage ( const Picture & toCopy )
 {
-        shadyImage->fillWithColor( Color::keyColor () );
-        allegro::bitBlit( /* from */ toCopy.getAllegroPict(), /* to */ this->shadyImage->getAllegroPict() );
-        this->shadyImage->setName( "shaded " + this->rawImage->getName() );
+        shadedImage->fillWithColor( Color::keyColor () );
+        allegro::bitBlit( /* from */ toCopy.getAllegroPict(), /* to */ this->shadedImage->getAllegroPict() );
+        this->shadedImage->setName( "shaded " + this->rawImage->getName() );
 }
 
-void FloorTile::freshShadyImage ()
+void FloorTile::refreshShadedImage ()
 {
-        if ( getWantShadow() || this->shadyImage->getName().find( "fresh copy" ) != std::string::npos )
+        if ( getWantShadow() || this->shadedImage->getName().find( "fresh copy" ) != std::string::npos )
                 return ; // it’s fresh already or in the process of shading this tile
 
-        shadyImage->fillWithColor( Color::keyColor () );
-        allegro::bitBlit( /* from */ this->rawImage->getAllegroPict(), /* to */ this->shadyImage->getAllegroPict() );
-        this->shadyImage->setName( "fresh copy of " + this->rawImage->getName() );
+        shadedImage->fillWithColor( Color::keyColor () );
+        allegro::bitBlit( /* from */ this->rawImage->getAllegroPict(), /* to */ this->shadedImage->getAllegroPict() );
+        this->shadedImage->setName( "fresh copy of " + this->rawImage->getName() );
 }
 
 unsigned int FloorTile::getIndexOfColumn () const
 {
         assert( getMediator() != nilPointer );
-        return getMediator()->getRoom().getTilesAlongX() * getCellY() + getCellX() ;
+        return getMediator()->getRoom().getCellsAlongX() * getCellY() + getCellX() ;
 }
 
 /* static */

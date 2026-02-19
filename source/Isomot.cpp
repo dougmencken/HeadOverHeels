@@ -24,7 +24,7 @@ Isomot::Isomot( ) :
         view( nilPointer ),
         paused( false ),
         finalRoomBuilt( false ),
-        sizeOfTileForMiniature( Miniature::the_default_size_of_tile ),
+        miniatureSquareSize( Miniature::the_default_square_size ),
         cameraFollowsCharacter( false ),
         drawOnChequerboard( false )
 {
@@ -217,7 +217,7 @@ Picture* Isomot::updateMe ()
                 - cameraDeltaX, - cameraDeltaY
         );
 
-        drawMiniature( 24, 24, this->sizeOfTileForMiniature ) ;
+        drawMiniature( 24, 24, this->miniatureSquareSize ) ;
 
         // show text when the infinite lives and inviolability cheats are enabled
 
@@ -241,7 +241,7 @@ Picture* Isomot::updateMe ()
         return this->view ;
 }
 
-void Isomot::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
+void Isomot::drawMiniature ( int leftX, int topY, unsigned int squareSize )
 {
         if ( ! GameManager::getInstance().drawRoomMiniatures () ) return ;
 
@@ -253,10 +253,10 @@ void Isomot::drawMiniature ( int leftX, int topY, unsigned int sizeOfTile )
         Miniature * ofThisRoom = this->miniatures.getMiniatureByName( "this" );
         if ( ofThisRoom == nilPointer ||
                         ofThisRoom->getRoom().getNameOfRoomDescriptionFile() != activeRoom->getNameOfRoomDescriptionFile()
-                        || ofThisRoom->getSizeOfTile() != sizeOfTile )
+                        || ofThisRoom->getSquareSize() != squareSize )
         {
-                ofThisRoom = new Miniature( *activeRoom, sizeOfTile, /* with room info */ true );
-                ofThisRoom->setOffsetOnScreen( leftX, topY );
+                ofThisRoom = new Miniature( *activeRoom, squareSize, /* with room info */ true );
+                ofThisRoom->setDrawingOffset( leftX, topY );
                 this->miniatures.setMiniatureForName( "this", ofThisRoom );
                 sameRoom = false ;
         }
@@ -632,14 +632,14 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isShiftKeyPushed() && ( allegro::isKeyPushed( "Pad -" ) || allegro::isKeyPushed( "," ) ) )
         {
-                if ( sizeOfTileForMiniature > 2 ) sizeOfTileForMiniature -- ;
+                if ( this->miniatureSquareSize > 2 ) this->miniatureSquareSize -- ;
 
                 if ( allegro::isKeyPushed( "," ) ) allegro::releaseKey( "," );
                 if ( allegro::isKeyPushed( "Pad -" ) ) allegro::releaseKey( "Pad -" );
         }
         if ( allegro::isShiftKeyPushed() && ( allegro::isKeyPushed( "Pad +" ) || allegro::isKeyPushed( "." ) ) )
         {
-                if ( sizeOfTileForMiniature < 10 ) sizeOfTileForMiniature ++ ;
+                if ( this->miniatureSquareSize < 10 ) this->miniatureSquareSize ++ ;
 
                 if ( allegro::isKeyPushed( "." ) ) allegro::releaseKey( "." );
                 if ( allegro::isKeyPushed( "Pad +" ) ) allegro::releaseKey( "Pad +" );

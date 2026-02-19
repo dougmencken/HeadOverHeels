@@ -282,7 +282,7 @@ void Mediator::wantShadowFromGridItem( const GridItem & item )
         // shade the floor in this column, if any
         FloorTile * floorTile = this->room.getFloorTileAtColumn( column );
         if ( floorTile != nilPointer ) {
-                floorTile->freshShadyImage(); // begin shading with the fresh image of tile
+                floorTile->refreshShadedImage(); // begin shading with the fresh image of tile
                 floorTile->setWantShadow( true );
         }
 }
@@ -305,15 +305,15 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem & item, int x, int y, in
         const std::vector < std::vector < GridItemPtr > > & gridItems = this->room.getGridItems ();
 
         // the range of tiles (columns, cells) where this item is
-        int xStart = x / this->room.getSizeOfOneTile ();
-        int xEnd = ( x + item.getWidthX() - 1 ) / this->room.getSizeOfOneTile () + 1 ;
-        int yStart = ( y - item.getWidthY() + 1 ) / this->room.getSizeOfOneTile ();
-        int yEnd = y / this->room.getSizeOfOneTile () + 1 ;
+        int xStart = x / this->room.getSizeOfOneCell ();
+        int xEnd = ( x + item.getWidthX() - 1 ) / this->room.getSizeOfOneCell () + 1 ;
+        int yStart = ( y - item.getWidthY() + 1 ) / this->room.getSizeOfOneCell ();
+        int yEnd = y / this->room.getSizeOfOneCell () + 1 ;
 
         for ( int i = xStart; i < xEnd; ++ i ) {
                 for ( int j = yStart; j < yEnd; ++ j )
                 {
-                        unsigned int column = this->room.getTilesAlongX() * j + i ;
+                        unsigned int column = this->room.getCellsAlongX() * j + i ;
 
                         // mark to shade grid items in the column
                         for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ]. begin ();
@@ -331,7 +331,7 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem & item, int x, int y, in
                         // shade the floor in this column, if any
                         FloorTile * floorTile = this->room.getFloorTileAtColumn( column );
                         if ( floorTile != nilPointer ) {
-                                floorTile->freshShadyImage (); // begin shading with the fresh image of tile
+                                floorTile->refreshShadedImage (); // begin shading with the fresh image of tile
                                 floorTile->setWantShadow( true );
                         }
                 }
@@ -381,7 +381,7 @@ void Mediator::castShadowOnFloor( FloorTile & floorTile )
         int xCell = floorTile.getCellX ();
         int yCell = floorTile.getCellY ();
         unsigned int column = floorTile.getIndexOfColumn ();
-        unsigned int tileSize = this->room.getSizeOfOneTile ();
+        unsigned int tileSize = this->room.getSizeOfOneCell ();
 
         const std::vector < std::vector < GridItemPtr > > & gridItems = this->room.getGridItems ();
 
@@ -460,7 +460,7 @@ void Mediator::castShadowOnGridItem( GridItem & gridItem )
 {
         if ( this->room.getTransparencyOfShadows() >= 256 ) return ;
 
-        int tileSize = this->room.getSizeOfOneTile ();
+        int tileSize = this->room.getSizeOfOneCell ();
         int column = gridItem.getColumnOfGrid() ;
 
         const std::vector < std::vector < GridItemPtr > > & gridItems = this->room.getGridItems ();
@@ -560,7 +560,7 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
 
         const std::vector < std::vector < GridItemPtr > > & gridItems = this->room.getGridItems ();
 
-        int tileSize = this->room.getSizeOfOneTile ();
+        int tileSize = this->room.getSizeOfOneCell ();
 
         // the range of cells where this item is
         int xStart = freeItem.getX() / tileSize;
@@ -572,7 +572,7 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
         for ( int yCell = yStart; yCell <= yEnd; yCell++ ) {
                 for ( int xCell = xStart; xCell <= xEnd; xCell++ )
                 {
-                        int column = yCell * this->room.getTilesAlongX() + xCell;
+                        int column = yCell * this->room.getCellsAlongX() + xCell;
 
                         for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
                         {
@@ -710,17 +710,17 @@ void Mediator::maskFreeItem( FreeItem & freeItem )
         {
                 const std::vector < std::vector < GridItemPtr > > & gridItems = this->room.getGridItems ();
 
-                int xStart = freeItem.getX() / this->room.getSizeOfOneTile() ;
-                int xEnd = 1 + ( freeItem.getX() + freeItem.getWidthX() - 1 ) / this->room.getSizeOfOneTile() ;
-                int yStart = 1 + freeItem.getY() / this->room.getSizeOfOneTile ();
-                int yEnd = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / this->room.getSizeOfOneTile() ;
+                int xStart = freeItem.getX() / this->room.getSizeOfOneCell() ;
+                int xEnd = 1 + ( freeItem.getX() + freeItem.getWidthX() - 1 ) / this->room.getSizeOfOneCell() ;
+                int yStart = 1 + freeItem.getY() / this->room.getSizeOfOneCell ();
+                int yEnd = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / this->room.getSizeOfOneCell() ;
 
                 do {
                         unsigned int i = 0;
 
-                        while ( ( xStart + i < this->room.getTilesAlongX() ) && ( yStart + i < this->room.getTilesAlongY() ) )
+                        while ( ( xStart + i < this->room.getCellsAlongX() ) && ( yStart + i < this->room.getCellsAlongY() ) )
                         {
-                                int column = this->room.getTilesAlongX() * ( yStart + i ) + xStart + i ;
+                                int column = this->room.getCellsAlongX() * ( yStart + i ) + xStart + i ;
 
                                 // behind grid items
                                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
@@ -729,8 +729,8 @@ void Mediator::maskFreeItem( FreeItem & freeItem )
 
                                         if ( gridItem.doGraphicsOverlap( freeItem ) )
                                         {
-                                                int gridItemX = static_cast< int >( ( xStart + i ) * this->room.getSizeOfOneTile() ) ;
-                                                int gridItemYMinusWidthY = static_cast< int >( ( yStart + i ) * this->room.getSizeOfOneTile() ) - 1 ;
+                                                int gridItemX = static_cast< int >( ( xStart + i ) * this->room.getSizeOfOneCell() ) ;
+                                                int gridItemYMinusWidthY = static_cast< int >( ( yStart + i ) * this->room.getSizeOfOneCell() ) - 1 ;
 
                                                 if ( gridItemX >= ( freeItem.getX() + freeItem.getWidthX() ) ||
                                                         ( gridItemYMinusWidthY >= freeItem.getY() ) ||
@@ -873,22 +873,22 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
         else if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
         {
                 // the range of cells where the item is
-                int xStart = item->getX() / this->room.getSizeOfOneTile ();
-                int xEnd = 1 + ( item->getX() + item->getWidthX() - 1 ) / this->room.getSizeOfOneTile ();
-                int yStart = ( item->getY() - item->getWidthY() + 1 ) / this->room.getSizeOfOneTile ();
-                int yEnd = 1 + item->getY() / this->room.getSizeOfOneTile () ;
+                int xStart = item->getX() / this->room.getSizeOfOneCell ();
+                int xEnd = 1 + ( item->getX() + item->getWidthX() - 1 ) / this->room.getSizeOfOneCell ();
+                int yStart = ( item->getY() - item->getWidthY() + 1 ) / this->room.getSizeOfOneCell ();
+                int yEnd = 1 + item->getY() / this->room.getSizeOfOneCell () ;
 
                 // there are room limits by the way
                 if ( xStart < 0 ) xStart = 0;
-                if ( xEnd > static_cast< int >( this->room.getTilesAlongX () ) ) xEnd = this->room.getTilesAlongX();
+                if ( xEnd > static_cast< int >( this->room.getCellsAlongX () ) ) xEnd = this->room.getCellsAlongX();
                 if ( yStart < 0 ) yStart = 0;
-                if ( yEnd > static_cast< int >( this->room.getTilesAlongY () ) ) yEnd = this->room.getTilesAlongY();
+                if ( yEnd > static_cast< int >( this->room.getCellsAlongY () ) ) yEnd = this->room.getCellsAlongY();
 
                 // look for grid items within these cells
                 for ( int i = xStart; i < xEnd; i++ ) {
                         for ( int j = yStart; j < yEnd; j++ )
                         {
-                                std::vector< GridItemPtr > items = gridItems[ this->room.getTilesAlongX() * j + i ] ;
+                                std::vector< GridItemPtr > items = gridItems[ this->room.getCellsAlongX() * j + i ] ;
 
                                 for ( std::vector< GridItemPtr >::const_iterator g = items.begin (); g != items.end (); ++ g )
                                 {
@@ -950,16 +950,16 @@ int Mediator::findHighestZ( const DescribedItem & item )
                 const FreeItem & freeItem = dynamic_cast< const FreeItem & >( item );
 
                 // get cells where the item is
-                int xStart = freeItem.getX() / this->room.getSizeOfOneTile();
-                int xEnd = 1 + ( freeItem.getX() + freeItem.getWidthX() - 1 ) / this->room.getSizeOfOneTile() ;
-                int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / this->room.getSizeOfOneTile() ;
-                int yEnd = 1 + freeItem.getY() / this->room.getSizeOfOneTile() ;
+                int xStart = freeItem.getX() / this->room.getSizeOfOneCell();
+                int xEnd = 1 + ( freeItem.getX() + freeItem.getWidthX() - 1 ) / this->room.getSizeOfOneCell() ;
+                int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / this->room.getSizeOfOneCell() ;
+                int yEnd = 1 + freeItem.getY() / this->room.getSizeOfOneCell() ;
 
                 // look for grid items within these cells
                 for ( int i = xStart; i < xEnd; ++ i ) {
                         for ( int j = yStart; j < yEnd; ++ j )
                         {
-                                int column = this->room.getTilesAlongX() * j + i ;
+                                int column = this->room.getCellsAlongX() * j + i ;
                                 for ( std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin ();
                                                 g != gridItems[ column ].end (); ++ g )
                                 {
@@ -1091,7 +1091,7 @@ bool Mediator::pickNextCharacter ()
         {
                 // see if the characters may join here
 
-                const int delta = this->room.getSizeOfOneTile() >> 1 ;
+                const int delta = this->room.getSizeOfOneCell() >> 1 ;
 
                 if ( ( previousCharacter->getOriginalKind() == "head" && currentCharacter->getOriginalKind() == "heels" ) ||
                                 ( previousCharacter->getOriginalKind() == "heels" && currentCharacter->getOriginalKind() == "head" ) )

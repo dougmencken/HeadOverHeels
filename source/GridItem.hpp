@@ -24,7 +24,7 @@ class DescriptionOfItem ;
 
 /**
  * The grid items are those which are placed in a single grid cell. They have the same
- * widths as the grid cells have. Grid items are mostly static. Only the Z coordinate
+ * widths as the room grid cells have. Grid items are mostly static. Only the Z coordinate
  * of a grid item can be changed, but not the position along X and Y
  */
 

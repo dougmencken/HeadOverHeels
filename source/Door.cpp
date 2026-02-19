@@ -236,7 +236,7 @@ const FreeItemPtr & Door::getLeftJamb()
 
                 const DescriptionOfItem & whatIsLeftJamb = * ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~leftjamb" );
 
-                int oneTile = getMediator()->getRoom().getSizeOfOneTile ();
+                int oneCell = getMediator()->getRoom().getSizeOfOneCell ();
 
                 int x = 0 ; int y = 0 ;
 
@@ -245,32 +245,32 @@ const FreeItemPtr & Door::getLeftJamb()
                         case Way::North:
                         case Way::Northeast:
                         case Way::Northwest:
-                                x = cellX * oneTile + whatIsLeftJamb.getWidthX() - 2 ;
-                                y = ( cellY + 2 ) * oneTile - 2 ;
+                                x = cellX * oneCell + whatIsLeftJamb.getWidthX() - 2 ;
+                                y = ( cellY + 2 ) * oneCell - 2 ;
                                 this->leftLimit = y + whatIsLeftJamb.getWidthY() ;
                                 break;
 
                         case Way::South:
                         case Way::Southeast:
                         case Way::Southwest:
-                                x = cellX * oneTile ;
-                                y = ( cellY + 2 ) * oneTile - 2 ;
+                                x = cellX * oneCell ;
+                                y = ( cellY + 2 ) * oneCell - 2 ;
                                 this->leftLimit = y + whatIsLeftJamb.getWidthY() ;
                                 break;
 
                         case Way::East:
                         case Way::Eastnorth:
                         case Way::Eastsouth:
-                                x = cellX * oneTile ;
-                                y = ( cellY + 1 ) * oneTile - 1 ;
+                                x = cellX * oneCell ;
+                                y = ( cellY + 1 ) * oneCell - 1 ;
                                 this->leftLimit = x + whatIsLeftJamb.getWidthX() ;
                                 break;
 
                         case Way::West:
                         case Way::Westnorth:
                         case Way::Westsouth:
-                                x = cellX * oneTile ;
-                                y = ( cellY + 1 ) * oneTile - whatIsLeftJamb.getWidthY() + 1 ;
+                                x = cellX * oneCell ;
+                                y = ( cellY + 1 ) * oneCell - whatIsLeftJamb.getWidthY() + 1 ;
                                 this->leftLimit = x + whatIsLeftJamb.getWidthX() ;
                                 break;
 
@@ -296,7 +296,7 @@ const FreeItemPtr & Door::getRightJamb()
                 if ( this->rightJambImage == nilPointer )
                         throw UnlikelyToHappenException( "nil image for the right jamb of " + getKind() );
 
-                int oneTile = getMediator()->getRoom().getSizeOfOneTile ();
+                int oneCell = getMediator()->getRoom().getSizeOfOneCell ();
 
                 const DescriptionOfItem & whatIsRightJamb = * ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~rightjamb" );
 
@@ -307,32 +307,32 @@ const FreeItemPtr & Door::getRightJamb()
                         case Way::North:
                         case Way::Northeast:
                         case Way::Northwest:
-                                x = cellX * oneTile + whatIsRightJamb.getWidthX() - 2 ;
-                                y = cellY * oneTile + whatIsRightJamb.getWidthY() - 1 ;
+                                x = cellX * oneCell + whatIsRightJamb.getWidthX() - 2 ;
+                                y = cellY * oneCell + whatIsRightJamb.getWidthY() - 1 ;
                                 this->rightLimit = y ;
                                 break;
 
                         case Way::South:
                         case Way::Southeast:
                         case Way::Southwest:
-                                x = cellX * oneTile ;
-                                y = cellY * oneTile + whatIsRightJamb.getWidthY() - 1 ;
+                                x = cellX * oneCell ;
+                                y = cellY * oneCell + whatIsRightJamb.getWidthY() - 1 ;
                                 this->rightLimit = y ;
                                 break;
 
                         case Way::East:
                         case Way::Eastnorth:
                         case Way::Eastsouth:
-                                x = ( cellX + 2 ) * oneTile - whatIsRightJamb.getWidthX() - 2 ;
-                                y = ( cellY + 1 ) * oneTile - 1 ;
+                                x = ( cellX + 2 ) * oneCell - whatIsRightJamb.getWidthX() - 2 ;
+                                y = ( cellY + 1 ) * oneCell - 1 ;
                                 this->rightLimit = x ;
                                 break;
 
                         case Way::West:
                         case Way::Westnorth:
                         case Way::Westsouth:
-                                x = ( cellX + 2 ) * oneTile - whatIsRightJamb.getWidthX() - 2 ;
-                                y = ( cellY + 1 ) * oneTile - whatIsRightJamb.getWidthY() + 1 ;
+                                x = ( cellX + 2 ) * oneCell - whatIsRightJamb.getWidthX() - 2 ;
+                                y = ( cellY + 1 ) * oneCell - whatIsRightJamb.getWidthY() + 1 ;
                                 this->rightLimit = x ;
                                 break;
 
@@ -358,7 +358,7 @@ const FreeItemPtr & Door::getLintel()
                 if ( this->lintelImage == nilPointer )
                         throw UnlikelyToHappenException( "nil image for the lintel of " + getKind() );
 
-                int oneTile = getMediator()->getRoom().getSizeOfOneTile ();
+                int oneCell = getMediator()->getRoom().getSizeOfOneCell ();
 
                 const DescriptionOfItem & whatIsLintel = * ItemDescriptions::descriptions ().getDescriptionByKind( kindOfDoor + "~lintel" );
 
@@ -369,29 +369,29 @@ const FreeItemPtr & Door::getLintel()
                         case Way::North:
                         case Way::Northeast:
                         case Way::Northwest:
-                                x = cellX * oneTile + whatIsLintel.getWidthX() - 2 ;
-                                y = ( cellY + 2 ) * oneTile - 1 ;
+                                x = cellX * oneCell + whatIsLintel.getWidthX() - 2 ;
+                                y = ( cellY + 2 ) * oneCell - 1 ;
                                 break;
 
                         case Way::South:
                         case Way::Southeast:
                         case Way::Southwest:
-                                x = cellX * oneTile ;
-                                y = ( cellY + 2 ) * oneTile - 1 ;
+                                x = cellX * oneCell ;
+                                y = ( cellY + 2 ) * oneCell - 1 ;
                                 break;
 
                         case Way::East:
                         case Way::Eastnorth:
                         case Way::Eastsouth:
-                                x = cellX * oneTile ;
-                                y = ( cellY + 1 ) * oneTile - 1 ;
+                                x = cellX * oneCell ;
+                                y = ( cellY + 1 ) * oneCell - 1 ;
                                 break;
 
                         case Way::West:
                         case Way::Westnorth:
                         case Way::Westsouth:
-                                x = cellX * oneTile ;
-                                y = ( cellY + 1 ) * oneTile - whatIsLintel.getWidthY() + 1 ;
+                                x = cellX * oneCell ;
+                                y = ( cellY + 1 ) * oneCell - whatIsLintel.getWidthY() + 1 ;
                                 break;
 
                         default:
@@ -415,7 +415,7 @@ bool Door::isUnderDoor( int x, int y, int z ) const
 
         bool under = ( leftJamb->getZ() <= z && z <= lintel->getZ() );
 
-        const int oneCell = getMediator()->getRoom().getSizeOfOneTile ();
+        const int oneCell = getMediator()->getRoom().getSizeOfOneCell ();
 
         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
         {

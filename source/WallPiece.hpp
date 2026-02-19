@@ -19,13 +19,29 @@
 
 
 /**
- * The segment of the room’s wall
+ * A segment of the room’s wall
  */
 
 class WallPiece : public Drawable, public Mediated
 {
 
-public:
+private :
+
+        // if true, then this piece is a segment of the wall along X, otherwise along Y
+        bool alongX ;
+
+        // the position of this piece, the smaller the closer to the room’s origin
+        int position ;
+
+        // the name of the image file for this part of the wall
+        std::string nameOfImageFile ;
+
+        // the offset of this wall piece’s graphics within the room image
+        std::pair < int, int > offset ;
+
+        void calculateOffset () ;
+
+public :
 
         /**
          * @param trueXfalseY is this a piece of the wall along X or not
@@ -50,24 +66,6 @@ public:
 
         static bool compareWallPointers ( const WallPiece * first, const WallPiece * second )
                 {  return ( first != nilPointer && second != nilPointer ) ? *first < *second : false ;  }
-
-private:
-
-        // calculates the offset of this wall piece’s graphics in the room
-        void calculateOffset () ;
-
-        // if true, then this piece is part of the wall along X, otherwise along Y
-        bool alongX ;
-
-        // the position of this piece, the smaller the closer to the room’s origin
-        int position ;
-
-        std::pair < int, int > offset ;
-
-        // the name of the image file for this part of the wall
-        std::string nameOfImageFile ;
-
-public:
 
         bool isAlongX () const {  return   this->alongX ;  }
         bool isAlongY () const {  return ! this->alongX ;  }

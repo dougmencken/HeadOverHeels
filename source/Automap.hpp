@@ -23,7 +23,7 @@ private :
 
         Picture * automapImage ;
 
-        unsigned int sizeOfMiniatureTile ;
+        unsigned int miniatureSquareSize ;
 
         NamedMiniatures miniatures ;
 
@@ -42,7 +42,7 @@ public :
 
         void drawMiniature () ;
 
-        void drawMiniature ( int leftX, int topY, unsigned int sizeOfTile ) ;
+        void drawMiniature ( int leftX, int topY, unsigned int squareSize ) ;
 
         Picture * getImage () {  return this->automapImage ;  }
 

@@ -312,7 +312,7 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
 
         bool walksThruDoor = false ;
 
-        const unsigned int oneTile = getMediator()->getRoom().getSizeOfOneTile() ;
+        const unsigned int oneCell = getMediator()->getRoom().getSizeOfOneCell() ;
 
         switch ( Way( where ).getIntegerOfWay () )
         {
@@ -327,7 +327,7 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
                         break;
 
                 case Way::South:
-                        walksThruDoor = ( getX() + getWidthX() > static_cast< int >( getMediator()->getRoom().getTilesAlongX() * oneTile ) );
+                        walksThruDoor = ( getX() + getWidthX() > static_cast< int >( getMediator()->getRoom().getCellsAlongX() * oneCell ) );
                         break;
 
                 case Way::Southeast:
@@ -347,7 +347,7 @@ bool AvatarItem::isWalkingThroughDoorAt( const std::string & where )
                         break;
 
                 case Way::West:
-                        walksThruDoor = ( getY() >= static_cast< int >( getMediator()->getRoom().getTilesAlongY() * oneTile ) );
+                        walksThruDoor = ( getY() >= static_cast< int >( getMediator()->getRoom().getCellsAlongY() * oneCell ) );
                         break;
 
                 case Way::Westnorth:

@@ -18,10 +18,10 @@ GridItem::GridItem( const DescriptionOfItem & description, int cx, int cy, int z
 
 void GridItem::updateImageOffset ( unsigned int imageWidth, unsigned int imageHeight )
 {
-        int oneTileLong = ( getMediator() != nilPointer ) ? getMediator()->getRoom().getSizeOfOneTile() : Room::Single_Tile_Size ;
+        int oneCell = ( getMediator() != nilPointer ) ? getMediator()->getRoom().getSizeOfOneCell() : Room::single_cell_size ;
 
-        int offsetX = ( ( oneTileLong * ( cell.first - cell.second ) ) << 1 ) - ( imageWidth >> 1 ) + 1 ;
-        int offsetY = oneTileLong * ( cell.first + cell.second + 2 ) - imageHeight - this->getZ() - 1 ;
+        int offsetX = ( ( oneCell * ( cell.first - cell.second ) ) << 1 ) - ( imageWidth >> 1 ) + 1 ;
+        int offsetY = oneCell * ( cell.first + cell.second + 2 ) - imageHeight - this->getZ() - 1 ;
 
         this->imageOffset = std::pair< int, int >( offsetX, offsetY );
 }
@@ -91,7 +91,7 @@ bool GridItem::addToPosition( int x, int y, int z )
                 if ( ! collisionFound )
                 {
                         // change only the offset on Y because it depends on the 3D Z coordinate
-                        int newOffsetY = getMediator()->getRoom().getSizeOfOneTile() * ( cell.first + cell.second + 2 ) - getCurrentRawImage().getHeight() - this->getZ() - 1 ;
+                        int newOffsetY = getMediator()->getRoom().getSizeOfOneCell() * ( cell.first + cell.second + 2 ) - getCurrentRawImage().getHeight() - this->getZ() - 1 ;
                         this->imageOffset = std::pair< int, int >( getImageOffsetX(), newOffsetY );
 
                         // mark to mask overlapping free items
@@ -118,6 +118,6 @@ bool GridItem::addToPosition( int x, int y, int z )
 unsigned int GridItem::getColumnOfGrid () const
 {
         assert( getMediator() != nilPointer );
-        return getMediator()->getRoom().getTilesAlongX() * getCellY() + getCellX();
+        return getMediator()->getRoom().getCellsAlongX() * getCellY() + getCellX();
 }
 

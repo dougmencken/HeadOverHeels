@@ -429,7 +429,7 @@ void GameManager::saveTheGame ()
 
         if ( fish != nilPointer && fish->whichItemClass() == "free item" ) {
                 const FreeItem & freeFish = dynamic_cast< const FreeItem & >( *fish );
-                int oneCell = room->getSizeOfOneTile ();
+                int oneCell = room->getSizeOfOneCell ();
 
                 // get the initial location o’ fish in the room
                 x = freeFish.getInitialCellX() * oneCell ;

@@ -113,7 +113,7 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
                                                         << " in room " << theRoom->getNameOfRoomDescriptionFile() << std::endl ;
 
                                 std::string fileWithPicture = kind + ".png" ;
-                                theRoom->addWallPiece( new WallPiece( wallAlongX, where, fileWithPicture ) );
+                                theRoom->addWallSegment( new WallPiece( wallAlongX, where, fileWithPicture ) );
                         }
                         else {
                                 GridItemPtr gridItem = makeGridItem( item, theRoom );
@@ -149,10 +149,10 @@ Room* RoomMaker::makeRoom ( const std::string & roomName )
                                 wall != nilPointer ;
                                 wall = wall->NextSiblingElement( "wall" ) )
                 {
-                        WallPiece* wallSegment = makeWallPiece( wall );
+                        WallPiece* piece = makeWallPiece( wall );
 
-                        if ( wallSegment != nilPointer )
-                                theRoom->addWallPiece( wallSegment );
+                        if ( piece != nilPointer )
+                                theRoom->addWallSegment( piece );
                 }
         }
 
@@ -184,9 +184,9 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
         Door* westnorthDoor = room->getDoorOn( "westnorth" );
         Door* westsouthDoor = room->getDoorOn( "westsouth" );
 
-        // read the list of floorless tiles (for a triple room)
+        // read the list of floorless cells (for a triple room)
 
-        std::set< std::pair< int, int > > tilesWithoutFloor ;
+        std::set< std::pair< int, int > > floorlessCells ;
 
         for ( tinyxml2::XMLElement* nofloor = xmlRootElement->FirstChildElement( "nofloor" ) ;
                         nofloor != nilPointer ;
@@ -196,20 +196,20 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                 int noFloorY = std::atoi( nofloor->Attribute( "y" ) ) ;
                 std::pair< int, int > noFloorXY( noFloorX, noFloorY ) ;
 
-                tilesWithoutFloor.insert( noFloorXY );
+                floorlessCells.insert( noFloorXY );
         }
 
-        if ( ! tilesWithoutFloor.empty () )
-                room->setTilesWithoutFloor( tilesWithoutFloor );
+        if ( ! floorlessCells.empty () )
+                room->setCellsWithoutFloor( floorlessCells );
 
         if ( ! room->getScenery ().empty() )
         {
-                // make the floor in the room just by its kind, without listing every tile
+                // make the floor by its kind (plain or mortal) and the room’s scenery, without listing every tile
 
                 const std::string sceneryPrefix = room->getScenery() + "-" ;
 
-                int lastTileX = room->getTilesAlongX() - 1 ;
-                int lastTileY = room->getTilesAlongY() - 1 ;
+                int lastTileX = room->getCellsAlongX() - 1 ;
+                int lastTileY = room->getCellsAlongY() - 1 ;
 
                 for ( int tileX = 0 ; tileX <= lastTileX ; ++ tileX ) {
                         for ( int tileY = 0 ; tileY <= lastTileY ; ++ tileY )
@@ -298,7 +298,7 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                                         if ( tileY > 0 ) {
                                                 // the tile is not full only if the tile further east is without floor
                                                 std::pair< int, int > easterTileXY( tileX, tileY - 1 );
-                                                isNotFull = ( tilesWithoutFloor.find( easterTileXY ) != tilesWithoutFloor.end() );
+                                                isNotFull = ( floorlessCells.find( easterTileXY ) != floorlessCells.end() );
                                         }
 
                                         if ( isNotFull )
@@ -329,7 +329,7 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                                         if ( tileX > 0 ) {
                                                 // the tile is not full only if the tile further north is without floor
                                                 std::pair< int, int > northerTileXY( tileX - 1, tileY );
-                                                isNotFull = ( tilesWithoutFloor.find( northerTileXY ) != tilesWithoutFloor.end() );
+                                                isNotFull = ( floorlessCells.find( northerTileXY ) != floorlessCells.end() );
                                         }
 
                                         if ( isNotFull )
@@ -380,7 +380,7 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
 
                                 std::pair< int, int > tileXY( tileX, tileY );
 
-                                addTile = addTile && ( tilesWithoutFloor.find( tileXY ) == tilesWithoutFloor.end() );
+                                addTile = addTile && ( floorlessCells.find( tileXY ) == floorlessCells.end() );
 
                                 if ( addTile ) {
                                         PoolOfPictures & imagePool = PoolOfPictures::getPoolOfPictures() ;
@@ -441,7 +441,8 @@ void RoomMaker::makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement )
                 }
         }
         else
-        {
+        {       // for each floor tile its position (x,y) and image file name are listed
+
                 tinyxml2::XMLElement* floor = xmlRootElement->FirstChildElement( "floor" );
                 if ( floor != nilPointer )
                 {
@@ -534,9 +535,9 @@ FreeItemPtr RoomMaker::makeFreeItem( tinyxml2::XMLElement* item, Room* room )
                 int cellZ = std::atoi( item->Attribute( "z" ) );
 
                 // convert the location of cell to the free coordinates
-                unsigned int oneTileLong = room->getSizeOfOneTile ();
-                int freeX = cellX * oneTileLong + ( ( oneTileLong - itemDescription->getWidthX() ) >> 1 );
-                int freeY = ( cellY + 1 ) * oneTileLong - ( ( oneTileLong - itemDescription->getWidthY() ) >> 1 ) - 1 ;
+                unsigned int oneCell = room->getSizeOfOneCell ();
+                int freeX = cellX * oneCell + ( ( oneCell - itemDescription->getWidthX() ) >> 1 );
+                int freeY = ( cellY + 1 ) * oneCell - ( ( oneCell - itemDescription->getWidthY() ) >> 1 ) - 1 ;
                 int freeZ = ( cellZ > Room::FloorZ ) ? cellZ * Room::LayerHeight : Room::FloorZ ;
 
                 // don’t create an item if it's a bonus that disappears once when taken

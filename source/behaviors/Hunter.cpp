@@ -46,7 +46,7 @@ bool Hunter::update ()
                         else
                         {
                                 const unsigned int sizeOfRectangleInTiles = 3 ;
-                                const int coverage = hunterItem.getMediator()->getRoom().getSizeOfOneTile() * sizeOfRectangleInTiles ;
+                                const int coverage = hunterItem.getMediator()->getRoom().getSizeOfOneCell() * sizeOfRectangleInTiles ;
 
                                 if ( whoToHunt != nilPointer  &&
                                         whoToHunt->getX() > hunterItem.getX() - coverage  &&

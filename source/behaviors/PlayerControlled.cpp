@@ -559,8 +559,8 @@ void PlayerControlled::takeItem ()
                                 if ( belowItem != nilPointer && belowItem->getBehavior() != nilPointer
                                         && ( belowItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 belowItem->getBehavior()->getNameOfBehavior() == "behavior of spring stool" )
-                                        && belowItem->getUnsignedWidthX() <= ( mediator->getRoom().getSizeOfOneTile() * 3 ) >> 2
-                                        && belowItem->getUnsignedWidthY() <= ( mediator->getRoom().getSizeOfOneTile() * 3 ) >> 2 )
+                                        && belowItem->getUnsignedWidthX() <= ( mediator->getRoom().getSizeOfOneCell() * 3 ) >> 2
+                                        && belowItem->getUnsignedWidthY() <= ( mediator->getRoom().getSizeOfOneCell() * 3 ) >> 2 )
                                 {
                                         if ( belowItem->getX() + belowItem->getY() > whereIsItemToPick ) {
                                                 whereIsItemToPick = belowItem->getX() + belowItem->getY() ;

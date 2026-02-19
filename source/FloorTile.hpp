@@ -60,7 +60,7 @@ private:
         /**
          * Picture of the shaded tile
          */
-        autouniqueptr< NamedPicture > shadyImage ;
+        autouniqueptr< NamedPicture > shadedImage ;
 
 public:
 
@@ -81,11 +81,11 @@ public:
 
         const NamedPicture & getRawImage () const {  return * this->rawImage ;  }
 
-        const NamedPicture & getShadyImage () const {  return * this->shadyImage ;  }
+        const NamedPicture & getShadedImage () const {  return * this->shadedImage ;  }
 
-        void setAsShadyImage ( const Picture & toCopy ) ;
+        void setShadedImage ( const Picture & toCopy ) ;
 
-        void freshShadyImage () ;
+        void refreshShadedImage () ;
 
         static NamedPicturePtr fullTileToPartialTile ( const NamedPicture & fullTile, const std::string & whichPart, bool darkenPlane = true ) ;
 

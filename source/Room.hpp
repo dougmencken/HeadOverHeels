@@ -42,29 +42,29 @@ class Room : public Drawable, public Mediated
 public:
 
         /**
-         * @param roomFile the name of file with the description of this room
-         * @param xTiles the length along X, in tiles
-         * @param yTiles the length along Y, in tiles
-         * @param roomScenery the scenery such as moon or safari
-         * @param floorKind the kind of floor
-         */
-        Room( const std::string & roomFile, unsigned short xTiles, unsigned short yTiles,
+	 * @param nameOfRoomFile the name of file with the description of this room
+	 * @param xCells the length along north–south, in cells
+	 * @param yCells the length along east–west, in cells
+	 * @param roomScenery the scenery such as moon or safari
+	 * @param whichFloor the kind of floor
+	 */
+        Room( const std::string & roomFile, unsigned short xCells, unsigned short yCells,
                         const std::string & roomScenery, const std::string & floorKind ) ;
 
         virtual ~Room( ) ;
 
-        bool isSingleRoom () const {  return getTilesAlongX() <= maxTilesOfSingleRoom && getTilesAlongY() <= maxTilesOfSingleRoom ;  }
+        bool isSingleRoom () const {  return getCellsAlongX() <= max_single_room_size && getCellsAlongY() <= max_single_room_size ;  }
 
-        bool isTripleRoom () const {  return getTilesAlongX() > maxTilesOfSingleRoom && getTilesAlongY() > maxTilesOfSingleRoom ;  }
+        bool isTripleRoom () const {  return getCellsAlongX() > max_single_room_size && getCellsAlongY() > max_single_room_size ;  }
 
-        bool isDoubleRoomAlongX () const {  return getTilesAlongX() > maxTilesOfSingleRoom && getTilesAlongY() <= maxTilesOfSingleRoom ;  }
-        bool isDoubleRoomAlongY () const {  return getTilesAlongX() <= maxTilesOfSingleRoom && getTilesAlongY() > maxTilesOfSingleRoom ;  }
+        bool isDoubleRoomAlongX () const {  return getCellsAlongX() > max_single_room_size && getCellsAlongY() <= max_single_room_size ;  }
+        bool isDoubleRoomAlongY () const {  return getCellsAlongX() <= max_single_room_size && getCellsAlongY() > max_single_room_size ;  }
 
         bool saveAsXML ( const std::string& file ) ;
 
-        void addFloorTile ( FloorTile * floorTile ) ;
+        void addFloorTile ( FloorTile * tile ) ;
 
-        void addWallPiece ( WallPiece * segment ) ;
+        void addWallSegment ( WallPiece * piece ) ;
 
         void addDoor ( Door * door ) ;
 
@@ -98,7 +98,7 @@ public:
 
         bool placeCharacterInRoom ( const AvatarItemPtr & character, bool justEntered ) ;
 
-        void removeFloorAt ( int tileX, int tileY ) ;
+        void removeFloorAt ( int cx, int cy ) ;
 
         void removeFloorTile ( FloorTile * floorTile ) ;
 
@@ -186,7 +186,7 @@ public:
         /**
          * the X coordinate of the room’s origin point
          */
-        int getX0 () const {  return getTilesAlongY() * ( getSizeOfOneTile () << 1 ) ;  }
+        int getX0 () const {  return getCellsAlongY() * ( getSizeOfOneCell() << 1 ) ;  }
 
         /**
          * the Y coordinate of the room’s origin point
@@ -197,25 +197,25 @@ public:
 
         unsigned int getHeightOfRoomImage () const ;
 
-        unsigned short getTilesAlongX () const {  return this->howManyTilesAlongX ;  }
+        unsigned short getCellsAlongX () const {  return this->howManyCellsAlongX ;  }
 
-        unsigned short getTilesAlongY () const {  return this->howManyTilesAlongY ;  }
+        unsigned short getCellsAlongY () const {  return this->howManyCellsAlongY ;  }
 
         /**
-         * The length of the single tile's side, in isometric units
+         * The length of a single cell’s side, in isometric units
          */
-        static const unsigned int Single_Tile_Size = 16 ;
+        static const unsigned int single_cell_size = 16 ;
 
-        virtual // inherit as subclass for other sizes but 16
-        unsigned int getSizeOfOneTile () const {  return Single_Tile_Size ;  }
+        virtual // override in a subclass for other sizes but 16
+        unsigned int getSizeOfOneCell () const {  return single_cell_size ;  }
 
         bool hasFloor () const {  return this->floorIsPresent ;  }
         bool isFloorMortal () const {  return this->floorIsMortal ;  }
 
         short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
-        const std::set < std::pair < int, int > > & getTilesWithoutFloor () const {  return this->tilesWithoutFloor ;  }
-        void setTilesWithoutFloor ( const std::set < std::pair < int, int > > & floorlessTiles ) {  this->tilesWithoutFloor = floorlessTiles ;  }
+        const std::set < std::pair < int, int > > & getCellsWithoutFloor () const {  return this->cellsWithoutFloor ;  }
+        void setCellsWithoutFloor ( const std::set < std::pair < int, int > > & floorlessCells ) {  this->cellsWithoutFloor = floorlessCells ;  }
 
         const std::vector < std::vector < GridItemPtr > > & getGridItems () const {  return this->gridItems ;  }
 
@@ -272,22 +272,20 @@ public:
          */
         static const int MaxLayers = 10 ;
 
-        /**
-         * the rooms larger than this number of tiles are not "single"
-         */
-        static const unsigned int maxTilesOfSingleRoom = 10 ;
-
         static const unsigned int Sides = 12 ;
         static const std::string Sides_Of_Room [] ;
 
 private:
 
+        // a room larger than this number of cells isn’t “single”
+        static const unsigned int max_single_room_size = 10 ;
+
         // in which file is this room described
         std::string nameOfRoomDescriptionFile ;
 
-        // how big is this room in tiles
-        unsigned short howManyTilesAlongX ;
-        unsigned short howManyTilesAlongY ;
+        // how big is this room in cells
+        unsigned short howManyCellsAlongX ;
+        unsigned short howManyCellsAlongY ;
 
         std::string scenery ;
 
@@ -321,12 +319,12 @@ private:
          */
         unsigned short shadingTransparency ;
 
-        // floorless tiles for a triple room
-        std::set < std::pair < int, int > > tilesWithoutFloor ;
+        // floorless cells for a triple room
+        std::set < std::pair < int, int > > cellsWithoutFloor ;
 
         std::vector < FloorTile * > floorTiles ;
 
-        std::vector < WallPiece * > wallPieces ;
+        std::vector < WallPiece * > wallSegments ;
 
         // the grid items
         std::vector < std::vector < GridItemPtr > > gridItems ;

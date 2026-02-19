@@ -34,7 +34,7 @@ class Miniature : public Drawable
 
 public :
 
-        Miniature( const Room & roomForMiniature, unsigned short singleTileSize = the_default_size_of_tile, bool withRoomInfo = false ) ;
+        Miniature( const Room & roomForMiniature, unsigned short sizeOfSquare = the_default_square_size, bool withRoomInfo = false ) ;
 
         virtual ~Miniature( ) {  binTheImage() ;  }
 
@@ -42,26 +42,26 @@ public :
 
         void drawVignetteAboveOrBelow ( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, bool drawAbove, bool drawBelow ) ;
 
-        void drawEastDoorOnMiniature ( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color ) ;
-        void drawSouthDoorOnMiniature ( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color ) ;
-        void drawNorthDoorOnMiniature ( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color ) ;
-        void drawWestDoorOnMiniature ( const allegro::Pict & where, unsigned int tileX, unsigned int tileY, const Color & color ) ;
+        void drawEastDoorOnMiniature ( const allegro::Pict & where, unsigned int x, unsigned int y, const Color & color ) ;
+        void drawSouthDoorOnMiniature ( const allegro::Pict & where, unsigned int x, unsigned int y, const Color & color ) ;
+        void drawNorthDoorOnMiniature ( const allegro::Pict & where, unsigned int x, unsigned int y, const Color & color ) ;
+        void drawWestDoorOnMiniature ( const allegro::Pict & where, unsigned int x, unsigned int y, const Color & color ) ;
 
-        void drawIsoSquare ( const allegro::Pict & where, std::pair< int, int > origin, unsigned int tilesX, unsigned int tilesY, const Color & color ) ;
-        void drawIsoSquare ( const allegro::Pict & where, unsigned int tilesX, unsigned int tilesY, const Color & color )
-                {  drawIsoSquare( where, getOriginOfRoom(), tilesX, tilesY, color ) ;  }
+        void drawBigIsoRectangle ( const allegro::Pict & where, std::pair< int, int > origin, unsigned int squaresX, unsigned int squaresY, const Color & color ) ;
+        void drawBigIsoRectangle ( const allegro::Pict & where, unsigned int squaresX, unsigned int squaresY, const Color & color )
+                {  drawBigIsoRectangle( where, getOriginOfRoom(), squaresX, squaresY, color ) ;  }
 
-        void drawIsoTile ( const allegro::Pict & where, std::pair< int, int > origin, int tileX, int tileY, const Color & color, bool loX, bool loY, bool hiX, bool hiY ) ;
-        void drawIsoTile ( const allegro::Pict & where, int tileX, int tileY, const Color & color, bool loX, bool loY, bool hiX, bool hiY )
-                {  drawIsoTile( where, getOriginOfRoom(), tileX, tileY, color, loX, loY, hiX, hiY ) ;  }
+        void drawIsoSquare ( const allegro::Pict & where, std::pair< int, int > origin, int x, int y, const Color & color, bool loX, bool loY, bool hiX, bool hiY ) ;
+        void drawIsoSquare ( const allegro::Pict & where, int x, int y, const Color & color, bool loX, bool loY, bool hiX, bool hiY )
+                {  drawIsoSquare( where, getOriginOfRoom(), x, y, color, loX, loY, hiX, hiY ) ;  }
 
-        void fillIsoTile ( const allegro::Pict & where, std::pair< int, int > origin, int tileX, int tileY, const Color & color ) ;
-        void fillIsoTile ( const allegro::Pict & where, int tileX, int tileY, const Color & color )
-                {  fillIsoTile( where, getOriginOfRoom(), tileX, tileY, color ) ;  }
+        void fillIsoSquare ( const allegro::Pict & where, std::pair< int, int > origin, int x, int y, const Color & color ) ;
+        void fillIsoSquare ( const allegro::Pict & where, int x, int y, const Color & color )
+                {  fillIsoSquare( where, getOriginOfRoom(), x, y, color ) ;  }
 
-        void fillIsoTileInside ( const allegro::Pict & where, std::pair< int, int > origin, int tileX, int tileY, const Color & color, bool fullFill ) ;
-        void fillIsoTileInside ( const allegro::Pict & where, int tileX, int tileY, const Color & color, bool fullFill )
-                {  fillIsoTileInside( where, getOriginOfRoom(), tileX, tileY, color, fullFill ) ;  }
+        void fillIsoSquareInside ( const allegro::Pict & where, std::pair< int, int > origin, int x, int y, const Color & color, bool fullFill ) ;
+        void fillIsoSquareInside ( const allegro::Pict & where, int x, int y, const Color & color, bool fullFill )
+                {  fillIsoSquareInside( where, getOriginOfRoom(), x, y, color, fullFill ) ;  }
 
         const std::pair< int, int > & getEastDoorNorthernCorner ()
                 {  if ( this->theImage == nilPointer ) composeImage () ;  return this->eastDoorNorthernCorner ;  }
@@ -97,29 +97,29 @@ public :
 
         std::pair< int, int > getOriginOfRoom () const
         {
-                return std::pair< int, int >( this->room.getTilesAlongY() * ( getSizeOfTile() << 1 ), 0 ) ;
+                return std::pair< int, int >( this->room.getCellsAlongY() * ( getSquareSize() << 1 ), 0 ) ;
         }
 
-        unsigned short getSizeOfTile () const {  return this->sizeOfTile ;  }
+        unsigned short getSquareSize () const {  return this->squareSize ;  }
 
-        void setSizeOfTile ( unsigned short newSize )
+        void setSquareSize ( unsigned short newSize )
         {
                      if ( newSize < 2 ) newSize = 2 ;
                 else if ( newSize > 16 ) newSize = 16 ;
 
-                if ( newSize == this->sizeOfTile ) return ;
-
-                this->sizeOfTile = newSize ;
-                binTheImage() ;
+                if ( newSize != this->squareSize ) {
+                        this->squareSize = newSize ;
+                        binTheImage() ;
+                }
         }
 
-        const std::pair< int, int > & getOffsetOnScreen () const {  return this->offsetOnScreen ;  }
+        const std::pair< int, int > & getDrawingOffset () const {  return this->drawingOffset ;  }
 
-        void setOffsetOnScreen ( int leftX, int topY ) ;
+        void setDrawingOffset ( int leftX, int topY ) ;
 
         bool connectMiniature ( Miniature * that, const std::string & where, short gap = 0 ) ;
 
-        static const short the_default_size_of_tile = 3 ;
+        static const short the_default_square_size = 3 ;
 
         static const int room_info_shift_x = 2 ;
         static const int room_info_shift_y = 18 ;
@@ -146,7 +146,8 @@ private :
 
         const Room & room ;
 
-        unsigned short sizeOfTile ; // 2...16
+        // the size of a single square, in pixels
+        unsigned short squareSize ; // 2...16
 
         bool withTextAboutRoom ;
         bool textAboutRoomIsWritten ;
@@ -154,7 +155,7 @@ private :
         bool isThereRoomAbove ;
         bool isThereRoomBelow ;
 
-        std::pair < int, int > offsetOnScreen ;
+        std::pair < int, int > drawingOffset ;
 
         std::pair < int, int > northDoorEasternCorner ;
         std::pair < int, int > eastDoorNorthernCorner ;
