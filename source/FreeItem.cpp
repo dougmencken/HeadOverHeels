@@ -116,8 +116,8 @@ void FreeItem::updateImage ()
         setWantMaskTrue();
 
         // remask
-        getMediator()->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
-        getMediator()->wantToMaskWithFreeItem( *this );
+        getMediator()->wantMaskingWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
+        getMediator()->wantMaskingWithFreeItem( *this );
 }
 
 void FreeItem::requestShadow()
@@ -193,12 +193,12 @@ bool FreeItem::addToPosition( int x, int y, int z )
                         setWantMaskTrue();
 
                         // mark to remask
-                        getMediator()->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
-                        getMediator()->wantToMaskWithFreeItem( *this );
+                        getMediator()->wantMaskingWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
+                        getMediator()->wantMaskingWithFreeItem( *this );
 
                         // reshade items
-                        getMediator()->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
-                        getMediator()->wantShadowFromFreeItem( *this );
+                        getMediator()->castShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
+                        getMediator()->castShadowFromFreeItem( *this );
 
                         getMediator()->markToSortFreeItems ();
                 }

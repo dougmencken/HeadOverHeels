@@ -203,12 +203,7 @@ void Mediator::decreaseShieldForActiveCharacter ( double seconds )
         }
 }
 
-void Mediator::wantToMaskWithFreeItem( const FreeItem & item )
-{
-        wantToMaskWithFreeItemImageAt( item, item.getImageOffsetX (), item.getImageOffsetY () );
-}
-
-void Mediator::wantToMaskWithFreeItemImageAt( const FreeItem & item, int x, int y )
+void Mediator::wantMaskingWithFreeItemImageAt( const FreeItem & item, int x, int y )
 {
         const std::vector < FreeItemPtr > & freeItems = this->room.getFreeItems ();
         for ( unsigned int i = 0 ; i < freeItems.size (); ++ i )
@@ -224,14 +219,7 @@ void Mediator::wantToMaskWithFreeItemImageAt( const FreeItem & item, int x, int 
         }
 }
 
-void Mediator::wantToMaskWithGridItem( const GridItem & gridItem )
-{
-        wantToMaskWithGridItemAt( gridItem,
-                                        gridItem.getX (), gridItem.getY (), gridItem.getZ (),
-                                                std::pair< int, int >( gridItem.getImageOffsetX (), gridItem.getImageOffsetY () ) );
-}
-
-void Mediator::wantToMaskWithGridItemAt( const GridItem & gridItem, int x, int y, int z, std::pair< int, int > offset )
+void Mediator::wantMaskingWithGridItemAt( const GridItem & gridItem, int x, int y, int z, std::pair< int, int > offset )
 {
         const std::vector < FreeItemPtr > & freeItems = this->room.getFreeItems ();
         for ( unsigned int i = 0 ; i < freeItems.size (); ++ i )
@@ -247,12 +235,12 @@ void Mediator::wantToMaskWithGridItemAt( const GridItem & gridItem, int x, int y
         }
 }
 
-void Mediator::wantShadowFromGridItem( const GridItem & item )
+void Mediator::castShadowFromGridItem( const GridItem & item )
 {
         if ( this->room.getTransparencyOfShadows() >= 256 ) return ;
 
 #if defined( DEBUG_SHADOWS ) && DEBUG_SHADOWS
-        std::cout << "Mediator::wantShadowFromGridItem( from item \"" << item.getUniqueName() << "\" )" << std::endl ;
+        std::cout << "Mediator::castShadowFromGridItem( from item \"" << item.getUniqueName() << "\" )" << std::endl ;
 #endif
 
         shadeFreeItemsBeneathItemAt( item, item.getX (), item.getY (), item.getZ () );
@@ -281,23 +269,16 @@ void Mediator::wantShadowFromGridItem( const GridItem & item )
 
         // shade the floor in this column, if any
         FloorTile * floorTile = this->room.getFloorTileAtColumn( column );
-        if ( floorTile != nilPointer ) {
+        if ( floorTile != nilPointer )
                 floorTile->refreshShadedImage(); // begin shading with the fresh image of tile
-                floorTile->setWantShadow( true );
-        }
 }
 
-void Mediator::wantShadowFromFreeItem( const FreeItem & item )
-{
-        wantShadowFromFreeItemAt( item, item.getX (), item.getY (), item.getZ () );
-}
-
-void Mediator::wantShadowFromFreeItemAt( const FreeItem & item, int x, int y, int z )
+void Mediator::castShadowFromFreeItemAt( const FreeItem & item, int x, int y, int z )
 {
         if ( this->room.getTransparencyOfShadows() >= 256 ) return ;
 
 #if defined( DEBUG_SHADOWS ) && DEBUG_SHADOWS
-        std::cout << "Mediator::wantShadowFromFreeItemAt( from item \"" << item.getUniqueName() << "\" at x=" << x << " y=" << y << " z=" << z << " )" << std::endl ;
+        std::cout << "Mediator::castShadowFromFreeItemAt( from item \"" << item.getUniqueName() << "\" at x=" << x << " y=" << y << " z=" << z << " )" << std::endl ;
 #endif
 
         shadeFreeItemsBeneathItemAt( item, x, y, z );
@@ -330,10 +311,8 @@ void Mediator::wantShadowFromFreeItemAt( const FreeItem & item, int x, int y, in
 
                         // shade the floor in this column, if any
                         FloorTile * floorTile = this->room.getFloorTileAtColumn( column );
-                        if ( floorTile != nilPointer ) {
+                        if ( floorTile != nilPointer )
                                 floorTile->refreshShadedImage (); // begin shading with the fresh image of tile
-                                floorTile->setWantShadow( true );
-                        }
                 }
         }
 }

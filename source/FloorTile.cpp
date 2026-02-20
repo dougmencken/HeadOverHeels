@@ -13,12 +13,10 @@ FloorTile::FloorTile( int cellX, int cellY, const NamedPicture & graphicsOfTile 
         , coordinates( std::pair< int, int >( cellX, cellY ) )
         , offset( std::pair< int, int >( 0, 0 ) )
         , rawImage( new NamedPicture( graphicsOfTile ) )
-        , shadedImage( new NamedPicture( graphicsOfTile ) )
+        , shadedImage( nilPointer )
 {
-        rawImage->setName( graphicsOfTile.getName() );
-        shadedImage->setName( graphicsOfTile.getName() );
-
-        setWantShadow( true );
+        this->rawImage->setName( graphicsOfTile.getName() ); // without the "copy of" prefix added by the NamedPicture constructor
+        refreshShadedImage() ;
 }
 
 void FloorTile::calculateOffset ()
@@ -51,12 +49,17 @@ void FloorTile::setShadedImage ( const Picture & toCopy )
 
 void FloorTile::refreshShadedImage ()
 {
-        if ( getWantShadow() || this->shadedImage->getName().find( "fresh copy" ) != std::string::npos )
-                return ; // it’s fresh already or in the process of shading this tile
+        if ( this->shadedImage == nilPointer )
+                this->shadedImage.reset( new NamedPicture( this->rawImage->getWidth(), this->rawImage->getHeight() ) );
 
-        shadedImage->fillWithColor( Color::keyColor () );
+        if ( getWantShadow() || this->shadedImage->getName().find( "fresh copy" ) != std::string::npos )
+                return ; // is fresh already or is in the process of shading
+
+        ////shadedImage->fillWithColor( Color::keyColor () ); // redundant
         allegro::bitBlit( /* from */ this->rawImage->getAllegroPict(), /* to */ this->shadedImage->getAllegroPict() );
         this->shadedImage->setName( "fresh copy of " + this->rawImage->getName() );
+
+        setWantShadow( true );
 }
 
 unsigned int FloorTile::getIndexOfColumn () const

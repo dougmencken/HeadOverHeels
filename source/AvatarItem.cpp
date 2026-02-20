@@ -282,12 +282,12 @@ bool AvatarItem::addToPosition( int x, int y, int z )
                                 setWantMaskTrue();
 
                                 // mark to mask the free items whose images overlap with the character’s image
-                                getMediator()->wantToMaskWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
-                                getMediator()->wantToMaskWithFreeItem( *this );
+                                getMediator()->wantMaskingWithFreeItemImageAt( *this, imageOffsetXBefore, imageOffsetYBefore );
+                                getMediator()->wantMaskingWithFreeItem( *this );
 
                                 // reshade other items
-                                getMediator()->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
-                                getMediator()->wantShadowFromFreeItem( *this );
+                                getMediator()->castShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
+                                getMediator()->castShadowFromFreeItem( *this );
 
                                 // re~sort
                                 getMediator()->markToSortFreeItems ();

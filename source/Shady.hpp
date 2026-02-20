@@ -17,11 +17,11 @@ class Shady
 
 public:
 
-        Shady( ) : wantShadow( true )  { }
+        Shady( ) : wantShadow( false )  {}
 
-        Shady( bool wanna ) : wantShadow( wanna )  { }
+        Shady( bool wanna ) : wantShadow( wanna )  {}
 
-        virtual ~Shady( ) { }
+        virtual ~Shady( ) {}
 
         bool getWantShadow () const {  return wantShadow ;  }
 

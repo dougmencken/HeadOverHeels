@@ -632,8 +632,8 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 return ;
         }
 
-        getMediator()->wantShadowFromGridItem( *gridItem );
-        getMediator()->wantToMaskWithGridItem( *gridItem );
+        getMediator()->castShadowFromGridItem( *gridItem );
+        getMediator()->wantMaskingWithGridItem( *gridItem );
 
         IF_DEBUG( std::cout << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" is yet part of room " << getNameOfRoomDescriptionFile() << std::endl )
 }
@@ -718,8 +718,8 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 return;
         }
 
-        getMediator()->wantShadowFromFreeItem( *freeItem );
-        getMediator()->wantToMaskWithFreeItem( *freeItem );
+        getMediator()->castShadowFromFreeItem( *freeItem );
+        getMediator()->wantMaskingWithFreeItem( *freeItem );
 
         IF_DEBUG( std::cout << freeItem->whichItemClass() << " \"" << freeItem->getUniqueName() << "\" is yet in room " << getNameOfRoomDescriptionFile() << std::endl )
 }
@@ -907,8 +907,8 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
         if ( getMediator()->getActiveCharacter() == nilPointer )
                 getMediator()->activateCharacterByName( character->getOriginalKind() );
 
-        getMediator()->wantShadowFromFreeItem( *character );
-        getMediator()->wantToMaskWithFreeItem( *character );
+        getMediator()->castShadowFromFreeItem( *character );
+        getMediator()->wantMaskingWithFreeItem( *character );
 
         // add avatar item to room
         this->charactersYetInRoom.push_back( character );
@@ -1034,8 +1034,8 @@ void Room::removeGridItemByUniqueName( const std::string & uniqueName )
         }
 
         if ( foundGridItem != nilPointer ) {
-                getMediator()->wantShadowFromGridItem( * foundGridItem );
-                getMediator()->wantToMaskWithGridItem( * foundGridItem );
+                getMediator()->castShadowFromGridItem( * foundGridItem );
+                getMediator()->wantMaskingWithGridItem( * foundGridItem );
         }
 }
 
@@ -1059,8 +1059,8 @@ void Room::removeFreeItemByUniqueName( const std::string & uniqueName )
         }
 
         if ( foundFreeItem != nilPointer ) {
-                getMediator()->wantShadowFromFreeItem( * foundFreeItem );
-                getMediator()->wantToMaskWithFreeItem( * foundFreeItem );
+                getMediator()->castShadowFromFreeItem( * foundFreeItem );
+                getMediator()->wantMaskingWithFreeItem( * foundFreeItem );
         }
 }
 

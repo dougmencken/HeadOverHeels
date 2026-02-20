@@ -57,8 +57,8 @@ void GridItem::updateImage ()
         updateImageOffset ();
 
         // remask items
-        getMediator()->wantToMaskWithGridItemAt( *this, xBefore, yBefore, zBefore, imageOffsetBefore );
-        getMediator()->wantToMaskWithGridItem( *this );
+        getMediator()->wantMaskingWithGridItemAt( *this, xBefore, yBefore, zBefore, imageOffsetBefore );
+        getMediator()->wantMaskingWithGridItem( *this );
 }
 
 bool GridItem::addToPosition( int x, int y, int z )
@@ -95,11 +95,11 @@ bool GridItem::addToPosition( int x, int y, int z )
                         this->imageOffset = std::pair< int, int >( getImageOffsetX(), newOffsetY );
 
                         // mark to mask overlapping free items
-                        getMediator()->wantToMaskWithGridItemAt( *this, getX(), getY(), zBefore, imageOffsetBefore );
-                        getMediator()->wantToMaskWithGridItem( *this );
+                        getMediator()->wantMaskingWithGridItemAt( *this, getX(), getY(), zBefore, imageOffsetBefore );
+                        getMediator()->wantMaskingWithGridItem( *this );
 
                         // reshade items
-                        getMediator()->wantShadowFromGridItem( *this );
+                        getMediator()->castShadowFromGridItem( *this );
 
                         getMediator()->markToSortGridItems ();
                 }

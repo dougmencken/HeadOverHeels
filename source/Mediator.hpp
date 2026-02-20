@@ -57,24 +57,31 @@ public:
 
         void endUpdating () ;
 
-        /**
-         * Decrease shield for an active player character by 'seconds'
-         */
-        void decreaseShieldForActiveCharacter ( double seconds ) ;
+        // masking and shading
 
-        void wantToMaskWithFreeItemImageAt ( const FreeItem & item, int x, int y ) ;
+        void wantMaskingWithFreeItemImageAt ( const FreeItem & item, int x, int y ) ;
 
-        void wantToMaskWithFreeItem ( const FreeItem & item ) ;
+        void wantMaskingWithFreeItem ( const FreeItem & item )
+        {
+                wantMaskingWithFreeItemImageAt( item, item.getImageOffsetX(), item.getImageOffsetY() );
+        }
 
-        void wantToMaskWithGridItemAt ( const GridItem & gridItem, int x, int y, int z, std::pair < int, int > offset ) ;
+        void wantMaskingWithGridItemAt ( const GridItem & gridItem, int x, int y, int z, std::pair < int, int > offset ) ;
 
-        void wantToMaskWithGridItem ( const GridItem & gridItem ) ;
+        void wantMaskingWithGridItem ( const GridItem & item )
+        {
+                wantMaskingWithGridItemAt( item, item.getX(), item.getY(), item.getZ(),
+                                                std::pair< int, int >( item.getImageOffsetX(), item.getImageOffsetY() ) );
+        }
 
-        void wantShadowFromGridItem ( const GridItem & gridItem ) ;
+        void castShadowFromGridItem ( const GridItem & gridItem ) ;
 
-        void wantShadowFromFreeItemAt ( const FreeItem & freeItem, int x, int y, int z ) ;
+        void castShadowFromFreeItemAt ( const FreeItem & freeItem, int x, int y, int z ) ;
 
-        void wantShadowFromFreeItem ( const FreeItem & freeItem ) ;
+        void castShadowFromFreeItem ( const FreeItem & item )
+        {
+                castShadowFromFreeItemAt( item, item.getX(), item.getY(), item.getZ() );
+        }
 
         void shadeFreeItemsBeneathItemAt ( const DescribedItem & item, int x, int y, int z ) ;
 
@@ -162,6 +169,11 @@ public:
         void markToSortFreeItems () {  this->needToSortFreeItems = true ;  }
 
         bool isThreadRunning () const {  return threadRunning ;  }
+
+        /**
+         * Decrease shield for an active player character by 'seconds'
+         */
+        void decreaseShieldForActiveCharacter ( double seconds ) ;
 
         const AvatarItemPtr & getActiveCharacter () const {  return this->currentlyActiveCharacter ;  }
 
