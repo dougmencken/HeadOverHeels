@@ -171,11 +171,9 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
                 if ( frameHeight != nilPointer )
                         description.setHeightOfFrame( std::atoi( frameHeight->FirstChild()->ToText()->Value() ) );
         }
-        else
-        {
+        else {
                 const std::string & kindOfItem = description.getKind ();
-                if ( kindOfItem == "invisible-wall-x" || kindOfItem == "invisible-wall-y" )
-                {
+                if ( kindOfItem.find( "invisible-wall" ) != std::string::npos ) {
                         description.setNameOfFramesFile( "" );
                         description.setWidthOfFrame( 64 );
                         description.setHeightOfFrame( 115 );
@@ -212,7 +210,7 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
         if ( frames != nilPointer )
         {
                 unsigned int howManyFramesPerOrientation = std::atoi( frames->FirstChild()->ToText()->Value() ) ;
-                description.makeSequenceOFrames( howManyFramesPerOrientation ) ;
+                description.setSimpleSequenceOFrames( howManyFramesPerOrientation ) ;
         }
         else
         {
@@ -232,7 +230,7 @@ void ItemDescriptions::readDescriptionFurther( const tinyxml2::XMLElement & elem
 
         // ... if neither
         if ( description.howManyFramesPerOrientation () == 0 )
-                description.makeSequenceOFrames( 1 ) ; // then it's static
+                description.setSimpleSequenceOFrames( 1 ) ; // then it’s static
 
         // how many various orientations
         const tinyxml2::XMLElement* orientations = element.FirstChildElement( "orientations" ) ;

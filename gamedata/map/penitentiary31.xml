@@ -1,6 +1,6 @@
 <room scenery="penitentiary">
-    <xTiles>9</xTiles>
-    <yTiles>3</yTiles>
+    <cells-x>9</cells-x>
+    <cells-y>3</cells-y>
     <color>white</color>
     <floorKind>absent</floorKind>
     <walls>

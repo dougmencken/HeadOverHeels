@@ -1,6 +1,6 @@
 <room scenery="egyptus">
-    <xTiles>3</xTiles>
-    <yTiles>9</yTiles>
+    <cells-x>3</cells-x>
+    <cells-y>9</cells-y>
     <color>white</color>
     <floorKind>absent</floorKind>
     <walls>

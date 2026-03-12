@@ -1,6 +1,6 @@
 <room scenery="byblos">
-    <xTiles>8</xTiles>
-    <yTiles>17</yTiles>
+    <cells-x>8</cells-x>
+    <cells-y>17</cells-y>
     <color>white</color>
     <floorKind>mortal</floorKind>
     <walls>

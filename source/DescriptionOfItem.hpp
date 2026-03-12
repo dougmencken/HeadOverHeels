@@ -95,7 +95,7 @@ public:
                 this->sequenceOFrames = newSequence ;
         }
 
-        void makeSequenceOFrames( unsigned int howMany )
+        void setSimpleSequenceOFrames( unsigned int howMany )
         {
                 if ( this->sequenceOFrames.size() > 0 ) this->sequenceOFrames.clear () ;
 

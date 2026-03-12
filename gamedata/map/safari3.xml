@@ -1,6 +1,6 @@
 <room scenery="safari">
-    <xTiles>4</xTiles>
-    <yTiles>10</yTiles>
+    <cells-x>4</cells-x>
+    <cells-y>10</cells-y>
     <color>cyan</color>
     <floorKind>mortal</floorKind>
     <walls>

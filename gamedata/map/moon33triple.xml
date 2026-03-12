@@ -1,6 +1,6 @@
 <room scenery="moon">
-    <xTiles>13</xTiles>
-    <yTiles>18</yTiles>
+    <cells-x>13</cells-x>
+    <cells-y>18</cells-y>
     <color>white</color>
     <floorKind>plain</floorKind>
     <nofloor x="7" y="9"/>
@@ -58,13 +58,13 @@
     <nofloor x="12" y="16"/>
     <nofloor x="12" y="17"/>
     <walls>
-        <wall along="x">
-            <position>1</position>
-            <picture>moon-wall-x-4.png</picture>
-        </wall>
         <wall along="y">
             <position>1</position>
             <picture>moon-wall-y-4.png</picture>
+        </wall>
+        <wall along="x">
+            <position>1</position>
+            <picture>moon-wall-x-4.png</picture>
         </wall>
         <wall along="x">
             <position>2</position>

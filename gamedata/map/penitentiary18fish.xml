@@ -1,6 +1,6 @@
 <room scenery="penitentiary">
-    <xTiles>17</xTiles>
-    <yTiles>7</yTiles>
+    <cells-x>17</cells-x>
+    <cells-y>7</cells-y>
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>
@@ -97,8 +97,8 @@
         </item>
         <item x="2" y="1" z="3">
             <kind>brick2</kind>
-            <class>griditem</class>
             <behavior>vanishing when some free dude is above</behavior>
+            <class>griditem</class>
         </item>
         <item x="3" y="1" z="3">
             <kind>brick2</kind>
@@ -130,8 +130,8 @@
         </item>
         <item x="10" y="1" z="3">
             <kind>brick2</kind>
-            <class>griditem</class>
             <behavior>vanishing when some free dude is above</behavior>
+            <class>griditem</class>
         </item>
         <item x="11" y="1" z="3">
             <kind>brick2</kind>

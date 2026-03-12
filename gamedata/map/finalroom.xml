@@ -1,6 +1,6 @@
 <room>
-    <xTiles>12</xTiles>
-    <yTiles>8</yTiles>
+    <cells-x>12</cells-x>
+    <cells-y>8</cells-y>
     <color>white</color>
     <floorKind>plain</floorKind>
     <floor>

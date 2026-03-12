@@ -44,13 +44,13 @@ private:
 
         RoomMaker( ) { }
 
-        static void makeFloor( Room * room, tinyxml2::XMLElement * xmlRootElement );
+        static void makeFloor( Room & room, tinyxml2::XMLElement * xmlRootElement );
 
         static WallPiece * makeWallPiece ( tinyxml2::XMLElement * wall ) ;
 
-        static GridItemPtr makeGridItem ( tinyxml2::XMLElement * item, Room* room ) ;
+        static GridItemPtr makeGridItem ( tinyxml2::XMLElement * item, const Room & room ) ;
 
-        static FreeItemPtr makeFreeItem ( tinyxml2::XMLElement * item, Room* room ) ;
+        static FreeItemPtr makeFreeItem ( tinyxml2::XMLElement * item, const Room & room ) ;
 
         static Door * makeDoor ( tinyxml2::XMLElement * item ) ;
 

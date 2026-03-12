@@ -261,14 +261,13 @@ public:
         static const int FloorZ = -1 ;
 
         /**
-         * The height in isometric units of a layer
-         * Item in the grid at height n is n * LayerHeight units
+         * The height of a layer in pixels.
+         * An item on layer n in the grid is n × LayerHeight pixels above the floor
          */
         static const int LayerHeight = 24 ;
 
         /**
-         * The maximum number of layers in a room
-         * In isometric units, the maximum height of room is LayerHeight * MaxLayers
+         * How many layers a room has. The height of a room is LayerHeight × MaxLayers
          */
         static const int MaxLayers = 10 ;
 

@@ -1,6 +1,6 @@
 <room scenery="blacktooth">
-    <xTiles>2</xTiles>
-    <yTiles>10</yTiles>
+    <cells-x>2</cells-x>
+    <cells-y>10</cells-y>
     <color>white</color>
     <floorKind>plain</floorKind>
     <walls>

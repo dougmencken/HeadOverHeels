@@ -252,9 +252,12 @@ void Mediator::castShadowFromGridItem( const GridItem & item )
         // shade grid items below
         if ( ! gridItems[ column ].empty() ) {
                 std::vector< GridItemPtr >::const_iterator g = gridItems[ column ].begin() ;
-                while ( g != gridItems[ column ].end() )
+                for ( ; g != gridItems[ column ].end() ; ++ g )
                 {
                         GridItem & gridItem = *( *g );
+
+                        if ( gridItem.getKind().find( "invisible-wall" ) != std::string::npos )
+                                continue ;
 
                         gridItem.freshProcessedImage();
 
@@ -262,8 +265,6 @@ void Mediator::castShadowFromGridItem( const GridItem & item )
                         if ( gridItem.getUniqueName() == item.getUniqueName() ) break ;
 
                         gridItem.setWantShadow( true );
-
-                        ++ g ;
                 }
         }
 

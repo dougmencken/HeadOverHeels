@@ -29,18 +29,18 @@ const std::string Room::Sides_Of_Room[ Room::Sides ] =
                                 "eastnorth", "eastsouth", "east", "westnorth", "westsouth", "west"  };
 
 Room::Room( const std::string & roomFile,
-                unsigned short xTiles, unsigned short yTiles,
+                unsigned short xCells, unsigned short yCells,
                         const std::string & roomScenery, const std::string & floorKind )
         : Mediated( )
         , nameOfRoomDescriptionFile( roomFile )
-        , howManyCellsAlongX( xTiles )
-        , howManyCellsAlongY( yTiles )
+        , howManyCellsAlongX( xCells )
+        , howManyCellsAlongY( yCells )
         , scenery( roomScenery )
         , floorIsPresent( floorKind != "absent" )
         , floorIsMortal( floorKind == "mortal" )
         , color( "white" )
         , connections( nilPointer )
-        , drawingSequence( new unsigned int[ xTiles * yTiles ] )
+        , drawingSequence( new unsigned int[ xCells * yCells ] )
         , camera( new Camera( this ) )
         , whereToDraw( )
 {
@@ -52,13 +52,13 @@ Room::Room( const std::string & roomFile,
         }
 
         // make nil floor
-        for ( unsigned int i = 0 ; i < xTiles * yTiles /* + 1 */ ; ++ i )
+        for ( unsigned int i = 0 ; i < xCells * yCells /* + 1 */ ; ++ i )
         {
                 this->floorTiles.push_back( nilPointer );
         }
 
         // make the room’s grid structure
-        for ( unsigned int i = 0 ; i < xTiles * yTiles /* + 1 */ ; ++ i )
+        for ( unsigned int i = 0 ; i < xCells * yCells /* + 1 */ ; ++ i )
         {
                 this->gridItems.push_back( std::vector< GridItemPtr > () );
         }
@@ -101,13 +101,13 @@ Room::Room( const std::string & roomFile,
 
         size_t pos = 0;
 
-        for ( unsigned int f = 0 ; f < xTiles + yTiles ; ++ f ) {
-                for ( unsigned int g = yTiles ; g > 0 ; -- g )
+        for ( unsigned int f = 0 ; f < xCells + yCells ; ++ f ) {
+                for ( unsigned int g = yCells ; g > 0 ; -- g )
                 {
                         unsigned int n = g - 1 ; // g = n + 1
-                        unsigned int index = n * ( xTiles - 1 ) + f ;
+                        unsigned int index = n * ( xCells - 1 ) + f ;
 
-                        if ( ( index >= n * xTiles ) && ( index < g * xTiles ) )
+                        if ( ( index >= n * xCells ) && ( index < g * xCells ) )
                                 drawingSequence[ pos ++ ] = index ;
                 }
         }
@@ -165,13 +165,13 @@ bool Room::saveAsXML( const std::string & file )
         if ( ! getScenery().empty () )
                 root->SetAttribute( "scenery", getScenery().c_str () );
 
-        tinyxml2::XMLElement* xTiles = roomXml.NewElement( "xTiles" ) ;
-        xTiles->SetText( getCellsAlongX() );
-        root->InsertEndChild( xTiles );
+        tinyxml2::XMLElement* cellsX = roomXml.NewElement( "cells-x" ) ;
+        cellsX->SetText( getCellsAlongX() );
+        root->InsertEndChild( cellsX );
 
-        tinyxml2::XMLElement* yTiles = roomXml.NewElement( "yTiles" ) ;
-        yTiles->SetText( getCellsAlongY() );
-        root->InsertEndChild( yTiles );
+        tinyxml2::XMLElement* cellsY = roomXml.NewElement( "cells-y" ) ;
+        cellsY->SetText( getCellsAlongY() );
+        root->InsertEndChild( cellsY );
 
         tinyxml2::XMLElement* roomColor = roomXml.NewElement( "color" ) ;
         roomColor->SetText( getColor().c_str () );
@@ -1343,7 +1343,7 @@ void Room::draw ()
         getMediator()->unlockGridItemsMutex() ;
 
 #if defined( SHOW_ORIGIN_OF_ROOM ) && SHOW_ORIGIN_OF_ROOM
-        // draw point of the room’s origin
+        // draw the point of the room’s origin
         if ( FlickeringColor::flickerWhiteAndTransparent() != Color::whiteColor() ) {
                 allegro::fillCircle( getX0(), getY0(), 3, Color::blackColor().toAllegroColor() );
                 where.drawPixelAt( getX0(), getY0(), Color::whiteColor().toAllegroColor() );

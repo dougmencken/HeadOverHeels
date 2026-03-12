@@ -1,6 +1,6 @@
 <room scenery="market">
-    <xTiles>6</xTiles>
-    <yTiles>10</yTiles>
+    <cells-x>6</cells-x>
+    <cells-y>10</cells-y>
     <color>white.reduced</color>
     <floorKind>plain</floorKind>
     <walls>
