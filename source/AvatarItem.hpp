@@ -33,7 +33,7 @@ public :
 
         virtual ~AvatarItem( ) { }
 
-        virtual std::string whichItemClass () const {  return "avatar item" ;  }
+        virtual std::string whichClassOfItem () const {  return "avatar item" ;  }
 
         bool isHead () const {  return getOriginalKind() == "head" ;  }
 

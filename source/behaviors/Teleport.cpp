@@ -41,7 +41,7 @@ bool Teleport::update ()
 
                                         // is it a free item with behavior
                                         if ( aboveItem != nilPointer &&
-                                                ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" ) &&
+                                                ( aboveItem->whichClassOfItem() == "free item" || aboveItem->whichClassOfItem() == "avatar item" ) &&
                                                         aboveItem->getBehavior() != nilPointer )
                                         {
                                                 // look for the items below
@@ -53,7 +53,7 @@ bool Teleport::update ()
                                                         {
                                                                 DescribedItemPtr belowItem = mediator->findCollisionPop( );
 
-                                                                if ( aboveItem->whichItemClass() == "avatar item"
+                                                                if ( aboveItem->whichClassOfItem() == "avatar item"
                                                                         && belowItem->getUniqueName() == teleportItem.getUniqueName() )
                                                                 {
                                                                         characterIsAboveTeleport = true ;

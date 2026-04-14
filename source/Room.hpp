@@ -245,24 +245,18 @@ private:
 
         void copyAnotherCharacterAsEntered ( const std::string& name ) ;
 
-        void dumpItemInsideThisRoom ( const DescribedItem & item ) ;
-
-protected:
-
-        void addGridItemToContainer ( const GridItemPtr & gridItem ) ;
-
-        void addFreeItemToContainer ( const FreeItemPtr & freeItem ) ;
+        void dumpItemInsideThisRoom ( const AbstractItem & item ) ;
 
 public:
 
         /**
-         * The "z" position of the floor
+         * The layer of the floor
          */
         static const int FloorZ = -1 ;
 
         /**
-         * The height of a layer in pixels.
-         * An item on layer n in the grid is n × LayerHeight pixels above the floor
+         * The height of a layer in pixels. An item on layer n in the grid
+         * is n × LayerHeight pixels above the floor
          */
         static const int LayerHeight = 24 ;
 

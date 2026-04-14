@@ -41,14 +41,14 @@ void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity 
                 if ( itemMeetsSender != nilPointer ) // a collision with an item
                 {
                         // is it free item or grid item
-                        if ( itemMeetsSender->whichItemClass() == "grid item" ||
-                                itemMeetsSender->whichItemClass() == "free item" || itemMeetsSender->whichItemClass() == "avatar item" )
+                        if ( itemMeetsSender->whichClassOfItem() == "grid item" ||
+                                itemMeetsSender->whichClassOfItem() == "free item" || itemMeetsSender->whichClassOfItem() == "avatar item" )
                         {
                                 // is it item with behavior
                                 if ( itemMeetsSender->getBehavior() != nilPointer )
                                 {
                                         // if it’s the character and the sender is mortal, then the character loses one life
-                                        if ( itemMeetsSender->whichItemClass() == "avatar item" && sender.isMortal() )
+                                        if ( itemMeetsSender->whichClassOfItem() == "avatar item" && sender.isMortal() )
                                         {
                                                 if ( itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::MetLethalItem
                                                         && itemMeetsSender->getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
@@ -59,7 +59,7 @@ void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity 
                                                 }
                                         }
                                         // if the sender is the character and the colliding one is mortal, then the character loses one life
-                                        else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
+                                        else if ( sender.whichClassOfItem() == "avatar item" && itemMeetsSender->isMortal() )
                                         {
                                                 const Activity & activityOfSender = sender.getBehavior()->getCurrentActivity() ;
                                                 if ( activityOfSender != activities::Activity::MetLethalItem
@@ -82,7 +82,7 @@ void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity 
                                         }
                                 }
                                 // otherwise it is an item without behavior, which may be mortal too
-                                else if ( sender.whichItemClass() == "avatar item" && itemMeetsSender->isMortal() )
+                                else if ( sender.whichClassOfItem() == "avatar item" && itemMeetsSender->isMortal() )
                                 {
                                         const Activity & activityOfSender = sender.getBehavior()->getCurrentActivity() ;
                                         if ( activityOfSender != activities::Activity::MetLethalItem
@@ -93,7 +93,7 @@ void PropagateActivity::toAdjacentItems( DescribedItem & sender, const Activity 
                 }
                 // a collision isn’t with an item
                 else
-                if ( sender.whichItemClass() == "avatar item" )
+                if ( sender.whichClassOfItem() == "avatar item" )
                 {
                         AvatarItem & character = dynamic_cast< AvatarItem & >( sender );
 
@@ -132,7 +132,7 @@ void PropagateActivity::toItemsAbove( DescribedItem & sender, const Activity & a
                         if ( itemAbove == nilPointer ) continue ;
 
                         // is it free item
-                        if ( itemAbove->whichItemClass() == "free item" || itemAbove->whichItemClass() == "avatar item" )
+                        if ( itemAbove->whichClassOfItem() == "free item" || itemAbove->whichClassOfItem() == "avatar item" )
                         {
                                 FreeItem & freeItemAbove = dynamic_cast< FreeItem & >( *itemAbove );
                                 if ( freeItemAbove.getBehavior() == nilPointer ) continue ; // nothing for an item without behavior
@@ -146,7 +146,7 @@ void PropagateActivity::toItemsAbove( DescribedItem & sender, const Activity & a
                                                 if ( freeItemAbove.getBehavior()->getCurrentActivity() != activities::Activity::Vanishing )
                                                 {
                                                         // if it’s the character above the mortal sender, then the character loses its life
-                                                        if ( freeItemAbove.whichItemClass() == "avatar item" && sender.isMortal() )
+                                                        if ( freeItemAbove.whichClassOfItem() == "avatar item" && sender.isMortal() )
                                                         {
                                                                 freeItemAbove.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                                         }

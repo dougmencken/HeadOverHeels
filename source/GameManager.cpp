@@ -427,7 +427,7 @@ void GameManager::saveTheGame ()
 
         DescribedItemPtr fish = room->getMediator()->findItemOfKind( "reincarnation-fish" );
 
-        if ( fish != nilPointer && fish->whichItemClass() == "free item" ) {
+        if ( fish != nilPointer && fish->whichClassOfItem() == "free item" ) {
                 const FreeItem & freeFish = dynamic_cast< const FreeItem & >( *fish );
                 int oneCell = room->getSizeOfOneCell ();
 

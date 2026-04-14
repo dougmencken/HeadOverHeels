@@ -13,22 +13,21 @@
 #endif
 
 
-FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & where )
+FreeItem::FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & heading )
         : DescribedItem( description )
         , theX( x )
         , theY( y >= 0 ? y : 0 )
         , theZ( z )
-        , initialCellX( farFarAway )
-        , initialCellY( farFarAway )
-        , initialCellZ( farFarAway )
+        , initialCellX( far_far_away )
+        , initialCellY( far_far_away )
+        , initialCellZ( far_far_away )
         , heading( "" )
         , wantMask ( tritrue )
         , frozen ( false )
-        , partOfDoor ( false )
         , carrier( "" )
         , shadedNonmaskedImage( nilPointer )
 {
-        changeHeading( where );
+        changeHeading( heading );
         freshBothProcessedImages ();
 }
 
@@ -43,7 +42,6 @@ FreeItem::FreeItem( const FreeItem & freeItem )
         , heading( freeItem.heading )
         , wantMask( freeItem.wantMask )
         , frozen( freeItem.frozen )
-        , partOfDoor( freeItem.partOfDoor )
         , carrier( freeItem.carrier )
         , shadedNonmaskedImage( ( freeItem.shadedNonmaskedImage != nilPointer ) ? new NamedPicture( * freeItem.shadedNonmaskedImage ) : nilPointer )
 {}

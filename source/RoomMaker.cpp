@@ -553,7 +553,7 @@ FreeItemPtr RoomMaker::makeFreeItem( tinyxml2::XMLElement* item, const Room & ro
                 if ( heading == "none" ) heading = "" ; //// backwards compatibility
 
                 FreeItemPtr freeItem( new FreeItem( *itemDescription, freeX, freeY, freeZ, heading ) );
-                freeItem->setInitialCellLocation( cellX, cellY, cellZ );
+                freeItem->setInitialCell( cellX, cellY, cellZ );
 
                 std::string behaviorOfItem ;
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );

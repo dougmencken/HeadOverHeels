@@ -42,7 +42,7 @@ public :
 
         virtual ~AbstractItem( ) ;
 
-        virtual std::string whichItemClass () const {  return "abstract item" ;  }
+        virtual std::string whichClassOfItem () const {  return "abstract item" ;  }
 
         const std::string & getUniqueName () const {  return this->uniqueName ;  }
 
@@ -53,6 +53,15 @@ public :
          * @return true if the item can be updated thereafter (it didn’t disappear from the room)
          */
         virtual bool updateItem () ;
+
+        // the position in 3-dimensional space of this item’s lower north-west point, in free units
+        virtual int getX () const = 0 ;
+        virtual int getY () const = 0 ;
+        virtual int getZ () const = 0 ;
+
+        virtual void setX ( int newX ) = 0 ;
+        virtual void setY ( int newY ) = 0 ;
+        virtual void setZ ( int newZ ) = 0 ;
 
         /**
          * Add value to the X coordinate
@@ -80,6 +89,11 @@ public :
          * @return true on change or false when there’s a collision
          */
         virtual bool addToPosition ( int x, int y, int z ) = 0 ;
+
+        // the three spatial dimensions (widths) of the item, along the x, along the y, and height along the z
+        virtual int getWidthX () const = 0 ;
+        virtual int getWidthY () const = 0 ;
+        virtual int getHeight () const = 0 ;
 
         bool doGraphicsOverlap ( const AbstractItem & item ) const {  return doGraphicsOverlapAt( item, item.getImageOffsetX(), item.getImageOffsetY() );  }
 
@@ -137,13 +151,17 @@ public :
                 return howManyFrames ;
         }
 
-        const NamedPicture & getCurrentRawImageIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
+        const NamedPicture & getCurrentRawImageIn ( const std::string & sequence ) const {
+                return getNthFrameIn( sequence, getCurrentFrame() ) ;
+        }
 
-        const NamedPicture & getCurrentRawImage () const {  return getCurrentRawImageIn( getCurrentFrameSequence() ) ;  }
+        const NamedPicture & getCurrentRawImage () const {
+                return getCurrentRawImageIn( getCurrentFrameSequence() ) ;
+        }
 
-        NamedPicture & getCurrentRawImageToChangeItIn ( const std::string & sequence ) const {  return getNthFrameIn( sequence, getCurrentFrame() ) ;  }
-
-        NamedPicture & getCurrentRawImageToChangeIt () const {  return getCurrentRawImageToChangeItIn( getCurrentFrameSequence() ) ;  }
+        NamedPicture & getCurrentRawImageToChangeIt () const {
+                return getNthFrameIn( getCurrentFrameSequence(), getCurrentFrame() ) ;
+        }
 
         /**
          * Animate from the first to the last frame, which is by default

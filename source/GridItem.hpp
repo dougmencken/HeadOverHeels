@@ -43,7 +43,7 @@ public :
 
         virtual ~GridItem( ) {}
 
-        virtual std::string whichItemClass () const {  return "grid item" ;  }
+        virtual std::string whichClassOfItem () const {  return "grid item" ;  }
 
         /**
          * for sorting grid items in a container

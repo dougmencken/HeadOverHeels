@@ -29,21 +29,6 @@ Picture::Picture( const std::string & path, const std::string & name ) /* throws
                 throw NoSuchPictureException( "can’t read picture from file \"" + name + "\" in " + path );
 }
 
-void Picture::putPixelAt( int x, int y, const Color& color ) const
-{
-        getAllegroPict().putPixelAt( x, y, color.toAllegroColor() ) ;
-}
-
-void Picture::drawPixelAt( int x, int y, const Color& color ) const
-{
-        getAllegroPict().drawPixelAt( x, y, color.toAllegroColor() ) ;
-}
-
-void Picture::fillWithColor( const Color& color )
-{
-        getAllegroPict().clearToColor( color.toAllegroColor () ) ;
-}
-
 void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare )
 {
         const unsigned int doubleSquare = sizeOfSquare << 1 ;

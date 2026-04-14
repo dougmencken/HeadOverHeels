@@ -34,19 +34,19 @@ class FreeItem : public DescribedItem, public Drawable
 public :
 
        /**
-        * @param description Description of this item
-        * @param x Position on X
-        * @param y Position on Y
-        * @param z Position on Z, or how far is the floor
-        * @param where The initial orientation of item
+        * @param description The description of this item
+        * @param x The X of the northernmost point
+        * @param y The Y of the westernmost point
+        * @param z The Z of the lowest point, or how far is the floor
+        * @param heading The initial heading (angular orientation)
         */
-        FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & where = "" ) ;
+        FreeItem( const DescriptionOfItem & description, int x, int y, int z, const std::string & heading = "" ) ;
 
         FreeItem( const FreeItem & freeItem ) ;
 
         virtual ~FreeItem( ) { }
 
-        virtual std::string whichItemClass () const {  return "free item" ;  }
+        virtual std::string whichClassOfItem () const {  return "free item" ;  }
 
         /**
          * for sorting free items in a container
@@ -68,7 +68,7 @@ public :
         int getInitialCellY () const {  return this->initialCellY ;  }
         int getInitialCellZ () const {  return this->initialCellZ ;  }
 
-        void setInitialCellLocation ( int cx, int cy, int cz )
+        void setInitialCell ( int cx, int cy, int cz )
         {
                 this->initialCellX = cx ;
                 this->initialCellY = cy ;
@@ -98,6 +98,12 @@ public :
         virtual void freshProcessedImage () ;
 
         void freshBothProcessedImages () ;
+
+        virtual void addFrameTo ( const std::string & sequence, NamedPicture *const frame )
+        {
+                DescribedItem::addFrameTo( sequence, frame );
+                freshBothProcessedImages() ;
+        }
 
         /**
          * The distance of the processed image from the room’s origin
@@ -139,9 +145,7 @@ public :
 
         NamedPicture & getShadedNonmaskedImage () const {  return * shadedNonmaskedImage ;  }
 
-        bool isPartOfDoor () const {  return partOfDoor ;  }
-
-        void setPartOfDoor ( bool isPart ) {  partOfDoor = isPart ;  }
+        bool isPartOfDoor () const {  return getDescriptionOfItem().isPartOfDoor() ;  }
 
         /**
          * When the carrier moves, the item above it (this item) also moves
@@ -150,7 +154,7 @@ public :
 
         void setCarrier ( const std::string & itemBelow ) {  this->carrier = itemBelow ;  }
 
-        static const int farFarAway = -1024 ;
+        static const int far_far_away = -1024 ;
 
 protected :
 
@@ -184,8 +188,6 @@ private :
 
         // whether this item is inactive
         bool frozen ;
-
-        bool partOfDoor ;
 
         // the unique name of item below this one
         // the item above the carrier moves along with the moving carrier

@@ -612,7 +612,7 @@ void Miniature::draw ()
 
         for ( std::vector< FreeItemPtr >::const_iterator fi = freeItemsInRoom.begin (); fi != freeItemsInRoom.end (); ++ fi )
         {
-                if ( *fi == nilPointer || ( *fi )->whichItemClass() == "avatar item" ) continue ;
+                if ( *fi == nilPointer || ( *fi )->whichClassOfItem() == "avatar item" ) continue ;
                 const FreeItem & item = *( *fi ) ;
 
                 const DescriptionOfItem & descriptionOfItem = item.getDescriptionOfItem () ;

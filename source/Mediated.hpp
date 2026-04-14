@@ -17,24 +17,22 @@ class Mediator ;
 class Mediated
 {
 
-public:
+public :
 
         Mediated( ) : mediator( 0 ) {}
 
-        virtual ~Mediated( ) { }
+        virtual ~Mediated( ) {}
 
-private:
+        virtual void setMediator ( Mediator * mediator ) {  this->mediator = mediator ;  }
+
+        Mediator * getMediator () const {  return this->mediator ;  }
+
+private :
 
        /**
         * Intermediary between the elements of a single room
         */
         Mediator * mediator ;
-
-public:
-
-        virtual void setMediator ( Mediator* mediator ) {  this->mediator = mediator ;  }
-
-        Mediator* getMediator () const {  return this->mediator ;  }
 
 } ;
 

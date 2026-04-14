@@ -373,7 +373,7 @@ void Mediator::castShadowOnFloor( FloorTile & floorTile )
                 if ( ! gridItem.hasShadow() ) continue ;
 
         # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
-                std::cout << "casting shadow from " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" <<
+                std::cout << "casting shadow from " << gridItem.whichClassOfItem() << " \"" << gridItem.getUniqueName() << "\"" <<
                         " at x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() <<
                         " on floor tile at" <<
                         " x=" << tileSize << "*" << xCell << "=" << xCell * tileSize <<
@@ -412,7 +412,7 @@ void Mediator::castShadowOnFloor( FloorTile & floorTile )
                 if ( xCell >= xStart && xCell <= xEnd && yCell >= yStart && yCell <= yEnd )
                 {
                 # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
-                        std::cout << "casting shadow from " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" <<
+                        std::cout << "casting shadow from " << freeItem.whichClassOfItem() << " \"" << freeItem.getUniqueName() << "\"" <<
                                 " at x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() <<
                                 " on floor tile at" <<
                                 " x=" << tileSize << "*" << xCell << "=" << xCell * tileSize <<
@@ -460,8 +460,8 @@ void Mediator::castShadowOnGridItem( GridItem & gridItem )
                         std::ostringstream positionOfOn;
                         positionOfOn << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
 
-                        std::cout << "casting shadow from " << aboveItem.whichItemClass() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                        " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                        std::cout << "casting shadow from " << aboveItem.whichClassOfItem() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                        " on " << gridItem.whichClassOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                 # endif
 
                         int  widthOfItemImage = gridItem.getCurrentRawImage().getWidth() ;
@@ -509,8 +509,8 @@ void Mediator::castShadowOnGridItem( GridItem & gridItem )
                                 std::ostringstream positionOfOn;
                                 positionOfOn << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
 
-                                std::cout << "casting shadow from " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                                " on " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                std::cout << "casting shadow from " << freeItem.whichClassOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                                " on " << gridItem.whichClassOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
                                 int  widthOfAboveShadow = freeItem.getCurrentImageOfShadow().getWidth() ;
@@ -568,8 +568,8 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
                                         std::ostringstream positionOfOn;
                                         positionOfOn << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
 
-                                        std::cout << "casting shadow from " << gridItem.whichItemClass() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                                        " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                        std::cout << "casting shadow from " << gridItem.whichClassOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                                        " on " << freeItem.whichClassOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                                 # endif
 
                                         int  widthOfAboveShadow = gridItem.getCurrentImageOfShadow().getWidth() ;
@@ -615,8 +615,8 @@ void Mediator::castShadowOnFreeItem( FreeItem & freeItem )
                                 std::ostringstream positionOfOn;
                                 positionOfOn << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
 
-                                std::cout << "casting shadow from " << aboveItem.whichItemClass() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                        " on " << freeItem.whichItemClass() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                std::cout << "casting shadow from " << aboveItem.whichClassOfItem() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                        " on " << freeItem.whichClassOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
                                 int  widthOfAboveShadow = aboveItem.getCurrentImageOfShadow().getWidth() ;
@@ -835,7 +835,7 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
         const std::vector < std::vector < GridItemPtr > > & gridItems = this->room.getGridItems ();
 
         // a grid item collides with grid items
-        if ( item->whichItemClass() == "grid item" )
+        if ( item->whichClassOfItem() == "grid item" )
         {
                 int column = dynamic_cast< GridItem & >( *item ).getColumnOfGrid() ;
 
@@ -850,7 +850,7 @@ bool Mediator::collectCollisionsWith ( const std::string & uniqueNameOfItem )
                 }
         }
         // a free item collides with grid items
-        else if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
+        else if ( item->whichClassOfItem() == "free item" || item->whichClassOfItem() == "avatar item" )
         {
                 // the range of cells where the item is
                 int xStart = item->getX() / this->room.getSizeOfOneCell ();
@@ -911,7 +911,7 @@ int Mediator::findHighestZ( const DescribedItem & item )
         // look for the highest grid item in the column
         const std::vector < std::vector < GridItemPtr > > & gridItems = this->room.getGridItems ();
 
-        if ( item.whichItemClass() == "grid item" )
+        if ( item.whichClassOfItem() == "grid item" )
         {
                 int column = dynamic_cast< const GridItem & >( item ).getColumnOfGrid ();
 
@@ -925,7 +925,7 @@ int Mediator::findHighestZ( const DescribedItem & item )
                         if ( zPlusHeight > z ) z = zPlusHeight ;
                 }
         }
-        else if ( item.whichItemClass() == "free item" || item.whichItemClass() == "avatar item" )
+        else if ( item.whichClassOfItem() == "free item" || item.whichClassOfItem() == "avatar item" )
         {
                 const FreeItem & freeItem = dynamic_cast< const FreeItem & >( item );
 

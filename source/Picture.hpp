@@ -44,18 +44,19 @@ public:
 
         virtual ~Picture( ) {}
 
-        unsigned int getWidth () const {  return this->apicture->getW() ;  }
-
-        unsigned int getHeight () const {  return this->apicture->getH() ;  }
-
-        Color getPixelAt ( int x, int y ) const {  return Color( this->apicture->getPixelAt( x, y ) ) ;  }
-
-        void putPixelAt ( int x, int y, const Color & color ) const ;
-        void drawPixelAt ( int x, int y, const Color & color ) const ;
-
         const allegro::Pict & getAllegroPict () const {  return *this->apicture ;  }
 
-        void fillWithColor ( const Color & color ) ;
+        unsigned int getWidth () const {  return getAllegroPict().getW() ;  }
+
+        unsigned int getHeight () const {  return getAllegroPict().getH() ;  }
+
+        Color getPixelAt ( int x, int y ) const {  return Color( getAllegroPict().getPixelAt( x, y ) ) ;  }
+
+        void putPixelAt ( int x, int y, const Color & color ) const {  getAllegroPict().putPixelAt( x, y, color.toAllegroColor() ) ;  }
+
+        void drawPixelAt ( int x, int y, const Color & color ) const {  getAllegroPict().drawPixelAt( x, y, color.toAllegroColor() ) ;  }
+
+        void fillWithColor ( const Color & color ) {  getAllegroPict().clearToColor( color.toAllegroColor() ) ;  }
 
         void fillWithTransparencyChequerboard ( const unsigned int sizeOfSquare = 8 ) ;
 

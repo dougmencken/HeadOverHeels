@@ -43,7 +43,7 @@ bool Switch::update ()
                                         // or that item may be near but it’s a character that is waiting
                                         if ( std::find( itemsNearbyNow.begin (), itemsNearbyNow.end (), switcher ) == itemsNearbyNow.end ()
                                                         || switcherItem == nilPointer ||
-                                                        ( switcherItem->whichItemClass() == "avatar item" &&
+                                                        ( switcherItem->whichClassOfItem() == "avatar item" &&
                                                                 switcherItem->getBehavior()->getCurrentActivity() == activities::Activity::Waiting ) )
                                         {
                                                 // then remove an item from the set of switchers so that it may re~switch
@@ -63,7 +63,7 @@ bool Switch::update ()
                                                 || switcherAbove->canAdvanceTo( 0, 0, -1 ) ) continue ;
 
                                         // is it a free item
-                                        if ( switcherAbove->whichItemClass() == "free item" || switcherAbove->whichItemClass() == "avatar item" )
+                                        if ( switcherAbove->whichClassOfItem() == "free item" || switcherAbove->whichClassOfItem() == "avatar item" )
                                         {
                                                 // the switch doesn’t toggle when the switcher is jumping
                                                 if ( switcherAbove->getBehavior()->getCurrentActivity() != activities::Activity::Jumping )

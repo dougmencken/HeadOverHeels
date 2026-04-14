@@ -41,7 +41,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
         {
                 case activities::Activity::Moving :
                 case activities::Activity::Automoving :
-                        if ( whatMoves.whichItemClass() == "free item" || whatMoves.whichItemClass() == "avatar item" )
+                        if ( whatMoves.whichClassOfItem() == "free item" || whatMoves.whichClassOfItem() == "avatar item" )
                         {
                                 FreeItem & itMoves = dynamic_cast< FreeItem & >( whatMoves );
 
@@ -83,7 +83,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
                                         // when there’s something above
                                         if ( aboveItem != nilPointer
                                                 // that moves freely
-                                                && ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" )
+                                                && ( aboveItem->whichClassOfItem() == "free item" || aboveItem->whichClassOfItem() == "avatar item" )
                                                 // and isn’t bigger
                                                 && ( whatMoves.getWidthX() + whatMoves.getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
                                         {
@@ -116,7 +116,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
                                         DescribedItemPtr onTop = mediator->findItemByUniqueName( itemsAbove.top() );
                                         itemsAbove.pop() ;
 
-                                        if ( onTop->whichItemClass() == "free item" || onTop->whichItemClass() == "avatar item" )
+                                        if ( onTop->whichClassOfItem() == "free item" || onTop->whichClassOfItem() == "avatar item" )
                                         {       // lower it, to not fall when on an elevator and it goes down
                                                 descend( dynamic_cast< FreeItem & >( *onTop ), /* 2 */ 1 );
                                         }
@@ -130,7 +130,7 @@ bool Moving::move( behaviors::Behavior & behavior, bool itFalls )
         }
 
         // if the item can move freely
-        if ( whatMoves.whichItemClass() == "free item" || whatMoves.whichItemClass() == "avatar item" )
+        if ( whatMoves.whichClassOfItem() == "free item" || whatMoves.whichClassOfItem() == "avatar item" )
         {
                 bool onElevator = ( activity == activities::ActivityOfElevator::GoingUp
                                         || activity == activities::ActivityOfElevator::GoingDown );
@@ -175,7 +175,7 @@ void Moving::ascend( FreeItem & freeItem, int dz )
         {
                 std::string collision = mediator->popCollision ();
 
-                if ( freeItem.whichItemClass() == "avatar item" && collision == "ceiling" ) {
+                if ( freeItem.whichClassOfItem() == "avatar item" && collision == "ceiling" ) {
                         AvatarItem & character = dynamic_cast< AvatarItem & >( freeItem );
 
                         if ( character.isActiveCharacter() ) {
@@ -191,7 +191,7 @@ void Moving::ascend( FreeItem & freeItem, int dz )
                 // when there’s something above
                 if ( aboveItem != nilPointer
                         // that can move freely
-                        && ( aboveItem->whichItemClass() == "free item" || aboveItem->whichItemClass() == "avatar item" )
+                        && ( aboveItem->whichClassOfItem() == "free item" || aboveItem->whichClassOfItem() == "avatar item" )
                         // and isn’t bigger
                         && ( freeItem.getWidthX() + freeItem.getWidthY() >= aboveItem->getWidthX() + aboveItem->getWidthY() ) )
                 {
@@ -237,7 +237,7 @@ void Moving::descend( FreeItem & freeItem, int dz )
                         itemsBelow.pop ();
 
                         if ( belowItem != nilPointer
-                                && ( belowItem->whichItemClass() == "free item" || belowItem->whichItemClass() == "avatar item" ) )
+                                && ( belowItem->whichClassOfItem() == "free item" || belowItem->whichClassOfItem() == "avatar item" ) )
                         {
                                 // recursively lower such an item
                                 descend( dynamic_cast< FreeItem & >( *belowItem ), dz );

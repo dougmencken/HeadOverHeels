@@ -354,7 +354,7 @@ bool Room::saveAsXML( const std::string & file )
                 for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
                 {
                         FreeItemPtr theItem = *fi ;
-                        if ( theItem != nilPointer && ! theItem->isPartOfDoor() && theItem->whichItemClass() != "avatar item" )
+                        if ( theItem != nilPointer && ! theItem->isPartOfDoor() && theItem->whichClassOfItem() != "avatar item" )
                         {
                                 tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
 
@@ -485,17 +485,9 @@ void Room::addDoor( Door * door )
         this->doors[ door->getRoomSide() ] = door;
 
         // each door is actually three free items
-        FreeItemPtr leftJamb = door->getLeftJamb() ;
-        FreeItemPtr rightJamb = door->getRightJamb() ;
-        FreeItemPtr lintel = door->getLintel() ;
-
-        leftJamb->setPartOfDoor( true );
-        rightJamb->setPartOfDoor( true );
-        lintel->setPartOfDoor( true );
-
-        addFreeItem( leftJamb );
-        addFreeItem( rightJamb );
-        addFreeItem( lintel );
+        addFreeItem( door->getLeftJamb() );
+        addFreeItem( door->getRightJamb() );
+        addFreeItem( door->getLintel() );
 
         camera->recenterRoom () ;
 }
@@ -573,13 +565,6 @@ void Room::convertWallsNearDoors ()
                 std::sort( wallSegments.begin (), wallSegments.end (), WallPiece::compareWallPointers );
 }
 
-void Room::addGridItemToContainer( const GridItemPtr& gridItem )
-{
-        int column = gridItem->getColumnOfGrid();
-        gridItems[ column ].push_back( gridItem );
-        // don’t sort here
-}
-
 void Room::addGridItem( const GridItemPtr& gridItem )
 {
         if ( gridItem == nilPointer ) return;
@@ -588,13 +573,13 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 ( gridItem->getCellX() >= static_cast< int >( this->getCellsAlongX() ) ||
                         gridItem->getCellY() >= static_cast< int >( this->getCellsAlongY() ) ) )
         {
-                std::cerr << "coordinates for " << gridItem->whichItemClass() << " are out of limits" << std::endl ;
+                std::cerr << "coordinates for " << gridItem->whichClassOfItem() << " are out of limits" << std::endl ;
                 return;
         }
 
         if ( gridItem->getUnsignedHeight() == 0 )
         {
-                std::cerr << "can’t add " << gridItem->whichItemClass() << " which height is zero" << std::endl ;
+                std::cerr << "can’t add " << gridItem->whichClassOfItem() << " which height is zero" << std::endl ;
                 return;
         }
 
@@ -616,7 +601,9 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         gridItem->setUniqueName( name.str() );
 
-        addGridItemToContainer( gridItem );
+        // add grid item to the container
+        int column = gridItem->getColumnOfGrid() ;
+        gridItems[ column ].push_back( gridItem );
 
         if ( gridItem->getZ() != Room::FloorZ ) {
                 // when the position on Z is set, look for collisions there
@@ -625,21 +612,20 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         {       // an item with z = FloorZ goes above the previously added ones in the column with the same x and y
                 // and its position on Z is calculated
                 gridItem->setZ( getMediator()->findHighestZ( *gridItem ) );
-                std::cout << "for " << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName()
+                std::cout << "for " << gridItem->whichClassOfItem() << " \"" << gridItem->getUniqueName()
                                         << "\" the calculated “Z above others” is " << gridItem->getZ() << std::endl ;
         }
 
-        if ( getMediator()->isThereAnyCollision () )
-        {
+        if ( getMediator()->isThereAnyCollision () ) {
                 // can’t add item when there’s some collision
-                std::cerr << "there’s collision with " << gridItem->whichItemClass() << std::endl ;
+                std::cerr << "there’s collision with " << gridItem->whichClassOfItem() << std::endl ;
                 return ;
         }
 
         getMediator()->castShadowFromGridItem( *gridItem );
         getMediator()->wantMaskingWithGridItem( *gridItem );
 
-        IF_DEBUG( std::cout << gridItem->whichItemClass() << " \"" << gridItem->getUniqueName() << "\" is yet part of room " << getNameOfRoomDescriptionFile() << std::endl )
+        IF_DEBUG( std::cout << gridItem->whichClassOfItem() << " \"" << gridItem->getUniqueName() << "\" is yet part of room " << getNameOfRoomDescriptionFile() << std::endl )
 }
 
 void Room::sortGridItems ()
@@ -655,26 +641,20 @@ void Room::sortGridItems ()
         getMediator()->unlockGridItemsMutex ();
 }
 
-void Room::addFreeItemToContainer( const FreeItemPtr& freeItem )
-{
-        freeItems.push_back( freeItem );
-        // no sorting here
-}
-
 void Room::addFreeItem( const FreeItemPtr& freeItem )
 {
-        if ( freeItem == nilPointer ) return;
+        if ( freeItem == nilPointer ) return ;
 
         if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Room::FloorZ )
         {
-                std::cerr << "coordinates for " << freeItem->whichItemClass() << " are out of limits" << std::endl ;
+                std::cerr << "coordinates for " << freeItem->whichClassOfItem() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
                 return;
         }
 
         if ( freeItem->getUnsignedHeight() == 0 || freeItem->getUnsignedWidthX() == 0 || freeItem->getUnsignedWidthY() == 0 )
         {
-                std::cerr << "can’t add " << freeItem->whichItemClass() << " which dimension is zero" << std::endl ;
+                std::cerr << "can’t add " << freeItem->whichClassOfItem() << " which dimension is zero" << std::endl ;
                 return;
         }
 
@@ -682,7 +662,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 || ( freeItem->getY() - freeItem->getWidthY() + 1 < 0 )
                         || ( freeItem->getY() > static_cast< int >( this->getCellsAlongY() * getSizeOfOneCell() ) - 1 ) )
         {
-                std::cerr << "coordinates for " << freeItem->whichItemClass() << " are out of room" << std::endl ;
+                std::cerr << "coordinates for " << freeItem->whichClassOfItem() << " are out of room" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
                 return;
         }
@@ -701,7 +681,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 
         freeItem->setUniqueName( kindOfItem + " " + util::toStringWithOrdinalSuffix( uniqueNumberOfItem ) );
 
-        addFreeItemToContainer( freeItem );
+        this->freeItems.push_back( freeItem );
 
         // for item which is placed at some height, look for collisions
         if ( freeItem->getZ() > Room::FloorZ )
@@ -717,7 +697,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         // collision is found, so can’t add this item
         if ( getMediator()->isThereAnyCollision () )
         {
-                std::cerr << "there’s collision with " << freeItem->whichItemClass() << std::endl ;
+                std::cerr << "there’s collision with " << freeItem->whichClassOfItem() << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
                 return;
         }
@@ -725,7 +705,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         getMediator()->castShadowFromFreeItem( *freeItem );
         getMediator()->wantMaskingWithFreeItem( *freeItem );
 
-        IF_DEBUG( std::cout << freeItem->whichItemClass() << " \"" << freeItem->getUniqueName() << "\" is yet in room " << getNameOfRoomDescriptionFile() << std::endl )
+        IF_DEBUG( std::cout << freeItem->whichClassOfItem() << " \"" << freeItem->getUniqueName() << "\" is yet in room " << getNameOfRoomDescriptionFile() << std::endl )
 }
 
 void Room::sortFreeItems ()
@@ -846,14 +826,14 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
 
         if ( character->getX() < 0 || character->getY() < 1 || character->getZ() < Room::FloorZ )
         {
-                std::cerr << "coordinates for " << character->whichItemClass() << " are out of limits" << std::endl ;
+                std::cerr << "coordinates for " << character->whichClassOfItem() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
         }
 
         if ( character->getUnsignedHeight() == 0 || character->getUnsignedWidthX() == 0 || character->getUnsignedWidthY() == 0 )
         {
-                std::cerr << "can’t add " << character->whichItemClass() << " which dimension is zero" << std::endl ;
+                std::cerr << "can’t add " << character->whichClassOfItem() << " which dimension is zero" << std::endl ;
                 return false;
         }
 
@@ -861,7 +841,7 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
                 || ( character->getY() - character->getWidthY() + 1 < 0 )
                         || ( character->getY() > static_cast< int >( this->getCellsAlongY() * getSizeOfOneCell() ) - 1 ) )
         {
-                std::cerr << "coordinates for " << character->whichItemClass() << " are out of room"
+                std::cerr << "coordinates for " << character->whichClassOfItem() << " are out of room"
                                 << " \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
@@ -884,7 +864,7 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
 
         std::cout << "adding character \"" << character->getOriginalKind() << "\" to room " << getNameOfRoomDescriptionFile() << std::endl ;
 
-        addFreeItemToContainer( character );
+        this->freeItems.push_back( character );
 
         // if character is placed at the given height, look for collisions
         if ( character->getZ() > Room::FloorZ )
@@ -903,7 +883,7 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
         // collision is found, so can’t add this item
         if ( getMediator()->isThereAnyCollision () )
         {
-                std::cerr << "there’s collision with " << character->whichItemClass() << std::endl ;
+                std::cerr << "there’s collision with " << character->whichClassOfItem() << std::endl ;
                 dumpItemInsideThisRoom( *character );
                 return false;
         }
@@ -937,15 +917,15 @@ bool Room::placeCharacterInRoom( const AvatarItemPtr & character, bool justEnter
         return true ;
 }
 
-void Room::dumpItemInsideThisRoom( const DescribedItem & item )
+void Room::dumpItemInsideThisRoom( const AbstractItem & item )
 {
-        std::cout << "   " << item.whichItemClass() << " \"" << item.getUniqueName() << "\""
+        std::cout << "   " << item.whichClassOfItem() << " \"" << item.getUniqueName() << "\""
                         << " at " << item.getX() << " " << item.getY() << " " << item.getZ()
                         << " with dimensions " << item.getWidthX() << " x " << item.getWidthY() << " x " << item.getHeight()
                         << std::endl
                         << "   inside room " << getNameOfRoomDescriptionFile()
-                        << " of " << getCellsAlongX () << " x " << getCellsAlongY () << " tiles"
-                        << " each tile of " << getSizeOfOneCell () << " pixels"
+                        << " of " << getCellsAlongX() << " x " << getCellsAlongY() << " cells"
+                        << " each cell of " << getSizeOfOneCell() << " pixels"
                         << std::endl ;
 }
 
@@ -1025,7 +1005,7 @@ void Room::removeGridItemByUniqueName( const std::string & uniqueName )
                         {
                                 foundGridItem = *g ;
 
-                                std::cout << "removing " << ( *g )->whichItemClass() << " \"" << uniqueName <<
+                                std::cout << "removing " << ( *g )->whichClassOfItem() << " \"" << uniqueName <<
                                         "\" from room " << getNameOfRoomDescriptionFile() << std::endl ;
 
                                 gridItems[ column ].erase( g );
@@ -1053,7 +1033,7 @@ void Room::removeFreeItemByUniqueName( const std::string & uniqueName )
                 {
                         foundFreeItem = *f ;
 
-                        std::cout << "removing " << ( *f )->whichItemClass() << " \"" << uniqueName <<
+                        std::cout << "removing " << ( *f )->whichClassOfItem() << " \"" << uniqueName <<
                                 "\" from room " << getNameOfRoomDescriptionFile() << std::endl ;
 
                         freeItems.erase( f );

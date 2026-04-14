@@ -27,7 +27,7 @@ class ItemDescriptions ;
 class Door : public Mediated
 {
 
-public:
+public :
 
        /**
         * @param kind the kind of door
@@ -41,17 +41,6 @@ public:
         virtual ~Door( ) {}
 
         const std::string & getRoomSide () const {  return this->onWhichSide ;  }
-
-        // useful for doors in big rooms
-        std::string onWhichSideOfTheFour () const
-        {
-                if ( this->onWhichSide == "northeast" || this->onWhichSide == "northwest" ) return "north" ;
-                if ( this->onWhichSide == "southeast" || this->onWhichSide == "southwest" ) return "south" ;
-                if ( this->onWhichSide == "eastnorth" || this->onWhichSide == "eastsouth" ) return "east" ;
-                if ( this->onWhichSide == "westnorth" || this->onWhichSide == "westsouth" ) return "west" ;
-
-                return this->onWhichSide ;
-        }
 
         const FreeItemPtr & getLeftJamb () ;
 
@@ -74,7 +63,7 @@ public:
                 return isUnderDoor( item.getX(), item.getY(), item.getZ() );
         }
 
-private:
+private :
 
         // the door item’s kind is %scenery%-door-%on%
         std::string kindOfDoor ;
@@ -90,32 +79,46 @@ private:
         // for a single room, the sides are north, south, west or east
         std::string onWhichSide ;
 
-        int rightLimit ;
         int leftLimit ;
+        int rightLimit ;
 
         FreeItemPtr leftJamb ;
         FreeItemPtr rightJamb ;
         FreeItemPtr lintel ;
 
+        // useful for doors in big rooms
+        std::string onWhichSideOfTheFour () const
+        {
+                const std::string & side = this->onWhichSide ;
+
+                if ( side == "northeast" || side == "northwest" ) return "north" ;
+                if ( side == "southeast" || side == "southwest" ) return "south" ;
+                if ( side == "eastnorth" || side == "eastsouth" ) return "east" ;
+                if ( side == "westnorth" || side == "westsouth" ) return "west" ;
+
+                return side ;
+        }
+
         /**
          * Get the image of lintel from the image of door
          */
-        static NamedPicture * cutOutLintel ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        static NamedPicture * cutOutLintel ( const NamedPicturePtr & doorImage,
+                                                unsigned int widthX, unsigned int widthY, unsigned int height,
                                                 unsigned int leftJambWidthX, unsigned int leftJambWidthY,
                                                 unsigned int rightJambWidthX, unsigned int rightJambWidthY,
                                                 const std::string & on ) ;
-
         /**
          * Get the image of left jamb from the image of door
          */
-        static NamedPicture * cutOutLeftJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        static NamedPicture * cutOutLeftJamb ( const NamedPicturePtr & doorImage,
+                                                unsigned int widthX, unsigned int widthY, unsigned int height,
                                                 /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
                                                 const std::string & on ) ;
-
         /**
          * Get the image of right jamb from the image of door
          */
-        static NamedPicture * cutOutRightJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        static NamedPicture * cutOutRightJamb ( const NamedPicturePtr & doorImage,
+                                                unsigned int widthX, unsigned int widthY, unsigned int height,
                                                 unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                                 const std::string & on ) ;
 

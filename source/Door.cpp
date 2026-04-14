@@ -25,6 +25,8 @@ Door::Door( const std::string & kind, int cx, int cy, int z, const std::string &
         , cellY( cy )
         , elevation( z )
         , onWhichSide( on )
+        , leftLimit( 1 << 22 )
+        , rightLimit( 1 << 22 )
         , leftJamb( nilPointer )
         , rightJamb( nilPointer )
         , lintel( nilPointer )
@@ -50,105 +52,89 @@ Door::Door( const std::string & kind, int cx, int cy, int z, const std::string &
 }
 
 /* static */
-NamedPicture* Door::cutOutLintel( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
+NamedPicture* Door::cutOutLintel( const NamedPicturePtr & doorImage,
+                                        unsigned int widthX, unsigned int widthY, unsigned int height,
                                         unsigned int leftJambWidthX, unsigned int leftJambWidthY,
                                         unsigned int rightJambWidthX, unsigned int rightJambWidthY,
                                         const std::string & on )
 {
-        bool ns = ( on == "north" || on == "south" || on == "northeast" || on == "northwest" || on == "southeast" || on == "southwest" );
-
-        unsigned int lintelWidth = ( widthX << 1 ) + ( widthY << 1 );
-        unsigned int lintelHeight = height + widthY + widthX;
+        unsigned int lintelWidth = ( widthX + widthY ) << 1  ;
+        unsigned int lintelHeight = height + widthY + widthX ;
 
         NamedPicture * lintel = new NamedPicture( lintelWidth, lintelHeight );
 
-        if ( ns )
-        {
-                allegro::bitBlit( door, lintel->getAllegroPict(), 0, 0, 0, 0, lintelWidth, height + widthX );
+        bool ns = ( on == "north" || on == "south" || on == "northeast" || on == "northwest" || on == "southeast" || on == "southwest" );
+        if ( ns ) {
+                unsigned int copiedHeight = height + widthX ;
+                allegro::bitBlit( doorImage->getAllegroPict(), lintel->getAllegroPict(), 0, 0, 0, 0, lintelWidth, copiedHeight );
 
-                unsigned int delta = lintelWidth;
-                int noPixel = lintelWidth - ( ( rightJambWidthX + rightJambWidthY ) << 1 ) + 1;
-                int yStart = noPixel;
-                int yEnd = noPixel - 1;
+                int noPixel = lintelWidth - ( ( rightJambWidthX + rightJambWidthY ) << 1 ) + 1 ;
+                int yStart = noPixel ;
+                int yEnd = noPixel - 1 ;
 
-                /////lintel->getAllegroPict().lockWriteOnly() ;
-
-                for ( unsigned int yPic = height + widthX; yPic < lintelHeight; yPic++ ) {
-                        for ( unsigned int xPic = delta; xPic > 0; xPic-- )
+                unsigned int firstX = lintelWidth ;
+                for ( unsigned int y = copiedHeight ; y < lintelHeight ; y ++ ) {
+                        for ( unsigned int x = firstX ; x > 0 ; x -- )
                         {
-                                if ( yPic != height + widthX && ( static_cast< int >( xPic ) - 1 ) == noPixel )
-                                {
-                                        if ( noPixel > yEnd ) {
-                                                noPixel -- ;
-                                        }
+                                int xPixel = static_cast< int >( x ) - 1 ;
+                                if ( y != copiedHeight && xPixel == noPixel ) {
+                                        if ( noPixel > yEnd ) noPixel -- ;
                                         else {
                                                 yStart += 2 ;
-                                                noPixel = yStart;
+                                                noPixel = yStart ;
                                         }
                                 }
-                                else if ( yPic < height + ( widthX << 1 ) || ( static_cast< int >( xPic ) - 1 ) < yEnd )
-                                {
-                                        lintel->getAllegroPict().putPixelAt( xPic - 1, yPic, door.getPixelAt( xPic - 1, yPic ) );
-                                }
+                                else if ( y < height + ( widthX << 1 ) || xPixel < yEnd )
+                                        lintel->putPixelAt( xPixel, y, doorImage->getPixelAt( xPixel, y ) );
                         }
-
-                        delta -= 2;
+                        firstX -= 2 ;
                 }
-
-                /////lintel->getAllegroPict().unlock() ;
         }
-        else
-        {
-                allegro::bitBlit( door, lintel->getAllegroPict(), 0, 0, 0, 0, lintelWidth, height + widthY );
+        else {
+                unsigned int copiedHeight = height + widthY ;
+                allegro::bitBlit( doorImage->getAllegroPict(), lintel->getAllegroPict(), 0, 0, 0, 0, lintelWidth, copiedHeight );
 
-                unsigned int delta = 0;
-                int noPixel = ( ( leftJambWidthX + leftJambWidthY ) << 1 ) - 2;
-                int yStart = noPixel;
-                int yEnd = noPixel + 1;
+                int noPixel = ( ( leftJambWidthX + leftJambWidthY ) << 1 ) - 2 ;
+                int yStart = noPixel ;
+                int yEnd = noPixel + 1 ;
 
-                /////lintel->getAllegroPict().lockWriteOnly() ;
-
-                for ( unsigned int yPic = height + widthY; yPic < lintelHeight; yPic++ ) {
-                        for ( unsigned int xPic = delta; xPic < lintelWidth; xPic++ )
+                unsigned int firstX = 0 ;
+                for ( unsigned int y = copiedHeight ; y < lintelHeight ; y ++ ) {
+                        for ( unsigned int x = firstX ; x < lintelWidth ; x ++ )
                         {
-                                if ( yPic != height + widthY && static_cast< int >( xPic ) == noPixel )
-                                {
-                                        if ( noPixel < yEnd ) {
-                                                noPixel ++ ;
-                                        }
+                                int xPixel = static_cast< int >( x ) ;
+                                if ( y != copiedHeight && xPixel == noPixel ) {
+                                        if ( noPixel < yEnd ) noPixel ++ ;
                                         else {
                                                 yStart -= 2 ;
-                                                noPixel = yStart;
+                                                noPixel = yStart ;
                                         }
                                 }
-                                else if ( yPic < height + ( widthY << 1 ) || static_cast< int >( xPic ) > yEnd )
-                                {
-                                        lintel->getAllegroPict().putPixelAt( xPic, yPic, door.getPixelAt( xPic, yPic ) );
-                                }
+                                else if ( y < height + ( widthY << 1 ) || xPixel > yEnd )
+                                        lintel->putPixelAt( xPixel, y, doorImage->getPixelAt( xPixel, y ) );
                         }
-
-                        delta += 2;
+                        firstX += 2 ;
                 }
-
-                /////lintel->getAllegroPict().unlock() ;
         }
 
+        lintel->setName( "lintel of " + doorImage->getName() );
         return lintel ;
 }
 
 /* static */
-NamedPicture* Door::cutOutLeftJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
+NamedPicture* Door::cutOutLeftJamb( const NamedPicturePtr & doorImage,
+                                        unsigned int widthX, unsigned int widthY, unsigned int height,
                                         /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
                                         const std::string & on )
 {
         bool ns = ( on == "north" || on == "south" || on == "northeast" || on == "northwest" || on == "southeast" || on == "southwest" );
-        unsigned int fixWidth = ( ns ? 7 : 0 );
-        int fixY = ( ns ? -1 : 0 );
+        unsigned int widthCorrection = ( ns ? 7 : 0 );
+        int yCorrection = ( ns ? -1 : 0 );
 
-        NamedPicture * leftJamb = new NamedPicture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
+        NamedPicture * leftJamb = new NamedPicture( (( widthX + widthY ) << 1) + widthCorrection, height + widthY + widthX );
 
-        allegro::bitBlit( door, leftJamb->getAllegroPict(),
-                                fixY, lintelHeight + lintelWidthY - widthY + fixY,
+        allegro::bitBlit( doorImage->getAllegroPict(), leftJamb->getAllegroPict(),
+                                yCorrection, lintelHeight + lintelWidthY - widthY + yCorrection,
                                 0, 0,
                                 leftJamb->getWidth(), leftJamb->getHeight() );
 
@@ -156,22 +142,24 @@ NamedPicture* Door::cutOutLeftJamb( const allegro::Pict& door, unsigned int widt
         Color::pictureToGrayscale( leftJamb );
 # endif
 
+        leftJamb->setName( "left jamb of " + doorImage->getName() );
         return leftJamb ;
 }
 
 /* static */
-NamedPicture* Door::cutOutRightJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
+NamedPicture* Door::cutOutRightJamb( const NamedPicturePtr & doorImage,
+                                        unsigned int widthX, unsigned int widthY, unsigned int height,
                                         unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                         const std::string & on )
 {
         bool ns = ( on == "north" || on == "south" || on == "northeast" || on == "northwest" || on == "southeast" || on == "southwest" );
-        unsigned int fixWidth = ( ns ? 0 : 7 );
-        int fixY = ( ns ? 0 : -2 );
+        unsigned int widthCorrection = ( ns ? 0 : 7 );
+        int yCorrection = ( ns ? 0 : -2 );
 
-        NamedPicture * rightJamb = new NamedPicture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
+        NamedPicture * rightJamb = new NamedPicture( (( widthX + widthY ) << 1) + widthCorrection, height + widthY + widthX );
 
-        allegro::bitBlit( door, rightJamb->getAllegroPict(),
-                                door.getW() - rightJamb->getWidth(), lintelHeight + lintelWidthX - widthY + fixY,
+        allegro::bitBlit( doorImage->getAllegroPict(), rightJamb->getAllegroPict(),
+                                doorImage->getWidth() - rightJamb->getWidth(), lintelHeight + lintelWidthX - widthY + yCorrection,
                                 0, 0,
                                 rightJamb->getWidth(), rightJamb->getHeight() );
 
@@ -179,6 +167,7 @@ NamedPicture* Door::cutOutRightJamb( const allegro::Pict& door, unsigned int wid
         Color::pictureToGrayscale( rightJamb );
 # endif
 
+        rightJamb->setName( "right jamb of " + doorImage->getName() );
         return rightJamb ;
 }
 
@@ -198,7 +187,7 @@ const FreeItemPtr & Door::getLeftJamb()
                         const DescriptionOfItem & whatIsLintel = * descriptions.getDescriptionByKind( getKind() + "~lintel" );
 
                         // cut out the left jamb
-                        NamedPicture * leftJambCut = cutOutLeftJamb( imagePool.getPicture( doorImageName )->getAllegroPict(),
+                        NamedPicture * leftJambCut = Door::cutOutLeftJamb( imagePool.getPicture( doorImageName ),
                                                 whatIsLeftJamb.getWidthX(), whatIsLeftJamb.getWidthY(), whatIsLeftJamb.getHeight(),
                                                 whatIsLintel.getWidthY(), whatIsLintel.getHeight(),
                                                 getRoomSide() );
@@ -223,45 +212,40 @@ const FreeItemPtr & Door::getLeftJamb()
                         case Way::North:
                         case Way::Northeast:
                         case Way::Northwest:
-                                x = cellX * oneCell + whatIsLeftJamb.getWidthX() - 2 ;
-                                y = ( cellY + 2 ) * oneCell - 2 ;
+                                x = this->cellX * oneCell + whatIsLeftJamb.getWidthX() - 2 ;
+                                y = ( this->cellY + 2 ) * oneCell - 2 ;
                                 this->leftLimit = y + whatIsLeftJamb.getWidthY() ;
-                                break;
+                                break ;
 
                         case Way::South:
                         case Way::Southeast:
                         case Way::Southwest:
-                                x = cellX * oneCell ;
-                                y = ( cellY + 2 ) * oneCell - 2 ;
+                                x = this->cellX * oneCell ;
+                                y = ( this->cellY + 2 ) * oneCell - 2 ;
                                 this->leftLimit = y + whatIsLeftJamb.getWidthY() ;
-                                break;
+                                break ;
 
                         case Way::East:
                         case Way::Eastnorth:
                         case Way::Eastsouth:
-                                x = cellX * oneCell ;
-                                y = ( cellY + 1 ) * oneCell - 1 ;
+                                x = this->cellX * oneCell ;
+                                y = ( this->cellY + 1 ) * oneCell - 1 ;
                                 this->leftLimit = x + whatIsLeftJamb.getWidthX() ;
-                                break;
+                                break ;
 
                         case Way::West:
                         case Way::Westnorth:
                         case Way::Westsouth:
-                                x = cellX * oneCell ;
-                                y = ( cellY + 1 ) * oneCell - whatIsLeftJamb.getWidthY() + 1 ;
+                                x = this->cellX * oneCell ;
+                                y = ( this->cellY + 1 ) * oneCell - whatIsLeftJamb.getWidthY() + 1 ;
                                 this->leftLimit = x + whatIsLeftJamb.getWidthX() ;
-                                break;
-
-                        default:
-                                ;
+                                break ;
                 }
 
                 leftJamb = FreeItemPtr( new FreeItem( whatIsLeftJamb, x, y, Room::FloorZ, onWhichSideOfTheFour() ) );
-                leftJamb->addFrameTo( onWhichSideOfTheFour(), new NamedPicture( leftJambImage->getWidth(), leftJambImage->getHeight() ) );
-                allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
-                leftJamb->getCurrentRawImageToChangeIt().setName( leftJambImage->getName() );
-                leftJamb->freshBothProcessedImages ();
-                leftJamb->setUniqueName( leftJamb->getKind () + " " + util::makeRandomString( 8 ) );
+                leftJamb->setUniqueName( leftJamb->getKind() + "." + util::makeRandomString( 8 ) );
+                leftJamb->addFrameTo( leftJamb->getHeading(), new NamedPicture( * leftJambImage ) );
+                leftJamb->setMediator( getMediator() );
         }
 
         return this->leftJamb ;
@@ -283,7 +267,7 @@ const FreeItemPtr & Door::getRightJamb()
                         const DescriptionOfItem & whatIsLintel = * descriptions.getDescriptionByKind( getKind() + "~lintel" );
 
                         // cut out the right jamb
-                        NamedPicture * rightJambCut = cutOutRightJamb( imagePool.getPicture( doorImageName )->getAllegroPict(),
+                        NamedPicture * rightJambCut = Door::cutOutRightJamb( imagePool.getPicture( doorImageName ),
                                                 whatIsRightJamb.getWidthX(), whatIsRightJamb.getWidthY(), whatIsRightJamb.getHeight(),
                                                 whatIsLintel.getWidthX(), whatIsLintel.getHeight(),
                                                 getRoomSide() );
@@ -295,7 +279,7 @@ const FreeItemPtr & Door::getRightJamb()
                 # endif
                 }
 
-                const NamedPicturePtr & rightJambImage = imagePool.getOrLoadAndGet( rightJambName );
+                const NamedPicturePtr & rightJambImage = imagePool.getPicture( rightJambName );
                 if ( rightJambImage == nilPointer )
                         throw UnlikelyToHappenException( "nil image for the right jamb of " + getKind() );
 
@@ -308,45 +292,40 @@ const FreeItemPtr & Door::getRightJamb()
                         case Way::North:
                         case Way::Northeast:
                         case Way::Northwest:
-                                x = cellX * oneCell + whatIsRightJamb.getWidthX() - 2 ;
-                                y = cellY * oneCell + whatIsRightJamb.getWidthY() - 1 ;
+                                x = this->cellX * oneCell + whatIsRightJamb.getWidthX() - 2 ;
+                                y = this->cellY * oneCell + whatIsRightJamb.getWidthY() - 1 ;
                                 this->rightLimit = y ;
-                                break;
+                                break ;
 
                         case Way::South:
                         case Way::Southeast:
                         case Way::Southwest:
-                                x = cellX * oneCell ;
-                                y = cellY * oneCell + whatIsRightJamb.getWidthY() - 1 ;
+                                x = this->cellX * oneCell ;
+                                y = this->cellY * oneCell + whatIsRightJamb.getWidthY() - 1 ;
                                 this->rightLimit = y ;
-                                break;
+                                break ;
 
                         case Way::East:
                         case Way::Eastnorth:
                         case Way::Eastsouth:
-                                x = ( cellX + 2 ) * oneCell - whatIsRightJamb.getWidthX() - 2 ;
-                                y = ( cellY + 1 ) * oneCell - 1 ;
+                                x = ( this->cellX + 2 ) * oneCell - whatIsRightJamb.getWidthX() - 2 ;
+                                y = ( this->cellY + 1 ) * oneCell - 1 ;
                                 this->rightLimit = x ;
-                                break;
+                                break ;
 
                         case Way::West:
                         case Way::Westnorth:
                         case Way::Westsouth:
-                                x = ( cellX + 2 ) * oneCell - whatIsRightJamb.getWidthX() - 2 ;
-                                y = ( cellY + 1 ) * oneCell - whatIsRightJamb.getWidthY() + 1 ;
+                                x = ( this->cellX + 2 ) * oneCell - whatIsRightJamb.getWidthX() - 2 ;
+                                y = ( this->cellY + 1 ) * oneCell - whatIsRightJamb.getWidthY() + 1 ;
                                 this->rightLimit = x ;
-                                break;
-
-                        default:
-                                ;
+                                break ;
                 }
 
                 rightJamb = FreeItemPtr( new FreeItem( whatIsRightJamb, x, y, Room::FloorZ, onWhichSideOfTheFour() ) );
-                rightJamb->addFrameTo( onWhichSideOfTheFour(), new NamedPicture( rightJambImage->getWidth(), rightJambImage->getHeight() ) );
-                allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getCurrentRawImageToChangeIt ().getAllegroPict() );
-                rightJamb->getCurrentRawImageToChangeIt().setName( rightJambImage->getName() );
-                rightJamb->freshBothProcessedImages ();
-                rightJamb->setUniqueName( rightJamb->getKind () + " " + util::makeRandomString( 8 ) );
+                rightJamb->setUniqueName( rightJamb->getKind() + "." + util::makeRandomString( 8 ) );
+                rightJamb->addFrameTo( rightJamb->getHeading(), new NamedPicture( * rightJambImage ) );
+                rightJamb->setMediator( getMediator() );
         }
 
         return this->rightJamb ;
@@ -369,7 +348,7 @@ const FreeItemPtr & Door::getLintel()
                         const DescriptionOfItem & whatIsRightJamb = * descriptions.getDescriptionByKind( getKind() + "~rightjamb" );
 
                         // cut out the lintel
-                        NamedPicture * lintelCut = cutOutLintel( imagePool.getPicture( doorImageName )->getAllegroPict(),
+                        NamedPicture * lintelCut = Door::cutOutLintel( imagePool.getPicture( doorImageName ),
                                                 whatIsLintel.getWidthX(), whatIsLintel.getWidthY(), whatIsLintel.getHeight(),
                                                 whatIsLeftJamb.getWidthX(), whatIsLeftJamb.getWidthY(),
                                                 whatIsRightJamb.getWidthX(), whatIsRightJamb.getWidthY(),
@@ -382,7 +361,7 @@ const FreeItemPtr & Door::getLintel()
                 # endif
                 }
 
-                const NamedPicturePtr & lintelImage = imagePool.getOrLoadAndGet( lintelName );
+                const NamedPicturePtr & lintelImage = imagePool.getPicture( lintelName );
                 if ( lintelImage == nilPointer )
                         throw UnlikelyToHappenException( "nil image for the lintel of " + getKind() );
 
@@ -395,41 +374,36 @@ const FreeItemPtr & Door::getLintel()
                         case Way::North:
                         case Way::Northeast:
                         case Way::Northwest:
-                                x = cellX * oneCell + whatIsLintel.getWidthX() - 2 ;
-                                y = ( cellY + 2 ) * oneCell - 1 ;
-                                break;
+                                x = this->cellX * oneCell + whatIsLintel.getWidthX() - 2 ;
+                                y = ( this->cellY + 2 ) * oneCell - 1 ;
+                                break ;
 
                         case Way::South:
                         case Way::Southeast:
                         case Way::Southwest:
-                                x = cellX * oneCell ;
-                                y = ( cellY + 2 ) * oneCell - 1 ;
-                                break;
+                                x = this->cellX * oneCell ;
+                                y = ( this->cellY + 2 ) * oneCell - 1 ;
+                                break ;
 
                         case Way::East:
                         case Way::Eastnorth:
                         case Way::Eastsouth:
-                                x = cellX * oneCell ;
-                                y = ( cellY + 1 ) * oneCell - 1 ;
-                                break;
+                                x = this->cellX * oneCell ;
+                                y = ( this->cellY + 1 ) * oneCell - 1 ;
+                                break ;
 
                         case Way::West:
                         case Way::Westnorth:
                         case Way::Westsouth:
-                                x = cellX * oneCell ;
-                                y = ( cellY + 1 ) * oneCell - whatIsLintel.getWidthY() + 1 ;
-                                break;
-
-                        default:
-                                ;
+                                x = this->cellX * oneCell ;
+                                y = ( this->cellY + 1 ) * oneCell - whatIsLintel.getWidthY() + 1 ;
+                                break ;
                 }
 
                 lintel = FreeItemPtr( new FreeItem( whatIsLintel, x, y, Room::FloorZ, onWhichSideOfTheFour() ) );
-                lintel->addFrameTo( onWhichSideOfTheFour(), new NamedPicture( lintelImage->getWidth(), lintelImage->getHeight() ) );
-                allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getCurrentRawImageToChangeIt ().getAllegroPict() );
-                lintel->getCurrentRawImageToChangeIt().setName( lintelImage->getName() );
-                lintel->freshBothProcessedImages ();
-                lintel->setUniqueName( lintel->getKind () + " " + util::makeRandomString( 8 ) );
+                lintel->setUniqueName( lintel->getKind() + "." + util::makeRandomString( 8 ) );
+                lintel->addFrameTo( lintel->getHeading(), new NamedPicture( * lintelImage ) );
+                lintel->setMediator( getMediator() );
         }
 
         return this->lintel ;

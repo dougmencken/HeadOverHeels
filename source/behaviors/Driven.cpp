@@ -45,7 +45,7 @@ bool Driven::update ()
                                         {
                                                 DescribedItemPtr itemAbove = mediator->findCollisionPop ();
 
-                                                if ( itemAbove->whichItemClass() == "avatar item" ) {
+                                                if ( itemAbove->whichClassOfItem() == "avatar item" ) {
                                                         foundCharacter = true ;
 
                                                         this->whereGoing = dynamic_cast< FreeItem & >( *itemAbove ).getHeading() ;

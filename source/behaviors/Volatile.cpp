@@ -62,7 +62,7 @@ bool Volatile::update ()
 
                                         // is it free item
                                         if ( atopItem != nilPointer &&
-                                                ( atopItem->whichItemClass() == "free item" || atopItem->whichItemClass() == "avatar item" ) )
+                                                ( atopItem->whichClassOfItem() == "free item" || atopItem->whichClassOfItem() == "avatar item" ) )
                                         {
                                                 // look at whether an item above is volatile or bonus
                                                 // because that item would disappear unless it is leaning on another one

@@ -67,7 +67,7 @@ bool Jumping::jump( behaviors::Behavior & behavior, unsigned int jumpPhase, cons
                                         character.getBehavior()->setCurrentActivity( activities::Activity::MetLethalItem, Motion2D::rest() );
                                 }
                                 else {  // a harmless free item
-                                        if ( item->whichItemClass() == "free item" || item->whichItemClass() == "avatar item" )
+                                        if ( item->whichClassOfItem() == "free item" || item->whichClassOfItem() == "avatar item" )
                                         {
                                                 // raise items recursively
                                                 lift( character, *item, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );

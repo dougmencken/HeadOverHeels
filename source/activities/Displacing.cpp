@@ -37,7 +37,7 @@ bool Displacing::displace( behaviors::Behavior & behavior, bool canFall )
         else if ( currentActivity == activities::Activity::PushedUp )
                 displaced = item.addToZ( 1 );
 
-        if ( item.whichItemClass() == "free item" || item.whichItemClass() == "avatar item" )
+        if ( item.whichClassOfItem() == "free item" || item.whichClassOfItem() == "avatar item" )
         {
                 Activity activityToPropagate = ( currentActivity == activities::Activity::Dragged )
                                                         ? Activity( activities::Activity::Pushed )

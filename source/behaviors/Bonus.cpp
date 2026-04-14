@@ -42,7 +42,7 @@ bool Bonus::update ()
 
                                 // can that above item take this bonus
                                 if ( itemAbove != nilPointer
-                                                && itemAbove->whichItemClass() == "avatar item"
+                                                && itemAbove->whichClassOfItem() == "avatar item"
                                                         && mayTake( dynamic_cast< AvatarItem & >( *itemAbove ) ) ) {
                                         changeActivityDueTo( activities::Activity::Vanishing, itemAbove );
                                         disappearanceTimer->go() ;
@@ -64,7 +64,7 @@ bool Bonus::update ()
 
                         // if may take it
                         if ( taker != nilPointer
-                                        && taker->whichItemClass() == "avatar item"
+                                        && taker->whichClassOfItem() == "avatar item"
                                                 && mayTake( dynamic_cast< AvatarItem & >( *taker ) ) ) {
                                 changeActivityDueTo( activities::Activity::Vanishing, taker );
                         }
@@ -114,7 +114,7 @@ bool Bonus::update ()
 
                                         // can that below item take this bonus
                                         if ( itemBelow != nilPointer
-                                                        && itemBelow->whichItemClass() == "avatar item"
+                                                        && itemBelow->whichClassOfItem() == "avatar item"
                                                                 && mayTake( dynamic_cast< AvatarItem & >( *itemBelow ) ) ) {
                                                 // get collisions with the bonus and other items above
                                                 itemBelow->canAdvanceTo( 0, 0, 1 );
@@ -145,7 +145,7 @@ bool Bonus::update ()
                                         ) );
 
                                 const AbstractItemPtr & taker = getWhatAffectedThisBehavior ();
-                                if ( taker != nilPointer && taker->whichItemClass() == "avatar item" )
+                                if ( taker != nilPointer && taker->whichClassOfItem() == "avatar item" )
                                         takeIt( dynamic_cast< AvatarItem & >( * taker ) );
 
                                 if ( bonusItem.getOriginalKind() != "crown" )
@@ -171,7 +171,7 @@ bool Bonus::update ()
 bool Bonus::mayTake( const AvatarItem & taker )
 {
         // only a character can take a bonus
-        /* if ( taker.whichItemClass() != "avatar item" ) return false ; */ // guaranteed by the class of taker
+        /* if ( taker.whichClassOfItem() != "avatar item" ) return false ; */ // guaranteed by the class of taker
 
         const std::string & magicItem = dynamic_cast< DescribedItem & >( getItem() ).getOriginalKind ();
 

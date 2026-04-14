@@ -52,7 +52,7 @@ bool Conveyor::update ()
 
                                 // is it free item
                                 if ( collision != nilPointer &&
-                                        ( collision->whichItemClass() == "free item" || collision->whichItemClass() == "avatar item" ) )
+                                        ( collision->whichClassOfItem() == "free item" || collision->whichClassOfItem() == "avatar item" ) )
                                 {
                                         FreeItem & itemAbove = dynamic_cast< FreeItem & >( *collision );
 

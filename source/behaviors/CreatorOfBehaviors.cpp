@@ -39,7 +39,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
 {
         Behavior * behaviorToReturn = nilPointer ;
 
-        if ( item.whichItemClass() == "avatar item" )
+        if ( item.whichClassOfItem() == "avatar item" )
         {
                 ::AvatarItem & avatar = dynamic_cast< ::AvatarItem & >( item );
 
@@ -52,7 +52,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
                 if ( behavior == "behavior of Head over Heels" )
                         behaviorToReturn = new CharacterHeadAndHeels( avatar );
         }
-        else if ( item.whichItemClass() == "free item" )
+        else if ( item.whichClassOfItem() == "free item" )
         {
                 ::FreeItem & free = dynamic_cast< ::FreeItem & >( item );
 
@@ -111,7 +111,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
                                 || behavior == "behavior of move then turn right and move" )
                         behaviorToReturn = new Turn( free, behavior );
         }
-        else if ( item.whichItemClass() == "grid item" )
+        else if ( item.whichClassOfItem() == "grid item" )
         {
                 ::GridItem & onGrid = dynamic_cast< ::GridItem & >( item );
 
@@ -127,7 +127,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
 
         if ( behaviorToReturn == nilPointer ) // none of the above
         {
-                if ( behavior.find( "vanishing" ) != std::string::npos /* && item.whichItemClass() == "described item" */ )
+                if ( behavior.find( "vanishing" ) != std::string::npos /* && item.whichClassOfItem() == "described item" */ )
                         behaviorToReturn = new Volatile( dynamic_cast< ::DescribedItem & >( item ), behavior );
                 else
                 if ( behavior.empty () || behavior == "still" || behavior == "behavior of bubbles" )
@@ -136,7 +136,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( AbstractItem
                 }
                 else {
                         std::cerr << "unknown behavior \"" << behavior << "\" for "
-                                        << item.whichItemClass() << " \"" << item.getUniqueName()
+                                        << item.whichClassOfItem() << " \"" << item.getUniqueName()
                                                 << "\" in CreatorOfBehaviors::createBehaviorByName" << std::endl ;
                 }
         }

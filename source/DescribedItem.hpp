@@ -106,7 +106,7 @@ protected :
 
 public :
 
-        virtual std::string whichItemClass () const {  return "described item" ;  }
+        virtual std::string whichClassOfItem () const {  return "described item" ;  }
 
         const DescriptionOfItem & getDescriptionOfItem () const {  return * this->descriptionOfItem ;  }
 
@@ -128,19 +128,19 @@ public :
          * The width of this item on X in free units
          */
         unsigned int getUnsignedWidthX () const {  return getDescriptionOfItem().getWidthX () ;  }
-        int getWidthX () const {  return static_cast< int >( getUnsignedWidthX () );  }
+        virtual int getWidthX () const {  return static_cast< int >( getUnsignedWidthX () );  }
 
         /**
          * The width of this item on Y in free units
          */
         unsigned int getUnsignedWidthY () const {  return getDescriptionOfItem().getWidthY () ;  }
-        int getWidthY () const {  return static_cast< int >( getUnsignedWidthY () );  }
+        virtual int getWidthY () const {  return static_cast< int >( getUnsignedWidthY () );  }
 
         /**
          * The height, or width on Z, of this item in free units
          */
         unsigned int getUnsignedHeight () const {  return this->height ;  }
-        int getHeight () const {  return static_cast< int >( getUnsignedHeight () );  }
+        virtual int getHeight () const {  return static_cast< int >( getUnsignedHeight () );  }
 
         void changeHeightTo ( int newHeight ) {  this->height = newHeight ;  }
 
@@ -158,15 +158,6 @@ public :
          * Time in seconds between each frame of item’s animation
          */
         float getDelayBetweenFrames () const {  return getDescriptionOfItem().getDelayBetweenFrames() ;  }
-
-        // the position in 3-dimensional space of this item’s lower north-west point, in free units
-        virtual int getX () const = 0 ;
-        virtual int getY () const = 0 ;
-        virtual int getZ () const = 0 ;
-
-        virtual void setX ( int newX ) = 0 ;
-        virtual void setY ( int newY ) = 0 ;
-        virtual void setZ ( int newZ ) = 0 ;
 
         /**
          * May this item advance to the given offset or not

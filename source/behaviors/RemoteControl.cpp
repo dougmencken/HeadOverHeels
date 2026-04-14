@@ -77,7 +77,7 @@ bool RemoteControl::update ()
                         {
                                 // what to move by the remote control
                                 DescribedItemPtr controlledItem = getItem().getMediator()->findItemBehavingAs( "behavior of remotely controlled one" );
-                                if ( controlledItem != nilPointer && controlledItem->whichItemClass() == "free item" )
+                                if ( controlledItem != nilPointer && controlledItem->whichClassOfItem() == "free item" )
                                 {
                                         Motion2D pushVector = get2DVelocityVector() ;
 
